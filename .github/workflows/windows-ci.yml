@@ -61,7 +61,9 @@ jobs:
           foreach ($file in $upstream) {
             $local = Join-Path ".workflow/tools" $file.Name
             if (-not (Test-Path $local)) { throw "Missing vendored tool: $($file.Name)" }
-            if ((Get-FileHash $file.FullName -Algorithm SHA256).Hash -ne (Get-FileHash $local -Algorithm SHA256).Hash) {
+            $upstreamBlob = git -C _skill rev-parse "${skillSha}:scripts/$($file.Name)"
+            $localBlob = git rev-parse "HEAD:.workflow/tools/$($file.Name)"
+            if ($upstreamBlob.Trim() -ne $localBlob.Trim()) {
               throw "Skill Workflow provenance mismatch: $($file.Name)"
             }
           }
