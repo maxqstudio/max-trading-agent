@@ -3,22 +3,22 @@
 # PROJECT MANIFEST
 
 ## Project
-Name: MAX REBUILD
-Purpose: Local Windows control plane for deterministic Strategy optimization, Challenger and Champion governance plus a separately gated scientific Research pipeline using MT5 execution evidence and immutable lineage.
+Name: MAX Trading Agent
+Purpose: Windows-only GitHub-first control plane for deterministic Strategy optimization, Challenger and Champion governance plus a separately gated scientific Research pipeline around MetaTrader 5 execution evidence and immutable lineage.
 Primary users: Owner, authorized Builder, Control Room auditor
 Governance profile: strict
 
 ## Repositories
-Repository: maxqstudio/max_rebuild
-Active branch: work/skill-workflow-strict-adoption
+Repository: maxqstudio/max-trading-agent
+Active branch: work/hosted-governance-rebase
 Current authoritative SHA: external final acceptance evidence
-Last accepted SHA: ad7e61c9d944677e1d7a48e9bfbfc9d049b2542e
-Current source digest: 385d2b167fbcf71a6311bfa92f3e567cb6d4c08fef1a00c963f58721e4145429
+Last accepted SHA: ce66946efb23cd479b43239087601ad30c8ac239
+Current source digest: be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca
 
 ## Authorities
-Source authority: Tracked source/spec/governance state is authoritative by exact commit; final candidate HEAD must equal locally tested HEAD.
-Runtime authority: Windows/MT5/browser runtime and E2E behavior are accepted only from the Owner-PC checkout at the tested SHA.
-Acceptance authority: No individual validator or historical PASS alone grants project acceptance.
+Source authority: Tracked source/spec/governance state is authoritative by exact main commit. Ordinary phases branch from latest main, validate in Windows CI, merge only when green, then revalidate main.
+Runtime authority: Real MT5, MetaEditor, broker/data-root, browser and filesystem runtime behavior is final acceptance authority only after the GitHub development roadmap is complete. GitHub Actions cannot prove this boundary.
+Acceptance authority: Ordinary source phases require green Windows CI at the phase candidate and green main after merge. Final real runtime/E2E remains separately unproven until Owner-PC final acceptance.
 Data authority: see SOURCE_AUTHORITY_MAP.md
 UI authority: see SOURCE_AUTHORITY_MAP.md
 Historical/reference authority: see SOURCE_AUTHORITY_MAP.md
@@ -27,7 +27,7 @@ Historical/reference authority: see SOURCE_AUTHORITY_MAP.md
 Languages: Python 3.13, TypeScript/TSX, MQL5, PowerShell, CMD
 Frameworks: FastAPI, React 19, Vite, Vitest
 Persistence: SQLite mutable operational state, immutable filesystem artifacts/evidence
-External systems: MetaTrader 5 Strategy Tester, MetaEditor, GitHub source authority, Owner PC D:\MAX_REBUILD runtime authority
+External systems: MetaTrader 5 Strategy Tester, MetaEditor, GitHub source authority, GitHub Actions windows-latest hosted build/test authority, Owner PC final runtime/E2E authority
 
 ## Entry points
 
@@ -63,11 +63,13 @@ Generated from PROJECT_PROFILE.yaml.
 
 ## Non-negotiable constraints
 
-- GitHub is source authority; Owner PC D:\MAX_REBUILD is runtime/E2E authority.
-- Do not use GitHub Actions.
+- GitHub main exact commit in maxqstudio/max-trading-agent is source authority.
+- GitHub Actions on windows-latest is hosted build/test authority during ordinary development phases.
+- Owner PC plus real MetaTrader 5 is final runtime/E2E authority only after the GitHub development roadmap is complete.
+- Public repository is source-only; runtime databases, evidence, artifacts, datasets, credentials, terminal data and local build/dependency outputs are not source authority and must not be committed.
 - Owner explicitly authorizes Strategy promotion and Research advancement where required.
 - Scientist is advisory only and cannot create scientific, promotion, risk or execution authority.
 - R01 source/runtime readiness is not R01 scientific PASS.
-- R02 remains blocked until an accepted R01 scientific result and separate Owner authorization.
+- R02 remains blocked until an accepted current-epoch R01 scientific result and separate Owner authorization.
 - Protected Locked OOS/Fresh outcomes must not silently become adaptive tuning feedback.
 - Current governance method is Skill Workflow exact SHA 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f with generated documentation and DURING sequence evidence.
