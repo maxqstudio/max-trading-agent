@@ -1,11 +1,13 @@
 {
   "constraints": [
-    "GitHub is source authority; Owner PC D:\\MAX_REBUILD is runtime/E2E authority.",
-    "Do not use GitHub Actions.",
+    "GitHub main exact commit in maxqstudio/max-trading-agent is source authority.",
+    "GitHub Actions on windows-latest is hosted build/test authority during ordinary development phases.",
+    "Owner PC plus real MetaTrader 5 is final runtime/E2E authority only after the GitHub development roadmap is complete.",
+    "Public repository is source-only; runtime databases, evidence, artifacts, datasets, credentials, terminal data and local build/dependency outputs are not source authority and must not be committed.",
     "Owner explicitly authorizes Strategy promotion and Research advancement where required.",
     "Scientist is advisory only and cannot create scientific, promotion, risk or execution authority.",
     "R01 source/runtime readiness is not R01 scientific PASS.",
-    "R02 remains blocked until an accepted R01 scientific result and separate Owner authorization.",
+    "R02 remains blocked until an accepted current-epoch R01 scientific result and separate Owner authorization.",
     "Protected Locked OOS/Fresh outcomes must not silently become adaptive tuning feedback.",
     "Current governance method is Skill Workflow exact SHA 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f with generated documentation and DURING sequence evidence."
   ],
@@ -42,14 +44,14 @@
       "Run Research only through explicit Owner-gated stages with immutable execution snapshots and protected-data boundaries.",
       "Provide exact-SHA source, runtime, documentation, sequence, test and evidence traceability without allowing advisory Scientist output to create authority."
     ],
-    "name": "MAX REBUILD",
+    "name": "MAX Trading Agent",
     "primary_users": [
       "Owner",
       "authorized Builder",
       "Control Room auditor"
     ],
-    "purpose": "Local Windows control plane for deterministic Strategy optimization, Challenger and Champion governance plus a separately gated scientific Research pipeline using MT5 execution evidence and immutable lineage.",
-    "repository": "maxqstudio/max_rebuild"
+    "purpose": "Windows-only GitHub-first control plane for deterministic Strategy optimization, Challenger and Champion governance plus a separately gated scientific Research pipeline around MetaTrader 5 execution evidence and immutable lineage.",
+    "repository": "maxqstudio/max-trading-agent"
   },
   "schema_version": 1,
   "technology": {
@@ -57,7 +59,8 @@
       "MetaTrader 5 Strategy Tester",
       "MetaEditor",
       "GitHub source authority",
-      "Owner PC D:\\MAX_REBUILD runtime authority"
+      "GitHub Actions windows-latest hosted build/test authority",
+      "Owner PC final runtime/E2E authority"
     ],
     "frameworks": [
       "FastAPI",
