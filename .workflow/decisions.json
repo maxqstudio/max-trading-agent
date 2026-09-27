@@ -1,18 +1,18 @@
 {
   "decisions": [
     {
-      "decision": "GitHub exact commit is source authority; D:\\MAX_REBUILD exact-SHA checkout is runtime/E2E authority.",
+      "decision": "GitHub main exact commit is source authority; GitHub Actions windows-latest is ordinary hosted build/test authority; Owner PC plus real MT5 is final runtime/E2E authority only after the hosted roadmap is complete.",
       "id": "D-001",
-      "rationale": "Separate source lineage from real Windows/MT5/browser evidence.",
+      "rationale": "Separate source, hosted verification and real runtime authority without allowing CI to overclaim MT5 behavior.",
       "status": "CURRENT",
-      "title": "GitHub source / Owner-PC runtime separation"
+      "title": "Three-layer GitHub / Windows CI / final Owner-PC authority"
     },
     {
       "decision": "Do not use GitHub Actions; acceptance executes on Owner PC against exact candidate SHA.",
       "id": "D-002",
-      "rationale": "Owner runtime is the accepted runtime environment.",
-      "status": "CURRENT",
-      "title": "No GitHub Actions acceptance"
+      "rationale": "Superseded by D-018 and D-019 after the project migrated to GitHub-first Windows CI development.",
+      "status": "SUPERSEDED",
+      "title": "Historical no-GitHub-Actions acceptance model"
     },
     {
       "decision": "Owner explicitly selects qualified Strategy candidates, promotes Champion, and opens Research gates where required.",
@@ -118,6 +118,27 @@
       "rationale": "Skill main advanced from 414104e9d56b59374a6e3c94c6883d295427cfa3 only to emit the prompt-required SELFTEST=PASS and STRICT_SELFTEST=PASS integration markers. Validator behavior, product behavior, scientific state and database schema are unchanged.",
       "status": "CURRENT",
       "title": "Current Skill Workflow authority with explicit self-test PASS markers"
+    },
+    {
+      "id": "D-018",
+      "title": "Hosted phase workflow",
+      "decision": "Every ordinary source phase starts from latest main, uses a work branch, must pass required windows-latest GitHub Actions, merges only when green, and revalidates main before the next phase.",
+      "rationale": "Make clean public-clone reproducibility and hosted regression evidence the development floor while preserving Windows-only MT5 boundaries.",
+      "status": "CURRENT"
+    },
+    {
+      "id": "D-019",
+      "title": "Final runtime acceptance is deferred",
+      "decision": "Owner-PC fresh database, real MT5/MetaEditor, broker/data-root, filesystem deployment and browser E2E are performed only after the GitHub development roadmap is complete; GitHub Actions cannot claim those runtime facts.",
+      "rationale": "Prevent ordinary source CI from being misrepresented as production MT5/runtime evidence.",
+      "status": "CURRENT"
+    },
+    {
+      "id": "D-020",
+      "title": "Public source-only repository boundary",
+      "decision": "The public repository contains source, deterministic governance and synthetic test fixtures only; private/runtime databases, evidence, artifacts, datasets, credentials, terminal data, logs and local dependency/build outputs are excluded.",
+      "rationale": "Keep a public clean clone reproducible without leaking private state or coupling tests to Owner runtime artifacts.",
+      "status": "CURRENT"
     }
   ],
   "schema_version": 1
