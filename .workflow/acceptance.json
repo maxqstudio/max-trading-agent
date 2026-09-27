@@ -1,5 +1,4 @@
 {
-  "schema_version": 1,
   "evidence_boundary": "H0 Hosted Governance Rebase for public maxqstudio/max-trading-agent. GitHub main is source authority and windows-latest GitHub Actions is ordinary hosted build/test authority. No Owner-PC runtime action is part of H0. Previous MAX REBUILD runtime evidence is historical provenance only; real MT5/MetaEditor/broker/data-root/browser/filesystem behavior remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the GitHub roadmap closes.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
@@ -18,107 +17,107 @@
   "human_comprehension_status": "PASS",
   "requirements": [
     {
+      "evidence": "GitHub branch ancestry",
       "id": "H0-0",
       "requirement": "Hosted branch descends from migration main ce66946efb23cd479b43239087601ad30c8ac239 without resetting valid work.",
-      "evidence": "GitHub branch ancestry",
       "status": "PASS"
     },
     {
+      "evidence": "Windows CI Skill Workflow provenance and STRICT selftest",
       "id": "H0-1",
       "requirement": "Skill Workflow authority is current main 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f and vendored tools remain byte-identical.",
-      "evidence": "Windows CI Skill Workflow provenance and STRICT selftest",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "Windows CI Source-only policy plus redacted exact-tree secret scan",
       "id": "H0-2",
       "requirement": "Public repository source-only policy rejects prohibited runtime/private paths and exact-tree secret findings.",
-      "evidence": "Windows CI Source-only policy plus redacted exact-tree secret scan",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": ".workflow semantic specs and generated governance",
       "id": "H0-3",
       "requirement": "Current repository identity and authority model are maxqstudio/max-trading-agent -> windows-latest CI -> deferred final Owner-PC runtime.",
-      "evidence": ".workflow semantic specs and generated governance",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "Hosted governance CI",
       "id": "H0-4",
       "requirement": "Project Truth Compiler and strict governance validators reproduce canonical docs without manual generated-Markdown edits.",
-      "evidence": "Hosted governance CI",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "Windows CI Backend and Skill Workflow job",
       "id": "H0-5",
       "requirement": "Backend regression remains at or above verified 488-pass migration floor and pip check passes.",
-      "evidence": "Windows CI Backend and Skill Workflow job",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "Windows CI Frontend job",
       "id": "H0-6",
       "requirement": "Frontend remains at or above 53 tests / 10 files with lint, production build and npm dependency tree PASS.",
-      "evidence": "Windows CI Frontend job",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "migration audit, decisions, claims, state, generated docs",
       "id": "H0-7",
       "requirement": "Historical previous-repository/runtime evidence is distinguished from current authority without blind rewriting.",
-      "evidence": "migration audit, decisions, claims, state, generated docs",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "GitHub Actions Windows CI",
       "id": "H0-8",
       "requirement": "Exact H0 work-branch candidate passes every required Windows CI job before merge.",
-      "evidence": "GitHub Actions Windows CI",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "GitHub PR/merge and main Windows CI",
       "id": "H0-9",
       "requirement": "H0 merges only after green branch CI and resulting main commit is revalidated by Windows CI.",
-      "evidence": "GitHub PR/merge and main Windows CI",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "runtime status and authority semantics",
       "id": "H0-10",
       "requirement": "No GitHub evidence claims real MT5, broker, terminal data-root, browser or Owner-PC runtime PASS.",
-      "evidence": "runtime status and authority semantics",
       "status": "PASS"
     }
   ],
   "results": {
     "hosted_baseline": {
-      "migration_main": "ce66946efb23cd479b43239087601ad30c8ac239",
-      "migration_verification_run_id": 36331539014,
       "backend_floor": 488,
       "frontend_files_floor": 10,
       "frontend_tests_floor": 53,
-      "source_only_policy": "PREVIOUSLY_VERIFIED; H0_EXACT_COMMIT_NOT_PROVEN_YET",
-      "skill_authority_sha": "9e22feddb8f94e8c0f1af6a33e14b64de5068f8f"
+      "migration_main": "ce66946efb23cd479b43239087601ad30c8ac239",
+      "migration_verification_run_id": 36331539014,
+      "skill_authority_sha": "9e22feddb8f94e8c0f1af6a33e14b64de5068f8f",
+      "source_only_policy": "PREVIOUSLY_VERIFIED; H0_EXACT_COMMIT_NOT_PROVEN_YET"
     },
     "regression": {
       "backend": "NOT_PROVEN_H0_EXACT_COMMIT",
-      "pip_check": "NOT_PROVEN_H0_EXACT_COMMIT",
+      "build": "NOT_PROVEN_H0_EXACT_COMMIT",
       "frontend": "NOT_PROVEN_H0_EXACT_COMMIT",
       "lint": "NOT_PROVEN_H0_EXACT_COMMIT",
-      "build": "NOT_PROVEN_H0_EXACT_COMMIT",
-      "npm_ls_all": "NOT_PROVEN_H0_EXACT_COMMIT"
+      "npm_ls_all": "NOT_PROVEN_H0_EXACT_COMMIT",
+      "pip_check": "NOT_PROVEN_H0_EXACT_COMMIT"
     },
     "runtime": {
-      "status": "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED",
-      "github_actions_scope": "SOURCE_BUILD_TEST_ONLY",
-      "real_mt5": "NOT_PROVEN",
-      "real_metaeditor": "NOT_PROVEN",
-      "real_broker_or_terminal_data_root": "NOT_PROVEN",
       "browser_e2e": "NOT_PROVEN",
-      "fresh_database_bootstrap": "NOT_PROVEN"
+      "fresh_database_bootstrap": "NOT_PROVEN",
+      "github_actions_scope": "SOURCE_BUILD_TEST_ONLY",
+      "real_broker_or_terminal_data_root": "NOT_PROVEN",
+      "real_metaeditor": "NOT_PROVEN",
+      "real_mt5": "NOT_PROVEN",
+      "status": "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
     },
     "scientific_state": {
+      "champion_mutation": "NONE_AUTHORIZED_IN_H0",
       "current_epoch_r00": "NOT_EXECUTED_IN_HOSTED_DEVELOPMENT",
       "current_epoch_r01_scientific_result": "NOT_PROVEN",
-      "r02": "BLOCKED / NOT STARTED",
       "model_training": 0,
       "onnx": 0,
-      "research_challenger": 0,
-      "champion_mutation": "NONE_AUTHORIZED_IN_H0"
+      "r02": "BLOCKED / NOT STARTED",
+      "research_challenger": 0
     },
     "tool_provenance": {
       "skill_authority_sha": "9e22feddb8f94e8c0f1af6a33e14b64de5068f8f",
@@ -130,6 +129,7 @@
     "Real MT5, MetaEditor, broker/data-root, browser and fresh-database behavior remain OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after hosted roadmap closure."
   ],
   "runtime_status": "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED",
+  "schema_version": 1,
   "sequence_mode": "DURING",
   "sequence_session": "docs/sequence/sessions/ (current DURING sessions)",
   "sequence_sync_status": "PASS",
@@ -150,23 +150,23 @@
     "npm ls --all (workdir: frontend)"
   ],
   "truth_gates": {
-    "SOURCE_TESTS": "NOT_PROVEN",
-    "RUNTIME_E2E": "NOT_APPLICABLE",
-    "PROVENANCE_SYNC": "NOT_PROVEN",
-    "REFERENCE_SYNC": "NOT_PROVEN",
-    "STRUCTURAL_SYNC": "NOT_PROVEN",
-    "SEMANTIC_SYNC": "NOT_PROVEN",
     "BEHAVIORAL_SYNC": "NOT_PROVEN",
     "CROSS_DOCUMENT_CONSISTENCY": "NOT_PROVEN",
-    "HUMAN_COMPREHENSION": "PASS",
-    "SEQUENCE_SYNC": "PASS",
-    "DOC_LAYOUT": "NOT_PROVEN",
-    "PROJECT_DOCS_NORMALIZED": "NOT_PROVEN",
-    "DOC_READABILITY": "NOT_PROVEN",
-    "PROJECT_DOCS_SYNC": "NOT_PROVEN",
+    "DOC_LAYOUT": "PASS",
+    "DOC_READABILITY": "PASS",
     "DOC_SOURCE_TRACEABILITY": "NOT_PROVEN",
     "DOC_TEST_TRACEABILITY": "NOT_PROVEN",
-    "TEST_RUNTIME_TRACEABILITY": "NOT_APPLICABLE",
-    "PROJECT_STATE_SYNC": "NOT_PROVEN"
+    "HUMAN_COMPREHENSION": "PASS",
+    "PROJECT_DOCS_NORMALIZED": "PASS",
+    "PROJECT_DOCS_SYNC": "PASS",
+    "PROJECT_STATE_SYNC": "NOT_PROVEN",
+    "PROVENANCE_SYNC": "NOT_PROVEN",
+    "REFERENCE_SYNC": "NOT_PROVEN",
+    "RUNTIME_E2E": "NOT_APPLICABLE",
+    "SEMANTIC_SYNC": "NOT_PROVEN",
+    "SEQUENCE_SYNC": "PASS",
+    "SOURCE_TESTS": "NOT_PROVEN",
+    "STRUCTURAL_SYNC": "NOT_PROVEN",
+    "TEST_RUNTIME_TRACEABILITY": "NOT_APPLICABLE"
   }
 }
