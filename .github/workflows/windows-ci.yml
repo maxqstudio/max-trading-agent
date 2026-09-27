@@ -62,40 +62,6 @@ jobs:
       - name: Rebuild Scientist knowledge manifest
         shell: pwsh
         run: python scripts/build_scientist_knowledge.py
-      - name: Regenerate current sequence evidence
-        shell: pwsh
-        run: |
-          @'
-          import json
-          import subprocess
-          import sys
-          from pathlib import Path
-
-          root = Path(".").resolve()
-          sessions = sorted((root / "docs" / "sequence" / "sessions").glob("*.json"))
-          for path in sessions:
-              session = json.loads(path.read_text(encoding="utf-8"))
-              actual = session["actual"]
-              cmd = [
-                  sys.executable,
-                  ".workflow/tools/generate_sequence_actual.py",
-                  "--root",
-                  ".",
-                  "--output-json",
-                  actual["graph"],
-                  "--output-mermaid",
-                  actual["diagram"],
-              ]
-              for entry in actual.get("entries", []):
-                  cmd.extend(["--entry", entry])
-              subprocess.run(cmd, cwd=root, check=True)
-              graph = json.loads((root / actual["graph"]).read_text(encoding="utf-8"))
-              session["actual"]["source_digest"] = graph["source_digest"]
-              path.write_text(
-                  json.dumps(session, indent=2, sort_keys=True) + "\n",
-                  encoding="utf-8",
-              )
-          '@ | python -
       - name: Preserve deterministic compiler output for repair
         if: always()
         uses: actions/upload-artifact@v4
