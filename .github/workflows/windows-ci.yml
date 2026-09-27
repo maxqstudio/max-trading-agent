@@ -79,15 +79,31 @@ jobs:
       - name: Validate generated docs
         shell: pwsh
         run: python .workflow/tools/validate_project_docs.py
+      - name: Assert clean after generated-doc validation
+        shell: pwsh
+        run: |
+          git diff --exit-code -- .workflow/acceptance.json
       - name: Validate sequence sessions
         shell: pwsh
         run: python .workflow/tools/validate_sequence_sessions.py
+      - name: Assert clean after sequence validation
+        shell: pwsh
+        run: |
+          git diff --exit-code -- .workflow/acceptance.json
       - name: Validate handoff
         shell: pwsh
         run: python .workflow/tools/validate_handoff.py
+      - name: Assert clean after handoff validation
+        shell: pwsh
+        run: |
+          git diff --exit-code -- .workflow/acceptance.json
       - name: Validate human comprehension
         shell: pwsh
         run: python .workflow/tools/validate_human_comprehension.py --require-pass
+      - name: Assert clean after human validation
+        shell: pwsh
+        run: |
+          git diff --exit-code -- .workflow/acceptance.json
       - name: Assert governance worktree clean
         shell: pwsh
         run: |
