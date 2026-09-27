@@ -79,38 +79,28 @@ jobs:
       - name: Validate generated docs
         shell: pwsh
         run: python .workflow/tools/validate_project_docs.py
-      - name: Assert clean after generated-doc validation
-        shell: pwsh
-        run: |
-          git diff --exit-code -- .workflow/acceptance.json
       - name: Validate sequence sessions
         shell: pwsh
         run: python .workflow/tools/validate_sequence_sessions.py
-      - name: Assert clean after sequence validation
-        shell: pwsh
-        run: |
-          git diff --exit-code -- .workflow/acceptance.json
       - name: Validate handoff
         shell: pwsh
         run: python .workflow/tools/validate_handoff.py
-      - name: Assert clean after handoff validation
-        shell: pwsh
-        run: |
-          git diff --exit-code -- .workflow/acceptance.json
       - name: Validate human comprehension
         shell: pwsh
         run: python .workflow/tools/validate_human_comprehension.py --require-pass
-      - name: Assert clean after human validation
-        shell: pwsh
-        run: |
-          git diff --exit-code -- .workflow/acceptance.json
       - name: Assert governance worktree clean
         shell: pwsh
         run: |
-          $dirty = git status --porcelain
-          if ($dirty) {
-            $dirty | ForEach-Object { Write-Host $_ }
-            throw "Governance validators left tracked or unignored workspace changes."
+          git diff --exit-code
+          if ($LASTEXITCODE -ne 0) { throw "Tracked governance content changed." }
+          git diff --cached --exit-code
+          if ($LASTEXITCODE -ne 0) { throw "Staged governance content changed." }
+          git update-index --refresh
+          if ($LASTEXITCODE -ne 0) { throw "Tracked files do not match the index." }
+          $untracked = git ls-files --others --exclude-standard
+          if ($untracked) {
+            $untracked | ForEach-Object { Write-Host "UNTRACKED $_" }
+            throw "Unignored governance outputs were created."
           }
       - name: Validate cross-document consistency
         shell: pwsh
