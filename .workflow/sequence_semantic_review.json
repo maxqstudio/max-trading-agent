@@ -22,7 +22,7 @@
       "python_source_owners_outside_static_reachable_graph": [
         "backend/max_backend/challenger_operations.py::run_challenger_backtest"
       ],
-      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
       "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
@@ -52,7 +52,7 @@
         "backend/max_backend/challenger_operations.py::challenger_registry_page"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
       "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
@@ -83,7 +83,7 @@
         "backend/max_backend/promotion_service.py::verify_current_strategy_champion"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
       "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
@@ -116,7 +116,7 @@
         "backend/max_backend/challenger_store.py::consumed_source_identities"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
       "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
@@ -147,7 +147,7 @@
         "backend/max_backend/research_service.py::canonical_research_stage"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
       "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
@@ -187,7 +187,7 @@
         "backend/max_backend/research_r01_service.py::r01_detail"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
       "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
@@ -221,7 +221,7 @@
         "backend/max_backend/research_r01_service.py::start_r01"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
       "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
@@ -251,7 +251,7 @@
         "backend/max_backend/scientist_api.py::get_status"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
       "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
