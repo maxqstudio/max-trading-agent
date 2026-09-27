@@ -19,11 +19,11 @@ R01 implementation/runtime readiness is not R01 scientific PASS.
 ## Governance reading order
 
 PROJECT_PROFILE.yaml
-â†’ docs/SYSTEM_OVERVIEW.md
-â†’ docs/CURRENT_STATE.md
-â†’ docs/PROJECT_MANIFEST.md
-â†’ remaining profile-required generated governance documents under docs/
-â†’ exact relevant source/tests.
+→ docs/SYSTEM_OVERVIEW.md
+→ docs/CURRENT_STATE.md
+→ docs/PROJECT_MANIFEST.md
+→ remaining profile-required generated governance documents under docs/
+→ exact relevant source/tests.
 
 ## Current governance authority
 
