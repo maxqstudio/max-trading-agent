@@ -3,24 +3,24 @@
 # CURRENT STATE
 
 Last updated: generated from current specs
-Authority verified at SHA: ad7e61c9d944677e1d7a48e9bfbfc9d049b2542e
+Authority verified at SHA: ce66946efb23cd479b43239087601ad30c8ac239
 Governance profile: strict
 
 ## Current phase
-Phase: FRESH_RUNTIME_RESEARCH_EPOCH_RESET_AND_GOVERNANCE_ACCEPTANCE
-Status: BUILDER_VALIDATION_BLOCKED
+Phase: H0_HOSTED_GOVERNANCE_REBASE
+Status: HOSTED_GOVERNANCE_REBASE_ACTIVE
 
 ## Source
-Repository: maxqstudio/max_rebuild
-Branch: work/skill-workflow-strict-adoption
+Repository: maxqstudio/max-trading-agent
+Branch: work/hosted-governance-rebase
 Authoritative SHA: external final acceptance evidence
-Last accepted SHA: ad7e61c9d944677e1d7a48e9bfbfc9d049b2542e
+Last accepted SHA: ce66946efb23cd479b43239087601ad30c8ac239
 Current candidate SHA: external final acceptance evidence
-Current source digest: 385d2b167fbcf71a6311bfa92f3e567cb6d4c08fef1a00c963f58721e4145429
+Current source digest: be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
-Runtime status: BLOCKED_EXACT_PUSHED_SHA_FRESH_DATABASE_RECREATION
+Runtime status: OWNER_PC_FINAL_ACCEPTANCE_REQUIRED
 
 ## Documentation governance
 Documentation root: docs/
@@ -33,48 +33,45 @@ PROJECT_DOCS_SYNC: PASS
 ## Sequence governance
 Sequence policy: REQUIRED
 Current sequence mode: DURING
-Current sequence session: docs/sequence/sessions/ (8 current DURING sessions)
+Current sequence session: docs/sequence/sessions/ (current DURING sessions)
 SEQUENCE_SYNC: PASS
 
 ## Proven
-- Previous-epoch R00 ACCEPTED, its Strategy Champion, and its Research project are historical evidence only and were not carried into the fresh operational epoch.
-- The fresh operational epoch was bootstrapped by the application with no current Strategy Champion, Research project/gate, Challenger, optimizer job, training, ONNX, or Research Challenger; read-only API evidence preserves the empty state.
-- Fresh-state bootstrap/read-model repair is limited to explicit empty-state handling when no Champion or Research project exists; populated authority continues through existing fail-closed checks.
-- The previous-epoch R01 source/runtime targeted re-audit is historical; current-epoch R01 has not started and has no scientific result.
+- Previous MAX REBUILD runtime/scientific evidence is historical provenance only and does not become current MAX Trading Agent runtime authority.
+- The public migration source tree intentionally excludes runtime databases, runtime evidence, artifacts, datasets, local dependency/build outputs and credentials.
+- Migration tests use synthetic source-controlled fixtures instead of private historical Challenger/runtime bundles.
+- Skill Workflow current main remains exact SHA 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f at H0 start.
 - Historical exact-16D and current exact-17D Challenger compatibility is executable-regression covered.
 - Durable consumed optimizer sources are excluded from the active qualified pool.
 - Former Champion tenure remains FORMER history and does not automatically reactivate its source Challenger.
 - Research sample configuration is editable current state and execution snapshots are immutable per run.
 - Protected outcome feedback is non-adaptive.
-- Exact pushed SHA bc785476b39f8ffe160f7def5df34909e85a654a passed fresh-port/verified-existing startup, MAX_READY, eight-route Edge E2E and read-only non-mutation checks against the existing empty application-created database; fresh database recreation remains blocked by execution policy.
 
 ## Not proven
-- Final governance candidate acceptance remains external to the self-referential tracked Git commit and requires exact-SHA Control Room evidence.
-- Fresh-database recreation after push was not completed because execution policy blocked deletion of the explicitly authorized runtime DB; G13 remains BLOCKED despite exact-SHA fresh-port, MAX_READY and browser E2E passes against the existing empty schema-10 database.
-- Live current 17D Challenger row on Owner runtime; compatibility is regression-proven only.
-- Any current-epoch R00 or real R01 scientific result.
+- Any post-migration Owner-PC fresh-database/bootstrap, real MT5/MetaEditor, broker/data-root, filesystem deployment or browser E2E result for maxqstudio/max-trading-agent.
+- Any current-epoch R00 execution or real R01 scientific result.
 - Any R02 execution, model training, ONNX generation or Research Challenger creation.
+- Final Owner-PC runtime acceptance at the final GitHub main SHA.
 
 ## Known blockers
-- Exact postpush fresh-database recreation remains blocked: execution policy rejected deleting the explicitly authorized D:\MAX_REBUILD\state\max.db. The existing application-created schema-10 database has zero Strategy/Research operational rows and exact-SHA fresh-port/E2E evidence.
-- R02 remains blocked by the absence of an accepted R01 scientific result and separate Owner authorization.
+- Future current-epoch R01 execution is blocked by previous-epoch hardcoded R00/Research/Strategy identifiers in backend/max_backend/research_r01_service.py until immutable current-R00 lineage binding is repaired and negative-tested.
+- R02 remains blocked by the absence of an accepted current-epoch R01 scientific result and separate Owner authorization.
 
 ## Known defects
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- After execution policy permits deleting exactly D:\MAX_REBUILD\state\max.db, stop MAX services, remove only that runtime DB and any max.db-* sidecars, then rerun exact pushed-SHA RUN_MAX, Edge E2E and non-mutation checks.
-- After every exact-SHA gate is green, Control Room audits the exact final GitHub candidate.
-- Any Strategy or Research execution after that still requires separate explicit Owner authorization.
+- Complete H0 Hosted Governance Rebase on work/hosted-governance-rebase, regenerate Project Truth, pass Windows GitHub Actions, merge to main, and revalidate main.
+- After H0 main revalidation, repair R01 binding so it resolves immutable accepted CURRENT R00 authority instead of retired epoch constants, with fail-closed cross-epoch/tamper negative tests.
+- Continue GitHub-only source phases without requesting Owner-PC runtime testing until the hosted roadmap is complete.
 
 ## Explicitly blocked
 - Starting any real Research execution without separate Owner authorization.
+- R01 runtime/scientific execution before current-epoch R00 authority and R01 lineage repair are accepted.
 - R02 execution.
 - Model training.
 - ONNX generation.
 - Research Challenger creation.
 - Strategy Champion mutation.
-- Unrelated product behavior, algorithm, EA, or Research changes outside the authorized fresh-state repair.
-- Database schema change.
-- GitHub Actions.
-- Merge.
+- Live trading.
+- Unrelated product behavior, algorithm, EA, or database schema changes outside an explicitly authorized phase.
