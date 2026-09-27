@@ -1,0 +1,23 @@
+{
+  "schema": "MAX_REBUILD_OPTIMIZER_REQUEST_V2",
+  "symbol": "TEST_XAUUSD",
+  "relative_symbol": "TEST_EURUSD",
+  "period": "M30",
+  "max_rounds": 1,
+  "kpi": {
+    "min_profit_factor": 1
+  },
+  "trade_sample": {
+    "minimum_trades": 10
+  },
+  "optimize_params": [
+    "InpMinConsensus"
+  ],
+  "scientist_assist": false,
+  "ea": {
+    "path": "synthetic",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "version": "2.00"
+  },
+  "mt5": {}
+}
