@@ -65,14 +65,9 @@ jobs:
               throw "Skill Workflow provenance mismatch: $($file.Name)"
             }
           }
-      - name: Skill Workflow document gates
+      - name: Skill Workflow strict selftest
         shell: pwsh
-        run: |
-          python .workflow/tools/validate_project_docs.py
-          python .workflow/tools/validate_doc_quality.py
-          python .workflow/tools/validate_sequence_sessions.py
-          python .workflow/tools/validate_handoff.py
-          python .workflow/tools/validate_human_comprehension.py --require-pass
+        run: python .workflow/tools/selftest_strict_project_workflow.py
       - name: Backend tests
         shell: pwsh
         run: python -m pytest backend/tests -q -o addopts=
