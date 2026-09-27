@@ -2,21 +2,21 @@
 
 # DECISIONS
 
-## D-001 — GitHub source / Owner-PC runtime separation
+## D-001 — Three-layer GitHub / Windows CI / final Owner-PC authority
 
 Status: CURRENT
 
-GitHub exact commit is source authority; D:\MAX_REBUILD exact-SHA checkout is runtime/E2E authority.
+GitHub main exact commit is source authority; GitHub Actions windows-latest is ordinary hosted build/test authority; Owner PC plus real MT5 is final runtime/E2E authority only after the hosted roadmap is complete.
 
-Rationale: Separate source lineage from real Windows/MT5/browser evidence.
+Rationale: Separate source, hosted verification and real runtime authority without allowing CI to overclaim MT5 behavior.
 
-## D-002 — No GitHub Actions acceptance
+## D-002 — Historical no-GitHub-Actions acceptance model
 
-Status: CURRENT
+Status: SUPERSEDED
 
 Do not use GitHub Actions; acceptance executes on Owner PC against exact candidate SHA.
 
-Rationale: Owner runtime is the accepted runtime environment.
+Rationale: Superseded by D-018 and D-019 after the project migrated to GitHub-first Windows CI development.
 
 ## D-003 — Owner controls advancement
 
@@ -137,3 +137,27 @@ Status: CURRENT
 MAX uses Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f; .workflow/tools are byte-identical to that exact current main; generated canonical governance docs remain under docs/; sequence mode remains DURING/CURRENT without retrospective plans.
 
 Rationale: Skill main advanced from 414104e9d56b59374a6e3c94c6883d295427cfa3 only to emit the prompt-required SELFTEST=PASS and STRICT_SELFTEST=PASS integration markers. Validator behavior, product behavior, scientific state and database schema are unchanged.
+
+## D-018 — Hosted phase workflow
+
+Status: CURRENT
+
+Every ordinary source phase starts from latest main, uses a work branch, must pass required windows-latest GitHub Actions, merges only when green, and revalidates main before the next phase.
+
+Rationale: Make clean public-clone reproducibility and hosted regression evidence the development floor while preserving Windows-only MT5 boundaries.
+
+## D-019 — Final runtime acceptance is deferred
+
+Status: CURRENT
+
+Owner-PC fresh database, real MT5/MetaEditor, broker/data-root, filesystem deployment and browser E2E are performed only after the GitHub development roadmap is complete; GitHub Actions cannot claim those runtime facts.
+
+Rationale: Prevent ordinary source CI from being misrepresented as production MT5/runtime evidence.
+
+## D-020 — Public source-only repository boundary
+
+Status: CURRENT
+
+The public repository contains source, deterministic governance and synthetic test fixtures only; private/runtime databases, evidence, artifacts, datasets, credentials, terminal data, logs and local dependency/build outputs are excluded.
+
+Rationale: Keep a public clean clone reproducible without leaking private state or coupling tests to Owner runtime artifacts.
