@@ -69,7 +69,7 @@ jobs:
           }
       - name: Skill Workflow strict selftest
         shell: pwsh
-        run: python .workflow/tools/selftest_strict_project_workflow.py
+        run: python _skill/scripts/selftest_strict_project_workflow.py
       - name: Backend tests
         shell: pwsh
         run: python -m pytest backend/tests -q -o addopts=
