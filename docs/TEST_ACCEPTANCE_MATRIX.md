@@ -4,61 +4,51 @@
 
 ## Evidence boundary
 
-Authorized fresh runtime/Research epoch reset and narrow empty-state repair. Previous-epoch R00 acceptance, Strategy Champion and Research project remain historical only. Exact pushed SHA bc785476b39f8ffe160f7def5df34909e85a654a passed RUN_MAX fresh-port and verified-existing paths, MAX_READY, 13 read-only API checks, all eight real Edge routes, and scientific non-mutation against the existing application-created empty schema-10 database. Deletion/recreation of that DB after push was explicitly authorized but refused by execution policy, so G13 fresh-database acceptance remains BLOCKED and Control Room final acceptance remains external.
+H0 Hosted Governance Rebase for public maxqstudio/max-trading-agent. GitHub main is source authority and windows-latest GitHub Actions is ordinary hosted build/test authority. No Owner-PC runtime action is part of H0. Previous MAX REBUILD runtime evidence is historical provenance only; real MT5/MetaEditor/broker/data-root/browser/filesystem behavior remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the GitHub roadmap closes.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 385d2b167fbcf71a6311bfa92f3e567cb6d4c08fef1a00c963f58721e4145429
+Current source digest: be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
-| G0 | Branch lineage descends from ad7e61c without reset/rewrite. | git merge-base --is-ancestor + preflight | PASS |
-| G1 | Vendored .workflow/tools are byte-identical to Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f with no local patch. | Deterministic SHA-256 comparison against exact repaired current Skill main tool pack. | PASS |
-| G2 | Only authorized fresh-state/bootstrap handling changed; no unrelated product behavior, algorithm, EA, or database schema change. | Changed-path and diff classification against ad7e61c; database schema comparison. | PASS |
-| G3 | STRICT generated documentation and sequence policy. | PROJECT_PROFILE.yaml parser/validator | PASS |
-| G4 | Machine-readable semantic specs genuinely populated and placeholder-free. | .workflow spec audit | PASS |
-| G4A | Every current pre-compiler semantic section mapped or classified historical/non-authoritative. | .workflow/migration_audit.json | PASS |
-| G5 | Eight real current MAX workflow specs with R02 non-executable. | .workflow/workflows/*.json | PASS |
-| G5A | All prior critical authority symbols preserved; non-Python structured traceability PASS. | .workflow/critical_symbol_traceability.json | PASS |
-| G6 | Project Truth Compiler deterministic generation/check PASS. | sync_project_truth + validate_project_docs | PASS |
-| G7 | PROJECT_DOCS_SYNC PASS. | .workflow/acceptance.json + independent validator | PASS |
-| G8 | Human Comprehension semantic and executable gate PASS. | SYSTEM_OVERVIEW review + validate_human_comprehension --require-pass | PASS |
-| G9 | Eight DURING sessions with zero retrospective plan artifacts and current generated actual evidence. | validate_sequence_sessions | PASS |
-| G10 | SEQUENCE_SYNC PASS after semantic sequence review. | workflow/actual/source/test/runtime-boundary reconciliation | PASS |
-| G11 | Twelve current claims and three relations; no false relation conflict, unknown claim, or contradictory claim. | Current semantic ledger plus cross-document validator outputs. | PASS |
-| G12 | HISTORICAL_COUNT_ONLY_ACCEPTANCE_DEFECT: Git history and local reports do not recover a reproducible command for the former 236 count. The replacement contract is the exact twelve-file command in test_commands with a 236-pass minimum; its M01 optimizer core/store/fail-closed/jobs/lifecycle/recovery, M02 Scientist/store, M03 worker/store/challenger, and M08 strategy-results coverage preserves the optimizer-to-Challenger lifecycle scope. The full backend suite remains independently required. | The exact twelve-file Optimizer command in test_commands; latest run 238 passed. | PASS |
-| G13 | Exact pushed-SHA Owner-PC runtime/E2E after fresh database recreation; recreation is blocked by the tool policy refusal for the authorized runtime DB deletion. | Exact-SHA runtime/E2E against existing empty database PASS; required post-push database recreation was refused by execution policy. | BLOCKED |
-| G14 | Current pre/post runtime probes show no Champion/Research gate and no scientific/domain mutation; exact-SHA recheck remains tied to blocked fresh-database recreation. | Research/Champion runtime state probes | PASS |
-| G15 | Final GitHub branch SHA equals the locally tested exact commit SHA. | git local/remote comparison | NOT_PROVEN |
-| G16 | After exact-SHA runtime/E2E, worktree clean, diff-check passes, no conflicts/actions/post-test tracked mutation. | final Git audit | NOT_PROVEN |
+| H0-0 | Hosted branch descends from migration main ce66946efb23cd479b43239087601ad30c8ac239 without resetting valid work. | GitHub branch ancestry | PASS |
+| H0-1 | Skill Workflow authority is current main 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f and vendored tools remain byte-identical. | Windows CI Skill Workflow provenance and STRICT selftest | NOT_PROVEN |
+| H0-2 | Public repository source-only policy rejects prohibited runtime/private paths and exact-tree secret findings. | Windows CI Source-only policy plus redacted exact-tree secret scan | NOT_PROVEN |
+| H0-3 | Current repository identity and authority model are maxqstudio/max-trading-agent -> windows-latest CI -> deferred final Owner-PC runtime. | .workflow semantic specs and generated governance | NOT_PROVEN |
+| H0-4 | Project Truth Compiler and strict governance validators reproduce canonical docs without manual generated-Markdown edits. | Hosted governance CI | NOT_PROVEN |
+| H0-5 | Backend regression remains at or above verified 488-pass migration floor and pip check passes. | Windows CI Backend and Skill Workflow job | NOT_PROVEN |
+| H0-6 | Frontend remains at or above 53 tests / 10 files with lint, production build and npm dependency tree PASS. | Windows CI Frontend job | NOT_PROVEN |
+| H0-7 | Historical previous-repository/runtime evidence is distinguished from current authority without blind rewriting. | migration audit, decisions, claims, state, generated docs | NOT_PROVEN |
+| H0-8 | Exact H0 work-branch candidate passes every required Windows CI job before merge. | GitHub Actions Windows CI | NOT_PROVEN |
+| H0-9 | H0 merges only after green branch CI and resulting main commit is revalidated by Windows CI. | GitHub PR/merge and main Windows CI | NOT_PROVEN |
+| H0-10 | No GitHub evidence claims real MT5, broker, terminal data-root, browser or Owner-PC runtime PASS. | runtime status and authority semantics | PASS |
 
 ## Test commands
 
-- .\.venv\Scripts\python.exe -m pytest backend\tests -q -o addopts=
-- .\.venv\Scripts\python.exe -m pytest backend\tests\test_r01_source.py backend\tests\test_r01_dataset.py backend\tests\test_r01_research.py -q -o addopts=
-- .\.venv\Scripts\python.exe -m pytest backend\tests\test_r01_dataset.py::test_r01_dependency_and_adversarial_suite -q -o addopts=
-- .\.venv\Scripts\python.exe -m pytest backend\tests\test_m06_challenger_operations.py -q -o addopts=
-- .\.venv\Scripts\python.exe -m pytest backend\tests\test_m01_optimizer_core.py backend\tests\test_m01_optimizer_store.py backend\tests\test_m01_fail_closed.py backend\tests\test_m01_jobs.py backend\tests\test_m01_lifecycle.py backend\tests\test_m01_recovery.py backend\tests\test_m02_scientist.py backend\tests\test_m02_store.py backend\tests\test_m03_worker.py backend\tests\test_m03_store.py backend\tests\test_m03_challenger.py backend\tests\test_m08_strategy_results.py -q -o addopts=
-- .\.venv\Scripts\python.exe -m pytest backend\tests\test_m02_scientist.py backend\tests\test_m05_scientist.py backend\tests\test_m05_provider_settings.py backend\tests\test_m05_final_evidence_contract.py backend\tests\test_m05_candidate_tree_scan.py -q -o addopts=
+- python .workflow/tools/sync_project_truth.py
+- python .workflow/tools/validate_project_docs.py
+- python .workflow/tools/validate_sequence_sessions.py
+- python .workflow/tools/validate_handoff.py
+- python .workflow/tools/validate_human_comprehension.py --require-pass
+- python .workflow/tools/validate_cross_document_consistency.py
+- python .workflow/tools/validate_project_truth.py
+- python scripts/scan_m05_candidate_tree.py --candidate-sha HEAD
+- python -m pytest backend/tests -q -o addopts=
+- python -m pip check
 - npm test -- --run (workdir: frontend)
 - npm run lint (workdir: frontend)
-- npm run build (workdir: frontend; includes tsc -b)
+- npm run build (workdir: frontend)
 - npm ls --all (workdir: frontend)
-- .\.venv\Scripts\python.exe -m pip check
 
 ## Runtime checks
 
-- RUN_MAX.cmd --no-pause fresh-port path passed on the exact pushed SHA bc785476b39f8ffe160f7def5df34909e85a654a using the existing application-created empty schema-10 database; this does not satisfy fresh-database recreation.
-- RUN_MAX.cmd --no-pause verified-existing path passed on exact pushed SHA bc785476b39f8ffe160f7def5df34909e85a654a.
-- MAX_READY: Backend READY, SQLite schema 10 READY, Scientist knowledge/provider READY, Champion NONE, and MT5 READY_EXECUTABLE_AND_DATA_ROOT.
-- Thirteen read-only API GET checks returned HTTP 200; Strategy/Research operational SQLite rows remained zero and generated storage remained zero.
-- Real isolated Microsoft Edge E2E passed all eight required routes; zero API 4xx/5xx, zero console errors, zero browser runtime exceptions.
-- Scientist drawer inspection caused two UI-settings PUT requests; the original closed preference was restored and all pre/post domain row counts were identical.
-- After the authorized database deletion attempt was refused by execution policy, no alternate deletion route was attempted; the required fresh-database rebootstrap remains blocked.
+- H0 intentionally performs no Owner-PC runtime checks.
+- Real MT5, MetaEditor, broker/data-root, browser and fresh-database behavior remain OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after hosted roadmap closure.
 
 ## Sequence contract evidence
 
 Sequence mode for this phase/session: DURING
-Sequence session contract: docs/sequence/sessions/ (8 current DURING sessions)
+Sequence session contract: docs/sequence/sessions/ (current DURING sessions)
 SEQUENCE_SYNC: PASS
 
 ## Project Truth Compiler evidence
