@@ -7,9 +7,9 @@ Human comprehension status: PASS
 
 ## One-minute summary
 
-Project: MAX REBUILD
+Project: MAX Trading Agent
 
-Purpose: Local Windows control plane for deterministic Strategy optimization, Challenger and Champion governance plus a separately gated scientific Research pipeline using MT5 execution evidence and immutable lineage.
+Purpose: Windows-only GitHub-first control plane for deterministic Strategy optimization, Challenger and Champion governance plus a separately gated scientific Research pipeline around MetaTrader 5 execution evidence and immutable lineage.
 
 Primary users: Owner, authorized Builder, Control Room auditor
 
@@ -26,7 +26,7 @@ Users / External Systems
     -> State / Evidence Authorities
     -> External Runtime / Outputs
 
-Observed source inventory: 643 files, 6 language categories.
+Observed source inventory: 128 files, 4 language categories.
 
 ## Major components
 
@@ -40,7 +40,7 @@ Observed source inventory: 643 files, 6 language categories.
 | Windows launcher/readiness | Verify or start canonical backend/frontend instances, reject invalid occupied ports and emit MAX_READY only after authority/readiness checks. | RUN_MAX.cmd, scripts/run_max.ps1 | backend /api/overview, frontend proxy/root, Scientist status, ports 8000/5173 |
 | MT5/MetaEditor execution boundary | Provide Strategy Tester simulation/optimization and MQL5 compile/execution truth. | ea/baseline/Max_MTF.mq5 | MetaTrader 5 terminal, MetaEditor |
 | SQLite operational state | Persist mutable Strategy/Research/Scientist operational state through owning stores and transactions. | state/max.db | backend store modules |
-| Immutable evidence/artifact layer | Retain execution/scientific lineage that current configuration or active-role changes cannot rewrite. | artifacts/, evidence/, docs/audits/ | domain services and artifact registry |
+| Immutable evidence/artifact layer | Define retained execution/scientific lineage at runtime; private runtime artifacts/evidence are not tracked in the public source-only GitHub repository. | artifacts/, evidence/, docs/audits/ | domain services and artifact registry |
 | Current project governance | Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth. | PROJECT_PROFILE.yaml, .workflow/*.json, .workflow/workflows/*.json, .workflow/tools/*.py, docs/sequence/sessions/*.json, docs/sequence/generated/*.actual.json, docs/sequence/generated/*.actual.mmd | Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f |
 
 ## Main data flow
@@ -148,9 +148,9 @@ Authority: scientist_knowledge hash manifest + bounded Scientist context/store; 
 
 ## Lifecycle and state
 
-Current phase: FRESH_RUNTIME_RESEARCH_EPOCH_RESET_AND_GOVERNANCE_ACCEPTANCE
+Current phase: H0_HOSTED_GOVERNANCE_REBASE
 
-Current status: BUILDER_VALIDATION_BLOCKED
+Current status: HOSTED_GOVERNANCE_REBASE_ACTIVE
 
 See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 
@@ -158,9 +158,9 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 
 | Concern | Authority | Meaning |
 |---|---|---|
-| source | GitHub exact commit in maxqstudio/max_rebuild | Tracked source/spec/governance state is authoritative by exact commit; final candidate HEAD must equal locally tested HEAD. |
-| runtime | Owner PC D:\MAX_REBUILD exact-SHA checkout | Windows/MT5/browser runtime and E2E behavior are accepted only from the Owner-PC checkout at the tested SHA. |
-| acceptance | Control Room audit over exact-SHA source/test/runtime evidence | No individual validator or historical PASS alone grants project acceptance. |
+| source | GitHub main exact commit in maxqstudio/max-trading-agent | Tracked source/spec/governance state is authoritative by exact main commit. Ordinary phases branch from latest main, validate in Windows CI, merge only when green, then revalidate main. |
+| runtime | Owner PC clean exact-SHA checkout plus real MetaTrader 5 | Real MT5, MetaEditor, broker/data-root, browser and filesystem runtime behavior is final acceptance authority only after the GitHub development roadmap is complete. GitHub Actions cannot prove this boundary. |
+| acceptance | GitHub Actions Windows CI for hosted phases; Owner PC for final runtime acceptance | Ordinary source phases require green Windows CI at the phase candidate and green main after merge. Final real runtime/E2E remains separately unproven until Owner-PC final acceptance. |
 | sqlite_operational_state | Owning backend store over state/max.db | Mutable operational lifecycle/settings state is authoritative only where the corresponding store/service owns it. |
 | immutable_scientific_evidence | Sealed manifests, bundles, reports and retained artifacts | Scientific/execution history is immutable when its owning contract marks it immutable; current config cannot rewrite it. |
 | strategy_champion | backend/max_backend/champion_store.py::commit_promotion_authority plus explicit Owner promotion | Current Champion tenure changes only through verified promotion authority; prior tenure becomes FORMER history. |
@@ -172,7 +172,7 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 | mt5_execution | MetaTrader 5 Strategy Tester and MetaEditor | MT5/MetaEditor own simulation, optimization and compile execution truth; Python owns legality/orchestration/evidence verification. |
 | scientist | Hash-verified static knowledge plus bounded committed runtime context | Scientist output is advisory only and cannot mutate Strategy/Research scientific authority. |
 | frontend | Semantic backend API representation | React presents authority; UI labels/local state do not create domain eligibility, gate completion or scientific PASS. |
-| tests | Executable suites at the exact tested HEAD | A test PASS is evidence only for the layer and snapshot actually executed. |
+| tests | Executable suites at the exact GitHub-tested commit | A test PASS is evidence only for the layer and commit actually executed; Windows CI does not imply real MT5 runtime PASS. |
 | historical_evidence | Retained docs/audits/acceptance and immutable artifacts | Historical evidence remains historically truthful and is not rewritten to mimic current terminology or configuration. |
 | documentation | .workflow semantic specs + Project Truth Compiler at Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f | Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden. |
 | sequence | DURING-mode generated actual sequence graphs plus source/test/runtime semantic review | Existing implementation is reconstructed from current source; retrospective BEFORE plans are forbidden. |
@@ -182,9 +182,9 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 
 ### Mutable current state
 
-- source: Tracked source/spec/governance state is authoritative by exact commit; final candidate HEAD must equal locally tested HEAD.
-- runtime: Windows/MT5/browser runtime and E2E behavior are accepted only from the Owner-PC checkout at the tested SHA.
-- acceptance: No individual validator or historical PASS alone grants project acceptance.
+- source: Tracked source/spec/governance state is authoritative by exact main commit. Ordinary phases branch from latest main, validate in Windows CI, merge only when green, then revalidate main.
+- runtime: Real MT5, MetaEditor, broker/data-root, browser and filesystem runtime behavior is final acceptance authority only after the GitHub development roadmap is complete. GitHub Actions cannot prove this boundary.
+- acceptance: Ordinary source phases require green Windows CI at the phase candidate and green main after merge. Final real runtime/E2E remains separately unproven until Owner-PC final acceptance.
 - sqlite_operational_state: Mutable operational lifecycle/settings state is authoritative only where the corresponding store/service owns it.
 - strategy_champion: Current Champion tenure changes only through verified promotion authority; prior tenure becomes FORMER history.
 - strategy_challenger: Active eligibility and historical PROMOTED/RETIRED identity are distinct; retained request epoch defines exact parameter universe.
@@ -193,7 +193,7 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 - mt5_execution: MT5/MetaEditor own simulation, optimization and compile execution truth; Python owns legality/orchestration/evidence verification.
 - scientist: Scientist output is advisory only and cannot mutate Strategy/Research scientific authority.
 - frontend: React presents authority; UI labels/local state do not create domain eligibility, gate completion or scientific PASS.
-- tests: A test PASS is evidence only for the layer and snapshot actually executed.
+- tests: A test PASS is evidence only for the layer and commit actually executed; Windows CI does not imply real MT5 runtime PASS.
 - documentation: Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden.
 - sequence: Existing implementation is reconstructed from current source; retrospective BEFORE plans are forbidden.
 
@@ -225,48 +225,45 @@ compiler does not infer them from implementation names.
 ## Current project state
 
 Next authorized actions:
-- After execution policy permits deleting exactly D:\MAX_REBUILD\state\max.db, stop MAX services, remove only that runtime DB and any max.db-* sidecars, then rerun exact pushed-SHA RUN_MAX, Edge E2E and non-mutation checks.
-- After every exact-SHA gate is green, Control Room audits the exact final GitHub candidate.
-- Any Strategy or Research execution after that still requires separate explicit Owner authorization.
+- Complete H0 Hosted Governance Rebase on work/hosted-governance-rebase, regenerate Project Truth, pass Windows GitHub Actions, merge to main, and revalidate main.
+- After H0 main revalidation, repair R01 binding so it resolves immutable accepted CURRENT R00 authority instead of retired epoch constants, with fail-closed cross-epoch/tamper negative tests.
+- Continue GitHub-only source phases without requesting Owner-PC runtime testing until the hosted roadmap is complete.
 
 Blocked actions:
 - Starting any real Research execution without separate Owner authorization.
+- R01 runtime/scientific execution before current-epoch R00 authority and R01 lineage repair are accepted.
 - R02 execution.
 - Model training.
 - ONNX generation.
 - Research Challenger creation.
 - Strategy Champion mutation.
-- Unrelated product behavior, algorithm, EA, or Research changes outside the authorized fresh-state repair.
-- Database schema change.
-- GitHub Actions.
-- Merge.
+- Live trading.
+- Unrelated product behavior, algorithm, EA, or database schema changes outside an explicitly authorized phase.
 
 Known blockers:
-- Exact postpush fresh-database recreation remains blocked: execution policy rejected deleting the explicitly authorized D:\MAX_REBUILD\state\max.db. The existing application-created schema-10 database has zero Strategy/Research operational rows and exact-SHA fresh-port/E2E evidence.
-- R02 remains blocked by the absence of an accepted R01 scientific result and separate Owner authorization.
+- Future current-epoch R01 execution is blocked by previous-epoch hardcoded R00/Research/Strategy identifiers in backend/max_backend/research_r01_service.py until immutable current-R00 lineage binding is repaired and negative-tested.
+- R02 remains blocked by the absence of an accepted current-epoch R01 scientific result and separate Owner authorization.
 
 ## Proven vs not proven
 
 ### Proven
 
-- Previous-epoch R00 ACCEPTED, its Strategy Champion, and its Research project are historical evidence only and were not carried into the fresh operational epoch.
-- The fresh operational epoch was bootstrapped by the application with no current Strategy Champion, Research project/gate, Challenger, optimizer job, training, ONNX, or Research Challenger; read-only API evidence preserves the empty state.
-- Fresh-state bootstrap/read-model repair is limited to explicit empty-state handling when no Champion or Research project exists; populated authority continues through existing fail-closed checks.
-- The previous-epoch R01 source/runtime targeted re-audit is historical; current-epoch R01 has not started and has no scientific result.
+- Previous MAX REBUILD runtime/scientific evidence is historical provenance only and does not become current MAX Trading Agent runtime authority.
+- The public migration source tree intentionally excludes runtime databases, runtime evidence, artifacts, datasets, local dependency/build outputs and credentials.
+- Migration tests use synthetic source-controlled fixtures instead of private historical Challenger/runtime bundles.
+- Skill Workflow current main remains exact SHA 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f at H0 start.
 - Historical exact-16D and current exact-17D Challenger compatibility is executable-regression covered.
 - Durable consumed optimizer sources are excluded from the active qualified pool.
 - Former Champion tenure remains FORMER history and does not automatically reactivate its source Challenger.
 - Research sample configuration is editable current state and execution snapshots are immutable per run.
 - Protected outcome feedback is non-adaptive.
-- Exact pushed SHA bc785476b39f8ffe160f7def5df34909e85a654a passed fresh-port/verified-existing startup, MAX_READY, eight-route Edge E2E and read-only non-mutation checks against the existing empty application-created database; fresh database recreation remains blocked by execution policy.
 
 ### Not proven
 
-- Final governance candidate acceptance remains external to the self-referential tracked Git commit and requires exact-SHA Control Room evidence.
-- Fresh-database recreation after push was not completed because execution policy blocked deletion of the explicitly authorized runtime DB; G13 remains BLOCKED despite exact-SHA fresh-port, MAX_READY and browser E2E passes against the existing empty schema-10 database.
-- Live current 17D Challenger row on Owner runtime; compatibility is regression-proven only.
-- Any current-epoch R00 or real R01 scientific result.
+- Any post-migration Owner-PC fresh-database/bootstrap, real MT5/MetaEditor, broker/data-root, filesystem deployment or browser E2E result for maxqstudio/max-trading-agent.
+- Any current-epoch R00 execution or real R01 scientific result.
 - Any R02 execution, model training, ONNX generation or Research Challenger creation.
+- Final Owner-PC runtime acceptance at the final GitHub main SHA.
 
 ## Important limitations
 
