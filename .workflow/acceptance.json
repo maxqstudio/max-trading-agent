@@ -1,5 +1,6 @@
 {
-  "evidence_boundary": "Authorized fresh runtime/Research epoch reset and narrow empty-state repair. Previous-epoch R00 acceptance, Strategy Champion and Research project remain historical only. Exact pushed SHA bc785476b39f8ffe160f7def5df34909e85a654a passed RUN_MAX fresh-port and verified-existing paths, MAX_READY, 13 read-only API checks, all eight real Edge routes, and scientific non-mutation against the existing application-created empty schema-10 database. Deletion/recreation of that DB after push was explicitly authorized but refused by execution policy, so G13 fresh-database acceptance remains BLOCKED and Control Room final acceptance remains external.",
+  "schema_version": 1,
+  "evidence_boundary": "H0 Hosted Governance Rebase for public maxqstudio/max-trading-agent. GitHub main is source authority and windows-latest GitHub Actions is ordinary hosted build/test authority. No Owner-PC runtime action is part of H0. Previous MAX REBUILD runtime evidence is historical provenance only; real MT5/MetaEditor/broker/data-root/browser/filesystem behavior remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the GitHub roadmap closes.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
     "How does important data flow through the system?": "PASS",
@@ -17,273 +18,155 @@
   "human_comprehension_status": "PASS",
   "requirements": [
     {
-      "evidence": "git merge-base --is-ancestor + preflight",
-      "id": "G0",
-      "requirement": "Branch lineage descends from ad7e61c without reset/rewrite.",
+      "id": "H0-0",
+      "requirement": "Hosted branch descends from migration main ce66946efb23cd479b43239087601ad30c8ac239 without resetting valid work.",
+      "evidence": "GitHub branch ancestry",
       "status": "PASS"
     },
     {
-      "evidence": "Deterministic SHA-256 comparison against exact repaired current Skill main tool pack.",
-      "id": "G1",
-      "requirement": "Vendored .workflow/tools are byte-identical to Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f with no local patch.",
-      "status": "PASS"
-    },
-    {
-      "evidence": "Changed-path and diff classification against ad7e61c; database schema comparison.",
-      "id": "G2",
-      "requirement": "Only authorized fresh-state/bootstrap handling changed; no unrelated product behavior, algorithm, EA, or database schema change.",
-      "status": "PASS"
-    },
-    {
-      "evidence": "PROJECT_PROFILE.yaml parser/validator",
-      "id": "G3",
-      "requirement": "STRICT generated documentation and sequence policy.",
-      "status": "PASS"
-    },
-    {
-      "evidence": ".workflow spec audit",
-      "id": "G4",
-      "requirement": "Machine-readable semantic specs genuinely populated and placeholder-free.",
-      "status": "PASS"
-    },
-    {
-      "evidence": ".workflow/migration_audit.json",
-      "id": "G4A",
-      "requirement": "Every current pre-compiler semantic section mapped or classified historical/non-authoritative.",
-      "status": "PASS"
-    },
-    {
-      "evidence": ".workflow/workflows/*.json",
-      "id": "G5",
-      "requirement": "Eight real current MAX workflow specs with R02 non-executable.",
-      "status": "PASS"
-    },
-    {
-      "evidence": ".workflow/critical_symbol_traceability.json",
-      "id": "G5A",
-      "requirement": "All prior critical authority symbols preserved; non-Python structured traceability PASS.",
-      "status": "PASS"
-    },
-    {
-      "evidence": "sync_project_truth + validate_project_docs",
-      "id": "G6",
-      "requirement": "Project Truth Compiler deterministic generation/check PASS.",
-      "status": "PASS"
-    },
-    {
-      "evidence": ".workflow/acceptance.json + independent validator",
-      "id": "G7",
-      "requirement": "PROJECT_DOCS_SYNC PASS.",
-      "status": "PASS"
-    },
-    {
-      "evidence": "SYSTEM_OVERVIEW review + validate_human_comprehension --require-pass",
-      "id": "G8",
-      "requirement": "Human Comprehension semantic and executable gate PASS.",
-      "status": "PASS"
-    },
-    {
-      "evidence": "validate_sequence_sessions",
-      "id": "G9",
-      "requirement": "Eight DURING sessions with zero retrospective plan artifacts and current generated actual evidence.",
-      "status": "PASS"
-    },
-    {
-      "evidence": "workflow/actual/source/test/runtime-boundary reconciliation",
-      "id": "G10",
-      "requirement": "SEQUENCE_SYNC PASS after semantic sequence review.",
-      "status": "PASS"
-    },
-    {
-      "evidence": "Current semantic ledger plus cross-document validator outputs.",
-      "id": "G11",
-      "requirement": "Twelve current claims and three relations; no false relation conflict, unknown claim, or contradictory claim.",
-      "status": "PASS"
-    },
-    {
-      "evidence": "The exact twelve-file Optimizer command in test_commands; latest run 238 passed.",
-      "id": "G12",
-      "requirement": "HISTORICAL_COUNT_ONLY_ACCEPTANCE_DEFECT: Git history and local reports do not recover a reproducible command for the former 236 count. The replacement contract is the exact twelve-file command in test_commands with a 236-pass minimum; its M01 optimizer core/store/fail-closed/jobs/lifecycle/recovery, M02 Scientist/store, M03 worker/store/challenger, and M08 strategy-results coverage preserves the optimizer-to-Challenger lifecycle scope. The full backend suite remains independently required.",
-      "status": "PASS"
-    },
-    {
-      "evidence": "Exact-SHA runtime/E2E against existing empty database PASS; required post-push database recreation was refused by execution policy.",
-      "id": "G13",
-      "requirement": "Exact pushed-SHA Owner-PC runtime/E2E after fresh database recreation; recreation is blocked by the tool policy refusal for the authorized runtime DB deletion.",
-      "status": "BLOCKED"
-    },
-    {
-      "evidence": "Research/Champion runtime state probes",
-      "id": "G14",
-      "requirement": "Current pre/post runtime probes show no Champion/Research gate and no scientific/domain mutation; exact-SHA recheck remains tied to blocked fresh-database recreation.",
-      "status": "PASS"
-    },
-    {
-      "evidence": "git local/remote comparison",
-      "id": "G15",
-      "requirement": "Final GitHub branch SHA equals the locally tested exact commit SHA.",
+      "id": "H0-1",
+      "requirement": "Skill Workflow authority is current main 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f and vendored tools remain byte-identical.",
+      "evidence": "Windows CI Skill Workflow provenance and STRICT selftest",
       "status": "NOT_PROVEN"
     },
     {
-      "evidence": "final Git audit",
-      "id": "G16",
-      "requirement": "After exact-SHA runtime/E2E, worktree clean, diff-check passes, no conflicts/actions/post-test tracked mutation.",
+      "id": "H0-2",
+      "requirement": "Public repository source-only policy rejects prohibited runtime/private paths and exact-tree secret findings.",
+      "evidence": "Windows CI Source-only policy plus redacted exact-tree secret scan",
       "status": "NOT_PROVEN"
+    },
+    {
+      "id": "H0-3",
+      "requirement": "Current repository identity and authority model are maxqstudio/max-trading-agent -> windows-latest CI -> deferred final Owner-PC runtime.",
+      "evidence": ".workflow semantic specs and generated governance",
+      "status": "NOT_PROVEN"
+    },
+    {
+      "id": "H0-4",
+      "requirement": "Project Truth Compiler and strict governance validators reproduce canonical docs without manual generated-Markdown edits.",
+      "evidence": "Hosted governance CI",
+      "status": "NOT_PROVEN"
+    },
+    {
+      "id": "H0-5",
+      "requirement": "Backend regression remains at or above verified 488-pass migration floor and pip check passes.",
+      "evidence": "Windows CI Backend and Skill Workflow job",
+      "status": "NOT_PROVEN"
+    },
+    {
+      "id": "H0-6",
+      "requirement": "Frontend remains at or above 53 tests / 10 files with lint, production build and npm dependency tree PASS.",
+      "evidence": "Windows CI Frontend job",
+      "status": "NOT_PROVEN"
+    },
+    {
+      "id": "H0-7",
+      "requirement": "Historical previous-repository/runtime evidence is distinguished from current authority without blind rewriting.",
+      "evidence": "migration audit, decisions, claims, state, generated docs",
+      "status": "NOT_PROVEN"
+    },
+    {
+      "id": "H0-8",
+      "requirement": "Exact H0 work-branch candidate passes every required Windows CI job before merge.",
+      "evidence": "GitHub Actions Windows CI",
+      "status": "NOT_PROVEN"
+    },
+    {
+      "id": "H0-9",
+      "requirement": "H0 merges only after green branch CI and resulting main commit is revalidated by Windows CI.",
+      "evidence": "GitHub PR/merge and main Windows CI",
+      "status": "NOT_PROVEN"
+    },
+    {
+      "id": "H0-10",
+      "requirement": "No GitHub evidence claims real MT5, broker, terminal data-root, browser or Owner-PC runtime PASS.",
+      "evidence": "runtime status and authority semantics",
+      "status": "PASS"
     }
   ],
   "results": {
-    "docs": {
-      "doc_layout": "PASS",
-      "doc_readability": "PASS",
-      "generated": 21,
-      "project_docs_normalized": "PASS",
-      "project_docs_sync": "PASS",
-      "root_canonical_duplicates": 0
+    "hosted_baseline": {
+      "migration_main": "ce66946efb23cd479b43239087601ad30c8ac239",
+      "migration_verification_run_id": 36331539014,
+      "backend_floor": 488,
+      "frontend_files_floor": 10,
+      "frontend_tests_floor": 53,
+      "source_only_policy": "PREVIOUSLY_VERIFIED; H0_EXACT_COMMIT_NOT_PROVEN_YET",
+      "skill_authority_sha": "9e22feddb8f94e8c0f1af6a33e14b64de5068f8f"
     },
     "regression": {
-      "backend": 488,
-      "backend_status": "PASS",
-      "build": "PASS",
-      "frontend_files": 10,
-      "frontend_status": "PASS",
-      "frontend_tests": 53,
-      "leakage_gate_count": 24,
-      "leakage_status": "PASS",
-      "lint": "0 errors / 0 warnings",
-      "m06": 18,
-      "m06_status": "PASS",
-      "npm_ls_all": "PASS",
-      "optimizer": 238,
-      "optimizer_status": "PASS",
-      "pip_check": "PASS",
-      "r01": 54,
-      "r01_status": "PASS",
-      "scientist": 91,
-      "scientist_status": "PASS",
-      "typescript": "PASS"
+      "backend": "NOT_PROVEN_H0_EXACT_COMMIT",
+      "pip_check": "NOT_PROVEN_H0_EXACT_COMMIT",
+      "frontend": "NOT_PROVEN_H0_EXACT_COMMIT",
+      "lint": "NOT_PROVEN_H0_EXACT_COMMIT",
+      "build": "NOT_PROVEN_H0_EXACT_COMMIT",
+      "npm_ls_all": "NOT_PROVEN_H0_EXACT_COMMIT"
     },
     "runtime": {
-      "api_4xx_5xx": 0,
-      "browser_e2e": "PASS",
-      "browser_runtime_exceptions": 0,
-      "candidate_sha_before_commit": "35c449d8e2ff92fd83e926b4ced14d3d5537e4ce",
-      "exact_pushed_sha": "bc785476b39f8ffe160f7def5df34909e85a654a",
-      "exact_pushed_sha_browser_console_errors": 0,
-      "exact_pushed_sha_browser_e2e": "PASS",
-      "exact_pushed_sha_browser_pages": 8,
-      "exact_pushed_sha_browser_runtime_exceptions": 0,
-      "exact_pushed_sha_domain_state_pre_post_identical": true,
-      "exact_pushed_sha_run_max_fresh_port": "PASS",
-      "exact_pushed_sha_run_max_verified_existing": "PASS",
-      "exact_pushed_sha_runtime": "PASS_FRESH_PORT_AND_MAX_READY_WITH_PREEXISTING_EMPTY_SCHEMA_10_DATABASE",
-      "exact_pushed_sha_unexpected_api_4xx_5xx": 0,
-      "fresh_database_recreation": "BLOCKED_TOOL_POLICY_DELETE_REFUSED",
-      "max_ready": "PASS",
-      "mt5": "READY_EXECUTABLE_AND_DATA_ROOT",
-      "run_max_existing": "PASS",
-      "run_max_fresh": "PASS",
-      "scientist_drawer_preference_restored": true,
-      "scientist_knowledge": "READY",
-      "scientist_provider": "READY",
-      "source_digest": "385d2b167fbcf71a6311bfa92f3e567cb6d4c08fef1a00c963f58721e4145429",
-      "sqlite_schema": 10
+      "status": "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED",
+      "github_actions_scope": "SOURCE_BUILD_TEST_ONLY",
+      "real_mt5": "NOT_PROVEN",
+      "real_metaeditor": "NOT_PROVEN",
+      "real_broker_or_terminal_data_root": "NOT_PROVEN",
+      "browser_e2e": "NOT_PROVEN",
+      "fresh_database_bootstrap": "NOT_PROVEN"
     },
     "scientific_state": {
-      "champion_mutation": "NONE",
-      "current_gate_state": "NOT_INITIALIZED",
-      "current_research_gate": "NONE",
+      "current_epoch_r00": "NOT_EXECUTED_IN_HOSTED_DEVELOPMENT",
+      "current_epoch_r01_scientific_result": "NOT_PROVEN",
+      "r02": "BLOCKED / NOT STARTED",
       "model_training": 0,
       "onnx": 0,
-      "pre_post_identical": true,
-      "r01_scientific_result": "NOT_PROVEN",
-      "r02": "BLOCKED / NOT STARTED",
-      "real_r01_scientific_run": "NOT STARTED",
       "research_challenger": 0,
-      "strategy_champion": "NONE"
-    },
-    "semantics": {
-      "claim_relation_count": 3,
-      "contradictory_claims": 0,
-      "current_claim_count": 12,
-      "false_claim_relation_conflicts": 0,
-      "unknown_claims": 0,
-      "unmapped_current_semantics": 0,
-      "workflow_count": 8
-    },
-    "sequence": {
-      "actual_graphs": 8,
-      "actual_mermaid": 8,
-      "mode": "DURING",
-      "plan_artifacts": 0,
-      "scope": "CURRENT",
-      "sequence_sync": "PASS",
-      "sessions": 8,
-      "source_digest": "385d2b167fbcf71a6311bfa92f3e567cb6d4c08fef1a00c963f58721e4145429",
-      "unresolved_critical_bindings": 0
-    },
-    "skill_authority_sha": "9e22feddb8f94e8c0f1af6a33e14b64de5068f8f",
-    "symbols": {
-      "before": 40,
-      "lost": 0,
-      "non_python_structured": "10/10 PASS",
-      "preserved": 40,
-      "python_machine_extracted": "32/32"
+      "champion_mutation": "NONE_AUTHORIZED_IN_H0"
     },
     "tool_provenance": {
-      "byte_identical": 18,
-      "local_patch": 0,
-      "missing": 0,
       "skill_authority_sha": "9e22feddb8f94e8c0f1af6a33e14b64de5068f8f",
-      "stale": 0,
-      "status": "PASS",
-      "vendored": 18
+      "status": "NOT_PROVEN_H0_EXACT_COMMIT"
     }
   },
   "runtime_checks": [
-    "RUN_MAX.cmd --no-pause fresh-port path passed on the exact pushed SHA bc785476b39f8ffe160f7def5df34909e85a654a using the existing application-created empty schema-10 database; this does not satisfy fresh-database recreation.",
-    "RUN_MAX.cmd --no-pause verified-existing path passed on exact pushed SHA bc785476b39f8ffe160f7def5df34909e85a654a.",
-    "MAX_READY: Backend READY, SQLite schema 10 READY, Scientist knowledge/provider READY, Champion NONE, and MT5 READY_EXECUTABLE_AND_DATA_ROOT.",
-    "Thirteen read-only API GET checks returned HTTP 200; Strategy/Research operational SQLite rows remained zero and generated storage remained zero.",
-    "Real isolated Microsoft Edge E2E passed all eight required routes; zero API 4xx/5xx, zero console errors, zero browser runtime exceptions.",
-    "Scientist drawer inspection caused two UI-settings PUT requests; the original closed preference was restored and all pre/post domain row counts were identical.",
-    "After the authorized database deletion attempt was refused by execution policy, no alternate deletion route was attempted; the required fresh-database rebootstrap remains blocked."
+    "H0 intentionally performs no Owner-PC runtime checks.",
+    "Real MT5, MetaEditor, broker/data-root, browser and fresh-database behavior remain OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after hosted roadmap closure."
   ],
-  "runtime_status": "BLOCKED_EXACT_PUSHED_SHA_FRESH_DATABASE_RECREATION",
-  "schema_version": 1,
+  "runtime_status": "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED",
   "sequence_mode": "DURING",
-  "sequence_session": "docs/sequence/sessions/ (8 current DURING sessions)",
+  "sequence_session": "docs/sequence/sessions/ (current DURING sessions)",
   "sequence_sync_status": "PASS",
   "test_commands": [
-    ".\\.venv\\Scripts\\python.exe -m pytest backend\\tests -q -o addopts=",
-    ".\\.venv\\Scripts\\python.exe -m pytest backend\\tests\\test_r01_source.py backend\\tests\\test_r01_dataset.py backend\\tests\\test_r01_research.py -q -o addopts=",
-    ".\\.venv\\Scripts\\python.exe -m pytest backend\\tests\\test_r01_dataset.py::test_r01_dependency_and_adversarial_suite -q -o addopts=",
-    ".\\.venv\\Scripts\\python.exe -m pytest backend\\tests\\test_m06_challenger_operations.py -q -o addopts=",
-    ".\\.venv\\Scripts\\python.exe -m pytest backend\\tests\\test_m01_optimizer_core.py backend\\tests\\test_m01_optimizer_store.py backend\\tests\\test_m01_fail_closed.py backend\\tests\\test_m01_jobs.py backend\\tests\\test_m01_lifecycle.py backend\\tests\\test_m01_recovery.py backend\\tests\\test_m02_scientist.py backend\\tests\\test_m02_store.py backend\\tests\\test_m03_worker.py backend\\tests\\test_m03_store.py backend\\tests\\test_m03_challenger.py backend\\tests\\test_m08_strategy_results.py -q -o addopts=",
-    ".\\.venv\\Scripts\\python.exe -m pytest backend\\tests\\test_m02_scientist.py backend\\tests\\test_m05_scientist.py backend\\tests\\test_m05_provider_settings.py backend\\tests\\test_m05_final_evidence_contract.py backend\\tests\\test_m05_candidate_tree_scan.py -q -o addopts=",
+    "python .workflow/tools/sync_project_truth.py",
+    "python .workflow/tools/validate_project_docs.py",
+    "python .workflow/tools/validate_sequence_sessions.py",
+    "python .workflow/tools/validate_handoff.py",
+    "python .workflow/tools/validate_human_comprehension.py --require-pass",
+    "python .workflow/tools/validate_cross_document_consistency.py",
+    "python .workflow/tools/validate_project_truth.py",
+    "python scripts/scan_m05_candidate_tree.py --candidate-sha HEAD",
+    "python -m pytest backend/tests -q -o addopts=",
+    "python -m pip check",
     "npm test -- --run (workdir: frontend)",
     "npm run lint (workdir: frontend)",
-    "npm run build (workdir: frontend; includes tsc -b)",
-    "npm ls --all (workdir: frontend)",
-    ".\\.venv\\Scripts\\python.exe -m pip check"
+    "npm run build (workdir: frontend)",
+    "npm ls --all (workdir: frontend)"
   ],
   "truth_gates": {
-    "BEHAVIORAL_SYNC": "PASS",
-    "CROSS_DOCUMENT_CONSISTENCY": "PASS",
-    "DOC_LAYOUT": "PASS",
-    "DOC_READABILITY": "PASS",
-    "DOC_SOURCE_TRACEABILITY": "PASS",
-    "DOC_TEST_TRACEABILITY": "PASS",
+    "SOURCE_TESTS": "NOT_PROVEN",
+    "RUNTIME_E2E": "NOT_APPLICABLE",
+    "PROVENANCE_SYNC": "NOT_PROVEN",
+    "REFERENCE_SYNC": "NOT_PROVEN",
+    "STRUCTURAL_SYNC": "NOT_PROVEN",
+    "SEMANTIC_SYNC": "NOT_PROVEN",
+    "BEHAVIORAL_SYNC": "NOT_PROVEN",
+    "CROSS_DOCUMENT_CONSISTENCY": "NOT_PROVEN",
     "HUMAN_COMPREHENSION": "PASS",
-    "PROJECT_DOCS_NORMALIZED": "PASS",
-    "PROJECT_DOCS_SYNC": "PASS",
-    "PROJECT_STATE_SYNC": "PASS",
-    "PROVENANCE_SYNC": "PASS",
-    "REFERENCE_SYNC": "PASS",
-    "RUNTIME_E2E": "PASS",
-    "SEMANTIC_SYNC": "PASS",
     "SEQUENCE_SYNC": "PASS",
-    "SOURCE_TESTS": "PASS",
-    "STRUCTURAL_SYNC": "PASS",
-    "TEST_RUNTIME_TRACEABILITY": "PASS"
+    "DOC_LAYOUT": "NOT_PROVEN",
+    "PROJECT_DOCS_NORMALIZED": "NOT_PROVEN",
+    "DOC_READABILITY": "NOT_PROVEN",
+    "PROJECT_DOCS_SYNC": "NOT_PROVEN",
+    "DOC_SOURCE_TRACEABILITY": "NOT_PROVEN",
+    "DOC_TEST_TRACEABILITY": "NOT_PROVEN",
+    "TEST_RUNTIME_TRACEABILITY": "NOT_APPLICABLE",
+    "PROJECT_STATE_SYNC": "NOT_PROVEN"
   }
 }
