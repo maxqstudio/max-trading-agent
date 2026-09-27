@@ -53,6 +53,19 @@ def fresh_schema5(path: Path) -> None:
     migrate_m04(path)
 
 
+@pytest.fixture(autouse=True, scope="module")
+def synthetic_historical_bundle() -> None:
+    bundle = ROOT / "artifacts" / "strategy_challengers" / "TEST-FIXTURE-M05"
+    existed = bundle.exists()
+    bundle.mkdir(parents=True, exist_ok=True)
+    yield
+    if not existed:
+        try:
+            bundle.rmdir()
+        except OSError:
+            pass
+
+
 def _seed_historical_scientist_authority(path: Path) -> None:
     """Make M05 tests independent from the current mutable Strategy epoch.
 
@@ -141,7 +154,7 @@ def _seed_historical_scientist_authority(path: Path) -> None:
                 challenger_id, job_id,
                 "2026-09-22T12:07:35+00:00", "2026-09-22T14:12:39+00:00",
                 "9fa6e50231cec4d907b14e3237a118bf3bac22c55682f83ea06303e73c140345",
-                "artifacts/strategy_challengers/" + challenger_id,
+                "artifacts/strategy_challengers/TEST-FIXTURE-M05",
                 json.dumps(params), json.dumps(kpi), json.dumps(hard_gates),
                 json.dumps(request), json.dumps(winner), json.dumps({}),
             ),
