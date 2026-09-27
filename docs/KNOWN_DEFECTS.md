@@ -9,10 +9,12 @@
 | KD-003 | FIXED/ACCEPTED | Former Champion source auto-reactivated | Champion store/promotion regressions prove FORMER tenure + historical PROMOTED source. |
 | KD-004 | FIXED/ACCEPTED | Research sample setting froze/hardcoded historical 4/8 behavior | R00/R01 config/snapshot regressions prove editable current config and immutable per-execution snapshot. |
 | KD-005 | FIXED/ACCEPTED | Optimizer parameter-grid display issue | Accepted targeted repair regression evidence. |
-| NP-001 | NOT_PROVEN | Live current 17D Challenger row on Owner runtime | Owner runtime has five active legacy exact-16D rows; 17D compatibility is regression-proven only. |
+| NP-001 | HISTORICAL_NOT_CURRENT_AUTHORITY | Previous Owner-runtime Challenger population is not current hosted authority | Any previous Owner-runtime Challenger population belongs to the retired MAX REBUILD epoch. Post-migration Owner runtime for maxqstudio/max-trading-agent is deferred and NOT_PROVEN. |
 | NP-002 | NOT_PROVEN | R01 scientific result | Real R01 scientific run has not started. |
 | NP-003 | NOT_PROVEN | R02/model training/ONNX/Research Challenger | All remain blocked/not started. |
 | GOV-001 | FIXED/ACCEPTED_CANDIDATE | Historical Skill Workflow authority drift repaired forward to current repaired authority | Repaired Skill authority 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f vendored 18/18 byte-identically; canonical docs/ layout and strict validators pass on pre-final clean candidate. |
 | GOV-002 | FIXED/ACCEPTED_CANDIDATE | Claim relation row misclassification and Project Truth fail-open repaired in current Skill Workflow | Repaired Skill validates MAX 11 canonical claims and all 3 legitimate Claim relations with zero false claim-text conflicts; explicit truth-gate FAIL is fail-closed. |
+| GOV-003 | IN_REPAIR | Migrated semantic governance still describes maxqstudio/max_rebuild and Owner-PC-centric development | H0 audit of .workflow project/state/authority/acceptance/decisions/architecture plus generated docs. |
+| KD-006 | OPEN_BLOCKING_FUTURE_R01 | R01 binds retired previous-epoch R00/Research/Strategy identifiers | backend/max_backend/research_r01_service.py hardcoded ACCEPTED_R00_RESEARCH_ID, ACCEPTED_R00_PARENT_ID, ACCEPTED_R00_CHAMPION_ID and exact-ID normalization block a legal new current-epoch R01. |
 
 Use explicit OPEN, FIXED/ACCEPTED, HISTORICAL, or NOT_PROVEN semantics.
