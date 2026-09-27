@@ -6,9 +6,9 @@ Canonical authority is declared in .workflow/authority.json.
 
 | Concern | Authority | Meaning | Mutable |
 |---|---|---|---|
-| source | GitHub exact commit in maxqstudio/max_rebuild | Tracked source/spec/governance state is authoritative by exact commit; final candidate HEAD must equal locally tested HEAD. | YES |
-| runtime | Owner PC D:\MAX_REBUILD exact-SHA checkout | Windows/MT5/browser runtime and E2E behavior are accepted only from the Owner-PC checkout at the tested SHA. | YES |
-| acceptance | Control Room audit over exact-SHA source/test/runtime evidence | No individual validator or historical PASS alone grants project acceptance. | YES |
+| source | GitHub main exact commit in maxqstudio/max-trading-agent | Tracked source/spec/governance state is authoritative by exact main commit. Ordinary phases branch from latest main, validate in Windows CI, merge only when green, then revalidate main. | YES |
+| runtime | Owner PC clean exact-SHA checkout plus real MetaTrader 5 | Real MT5, MetaEditor, broker/data-root, browser and filesystem runtime behavior is final acceptance authority only after the GitHub development roadmap is complete. GitHub Actions cannot prove this boundary. | YES |
+| acceptance | GitHub Actions Windows CI for hosted phases; Owner PC for final runtime acceptance | Ordinary source phases require green Windows CI at the phase candidate and green main after merge. Final real runtime/E2E remains separately unproven until Owner-PC final acceptance. | YES |
 | sqlite_operational_state | Owning backend store over state/max.db | Mutable operational lifecycle/settings state is authoritative only where the corresponding store/service owns it. | YES |
 | immutable_scientific_evidence | Sealed manifests, bundles, reports and retained artifacts | Scientific/execution history is immutable when its owning contract marks it immutable; current config cannot rewrite it. | NO |
 | strategy_champion | backend/max_backend/champion_store.py::commit_promotion_authority plus explicit Owner promotion | Current Champion tenure changes only through verified promotion authority; prior tenure becomes FORMER history. | YES |
@@ -20,7 +20,7 @@ Canonical authority is declared in .workflow/authority.json.
 | mt5_execution | MetaTrader 5 Strategy Tester and MetaEditor | MT5/MetaEditor own simulation, optimization and compile execution truth; Python owns legality/orchestration/evidence verification. | YES |
 | scientist | Hash-verified static knowledge plus bounded committed runtime context | Scientist output is advisory only and cannot mutate Strategy/Research scientific authority. | YES |
 | frontend | Semantic backend API representation | React presents authority; UI labels/local state do not create domain eligibility, gate completion or scientific PASS. | YES |
-| tests | Executable suites at the exact tested HEAD | A test PASS is evidence only for the layer and snapshot actually executed. | YES |
+| tests | Executable suites at the exact GitHub-tested commit | A test PASS is evidence only for the layer and commit actually executed; Windows CI does not imply real MT5 runtime PASS. | YES |
 | historical_evidence | Retained docs/audits/acceptance and immutable artifacts | Historical evidence remains historically truthful and is not rewritten to mimic current terminology or configuration. | NO |
 | documentation | .workflow semantic specs + Project Truth Compiler at Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f | Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden. | YES |
 | sequence | DURING-mode generated actual sequence graphs plus source/test/runtime semantic review | Existing implementation is reconstructed from current source; retrospective BEFORE plans are forbidden. | YES |
@@ -29,7 +29,9 @@ Canonical authority is declared in .workflow/authority.json.
 ## Invariants
 
 - Authority conflicts fail closed; do not infer from UI labels, chat memory or stale prose.
-- TESTED_HEAD = FINAL_SOURCE_HEAD = FINAL_DOCUMENTATION_HEAD.
+- Ordinary development phase: latest main -> work branch -> exact-commit Windows CI PASS -> merge -> main Windows CI revalidation.
+- Final Owner-PC runtime acceptance must use the final GitHub main exact SHA after the hosted roadmap closes.
+- GitHub Actions may prove source/build/test contracts but must not claim real MT5, broker, terminal data-root, browser runtime or Owner-PC filesystem behavior.
 - Historical retained Challenger evidence remains exact legacy 16D while current V6 is exact 17D including InpRiskPct; mixed/missing/extra universes fail closed.
 - Durable optimizer consumption survives Challenger promotion, retirement and later permitted physical deletion while registry or COMMITTED batch authority remains.
 - Former Champion tenure does not recreate active Challenger eligibility.
