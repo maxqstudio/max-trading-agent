@@ -1,13 +1,13 @@
 {
   "claims": [
     {
-      "claim": "GitHub source and Owner-PC runtime authority are separate and explicit.",
+      "claim": "GitHub main is source authority, Windows GitHub Actions is ordinary hosted build/test authority, and Owner PC plus real MT5 is final runtime/E2E authority only after roadmap closure.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
       "id": "TRUTH-AUTHORITY-001",
       "runtime_evidence": [
-        "RUNTIME_ACCEPTANCE_EXTERNAL"
+        "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
       ],
       "source_owners": [
         "scripts/launcher_authority.py::expected_authority"
@@ -18,13 +18,13 @@
       ]
     },
     {
-      "claim": "Final delivered candidate must have GitHub HEAD equal to locally tested HEAD.",
+      "claim": "Each ordinary phase is validated at an exact GitHub commit before merge and main is revalidated after merge; final Owner-PC acceptance must use the final main exact SHA.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
       "id": "TRUTH-SHA-001",
       "runtime_evidence": [
-        "FINAL_SHA_MATCH_EXTERNAL"
+        "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
       ],
       "source_owners": [
         "scripts/launcher_authority.py::expected_authority"
@@ -72,14 +72,13 @@
       ]
     },
     {
-      "claim": "The previous-epoch Champion remains historical and is absent in the fresh runtime; its source does not automatically return to active Challengers.",
+      "claim": "Previous-epoch Champion tenure is historical provenance only and does not establish a current MAX Trading Agent runtime Champion; no automatic source-Challenger reactivation is allowed.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
       "id": "TRUTH-CHAMPION-001",
       "runtime_evidence": [
-        "FRESH_RUNTIME_CHAMPION_NONE",
-        "MUTATION_PROHIBITED_REGRESSION_AUTHORITY"
+        "OWNER_PC_CURRENT_RUNTIME_NOT_PROVEN"
       ],
       "source_owners": [
         "backend/max_backend/champion_store.py::commit_promotion_authority"
@@ -128,14 +127,13 @@
       ]
     },
     {
-      "claim": "The previous-epoch accepted R00 used 4 trades/month and remains immutable historical evidence; current-epoch R00 has not started.",
+      "claim": "Previous-epoch accepted R00 is immutable historical evidence only; it is not current Research authority for the fresh MAX Trading Agent epoch.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
       "id": "TRUTH-R00-HISTORY-001",
       "runtime_evidence": [
-        "HISTORICAL_R00_RUNTIME_EVIDENCE",
-        "FRESH_RUNTIME_R00_NOT_STARTED"
+        "CURRENT_EPOCH_R00_NOT_EXECUTED_IN_HOSTED_DEVELOPMENT"
       ],
       "source_owners": [
         "backend/max_backend/research_service.py::start_r00"
@@ -165,14 +163,13 @@
       ]
     },
     {
-      "claim": "The previous-epoch R01 implementation/runtime repair passed targeted re-audit; current-epoch R01 is blocked/not started and has no scientific result.",
+      "claim": "Current-epoch R01 has no scientific result and future execution is blocked until it binds immutable accepted CURRENT R00 authority instead of retired hardcoded previous-epoch IDs.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
       "id": "TRUTH-R01-STATE-001",
       "runtime_evidence": [
-        "FRESH_RUNTIME_R01_PREFLIGHT_BLOCKED",
-        "FRESH_RUNTIME_R00_NOT_STARTED"
+        "REAL_CURRENT_EPOCH_R01_NOT_RUN"
       ],
       "source_owners": [
         "backend/max_backend/research_r01_service.py::r01_detail"
@@ -183,32 +180,31 @@
       ]
     },
     {
-      "claim": "The fresh Research epoch has no current project or gate; Research initialization remains a separate Owner-authorized action.",
+      "claim": "The public source-only repository carries no mutable runtime database or inherited runtime authority; actual final Owner-PC fresh-epoch state remains unproven until final acceptance.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
       "id": "TRUTH-FRESH-EPOCH-001",
       "runtime_evidence": [
-        "FRESH_RUNTIME_READONLY_API",
-        "FRESH_RUNTIME_DOMAIN_COUNTS_ZERO"
+        "NOT_PROVEN"
       ],
       "source_owners": [
         "backend/max_backend/research_service.py::current_research",
         "backend/max_backend/research_r01_service.py::r01_preflight"
       ],
-      "status": "PASS",
+      "status": "NOT_PROVEN",
       "tests": [
         "backend/tests/test_fresh_runtime.py"
       ]
     },
     {
-      "claim": "R02 remains blocked and has not started.",
+      "claim": "R02 remains blocked and has not been authorized in hosted development; it requires accepted current-epoch R01 scientific authority plus separate Owner advancement.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
       "id": "TRUTH-R02-BLOCK-001",
       "runtime_evidence": [
-        "OWNER_RUNTIME_NO_R02"
+        "NOT_PROVEN"
       ],
       "source_owners": [
         "backend/max_backend/research_service.py::attempt_gate_transition"
