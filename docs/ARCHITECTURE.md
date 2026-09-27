@@ -2,7 +2,7 @@
 
 # ARCHITECTURE
 
-Current source digest: 385d2b167fbcf71a6311bfa92f3e567cb6d4c08fef1a00c963f58721e4145429
+Current source digest: be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca
 
 ## Components
 
@@ -16,7 +16,7 @@ Current source digest: 385d2b167fbcf71a6311bfa92f3e567cb6d4c08fef1a00c963f58721e
 | launcher | Windows launcher/readiness | Verify or start canonical backend/frontend instances, reject invalid occupied ports and emit MAX_READY only after authority/readiness checks. | RUN_MAX.cmd, scripts/run_max.ps1 | backend /api/overview, frontend proxy/root, Scientist status, ports 8000/5173 |
 | mt5 | MT5/MetaEditor execution boundary | Provide Strategy Tester simulation/optimization and MQL5 compile/execution truth. | ea/baseline/Max_MTF.mq5 | MetaTrader 5 terminal, MetaEditor |
 | operational-state | SQLite operational state | Persist mutable Strategy/Research/Scientist operational state through owning stores and transactions. | state/max.db | backend store modules |
-| immutable-evidence | Immutable evidence/artifact layer | Retain execution/scientific lineage that current configuration or active-role changes cannot rewrite. | artifacts/, evidence/, docs/audits/ | domain services and artifact registry |
+| immutable-evidence | Immutable evidence/artifact layer | Define retained execution/scientific lineage at runtime; private runtime artifacts/evidence are not tracked in the public source-only GitHub repository. | artifacts/, evidence/, docs/audits/ | domain services and artifact registry |
 | governance | Current project governance | Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth. | PROJECT_PROFILE.yaml, .workflow/*.json, .workflow/workflows/*.json, .workflow/tools/*.py, docs/sequence/sessions/*.json, docs/sequence/generated/*.actual.json, docs/sequence/generated/*.actual.mmd | Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f |
 
 ## Data flow
@@ -31,17 +31,18 @@ Current source digest: 385d2b167fbcf71a6311bfa92f3e567cb6d4c08fef1a00c963f58721e
 
 ## External boundaries
 
-- GitHub: Exact commit is source authority; no GitHub Actions acceptance.
-- Owner PC: D:\MAX_REBUILD exact checkout is runtime/browser/MT5 acceptance authority.
+- GitHub: maxqstudio/max-trading-agent main exact commit is source authority.
+- GitHub Actions: windows-latest is hosted build/test authority for ordinary development phases; it does not prove real MT5 or Owner-PC runtime.
+- Owner PC: Final exact-SHA clean install plus real MT5/MetaEditor/browser/filesystem behavior is runtime/E2E authority only after the hosted roadmap is complete.
 - MetaTrader 5: Simulation and optimization execution truth only; Python validates workflow legality and evidence.
 - MetaEditor: MQL5 compile truth used by promotion/deployment checks.
 - Scientist provider: Untrusted/advisory provider output is bounded and cannot mutate Strategy/Research authority.
 
 ## Observed implementation inventory
 
-Source files: 643
-Source lines: 93893
-Languages: JavaScript=489, PowerShell=1, Python=102, TypeScript=3, TypeScript/React=21, XML=27
+Source files: 128
+Source lines: 61765
+Languages: PowerShell=2, Python=102, TypeScript=3, TypeScript/React=21
 
 Structural facts come from the code extractor. Component meaning comes from
 .workflow/architecture.json.
