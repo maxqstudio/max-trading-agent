@@ -144,7 +144,7 @@
         "evidence/",
         "docs/audits/"
       ],
-      "purpose": "Retain execution/scientific lineage that current configuration or active-role changes cannot rewrite."
+      "purpose": "Define retained execution/scientific lineage at runtime; private runtime artifacts/evidence are not tracked in the public source-only GitHub repository."
     },
     {
       "depends_on": [
@@ -203,24 +203,28 @@
   ],
   "external_boundaries": [
     {
-      "contract": "Exact commit is source authority; no GitHub Actions acceptance.",
-      "name": "GitHub"
+      "name": "GitHub",
+      "contract": "maxqstudio/max-trading-agent main exact commit is source authority."
     },
     {
-      "contract": "D:\\MAX_REBUILD exact checkout is runtime/browser/MT5 acceptance authority.",
-      "name": "Owner PC"
+      "name": "GitHub Actions",
+      "contract": "windows-latest is hosted build/test authority for ordinary development phases; it does not prove real MT5 or Owner-PC runtime."
     },
     {
-      "contract": "Simulation and optimization execution truth only; Python validates workflow legality and evidence.",
-      "name": "MetaTrader 5"
+      "name": "Owner PC",
+      "contract": "Final exact-SHA clean install plus real MT5/MetaEditor/browser/filesystem behavior is runtime/E2E authority only after the hosted roadmap is complete."
     },
     {
-      "contract": "MQL5 compile truth used by promotion/deployment checks.",
-      "name": "MetaEditor"
+      "name": "MetaTrader 5",
+      "contract": "Simulation and optimization execution truth only; Python validates workflow legality and evidence."
     },
     {
-      "contract": "Untrusted/advisory provider output is bounded and cannot mutate Strategy/Research authority.",
-      "name": "Scientist provider"
+      "name": "MetaEditor",
+      "contract": "MQL5 compile truth used by promotion/deployment checks."
+    },
+    {
+      "name": "Scientist provider",
+      "contract": "Untrusted/advisory provider output is bounded and cannot mutate Strategy/Research authority."
     }
   ],
   "schema_version": 1
