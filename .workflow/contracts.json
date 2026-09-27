@@ -472,84 +472,89 @@
   ],
   "runbook_steps": [
     {
-      "command": "git fetch origin work/skill-workflow-strict-adoption; git switch work/skill-workflow-strict-adoption; git rev-parse HEAD; git status --porcelain",
-      "expected": "Exact intended candidate HEAD and clean worktree.",
-      "name": "Verify exact source"
+      "name": "Verify hosted source authority",
+      "command": "git fetch origin main; git switch main; git pull --ff-only; git rev-parse HEAD; git status --porcelain",
+      "expected": "Latest maxqstudio/max-trading-agent main exact SHA and clean worktree."
     },
     {
+      "name": "Create phase branch",
+      "command": "git switch -c work/<semantic-phase-name>",
+      "expected": "Work branch descends from latest main; no reset/rewrite of valid work."
+    },
+    {
+      "name": "Python environment",
       "command": "py -3.13 -m venv .venv; .\\.venv\\Scripts\\python.exe -m pip install -r requirements.lock.txt",
-      "expected": "Python 3.13 environment with locked dependencies.",
-      "name": "Python environment"
+      "expected": "Python 3.13 environment with locked dependencies."
     },
     {
+      "name": "Frontend dependencies",
       "command": "cd frontend; npm ci; cd ..",
-      "expected": "package-lock resolved without required dependency errors.",
-      "name": "Frontend dependencies"
+      "expected": "package-lock resolves without required dependency errors."
     },
     {
+      "name": "Sync generated governance",
       "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\sync_project_truth.py",
-      "expected": "PROJECT_DOCS_SYNC=PASS.",
-      "name": "Sync generated governance"
+      "expected": "PROJECT_DOCS_SYNC=PASS; commit only deterministic compiler outputs."
     },
     {
+      "name": "Validate generated docs",
       "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_project_docs.py",
-      "expected": "RESULT=PASS and no stale/missing generated docs.",
-      "name": "Validate generated docs"
+      "expected": "No stale/missing generated canonical docs."
     },
     {
+      "name": "Validate sequence sessions",
       "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_sequence_sessions.py",
-      "expected": "Eight current DURING sessions, zero failed sessions.",
-      "name": "Validate sequence sessions"
+      "expected": "Eight current DURING sessions with zero failed sessions."
     },
     {
-      "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_handoff.py",
-      "expected": "STRICT required docs present/current.",
-      "name": "Validate handoff"
+      "name": "Validate handoff and human comprehension",
+      "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_handoff.py; .\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_human_comprehension.py --require-pass",
+      "expected": "STRICT handoff and HUMAN_COMPREHENSION PASS."
     },
     {
-      "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_human_comprehension.py --require-pass",
-      "expected": "HUMAN_COMPREHENSION_GATE PASS.",
-      "name": "Validate human comprehension"
+      "name": "Validate cross-document consistency",
+      "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_cross_document_consistency.py",
+      "expected": "RESULT=PASS without stale repository/runtime authority conflicts."
     },
     {
-      "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_cross_document_consistency.py --base ad7e61c9d944677e1d7a48e9bfbfc9d049b2542e --require-base",
-      "expected": "RESULT=PASS.",
-      "name": "Validate cross-document consistency"
-    },
-    {
+      "name": "Validate project truth",
       "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_project_truth.py",
-      "expected": "RESULT=PASS after required acceptance evidence is present.",
-      "name": "Validate project truth"
+      "expected": "RESULT=PASS for the current hosted scope; final real runtime remains explicitly deferred."
     },
     {
+      "name": "Backend cumulative tests",
       "command": ".\\.venv\\Scripts\\python.exe -m pytest backend\\tests -q -o addopts=",
-      "expected": "At least established 485-pass floor; investigate any decrease.",
-      "name": "Backend cumulative tests"
+      "expected": "At least the verified migration floor of 488 PASS; any unexplained decrease blocks the phase."
     },
     {
-      "command": "cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all; cd ..",
-      "expected": "51-test floor across 10 files, lint 0/0, build PASS, dependency tree exit 0.",
-      "name": "Frontend tests/lint/build"
-    },
-    {
+      "name": "Python dependencies",
       "command": ".\\.venv\\Scripts\\python.exe -m pip check",
-      "expected": "No broken requirements.",
-      "name": "Python dependencies"
+      "expected": "No broken requirements."
     },
     {
-      "command": "RUN_MAX.cmd --no-pause",
-      "expected": "Verified-instance or fresh-port path reaches MAX_READY only after backend/proxy/Scientist authority checks.",
-      "name": "Canonical runtime"
+      "name": "Frontend tests lint build dependencies",
+      "command": "cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all; cd ..",
+      "expected": "At least 53 tests across 10 files, lint PASS, production build PASS, dependency tree exit 0."
     },
     {
-      "command": "Invoke-RestMethod http://127.0.0.1:8000/api/overview; Invoke-RestMethod http://127.0.0.1:8000/api/mt5/preflight; Invoke-RestMethod http://127.0.0.1:5173/api/scientist/status",
-      "expected": "Backend/MT5/Scientist semantic readiness.",
-      "name": "Readiness probes"
+      "name": "Public exact-tree secret scan",
+      "command": ".\\.venv\\Scripts\\python.exe scripts\\scan_m05_candidate_tree.py --candidate-sha HEAD",
+      "expected": "PASS with no plaintext high-confidence secret or forbidden secret-storage path."
     },
     {
-      "command": "Real Microsoft Edge/Chromium navigate Strategy Overview/Optimizer/Challengers/Champion, Research/Data, Artifacts, Settings and Scientist drawer without mutation",
-      "expected": "All required views render; no R01 start/promotion/retirement/delete/training/ONNX mutation.",
-      "name": "Browser E2E"
+      "name": "Hosted phase acceptance",
+      "command": "Push work branch and inspect .github/workflows/windows-ci.yml for the exact candidate commit.",
+      "expected": "Source-only policy, governance, Skill provenance/selftest, backend, pip, frontend test/lint/build/dependency gates all PASS on windows-latest."
+    },
+    {
+      "name": "Merge and main revalidation",
+      "command": "Merge the green phase branch to main, then inspect Windows CI for the resulting main commit.",
+      "expected": "Main Windows CI PASS before beginning the next ordinary development phase."
+    },
+    {
+      "name": "Final runtime acceptance boundary",
+      "command": "Only after hosted roadmap closure: clean-clone final main and run INSTALL.ps1 on Owner PC before real MT5/MetaEditor/browser/E2E checks.",
+      "expected": "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED until that final phase; never infer runtime PASS from GitHub Actions."
     }
   ],
   "schema_version": 1,
