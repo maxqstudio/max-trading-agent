@@ -1,0 +1,35 @@
+{
+  "params": {
+    "InpWeightTrend": 1.7,
+    "InpWeightRange": 1.7,
+    "InpWeightBreakout": 0.2,
+    "InpWeightPullback": 1.5,
+    "InpWeightSession": 0.3,
+    "InpWeightShock": 1.5,
+    "InpWeightRelative": 0.8,
+    "InpEntryThreshold": 0.18,
+    "InpExitReverseThreshold": 0.25,
+    "InpMinConsensus": 0.6,
+    "InpSL_ATR": 3.2,
+    "InpTP_ATR": 4.8,
+    "InpMaxHoldBars": 54,
+    "InpShockHaltATR": 3.5,
+    "InpRelativeLookback": 60,
+    "InpMinRelativeCorr": 0.25
+  },
+  "kpi": {
+    "profit_factor": 1.5,
+    "recovery_factor": 1.2,
+    "mean_r": 0.1,
+    "weighted_r": 0.1,
+    "required_trades": 10,
+    "trades": 12
+  },
+  "hard_gates": {
+    "min_profit_factor": 1,
+    "min_recovery_factor": 0,
+    "min_expectancy_r": 0,
+    "min_weighted_r": 0,
+    "minimum_trades": 10
+  }
+}
