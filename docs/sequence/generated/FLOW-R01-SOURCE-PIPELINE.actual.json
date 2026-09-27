@@ -4815,7 +4815,7 @@
       "locator": "backend/max_backend/workflow_store.py::migrate_current"
     }
   ],
-  "observed_head": "35c449d8e2ff92fd83e926b4ced14d3d5537e4ce",
+  "observed_head": "5ad2958bb12242fd6baea0d82baffad43b0052f0",
   "schema_version": 1,
-  "source_digest": "385d2b167fbcf71a6311bfa92f3e567cb6d4c08fef1a00c963f58721e4145429"
+  "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca"
 }
