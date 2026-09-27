@@ -34,8 +34,8 @@ from max_backend.mtf_geometry import STRATEGY_CONTRACT, resolve_strategy_geometr
 REAL_ROOT = Path(__file__).resolve().parents[2]
 BASELINE = REAL_ROOT / "ea" / "baseline" / "Max_MTF.mq5"
 M03_ID = "STRAT-20260922-120735-R01-P11"
-M03_BUNDLE = REAL_ROOT / "artifacts" / "strategy_challengers" / M03_ID
-M03_REQUEST = M03_BUNDLE / "source" / "request.json"
+M03_BUNDLE = REAL_ROOT / "backend" / "tests" / "fixtures" / "m03_challenger"
+M03_REQUEST = M03_BUNDLE / "request.json"
 M03_META = M03_BUNDLE / "challenger.json"
 BASELINE_SHA = "827c4caddedbe37081353e08bba35eac5f01e96314dd8650d7ea17ad109ae725"
 
