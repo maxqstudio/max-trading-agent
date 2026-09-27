@@ -1,48 +1,45 @@
 {
   "blocked_actions": [
     "Starting any real Research execution without separate Owner authorization.",
+    "R01 runtime/scientific execution before current-epoch R00 authority and R01 lineage repair are accepted.",
     "R02 execution.",
     "Model training.",
     "ONNX generation.",
     "Research Challenger creation.",
     "Strategy Champion mutation.",
-    "Unrelated product behavior, algorithm, EA, or Research changes outside the authorized fresh-state repair.",
-    "Database schema change.",
-    "GitHub Actions.",
-    "Merge."
+    "Live trading.",
+    "Unrelated product behavior, algorithm, EA, or database schema changes outside an explicitly authorized phase."
   ],
   "blockers": [
-    "Exact postpush fresh-database recreation remains blocked: execution policy rejected deleting the explicitly authorized D:\\MAX_REBUILD\\state\\max.db. The existing application-created schema-10 database has zero Strategy/Research operational rows and exact-SHA fresh-port/E2E evidence.",
-    "R02 remains blocked by the absence of an accepted R01 scientific result and separate Owner authorization."
+    "Future current-epoch R01 execution is blocked by previous-epoch hardcoded R00/Research/Strategy identifiers in backend/max_backend/research_r01_service.py until immutable current-R00 lineage binding is repaired and negative-tested.",
+    "R02 remains blocked by the absence of an accepted current-epoch R01 scientific result and separate Owner authorization."
   ],
-  "last_accepted_branch": "work/skill-workflow-strict-adoption",
-  "last_accepted_sha": "ad7e61c9d944677e1d7a48e9bfbfc9d049b2542e",
+  "last_accepted_branch": "main",
+  "last_accepted_sha": "ce66946efb23cd479b43239087601ad30c8ac239",
   "next_authorized_actions": [
-    "After execution policy permits deleting exactly D:\\MAX_REBUILD\\state\\max.db, stop MAX services, remove only that runtime DB and any max.db-* sidecars, then rerun exact pushed-SHA RUN_MAX, Edge E2E and non-mutation checks.",
-    "After every exact-SHA gate is green, Control Room audits the exact final GitHub candidate.",
-    "Any Strategy or Research execution after that still requires separate explicit Owner authorization."
+    "Complete H0 Hosted Governance Rebase on work/hosted-governance-rebase, regenerate Project Truth, pass Windows GitHub Actions, merge to main, and revalidate main.",
+    "After H0 main revalidation, repair R01 binding so it resolves immutable accepted CURRENT R00 authority instead of retired epoch constants, with fail-closed cross-epoch/tamper negative tests.",
+    "Continue GitHub-only source phases without requesting Owner-PC runtime testing until the hosted roadmap is complete."
   ],
   "not_proven": [
-    "Final governance candidate acceptance remains external to the self-referential tracked Git commit and requires exact-SHA Control Room evidence.",
-    "Fresh-database recreation after push was not completed because execution policy blocked deletion of the explicitly authorized runtime DB; G13 remains BLOCKED despite exact-SHA fresh-port, MAX_READY and browser E2E passes against the existing empty schema-10 database.",
-    "Live current 17D Challenger row on Owner runtime; compatibility is regression-proven only.",
-    "Any current-epoch R00 or real R01 scientific result.",
-    "Any R02 execution, model training, ONNX generation or Research Challenger creation."
+    "Any post-migration Owner-PC fresh-database/bootstrap, real MT5/MetaEditor, broker/data-root, filesystem deployment or browser E2E result for maxqstudio/max-trading-agent.",
+    "Any current-epoch R00 execution or real R01 scientific result.",
+    "Any R02 execution, model training, ONNX generation or Research Challenger creation.",
+    "Final Owner-PC runtime acceptance at the final GitHub main SHA."
   ],
-  "phase": "FRESH_RUNTIME_RESEARCH_EPOCH_RESET_AND_GOVERNANCE_ACCEPTANCE",
+  "phase": "H0_HOSTED_GOVERNANCE_REBASE",
   "proven": [
-    "Previous-epoch R00 ACCEPTED, its Strategy Champion, and its Research project are historical evidence only and were not carried into the fresh operational epoch.",
-    "The fresh operational epoch was bootstrapped by the application with no current Strategy Champion, Research project/gate, Challenger, optimizer job, training, ONNX, or Research Challenger; read-only API evidence preserves the empty state.",
-    "Fresh-state bootstrap/read-model repair is limited to explicit empty-state handling when no Champion or Research project exists; populated authority continues through existing fail-closed checks.",
-    "The previous-epoch R01 source/runtime targeted re-audit is historical; current-epoch R01 has not started and has no scientific result.",
+    "Previous MAX REBUILD runtime/scientific evidence is historical provenance only and does not become current MAX Trading Agent runtime authority.",
+    "The public migration source tree intentionally excludes runtime databases, runtime evidence, artifacts, datasets, local dependency/build outputs and credentials.",
+    "Migration tests use synthetic source-controlled fixtures instead of private historical Challenger/runtime bundles.",
+    "Skill Workflow current main remains exact SHA 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f at H0 start.",
     "Historical exact-16D and current exact-17D Challenger compatibility is executable-regression covered.",
     "Durable consumed optimizer sources are excluded from the active qualified pool.",
     "Former Champion tenure remains FORMER history and does not automatically reactivate its source Challenger.",
     "Research sample configuration is editable current state and execution snapshots are immutable per run.",
-    "Protected outcome feedback is non-adaptive.",
-    "Exact pushed SHA bc785476b39f8ffe160f7def5df34909e85a654a passed fresh-port/verified-existing startup, MAX_READY, eight-route Edge E2E and read-only non-mutation checks against the existing empty application-created database; fresh database recreation remains blocked by execution policy."
+    "Protected outcome feedback is non-adaptive."
   ],
   "schema_version": 1,
-  "status": "BUILDER_VALIDATION_BLOCKED",
-  "working_branch": "work/skill-workflow-strict-adoption"
+  "status": "HOSTED_GOVERNANCE_REBASE_ACTIVE",
+  "working_branch": "work/hosted-governance-rebase"
 }
