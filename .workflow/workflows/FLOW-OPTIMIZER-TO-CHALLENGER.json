@@ -1,0 +1,79 @@
+{
+  "authority": "MT5 optimizer evidence + Python canonical qualification/revalidation + explicit Owner selection.",
+  "critical": true,
+  "entry_condition": "Optimizer job has QUALIFIED_POOL_READY evidence and Owner opens/selects from the active qualified pool.",
+  "failure_behavior": [
+    "Stale/rejected/consumed/mismatched candidate aborts before legal registry mutation.",
+    "Partial post-directory state becomes recovery-required rather than invented success."
+  ],
+  "flow_id": "FLOW-OPTIMIZER-TO-CHALLENGER",
+  "invariants": [
+    "Consumed source tuple cannot re-enter active pool while durable registry or COMMITTED batch authority remains.",
+    "No automatic Owner selection.",
+    "Every selected candidate is canonically revalidated before mutation."
+  ],
+  "purpose": "Expose only canonically qualified and unconsumed optimizer rows, require explicit Owner selection, revalidate every source tuple, then commit immutable Challenger batch/registry authority.",
+  "restart_behavior": [
+    "Resume/recovery uses persisted deterministic batch/job authority and never silently duplicates committed consumption."
+  ],
+  "rollback_behavior": [
+    "Pre-commit failure leaves no eligible phantom Challenger; immutable accepted prior evidence is not rewritten."
+  ],
+  "schema_version": 1,
+  "sequence_session": "docs/sequence/sessions/FLOW-OPTIMIZER-TO-CHALLENGER.json",
+  "source_owners": [
+    "backend/max_backend/optimizer_api.py::get_qualified_candidates",
+    "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
+    "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
+    "backend/max_backend/challenger_selection.py::create_selected_challengers",
+    "backend/max_backend/challenger_store.py::consumed_source_identities",
+    "frontend/src/OptimizerPage.tsx::OptimizerPage"
+  ],
+  "states": [
+    "OPTIMIZER_EVIDENCE",
+    "QUALIFIED_POOL_READY",
+    "OWNER_SELECTION",
+    "BATCH_PREPARED",
+    "BATCH_VALIDATED",
+    "BATCH_STAGED",
+    "BATCH_COMMITTED",
+    "CHALLENGER_REGISTERED"
+  ],
+  "tests": [
+    "backend/tests/test_m08_strategy_results.py",
+    "backend/tests/test_m03_challenger.py"
+  ],
+  "title": "Optimizer result to qualified pool, Owner selection and Challenger registration",
+  "transitions": [
+    {
+      "action": "Canonical qualification minus durable consumed_source_identities.",
+      "from": "OPTIMIZER_EVIDENCE",
+      "side_effects": [],
+      "to": "QUALIFIED_POOL_READY"
+    },
+    {
+      "action": "Owner explicitly selects one or more active job/round/pass tuples.",
+      "from": "QUALIFIED_POOL_READY",
+      "side_effects": [],
+      "to": "OWNER_SELECTION"
+    },
+    {
+      "action": "Revalidate every candidate against retained report/sidecar/request/baseline/hard gates.",
+      "from": "OWNER_SELECTION",
+      "side_effects": [
+        "prepare deterministic batch authority"
+      ],
+      "to": "BATCH_PREPARED"
+    },
+    {
+      "action": "Validate/stage immutable Challenger bundles then atomically commit batch and registry.",
+      "from": "BATCH_PREPARED",
+      "side_effects": [
+        "strategy_challenger_batches/items",
+        "strategy_challengers",
+        "immutable Challenger bundles"
+      ],
+      "to": "BATCH_COMMITTED"
+    }
+  ]
+}

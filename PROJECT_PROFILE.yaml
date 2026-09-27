@@ -1,0 +1,26 @@
+profile: strict
+
+contracts:
+  api_contracts: required
+  data_contracts: required
+  ui_information_architecture: required
+  runbook: required
+  decisions: required
+  known_defects: required
+  glossary: required
+  changelog: optional
+
+runtime:
+  e2e_required: true
+
+documentation:
+  generated: true
+  spec_root: .workflow
+  docs_root: docs
+
+sequence:
+  required: true
+  runtime_trace_required: false
+
+notes:
+  profile_reason: financial_trading_and_scientific_research_with_owner_runtime_acceptance

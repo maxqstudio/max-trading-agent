@@ -1,0 +1,80 @@
+{
+  "constraints": [
+    "GitHub is source authority; Owner PC D:\\MAX_REBUILD is runtime/E2E authority.",
+    "Do not use GitHub Actions.",
+    "Owner explicitly authorizes Strategy promotion and Research advancement where required.",
+    "Scientist is advisory only and cannot create scientific, promotion, risk or execution authority.",
+    "R01 source/runtime readiness is not R01 scientific PASS.",
+    "R02 remains blocked until an accepted R01 scientific result and separate Owner authorization.",
+    "Protected Locked OOS/Fresh outcomes must not silently become adaptive tuning feedback.",
+    "Current governance method is Skill Workflow exact SHA 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f with generated documentation and DURING sequence evidence."
+  ],
+  "entry_points": [
+    {
+      "name": "Owner launcher",
+      "path": "RUN_MAX.cmd",
+      "purpose": "Canonical Owner startup wrapper; --no-pause supported for acceptance."
+    },
+    {
+      "name": "Launcher implementation",
+      "path": "scripts/run_max.ps1",
+      "purpose": "Verify or start exact MAX backend/frontend, authority and readiness before MAX_READY."
+    },
+    {
+      "name": "Backend",
+      "path": "backend/max_backend/main.py::app",
+      "purpose": "FastAPI control-plane application."
+    },
+    {
+      "name": "Frontend",
+      "path": "frontend/src/App.tsx::App",
+      "purpose": "Owner-facing Strategy/Research/Artifacts/Settings shell and Scientist drawer."
+    },
+    {
+      "name": "EA baseline",
+      "path": "ea/baseline/Max_MTF.mq5",
+      "purpose": "Current v2.11 Strategy baseline source; BASELINE_NOT_CHAMPION and MT5 execution input authority."
+    }
+  ],
+  "project": {
+    "expected_outcomes": [
+      "Preserve deterministic Strategy lifecycle authority from optimizer evidence through Challenger and Champion tenure.",
+      "Run Research only through explicit Owner-gated stages with immutable execution snapshots and protected-data boundaries.",
+      "Provide exact-SHA source, runtime, documentation, sequence, test and evidence traceability without allowing advisory Scientist output to create authority."
+    ],
+    "name": "MAX REBUILD",
+    "primary_users": [
+      "Owner",
+      "authorized Builder",
+      "Control Room auditor"
+    ],
+    "purpose": "Local Windows control plane for deterministic Strategy optimization, Challenger and Champion governance plus a separately gated scientific Research pipeline using MT5 execution evidence and immutable lineage.",
+    "repository": "maxqstudio/max_rebuild"
+  },
+  "schema_version": 1,
+  "technology": {
+    "external_systems": [
+      "MetaTrader 5 Strategy Tester",
+      "MetaEditor",
+      "GitHub source authority",
+      "Owner PC D:\\MAX_REBUILD runtime authority"
+    ],
+    "frameworks": [
+      "FastAPI",
+      "React 19",
+      "Vite",
+      "Vitest"
+    ],
+    "languages": [
+      "Python 3.13",
+      "TypeScript/TSX",
+      "MQL5",
+      "PowerShell",
+      "CMD"
+    ],
+    "persistence": [
+      "SQLite mutable operational state",
+      "immutable filesystem artifacts/evidence"
+    ]
+  }
+}

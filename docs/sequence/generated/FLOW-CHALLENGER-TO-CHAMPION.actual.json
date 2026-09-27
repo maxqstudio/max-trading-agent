@@ -1,0 +1,2753 @@
+{
+  "coverage": {
+    "js_ts_http_module_scan": true,
+    "limitations": [
+      "dynamic dispatch",
+      "dependency injection",
+      "reflection",
+      "callbacks/events",
+      "framework magic not visible statically",
+      "JS/TS function-level call ownership is not fully resolved"
+    ],
+    "python_ast": true,
+    "python_parse_failures": [
+      "backend/max_backend/champion_bundle.py:SyntaxError"
+    ],
+    "python_route_decorators": true,
+    "runtime_trace": false
+  },
+  "edges": [
+    {
+      "action": "_same_number",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::_same_params",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_same_number"
+    },
+    {
+      "action": "optimizer_parameter_bounds_for_keys",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::_same_params",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys"
+    },
+    {
+      "action": "_json",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::_verify_manifest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_json"
+    },
+    {
+      "action": "_sha",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::_verify_manifest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_sha"
+    },
+    {
+      "action": "verify_baseline_snapshot",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::current_baseline_sha256",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/ea.py::verify_baseline_snapshot"
+    },
+    {
+      "action": "optimizer_parameter_bounds_for_keys",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::validate_full_params",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys"
+    },
+    {
+      "action": "_json",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_json"
+    },
+    {
+      "action": "_same_params",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_same_params"
+    },
+    {
+      "action": "_sha",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_sha"
+    },
+    {
+      "action": "_verify_manifest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_verify_manifest"
+    },
+    {
+      "action": "current_baseline_sha256",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::current_baseline_sha256"
+    },
+    {
+      "action": "validate_full_params",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::validate_full_params"
+    },
+    {
+      "action": "verify_parameter_parity",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::verify_parameter_parity"
+    },
+    {
+      "action": "assert_geometry_matches_main",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mtf_geometry.py::assert_geometry_matches_main"
+    },
+    {
+      "action": "_format_fixed_value",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_geometry_set",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_format_fixed_value"
+    },
+    {
+      "action": "_new_daily_loss_authority",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_geometry_set",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_new_daily_loss_authority"
+    },
+    {
+      "action": "_parse_simple_set",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_geometry_set",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_parse_simple_set"
+    },
+    {
+      "action": "_same_number",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_geometry_set",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_same_number"
+    },
+    {
+      "action": "frozen_geometry_inputs",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_geometry_set",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mtf_geometry.py::frozen_geometry_inputs"
+    },
+    {
+      "action": "_ea_input_number",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_parameter_parity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_ea_input_number"
+    },
+    {
+      "action": "_new_daily_loss_authority",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_parameter_parity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_new_daily_loss_authority"
+    },
+    {
+      "action": "_parse_simple_set",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_parameter_parity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_parse_simple_set"
+    },
+    {
+      "action": "_same_number",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_parameter_parity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_same_number"
+    },
+    {
+      "action": "_same_params",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_parameter_parity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_same_params"
+    },
+    {
+      "action": "validate_full_params",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_parameter_parity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::validate_full_params"
+    },
+    {
+      "action": "verify_geometry_set",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_parameter_parity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::verify_geometry_set"
+    },
+    {
+      "action": "optimizer_parameter_bounds_for_keys",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_parameter_parity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys"
+    },
+    {
+      "action": "parse_set_optimizer_entries",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_parameter_parity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::parse_set_optimizer_entries"
+    },
+    {
+      "action": "read_ea_optimizer_defaults",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_parameter_parity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::read_ea_optimizer_defaults"
+    },
+    {
+      "action": "_same_number",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_registry.py::_metric_equal",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_same_number"
+    },
+    {
+      "action": "_same_params",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_registry.py::verify_optimizer_winner",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_same_params"
+    },
+    {
+      "action": "current_baseline_sha256",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_registry.py::verify_optimizer_winner",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::current_baseline_sha256"
+    },
+    {
+      "action": "validate_full_params",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_registry.py::verify_optimizer_winner",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::validate_full_params"
+    },
+    {
+      "action": "_metric_equal",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_registry.py::verify_optimizer_winner",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_registry.py::_metric_equal"
+    },
+    {
+      "action": "_winner_job_allowed",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_registry.py::verify_optimizer_winner",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_registry.py::_winner_job_allowed"
+    },
+    {
+      "action": "assert_geometry_matches_main",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_registry.py::verify_optimizer_winner",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mtf_geometry.py::assert_geometry_matches_main"
+    },
+    {
+      "action": "apply_frozen_gates",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_registry.py::verify_optimizer_winner",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::apply_frozen_gates"
+    },
+    {
+      "action": "eligibility_audit",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_registry.py::verify_optimizer_winner",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::eligibility_audit"
+    },
+    {
+      "action": "optimizer_fitness_for_request",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_registry.py::verify_optimizer_winner",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::optimizer_fitness_for_request"
+    },
+    {
+      "action": "parse_optimization_xml",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_registry.py::verify_optimizer_winner",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::parse_optimization_xml"
+    },
+    {
+      "action": "report_matches_request",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_registry.py::verify_optimizer_winner",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::report_matches_request"
+    },
+    {
+      "action": "select_winner",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_registry.py::verify_optimizer_winner",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::select_winner"
+    },
+    {
+      "action": "trade_sample",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_registry.py::verify_optimizer_winner",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::trade_sample"
+    },
+    {
+      "action": "get_rounds",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_registry.py::verify_optimizer_winner",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_store.py::get_rounds"
+    },
+    {
+      "action": "migrate_m03",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_store.py::consumed_source_identities",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_store.py::migrate_m03"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_store.py::consumed_source_identities",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_store.py::migrate_m03",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_m02",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_store.py::migrate_m03",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_store.py::migrate_m02"
+    },
+    {
+      "action": "_decode_json",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::_decode_champion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_decode_json"
+    },
+    {
+      "action": "_decode_json",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::_decode_promotion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_decode_json"
+    },
+    {
+      "action": "_challenger_table_supports_promoted",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted"
+    },
+    {
+      "action": "_create_champion_tenure_table",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_create_champion_tenure_table"
+    },
+    {
+      "action": "_decode_promotion",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::active_promotion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_decode_promotion"
+    },
+    {
+      "action": "migrate_m04",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::active_promotion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::migrate_m04"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::active_promotion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_decode_champion",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::commit_promotion_authority",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_decode_champion"
+    },
+    {
+      "action": "_json",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::commit_promotion_authority",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_json"
+    },
+    {
+      "action": "migrate_m04",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::commit_promotion_authority",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::migrate_m04"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::commit_promotion_authority",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_decode_promotion",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::create_prepared_promotion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_decode_promotion"
+    },
+    {
+      "action": "_json",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::create_prepared_promotion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_json"
+    },
+    {
+      "action": "_table_exists",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::create_prepared_promotion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_table_exists"
+    },
+    {
+      "action": "migrate_m04",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::create_prepared_promotion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::migrate_m04"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::create_prepared_promotion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_decode_champion",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::current_champion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_decode_champion"
+    },
+    {
+      "action": "migrate_m04",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::current_champion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::migrate_m04"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::current_champion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_decode_promotion",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::get_promotion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_decode_promotion"
+    },
+    {
+      "action": "migrate_m04",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::get_promotion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::migrate_m04"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::get_promotion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_m03",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_store.py::migrate_m03"
+    },
+    {
+      "action": "_upgrade_challenger_status_constraint",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint"
+    },
+    {
+      "action": "_upgrade_champion_tenure_schema",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_decode_promotion",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::update_promotion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_decode_promotion"
+    },
+    {
+      "action": "_json",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::update_promotion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_json"
+    },
+    {
+      "action": "get_promotion",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::update_promotion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::get_promotion"
+    },
+    {
+      "action": "migrate_m04",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::update_promotion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::migrate_m04"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::update_promotion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "load_manifest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/ea.py::verify_baseline_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/ea.py::load_manifest"
+    },
+    {
+      "action": "sha256_file",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/ea.py::verify_baseline_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/ea.py::sha256_file"
+    },
+    {
+      "action": "resolve_strategy_geometry",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/mtf_geometry.py::assert_geometry_matches_main",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mtf_geometry.py::resolve_strategy_geometry"
+    },
+    {
+      "action": "assert_geometry_matches_main",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/mtf_geometry.py::frozen_geometry_inputs",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mtf_geometry.py::assert_geometry_matches_main"
+    },
+    {
+      "action": "_closest_supported",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/mtf_geometry.py::resolve_strategy_geometry",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mtf_geometry.py::_closest_supported"
+    },
+    {
+      "action": "_job_root",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_all_candidates",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_job_root"
+    },
+    {
+      "action": "_round_lineage",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_all_candidates",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_round_lineage"
+    },
+    {
+      "action": "_verify_round_files",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_all_candidates",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_verify_round_files"
+    },
+    {
+      "action": "qualification_check",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_all_candidates",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::qualification_check"
+    },
+    {
+      "action": "_resolve_project_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_job_root",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_resolve_project_path"
+    },
+    {
+      "action": "assert_geometry_matches_main",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_load_job",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mtf_geometry.py::assert_geometry_matches_main"
+    },
+    {
+      "action": "_job_root",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_load_job",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_job_root"
+    },
+    {
+      "action": "_load_json",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_load_job",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_load_json"
+    },
+    {
+      "action": "attach_rounds",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_load_job",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_store.py::attach_rounds"
+    },
+    {
+      "action": "_job_root",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_round_lineage",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_job_root"
+    },
+    {
+      "action": "_load_json",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_round_lineage",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_load_json"
+    },
+    {
+      "action": "_job_root",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_round_root",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_job_root"
+    },
+    {
+      "action": "_load_json",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_verify_round_files",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_load_json"
+    },
+    {
+      "action": "_resolve_project_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_verify_round_files",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_resolve_project_path"
+    },
+    {
+      "action": "_round_root",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_verify_round_files",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_round_root"
+    },
+    {
+      "action": "row.payload",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_verify_round_files",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::OptimizationPass.payload"
+    },
+    {
+      "action": "apply_frozen_gates",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_verify_round_files",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::apply_frozen_gates"
+    },
+    {
+      "action": "eligibility_audit",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_verify_round_files",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::eligibility_audit"
+    },
+    {
+      "action": "optimizer_fitness_for_request",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_verify_round_files",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::optimizer_fitness_for_request"
+    },
+    {
+      "action": "parse_optimization_xml",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_verify_round_files",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::parse_optimization_xml"
+    },
+    {
+      "action": "report_matches_request",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_verify_round_files",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::report_matches_request"
+    },
+    {
+      "action": "optimizer_uses_owner_selection",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_verify_round_files",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_contract.py::optimizer_uses_owner_selection"
+    },
+    {
+      "action": "_finite_number",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::qualification_check",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_finite_number"
+    },
+    {
+      "action": "validate_candidate_params",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::qualification_check",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::validate_candidate_params"
+    },
+    {
+      "action": "_all_candidates",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::qualified_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_all_candidates"
+    },
+    {
+      "action": "_load_job",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::qualified_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_load_job"
+    },
+    {
+      "action": "consumed_source_identities",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_store.py::consumed_source_identities"
+    },
+    {
+      "action": "_load_json",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_load_json"
+    },
+    {
+      "action": "qualified_candidate",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::qualified_candidate"
+    },
+    {
+      "action": "apply_frozen_gates",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::apply_frozen_gates"
+    },
+    {
+      "action": "eligibility_audit",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::eligibility_audit"
+    },
+    {
+      "action": "optimizer_fitness_for_request",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::optimizer_fitness_for_request"
+    },
+    {
+      "action": "parse_optimization_xml",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::parse_optimization_xml"
+    },
+    {
+      "action": "report_matches_request",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::report_matches_request"
+    },
+    {
+      "action": "optimizer_uses_owner_selection",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_contract.py::optimizer_uses_owner_selection"
+    },
+    {
+      "action": "optimizer_parameter_bounds_for_keys",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::validate_candidate_params",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys"
+    },
+    {
+      "action": "_float",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::_int",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::_float"
+    },
+    {
+      "action": "_is_fail_closed_sentinel",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::_is_v2_zero_trade_sentinel",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::_is_fail_closed_sentinel"
+    },
+    {
+      "action": "_float",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::_parse_frame_inputs",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::_float"
+    },
+    {
+      "action": "_int",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::_parse_frame_inputs",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::_int"
+    },
+    {
+      "action": "_strip_ns",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::_row_values",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::_strip_ns"
+    },
+    {
+      "action": "select_winner",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::eligibility_audit",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::select_winner"
+    },
+    {
+      "action": "unresolved_weighted_contenders",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::eligibility_audit",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::unresolved_weighted_contenders"
+    },
+    {
+      "action": "_strip_ns",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::optimization_report_identity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::_strip_ns"
+    },
+    {
+      "action": "ET.parse",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::optimization_report_identity",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_m01_recovery.py::Harness.parse"
+    },
+    {
+      "action": "validate_optimizer_trade_exponent",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::optimizer_fitness_contract",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::validate_optimizer_trade_exponent"
+    },
+    {
+      "action": "validate_optimizer_fitness_contract",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::optimizer_fitness_for_request",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::validate_optimizer_fitness_contract"
+    },
+    {
+      "action": "validate_optimizer_trade_exponent",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::optimizer_fitness_value",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::validate_optimizer_trade_exponent"
+    },
+    {
+      "action": "optimizer_parameter_bounds_for_keys",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parameter_signature",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys"
+    },
+    {
+      "action": "OptimizationPass",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::OptimizationPass"
+    },
+    {
+      "action": "_float",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::_float"
+    },
+    {
+      "action": "_int",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::_int"
+    },
+    {
+      "action": "_is_fail_closed_sentinel",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::_is_fail_closed_sentinel"
+    },
+    {
+      "action": "_row_values",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::_row_values"
+    },
+    {
+      "action": "_strip_ns",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::_strip_ns"
+    },
+    {
+      "action": "normalize_optimize_params",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::normalize_optimize_params"
+    },
+    {
+      "action": "optimizer_fitness_value",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::optimizer_fitness_value"
+    },
+    {
+      "action": "optimizer_parameter_bounds_for_keys",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys"
+    },
+    {
+      "action": "parameter_signature",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::parameter_signature"
+    },
+    {
+      "action": "at",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::parse_optimization_xml.at"
+    },
+    {
+      "action": "column",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::parse_optimization_xml.column"
+    },
+    {
+      "action": "parse_optimizer_metrics_csv",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv"
+    },
+    {
+      "action": "validate_optimizer_fitness_contract",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::validate_optimizer_fitness_contract"
+    },
+    {
+      "action": "ET.parse",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_m01_recovery.py::Harness.parse"
+    },
+    {
+      "action": "_is_v2_zero_trade_sentinel",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::_is_v2_zero_trade_sentinel"
+    },
+    {
+      "action": "_parse_frame_inputs",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::_parse_frame_inputs"
+    },
+    {
+      "action": "optimizer_fitness_value",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::optimizer_fitness_value"
+    },
+    {
+      "action": "parameter_signature",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::parameter_signature"
+    },
+    {
+      "action": "validate_optimizer_fitness_contract",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::validate_optimizer_fitness_contract"
+    },
+    {
+      "action": "optimization_report_identity",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::report_matches_request",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::optimization_report_identity"
+    },
+    {
+      "action": "unresolved_weighted_contenders",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::select_winner",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::unresolved_weighted_contenders"
+    },
+    {
+      "action": "_parse_date",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::trade_sample",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::_parse_date"
+    },
+    {
+      "action": "optimizer_fitness_contract",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_core.py::validate_optimizer_fitness_contract",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::optimizer_fitness_contract"
+    },
+    {
+      "action": "get_rounds",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::attach_rounds",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_store.py::get_rounds"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::get_rounds",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_decode_round",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::get_rounds",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_store.py::_decode_round"
+    },
+    {
+      "action": "migrate_m01",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::get_rounds",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_store.py::migrate_m01"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_m01",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_store.py::migrate_m01"
+    },
+    {
+      "action": "_sha",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_capture_before_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_sha"
+    },
+    {
+      "action": "_snapshot_file",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_capture_before_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_snapshot_file"
+    },
+    {
+      "action": "compile_summary",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_compile_champion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_runtime.py::compile_summary"
+    },
+    {
+      "action": "_json_write",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_compile_champion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_json_write"
+    },
+    {
+      "action": "_sha",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_compile_champion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_sha"
+    },
+    {
+      "action": "subprocess.run",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_compile_champion",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r01_source.py::_capture.run"
+    },
+    {
+      "action": "_json_write",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_finalize_committed_evidence",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_json_write"
+    },
+    {
+      "action": "_sha",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_finalize_committed_evidence",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_sha"
+    },
+    {
+      "action": "current_baseline_sha256",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_post_deployment_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::current_baseline_sha256"
+    },
+    {
+      "action": "_relative",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_post_deployment_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_relative"
+    },
+    {
+      "action": "_sha",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_post_deployment_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_sha"
+    },
+    {
+      "action": "_restore_file",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_restore_before_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_restore_file"
+    },
+    {
+      "action": "_atomic_copy",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_restore_file",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_atomic_copy"
+    },
+    {
+      "action": "_sha",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_restore_file",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_sha"
+    },
+    {
+      "action": "_same_params",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_retained_owner_selected_source",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_same_params"
+    },
+    {
+      "action": "optimizer_uses_owner_selection",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_retained_owner_selected_source",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_contract.py::optimizer_uses_owner_selection"
+    },
+    {
+      "action": "_sha",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_snapshot_file",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_sha"
+    },
+    {
+      "action": "current_baseline_sha256",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_stage_baseline_archive",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::current_baseline_sha256"
+    },
+    {
+      "action": "_archive_stamp",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_stage_baseline_archive",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_archive_stamp"
+    },
+    {
+      "action": "_json_write",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_stage_baseline_archive",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_json_write"
+    },
+    {
+      "action": "_sha",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_stage_baseline_archive",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_sha"
+    },
+    {
+      "action": "_json_write",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_stage_evidence",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_json_write"
+    },
+    {
+      "action": "_sha",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_stage_evidence",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_sha"
+    },
+    {
+      "action": "_archive_stamp",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_stage_former_champion_archive",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_archive_stamp"
+    },
+    {
+      "action": "_json_write",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_stage_former_champion_archive",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_json_write"
+    },
+    {
+      "action": "_sha",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_stage_former_champion_archive",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_sha"
+    },
+    {
+      "action": "verify_optimizer_winner",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_verify_challenger_optimizer_source",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_registry.py::verify_optimizer_winner"
+    },
+    {
+      "action": "revalidate_candidate_for_registration",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_verify_challenger_optimizer_source",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration"
+    },
+    {
+      "action": "_retained_owner_selected_source",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_verify_challenger_optimizer_source",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_retained_owner_selected_source"
+    },
+    {
+      "action": "_same_params",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_same_params"
+    },
+    {
+      "action": "current_baseline_sha256",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::current_baseline_sha256"
+    },
+    {
+      "action": "verify_challenger_bundle",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle"
+    },
+    {
+      "action": "active_promotion",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::active_promotion"
+    },
+    {
+      "action": "commit_promotion_authority",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::commit_promotion_authority"
+    },
+    {
+      "action": "create_prepared_promotion",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::create_prepared_promotion"
+    },
+    {
+      "action": "current_champion",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::current_champion"
+    },
+    {
+      "action": "get_promotion",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::get_promotion"
+    },
+    {
+      "action": "migrate_m04",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::migrate_m04"
+    },
+    {
+      "action": "update_promotion",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::update_promotion"
+    },
+    {
+      "action": "_atomic_copy",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_atomic_copy"
+    },
+    {
+      "action": "_capture_before_state",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_capture_before_state"
+    },
+    {
+      "action": "_cleanup_compile_temp",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_cleanup_compile_temp"
+    },
+    {
+      "action": "_commit_history_archive",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_commit_history_archive"
+    },
+    {
+      "action": "_compile_champion",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_compile_champion"
+    },
+    {
+      "action": "_finalize_committed_evidence",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_finalize_committed_evidence"
+    },
+    {
+      "action": "_json_write",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_json_write"
+    },
+    {
+      "action": "_post_deployment_state",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_post_deployment_state"
+    },
+    {
+      "action": "_promotion_id",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_promotion_id"
+    },
+    {
+      "action": "_relative",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_relative"
+    },
+    {
+      "action": "_restore_before_state",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_restore_before_state"
+    },
+    {
+      "action": "_sha",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_sha"
+    },
+    {
+      "action": "_stage_baseline_archive",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_stage_baseline_archive"
+    },
+    {
+      "action": "_stage_evidence",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_stage_evidence"
+    },
+    {
+      "action": "_stage_former_champion_archive",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_stage_former_champion_archive"
+    },
+    {
+      "action": "_verify_challenger_optimizer_source",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_verify_challenger_optimizer_source"
+    },
+    {
+      "action": "verify_current_strategy_champion",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::verify_current_strategy_champion"
+    },
+    {
+      "action": "_same_params",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::verify_current_strategy_champion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::_same_params"
+    },
+    {
+      "action": "current_baseline_sha256",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::verify_current_strategy_champion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::current_baseline_sha256"
+    },
+    {
+      "action": "verify_challenger_bundle",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::verify_current_strategy_champion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle"
+    },
+    {
+      "action": "current_champion",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::verify_current_strategy_champion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::current_champion"
+    },
+    {
+      "action": "migrate_m04",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::verify_current_strategy_champion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::migrate_m04"
+    },
+    {
+      "action": "_sha",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::verify_current_strategy_champion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_sha"
+    },
+    {
+      "action": "_verify_challenger_optimizer_source",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::verify_current_strategy_champion",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/promotion_service.py::_verify_challenger_optimizer_source"
+    },
+    {
+      "action": "canonical_json",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_contract.py::stable_hash",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_contract.py::canonical_json"
+    },
+    {
+      "action": "optimizer_result_workflow",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_contract.py::optimizer_uses_owner_selection",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_contract.py::optimizer_result_workflow"
+    },
+    {
+      "action": "good_pass",
+      "evidence": "STATIC",
+      "from": "backend/tests/test_m01_recovery.py::Harness.parse",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_m01_recovery.py::good_pass"
+    },
+    {
+      "action": "OptimizationPass",
+      "evidence": "STATIC",
+      "from": "backend/tests/test_m01_recovery.py::good_pass",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::OptimizationPass"
+    },
+    {
+      "action": "stable_hash",
+      "evidence": "STATIC",
+      "from": "backend/tests/test_r01_source.py::_capture.run",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_contract.py::stable_hash"
+    }
+  ],
+  "entries": [
+    "backend/max_backend/promotion_service.py::promote_strategy_challenger"
+  ],
+  "generated": true,
+  "generated_by": "generate_sequence_actual.py",
+  "nodes": [
+    {
+      "id": "backend/max_backend/challenger_bundle.py::_ea_input_number",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_bundle.py::_ea_input_number",
+      "language": "Python",
+      "line_end": 155,
+      "line_start": 147,
+      "locator": "backend/max_backend/challenger_bundle.py::_ea_input_number"
+    },
+    {
+      "id": "backend/max_backend/challenger_bundle.py::_format_fixed_value",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_bundle.py::_format_fixed_value",
+      "language": "Python",
+      "line_end": 270,
+      "line_start": 265,
+      "locator": "backend/max_backend/challenger_bundle.py::_format_fixed_value"
+    },
+    {
+      "id": "backend/max_backend/challenger_bundle.py::_json",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_bundle.py::_json",
+      "language": "Python",
+      "line_end": 57,
+      "line_start": 50,
+      "locator": "backend/max_backend/challenger_bundle.py::_json"
+    },
+    {
+      "id": "backend/max_backend/challenger_bundle.py::_new_daily_loss_authority",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_bundle.py::_new_daily_loss_authority",
+      "language": "Python",
+      "line_end": 144,
+      "line_start": 130,
+      "locator": "backend/max_backend/challenger_bundle.py::_new_daily_loss_authority"
+    },
+    {
+      "id": "backend/max_backend/challenger_bundle.py::_parse_simple_set",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_bundle.py::_parse_simple_set",
+      "language": "Python",
+      "line_end": 262,
+      "line_start": 254,
+      "locator": "backend/max_backend/challenger_bundle.py::_parse_simple_set"
+    },
+    {
+      "id": "backend/max_backend/challenger_bundle.py::_same_number",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_bundle.py::_same_number",
+      "language": "Python",
+      "line_end": 74,
+      "line_start": 64,
+      "locator": "backend/max_backend/challenger_bundle.py::_same_number"
+    },
+    {
+      "id": "backend/max_backend/challenger_bundle.py::_same_params",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_bundle.py::_same_params",
+      "language": "Python",
+      "line_end": 93,
+      "line_start": 77,
+      "locator": "backend/max_backend/challenger_bundle.py::_same_params"
+    },
+    {
+      "id": "backend/max_backend/challenger_bundle.py::_sha",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_bundle.py::_sha",
+      "language": "Python",
+      "line_end": 61,
+      "line_start": 60,
+      "locator": "backend/max_backend/challenger_bundle.py::_sha"
+    },
+    {
+      "id": "backend/max_backend/challenger_bundle.py::_verify_manifest",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_bundle.py::_verify_manifest",
+      "language": "Python",
+      "line_end": 660,
+      "line_start": 627,
+      "locator": "backend/max_backend/challenger_bundle.py::_verify_manifest"
+    },
+    {
+      "id": "backend/max_backend/challenger_bundle.py::current_baseline_sha256",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_bundle.py::current_baseline_sha256",
+      "language": "Python",
+      "line_end": 41,
+      "line_start": 40,
+      "locator": "backend/max_backend/challenger_bundle.py::current_baseline_sha256"
+    },
+    {
+      "id": "backend/max_backend/challenger_bundle.py::validate_full_params",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_bundle.py::validate_full_params",
+      "language": "Python",
+      "line_end": 121,
+      "line_start": 96,
+      "locator": "backend/max_backend/challenger_bundle.py::validate_full_params"
+    },
+    {
+      "id": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle",
+      "language": "Python",
+      "line_end": 839,
+      "line_start": 663,
+      "locator": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle"
+    },
+    {
+      "id": "backend/max_backend/challenger_bundle.py::verify_geometry_set",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_bundle.py::verify_geometry_set",
+      "language": "Python",
+      "line_end": 296,
+      "line_start": 273,
+      "locator": "backend/max_backend/challenger_bundle.py::verify_geometry_set"
+    },
+    {
+      "id": "backend/max_backend/challenger_bundle.py::verify_parameter_parity",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_bundle.py::verify_parameter_parity",
+      "language": "Python",
+      "line_end": 385,
+      "line_start": 346,
+      "locator": "backend/max_backend/challenger_bundle.py::verify_parameter_parity"
+    },
+    {
+      "id": "backend/max_backend/challenger_registry.py::_metric_equal",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_registry.py::_metric_equal",
+      "language": "Python",
+      "line_end": 68,
+      "line_start": 64,
+      "locator": "backend/max_backend/challenger_registry.py::_metric_equal"
+    },
+    {
+      "id": "backend/max_backend/challenger_registry.py::_winner_job_allowed",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_registry.py::_winner_job_allowed",
+      "language": "Python",
+      "line_end": 61,
+      "line_start": 51,
+      "locator": "backend/max_backend/challenger_registry.py::_winner_job_allowed"
+    },
+    {
+      "id": "backend/max_backend/challenger_registry.py::verify_optimizer_winner",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_registry.py::verify_optimizer_winner",
+      "language": "Python",
+      "line_end": 348,
+      "line_start": 71,
+      "locator": "backend/max_backend/challenger_registry.py::verify_optimizer_winner"
+    },
+    {
+      "id": "backend/max_backend/challenger_store.py::consumed_source_identities",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_store.py::consumed_source_identities",
+      "language": "Python",
+      "line_end": 230,
+      "line_start": 180,
+      "locator": "backend/max_backend/challenger_store.py::consumed_source_identities"
+    },
+    {
+      "id": "backend/max_backend/challenger_store.py::migrate_m03",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_store.py::migrate_m03",
+      "language": "Python",
+      "line_end": 75,
+      "line_start": 18,
+      "locator": "backend/max_backend/challenger_store.py::migrate_m03"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted",
+      "language": "Python",
+      "line_end": 38,
+      "line_start": 34,
+      "locator": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_create_champion_tenure_table",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_create_champion_tenure_table",
+      "language": "Python",
+      "line_end": 153,
+      "line_start": 99,
+      "locator": "backend/max_backend/champion_store.py::_create_champion_tenure_table"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_decode_champion",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_decode_champion",
+      "language": "Python",
+      "line_end": 345,
+      "line_start": 337,
+      "locator": "backend/max_backend/champion_store.py::_decode_champion"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_decode_json",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_decode_json",
+      "language": "Python",
+      "line_end": 23,
+      "line_start": 22,
+      "locator": "backend/max_backend/champion_store.py::_decode_json"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_decode_promotion",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_decode_promotion",
+      "language": "Python",
+      "line_end": 334,
+      "line_start": 322,
+      "locator": "backend/max_backend/champion_store.py::_decode_promotion"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_json",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_json",
+      "language": "Python",
+      "line_end": 19,
+      "line_start": 18,
+      "locator": "backend/max_backend/champion_store.py::_json"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_table_exists",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_table_exists",
+      "language": "Python",
+      "line_end": 31,
+      "line_start": 26,
+      "locator": "backend/max_backend/champion_store.py::_table_exists"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint",
+      "language": "Python",
+      "line_end": 95,
+      "line_start": 41,
+      "locator": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
+      "language": "Python",
+      "line_end": 198,
+      "line_start": 156,
+      "locator": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::active_promotion",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::active_promotion",
+      "language": "Python",
+      "line_end": 391,
+      "line_start": 381,
+      "locator": "backend/max_backend/champion_store.py::active_promotion"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::commit_promotion_authority",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::commit_promotion_authority",
+      "language": "Python",
+      "line_end": 742,
+      "line_start": 578,
+      "locator": "backend/max_backend/champion_store.py::commit_promotion_authority"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::create_prepared_promotion",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::create_prepared_promotion",
+      "language": "Python",
+      "line_end": 493,
+      "line_start": 413,
+      "locator": "backend/max_backend/champion_store.py::create_prepared_promotion"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::current_champion",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::current_champion",
+      "language": "Python",
+      "line_end": 354,
+      "line_start": 348,
+      "locator": "backend/max_backend/champion_store.py::current_champion"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::get_promotion",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::get_promotion",
+      "language": "Python",
+      "line_end": 401,
+      "line_start": 394,
+      "locator": "backend/max_backend/champion_store.py::get_promotion"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::migrate_m04",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::migrate_m04",
+      "language": "Python",
+      "line_end": 261,
+      "line_start": 200,
+      "locator": "backend/max_backend/champion_store.py::migrate_m04"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::update_promotion",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::update_promotion",
+      "language": "Python",
+      "line_end": 575,
+      "line_start": 496,
+      "locator": "backend/max_backend/champion_store.py::update_promotion"
+    },
+    {
+      "id": "backend/max_backend/db.py::connect",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::connect",
+      "language": "Python",
+      "line_end": 20,
+      "line_start": 14,
+      "locator": "backend/max_backend/db.py::connect"
+    },
+    {
+      "id": "backend/max_backend/ea.py::load_manifest",
+      "kind": "function",
+      "label": "backend/max_backend/ea.py::load_manifest",
+      "language": "Python",
+      "line_end": 24,
+      "line_start": 20,
+      "locator": "backend/max_backend/ea.py::load_manifest"
+    },
+    {
+      "id": "backend/max_backend/ea.py::sha256_file",
+      "kind": "function",
+      "label": "backend/max_backend/ea.py::sha256_file",
+      "language": "Python",
+      "line_end": 17,
+      "line_start": 12,
+      "locator": "backend/max_backend/ea.py::sha256_file"
+    },
+    {
+      "id": "backend/max_backend/ea.py::verify_baseline_snapshot",
+      "kind": "function",
+      "label": "backend/max_backend/ea.py::verify_baseline_snapshot",
+      "language": "Python",
+      "line_end": 46,
+      "line_start": 27,
+      "locator": "backend/max_backend/ea.py::verify_baseline_snapshot"
+    },
+    {
+      "id": "backend/max_backend/mtf_geometry.py::_closest_supported",
+      "kind": "function",
+      "label": "backend/max_backend/mtf_geometry.py::_closest_supported",
+      "language": "Python",
+      "line_end": 66,
+      "line_start": 38,
+      "locator": "backend/max_backend/mtf_geometry.py::_closest_supported"
+    },
+    {
+      "id": "backend/max_backend/mtf_geometry.py::assert_geometry_matches_main",
+      "kind": "function",
+      "label": "backend/max_backend/mtf_geometry.py::assert_geometry_matches_main",
+      "language": "Python",
+      "line_end": 150,
+      "line_start": 143,
+      "locator": "backend/max_backend/mtf_geometry.py::assert_geometry_matches_main"
+    },
+    {
+      "id": "backend/max_backend/mtf_geometry.py::frozen_geometry_inputs",
+      "kind": "function",
+      "label": "backend/max_backend/mtf_geometry.py::frozen_geometry_inputs",
+      "language": "Python",
+      "line_end": 168,
+      "line_start": 153,
+      "locator": "backend/max_backend/mtf_geometry.py::frozen_geometry_inputs"
+    },
+    {
+      "id": "backend/max_backend/mtf_geometry.py::resolve_strategy_geometry",
+      "kind": "function",
+      "label": "backend/max_backend/mtf_geometry.py::resolve_strategy_geometry",
+      "language": "Python",
+      "line_end": 124,
+      "line_start": 69,
+      "locator": "backend/max_backend/mtf_geometry.py::resolve_strategy_geometry"
+    },
+    {
+      "id": "backend/max_backend/optimizer_candidates.py::_all_candidates",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_candidates.py::_all_candidates",
+      "language": "Python",
+      "line_end": 346,
+      "line_start": 292,
+      "locator": "backend/max_backend/optimizer_candidates.py::_all_candidates"
+    },
+    {
+      "id": "backend/max_backend/optimizer_candidates.py::_finite_number",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_candidates.py::_finite_number",
+      "language": "Python",
+      "line_end": 178,
+      "line_start": 171,
+      "locator": "backend/max_backend/optimizer_candidates.py::_finite_number"
+    },
+    {
+      "id": "backend/max_backend/optimizer_candidates.py::_job_root",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_candidates.py::_job_root",
+      "language": "Python",
+      "line_end": 50,
+      "line_start": 46,
+      "locator": "backend/max_backend/optimizer_candidates.py::_job_root"
+    },
+    {
+      "id": "backend/max_backend/optimizer_candidates.py::_load_job",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_candidates.py::_load_job",
+      "language": "Python",
+      "line_end": 253,
+      "line_start": 235,
+      "locator": "backend/max_backend/optimizer_candidates.py::_load_job"
+    },
+    {
+      "id": "backend/max_backend/optimizer_candidates.py::_load_json",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_candidates.py::_load_json",
+      "language": "Python",
+      "line_end": 63,
+      "line_start": 57,
+      "locator": "backend/max_backend/optimizer_candidates.py::_load_json"
+    },
+    {
+      "id": "backend/max_backend/optimizer_candidates.py::_resolve_project_path",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_candidates.py::_resolve_project_path",
+      "language": "Python",
+      "line_end": 43,
+      "line_start": 41,
+      "locator": "backend/max_backend/optimizer_candidates.py::_resolve_project_path"
+    },
+    {
+      "id": "backend/max_backend/optimizer_candidates.py::_round_lineage",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_candidates.py::_round_lineage",
+      "language": "Python",
+      "line_end": 289,
+      "line_start": 256,
+      "locator": "backend/max_backend/optimizer_candidates.py::_round_lineage"
+    },
+    {
+      "id": "backend/max_backend/optimizer_candidates.py::_round_root",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_candidates.py::_round_root",
+      "language": "Python",
+      "line_end": 54,
+      "line_start": 53,
+      "locator": "backend/max_backend/optimizer_candidates.py::_round_root"
+    },
+    {
+      "id": "backend/max_backend/optimizer_candidates.py::_verify_round_files",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_candidates.py::_verify_round_files",
+      "language": "Python",
+      "line_end": 140,
+      "line_start": 66,
+      "locator": "backend/max_backend/optimizer_candidates.py::_verify_round_files"
+    },
+    {
+      "id": "backend/max_backend/optimizer_candidates.py::qualification_check",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_candidates.py::qualification_check",
+      "language": "Python",
+      "line_end": 232,
+      "line_start": 181,
+      "locator": "backend/max_backend/optimizer_candidates.py::qualification_check"
+    },
+    {
+      "id": "backend/max_backend/optimizer_candidates.py::qualified_candidate",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_candidates.py::qualified_candidate",
+      "language": "Python",
+      "line_end": 458,
+      "line_start": 438,
+      "locator": "backend/max_backend/optimizer_candidates.py::qualified_candidate"
+    },
+    {
+      "id": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
+      "language": "Python",
+      "line_end": 529,
+      "line_start": 461,
+      "locator": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration"
+    },
+    {
+      "id": "backend/max_backend/optimizer_candidates.py::validate_candidate_params",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_candidates.py::validate_candidate_params",
+      "language": "Python",
+      "line_end": 168,
+      "line_start": 143,
+      "locator": "backend/max_backend/optimizer_candidates.py::validate_candidate_params"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::OptimizationPass",
+      "kind": "class",
+      "label": "backend/max_backend/optimizer_core.py::OptimizationPass",
+      "language": "Python",
+      "line_end": 253,
+      "line_start": 188,
+      "locator": "backend/max_backend/optimizer_core.py::OptimizationPass"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::OptimizationPass.payload",
+      "kind": "method",
+      "label": "backend/max_backend/optimizer_core.py::OptimizationPass.payload",
+      "language": "Python",
+      "line_end": 253,
+      "line_start": 233,
+      "locator": "backend/max_backend/optimizer_core.py::OptimizationPass.payload"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::_float",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::_float",
+      "language": "Python",
+      "line_end": 879,
+      "line_start": 866,
+      "locator": "backend/max_backend/optimizer_core.py::_float"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::_int",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::_int",
+      "language": "Python",
+      "line_end": 886,
+      "line_start": 882,
+      "locator": "backend/max_backend/optimizer_core.py::_int"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::_is_fail_closed_sentinel",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::_is_fail_closed_sentinel",
+      "language": "Python",
+      "line_end": 370,
+      "line_start": 360,
+      "locator": "backend/max_backend/optimizer_core.py::_is_fail_closed_sentinel"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::_is_v2_zero_trade_sentinel",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::_is_v2_zero_trade_sentinel",
+      "language": "Python",
+      "line_end": 389,
+      "line_start": 373,
+      "locator": "backend/max_backend/optimizer_core.py::_is_v2_zero_trade_sentinel"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::_parse_date",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::_parse_date",
+      "language": "Python",
+      "line_end": 526,
+      "line_start": 519,
+      "locator": "backend/max_backend/optimizer_core.py::_parse_date"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::_parse_frame_inputs",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::_parse_frame_inputs",
+      "language": "Python",
+      "line_end": 926,
+      "line_start": 907,
+      "locator": "backend/max_backend/optimizer_core.py::_parse_frame_inputs"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::_row_values",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::_row_values",
+      "language": "Python",
+      "line_end": 863,
+      "line_start": 858,
+      "locator": "backend/max_backend/optimizer_core.py::_row_values"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::_strip_ns",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::_strip_ns",
+      "language": "Python",
+      "line_end": 855,
+      "line_start": 854,
+      "locator": "backend/max_backend/optimizer_core.py::_strip_ns"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::apply_frozen_gates",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::apply_frozen_gates",
+      "language": "Python",
+      "line_end": 1428,
+      "line_start": 1420,
+      "locator": "backend/max_backend/optimizer_core.py::apply_frozen_gates"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::eligibility_audit",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::eligibility_audit",
+      "language": "Python",
+      "line_end": 1507,
+      "line_start": 1457,
+      "locator": "backend/max_backend/optimizer_core.py::eligibility_audit"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::normalize_optimize_params",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::normalize_optimize_params",
+      "language": "Python",
+      "line_end": 493,
+      "line_start": 474,
+      "locator": "backend/max_backend/optimizer_core.py::normalize_optimize_params"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::optimization_report_identity",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::optimization_report_identity",
+      "language": "Python",
+      "line_end": 1121,
+      "line_start": 1097,
+      "locator": "backend/max_backend/optimizer_core.py::optimization_report_identity"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::optimizer_fitness_contract",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::optimizer_fitness_contract",
+      "language": "Python",
+      "line_end": 305,
+      "line_start": 297,
+      "locator": "backend/max_backend/optimizer_core.py::optimizer_fitness_contract"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::optimizer_fitness_for_request",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::optimizer_fitness_for_request",
+      "language": "Python",
+      "line_end": 340,
+      "line_start": 323,
+      "locator": "backend/max_backend/optimizer_core.py::optimizer_fitness_for_request"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::optimizer_fitness_value",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::optimizer_fitness_value",
+      "language": "Python",
+      "line_end": 357,
+      "line_start": 343,
+      "locator": "backend/max_backend/optimizer_core.py::optimizer_fitness_value"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys",
+      "language": "Python",
+      "line_end": 113,
+      "line_start": 101,
+      "locator": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::parameter_signature",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::parameter_signature",
+      "language": "Python",
+      "line_end": 904,
+      "line_start": 889,
+      "locator": "backend/max_backend/optimizer_core.py::parameter_signature"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
+      "language": "Python",
+      "line_end": 1418,
+      "line_start": 1139,
+      "locator": "backend/max_backend/optimizer_core.py::parse_optimization_xml"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::parse_optimization_xml.at",
+      "kind": "method",
+      "label": "backend/max_backend/optimizer_core.py::parse_optimization_xml.at",
+      "language": "Python",
+      "line_end": 1222,
+      "line_start": 1221,
+      "locator": "backend/max_backend/optimizer_core.py::parse_optimization_xml.at"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::parse_optimization_xml.column",
+      "kind": "method",
+      "label": "backend/max_backend/optimizer_core.py::parse_optimization_xml.column",
+      "language": "Python",
+      "line_end": 1193,
+      "line_start": 1189,
+      "locator": "backend/max_backend/optimizer_core.py::parse_optimization_xml.column"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv",
+      "language": "Python",
+      "line_end": 1095,
+      "line_start": 929,
+      "locator": "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::parse_set_optimizer_entries",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::parse_set_optimizer_entries",
+      "language": "Python",
+      "line_end": 816,
+      "line_start": 791,
+      "locator": "backend/max_backend/optimizer_core.py::parse_set_optimizer_entries"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::read_ea_optimizer_defaults",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::read_ea_optimizer_defaults",
+      "language": "Python",
+      "line_end": 417,
+      "line_start": 400,
+      "locator": "backend/max_backend/optimizer_core.py::read_ea_optimizer_defaults"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::report_matches_request",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::report_matches_request",
+      "language": "Python",
+      "line_end": 1136,
+      "line_start": 1124,
+      "locator": "backend/max_backend/optimizer_core.py::report_matches_request"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::select_winner",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::select_winner",
+      "language": "Python",
+      "line_end": 1454,
+      "line_start": 1439,
+      "locator": "backend/max_backend/optimizer_core.py::select_winner"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::trade_sample",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::trade_sample",
+      "language": "Python",
+      "line_end": 566,
+      "line_start": 529,
+      "locator": "backend/max_backend/optimizer_core.py::trade_sample"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::unresolved_weighted_contenders",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::unresolved_weighted_contenders",
+      "language": "Python",
+      "line_end": 1436,
+      "line_start": 1431,
+      "locator": "backend/max_backend/optimizer_core.py::unresolved_weighted_contenders"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::validate_optimizer_fitness_contract",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::validate_optimizer_fitness_contract",
+      "language": "Python",
+      "line_end": 320,
+      "line_start": 308,
+      "locator": "backend/max_backend/optimizer_core.py::validate_optimizer_fitness_contract"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::validate_optimizer_trade_exponent",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::validate_optimizer_trade_exponent",
+      "language": "Python",
+      "line_end": 294,
+      "line_start": 283,
+      "locator": "backend/max_backend/optimizer_core.py::validate_optimizer_trade_exponent"
+    },
+    {
+      "id": "backend/max_backend/optimizer_runtime.py::compile_summary",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_runtime.py::compile_summary",
+      "language": "Python",
+      "line_end": 102,
+      "line_start": 86,
+      "locator": "backend/max_backend/optimizer_runtime.py::compile_summary"
+    },
+    {
+      "id": "backend/max_backend/optimizer_store.py::_decode_round",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_store.py::_decode_round",
+      "language": "Python",
+      "line_end": 179,
+      "line_start": 176,
+      "locator": "backend/max_backend/optimizer_store.py::_decode_round"
+    },
+    {
+      "id": "backend/max_backend/optimizer_store.py::attach_rounds",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_store.py::attach_rounds",
+      "language": "Python",
+      "line_end": 415,
+      "line_start": 410,
+      "locator": "backend/max_backend/optimizer_store.py::attach_rounds"
+    },
+    {
+      "id": "backend/max_backend/optimizer_store.py::get_rounds",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_store.py::get_rounds",
+      "language": "Python",
+      "line_end": 407,
+      "line_start": 400,
+      "locator": "backend/max_backend/optimizer_store.py::get_rounds"
+    },
+    {
+      "id": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "language": "Python",
+      "line_end": 98,
+      "line_start": 45,
+      "locator": "backend/max_backend/optimizer_store.py::migrate_m01"
+    },
+    {
+      "id": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "language": "Python",
+      "line_end": 121,
+      "line_start": 101,
+      "locator": "backend/max_backend/optimizer_store.py::migrate_m02"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_archive_stamp",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_archive_stamp",
+      "language": "Python",
+      "line_end": 234,
+      "line_start": 233,
+      "locator": "backend/max_backend/promotion_service.py::_archive_stamp"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_atomic_copy",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_atomic_copy",
+      "language": "Python",
+      "line_end": 221,
+      "line_start": 217,
+      "locator": "backend/max_backend/promotion_service.py::_atomic_copy"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_capture_before_state",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_capture_before_state",
+      "language": "Python",
+      "line_end": 464,
+      "line_start": 427,
+      "locator": "backend/max_backend/promotion_service.py::_capture_before_state"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_cleanup_compile_temp",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_cleanup_compile_temp",
+      "language": "Python",
+      "line_end": 500,
+      "line_start": 495,
+      "locator": "backend/max_backend/promotion_service.py::_cleanup_compile_temp"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_commit_history_archive",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_commit_history_archive",
+      "language": "Python",
+      "line_end": 492,
+      "line_start": 487,
+      "locator": "backend/max_backend/promotion_service.py::_commit_history_archive"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_compile_champion",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_compile_champion",
+      "language": "Python",
+      "line_end": 347,
+      "line_start": 266,
+      "locator": "backend/max_backend/promotion_service.py::_compile_champion"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_finalize_committed_evidence",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_finalize_committed_evidence",
+      "language": "Python",
+      "line_end": 652,
+      "line_start": 592,
+      "locator": "backend/max_backend/promotion_service.py::_finalize_committed_evidence"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_json_write",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_json_write",
+      "language": "Python",
+      "line_end": 214,
+      "line_start": 208,
+      "locator": "backend/max_backend/promotion_service.py::_json_write"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_post_deployment_state",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_post_deployment_state",
+      "language": "Python",
+      "line_end": 542,
+      "line_start": 503,
+      "locator": "backend/max_backend/promotion_service.py::_post_deployment_state"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_promotion_id",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_promotion_id",
+      "language": "Python",
+      "line_end": 230,
+      "line_start": 224,
+      "locator": "backend/max_backend/promotion_service.py::_promotion_id"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_relative",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_relative",
+      "language": "Python",
+      "line_end": 205,
+      "line_start": 204,
+      "locator": "backend/max_backend/promotion_service.py::_relative"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_restore_before_state",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_restore_before_state",
+      "language": "Python",
+      "line_end": 484,
+      "line_start": 467,
+      "locator": "backend/max_backend/promotion_service.py::_restore_before_state"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_restore_file",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_restore_file",
+      "language": "Python",
+      "line_end": 263,
+      "line_start": 253,
+      "locator": "backend/max_backend/promotion_service.py::_restore_file"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_retained_owner_selected_source",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_retained_owner_selected_source",
+      "language": "Python",
+      "line_end": 152,
+      "line_start": 62,
+      "locator": "backend/max_backend/promotion_service.py::_retained_owner_selected_source"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_sha",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_sha",
+      "language": "Python",
+      "line_end": 59,
+      "line_start": 58,
+      "locator": "backend/max_backend/promotion_service.py::_sha"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_snapshot_file",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_snapshot_file",
+      "language": "Python",
+      "line_end": 250,
+      "line_start": 237,
+      "locator": "backend/max_backend/promotion_service.py::_snapshot_file"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_stage_baseline_archive",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_stage_baseline_archive",
+      "language": "Python",
+      "line_end": 380,
+      "line_start": 350,
+      "locator": "backend/max_backend/promotion_service.py::_stage_baseline_archive"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_stage_evidence",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_stage_evidence",
+      "language": "Python",
+      "line_end": 589,
+      "line_start": 545,
+      "locator": "backend/max_backend/promotion_service.py::_stage_evidence"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_stage_former_champion_archive",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_stage_former_champion_archive",
+      "language": "Python",
+      "line_end": 424,
+      "line_start": 383,
+      "locator": "backend/max_backend/promotion_service.py::_stage_former_champion_archive"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::_verify_challenger_optimizer_source",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::_verify_challenger_optimizer_source",
+      "language": "Python",
+      "line_end": 201,
+      "line_start": 155,
+      "locator": "backend/max_backend/promotion_service.py::_verify_challenger_optimizer_source"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "language": "Python",
+      "line_end": 1007,
+      "line_start": 675,
+      "locator": "backend/max_backend/promotion_service.py::promote_strategy_challenger"
+    },
+    {
+      "id": "backend/max_backend/promotion_service.py::verify_current_strategy_champion",
+      "kind": "function",
+      "label": "backend/max_backend/promotion_service.py::verify_current_strategy_champion",
+      "language": "Python",
+      "line_end": 1088,
+      "line_start": 1010,
+      "locator": "backend/max_backend/promotion_service.py::verify_current_strategy_champion"
+    },
+    {
+      "id": "backend/max_backend/research_contract.py::canonical_json",
+      "kind": "function",
+      "label": "backend/max_backend/research_contract.py::canonical_json",
+      "language": "Python",
+      "line_end": 103,
+      "line_start": 96,
+      "locator": "backend/max_backend/research_contract.py::canonical_json"
+    },
+    {
+      "id": "backend/max_backend/research_contract.py::stable_hash",
+      "kind": "function",
+      "label": "backend/max_backend/research_contract.py::stable_hash",
+      "language": "Python",
+      "line_end": 107,
+      "line_start": 106,
+      "locator": "backend/max_backend/research_contract.py::stable_hash"
+    },
+    {
+      "id": "backend/max_backend/workflow_contract.py::optimizer_result_workflow",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_contract.py::optimizer_result_workflow",
+      "language": "Python",
+      "line_end": 41,
+      "line_start": 23,
+      "locator": "backend/max_backend/workflow_contract.py::optimizer_result_workflow"
+    },
+    {
+      "id": "backend/max_backend/workflow_contract.py::optimizer_uses_owner_selection",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_contract.py::optimizer_uses_owner_selection",
+      "language": "Python",
+      "line_end": 45,
+      "line_start": 44,
+      "locator": "backend/max_backend/workflow_contract.py::optimizer_uses_owner_selection"
+    },
+    {
+      "id": "backend/tests/test_m01_recovery.py::Harness.parse",
+      "kind": "method",
+      "label": "backend/tests/test_m01_recovery.py::Harness.parse",
+      "language": "Python",
+      "line_end": 95,
+      "line_start": 93,
+      "locator": "backend/tests/test_m01_recovery.py::Harness.parse"
+    },
+    {
+      "id": "backend/tests/test_m01_recovery.py::good_pass",
+      "kind": "function",
+      "label": "backend/tests/test_m01_recovery.py::good_pass",
+      "language": "Python",
+      "line_end": 47,
+      "line_start": 35,
+      "locator": "backend/tests/test_m01_recovery.py::good_pass"
+    },
+    {
+      "id": "backend/tests/test_r01_source.py::_capture.run",
+      "kind": "method",
+      "label": "backend/tests/test_r01_source.py::_capture.run",
+      "language": "Python",
+      "line_end": 190,
+      "line_start": 125,
+      "locator": "backend/tests/test_r01_source.py::_capture.run"
+    }
+  ],
+  "observed_head": "35c449d8e2ff92fd83e926b4ced14d3d5537e4ce",
+  "schema_version": 1,
+  "source_digest": "385d2b167fbcf71a6311bfa92f3e567cb6d4c08fef1a00c963f58721e4145429"
+}

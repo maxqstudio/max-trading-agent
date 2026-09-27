@@ -1,0 +1,124 @@
+{
+  "decisions": [
+    {
+      "decision": "GitHub exact commit is source authority; D:\\MAX_REBUILD exact-SHA checkout is runtime/E2E authority.",
+      "id": "D-001",
+      "rationale": "Separate source lineage from real Windows/MT5/browser evidence.",
+      "status": "CURRENT",
+      "title": "GitHub source / Owner-PC runtime separation"
+    },
+    {
+      "decision": "Do not use GitHub Actions; acceptance executes on Owner PC against exact candidate SHA.",
+      "id": "D-002",
+      "rationale": "Owner runtime is the accepted runtime environment.",
+      "status": "CURRENT",
+      "title": "No GitHub Actions acceptance"
+    },
+    {
+      "decision": "Owner explicitly selects qualified Strategy candidates, promotes Champion, and opens Research gates where required.",
+      "id": "D-003",
+      "rationale": "Automation operates inside an authorized gate, not between gates.",
+      "status": "CURRENT",
+      "title": "Owner controls advancement"
+    },
+    {
+      "decision": "Strategy lifecycle provides parent authority to Research; Research does not retroactively redefine Strategy lifecycle state.",
+      "id": "D-004",
+      "rationale": "Preserve independent lineage and promotion/scientific authority.",
+      "status": "CURRENT",
+      "title": "Strategy and Research are separate authority domains"
+    },
+    {
+      "decision": "Scientist may analyze authorized evidence and propose hypotheses but cannot declare hard PASS, select for Owner, open gates, change risk, mutate datasets or promote Champion.",
+      "id": "D-005",
+      "rationale": "Deterministic backend and Owner remain authorities.",
+      "status": "CURRENT",
+      "title": "Scientist is advisory only"
+    },
+    {
+      "decision": "Replacing Champion A closes A tenure as FORMER while A source Challenger remains historical PROMOTED.",
+      "id": "D-006",
+      "rationale": "Champion tenure history and active Challenger eligibility are distinct.",
+      "status": "CURRENT",
+      "title": "Former Champion does not auto-reactivate"
+    },
+    {
+      "decision": "Registry lineage OR COMMITTED Challenger batch permanently excludes a retained optimizer source tuple while durable authority remains.",
+      "id": "D-007",
+      "rationale": "Prevent recycling already-consumed optimization evidence.",
+      "status": "CURRENT",
+      "title": "Consumed Optimizer source remains consumed"
+    },
+    {
+      "decision": "Research sample config remains Owner-editable; each execution snapshots the exact value into immutable authority.",
+      "id": "D-008",
+      "rationale": "Historical R00 4 trades/month is evidence, not a permanent current default.",
+      "status": "CURRENT",
+      "title": "Current Research config versus immutable execution snapshot"
+    },
+    {
+      "decision": "Locked OOS/Fresh outcome evidence remains protected and non-adaptive under its protected authority.",
+      "id": "D-009",
+      "rationale": "Prevent leakage/adaptive contamination.",
+      "status": "CURRENT",
+      "title": "Protected data cannot become tuning feedback"
+    },
+    {
+      "decision": "R02 remains blocked until R01 scientific execution is separately authorized, executed, accepted and later Owner advancement is authorized.",
+      "id": "D-010",
+      "rationale": "Readiness cannot substitute for scientific acceptance.",
+      "status": "CURRENT",
+      "title": "R01 before R02"
+    },
+    {
+      "decision": "Historical adoption was pinned to Skill Workflow 593a05674023c447fc28daed439f740f9adf39e1.",
+      "id": "D-011",
+      "rationale": "Superseded by D-014 current Skill Workflow authority; retained only as history.",
+      "status": "SUPERSEDED",
+      "title": "Historical Skill Workflow strict adoption"
+    },
+    {
+      "decision": "Tracked docs/specs record accepted parent/lineage, while exact final tested SHA belongs in external acceptance evidence.",
+      "id": "D-012",
+      "rationale": "Avoid unstable commit self-reference.",
+      "status": "CURRENT",
+      "title": "No self-referential tracked final SHA"
+    },
+    {
+      "decision": "A local compatibility patch existed in the old scripts/ validator to avoid misreading Claim relations.",
+      "id": "D-013",
+      "rationale": "Current vendored .workflow/tools from 6da01501 are byte-identical and contain no local patch; this decision is historical only.",
+      "status": "SUPERSEDED",
+      "title": "Historical old-validator compatibility repair"
+    },
+    {
+      "decision": "MAX uses Skill Workflow 6da01501ebfa5ae80b1eaf56e87077c4f1a60342, generated docs from .workflow, project-local byte-identical .workflow/tools, and DURING/CURRENT sequence sessions without retrospective plans.",
+      "id": "D-014",
+      "rationale": "Superseded by repaired current Skill Workflow authority D-015; retained as historical intermediate adoption.",
+      "status": "SUPERSEDED",
+      "title": "Current Skill Workflow compiler and DURING sequence authority"
+    },
+    {
+      "decision": "MAX uses Skill Workflow 227364cbf909679e85779b2ec60ce4524c8670ec; .workflow/tools are byte-identical to that authority; generated canonical governance docs live only under docs/; sequence mode remains DURING/CURRENT without retrospective plans.",
+      "id": "D-015",
+      "rationale": "Superseded by D-016 after current Skill main advanced by funding/README-only commits; retained as historical repaired authority.",
+      "status": "SUPERSEDED",
+      "title": "Repaired current Skill Workflow and canonical docs layout"
+    },
+    {
+      "decision": "MAX uses Skill Workflow 414104e9d56b59374a6e3c94c6883d295427cfa3; .workflow/tools are byte-identical to that exact current main; generated canonical governance docs remain under docs/; sequence mode remains DURING/CURRENT without retrospective plans.",
+      "id": "D-016",
+      "rationale": "Superseded by D-017 after Skill main added explicit required self-test PASS output markers; retained as historical current-main pin.",
+      "status": "SUPERSEDED",
+      "title": "Current Skill Workflow authority after funding-only main advance"
+    },
+    {
+      "decision": "MAX uses Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f; .workflow/tools are byte-identical to that exact current main; generated canonical governance docs remain under docs/; sequence mode remains DURING/CURRENT without retrospective plans.",
+      "id": "D-017",
+      "rationale": "Skill main advanced from 414104e9d56b59374a6e3c94c6883d295427cfa3 only to emit the prompt-required SELFTEST=PASS and STRICT_SELFTEST=PASS integration markers. Validator behavior, product behavior, scientific state and database schema are unchanged.",
+      "status": "CURRENT",
+      "title": "Current Skill Workflow authority with explicit self-test PASS markers"
+    }
+  ],
+  "schema_version": 1
+}

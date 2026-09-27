@@ -1,0 +1,66 @@
+{
+  "authority": "research_service R00 preflight/start + exact Strategy/Champion parent + Owner authorization.",
+  "critical": true,
+  "entry_condition": "Accepted Strategy authority and R00 prerequisites exist and Owner explicitly authorizes R00.",
+  "failure_behavior": [
+    "Missing parent/config/authorization/hash/invariant prevents terminal PASS."
+  ],
+  "flow_id": "FLOW-R00-INITIALIZATION",
+  "invariants": [
+    "R00 does not train a model or create ONNX/Research Challenger/Champion mutation.",
+    "R00 success does not automatically authorize or start R01.",
+    "Historical accepted R00 4 trades/month snapshot is immutable."
+  ],
+  "purpose": "Freeze accepted Strategy parent, feature/hardware/policy/current sample config and explicit Owner authorization into immutable R00 Research authority without training.",
+  "restart_behavior": [
+    "Recovery validates existing immutable authority and does not silently create a different Research parent."
+  ],
+  "rollback_behavior": [
+    "Partial pre-terminal materialization cannot rewrite an already accepted historical R00 authority."
+  ],
+  "schema_version": 1,
+  "sequence_session": "docs/sequence/sessions/FLOW-R00-INITIALIZATION.json",
+  "source_owners": [
+    "backend/max_backend/research_service.py::r00_preflight",
+    "backend/max_backend/research_service.py::start_r00",
+    "backend/max_backend/research_service.py::canonical_research_stage",
+    "frontend/src/ResearchPage.tsx::ResearchPage"
+  ],
+  "states": [
+    "R00_PREFLIGHT",
+    "R00_AUTHORIZED",
+    "R00_MATERIALIZING",
+    "PASS_WAITING_OWNER"
+  ],
+  "tests": [
+    "backend/tests/test_r00_research.py"
+  ],
+  "title": "R00 initialization to immutable Research parent",
+  "transitions": [
+    {
+      "action": "Verify parent Strategy/Champion, config, feature/hardware policy and Owner confirmation.",
+      "from": "R00_PREFLIGHT",
+      "side_effects": [],
+      "to": "R00_AUTHORIZED"
+    },
+    {
+      "action": "Write immutable parent/hardware/input authority.",
+      "from": "R00_AUTHORIZED",
+      "side_effects": [
+        "parent_manifest",
+        "hardware_snapshot",
+        "r00_input_manifest"
+      ],
+      "to": "R00_MATERIALIZING"
+    },
+    {
+      "action": "Publish immutable output/registry/events after invariant checks.",
+      "from": "R00_MATERIALIZING",
+      "side_effects": [
+        "r00_output_manifest",
+        "Research registry/events/memory"
+      ],
+      "to": "PASS_WAITING_OWNER"
+    }
+  ]
+}

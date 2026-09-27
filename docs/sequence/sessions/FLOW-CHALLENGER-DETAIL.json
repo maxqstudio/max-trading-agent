@@ -1,0 +1,37 @@
+{
+  "acceptance_report": "artifacts/sequence/FLOW-CHALLENGER-DETAIL.acceptance.json",
+  "actual": {
+    "diagram": "docs/sequence/generated/FLOW-CHALLENGER-DETAIL.actual.mmd",
+    "entries": [
+      "backend/max_backend/challenger_registry.py::challenger_detail",
+      "backend/max_backend/challenger_operations.py::challenger_registry_page"
+    ],
+    "graph": "docs/sequence/generated/FLOW-CHALLENGER-DETAIL.actual.json",
+    "source_digest": "385d2b167fbcf71a6311bfa92f3e567cb6d4c08fef1a00c963f58721e4145429"
+  },
+  "critical": true,
+  "implementation_base_sha": "ad7e61c9d944677e1d7a48e9bfbfc9d049b2542e",
+  "mode": "DURING",
+  "phase": "FRESH_RUNTIME_EPOCH_RESET",
+  "plan": {
+    "contract": "",
+    "diagram": "",
+    "frozen": false,
+    "frozen_commit": "",
+    "required": false,
+    "sha256": ""
+  },
+  "runtime_trace": {
+    "graph": "",
+    "required": false
+  },
+  "schema_version": 1,
+  "scope": "CURRENT",
+  "session_id": "FLOW-CHALLENGER-DETAIL",
+  "status": "CURRENT",
+  "test_traceability_required": true,
+  "tests": [
+    "backend/tests/test_m03_challenger.py",
+    "backend/tests/test_m06_challenger_operations.py"
+  ]
+}

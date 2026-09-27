@@ -1,0 +1,130 @@
+{
+  "authorities": [
+    {
+      "authority": "GitHub exact commit in maxqstudio/max_rebuild",
+      "concern": "source",
+      "meaning": "Tracked source/spec/governance state is authoritative by exact commit; final candidate HEAD must equal locally tested HEAD.",
+      "mutable": true
+    },
+    {
+      "authority": "Owner PC D:\\MAX_REBUILD exact-SHA checkout",
+      "concern": "runtime",
+      "meaning": "Windows/MT5/browser runtime and E2E behavior are accepted only from the Owner-PC checkout at the tested SHA.",
+      "mutable": true
+    },
+    {
+      "authority": "Control Room audit over exact-SHA source/test/runtime evidence",
+      "concern": "acceptance",
+      "meaning": "No individual validator or historical PASS alone grants project acceptance.",
+      "mutable": true
+    },
+    {
+      "authority": "Owning backend store over state/max.db",
+      "concern": "sqlite_operational_state",
+      "meaning": "Mutable operational lifecycle/settings state is authoritative only where the corresponding store/service owns it.",
+      "mutable": true
+    },
+    {
+      "authority": "Sealed manifests, bundles, reports and retained artifacts",
+      "concern": "immutable_scientific_evidence",
+      "meaning": "Scientific/execution history is immutable when its owning contract marks it immutable; current config cannot rewrite it.",
+      "mutable": false
+    },
+    {
+      "authority": "backend/max_backend/champion_store.py::commit_promotion_authority plus explicit Owner promotion",
+      "concern": "strategy_champion",
+      "meaning": "Current Champion tenure changes only through verified promotion authority; prior tenure becomes FORMER history.",
+      "mutable": true
+    },
+    {
+      "authority": "backend/max_backend/challenger_store.py plus retained immutable Challenger bundle",
+      "concern": "strategy_challenger",
+      "meaning": "Active eligibility and historical PROMOTED/RETIRED identity are distinct; retained request epoch defines exact parameter universe.",
+      "mutable": true
+    },
+    {
+      "authority": "MT5 optimizer reports/sidecars plus Python canonical revalidation",
+      "concern": "optimizer",
+      "meaning": "MT5 executes optimization; Python verifies identity, hashes, hard gates, request epoch and durable consumed-source eligibility.",
+      "mutable": true
+    },
+    {
+      "authority": "backend/max_backend/research_settings.py with SQLite schema_meta",
+      "concern": "research_current_configuration",
+      "meaning": "Owner-editable current Research sample configuration applies to future execution authorization only.",
+      "mutable": true
+    },
+    {
+      "authority": "R00/R01 immutable authorization and input manifests",
+      "concern": "research_execution_snapshot",
+      "meaning": "Each execution freezes the exact current configuration and parent/source authority; later edits cannot alter that snapshot.",
+      "mutable": false
+    },
+    {
+      "authority": "Managed verified Research source bundle and sealed R01 artifacts",
+      "concern": "research_dataset_source",
+      "meaning": "Source identity, dataset rows, partitions, labels and leakage evidence bind to explicit verified lineage.",
+      "mutable": false
+    },
+    {
+      "authority": "MetaTrader 5 Strategy Tester and MetaEditor",
+      "concern": "mt5_execution",
+      "meaning": "MT5/MetaEditor own simulation, optimization and compile execution truth; Python owns legality/orchestration/evidence verification.",
+      "mutable": true
+    },
+    {
+      "authority": "Hash-verified static knowledge plus bounded committed runtime context",
+      "concern": "scientist",
+      "meaning": "Scientist output is advisory only and cannot mutate Strategy/Research scientific authority.",
+      "mutable": true
+    },
+    {
+      "authority": "Semantic backend API representation",
+      "concern": "frontend",
+      "meaning": "React presents authority; UI labels/local state do not create domain eligibility, gate completion or scientific PASS.",
+      "mutable": true
+    },
+    {
+      "authority": "Executable suites at the exact tested HEAD",
+      "concern": "tests",
+      "meaning": "A test PASS is evidence only for the layer and snapshot actually executed.",
+      "mutable": true
+    },
+    {
+      "authority": "Retained docs/audits/acceptance and immutable artifacts",
+      "concern": "historical_evidence",
+      "meaning": "Historical evidence remains historically truthful and is not rewritten to mimic current terminology or configuration.",
+      "mutable": false
+    },
+    {
+      "authority": ".workflow semantic specs + Project Truth Compiler at Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f",
+      "concern": "documentation",
+      "meaning": "Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden.",
+      "mutable": true
+    },
+    {
+      "authority": "DURING-mode generated actual sequence graphs plus source/test/runtime semantic review",
+      "concern": "sequence",
+      "meaning": "Existing implementation is reconstructed from current source; retrospective BEFORE plans are forbidden.",
+      "mutable": true
+    },
+    {
+      "authority": ".workflow/tools vendored byte-identically from Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f",
+      "concern": "governance_tools",
+      "meaning": "Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed.",
+      "mutable": false
+    }
+  ],
+  "invariants": [
+    "Authority conflicts fail closed; do not infer from UI labels, chat memory or stale prose.",
+    "TESTED_HEAD = FINAL_SOURCE_HEAD = FINAL_DOCUMENTATION_HEAD.",
+    "Historical retained Challenger evidence remains exact legacy 16D while current V6 is exact 17D including InpRiskPct; mixed/missing/extra universes fail closed.",
+    "Durable optimizer consumption survives Challenger promotion, retirement and later permitted physical deletion while registry or COMMITTED batch authority remains.",
+    "Former Champion tenure does not recreate active Challenger eligibility.",
+    "Current Research configuration and immutable execution snapshots are distinct domains.",
+    "Protected Locked OOS/Fresh outcomes are not adaptive tuning feedback.",
+    "R01 implementation/runtime readiness does not equal R01 scientific PASS and cannot open R02.",
+    "Generated canonical docs/ Markdown is repaired through source/.workflow authority and regeneration, never manual patching."
+  ],
+  "schema_version": 1
+}

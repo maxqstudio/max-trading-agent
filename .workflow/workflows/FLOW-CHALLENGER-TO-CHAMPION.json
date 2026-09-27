@@ -1,0 +1,77 @@
+{
+  "authority": "Owner authorization + promotion service + champion store atomic commit + retained Challenger evidence.",
+  "critical": true,
+  "entry_condition": "Owner explicitly confirms promotion of a legal active Challenger against the expected current Champion/manifest authority.",
+  "failure_behavior": [
+    "Compile/parity/stale/authority failure blocks commit and preserves prior Champion/source authority."
+  ],
+  "flow_id": "FLOW-CHALLENGER-TO-CHAMPION",
+  "invariants": [
+    "No automatic Champion promotion.",
+    "Former Champion source stays historical PROMOTED and does not become active Challenger.",
+    "At most one CURRENT Champion tenure."
+  ],
+  "purpose": "Promote only a legal active Challenger through verified compile/deployment/parity and atomically preserve Champion/source history.",
+  "restart_behavior": [
+    "Promotion journal recovery resolves only verified persisted stages and never duplicates a committed promotion."
+  ],
+  "rollback_behavior": [
+    "Pre-commit filesystem/state changes restore prior before-state; immutable prior history remains retained."
+  ],
+  "schema_version": 1,
+  "sequence_session": "docs/sequence/sessions/FLOW-CHALLENGER-TO-CHAMPION.json",
+  "source_owners": [
+    "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+    "backend/max_backend/champion_store.py::commit_promotion_authority",
+    "backend/max_backend/promotion_service.py::verify_current_strategy_champion",
+    "frontend/src/ChampionPage.tsx::ChampionPage",
+    "frontend/src/ChallengersPage.tsx::ChallengersPage"
+  ],
+  "states": [
+    "ACTIVE_CHALLENGER",
+    "PROMOTION_PREPARED",
+    "DEPLOYMENT_VERIFIED",
+    "PROMOTION_COMMITTED",
+    "CURRENT_CHAMPION",
+    "PRIOR_TENURE_FORMER"
+  ],
+  "tests": [
+    "backend/tests/test_m04_promotion.py",
+    "backend/tests/test_m04_store.py"
+  ],
+  "title": "Explicit Owner Challenger to Champion promotion",
+  "transitions": [
+    {
+      "action": "Verify source/bundle/optimizer lineage and stale-protected Owner confirmation.",
+      "from": "ACTIVE_CHALLENGER",
+      "side_effects": [
+        "promotion journal"
+      ],
+      "to": "PROMOTION_PREPARED"
+    },
+    {
+      "action": "Stage deployment, compile and parity-check exact retained strategy.",
+      "from": "PROMOTION_PREPARED",
+      "side_effects": [
+        "deployment/compile/parity evidence"
+      ],
+      "to": "DEPLOYMENT_VERIFIED"
+    },
+    {
+      "action": "Atomically commit selected source PROMOTED and new CURRENT tenure; close prior CURRENT to FORMER.",
+      "from": "DEPLOYMENT_VERIFIED",
+      "side_effects": [
+        "strategy_promotions",
+        "strategy_champions",
+        "strategy_challengers"
+      ],
+      "to": "PROMOTION_COMMITTED"
+    },
+    {
+      "action": "Expose newly verified current Champion authority.",
+      "from": "PROMOTION_COMMITTED",
+      "side_effects": [],
+      "to": "CURRENT_CHAMPION"
+    }
+  ]
+}

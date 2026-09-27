@@ -1,0 +1,679 @@
+{
+  "api_contracts": [
+    {
+      "authority": "backend/max_backend/main.py",
+      "error_behavior": "Read-only; backend failure surfaces.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/health",
+      "purpose": "Backend/database readiness"
+    },
+    {
+      "authority": "backend/max_backend/main.py::overview",
+      "error_behavior": "Read-only semantic authority projection.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/overview",
+      "purpose": "Canonical runtime overview"
+    },
+    {
+      "authority": "MT5 detector",
+      "error_behavior": "Read-only; missing/invalid runtime fails closed.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/mt5/preflight",
+      "purpose": "MT5 executable/data-root readiness"
+    },
+    {
+      "authority": "optimizer domain",
+      "error_behavior": "Read-only.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/optimizer/contract",
+      "purpose": "Expose current optimizer contract"
+    },
+    {
+      "authority": "optimizer domain",
+      "error_behavior": "Invalid request fails; no job mutation.",
+      "method": "POST",
+      "mutation": "none",
+      "path": "/api/optimizer/preview",
+      "purpose": "Validate/freeze optimizer preview"
+    },
+    {
+      "authority": "optimizer domain + Owner request",
+      "error_behavior": "Illegal lifecycle/contract fails closed.",
+      "method": "POST",
+      "mutation": "optimizer job/evidence + MT5 worker",
+      "path": "/api/optimizer/start",
+      "purpose": "Start legal optimizer job"
+    },
+    {
+      "authority": "optimizer store",
+      "error_behavior": "Read-only.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/optimizer/current",
+      "purpose": "Current/latest optimizer state"
+    },
+    {
+      "authority": "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
+      "error_behavior": "Invalid/stale qualification excluded.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/optimizer/jobs/{job_id}/qualified-candidates",
+      "purpose": "Active qualified pool minus durable consumed tuples"
+    },
+    {
+      "authority": "backend/max_backend/challenger_selection.py::create_selected_challengers",
+      "error_behavior": "Every candidate canonically revalidated; stale/consumed/mismatch aborts.",
+      "method": "POST",
+      "mutation": "Challenger batch/registry/bundles",
+      "path": "/api/optimizer/jobs/{job_id}/challengers",
+      "purpose": "Owner selected candidates to committed Challenger batch"
+    },
+    {
+      "authority": "challenger operations/store",
+      "error_behavior": "Read-only semantic projection.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/challengers/registry",
+      "purpose": "Active/archive Challenger registry"
+    },
+    {
+      "authority": "backend/max_backend/challenger_registry.py::challenger_detail",
+      "error_behavior": "Exact retained 16D/17D universe only; corrupt/mixed evidence fails closed.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/challengers/{challenger_id}",
+      "purpose": "Verified retained Challenger detail"
+    },
+    {
+      "authority": "backend/max_backend/challenger_operations.py::retire_challenger",
+      "error_behavior": "Illegal status/dependency/stale authority blocks.",
+      "method": "POST",
+      "mutation": "status/journal/evidence",
+      "path": "/api/challengers/{challenger_id}/retire",
+      "purpose": "Non-destructive Challenger retirement"
+    },
+    {
+      "authority": "Challenger deletion contract",
+      "error_behavior": "Read-only blockers/allowed.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/challengers/{challenger_id}/delete-preflight",
+      "purpose": "Deletion legality"
+    },
+    {
+      "authority": "Challenger deletion contract",
+      "error_behavior": "Cannot bypass lineage, dependency or durable consumed-source rules.",
+      "method": "DELETE",
+      "mutation": "controlled registry/artifact cleanup",
+      "path": "/api/challengers/{challenger_id}",
+      "purpose": "Permitted controlled Challenger deletion"
+    },
+    {
+      "authority": "challenger operations",
+      "error_behavior": "Active retained contract only; no arbitrary market override.",
+      "method": "POST",
+      "mutation": "MT5 evidence + DB",
+      "path": "/api/challengers/{challenger_id}/backtest",
+      "purpose": "Retained-contract MT5 observational backtest"
+    },
+    {
+      "authority": "champion store/promotion service",
+      "error_behavior": "Read-only; no implicit reactivation.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/champion",
+      "purpose": "Verified current Champion"
+    },
+    {
+      "authority": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "error_behavior": "Stale/parity/compile failure rolls back; no automatic promotion.",
+      "method": "POST",
+      "mutation": "deployment/history/Champion tenure/source PROMOTED",
+      "path": "/api/challengers/{challenger_id}/promote",
+      "purpose": "Explicit Owner Challenger to Champion promotion"
+    },
+    {
+      "authority": "champion store",
+      "error_behavior": "Read-only historical projection.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/promotions",
+      "purpose": "Promotion history"
+    },
+    {
+      "authority": "research_settings.py",
+      "error_behavior": "No hidden 4/8 fallback.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/research/sample-config",
+      "purpose": "Read editable current Research sample config"
+    },
+    {
+      "authority": "backend/max_backend/research_settings.py::set_research_sample_configuration",
+      "error_behavior": "Cannot rewrite historical/running snapshots.",
+      "method": "PUT",
+      "mutation": "SQLite current config",
+      "path": "/api/research/sample-config",
+      "purpose": "Update future-execution Research sample config"
+    },
+    {
+      "authority": "backend/max_backend/research_service.py::r00_preflight",
+      "error_behavior": "Read-only blockers/authority.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/research/r00/preflight",
+      "purpose": "R00 prerequisite/readiness"
+    },
+    {
+      "authority": "backend/max_backend/research_service.py::start_r00",
+      "error_behavior": "Missing parent/config/authorization/hash blocks; no automatic R01.",
+      "method": "POST",
+      "mutation": "Research registry/events + immutable R00 manifests",
+      "path": "/api/research/r00/start",
+      "purpose": "Explicit Owner R00 initialization"
+    },
+    {
+      "authority": "backend/max_backend/research_service.py::canonical_research_stage",
+      "error_behavior": "Read-only; readiness is not scientific PASS.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/research/current",
+      "purpose": "Canonical Research stage"
+    },
+    {
+      "authority": "R01 source service",
+      "error_behavior": "Read-only.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/research/r01/source",
+      "purpose": "Managed R01 source status"
+    },
+    {
+      "authority": "backend/max_backend/research_source.py::prepare_r01_source",
+      "error_behavior": "Fails closed and is not R01 scientific result.",
+      "method": "POST",
+      "mutation": "managed source evidence",
+      "path": "/api/research/r01/source/prepare",
+      "purpose": "Prepare verified managed source before R01 start"
+    },
+    {
+      "authority": "backend/max_backend/research_r01_service.py::r01_preflight",
+      "error_behavior": "Read-only blockers/config/source/run state.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/research/r01/preflight",
+      "purpose": "R01 readiness"
+    },
+    {
+      "authority": "backend/max_backend/research_r01_service.py::r01_detail",
+      "error_behavior": "Read-only.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/research/r01/detail",
+      "purpose": "R01 detail and config/snapshot distinction"
+    },
+    {
+      "authority": "backend/max_backend/research_r01_service.py::start_r01",
+      "error_behavior": "Governance repair must not call; protected/leakage failure cannot become PASS.",
+      "method": "POST",
+      "mutation": "dataset/labels/leakage/artifacts/events",
+      "path": "/api/research/r01/start",
+      "purpose": "Explicit Owner R01 scientific execution"
+    },
+    {
+      "authority": "backend/max_backend/scientist_api.py::get_status",
+      "error_behavior": "Read-only.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/scientist/status",
+      "purpose": "Scientist/provider/knowledge readiness"
+    },
+    {
+      "authority": "backend/max_backend/scientist_knowledge.py::load_knowledge",
+      "error_behavior": "Stale manifest blocks.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/scientist/knowledge",
+      "purpose": "Hash-verified static knowledge projection"
+    },
+    {
+      "authority": "Scientist chat/context/provider validation",
+      "error_behavior": "No Strategy/Research scientific authority mutation.",
+      "method": "POST",
+      "mutation": "chat/provider accounting only",
+      "path": "/api/scientist/threads/{thread_id}/messages",
+      "purpose": "Advisory Scientist message"
+    },
+    {
+      "authority": "artifact control",
+      "error_behavior": "No scientific/promotion authority.",
+      "method": "GET",
+      "mutation": "controlled reconciliation only",
+      "path": "/api/artifacts",
+      "purpose": "Governed artifact inventory"
+    },
+    {
+      "authority": "artifact control",
+      "error_behavior": "Path/dependency/ownership blockers fail closed.",
+      "method": "POST",
+      "mutation": "none",
+      "path": "/api/artifacts/preflight",
+      "purpose": "Artifact action legality"
+    },
+    {
+      "authority": "artifact control",
+      "error_behavior": "Protected/current authority cannot be silently deleted.",
+      "method": "POST",
+      "mutation": "legal controlled cleanup/delete",
+      "path": "/api/artifacts/action",
+      "purpose": "Governed artifact action"
+    }
+  ],
+  "data_contracts": [
+    {
+      "invariants": [
+        "UI/Scientist cannot bypass owning service",
+        "transactions preserve lifecycle legality"
+      ],
+      "legal_writes": [
+        "owning store/service transactions"
+      ],
+      "mutability": "mutable operational",
+      "name": "SQLite operational state",
+      "retention": "runtime/historical rows per domain",
+      "source_of_truth": "Owning backend stores over state/max.db"
+    },
+    {
+      "invariants": [
+        "CHALLENGER active; PROMOTED historical; RETIRED archived",
+        "exact retained request epoch parameter universe"
+      ],
+      "legal_writes": [
+        "challenger selection/store/operations/promotion"
+      ],
+      "mutability": "status mutable; identity/lineage fixed",
+      "name": "Strategy Challenger registry",
+      "retention": "historical unless legal cleanup",
+      "source_of_truth": "strategy_challengers + retained immutable bundle"
+    },
+    {
+      "invariants": [
+        "COMMITTED batch source remains consumed after later row deletion"
+      ],
+      "legal_writes": [
+        "challenger selection transaction/recovery"
+      ],
+      "mutability": "lifecycle to terminal; COMMITTED durable",
+      "name": "Challenger batch authority",
+      "retention": "durable committed consumption history",
+      "source_of_truth": "strategy_challenger_batches/items"
+    },
+    {
+      "invariants": [
+        "at most one CURRENT",
+        "FORMER does not imply active Challenger",
+        "source Challenger remains historical PROMOTED"
+      ],
+      "legal_writes": [
+        "backend/max_backend/champion_store.py::commit_promotion_authority"
+      ],
+      "mutability": "CURRENT to FORMER only by legal replacement",
+      "name": "Champion tenure/history",
+      "retention": "durable",
+      "source_of_truth": "strategy_champions + strategy_promotions"
+    },
+    {
+      "invariants": [
+        "request epoch, hash, hard gates and baseline identity revalidated before Challenger mutation"
+      ],
+      "legal_writes": [
+        "optimizer worker/store"
+      ],
+      "mutability": "immutable retained evidence; job lifecycle operational",
+      "name": "Optimizer evidence",
+      "retention": "forensic/lineage",
+      "source_of_truth": "MT5 report/sidecar plus Python verification"
+    },
+    {
+      "invariants": [
+        "positive value",
+        "no hidden 4/8 fallback",
+        "future executions only"
+      ],
+      "legal_writes": [
+        "backend/max_backend/research_settings.py::set_research_sample_configuration"
+      ],
+      "mutability": "Owner editable",
+      "name": "Current Research sample configuration",
+      "retention": "current value",
+      "source_of_truth": "research_settings + schema_meta"
+    },
+    {
+      "invariants": [
+        "later current-config edits cannot alter snapshot",
+        "historical R00 4 trades/month remains historical"
+      ],
+      "legal_writes": [
+        "R00/R01 start authorization"
+      ],
+      "mutability": "immutable",
+      "name": "Research execution snapshot",
+      "retention": "scientific history",
+      "source_of_truth": "R00/R01 authorization/input manifests"
+    },
+    {
+      "invariants": [
+        "no model training",
+        "does not authorize R01 automatically"
+      ],
+      "legal_writes": [
+        "backend/max_backend/research_service.py::start_r00"
+      ],
+      "mutability": "immutable",
+      "name": "R00 Research parent authority",
+      "retention": "historical scientific authority",
+      "source_of_truth": "parent_manifest + R00 input/output/hardware manifests + registry/events"
+    },
+    {
+      "invariants": [
+        "verified MT5/account/server/symbol/time authority",
+        "no arbitrary Owner filesystem path"
+      ],
+      "legal_writes": [
+        "backend/max_backend/research_source.py::prepare_r01_source"
+      ],
+      "mutability": "immutable per source identity",
+      "name": "R01 source bundle",
+      "retention": "dataset lineage",
+      "source_of_truth": "managed verified source record/files"
+    },
+    {
+      "invariants": [
+        "original chronology preserved",
+        "features causal/closed-bar",
+        "future information only for targets"
+      ],
+      "legal_writes": [
+        "research_dataset.py builders"
+      ],
+      "mutability": "immutable per run",
+      "name": "R01 dataset rows and labels",
+      "retention": "scientific lineage",
+      "source_of_truth": "sealed deterministic dataset/label artifacts"
+    },
+    {
+      "invariants": [
+        "Discovery/Locked/Fresh non-overlap",
+        "legal target end stays before downstream protected boundary"
+      ],
+      "legal_writes": [
+        "research_leakage.py"
+      ],
+      "mutability": "immutable per execution",
+      "name": "Protected partition/dependency authority",
+      "retention": "scientific lineage",
+      "source_of_truth": "explicit Owner boundaries + deterministic research_leakage derivation"
+    },
+    {
+      "invariants": [
+        "not adaptive tuning feedback under protected authority"
+      ],
+      "legal_writes": [
+        "authorized later evaluation gates only"
+      ],
+      "mutability": "sealed/protected",
+      "name": "Locked OOS/Fresh outcomes",
+      "retention": "retained",
+      "source_of_truth": "protected Research evidence"
+    },
+    {
+      "invariants": [
+        "artifact/run/gate/memory publish atomically",
+        "protected feedback adaptive_eligible=false"
+      ],
+      "legal_writes": [
+        "backend/max_backend/research_r01_store.py::commit_r01_terminal_authority"
+      ],
+      "mutability": "append/terminal",
+      "name": "R01 terminal authority",
+      "retention": "retained",
+      "source_of_truth": "atomic R01 run/artifact/gate/memory commit"
+    },
+    {
+      "invariants": [
+        "hash mismatch makes knowledge STALE",
+        "advisory only"
+      ],
+      "legal_writes": [
+        "explicit knowledge rebuild when authoritative sources change"
+      ],
+      "mutability": "source-controlled",
+      "name": "Scientist knowledge manifest",
+      "retention": "current provenance",
+      "source_of_truth": "scientist/knowledge/source_manifest.json"
+    },
+    {
+      "invariants": [
+        "current baseline status BASELINE_NOT_CHAMPION",
+        "MT5 execution input does not itself become Champion authority"
+      ],
+      "legal_writes": [
+        "separately authorized Strategy baseline changes"
+      ],
+      "mutability": "source-controlled epoch",
+      "name": "EA baseline",
+      "retention": "current plus predecessor lineage",
+      "source_of_truth": "ea/baseline/manifest.json + ea/baseline/Max_MTF.mq5"
+    }
+  ],
+  "runbook_steps": [
+    {
+      "command": "git fetch origin work/skill-workflow-strict-adoption; git switch work/skill-workflow-strict-adoption; git rev-parse HEAD; git status --porcelain",
+      "expected": "Exact intended candidate HEAD and clean worktree.",
+      "name": "Verify exact source"
+    },
+    {
+      "command": "py -3.13 -m venv .venv; .\\.venv\\Scripts\\python.exe -m pip install -r requirements.lock.txt",
+      "expected": "Python 3.13 environment with locked dependencies.",
+      "name": "Python environment"
+    },
+    {
+      "command": "cd frontend; npm ci; cd ..",
+      "expected": "package-lock resolved without required dependency errors.",
+      "name": "Frontend dependencies"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\sync_project_truth.py",
+      "expected": "PROJECT_DOCS_SYNC=PASS.",
+      "name": "Sync generated governance"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_project_docs.py",
+      "expected": "RESULT=PASS and no stale/missing generated docs.",
+      "name": "Validate generated docs"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_sequence_sessions.py",
+      "expected": "Eight current DURING sessions, zero failed sessions.",
+      "name": "Validate sequence sessions"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_handoff.py",
+      "expected": "STRICT required docs present/current.",
+      "name": "Validate handoff"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_human_comprehension.py --require-pass",
+      "expected": "HUMAN_COMPREHENSION_GATE PASS.",
+      "name": "Validate human comprehension"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_cross_document_consistency.py --base ad7e61c9d944677e1d7a48e9bfbfc9d049b2542e --require-base",
+      "expected": "RESULT=PASS.",
+      "name": "Validate cross-document consistency"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_project_truth.py",
+      "expected": "RESULT=PASS after required acceptance evidence is present.",
+      "name": "Validate project truth"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest backend\\tests -q -o addopts=",
+      "expected": "At least established 485-pass floor; investigate any decrease.",
+      "name": "Backend cumulative tests"
+    },
+    {
+      "command": "cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all; cd ..",
+      "expected": "51-test floor across 10 files, lint 0/0, build PASS, dependency tree exit 0.",
+      "name": "Frontend tests/lint/build"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pip check",
+      "expected": "No broken requirements.",
+      "name": "Python dependencies"
+    },
+    {
+      "command": "RUN_MAX.cmd --no-pause",
+      "expected": "Verified-instance or fresh-port path reaches MAX_READY only after backend/proxy/Scientist authority checks.",
+      "name": "Canonical runtime"
+    },
+    {
+      "command": "Invoke-RestMethod http://127.0.0.1:8000/api/overview; Invoke-RestMethod http://127.0.0.1:8000/api/mt5/preflight; Invoke-RestMethod http://127.0.0.1:5173/api/scientist/status",
+      "expected": "Backend/MT5/Scientist semantic readiness.",
+      "name": "Readiness probes"
+    },
+    {
+      "command": "Real Microsoft Edge/Chromium navigate Strategy Overview/Optimizer/Challengers/Champion, Research/Data, Artifacts, Settings and Scientist drawer without mutation",
+      "expected": "All required views render; no R01 start/promotion/retirement/delete/training/ONNX mutation.",
+      "name": "Browser E2E"
+    }
+  ],
+  "schema_version": 1,
+  "ui_surfaces": [
+    {
+      "actions": [
+        "navigate"
+      ],
+      "authority": "GET /api/overview; UI is presentation only",
+      "flow_id": "FLOW-OPTIMIZER-TO-CHALLENGER",
+      "locators": [
+        "frontend/src/App.tsx::App"
+      ],
+      "name": "Strategy / Overview",
+      "purpose": "Runtime/foundation summary"
+    },
+    {
+      "actions": [
+        "preview",
+        "start",
+        "stop",
+        "resume",
+        "explicit qualified selection"
+      ],
+      "authority": "Optimizer APIs and canonical backend qualification",
+      "flow_id": "FLOW-OPTIMIZER-TO-CHALLENGER",
+      "locators": [
+        "frontend/src/OptimizerPage.tsx::OptimizerPage"
+      ],
+      "name": "Strategy / Optimizer",
+      "purpose": "Optimizer job/config/result/qualified selection"
+    },
+    {
+      "actions": [
+        "detail",
+        "backtest",
+        "retire",
+        "legal deletion preflight/action",
+        "promote confirmation"
+      ],
+      "authority": "Challenger/Champion APIs",
+      "flow_id": "FLOW-CHALLENGER-DETAIL",
+      "locators": [
+        "frontend/src/ChallengersPage.tsx::ChallengersPage"
+      ],
+      "name": "Strategy / Challengers",
+      "purpose": "Active/archive/detail/backtest/lifecycle/promotion surface"
+    },
+    {
+      "actions": [
+        "inspect"
+      ],
+      "authority": "Champion store/API",
+      "flow_id": "FLOW-CHALLENGER-TO-CHAMPION",
+      "locators": [
+        "frontend/src/ChampionPage.tsx::ChampionPage"
+      ],
+      "name": "Strategy / Champion",
+      "purpose": "Current Champion and promotion history"
+    },
+    {
+      "actions": [
+        "edit current sample config",
+        "legal R00 action"
+      ],
+      "authority": "Research APIs/services",
+      "flow_id": "FLOW-RESEARCH-CONFIG-SNAPSHOT",
+      "locators": [
+        "frontend/src/ResearchPage.tsx::ResearchPage"
+      ],
+      "name": "Research",
+      "purpose": "Research lifecycle/current config/R00 authority"
+    },
+    {
+      "actions": [
+        "source prepare",
+        "explicit R01 start only when separately authorized"
+      ],
+      "authority": "R01 APIs/services",
+      "flow_id": "FLOW-R01-SOURCE-PIPELINE",
+      "locators": [
+        "frontend/src/DataPage.tsx::DataPage"
+      ],
+      "name": "Research / Data",
+      "purpose": "Embedded R01 source/readiness/execution inspector"
+    },
+    {
+      "actions": [
+        "preflight",
+        "legal cleanup actions"
+      ],
+      "authority": "Artifact control APIs",
+      "flow_id": "FLOW-CHALLENGER-CONSUMPTION",
+      "locators": [
+        "frontend/src/ArtifactsPage.tsx::ArtifactsPage"
+      ],
+      "name": "Artifacts",
+      "purpose": "Governed generated-data inventory/control"
+    },
+    {
+      "actions": [
+        "save/connect settings"
+      ],
+      "authority": "Scientist settings APIs only",
+      "flow_id": "FLOW-SCIENTIST-KNOWLEDGE",
+      "locators": [
+        "frontend/src/SettingsPage.tsx::SettingsPage"
+      ],
+      "name": "Settings",
+      "purpose": "Scientist provider/model/UI configuration"
+    },
+    {
+      "actions": [
+        "chat",
+        "clear",
+        "model/context UI choice"
+      ],
+      "authority": "Scientist status/chat/context; no scientific mutation",
+      "flow_id": "FLOW-SCIENTIST-KNOWLEDGE",
+      "locators": [
+        "frontend/src/ScientistPage.tsx::ScientistPage"
+      ],
+      "name": "Scientist drawer",
+      "purpose": "Advisory chat over bounded evidence"
+    }
+  ]
+}

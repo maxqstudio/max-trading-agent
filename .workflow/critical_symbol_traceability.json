@@ -1,0 +1,269 @@
+{
+  "additional_non_python_authority": [
+    {
+      "language": "CMD",
+      "locator": "RUN_MAX.cmd",
+      "preservation": "structured_architecture_project_entrypoint_runbook",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "MQL5",
+      "locator": "ea/baseline/Max_MTF.mq5",
+      "preservation": "structured_architecture_project_entrypoint_data_contract",
+      "status": "PRESERVED"
+    }
+  ],
+  "critical_symbol_preservation": "PASS",
+  "lost": 0,
+  "lost_locators": [],
+  "non_python_structured_found": 10,
+  "non_python_structured_total": 10,
+  "non_python_structured_traceability": "PASS",
+  "preserved_after_migration": 40,
+  "previous_critical_authority_symbols": 40,
+  "python_machine_extracted": 32,
+  "python_machine_extracted_expected": 32,
+  "schema_version": 1,
+  "symbols": [
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/optimizer_core.py::freeze_request",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/challenger_selection.py::create_selected_challengers",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/challenger_store.py::consumed_source_identities",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/challenger_registry.py::challenger_detail",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/challenger_operations.py::challenger_registry_page",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/challenger_operations.py::retire_challenger",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/champion_store.py::commit_promotion_authority",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/promotion_service.py::verify_current_strategy_champion",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/research_settings.py::get_research_sample_configuration",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/research_settings.py::set_research_sample_configuration",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/research_service.py::r00_preflight",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/research_service.py::start_r00",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/research_service.py::canonical_research_stage",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/research_source.py::prepare_r01_source",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/research_dataset.py::build_labels",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/research_dataset.py::build_dataset",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/research_leakage.py::bind_protected_partition_rows",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/research_leakage.py::bind_protected_target_dependency_authority",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/research_leakage.py::run_adversarial_suite",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/research_r01_store.py::commit_r01_terminal_authority",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/research_r01_service.py::r01_preflight",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/research_r01_service.py::prepare_r01_verified_source",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/research_r01_service.py::start_r01",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/research_r01_service.py::r01_detail",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/scientist_knowledge.py::load_knowledge",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/scientist_api.py::get_status",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/main.py::lifespan",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "Python",
+      "locator": "backend/max_backend/main.py::overview",
+      "preservation": "machine_extracted",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "TypeScript/TSX",
+      "locator": "frontend/src/App.tsx::App",
+      "preservation": "structured_architecture_and_project_entrypoint",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "TypeScript/TSX",
+      "locator": "frontend/src/OptimizerPage.tsx::OptimizerPage",
+      "preservation": "structured_architecture_workflow_ui_contract",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "TypeScript/TSX",
+      "locator": "frontend/src/ChallengersPage.tsx::ChallengersPage",
+      "preservation": "structured_architecture_workflow_ui_contract",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "TypeScript/TSX",
+      "locator": "frontend/src/ChampionPage.tsx::ChampionPage",
+      "preservation": "structured_architecture_workflow_ui_contract",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "TypeScript/TSX",
+      "locator": "frontend/src/ResearchPage.tsx::ResearchPage",
+      "preservation": "structured_architecture_workflow_ui_contract",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "TypeScript/TSX",
+      "locator": "frontend/src/DataPage.tsx::DataPage",
+      "preservation": "structured_architecture_workflow_ui_contract",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "TypeScript/TSX",
+      "locator": "frontend/src/ScientistPage.tsx::ScientistPage",
+      "preservation": "structured_architecture_workflow_ui_contract",
+      "status": "PRESERVED"
+    },
+    {
+      "language": "PowerShell",
+      "locator": "scripts/run_max.ps1",
+      "preservation": "structured_architecture_project_entrypoint_runbook",
+      "status": "PRESERVED"
+    }
+  ]
+}

@@ -1,0 +1,285 @@
+{
+  "flows": [
+    {
+      "declared_entries": [
+        "backend/max_backend/challenger_operations.py::retire_challenger",
+        "backend/max_backend/challenger_store.py::consumed_source_identities"
+      ],
+      "flow_id": "FLOW-CHALLENGER-CONSUMPTION",
+      "generated_edges": 71,
+      "generated_nodes": 49,
+      "mode": "DURING",
+      "non_python_structured_source_owners": [
+        "frontend/src/ChallengersPage.tsx::ChallengersPage"
+      ],
+      "outside_graph_classification": "GENERATOR_DEFECT_OR_ENTRY_SURFACE_LIMITATION",
+      "outside_graph_resolution": "Exact locator exists and mapped tests/semantic workflow retain authority; no product source change is justified.",
+      "python_source_owners_declared": 3,
+      "python_source_owners_in_static_graph": [
+        "backend/max_backend/challenger_operations.py::retire_challenger",
+        "backend/max_backend/challenger_store.py::consumed_source_identities"
+      ],
+      "python_source_owners_outside_static_reachable_graph": [
+        "backend/max_backend/challenger_operations.py::run_challenger_backtest"
+      ],
+      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "scope": "CURRENT",
+      "semantic_review": "PASS",
+      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "tests": [
+        "backend/tests/test_m06_challenger_operations.py",
+        "backend/tests/test_m08_strategy_results.py"
+      ],
+      "unresolved_bindings": []
+    },
+    {
+      "declared_entries": [
+        "backend/max_backend/challenger_registry.py::challenger_detail",
+        "backend/max_backend/challenger_operations.py::challenger_registry_page"
+      ],
+      "flow_id": "FLOW-CHALLENGER-DETAIL",
+      "generated_edges": 63,
+      "generated_nodes": 44,
+      "mode": "DURING",
+      "non_python_structured_source_owners": [
+        "frontend/src/ChallengersPage.tsx::ChallengersPage"
+      ],
+      "outside_graph_classification": "NONE",
+      "outside_graph_resolution": "NOT_APPLICABLE",
+      "python_source_owners_declared": 2,
+      "python_source_owners_in_static_graph": [
+        "backend/max_backend/challenger_registry.py::challenger_detail",
+        "backend/max_backend/challenger_operations.py::challenger_registry_page"
+      ],
+      "python_source_owners_outside_static_reachable_graph": [],
+      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "scope": "CURRENT",
+      "semantic_review": "PASS",
+      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "tests": [
+        "backend/tests/test_m03_challenger.py",
+        "backend/tests/test_m06_challenger_operations.py"
+      ],
+      "unresolved_bindings": []
+    },
+    {
+      "declared_entries": [
+        "backend/max_backend/promotion_service.py::promote_strategy_challenger"
+      ],
+      "flow_id": "FLOW-CHALLENGER-TO-CHAMPION",
+      "generated_edges": 232,
+      "generated_nodes": 122,
+      "mode": "DURING",
+      "non_python_structured_source_owners": [
+        "frontend/src/ChampionPage.tsx::ChampionPage",
+        "frontend/src/ChallengersPage.tsx::ChallengersPage"
+      ],
+      "outside_graph_classification": "NONE",
+      "outside_graph_resolution": "NOT_APPLICABLE",
+      "python_source_owners_declared": 3,
+      "python_source_owners_in_static_graph": [
+        "backend/max_backend/promotion_service.py::promote_strategy_challenger",
+        "backend/max_backend/champion_store.py::commit_promotion_authority",
+        "backend/max_backend/promotion_service.py::verify_current_strategy_champion"
+      ],
+      "python_source_owners_outside_static_reachable_graph": [],
+      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "scope": "CURRENT",
+      "semantic_review": "PASS",
+      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "tests": [
+        "backend/tests/test_m04_promotion.py",
+        "backend/tests/test_m04_store.py"
+      ],
+      "unresolved_bindings": []
+    },
+    {
+      "declared_entries": [
+        "backend/max_backend/optimizer_api.py::get_qualified_candidates",
+        "backend/max_backend/optimizer_api.py::promote_qualified_candidates"
+      ],
+      "flow_id": "FLOW-OPTIMIZER-TO-CHALLENGER",
+      "generated_edges": 196,
+      "generated_nodes": 113,
+      "mode": "DURING",
+      "non_python_structured_source_owners": [
+        "frontend/src/OptimizerPage.tsx::OptimizerPage"
+      ],
+      "outside_graph_classification": "NONE",
+      "outside_graph_resolution": "NOT_APPLICABLE",
+      "python_source_owners_declared": 5,
+      "python_source_owners_in_static_graph": [
+        "backend/max_backend/optimizer_api.py::get_qualified_candidates",
+        "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
+        "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
+        "backend/max_backend/challenger_selection.py::create_selected_challengers",
+        "backend/max_backend/challenger_store.py::consumed_source_identities"
+      ],
+      "python_source_owners_outside_static_reachable_graph": [],
+      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "scope": "CURRENT",
+      "semantic_review": "PASS",
+      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "tests": [
+        "backend/tests/test_m08_strategy_results.py",
+        "backend/tests/test_m03_challenger.py"
+      ],
+      "unresolved_bindings": []
+    },
+    {
+      "declared_entries": [
+        "backend/max_backend/research_service.py::start_r00",
+        "backend/max_backend/research_service.py::r00_preflight"
+      ],
+      "flow_id": "FLOW-R00-INITIALIZATION",
+      "generated_edges": 322,
+      "generated_nodes": 177,
+      "mode": "DURING",
+      "non_python_structured_source_owners": [
+        "frontend/src/ResearchPage.tsx::ResearchPage"
+      ],
+      "outside_graph_classification": "NONE",
+      "outside_graph_resolution": "NOT_APPLICABLE",
+      "python_source_owners_declared": 3,
+      "python_source_owners_in_static_graph": [
+        "backend/max_backend/research_service.py::r00_preflight",
+        "backend/max_backend/research_service.py::start_r00",
+        "backend/max_backend/research_service.py::canonical_research_stage"
+      ],
+      "python_source_owners_outside_static_reachable_graph": [],
+      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "scope": "CURRENT",
+      "semantic_review": "PASS",
+      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "tests": [
+        "backend/tests/test_r00_research.py"
+      ],
+      "unresolved_bindings": []
+    },
+    {
+      "declared_entries": [
+        "backend/max_backend/research_r01_service.py::start_r01",
+        "backend/max_backend/research_source.py::prepare_r01_source",
+        "backend/max_backend/research_r01_service.py::r01_preflight",
+        "backend/max_backend/research_r01_service.py::prepare_r01_verified_source"
+      ],
+      "flow_id": "FLOW-R01-SOURCE-PIPELINE",
+      "generated_edges": 405,
+      "generated_nodes": 212,
+      "mode": "DURING",
+      "non_python_structured_source_owners": [
+        "frontend/src/DataPage.tsx::DataPage"
+      ],
+      "outside_graph_classification": "NONE",
+      "outside_graph_resolution": "NOT_APPLICABLE",
+      "python_source_owners_declared": 11,
+      "python_source_owners_in_static_graph": [
+        "backend/max_backend/research_source.py::prepare_r01_source",
+        "backend/max_backend/research_dataset.py::build_labels",
+        "backend/max_backend/research_dataset.py::build_dataset",
+        "backend/max_backend/research_leakage.py::bind_protected_partition_rows",
+        "backend/max_backend/research_leakage.py::bind_protected_target_dependency_authority",
+        "backend/max_backend/research_leakage.py::run_adversarial_suite",
+        "backend/max_backend/research_r01_store.py::commit_r01_terminal_authority",
+        "backend/max_backend/research_r01_service.py::r01_preflight",
+        "backend/max_backend/research_r01_service.py::prepare_r01_verified_source",
+        "backend/max_backend/research_r01_service.py::start_r01",
+        "backend/max_backend/research_r01_service.py::r01_detail"
+      ],
+      "python_source_owners_outside_static_reachable_graph": [],
+      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "scope": "CURRENT",
+      "semantic_review": "PASS",
+      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "tests": [
+        "backend/tests/test_r01_source.py",
+        "backend/tests/test_r01_dataset.py",
+        "backend/tests/test_r01_research.py"
+      ],
+      "unresolved_bindings": []
+    },
+    {
+      "declared_entries": [
+        "backend/max_backend/research_settings.py::set_research_sample_configuration",
+        "backend/max_backend/research_service.py::start_r00",
+        "backend/max_backend/research_r01_service.py::start_r01"
+      ],
+      "flow_id": "FLOW-RESEARCH-CONFIG-SNAPSHOT",
+      "generated_edges": 573,
+      "generated_nodes": 299,
+      "mode": "DURING",
+      "non_python_structured_source_owners": [
+        "frontend/src/ResearchPage.tsx::ResearchPage"
+      ],
+      "outside_graph_classification": "NONE",
+      "outside_graph_resolution": "NOT_APPLICABLE",
+      "python_source_owners_declared": 4,
+      "python_source_owners_in_static_graph": [
+        "backend/max_backend/research_settings.py::get_research_sample_configuration",
+        "backend/max_backend/research_settings.py::set_research_sample_configuration",
+        "backend/max_backend/research_service.py::start_r00",
+        "backend/max_backend/research_r01_service.py::start_r01"
+      ],
+      "python_source_owners_outside_static_reachable_graph": [],
+      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "scope": "CURRENT",
+      "semantic_review": "PASS",
+      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "tests": [
+        "backend/tests/test_r00_research.py",
+        "backend/tests/test_r01_research.py"
+      ],
+      "unresolved_bindings": []
+    },
+    {
+      "declared_entries": [
+        "backend/max_backend/scientist_knowledge.py::load_knowledge",
+        "backend/max_backend/scientist_api.py::get_status"
+      ],
+      "flow_id": "FLOW-SCIENTIST-KNOWLEDGE",
+      "generated_edges": 74,
+      "generated_nodes": 47,
+      "mode": "DURING",
+      "non_python_structured_source_owners": [
+        "frontend/src/ScientistPage.tsx::ScientistPage"
+      ],
+      "outside_graph_classification": "NONE",
+      "outside_graph_resolution": "NOT_APPLICABLE",
+      "python_source_owners_declared": 2,
+      "python_source_owners_in_static_graph": [
+        "backend/max_backend/scientist_knowledge.py::load_knowledge",
+        "backend/max_backend/scientist_api.py::get_status"
+      ],
+      "python_source_owners_outside_static_reachable_graph": [],
+      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "scope": "CURRENT",
+      "semantic_review": "PASS",
+      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "tests": [
+        "backend/tests/test_m05_scientist.py",
+        "backend/tests/test_m05_final_evidence_contract.py",
+        "frontend/src/ScientistPage.test.tsx"
+      ],
+      "unresolved_bindings": []
+    }
+  ],
+  "generation_anchor_policy": {
+    "meaning": "Pre-commit generation anchor only; final candidate provenance is external exact Git SHA while structural sequence binding uses deterministic product source_digest.",
+    "observed_head": "3f7dc9a684f0342c42ca9ebe409f69cdb6741250",
+    "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2"
+  },
+  "mode": "DURING",
+  "parse_failure_boundary": {
+    "classification": "GENERATOR_DEFECT",
+    "file": "backend/max_backend/champion_bundle.py",
+    "product_source_change": "NONE",
+    "reason": "File is valid UTF-8-with-BOM Python; current generic extractor reports one SyntaxError when parsing raw utf-8 text. Existing Python runtime/tests exercise the module; no product-source mutation is authorized."
+  },
+  "result": "PASS",
+  "retrospective_plan_artifacts": 0,
+  "runtime_trace_required": false,
+  "schema_version": 1,
+  "scope": "CURRENT",
+  "skill_authority_sha": "9e22feddb8f94e8c0f1af6a33e14b64de5068f8f",
+  "unresolved_critical_sequence_bindings": 0
+}

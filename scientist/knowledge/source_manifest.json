@@ -1,0 +1,218 @@
+[
+  {
+    "path": "pyproject.toml",
+    "sha256": "32ec04e7d3fa95d126c614b7c66723373e0db0083adf74accc4ce915cb6395db"
+  },
+  {
+    "path": "docs/PRD.md",
+    "sha256": "262bedff8e316c18cbc26f93003a7a6d108300c4f700e97270c0b5756abf2da0"
+  },
+  {
+    "path": "docs/ROADMAP.md",
+    "sha256": "feff2a886e30102152e3b967d6334669d6faf5644394a8890f668f39edd691a7"
+  },
+  {
+    "path": "docs/RESEARCH_MODEL_ROADMAP.md",
+    "sha256": "903303355e242b6dc93d6ebafa64d5dfe8d531e036d6dc43bd8323ce8fb846b9"
+  },
+  {
+    "path": "docs/audits/R00_OLD_MAX_SOURCE_AUDIT.md",
+    "sha256": "a3215ef58f5d02fb18700535b5018965f07c2e09284480444df06ab7486b689e"
+  },
+  {
+    "path": "docs/audits/R01_OLD_MAX_SOURCE_AUDIT.md",
+    "sha256": "01c2c0f4d368ffeef9a763101a79de85a1bde665423d543d228c8b271fa2dc8f"
+  },
+  {
+    "path": "docs/ARCHITECTURE_PHASE1.md",
+    "sha256": "82b5dde7d435dc0b9314a5881e38ffa74ada5cd75b2432e44b40c7a0c8bb17b0"
+  },
+  {
+    "path": "docs/ARTIFACT_CONTROL_PLANE.md",
+    "sha256": "858bb46bcc1eca16cc4d230a10b8b43aa95eac967f003d8fedc61f347b773778"
+  },
+  {
+    "path": "ea/baseline/manifest.json",
+    "sha256": "19217be34ee281c8f3cf33be5184b4bf60f3679b932e9f1f72de23ef3b26f0ce"
+  },
+  {
+    "path": "backend/max_backend/config.py",
+    "sha256": "ce8fd6aac073a1fdc469e182a9ceccd7223cb2b840c3fb6d7274475a3365aa9b"
+  },
+  {
+    "path": "backend/max_backend/schema.py",
+    "sha256": "97732c23c0a33f2d046abccc6915bb2914ed00884b4a2456f0cc88a5c0bb60cc"
+  },
+  {
+    "path": "backend/max_backend/workflow_contract.py",
+    "sha256": "6e89667c768bae7e9afedb6c2a415a8088771ddc257329c8960b00bd1ada779e"
+  },
+  {
+    "path": "backend/max_backend/workflow_store.py",
+    "sha256": "e963fd04f03a1c136dfc99fa1b20171fd2c524065e55c6c11799f7843112295e"
+  },
+  {
+    "path": "backend/max_backend/mtf_geometry.py",
+    "sha256": "34f4c17190ce95bcde556ae473a4ade034782c640876bc88056a6e02a629b979"
+  },
+  {
+    "path": "backend/max_backend/optimizer_core.py",
+    "sha256": "5dc5ec6b4f49884d2bb63f54ebf661f7f39e532e5f48a1c851ef74e441eb6ab0"
+  },
+  {
+    "path": "backend/max_backend/optimizer_store.py",
+    "sha256": "03bd3ed4254d4940f79781b0fec0f90a3d8ead9bd787888899a2e34d131a79b4"
+  },
+  {
+    "path": "backend/max_backend/optimizer_worker.py",
+    "sha256": "f0ac35557961d7b7a5291b945581120bcd8e6466f1beb86ef76f06df6bfce245"
+  },
+  {
+    "path": "backend/max_backend/optimizer_api.py",
+    "sha256": "9970e956c96ebf125900e054fb289ff3fd36ce276f81171c9c57ac131e865de5"
+  },
+  {
+    "path": "backend/max_backend/optimizer_candidates.py",
+    "sha256": "7744c3be401739804eb09b02c373e9209f80ecd7bb7202b50100deaf13170173"
+  },
+  {
+    "path": "backend/max_backend/challenger_selection.py",
+    "sha256": "1ecd701980a6fe44e1ccd2b70cf53d2d23e9d6fcef36c12d62fa6757dc853de2"
+  },
+  {
+    "path": "backend/max_backend/optimizer_scientist.py",
+    "sha256": "7faf0c534a79f7c9e1dd5c1eca380bd78b3456388981a37152f00012fe7ae21f"
+  },
+  {
+    "path": "backend/max_backend/optimizer_scientist_transition.py",
+    "sha256": "ed2986783e4b683675e1dfcee524aaf078339d69c4ef8de5d552095399f37e64"
+  },
+  {
+    "path": "backend/max_backend/challenger_store.py",
+    "sha256": "fca460477363716a575b9fb52f8ea33d50af4f05c84a2bd3789b02ae2798246f"
+  },
+  {
+    "path": "backend/max_backend/challenger_bundle.py",
+    "sha256": "9a9371e9e7e372799c0ef309828d593b5ce73b4a5ff4c0a1fdc2635d92ccb866"
+  },
+  {
+    "path": "backend/max_backend/challenger_operations_store.py",
+    "sha256": "f4395cc95063716228a5095396e1281aa156843729b91f3eab5754c8af43d91d"
+  },
+  {
+    "path": "backend/max_backend/challenger_operations.py",
+    "sha256": "5c66f91ae7ea80d715ed5244ecd8d455ebb9b88350dea4864ea62f0c82a5dbe1"
+  },
+  {
+    "path": "backend/max_backend/challenger_api.py",
+    "sha256": "36fe1c364d59caa2db10095500fdc8a26bef4a3dd2706c4bef346f6fe2fb0b91"
+  },
+  {
+    "path": "backend/max_backend/backtest_report.py",
+    "sha256": "eeeb804013dc1ee941c1ca1efd4d5e055d51973f1a72d6d1b3dec003a1d47304"
+  },
+  {
+    "path": "backend/max_backend/backtest_control.py",
+    "sha256": "f46f36f712ee88b489d89c2c3d8b26432b608d857fd9daec053396f430aeb21c"
+  },
+  {
+    "path": "backend/max_backend/path_safety.py",
+    "sha256": "5d369682c2b818abe75a34fc62f6bffeed6d7c30b4b50e62099b3ea1706ac6b3"
+  },
+  {
+    "path": "backend/max_backend/artifact_control.py",
+    "sha256": "14fa439726f2cee9a78ccfd773a65b3492b3f5daa1a70582d8c0e0dec3a975d3"
+  },
+  {
+    "path": "backend/max_backend/artifact_api.py",
+    "sha256": "3297f1a2bfb8c52c8d87a9255054c0cf6cd4d44e0f469f3cb5ce86df4165e8a4"
+  },
+  {
+    "path": "backend/max_backend/champion_store.py",
+    "sha256": "0ea247ea0524224da903712d6d66717163e8bb8ee8b76583e379a488067f1c7e"
+  },
+  {
+    "path": "backend/max_backend/champion_bundle.py",
+    "sha256": "9261fe26f9d8c29fc95e447616d26b6704e31a22be1fb31f1371e638699528f6"
+  },
+  {
+    "path": "backend/max_backend/promotion_service.py",
+    "sha256": "c85493eb9868bb07f8e6769f160251513a3a3a53a93e93b453e5f862889e4a82"
+  },
+  {
+    "path": "backend/max_backend/main.py",
+    "sha256": "9839b0fee4a99f181e0e339bf3ade4d3cf7b2fd49a816600191f57208614e09c"
+  },
+  {
+    "path": "backend/max_backend/research_contract.py",
+    "sha256": "8110c89eabf31907ecdb3e85e3dc8c7b4415b1dce368a9ae4efd7645c2b74218"
+  },
+  {
+    "path": "backend/max_backend/research_hardware.py",
+    "sha256": "1b378be7a4a0deb7a84e3c04d8d650d85c3350e86717ce418a550a4f18602e78"
+  },
+  {
+    "path": "backend/max_backend/research_store.py",
+    "sha256": "c9f76da68919a3a4edd842b85c881e46487750175d9b56f2be464e733072837c"
+  },
+  {
+    "path": "backend/max_backend/research_service.py",
+    "sha256": "6a7f2efef4966aa60a0a8e53be3b097b1e2415690f033a26ada3b9e7f3990fc6"
+  },
+  {
+    "path": "backend/max_backend/research_settings.py",
+    "sha256": "6d578ca82283676128f2cd4b47085d31ac0dc1c28d4275cc7be19205c2dd543d"
+  },
+  {
+    "path": "backend/max_backend/research_api.py",
+    "sha256": "a0bc3f335fb21f304b7293eca2aa7f5817ee194965a90cd88e13c11905e1796d"
+  },
+  {
+    "path": "backend/max_backend/research_cp32.py",
+    "sha256": "7243020f7a0d38ddbc062d4489321e7c726838265efb2d0d2aa78d8f5a248558"
+  },
+  {
+    "path": "backend/max_backend/research_dataset.py",
+    "sha256": "0270b2928ee8bc2222cbe3a27a510e4442c8b26628801793cea9bc13793fba72"
+  },
+  {
+    "path": "backend/max_backend/research_source.py",
+    "sha256": "3b3ec20658da2aab1093d5b35b7d483cbcb73f511519afbd455b46071fa13fd6"
+  },
+  {
+    "path": "backend/max_backend/research_leakage.py",
+    "sha256": "5563409139525c9ca61ec6828f95dc5ff483d9bcf2ae7e126e62084bb116487e"
+  },
+  {
+    "path": "backend/max_backend/research_r01_store.py",
+    "sha256": "06e734e40701846cb969df2550c306c425d71f5d5af7a225131693c1ce617462"
+  },
+  {
+    "path": "backend/max_backend/research_r01_service.py",
+    "sha256": "4389726c4baa866b76e1df1ad72eb687c865929355b380454dcd23b14aedb430"
+  },
+  {
+    "path": "backend/max_backend/scientist_knowledge.py",
+    "sha256": "2ddb8b5592f84b4cd82ba21682c09103937efb8394ab0cc42cc3ce9b686b432e"
+  },
+  {
+    "path": "backend/max_backend/scientist_context.py",
+    "sha256": "a348de87931cfb36dc65e0f214b623a9c72612ad346c78b0a348b31587f93508"
+  },
+  {
+    "path": "backend/max_backend/scientist_store.py",
+    "sha256": "bb11814b806576f47d7a6060d0d9dc689ac37f08e3ff0e644d868d27128750c2"
+  },
+  {
+    "path": "backend/max_backend/scientist_provider.py",
+    "sha256": "b14dd7df7913a62671e4d8e17bc07f2d0c6eb8e4f6a2d59628b805657c047b87"
+  },
+  {
+    "path": "backend/max_backend/scientist_chat.py",
+    "sha256": "3a41b68619110b88efb92717de064ced9f699b6458ce2036b9359da76afe3094"
+  },
+  {
+    "path": "backend/max_backend/scientist_api.py",
+    "sha256": "231a64d74b46dd89880438d6aaac657a8327a1cf3eba1dac27edae2d2253cad5"
+  }
+]

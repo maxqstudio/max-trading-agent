@@ -1,0 +1,44 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+frontend/node_modules/
+frontend/dist/
+state/*.db
+state/*.db-*
+state/promotion_recovery/
+evidence/runtime/
+*.log
+.env
+evidence/chrome-*/
+
+# M07 Owner-PC Strategy epoch reset raw operational backup/evidence stays local.
+evidence/m07/epoch_reset/
+
+# Runtime authority generated on the Owner PC. These artifacts are preserved
+# locally and validated by hashes/database lineage; they are not source files.
+artifacts/challengers/
+artifacts/optimizer/
+artifacts/research/
+artifacts/research_data/
+artifacts/backtests/
+artifacts/challenger_operations/
+artifacts/strategy_history/*/
+ea/champion/current/
+evidence/m04/promotions/*/
+
+# Public source-only repository hardening
+.vite/
+evidence/
+artifacts/
+*.sqlite
+*.sqlite3
+.env.*
+!.env.example
+*.pem
+*.pfx
+*.p12
+*.key
+id_rsa*
+id_ed25519*

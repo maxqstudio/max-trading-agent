@@ -1,0 +1,38 @@
+{
+  "acceptance_report": "artifacts/sequence/FLOW-RESEARCH-CONFIG-SNAPSHOT.acceptance.json",
+  "actual": {
+    "diagram": "docs/sequence/generated/FLOW-RESEARCH-CONFIG-SNAPSHOT.actual.mmd",
+    "entries": [
+      "backend/max_backend/research_settings.py::set_research_sample_configuration",
+      "backend/max_backend/research_service.py::start_r00",
+      "backend/max_backend/research_r01_service.py::start_r01"
+    ],
+    "graph": "docs/sequence/generated/FLOW-RESEARCH-CONFIG-SNAPSHOT.actual.json",
+    "source_digest": "385d2b167fbcf71a6311bfa92f3e567cb6d4c08fef1a00c963f58721e4145429"
+  },
+  "critical": true,
+  "implementation_base_sha": "ad7e61c9d944677e1d7a48e9bfbfc9d049b2542e",
+  "mode": "DURING",
+  "phase": "FRESH_RUNTIME_EPOCH_RESET",
+  "plan": {
+    "contract": "",
+    "diagram": "",
+    "frozen": false,
+    "frozen_commit": "",
+    "required": false,
+    "sha256": ""
+  },
+  "runtime_trace": {
+    "graph": "",
+    "required": false
+  },
+  "schema_version": 1,
+  "scope": "CURRENT",
+  "session_id": "FLOW-RESEARCH-CONFIG-SNAPSHOT",
+  "status": "CURRENT",
+  "test_traceability_required": true,
+  "tests": [
+    "backend/tests/test_r00_research.py",
+    "backend/tests/test_r01_research.py"
+  ]
+}

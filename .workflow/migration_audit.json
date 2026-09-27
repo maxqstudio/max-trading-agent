@@ -1,0 +1,157 @@
+{
+  "docs_root": "docs",
+  "documents": [
+    {
+      "current_semantics_status": "MAPPED",
+      "historical_policy": "Historical acceptance/audit evidence remains historical and is not normalized into current authority.",
+      "mapped_authority": [
+        ".workflow/project.json",
+        ".workflow/state.json",
+        ".workflow/authority.json"
+      ],
+      "precompiler_document": "PROJECT_MANIFEST.md"
+    },
+    {
+      "current_semantics_status": "MAPPED",
+      "historical_policy": "Historical acceptance/audit evidence remains historical and is not normalized into current authority.",
+      "mapped_authority": [
+        ".workflow/state.json",
+        ".workflow/acceptance.json"
+      ],
+      "precompiler_document": "CURRENT_STATE.md"
+    },
+    {
+      "current_semantics_status": "MAPPED",
+      "historical_policy": "Historical acceptance/audit evidence remains historical and is not normalized into current authority.",
+      "mapped_authority": [
+        ".workflow/authority.json"
+      ],
+      "precompiler_document": "SOURCE_AUTHORITY_MAP.md"
+    },
+    {
+      "current_semantics_status": "MAPPED",
+      "historical_policy": "Historical acceptance/audit evidence remains historical and is not normalized into current authority.",
+      "mapped_authority": [
+        ".workflow/architecture.json",
+        ".workflow/project.json"
+      ],
+      "precompiler_document": "ARCHITECTURE.md"
+    },
+    {
+      "current_semantics_status": "MAPPED",
+      "historical_policy": "Historical acceptance/audit evidence remains historical and is not normalized into current authority.",
+      "mapped_authority": [
+        ".workflow/workflows/*.json"
+      ],
+      "precompiler_document": "WORKFLOW_STATE_MACHINE.md"
+    },
+    {
+      "current_semantics_status": "MAPPED",
+      "historical_policy": "Historical acceptance/audit evidence remains historical and is not normalized into current authority.",
+      "mapped_authority": [
+        ".workflow/workflows/*.json",
+        ".workflow/generated/code_facts.json"
+      ],
+      "precompiler_document": "FLOW_INDEX.md"
+    },
+    {
+      "current_semantics_status": "MAPPED",
+      "historical_policy": "Historical acceptance/audit evidence remains historical and is not normalized into current authority.",
+      "mapped_authority": [
+        ".workflow/generated/code_facts.json",
+        ".workflow/architecture.json",
+        ".workflow/contracts.json",
+        ".workflow/workflows/*.json"
+      ],
+      "precompiler_document": "SYMBOL_INDEX.md"
+    },
+    {
+      "current_semantics_status": "MAPPED",
+      "historical_policy": "Historical acceptance/audit evidence remains historical and is not normalized into current authority.",
+      "mapped_authority": [
+        ".workflow/contracts.json::api_contracts"
+      ],
+      "precompiler_document": "API_CONTRACTS.md"
+    },
+    {
+      "current_semantics_status": "MAPPED",
+      "historical_policy": "Historical acceptance/audit evidence remains historical and is not normalized into current authority.",
+      "mapped_authority": [
+        ".workflow/contracts.json::data_contracts"
+      ],
+      "precompiler_document": "DATA_CONTRACTS.md"
+    },
+    {
+      "current_semantics_status": "MAPPED",
+      "historical_policy": "Historical acceptance/audit evidence remains historical and is not normalized into current authority.",
+      "mapped_authority": [
+        ".workflow/contracts.json::ui_surfaces"
+      ],
+      "precompiler_document": "UI_INFORMATION_ARCHITECTURE.md"
+    },
+    {
+      "current_semantics_status": "MAPPED",
+      "historical_policy": "Historical acceptance/audit evidence remains historical and is not normalized into current authority.",
+      "mapped_authority": [
+        ".workflow/contracts.json::runbook_steps"
+      ],
+      "precompiler_document": "RUNBOOK.md"
+    },
+    {
+      "current_semantics_status": "MAPPED",
+      "historical_policy": "Historical acceptance/audit evidence remains historical and is not normalized into current authority.",
+      "mapped_authority": [
+        ".workflow/decisions.json"
+      ],
+      "precompiler_document": "DECISIONS.md"
+    },
+    {
+      "current_semantics_status": "MAPPED",
+      "historical_policy": "Historical acceptance/audit evidence remains historical and is not normalized into current authority.",
+      "mapped_authority": [
+        ".workflow/known_defects.json"
+      ],
+      "precompiler_document": "KNOWN_DEFECTS.md"
+    },
+    {
+      "current_semantics_status": "MAPPED",
+      "historical_policy": "Historical acceptance/audit evidence remains historical and is not normalized into current authority.",
+      "mapped_authority": [
+        ".workflow/glossary.json"
+      ],
+      "precompiler_document": "GLOSSARY.md"
+    },
+    {
+      "current_semantics_status": "MAPPED",
+      "historical_policy": "Historical acceptance/audit evidence remains historical and is not normalized into current authority.",
+      "mapped_authority": [
+        ".workflow/claims.json",
+        ".workflow/acceptance.json"
+      ],
+      "precompiler_document": "PROJECT_TRUTH_SYNC.md"
+    },
+    {
+      "current_semantics_status": "HISTORICAL_NON_AUTHORITATIVE",
+      "historical_policy": "Parent-bound structural evidence retained as history; current compiler projection MODULE_MAP.md is current governance view.",
+      "mapped_authority": [
+        ".workflow/generated/code_facts.json",
+        "MODULE_MAP.md"
+      ],
+      "precompiler_document": "docs/generated/MODULE_MAP.generated.md"
+    },
+    {
+      "current_semantics_status": "HISTORICAL_NON_AUTHORITATIVE",
+      "historical_policy": "Parent-bound Python structural evidence retained as history; current compiler projection plus structured non-Python traceability is current authority.",
+      "mapped_authority": [
+        ".workflow/generated/code_facts.json",
+        ".workflow/critical_symbol_traceability.json",
+        "SYMBOL_INDEX.md"
+      ],
+      "precompiler_document": "docs/generated/SYMBOL_INDEX.generated.md"
+    }
+  ],
+  "repair_parent": "ad7e61c9d944677e1d7a48e9bfbfc9d049b2542e",
+  "schema_version": 1,
+  "skill_authority_sha": "9e22feddb8f94e8c0f1af6a33e14b64de5068f8f",
+  "unmapped_current_semantics": 0
+}

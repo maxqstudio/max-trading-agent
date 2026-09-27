@@ -1,0 +1,71 @@
+{
+  "authority": "scientist_knowledge hash manifest + bounded Scientist context/store; Owner/backend remain domain authorities.",
+  "critical": true,
+  "entry_condition": "Scientist status/chat request occurs and knowledge manifest/provider/context prerequisites are valid.",
+  "failure_behavior": [
+    "Stale knowledge, invalid provider response/evidence or uncertain in-flight request blocks authoritative completion/retry."
+  ],
+  "flow_id": "FLOW-SCIENTIST-KNOWLEDGE",
+  "invariants": [
+    "Scientist cannot open gates, select for Owner, promote Champion, mutate datasets, change risk or create scientific PASS.",
+    "Hash mismatch makes knowledge stale rather than silently using changed docs/source.",
+    "Chat/provider state is operational, not scientific authority."
+  ],
+  "purpose": "Load source-hash-verified static knowledge, combine only bounded committed runtime context and produce advisory chat without scientific or promotion mutation authority.",
+  "restart_behavior": [
+    "Chat/request recovery preserves idempotency and does not replay uncertain external provider side effects blindly."
+  ],
+  "rollback_behavior": [
+    "Clear/rotate chat may change conversational context only; Strategy/Research authority is untouched."
+  ],
+  "schema_version": 1,
+  "sequence_session": "docs/sequence/sessions/FLOW-SCIENTIST-KNOWLEDGE.json",
+  "source_owners": [
+    "backend/max_backend/scientist_knowledge.py::load_knowledge",
+    "backend/max_backend/scientist_api.py::get_status",
+    "frontend/src/ScientistPage.tsx::ScientistPage"
+  ],
+  "states": [
+    "KNOWLEDGE_UNCHECKED",
+    "KNOWLEDGE_READY",
+    "CONTEXT_BOUND",
+    "ADVISORY_REQUEST",
+    "ADVISORY_RESPONSE"
+  ],
+  "tests": [
+    "backend/tests/test_m05_scientist.py",
+    "backend/tests/test_m05_final_evidence_contract.py",
+    "frontend/src/ScientistPage.test.tsx"
+  ],
+  "title": "Hash-verified Scientist knowledge to advisory context",
+  "transitions": [
+    {
+      "action": "Verify scientist/knowledge/source_manifest hashes.",
+      "from": "KNOWLEDGE_UNCHECKED",
+      "side_effects": [],
+      "to": "KNOWLEDGE_READY"
+    },
+    {
+      "action": "Read allowlisted committed Strategy/Research/runtime evidence only.",
+      "from": "KNOWLEDGE_READY",
+      "side_effects": [],
+      "to": "CONTEXT_BOUND"
+    },
+    {
+      "action": "Build bounded provider request with provenance.",
+      "from": "CONTEXT_BOUND",
+      "side_effects": [
+        "provider request accounting"
+      ],
+      "to": "ADVISORY_REQUEST"
+    },
+    {
+      "action": "Validate provider output/evidence/classification before returning chat result.",
+      "from": "ADVISORY_REQUEST",
+      "side_effects": [
+        "Scientist chat history only"
+      ],
+      "to": "ADVISORY_RESPONSE"
+    }
+  ]
+}

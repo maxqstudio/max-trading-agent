@@ -1,0 +1,107 @@
+name: Windows CI
+
+on:
+  push:
+    branches: ["main", "work/**"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-policy:
+    name: Source-only policy
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reject runtime or sensitive tracked paths
+        shell: pwsh
+        run: |
+          $tracked = git ls-files
+          $bad = $tracked | Where-Object {
+            $_ -match '(^|/)\.env($|\.)' -or
+            $_ -match '^evidence/' -or
+            $_ -match '^artifacts/' -or
+            $_ -match '^state/.*\.(db|sqlite|sqlite3)(-|$)' -or
+            $_ -match '(^|/)\.vite/' -or
+            $_ -match '\.(pem|pfx|p12|key)$'
+          }
+          if ($bad) {
+            $bad | ForEach-Object { Write-Error "Forbidden tracked path: $_" }
+            exit 1
+          }
+  backend:
+    name: Backend and Skill Workflow
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: Install Python dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.lock.txt
+      - name: Verify Skill Workflow tool provenance
+        shell: pwsh
+        run: |
+          $skillSha = "9e22feddb8f94e8c0f1af6a33e14b64de5068f8f"
+          git clone --quiet https://github.com/maxqstudio/Skill_Workflow.git _skill
+          git -C _skill checkout --quiet $skillSha
+          $exclude = @("initialize_project_truth.py", "selftest_project_truth_compiler.py")
+          $upstream = Get-ChildItem "_skill/scripts/*.py" | Where-Object { $_.Name -notin $exclude }
+          if ($upstream.Count -ne 18) { throw "Unexpected Skill Workflow tool count: $($upstream.Count)" }
+          foreach ($file in $upstream) {
+            $local = Join-Path ".workflow/tools" $file.Name
+            if (-not (Test-Path $local)) { throw "Missing vendored tool: $($file.Name)" }
+            if ((Get-FileHash $file.FullName -Algorithm SHA256).Hash -ne (Get-FileHash $local -Algorithm SHA256).Hash) {
+              throw "Skill Workflow provenance mismatch: $($file.Name)"
+            }
+          }
+      - name: Skill Workflow document gates
+        shell: pwsh
+        run: |
+          python .workflow/tools/validate_project_docs.py
+          python .workflow/tools/validate_doc_quality.py
+          python .workflow/tools/validate_sequence_sessions.py
+          python .workflow/tools/validate_handoff.py
+          python .workflow/tools/validate_human_comprehension.py --require-pass
+      - name: Backend tests
+        shell: pwsh
+        run: python -m pytest backend/tests -q -o addopts=
+      - name: Python dependency integrity
+        shell: pwsh
+        run: python -m pip check
+
+  frontend:
+    name: Frontend
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install
+        working-directory: frontend
+        run: npm ci
+      - name: Test
+        working-directory: frontend
+        run: npm test -- --run
+      - name: Lint
+        working-directory: frontend
+        run: npm run lint
+      - name: Build
+        working-directory: frontend
+        run: npm run build
+      - name: Dependency tree
+        working-directory: frontend
+        run: npm ls --all

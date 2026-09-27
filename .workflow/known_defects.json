@@ -1,0 +1,65 @@
+{
+  "defects": [
+    {
+      "evidence": "Accepted targeted repair + exact retained universe regressions.",
+      "id": "KD-001",
+      "status": "FIXED/ACCEPTED",
+      "summary": "Legacy 16D Challenger detail HTTP 500"
+    },
+    {
+      "evidence": "Consumed-source regressions prove registry OR COMMITTED batch exclusion.",
+      "id": "KD-002",
+      "status": "FIXED/ACCEPTED",
+      "summary": "Consumed Optimizer candidates remained selectable"
+    },
+    {
+      "evidence": "Champion store/promotion regressions prove FORMER tenure + historical PROMOTED source.",
+      "id": "KD-003",
+      "status": "FIXED/ACCEPTED",
+      "summary": "Former Champion source auto-reactivated"
+    },
+    {
+      "evidence": "R00/R01 config/snapshot regressions prove editable current config and immutable per-execution snapshot.",
+      "id": "KD-004",
+      "status": "FIXED/ACCEPTED",
+      "summary": "Research sample setting froze/hardcoded historical 4/8 behavior"
+    },
+    {
+      "evidence": "Accepted targeted repair regression evidence.",
+      "id": "KD-005",
+      "status": "FIXED/ACCEPTED",
+      "summary": "Optimizer parameter-grid display issue"
+    },
+    {
+      "evidence": "Owner runtime has five active legacy exact-16D rows; 17D compatibility is regression-proven only.",
+      "id": "NP-001",
+      "status": "NOT_PROVEN",
+      "summary": "Live current 17D Challenger row on Owner runtime"
+    },
+    {
+      "evidence": "Real R01 scientific run has not started.",
+      "id": "NP-002",
+      "status": "NOT_PROVEN",
+      "summary": "R01 scientific result"
+    },
+    {
+      "evidence": "All remain blocked/not started.",
+      "id": "NP-003",
+      "status": "NOT_PROVEN",
+      "summary": "R02/model training/ONNX/Research Challenger"
+    },
+    {
+      "evidence": "Repaired Skill authority 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f vendored 18/18 byte-identically; canonical docs/ layout and strict validators pass on pre-final clean candidate.",
+      "id": "GOV-001",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Historical Skill Workflow authority drift repaired forward to current repaired authority"
+    },
+    {
+      "evidence": "Repaired Skill validates MAX 11 canonical claims and all 3 legitimate Claim relations with zero false claim-text conflicts; explicit truth-gate FAIL is fail-closed.",
+      "id": "GOV-002",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Claim relation row misclassification and Project Truth fail-open repaired in current Skill Workflow"
+    }
+  ],
+  "schema_version": 1
+}

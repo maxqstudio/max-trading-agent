@@ -1,0 +1,973 @@
+{
+  "coverage": {
+    "js_ts_http_module_scan": true,
+    "limitations": [
+      "dynamic dispatch",
+      "dependency injection",
+      "reflection",
+      "callbacks/events",
+      "framework magic not visible statically",
+      "JS/TS function-level call ownership is not fully resolved"
+    ],
+    "python_ast": true,
+    "python_parse_failures": [
+      "backend/max_backend/champion_bundle.py:SyntaxError"
+    ],
+    "python_route_decorators": true,
+    "runtime_trace": false
+  },
+  "edges": [
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_store.py::migrate_m03",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_m02",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_store.py::migrate_m03",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_store.py::migrate_m02"
+    },
+    {
+      "action": "_challenger_table_supports_promoted",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted"
+    },
+    {
+      "action": "_create_champion_tenure_table",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_create_champion_tenure_table"
+    },
+    {
+      "action": "migrate_m03",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_store.py::migrate_m03"
+    },
+    {
+      "action": "_upgrade_challenger_status_constraint",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint"
+    },
+    {
+      "action": "_upgrade_champion_tenure_schema",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "sanitize_route_config",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_scientist.py::_route_config_from_environment_only",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_scientist.py::sanitize_route_config"
+    },
+    {
+      "action": "_route_config_from_environment_only",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_scientist.py::route_config_from_environment",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_scientist.py::_route_config_from_environment_only"
+    },
+    {
+      "action": "saved_primary_route",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_scientist.py::route_config_from_environment",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::saved_primary_route"
+    },
+    {
+      "action": "_route_host",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_scientist.py::sanitize_route_config",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_scientist.py::_route_host"
+    },
+    {
+      "action": "route_config_from_environment",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_scientist.py::scientist_route_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_scientist.py::route_config_from_environment"
+    },
+    {
+      "action": "sanitize_route_config",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_scientist.py::scientist_route_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_scientist.py::sanitize_route_config"
+    },
+    {
+      "action": "credential_for_route",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_scientist.py::scientist_route_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::credential_for_route"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_m01",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_store.py::migrate_m01"
+    },
+    {
+      "action": "safe_route_status",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_api.py::get_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_chat.py::safe_route_status"
+    },
+    {
+      "action": "knowledge_status",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_api.py::get_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_knowledge.py::knowledge_status"
+    },
+    {
+      "action": "scientist_database_status",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_api.py::get_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_store.py::scientist_database_status"
+    },
+    {
+      "action": "get_provider_settings",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_chat.py::safe_route_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::get_provider_settings"
+    },
+    {
+      "action": "_canonical_json",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_knowledge.py::knowledge_sha256",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_knowledge.py::_canonical_json"
+    },
+    {
+      "action": "_sha256_bytes",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_knowledge.py::knowledge_sha256",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_knowledge.py::_sha256_bytes"
+    },
+    {
+      "action": "knowledge_sha256",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_knowledge.py::knowledge_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_knowledge.py::knowledge_sha256"
+    },
+    {
+      "action": "load_knowledge",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_knowledge.py::knowledge_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_knowledge.py::load_knowledge"
+    },
+    {
+      "action": "source_sha256",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_knowledge.py::load_knowledge",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_knowledge.py::source_sha256"
+    },
+    {
+      "action": "_sha256_bytes",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_knowledge.py::source_sha256",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_knowledge.py::_sha256_bytes"
+    },
+    {
+      "action": "_DataBlob",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::_blob",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_DataBlob"
+    },
+    {
+      "action": "_route_config_from_environment_only",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::_default_payload_from_environment",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_scientist.py::_route_config_from_environment_only"
+    },
+    {
+      "action": "_default_ui",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::_default_payload_from_environment",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_default_ui"
+    },
+    {
+      "action": "normalize_provider_config",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::_default_payload_from_environment",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::normalize_provider_config"
+    },
+    {
+      "action": "ProviderSettingsError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::_dpapi_unprotect",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::ProviderSettingsError"
+    },
+    {
+      "action": "_DataBlob",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::_dpapi_unprotect",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_DataBlob"
+    },
+    {
+      "action": "_blob",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::_dpapi_unprotect",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_blob"
+    },
+    {
+      "action": "ProviderSettingsError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::_load_secret",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::ProviderSettingsError"
+    },
+    {
+      "action": "_dpapi_unprotect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::_load_secret",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_dpapi_unprotect"
+    },
+    {
+      "action": "_paths",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::_load_secret",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_paths"
+    },
+    {
+      "action": "ProviderSettingsError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::_normalize_payload",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::ProviderSettingsError"
+    },
+    {
+      "action": "_default_ui",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::_normalize_payload",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_default_ui"
+    },
+    {
+      "action": "normalize_provider_config",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::_normalize_payload",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::normalize_provider_config"
+    },
+    {
+      "action": "ProviderSettingsError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::_parse_url",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::ProviderSettingsError"
+    },
+    {
+      "action": "settings_root",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::_paths",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::settings_root"
+    },
+    {
+      "action": "ProviderSettingsError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::_validate_remote_resolution",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::ProviderSettingsError"
+    },
+    {
+      "action": "_is_local_host",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::_validate_remote_resolution",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_is_local_host"
+    },
+    {
+      "action": "_load_secret",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::credential_for_route",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_load_secret"
+    },
+    {
+      "action": "_normalize_base_url",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::credential_for_route",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_normalize_base_url"
+    },
+    {
+      "action": "_provider_requires_api_key",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::credential_for_route",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_provider_requires_api_key"
+    },
+    {
+      "action": "load_settings",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::credential_for_route",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::load_settings"
+    },
+    {
+      "action": "_load_secret",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::credential_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_load_secret"
+    },
+    {
+      "action": "scientist_route_status",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::get_provider_settings",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_scientist.py::scientist_route_status"
+    },
+    {
+      "action": "_provider_requires_api_key",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::get_provider_settings",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_provider_requires_api_key"
+    },
+    {
+      "action": "credential_status",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::get_provider_settings",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::credential_status"
+    },
+    {
+      "action": "load_settings",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::get_provider_settings",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::load_settings"
+    },
+    {
+      "action": "route_for_model",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::get_provider_settings",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::route_for_model"
+    },
+    {
+      "action": "_default_payload_from_environment",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::load_settings",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_default_payload_from_environment"
+    },
+    {
+      "action": "_normalize_payload",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::load_settings",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_normalize_payload"
+    },
+    {
+      "action": "_paths",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::load_settings",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_paths"
+    },
+    {
+      "action": "ProviderSettingsError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::normalize_provider_config",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::ProviderSettingsError"
+    },
+    {
+      "action": "_dedupe_models",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::normalize_provider_config",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_dedupe_models"
+    },
+    {
+      "action": "_is_local_host",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::normalize_provider_config",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_is_local_host"
+    },
+    {
+      "action": "_normalize_base_url",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::normalize_provider_config",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_normalize_base_url"
+    },
+    {
+      "action": "_parse_url",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::normalize_provider_config",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_parse_url"
+    },
+    {
+      "action": "_validate_remote_resolution",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::normalize_provider_config",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::_validate_remote_resolution"
+    },
+    {
+      "action": "sanitize_route_config",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::route_for_model",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_scientist.py::sanitize_route_config"
+    },
+    {
+      "action": "ProviderSettingsError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::route_for_model",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::ProviderSettingsError"
+    },
+    {
+      "action": "normalize_provider_config",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::route_for_model",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::normalize_provider_config"
+    },
+    {
+      "action": "sanitize_route_config",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::saved_primary_route",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_scientist.py::sanitize_route_config"
+    },
+    {
+      "action": "load_settings",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::saved_primary_route",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::load_settings"
+    },
+    {
+      "action": "route_for_model",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_provider.py::saved_primary_route",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_provider.py::route_for_model"
+    },
+    {
+      "action": "migrate_m04",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_store.py::migrate_m05",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::migrate_m04"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_store.py::migrate_m05",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_store.py::scientist_database_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_m05",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_store.py::scientist_database_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_store.py::migrate_m05"
+    }
+  ],
+  "entries": [
+    "backend/max_backend/scientist_knowledge.py::load_knowledge",
+    "backend/max_backend/scientist_api.py::get_status"
+  ],
+  "generated": true,
+  "generated_by": "generate_sequence_actual.py",
+  "nodes": [
+    {
+      "id": "backend/max_backend/challenger_store.py::migrate_m03",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_store.py::migrate_m03",
+      "language": "Python",
+      "line_end": 75,
+      "line_start": 18,
+      "locator": "backend/max_backend/challenger_store.py::migrate_m03"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted",
+      "language": "Python",
+      "line_end": 38,
+      "line_start": 34,
+      "locator": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_create_champion_tenure_table",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_create_champion_tenure_table",
+      "language": "Python",
+      "line_end": 153,
+      "line_start": 99,
+      "locator": "backend/max_backend/champion_store.py::_create_champion_tenure_table"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint",
+      "language": "Python",
+      "line_end": 95,
+      "line_start": 41,
+      "locator": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
+      "language": "Python",
+      "line_end": 198,
+      "line_start": 156,
+      "locator": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::migrate_m04",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::migrate_m04",
+      "language": "Python",
+      "line_end": 261,
+      "line_start": 200,
+      "locator": "backend/max_backend/champion_store.py::migrate_m04"
+    },
+    {
+      "id": "backend/max_backend/db.py::connect",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::connect",
+      "language": "Python",
+      "line_end": 20,
+      "line_start": 14,
+      "locator": "backend/max_backend/db.py::connect"
+    },
+    {
+      "id": "backend/max_backend/optimizer_scientist.py::_route_config_from_environment_only",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_scientist.py::_route_config_from_environment_only",
+      "language": "Python",
+      "line_end": 124,
+      "line_start": 101,
+      "locator": "backend/max_backend/optimizer_scientist.py::_route_config_from_environment_only"
+    },
+    {
+      "id": "backend/max_backend/optimizer_scientist.py::_route_host",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_scientist.py::_route_host",
+      "language": "Python",
+      "line_end": 146,
+      "line_start": 139,
+      "locator": "backend/max_backend/optimizer_scientist.py::_route_host"
+    },
+    {
+      "id": "backend/max_backend/optimizer_scientist.py::route_config_from_environment",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_scientist.py::route_config_from_environment",
+      "language": "Python",
+      "line_end": 136,
+      "line_start": 127,
+      "locator": "backend/max_backend/optimizer_scientist.py::route_config_from_environment"
+    },
+    {
+      "id": "backend/max_backend/optimizer_scientist.py::sanitize_route_config",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_scientist.py::sanitize_route_config",
+      "language": "Python",
+      "line_end": 205,
+      "line_start": 149,
+      "locator": "backend/max_backend/optimizer_scientist.py::sanitize_route_config"
+    },
+    {
+      "id": "backend/max_backend/optimizer_scientist.py::scientist_route_status",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_scientist.py::scientist_route_status",
+      "language": "Python",
+      "line_end": 251,
+      "line_start": 208,
+      "locator": "backend/max_backend/optimizer_scientist.py::scientist_route_status"
+    },
+    {
+      "id": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "language": "Python",
+      "line_end": 98,
+      "line_start": 45,
+      "locator": "backend/max_backend/optimizer_store.py::migrate_m01"
+    },
+    {
+      "id": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "language": "Python",
+      "line_end": 121,
+      "line_start": 101,
+      "locator": "backend/max_backend/optimizer_store.py::migrate_m02"
+    },
+    {
+      "id": "backend/max_backend/scientist_api.py::get_status",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_api.py::get_status",
+      "language": "Python",
+      "line_end": 98,
+      "line_start": 76,
+      "locator": "backend/max_backend/scientist_api.py::get_status"
+    },
+    {
+      "id": "backend/max_backend/scientist_chat.py::safe_route_status",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_chat.py::safe_route_status",
+      "language": "Python",
+      "line_end": 449,
+      "line_start": 422,
+      "locator": "backend/max_backend/scientist_chat.py::safe_route_status"
+    },
+    {
+      "id": "backend/max_backend/scientist_knowledge.py::_canonical_json",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_knowledge.py::_canonical_json",
+      "language": "Python",
+      "line_end": 95,
+      "line_start": 88,
+      "locator": "backend/max_backend/scientist_knowledge.py::_canonical_json"
+    },
+    {
+      "id": "backend/max_backend/scientist_knowledge.py::_sha256_bytes",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_knowledge.py::_sha256_bytes",
+      "language": "Python",
+      "line_end": 79,
+      "line_start": 78,
+      "locator": "backend/max_backend/scientist_knowledge.py::_sha256_bytes"
+    },
+    {
+      "id": "backend/max_backend/scientist_knowledge.py::knowledge_sha256",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_knowledge.py::knowledge_sha256",
+      "language": "Python",
+      "line_end": 130,
+      "line_start": 129,
+      "locator": "backend/max_backend/scientist_knowledge.py::knowledge_sha256"
+    },
+    {
+      "id": "backend/max_backend/scientist_knowledge.py::knowledge_status",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_knowledge.py::knowledge_status",
+      "language": "Python",
+      "line_end": 151,
+      "line_start": 133,
+      "locator": "backend/max_backend/scientist_knowledge.py::knowledge_status"
+    },
+    {
+      "id": "backend/max_backend/scientist_knowledge.py::load_knowledge",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_knowledge.py::load_knowledge",
+      "language": "Python",
+      "line_end": 126,
+      "line_start": 98,
+      "locator": "backend/max_backend/scientist_knowledge.py::load_knowledge"
+    },
+    {
+      "id": "backend/max_backend/scientist_knowledge.py::source_sha256",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_knowledge.py::source_sha256",
+      "language": "Python",
+      "line_end": 85,
+      "line_start": 82,
+      "locator": "backend/max_backend/scientist_knowledge.py::source_sha256"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::ProviderSettingsError",
+      "kind": "class",
+      "label": "backend/max_backend/scientist_provider.py::ProviderSettingsError",
+      "language": "Python",
+      "line_end": 108,
+      "line_start": 105,
+      "locator": "backend/max_backend/scientist_provider.py::ProviderSettingsError"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::_DataBlob",
+      "kind": "class",
+      "label": "backend/max_backend/scientist_provider.py::_DataBlob",
+      "language": "Python",
+      "line_end": 113,
+      "line_start": 109,
+      "locator": "backend/max_backend/scientist_provider.py::_DataBlob"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::_blob",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::_blob",
+      "language": "Python",
+      "line_end": 140,
+      "line_start": 132,
+      "locator": "backend/max_backend/scientist_provider.py::_blob"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::_dedupe_models",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::_dedupe_models",
+      "language": "Python",
+      "line_end": 326,
+      "line_start": 317,
+      "locator": "backend/max_backend/scientist_provider.py::_dedupe_models"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::_default_payload_from_environment",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::_default_payload_from_environment",
+      "language": "Python",
+      "line_end": 437,
+      "line_start": 415,
+      "locator": "backend/max_backend/scientist_provider.py::_default_payload_from_environment"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::_default_ui",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::_default_ui",
+      "language": "Python",
+      "line_end": 412,
+      "line_start": 406,
+      "locator": "backend/max_backend/scientist_provider.py::_default_ui"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::_dpapi_unprotect",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::_dpapi_unprotect",
+      "language": "Python",
+      "line_end": 186,
+      "line_start": 166,
+      "locator": "backend/max_backend/scientist_provider.py::_dpapi_unprotect"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::_is_local_host",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::_is_local_host",
+      "language": "Python",
+      "line_end": 285,
+      "line_start": 284,
+      "locator": "backend/max_backend/scientist_provider.py::_is_local_host"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::_load_secret",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::_load_secret",
+      "language": "Python",
+      "line_end": 239,
+      "line_start": 228,
+      "locator": "backend/max_backend/scientist_provider.py::_load_secret"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::_normalize_base_url",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::_normalize_base_url",
+      "language": "Python",
+      "line_end": 264,
+      "line_start": 255,
+      "locator": "backend/max_backend/scientist_provider.py::_normalize_base_url"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::_normalize_payload",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::_normalize_payload",
+      "language": "Python",
+      "line_end": 469,
+      "line_start": 440,
+      "locator": "backend/max_backend/scientist_provider.py::_normalize_payload"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::_parse_url",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::_parse_url",
+      "language": "Python",
+      "line_end": 281,
+      "line_start": 267,
+      "locator": "backend/max_backend/scientist_provider.py::_parse_url"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::_paths",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::_paths",
+      "language": "Python",
+      "line_end": 129,
+      "line_start": 123,
+      "locator": "backend/max_backend/scientist_provider.py::_paths"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::_provider_requires_api_key",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::_provider_requires_api_key",
+      "language": "Python",
+      "line_end": 337,
+      "line_start": 329,
+      "locator": "backend/max_backend/scientist_provider.py::_provider_requires_api_key"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::_validate_remote_resolution",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::_validate_remote_resolution",
+      "language": "Python",
+      "line_end": 314,
+      "line_start": 288,
+      "locator": "backend/max_backend/scientist_provider.py::_validate_remote_resolution"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::credential_for_route",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::credential_for_route",
+      "language": "Python",
+      "line_end": 790,
+      "line_start": 769,
+      "locator": "backend/max_backend/scientist_provider.py::credential_for_route"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::credential_status",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::credential_status",
+      "language": "Python",
+      "line_end": 547,
+      "line_start": 539,
+      "locator": "backend/max_backend/scientist_provider.py::credential_status"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::get_provider_settings",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::get_provider_settings",
+      "language": "Python",
+      "line_end": 587,
+      "line_start": 550,
+      "locator": "backend/max_backend/scientist_provider.py::get_provider_settings"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::load_settings",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::load_settings",
+      "language": "Python",
+      "line_end": 506,
+      "line_start": 472,
+      "locator": "backend/max_backend/scientist_provider.py::load_settings"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::normalize_provider_config",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::normalize_provider_config",
+      "language": "Python",
+      "line_end": 403,
+      "line_start": 340,
+      "locator": "backend/max_backend/scientist_provider.py::normalize_provider_config"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::route_for_model",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::route_for_model",
+      "language": "Python",
+      "line_end": 674,
+      "line_start": 657,
+      "locator": "backend/max_backend/scientist_provider.py::route_for_model"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::saved_primary_route",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::saved_primary_route",
+      "language": "Python",
+      "line_end": 695,
+      "line_start": 677,
+      "locator": "backend/max_backend/scientist_provider.py::saved_primary_route"
+    },
+    {
+      "id": "backend/max_backend/scientist_provider.py::settings_root",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_provider.py::settings_root",
+      "language": "Python",
+      "line_end": 120,
+      "line_start": 116,
+      "locator": "backend/max_backend/scientist_provider.py::settings_root"
+    },
+    {
+      "id": "backend/max_backend/scientist_store.py::migrate_m05",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_store.py::migrate_m05",
+      "language": "Python",
+      "line_end": 92,
+      "line_start": 28,
+      "locator": "backend/max_backend/scientist_store.py::migrate_m05"
+    },
+    {
+      "id": "backend/max_backend/scientist_store.py::scientist_database_status",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_store.py::scientist_database_status",
+      "language": "Python",
+      "line_end": 116,
+      "line_start": 95,
+      "locator": "backend/max_backend/scientist_store.py::scientist_database_status"
+    }
+  ],
+  "observed_head": "35c449d8e2ff92fd83e926b4ced14d3d5537e4ce",
+  "schema_version": 1,
+  "source_digest": "385d2b167fbcf71a6311bfa92f3e567cb6d4c08fef1a00c963f58721e4145429"
+}

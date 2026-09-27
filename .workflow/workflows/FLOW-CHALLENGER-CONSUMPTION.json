@@ -1,0 +1,79 @@
+{
+  "authority": "Challenger operations/deletion contract plus challenger_store durable consumed-source identity.",
+  "critical": true,
+  "entry_condition": "Owner requests retirement or permitted deletion/preflight for a retained Challenger.",
+  "failure_behavior": [
+    "Preflight failure leaves state unchanged and reports blockers; no best-effort destructive cleanup."
+  ],
+  "flow_id": "FLOW-CHALLENGER-CONSUMPTION",
+  "invariants": [
+    "Lifecycle state changes never reactivate a consumed optimizer source.",
+    "COMMITTED batch authority alone is sufficient to retain consumption after later row deletion.",
+    "Illegal active operation/dependency/path ownership blocks mutation."
+  ],
+  "purpose": "Allow legal retirement/controlled deletion without ever making a durably consumed optimizer source active-selectable again.",
+  "restart_behavior": [
+    "Recovery resumes from persisted operation authority and never invents deletion/retirement completion."
+  ],
+  "rollback_behavior": [
+    "Failed destructive action preserves authoritative rows/artifacts unless a legal atomic mutation already committed."
+  ],
+  "schema_version": 1,
+  "sequence_session": "docs/sequence/sessions/FLOW-CHALLENGER-CONSUMPTION.json",
+  "source_owners": [
+    "backend/max_backend/challenger_operations.py::retire_challenger",
+    "backend/max_backend/challenger_store.py::consumed_source_identities",
+    "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+    "frontend/src/ChallengersPage.tsx::ChallengersPage"
+  ],
+  "states": [
+    "ACTIVE_CHALLENGER",
+    "RETIREMENT_PREFLIGHT",
+    "RETIRED",
+    "DELETE_PREFLIGHT",
+    "PERMITTED_DELETION",
+    "HISTORICAL_CONSUMPTION_RETAINED"
+  ],
+  "tests": [
+    "backend/tests/test_m06_challenger_operations.py",
+    "backend/tests/test_m08_strategy_results.py"
+  ],
+  "title": "Challenger retirement/deletion with durable optimizer consumption",
+  "transitions": [
+    {
+      "action": "Check stale authority, lifecycle and active dependency blockers.",
+      "from": "ACTIVE_CHALLENGER",
+      "side_effects": [],
+      "to": "RETIREMENT_PREFLIGHT"
+    },
+    {
+      "action": "Persist non-destructive retirement journal/status.",
+      "from": "RETIREMENT_PREFLIGHT",
+      "side_effects": [
+        "retirement evidence",
+        "registry status"
+      ],
+      "to": "RETIRED"
+    },
+    {
+      "action": "Evaluate legal dependency/path/ownership cleanup constraints.",
+      "from": "RETIRED",
+      "side_effects": [],
+      "to": "DELETE_PREFLIGHT"
+    },
+    {
+      "action": "Perform only controlled legal cleanup.",
+      "from": "DELETE_PREFLIGHT",
+      "side_effects": [
+        "permitted registry/artifact removal"
+      ],
+      "to": "PERMITTED_DELETION"
+    },
+    {
+      "action": "Continue deriving consumed identity from retained registry lineage or COMMITTED batch authority.",
+      "from": "PERMITTED_DELETION",
+      "side_effects": [],
+      "to": "HISTORICAL_CONSUMPTION_RETAINED"
+    }
+  ]
+}

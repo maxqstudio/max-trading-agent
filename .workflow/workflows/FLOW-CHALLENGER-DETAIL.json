@@ -1,0 +1,66 @@
+{
+  "authority": "Challenger store/registry plus immutable retained bundle/request epoch.",
+  "critical": true,
+  "entry_condition": "Owner views Challenger registry or opens an existing retained Challenger row.",
+  "failure_behavior": [
+    "Tampered/missing bundle, identity mismatch or illegal parameter universe returns domain failure rather than partial detail."
+  ],
+  "flow_id": "FLOW-CHALLENGER-DETAIL",
+  "invariants": [
+    "Historical retained 16D is never reinterpreted as 17D.",
+    "Current V6 universe is exact 17D including InpRiskPct.",
+    "Missing, extra, mixed or cross-epoch parameter universe fails closed."
+  ],
+  "purpose": "List active/archive Challenger authority and render detail strictly from the retained request epoch parameter universe.",
+  "restart_behavior": [
+    "Read-only detail has no restart mutation; retained evidence remains authority."
+  ],
+  "rollback_behavior": [
+    "Not applicable to read-only list/detail; no evidence rewrite is allowed."
+  ],
+  "schema_version": 1,
+  "sequence_session": "docs/sequence/sessions/FLOW-CHALLENGER-DETAIL.json",
+  "source_owners": [
+    "backend/max_backend/challenger_registry.py::challenger_detail",
+    "backend/max_backend/challenger_operations.py::challenger_registry_page",
+    "frontend/src/ChallengersPage.tsx::ChallengersPage"
+  ],
+  "states": [
+    "REGISTERED",
+    "ACTIVE_CHALLENGER",
+    "HISTORICAL_PROMOTED",
+    "HISTORICAL_RETIRED",
+    "DETAIL_VERIFIED"
+  ],
+  "tests": [
+    "backend/tests/test_m03_challenger.py",
+    "backend/tests/test_m06_challenger_operations.py"
+  ],
+  "title": "Challenger registry and exact retained 16D/17D detail",
+  "transitions": [
+    {
+      "action": "Expose status CHALLENGER rows as active eligible records.",
+      "from": "REGISTERED",
+      "side_effects": [],
+      "to": "ACTIVE_CHALLENGER"
+    },
+    {
+      "action": "Verify retained bundle/manifest/hash/parity and exact parameter universe.",
+      "from": "ACTIVE_CHALLENGER",
+      "side_effects": [],
+      "to": "DETAIL_VERIFIED"
+    },
+    {
+      "action": "Read historical retained source with its original exact universe.",
+      "from": "HISTORICAL_PROMOTED",
+      "side_effects": [],
+      "to": "DETAIL_VERIFIED"
+    },
+    {
+      "action": "Read historical retained source where evidence is retained.",
+      "from": "HISTORICAL_RETIRED",
+      "side_effects": [],
+      "to": "DETAIL_VERIFIED"
+    }
+  ]
+}

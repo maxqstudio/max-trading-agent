@@ -1,0 +1,227 @@
+{
+  "components": [
+    {
+      "depends_on": [
+        "FastAPI semantic APIs"
+      ],
+      "id": "owner-ui",
+      "name": "Owner React Control Surface",
+      "owns": [
+        "frontend/src/App.tsx::App",
+        "frontend/src/OptimizerPage.tsx::OptimizerPage",
+        "frontend/src/ChallengersPage.tsx::ChallengersPage",
+        "frontend/src/ChampionPage.tsx::ChampionPage",
+        "frontend/src/ResearchPage.tsx::ResearchPage",
+        "frontend/src/DataPage.tsx::DataPage",
+        "frontend/src/ScientistPage.tsx::ScientistPage"
+      ],
+      "purpose": "Present semantic Strategy, Research, Artifacts and Settings state and explicit Owner actions without manufacturing authority."
+    },
+    {
+      "depends_on": [
+        "SQLite",
+        "immutable Challenger/optimizer evidence",
+        "MT5/MetaEditor"
+      ],
+      "id": "strategy-domain",
+      "name": "Strategy lifecycle domain",
+      "owns": [
+        "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
+        "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
+        "backend/max_backend/challenger_selection.py::create_selected_challengers",
+        "backend/max_backend/challenger_store.py::consumed_source_identities",
+        "backend/max_backend/challenger_registry.py::challenger_detail",
+        "backend/max_backend/challenger_operations.py::retire_challenger",
+        "backend/max_backend/champion_store.py::commit_promotion_authority",
+        "backend/max_backend/promotion_service.py::promote_strategy_challenger"
+      ],
+      "purpose": "Own optimizer qualification, Challenger registration/lifecycle and Champion promotion/tenure semantics."
+    },
+    {
+      "depends_on": [
+        "Strategy parent authority",
+        "SQLite",
+        "immutable Research artifacts",
+        "MT5 source capture"
+      ],
+      "id": "research-domain",
+      "name": "Research authority and R00/R01 domain",
+      "owns": [
+        "backend/max_backend/research_settings.py::get_research_sample_configuration",
+        "backend/max_backend/research_settings.py::set_research_sample_configuration",
+        "backend/max_backend/research_service.py::r00_preflight",
+        "backend/max_backend/research_service.py::start_r00",
+        "backend/max_backend/research_service.py::canonical_research_stage",
+        "backend/max_backend/research_source.py::prepare_r01_source",
+        "backend/max_backend/research_dataset.py::build_labels",
+        "backend/max_backend/research_dataset.py::build_dataset",
+        "backend/max_backend/research_leakage.py::bind_protected_partition_rows",
+        "backend/max_backend/research_leakage.py::bind_protected_target_dependency_authority",
+        "backend/max_backend/research_leakage.py::run_adversarial_suite",
+        "backend/max_backend/research_r01_store.py::commit_r01_terminal_authority",
+        "backend/max_backend/research_r01_service.py::r01_preflight",
+        "backend/max_backend/research_r01_service.py::prepare_r01_verified_source",
+        "backend/max_backend/research_r01_service.py::start_r01",
+        "backend/max_backend/research_r01_service.py::r01_detail"
+      ],
+      "purpose": "Own editable current Research configuration, immutable R00/R01 authorization snapshots, source/dataset/label/leakage and terminal evidence."
+    },
+    {
+      "depends_on": [
+        "scientist/knowledge/source_manifest.json",
+        "Scientist store/provider settings"
+      ],
+      "id": "scientist",
+      "name": "Scientist advisory subsystem",
+      "owns": [
+        "backend/max_backend/scientist_knowledge.py::load_knowledge",
+        "backend/max_backend/scientist_api.py::get_status",
+        "frontend/src/ScientistPage.tsx::ScientistPage"
+      ],
+      "purpose": "Expose hash-verified static knowledge and bounded committed runtime context to an advisory LLM/chat workflow."
+    },
+    {
+      "depends_on": [
+        "domain services",
+        "SQLite",
+        "MT5 detection"
+      ],
+      "id": "backend-runtime",
+      "name": "FastAPI runtime",
+      "owns": [
+        "backend/max_backend/main.py::lifespan",
+        "backend/max_backend/main.py::overview",
+        "backend/max_backend/main.py::app"
+      ],
+      "purpose": "Start migrations/recovery, route semantic APIs and expose overview/readiness."
+    },
+    {
+      "depends_on": [
+        "backend /api/overview",
+        "frontend proxy/root",
+        "Scientist status",
+        "ports 8000/5173"
+      ],
+      "id": "launcher",
+      "name": "Windows launcher/readiness",
+      "owns": [
+        "RUN_MAX.cmd",
+        "scripts/run_max.ps1"
+      ],
+      "purpose": "Verify or start canonical backend/frontend instances, reject invalid occupied ports and emit MAX_READY only after authority/readiness checks."
+    },
+    {
+      "depends_on": [
+        "MetaTrader 5 terminal",
+        "MetaEditor"
+      ],
+      "id": "mt5",
+      "name": "MT5/MetaEditor execution boundary",
+      "owns": [
+        "ea/baseline/Max_MTF.mq5"
+      ],
+      "purpose": "Provide Strategy Tester simulation/optimization and MQL5 compile/execution truth."
+    },
+    {
+      "depends_on": [
+        "backend store modules"
+      ],
+      "id": "operational-state",
+      "name": "SQLite operational state",
+      "owns": [
+        "state/max.db"
+      ],
+      "purpose": "Persist mutable Strategy/Research/Scientist operational state through owning stores and transactions."
+    },
+    {
+      "depends_on": [
+        "domain services and artifact registry"
+      ],
+      "id": "immutable-evidence",
+      "name": "Immutable evidence/artifact layer",
+      "owns": [
+        "artifacts/",
+        "evidence/",
+        "docs/audits/"
+      ],
+      "purpose": "Retain execution/scientific lineage that current configuration or active-role changes cannot rewrite."
+    },
+    {
+      "depends_on": [
+        "Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f"
+      ],
+      "id": "governance",
+      "name": "Current project governance",
+      "owns": [
+        "PROJECT_PROFILE.yaml",
+        ".workflow/*.json",
+        ".workflow/workflows/*.json",
+        ".workflow/tools/*.py",
+        "docs/sequence/sessions/*.json",
+        "docs/sequence/generated/*.actual.json",
+        "docs/sequence/generated/*.actual.mmd"
+      ],
+      "purpose": "Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth."
+    }
+  ],
+  "data_flows": [
+    {
+      "from": "Owner React Control Surface",
+      "meaning": "Owner events become semantic API requests; UI itself creates no domain authority.",
+      "to": "FastAPI runtime"
+    },
+    {
+      "from": "FastAPI runtime",
+      "meaning": "Strategy actions are domain-validated before any SQLite/artifact/MT5 mutation.",
+      "to": "Strategy lifecycle domain"
+    },
+    {
+      "from": "Strategy lifecycle domain",
+      "meaning": "MT5/MetaEditor execute simulation/optimization/compile while Python verifies legality and evidence.",
+      "to": "MT5/MetaEditor execution boundary"
+    },
+    {
+      "from": "Strategy lifecycle domain",
+      "meaning": "Exact accepted Strategy parent authority seeds Research; Research cannot retroactively redefine Strategy history.",
+      "to": "Research authority and R00/R01 domain"
+    },
+    {
+      "from": "Research authority and R00/R01 domain",
+      "meaning": "R00/R01 authorization, dataset, leakage and terminal evidence are sealed by lineage.",
+      "to": "Immutable evidence/artifact layer"
+    },
+    {
+      "from": "Scientist advisory subsystem",
+      "meaning": "Scientist returns bounded advisory context only; no scientific/promotion authority.",
+      "to": "Owner React Control Surface"
+    },
+    {
+      "from": "Current project governance",
+      "meaning": "Project Truth Compiler projects source facts plus explicit semantic authority deterministically into canonical docs/ Markdown.",
+      "to": "Generated canonical docs/ governance Markdown"
+    }
+  ],
+  "external_boundaries": [
+    {
+      "contract": "Exact commit is source authority; no GitHub Actions acceptance.",
+      "name": "GitHub"
+    },
+    {
+      "contract": "D:\\MAX_REBUILD exact checkout is runtime/browser/MT5 acceptance authority.",
+      "name": "Owner PC"
+    },
+    {
+      "contract": "Simulation and optimization execution truth only; Python validates workflow legality and evidence.",
+      "name": "MetaTrader 5"
+    },
+    {
+      "contract": "MQL5 compile truth used by promotion/deployment checks.",
+      "name": "MetaEditor"
+    },
+    {
+      "contract": "Untrusted/advisory provider output is bounded and cannot mutate Strategy/Research authority.",
+      "name": "Scientist provider"
+    }
+  ],
+  "schema_version": 1
+}

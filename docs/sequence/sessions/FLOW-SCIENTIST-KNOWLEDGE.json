@@ -1,0 +1,38 @@
+{
+  "acceptance_report": "artifacts/sequence/FLOW-SCIENTIST-KNOWLEDGE.acceptance.json",
+  "actual": {
+    "diagram": "docs/sequence/generated/FLOW-SCIENTIST-KNOWLEDGE.actual.mmd",
+    "entries": [
+      "backend/max_backend/scientist_knowledge.py::load_knowledge",
+      "backend/max_backend/scientist_api.py::get_status"
+    ],
+    "graph": "docs/sequence/generated/FLOW-SCIENTIST-KNOWLEDGE.actual.json",
+    "source_digest": "385d2b167fbcf71a6311bfa92f3e567cb6d4c08fef1a00c963f58721e4145429"
+  },
+  "critical": true,
+  "implementation_base_sha": "ad7e61c9d944677e1d7a48e9bfbfc9d049b2542e",
+  "mode": "DURING",
+  "phase": "FRESH_RUNTIME_EPOCH_RESET",
+  "plan": {
+    "contract": "",
+    "diagram": "",
+    "frozen": false,
+    "frozen_commit": "",
+    "required": false,
+    "sha256": ""
+  },
+  "runtime_trace": {
+    "graph": "",
+    "required": false
+  },
+  "schema_version": 1,
+  "scope": "CURRENT",
+  "session_id": "FLOW-SCIENTIST-KNOWLEDGE",
+  "status": "CURRENT",
+  "test_traceability_required": true,
+  "tests": [
+    "backend/tests/test_m05_scientist.py",
+    "backend/tests/test_m05_final_evidence_contract.py",
+    "frontend/src/ScientistPage.test.tsx"
+  ]
+}
