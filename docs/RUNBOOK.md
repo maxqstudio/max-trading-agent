@@ -2,19 +2,20 @@
 
 # RUNBOOK
 
-1. Verify exact source — git fetch origin work/skill-workflow-strict-adoption; git switch work/skill-workflow-strict-adoption; git rev-parse HEAD; git status --porcelain — expected: Exact intended candidate HEAD and clean worktree.
-2. Python environment — py -3.13 -m venv .venv; .\.venv\Scripts\python.exe -m pip install -r requirements.lock.txt — expected: Python 3.13 environment with locked dependencies.
-3. Frontend dependencies — cd frontend; npm ci; cd .. — expected: package-lock resolved without required dependency errors.
-4. Sync generated governance — .\.venv\Scripts\python.exe .workflow\tools\sync_project_truth.py — expected: PROJECT_DOCS_SYNC=PASS.
-5. Validate generated docs — .\.venv\Scripts\python.exe .workflow\tools\validate_project_docs.py — expected: RESULT=PASS and no stale/missing generated docs.
-6. Validate sequence sessions — .\.venv\Scripts\python.exe .workflow\tools\validate_sequence_sessions.py — expected: Eight current DURING sessions, zero failed sessions.
-7. Validate handoff — .\.venv\Scripts\python.exe .workflow\tools\validate_handoff.py — expected: STRICT required docs present/current.
-8. Validate human comprehension — .\.venv\Scripts\python.exe .workflow\tools\validate_human_comprehension.py --require-pass — expected: HUMAN_COMPREHENSION_GATE PASS.
-9. Validate cross-document consistency — .\.venv\Scripts\python.exe .workflow\tools\validate_cross_document_consistency.py --base ad7e61c9d944677e1d7a48e9bfbfc9d049b2542e --require-base — expected: RESULT=PASS.
-10. Validate project truth — .\.venv\Scripts\python.exe .workflow\tools\validate_project_truth.py — expected: RESULT=PASS after required acceptance evidence is present.
-11. Backend cumulative tests — .\.venv\Scripts\python.exe -m pytest backend\tests -q -o addopts= — expected: At least established 485-pass floor; investigate any decrease.
-12. Frontend tests/lint/build — cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all; cd .. — expected: 51-test floor across 10 files, lint 0/0, build PASS, dependency tree exit 0.
-13. Python dependencies — .\.venv\Scripts\python.exe -m pip check — expected: No broken requirements.
-14. Canonical runtime — RUN_MAX.cmd --no-pause — expected: Verified-instance or fresh-port path reaches MAX_READY only after backend/proxy/Scientist authority checks.
-15. Readiness probes — Invoke-RestMethod http://127.0.0.1:8000/api/overview; Invoke-RestMethod http://127.0.0.1:8000/api/mt5/preflight; Invoke-RestMethod http://127.0.0.1:5173/api/scientist/status — expected: Backend/MT5/Scientist semantic readiness.
-16. Browser E2E — Real Microsoft Edge/Chromium navigate Strategy Overview/Optimizer/Challengers/Champion, Research/Data, Artifacts, Settings and Scientist drawer without mutation — expected: All required views render; no R01 start/promotion/retirement/delete/training/ONNX mutation.
+1. Verify hosted source authority — git fetch origin main; git switch main; git pull --ff-only; git rev-parse HEAD; git status --porcelain — expected: Latest maxqstudio/max-trading-agent main exact SHA and clean worktree.
+2. Create phase branch — git switch -c work/<semantic-phase-name> — expected: Work branch descends from latest main; no reset/rewrite of valid work.
+3. Python environment — py -3.13 -m venv .venv; .\.venv\Scripts\python.exe -m pip install -r requirements.lock.txt — expected: Python 3.13 environment with locked dependencies.
+4. Frontend dependencies — cd frontend; npm ci; cd .. — expected: package-lock resolves without required dependency errors.
+5. Sync generated governance — .\.venv\Scripts\python.exe .workflow\tools\sync_project_truth.py — expected: PROJECT_DOCS_SYNC=PASS; commit only deterministic compiler outputs.
+6. Validate generated docs — .\.venv\Scripts\python.exe .workflow\tools\validate_project_docs.py — expected: No stale/missing generated canonical docs.
+7. Validate sequence sessions — .\.venv\Scripts\python.exe .workflow\tools\validate_sequence_sessions.py — expected: Eight current DURING sessions with zero failed sessions.
+8. Validate handoff and human comprehension — .\.venv\Scripts\python.exe .workflow\tools\validate_handoff.py; .\.venv\Scripts\python.exe .workflow\tools\validate_human_comprehension.py --require-pass — expected: STRICT handoff and HUMAN_COMPREHENSION PASS.
+9. Validate cross-document consistency — .\.venv\Scripts\python.exe .workflow\tools\validate_cross_document_consistency.py — expected: RESULT=PASS without stale repository/runtime authority conflicts.
+10. Validate project truth — .\.venv\Scripts\python.exe .workflow\tools\validate_project_truth.py — expected: RESULT=PASS for the current hosted scope; final real runtime remains explicitly deferred.
+11. Backend cumulative tests — .\.venv\Scripts\python.exe -m pytest backend\tests -q -o addopts= — expected: At least the verified migration floor of 488 PASS; any unexplained decrease blocks the phase.
+12. Python dependencies — .\.venv\Scripts\python.exe -m pip check — expected: No broken requirements.
+13. Frontend tests lint build dependencies — cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all; cd .. — expected: At least 53 tests across 10 files, lint PASS, production build PASS, dependency tree exit 0.
+14. Public exact-tree secret scan — .\.venv\Scripts\python.exe scripts\scan_m05_candidate_tree.py --candidate-sha HEAD — expected: PASS with no plaintext high-confidence secret or forbidden secret-storage path.
+15. Hosted phase acceptance — Push work branch and inspect .github/workflows/windows-ci.yml for the exact candidate commit. — expected: Source-only policy, governance, Skill provenance/selftest, backend, pip, frontend test/lint/build/dependency gates all PASS on windows-latest.
+16. Merge and main revalidation — Merge the green phase branch to main, then inspect Windows CI for the resulting main commit. — expected: Main Windows CI PASS before beginning the next ordinary development phase.
+17. Final runtime acceptance boundary — Only after hosted roadmap closure: clean-clone final main and run INSTALL.ps1 on Owner PC before real MT5/MetaEditor/browser/E2E checks. — expected: OWNER_PC_FINAL_ACCEPTANCE_REQUIRED until that final phase; never infer runtime PASS from GitHub Actions.
