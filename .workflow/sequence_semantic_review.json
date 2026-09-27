@@ -25,7 +25,7 @@
       "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca",
       "tests": [
         "backend/tests/test_m06_challenger_operations.py",
         "backend/tests/test_m08_strategy_results.py"
@@ -55,7 +55,7 @@
       "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca",
       "tests": [
         "backend/tests/test_m03_challenger.py",
         "backend/tests/test_m06_challenger_operations.py"
@@ -86,7 +86,7 @@
       "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca",
       "tests": [
         "backend/tests/test_m04_promotion.py",
         "backend/tests/test_m04_store.py"
@@ -119,7 +119,7 @@
       "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_m03_challenger.py"
@@ -150,7 +150,7 @@
       "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca",
       "tests": [
         "backend/tests/test_r00_research.py"
       ],
@@ -190,7 +190,7 @@
       "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca",
       "tests": [
         "backend/tests/test_r01_source.py",
         "backend/tests/test_r01_dataset.py",
@@ -224,7 +224,7 @@
       "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca",
       "tests": [
         "backend/tests/test_r00_research.py",
         "backend/tests/test_r01_research.py"
@@ -254,7 +254,7 @@
       "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca",
       "tests": [
         "backend/tests/test_m05_scientist.py",
         "backend/tests/test_m05_final_evidence_contract.py",
@@ -264,9 +264,9 @@
     }
   ],
   "generation_anchor_policy": {
-    "meaning": "Pre-commit generation anchor only; final candidate provenance is external exact Git SHA while structural sequence binding uses deterministic product source_digest.",
-    "observed_head": "3f7dc9a684f0342c42ca9ebe409f69cdb6741250",
-    "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2"
+    "meaning": "Hosted H0 regeneration anchor only; exact phase/final acceptance SHA remains external while structural sequence binding uses deterministic product source_digest.",
+    "observed_head": "9c14b214831c8fd57ee1f78b243a07a2957b36db",
+    "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca"
   },
   "mode": "DURING",
   "parse_failure_boundary": {
