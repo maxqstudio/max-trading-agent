@@ -88,6 +88,14 @@ jobs:
       - name: Validate human comprehension
         shell: pwsh
         run: python .workflow/tools/validate_human_comprehension.py --require-pass
+      - name: Assert governance worktree clean
+        shell: pwsh
+        run: |
+          $dirty = git status --porcelain
+          if ($dirty) {
+            $dirty | ForEach-Object { Write-Host $_ }
+            throw "Governance validators left tracked or unignored workspace changes."
+          }
       - name: Validate cross-document consistency
         shell: pwsh
         run: python .workflow/tools/validate_cross_document_consistency.py
