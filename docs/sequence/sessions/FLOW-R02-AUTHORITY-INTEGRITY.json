@@ -27,7 +27,7 @@
     ],
     "graph": "docs/sequence/generated/FLOW-R02-AUTHORITY-INTEGRITY.actual.json",
     "diagram": "docs/sequence/generated/FLOW-R02-AUTHORITY-INTEGRITY.actual.mmd",
-    "source_digest": ""
+    "source_digest": "83b13a6534d32c3dfb89a127cacb76fd061154d533c72b78c2573e34596ea5cc"
   },
   "runtime_trace": {
     "required": false,

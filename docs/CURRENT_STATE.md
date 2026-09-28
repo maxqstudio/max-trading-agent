@@ -3,20 +3,20 @@
 # CURRENT STATE
 
 Last updated: generated from current specs
-Authority verified at SHA: eb6192873eb518b9fe4c7f15d03600ca4ac1e73d
+Authority verified at SHA: c913c47a45ca54d805470caf40bb54bf655b45c6
 Governance profile: strict
 
 ## Current phase
-Phase: R02_CHEAP_SCREEN_OUTCOME_LEDGER
-Status: SOURCE_PHASE_PRE_CLOSEOUT_PASS
+Phase: R02_AUTHORITY_INTEGRITY
+Status: ACTIVE_TARGETED_PASS
 
 ## Source
 Repository: maxqstudio/max-trading-agent
-Branch: work/r02-outcome-ledger
+Branch: work/r02-authority-integrity
 Authoritative SHA: external final acceptance evidence
-Last accepted SHA: eb6192873eb518b9fe4c7f15d03600ca4ac1e73d
+Last accepted SHA: c913c47a45ca54d805470caf40bb54bf655b45c6
 Current candidate SHA: external final acceptance evidence
-Current source digest: 6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68
+Current source digest: 83b13a6534d32c3dfb89a127cacb76fd061154d533c72b78c2573e34596ea5cc
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
@@ -33,49 +33,48 @@ PROJECT_DOCS_SYNC: PASS
 ## Sequence governance
 Sequence policy: REQUIRED
 Current sequence mode: DURING
-Current sequence session: docs/sequence/sessions/ (11 current DURING sessions after R02 outcome-ledger flow)
+Current sequence session: docs/sequence/sessions/ (12 current DURING sessions after R02 authority-integrity flow)
 SEQUENCE_SYNC: PASS
 
 ## Proven
 - H0 governance rebase remains accepted on main.
 - R01 current-lineage source repair remains accepted on main.
 - R02 Discovery source foundation remains accepted on main.
-- R02 authorization/freeze is merged to main as eb6192873eb518b9fe4c7f15d03600ca4ac1e73d; main Windows CI run 36409834797 passed 558 backend tests, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, governance, pip check, lint/build and npm dependency tree.
-- R02 outcome-ledger targeted Windows run 36411091220 passed 82 synthetic tests.
-- R02 numeric-overflow hardening targeted Windows run 36412664127 passed 84 R02 tests.
-- Exact R02 outcome-ledger branch Windows CI run 36413020299 passed at a178b4be591c42e88bb6a5ea3bcec1d113987dcb: backend 581 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, lint/build and npm dependency tree PASS.
+- R02 authorization/freeze remains accepted on main.
+- R02 outcome ledger is merged to main as c913c47a45ca54d805470caf40bb54bf655b45c6; post-merge Windows CI run 36424489731 passed 581 backend tests, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, governance, pip check, lint/build and npm dependency tree.
+- R02 authority-integrity targeted Windows run 36433759495 passed 94 R02 tests at 2a4fad68e13b53a49fc651d80742cd460e27736c.
 - Skill Workflow authority remains 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720.
 
 ## Not proven
-- Final branch closeout CI after acceptance evidence regeneration.
+- R02 authority-integrity full hosted regression and generated-governance synchronization.
 - Any real current-epoch R00/R01 scientific result or real R02 authorization/execution.
-- Any actual model training, Cheap Screen runtime outcome, Qualified Pool, ONNX or Research Challenger.
+- Any actual model fitting, Cheap Screen runtime outcome, Qualified Pool, ONNX or Research Challenger.
 - Any real Owner-PC runtime/bootstrap/MT5/browser behavior.
 
 ## Known blockers
 - The fresh runtime still has no accepted current R00/R01 scientific result, so real R02 remains BLOCKED / NOT STARTED.
-- The source now has an immutable outcome ledger/terminal contract, but no trainer/executor is implemented or authorized; hosted tests use synthetic outcome requests only.
-- Cheap Screen outcome status has zero scientific qualification authority; R03 Full WFA remains the only future Qualified Pool admission authority.
-- Real MetaTrader 5, MetaEditor, broker/data-root, filesystem deployment and browser E2E remain NOT_PROVEN until final Owner-PC acceptance.
+- R02 now has source-level read integrity verification, but no trainer/executor exists or is authorized.
+- Cheap Screen COMPLETE_WAITING_OWNER remains zero qualification authority; future R03 Full WFA alone may admit Qualified Pool.
+- Real MT5/MetaEditor/broker/data-root/filesystem/browser runtime remains NOT_PROVEN until final Owner-PC acceptance.
 
 ## Known defects
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Regenerate governed docs with exact R02 outcome-ledger pre-closeout evidence.
-- Run exact final branch Windows CI and merge only if all jobs remain green.
-- Revalidate main after merge before any trainer/executor slice.
+- Regenerate Project Truth, sequence projections and Scientist knowledge for R02 authority-integrity verification.
+- Run exact branch Windows CI and require full regression green.
+- Merge to main only after hosted closeout, then revalidate main before any further source-only phase.
 
 ## Explicitly blocked
 - Owner-PC testing between ordinary GitHub development phases.
 - Any real current-epoch R00, R01 or R02 scientific execution.
-- Any model fitting/training or Cheap Screen executor in this outcome-ledger phase.
-- Any API or UI action that submits fabricated Cheap Screen outcomes.
+- Any model fitting/training or Cheap Screen executor in this integrity phase.
+- Any outcome-submit API/UI.
 - Automatic second Discovery block creation.
 - Cheap Screen scientific qualification or Qualified Pool admission.
 - ONNX generation.
 - Research Challenger creation.
 - Strategy Champion mutation.
 - Live trading.
-- Adding heavy ML runtime dependencies before an executing R02 slice requires them.
+- Adding heavy ML runtime dependencies.
 - Unrelated Strategy, optimizer, EA or UI refactors.

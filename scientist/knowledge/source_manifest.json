@@ -196,12 +196,16 @@
     "sha256": "f4993030f60bbc51916bced52db8f65b29508a9b057fb076a6d4b606aa4af7e7"
   },
   {
+    "path": "backend/max_backend/research_r02_integrity.py",
+    "sha256": "b8a5bb214caa534542e3b6d56fe5b11fe69a55368f8bf6b7eaabd1310ec42931"
+  },
+  {
     "path": "backend/max_backend/research_r02_outcome.py",
     "sha256": "4ba39ba297fd293abe74c7eb76e0ba8e5bd0dcd1747735fd120b314720454238"
   },
   {
     "path": "backend/max_backend/research_r02_service.py",
-    "sha256": "69e876958e8eab561a49e203d840c07b04d50013598c98b7b300602f832dd656"
+    "sha256": "2e3d8083b1e88f93379203b8668b02ffb558e5dde9e0732472b70a25a639ad9c"
   },
   {
     "path": "backend/max_backend/research_r02_store.py",
@@ -209,7 +213,7 @@
   },
   {
     "path": "backend/max_backend/scientist_knowledge.py",
-    "sha256": "4f17c7a9d9c937faecdd68add46f9ad3c8e0c33ffd3abcec296d20e4f9dc7220"
+    "sha256": "952d1434a9a51f4141d1cbf6a8c26be8dddb0597e98ba65dd362a4a8e0ab0823"
   },
   {
     "path": "backend/max_backend/scientist_context.py",

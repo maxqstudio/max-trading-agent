@@ -120,3 +120,14 @@ Type: repair
 - Discovery compute-budget and outcome/terminal compute validation now map unrepresentable numeric input to deterministic validation errors instead of allowing OverflowError to escape.
 - Add huge-integer regressions for Owner authorization budget and outcome/terminal budget paths.
 - Windows targeted run 36412664127 passed 84 R02 tests at 02644bb471c8c605a27413b4a1f8677a1f30dffd.
+
+## 2026-09-28 — R02 authority integrity verification
+
+Type: source_hardening
+
+- Add deterministic read-time integrity verifier for R02 authorization, block, candidate specs, outcome ledger and terminal manifest.
+- Bind verification to accepted current R01 PASS_WAITING_OWNER output authority.
+- Reject hash mismatch, semantic authorization forgery, candidate/plan tamper, partial outcomes, outcome tamper and terminal-summary tamper.
+- R02 preflight now requires VERIFIED_FROZEN or VERIFIED_COMPLETE before exposing persisted R02 authority.
+- Windows targeted run 36433759495 passed 94 synthetic R02 tests at 2a4fad68e13b53a49fc651d80742cd460e27736c.
+- No trainer, model fitting, outcome-submit API, R03 qualification, ONNX, Challenger or Champion mutation is opened.

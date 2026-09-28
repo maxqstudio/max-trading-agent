@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68
+Source digest: 83b13a6534d32c3dfb89a127cacb76fd061154d533c72b78c2573e34596ea5cc
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -51,8 +51,9 @@ Generated/refreshed: current compiler run
 | backend/max_backend/research_r01_service.py | Python | 1758 | backend/max_backend | NO |
 | backend/max_backend/research_r01_store.py | Python | 502 | backend/max_backend | NO |
 | backend/max_backend/research_r02_contract.py | Python | 274 | backend/max_backend | NO |
+| backend/max_backend/research_r02_integrity.py | Python | 439 | backend/max_backend | NO |
 | backend/max_backend/research_r02_outcome.py | Python | 229 | backend/max_backend | NO |
-| backend/max_backend/research_r02_service.py | Python | 285 | backend/max_backend | NO |
+| backend/max_backend/research_r02_service.py | Python | 297 | backend/max_backend | NO |
 | backend/max_backend/research_r02_store.py | Python | 619 | backend/max_backend | NO |
 | backend/max_backend/research_service.py | Python | 1423 | backend/max_backend | NO |
 | backend/max_backend/research_settings.py | Python | 73 | backend/max_backend | NO |
@@ -62,7 +63,7 @@ Generated/refreshed: current compiler run
 | backend/max_backend/scientist_api.py | Python | 270 | backend/max_backend | NO |
 | backend/max_backend/scientist_chat.py | Python | 449 | backend/max_backend | NO |
 | backend/max_backend/scientist_context.py | Python | 879 | backend/max_backend | NO |
-| backend/max_backend/scientist_knowledge.py | Python | 187 | backend/max_backend | NO |
+| backend/max_backend/scientist_knowledge.py | Python | 188 | backend/max_backend | NO |
 | backend/max_backend/scientist_provider.py | Python | 993 | backend/max_backend | NO |
 | backend/max_backend/scientist_store.py | Python | 594 | backend/max_backend | NO |
 | backend/max_backend/workflow_contract.py | Python | 45 | backend/max_backend | NO |
@@ -98,10 +99,10 @@ Generated/refreshed: current compiler run
 | backend/tests/test_r01_research.py | Python | 1077 | backend/tests | YES |
 | backend/tests/test_r01_source.py | Python | 471 | backend/tests | YES |
 | backend/tests/test_r02_authorization_service.py | Python | 206 | backend/tests | YES |
-| backend/tests/test_r02_authorization_store.py | Python | 679 | backend/tests | YES |
+| backend/tests/test_r02_authorization_store.py | Python | 861 | backend/tests | YES |
 | backend/tests/test_r02_discovery_contract.py | Python | 198 | backend/tests | YES |
 | backend/tests/test_r02_outcome_contract.py | Python | 183 | backend/tests | YES |
-| backend/tests/test_r02_preflight.py | Python | 219 | backend/tests | YES |
+| backend/tests/test_r02_preflight.py | Python | 261 | backend/tests | YES |
 | frontend/src/App.test.tsx | TypeScript/React | 241 | frontend/src | YES |
 | frontend/src/App.tsx | TypeScript/React | 290 | frontend/src | NO |
 | frontend/src/ArtifactsPage.test.tsx | TypeScript/React | 252 | frontend/src | YES |

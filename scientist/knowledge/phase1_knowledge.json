@@ -202,7 +202,7 @@
         "Current Research stage is derived from immutable R00 history plus the persisted R01 run; R00 evidence is not rewritten after R01 begins.",
         "R01 terminal publication atomically binds run state, immutable artifacts, gate events and non-adaptive Research Memory, then stops waiting for Owner.",
         "R01 performs zero model training, zero ONNX export, zero Research Challenger creation, no Champion mutation and cannot execute R02.",
-        "R02 frozen Discovery authorization is immutable and one-block-per-Research; source also defines an append-only all-candidate Cheap Screen outcome ledger/COMPLETE_WAITING_OWNER terminal contract, but no trainer executes it and no outcome has R03 qualification authority."
+        "R02 frozen Discovery authorization and append-only outcome ledger are read back only after deterministic R02 authority integrity verification reconstructs accepted R01 lineage, Owner authorization semantics, plan/candidate identities and any terminal outcome manifest; no trainer executes it and no outcome has R03 qualification authority."
       ],
       "ref": "contract:r01-data-foundation",
       "title": "R01 Dataset + Label + Leakage Foundation"
@@ -244,7 +244,7 @@
   "planned_capabilities": [
     "Current-epoch R00 initialization and acceptance under the fresh epoch before any real R01 execution",
     "R01 current-lineage source binding is merged/revalidated; real current-epoch R00/R01 execution remains deferred to final Owner runtime",
-    "R02 source can deterministically plan/freeze one Owner-authorized Discovery block and define an immutable outcome ledger; real model fitting/execution remains separately blocked and only future R03 Full WFA can create Qualified Pool authority"
+    "R02 source can deterministically plan/freeze one Owner-authorized Discovery block, define an immutable outcome ledger, and fail closed on tampered persisted authority; real model fitting/execution remains separately blocked and only future R03 Full WFA can create Qualified Pool authority"
   ],
   "project": {
     "name": "MAX Trading Agent",
@@ -449,12 +449,16 @@
       "sha256": "f4993030f60bbc51916bced52db8f65b29508a9b057fb076a6d4b606aa4af7e7"
     },
     {
+      "path": "backend/max_backend/research_r02_integrity.py",
+      "sha256": "b8a5bb214caa534542e3b6d56fe5b11fe69a55368f8bf6b7eaabd1310ec42931"
+    },
+    {
       "path": "backend/max_backend/research_r02_outcome.py",
       "sha256": "4ba39ba297fd293abe74c7eb76e0ba8e5bd0dcd1747735fd120b314720454238"
     },
     {
       "path": "backend/max_backend/research_r02_service.py",
-      "sha256": "69e876958e8eab561a49e203d840c07b04d50013598c98b7b300602f832dd656"
+      "sha256": "2e3d8083b1e88f93379203b8668b02ffb558e5dde9e0732472b70a25a639ad9c"
     },
     {
       "path": "backend/max_backend/research_r02_store.py",
@@ -462,7 +466,7 @@
     },
     {
       "path": "backend/max_backend/scientist_knowledge.py",
-      "sha256": "4f17c7a9d9c937faecdd68add46f9ad3c8e0c33ffd3abcec296d20e4f9dc7220"
+      "sha256": "952d1434a9a51f4141d1cbf6a8c26be8dddb0597e98ba65dd362a4a8e0ab0823"
     },
     {
       "path": "backend/max_backend/scientist_context.py",

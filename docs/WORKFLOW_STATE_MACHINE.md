@@ -266,6 +266,54 @@ Authority: research_r01_service + research_source/dataset/leakage/store + immuta
 
 - Pre-terminal partial artifacts are cleaned or rejected; accepted parent/history remains immutable.
 
+## FLOW-R02-AUTHORITY-INTEGRITY — R02 read-time authority integrity verification
+
+Purpose: Fail closed before exposing persisted R02 frozen/complete authority by reconstructing its deterministic lineage and hashes.
+Critical: TRUE
+Entry condition: R02 preflight finds a persisted Discovery block.
+Authority: Accepted current R01 output + canonical R02 authorization/plan/candidate/outcome/terminal contracts.
+
+### States
+
+- PERSISTED_R02_FOUND
+- VERIFY_FROZEN_AUTHORITY
+- VERIFY_COMPLETE_LEDGER
+- VERIFIED_FROZEN
+- VERIFIED_COMPLETE
+- REJECTED
+
+### Legal transitions
+
+| From | To | Action | Authority | Side effects |
+|---|---|---|---|---|
+| PERSISTED_R02_FOUND | VERIFY_FROZEN_AUTHORITY | Re-derive accepted R01 binding, Owner authorization semantics, block ID, candidate specs and Discovery plan. | Accepted current R01 output + canonical R02 authorization/plan/candidate/outcome/terminal contracts. |  |
+| VERIFY_FROZEN_AUTHORITY | VERIFIED_FROZEN | Return verified frozen authority only when no outcome rows or terminal exist. | Accepted current R01 output + canonical R02 authorization/plan/candidate/outcome/terminal contracts. |  |
+| VERIFY_FROZEN_AUTHORITY | VERIFY_COMPLETE_LEDGER | When terminal exists, rebuild every candidate outcome and terminal manifest. | Accepted current R01 output + canonical R02 authorization/plan/candidate/outcome/terminal contracts. |  |
+| VERIFY_COMPLETE_LEDGER | VERIFIED_COMPLETE | Return verified complete authority only when every outcome/terminal field matches deterministic reconstruction. | Accepted current R01 output + canonical R02 authorization/plan/candidate/outcome/terminal contracts. |  |
+| VERIFY_FROZEN_AUTHORITY | REJECTED | Reject any hash/lineage/semantic mismatch or partial outcome state. | Accepted current R01 output + canonical R02 authorization/plan/candidate/outcome/terminal contracts. |  |
+
+### Invariants
+
+- Read verification is non-mutating and creates no scientific result.
+- Accepted current R01 PASS_WAITING_OWNER output must match frozen R02 lineage.
+- Hash-consistent but semantically forged authorization is rejected.
+- Candidate specs reconstruct the exact plan ID/SHA and authorization candidate set.
+- Outcome rows without terminal are invalid partial authority.
+- COMPLETE_WAITING_OWNER is exposed only after deterministic outcome and terminal reconstruction.
+- Verification does not create R03 qualification, ONNX, Challenger or Champion authority.
+
+### Failure behavior
+
+- Any malformed JSON/numeric value, hash mismatch, semantic mismatch, lineage mismatch, partial ledger or terminal mismatch fails closed before preflight exposes persisted R02 authority.
+
+### Restart behavior
+
+- Verification is pure/read-only and can be repeated deterministically.
+
+### Rollback behavior
+
+- No rollback required because verifier performs no scientific mutation.
+
 ## FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER — R02 Cheap Screen immutable outcome ledger
 
 Purpose: Define deterministic append-only all-candidate outcome and terminal authority for a future executor without performing model fitting or granting qualification.
