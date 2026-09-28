@@ -21,6 +21,7 @@ from max_backend.research_r02_store import (
     commit_r02_terminal_outcomes,
     get_r02_discovery_block,
     get_r02_outcome_ledger,
+    get_r02_terminal,
     validate_r02_discovery_block_integrity,
     validate_r02_outcome_integrity,
 )
