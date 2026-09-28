@@ -253,19 +253,19 @@
   "source_manifest": [
     {
       "path": "pyproject.toml",
-      "sha256": "32ec04e7d3fa95d126c614b7c66723373e0db0083adf74accc4ce915cb6395db"
+      "sha256": "c28fd7813620ed4409ef489da1cacd6ee7915098dbb5d33b530f895d98fa0f09"
     },
     {
       "path": "docs/PRD.md",
-      "sha256": "262bedff8e316c18cbc26f93003a7a6d108300c4f700e97270c0b5756abf2da0"
+      "sha256": "9ecde9a38146770c3e854027f7ea7ba277f54d0260a468f088f18619ce7c8f1c"
     },
     {
       "path": "docs/ROADMAP.md",
-      "sha256": "feff2a886e30102152e3b967d6334669d6faf5644394a8890f668f39edd691a7"
+      "sha256": "4cea04bd2c9e81b137728d5722acf939bb8c8294a5101ca5e164a44098a2b4f2"
     },
     {
       "path": "docs/RESEARCH_MODEL_ROADMAP.md",
-      "sha256": "903303355e242b6dc93d6ebafa64d5dfe8d531e036d6dc43bd8323ce8fb846b9"
+      "sha256": "b3b425188f7688260600bec263718cd11c51aabf255b28a284fdc214ade88a9d"
     },
     {
       "path": "docs/audits/R00_OLD_MAX_SOURCE_AUDIT.md",
@@ -277,11 +277,11 @@
     },
     {
       "path": "docs/ARCHITECTURE_PHASE1.md",
-      "sha256": "82b5dde7d435dc0b9314a5881e38ffa74ada5cd75b2432e44b40c7a0c8bb17b0"
+      "sha256": "1f57b76667996bc61ab4865d6fd877fcd6565478e65fa1615761d1c6ce128d76"
     },
     {
       "path": "docs/ARTIFACT_CONTROL_PLANE.md",
-      "sha256": "858bb46bcc1eca16cc4d230a10b8b43aa95eac967f003d8fedc61f347b773778"
+      "sha256": "eff56e67650a1f015ec2a5722c940c11dbd877feeb9e23bcbe80dbfa7e458739"
     },
     {
       "path": "ea/baseline/manifest.json",
