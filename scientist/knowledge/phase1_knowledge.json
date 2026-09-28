@@ -161,7 +161,7 @@
       "classification": "EXISTING",
       "facts": [
         "Previous-epoch R00 is accepted historical evidence; the current fresh epoch has no Research project and current-epoch R00 has not started.",
-        "Previous-epoch R01 source/runtime repair has historical targeted re-audit PASS; current-epoch R01 is blocked/not started until immutable current-R00 lineage replaces retired hardcoded identifiers, and R02 remains blocked.",
+        "Previous-epoch R01 source/runtime repair has historical targeted re-audit PASS; current source resolves R01 from the latest accepted current R00 immutable lineage without retired epoch IDs, while real current-epoch R01 remains blocked/not started until a new R00 exists and Owner authorizes execution; R02 remains blocked.",
         "The system owns deterministic scientific PASS/FAIL and may recommend; the Owner selects which qualified candidates advance.",
         "No Research gate automatically opens the next gate, creates a Strategy Challenger, or mutates Champion authority."
       ],
@@ -237,12 +237,12 @@
     "M07 accepted causal true-MTF Strategy epoch",
     "M08 accepted qualified pool, multi-Challenger selection, Backtest results and Artifact control plane",
     "Historical previous-epoch R00 Research Authority Foundation accepted; current fresh Research epoch has no current Research project and R00 has not started",
-    "Historical previous-epoch R01 Dataset + Label + Leakage Foundation implementation/runtime repair has targeted re-audit PASS; current-epoch R01 remains blocked/not started until current-R00 immutable lineage binding replaces retired hardcoded identifiers",
+    "Historical previous-epoch R01 Dataset + Label + Leakage Foundation implementation/runtime repair has targeted re-audit PASS; current source binds R01 to the latest accepted current R00 immutable lineage without retired epoch IDs; real current-epoch R01 remains blocked/not started",
     "V6 Strategy Optimizer source candidate with 17 dimensions including an exact Owner-grid InpRiskPct 0.5%..5.0% step 0.5% that refinement cannot shift off-grid, plus fixed 5.0% daily-loss authority for new jobs"
   ],
   "planned_capabilities": [
     "Current-epoch R00 initialization and acceptance under the fresh epoch before any real R01 execution",
-    "Repair current-R00 immutable lineage binding before any Owner-authorized real R01 scientific execution and acceptance",
+    "Validate current-R00 immutable lineage binding before any Owner-authorized real R01 scientific execution and acceptance",
     "R02 Discovery / Cheap Screen only after separate explicit Owner authorization following accepted R01"
   ],
   "project": {
@@ -441,7 +441,7 @@
     },
     {
       "path": "backend/max_backend/research_r01_service.py",
-      "sha256": "4389726c4baa866b76e1df1ad72eb687c865929355b380454dcd23b14aedb430"
+      "sha256": "38ac4afd360918e27912795e2cd7c1946048ca3642d230273e11a7fc97e1a5a1"
     },
     {
       "path": "backend/max_backend/scientist_knowledge.py",

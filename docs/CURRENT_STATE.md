@@ -3,20 +3,20 @@
 # CURRENT STATE
 
 Last updated: generated from current specs
-Authority verified at SHA: ce66946efb23cd479b43239087601ad30c8ac239
+Authority verified at SHA: 08f5a741412a2f5c69478b157529245b9a9a260e
 Governance profile: strict
 
 ## Current phase
-Phase: H0_HOSTED_GOVERNANCE_REBASE
-Status: H0_CLOSEOUT_CANDIDATE
+Phase: R01_CURRENT_LINEAGE_REPAIR
+Status: ACTIVE
 
 ## Source
 Repository: maxqstudio/max-trading-agent
-Branch: work/hosted-governance-rebase
+Branch: work/r01-current-lineage
 Authoritative SHA: external final acceptance evidence
-Last accepted SHA: ce66946efb23cd479b43239087601ad30c8ac239
+Last accepted SHA: 08f5a741412a2f5c69478b157529245b9a9a260e
 Current candidate SHA: external final acceptance evidence
-Current source digest: d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0
+Current source digest: 205e1014611af244e5752da817a13e755fc04e18e9e42443ca57f1b14a75b34e
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
@@ -37,44 +37,36 @@ Current sequence session: docs/sequence/sessions/ (8 current DURING sessions)
 SEQUENCE_SYNC: PASS
 
 ## Proven
-- Hosted H0 Windows CI run 36364128446 at tested SHA 17b69115ab179adc63c4dc17e943d3fa257063f1 passed source-only/public-secret policy, Skill Workflow provenance and STRICT selftest, project governance, backend 488 PASS, frontend 53 PASS across 10 files, lint/build/npm dependency tree PASS and pip check PASS.
-- Current Skill Workflow main is exactly 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f, matching the project pin at H0 start.
-- Previous-epoch R00 acceptance, Strategy Champion STRAT-20260924-115344-R01-P8912 and prior Research project are historical evidence only and are not current Research authority.
-- The source-governed fresh epoch declares Strategy Champion NONE, active Challenger 0, active Optimizer job NONE, current Research project NONE, R00 NOT STARTED, R01 BLOCKED / NOT STARTED, R02 BLOCKED / NOT STARTED, model training 0, ONNX 0 and Research Challenger 0.
-- Historical exact-16D and current exact-17D Challenger compatibility is executable-regression covered.
-- Durable consumed optimizer sources are excluded from the active qualified pool.
-- Former Champion tenure remains FORMER history and does not automatically reactivate its source Challenger.
-- Research sample configuration is editable current state and execution snapshots are immutable per run.
-- Protected outcome feedback is non-adaptive.
+- H0 is merged to main at 08f5a741412a2f5c69478b157529245b9a9a260e and Windows CI run 36366607560 passed source-only/security, Skill Workflow, governance, backend, frontend and dependency gates.
+- Skill Workflow main advanced by one compatible governance-only commit to 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720; this phase adopts that exact authority and re-vendors its changed tools byte-identically.
+- Previous-epoch R00/Champion/Research identifiers remain historical evidence only and are not current product-source authority.
+- The fresh source-governed epoch still declares Strategy Champion NONE, current Research project NONE, R00 NOT STARTED, R01 BLOCKED / NOT STARTED, R02 BLOCKED / NOT STARTED, model training 0, ONNX 0 and Research Challenger 0.
 
 ## Not proven
-- Any real current-epoch runtime database bootstrap or operational row counts on Owner PC.
-- Real MT5 detection, MetaEditor compile, Strategy Tester, broker data, terminal data root or filesystem deployment.
-- Real browser E2E on the final Owner-PC checkout.
+- R01 current-lineage source repair until exact-branch Windows CI and targeted negative tests pass.
 - Any current-epoch R00 or real R01 scientific result.
+- Any real Owner-PC runtime/bootstrap/MT5/browser behavior.
 - Any R02 execution, model training, ONNX generation or Research Challenger creation.
 
 ## Known blockers
-- backend/max_backend/research_r01_service.py still binds R01 to retired previous-epoch hardcoded R00/Strategy identifiers; current-epoch R01 must remain blocked until repaired with immutable current-R00 lineage.
-- Real MetaTrader 5, MetaEditor, broker/data-root, filesystem deployment and browser E2E are intentionally NOT_PROVEN until final Owner-PC acceptance.
+- The fresh source-governed epoch still has no accepted current R00; therefore real R01 remains BLOCKED / NOT STARTED after this source repair.
+- Real MetaTrader 5, MetaEditor, broker/data-root, filesystem deployment and browser E2E remain NOT_PROVEN until final Owner-PC acceptance.
 
 ## Known defects
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Remove the temporary H0 regeneration workflow after generated outputs are synchronized, then run final exact-branch Windows CI.
-- Merge H0 to main only after final branch CI is green, then revalidate main.
-- After H0 main revalidation, repair R01 current-R00 immutable lineage binding with negative wrong-ID/wrong-parent/wrong-Strategy/unaccepted/tampered/cross-epoch tests.
-- Continue source/design/test roadmap on GitHub; defer Owner-PC final runtime acceptance until GitHub development closure.
+- Verify the R01 current-R00 immutable lineage repair with targeted fail-closed tests and the full Windows CI regression.
+- Regenerate Project Truth Compiler, sequence and Scientist knowledge outputs from this phase authority.
+- Merge only after all hosted gates pass, then revalidate main; continue source roadmap without Owner-PC testing.
 
 ## Explicitly blocked
 - Owner-PC testing between ordinary GitHub development phases.
-- Any real Research execution, including a new current-epoch R00 or R01.
-- R01 execution until current accepted R00 lineage binding replaces retired hardcoded previous-epoch identifiers.
+- Any real Research execution, including current-epoch R00 or R01.
 - R02 execution.
 - Model training.
 - ONNX generation.
 - Research Challenger creation.
 - Strategy Champion mutation.
 - Live trading.
-- Unrelated product behavior, algorithm, EA, or database-schema changes during H0.
+- Unrelated Strategy, optimizer, EA, database-schema, or UI refactors during the R01 lineage repair.

@@ -2,7 +2,7 @@
 
 # ARCHITECTURE
 
-Current source digest: d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0
+Current source digest: 205e1014611af244e5752da817a13e755fc04e18e9e42443ca57f1b14a75b34e
 
 ## Components
 
@@ -17,7 +17,7 @@ Current source digest: d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2
 | mt5 | MT5/MetaEditor execution boundary | Provide Strategy Tester simulation/optimization and MQL5 compile/execution truth. | ea/baseline/Max_MTF.mq5 | MetaTrader 5 terminal, MetaEditor |
 | operational-state | SQLite operational state | Persist mutable Strategy/Research/Scientist operational state through owning stores and transactions. | state/max.db | backend store modules |
 | immutable-evidence | Immutable evidence/artifact layer | Represent runtime scientific/execution lineage owned by domain contracts; evidence/ and artifacts/ are runtime-only and intentionally absent from the public source repository. | artifacts/, evidence/, docs/audits/ | domain services and artifact registry |
-| governance | Current project governance | Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth for the GitHub-hosted workflow. | PROJECT_PROFILE.yaml, .workflow/*.json, .workflow/workflows/*.json, .workflow/tools/*.py, docs/sequence/sessions/*.json, docs/sequence/generated/*.actual.json, docs/sequence/generated/*.actual.mmd | Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f, GitHub Actions windows-latest hosted validation |
+| governance | Current project governance | Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth for the GitHub-hosted workflow. | PROJECT_PROFILE.yaml, .workflow/*.json, .workflow/workflows/*.json, .workflow/tools/*.py, docs/sequence/sessions/*.json, docs/sequence/generated/*.actual.json, docs/sequence/generated/*.actual.mmd | Skill Workflow 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720, GitHub Actions windows-latest hosted validation |
 
 ## Data flow
 
@@ -40,9 +40,9 @@ Current source digest: d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2
 
 ## Observed implementation inventory
 
-Source files: 128
-Source lines: 61771
-Languages: PowerShell=2, Python=102, TypeScript=3, TypeScript/React=21
+Source files: 129
+Source lines: 61954
+Languages: PowerShell=2, Python=103, TypeScript=3, TypeScript/React=21
 
 Structural facts come from the code extractor. Component meaning comes from
 .workflow/architecture.json.

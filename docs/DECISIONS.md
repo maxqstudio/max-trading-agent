@@ -132,7 +132,7 @@ Rationale: Superseded by D-017 after Skill main added explicit required self-tes
 
 ## D-017 — Current Skill Workflow authority with explicit self-test PASS markers
 
-Status: CURRENT
+Status: SUPERSEDED
 
 MAX uses Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f; .workflow/tools are byte-identical to that exact current main; generated canonical governance docs remain under docs/; sequence mode remains DURING/CURRENT without retrospective plans.
 
@@ -185,3 +185,19 @@ Status: CURRENT
 Runtime databases, evidence, artifacts, optimizer outputs, Research datasets, Owner terminal state and real credentials are excluded from the public repository; tests must use synthetic fixtures.
 
 Rationale: Public-source reproducibility and credential/privacy safety require runtime/private state to remain outside Git authority.
+
+## D-021 — Adopt deterministic-LF Skill Workflow authority
+
+Status: CURRENT
+
+MAX adopts Skill Workflow 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720; the upstream delta from 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f enforces byte-exact LF writes for acceptance.json and validates that contract in STRICT selftest.
+
+Rationale: Current-main governance authority must be adopted without MAX-local compatibility patches.
+
+## D-022 — R01 binds to latest accepted current R00
+
+Status: CURRENT
+
+R01 derives its parent from the latest Research project in current runtime authority and fails closed unless that R00 is terminal PASS_WAITING_OWNER with verified frozen integrity and exact Research/Strategy/parent-authority bindings. Retired previous-epoch IDs are not product constants.
+
+Rationale: This preserves immutable R00 lineage while allowing future fresh epochs to proceed without source edits or hardcoded Research/Champion identities.
