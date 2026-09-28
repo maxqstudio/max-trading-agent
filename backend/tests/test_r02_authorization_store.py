@@ -20,6 +20,7 @@ from max_backend.research_r02_store import (
     commit_r02_terminal_outcomes,
     get_r02_discovery_block,
     get_r02_outcome_ledger,
+    validate_r02_integrity,
 )
 from max_backend.research_store import create_authorization, create_research, update_gate_state
 from max_backend.workflow_store import migrate_current
@@ -677,3 +678,130 @@ def test_terminal_rows_are_immutable_append_only_and_do_not_mutate_science_count
     assert int(project["onnx_count"]) == 0
     assert int(project["research_challenger_count"]) == 0
     assert project["champion_mutation"] == "NONE"
+
+
+
+def _drop_trigger(conn, name: str) -> None:
+    conn.execute(f"DROP TRIGGER IF EXISTS {name}")
+
+
+def test_r02_integrity_verifies_frozen_authority(tmp_path: Path) -> None:
+    db, _block = _frozen_block(tmp_path)
+    result = validate_r02_integrity(RESEARCH_ID, path=db)
+    assert result["status"] == "VERIFIED_FROZEN"
+    assert result["terminal_present"] is False
+    assert all(result["checks"].values())
+
+
+def test_r02_integrity_verifies_complete_outcome_authority(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    commit_r02_terminal_outcomes(RESEARCH_ID, _outcomes(block), path=db)
+    result = validate_r02_integrity(RESEARCH_ID, path=db)
+    assert result["status"] == "VERIFIED_COMPLETE"
+    assert result["terminal_present"] is True
+    assert all(result["checks"].values())
+
+
+def test_r02_integrity_detects_authorization_tamper(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    with connect(db) as conn:
+        _drop_trigger(conn, "research_r02_authorization_no_update")
+        conn.execute(
+            """
+            UPDATE research_r02_authorizations
+            SET payload_sha256=?
+            WHERE authorization_id=?
+            """,
+            ("0" * 64, block["authorization_id"]),
+        )
+    result = validate_r02_integrity(RESEARCH_ID, path=db)
+    assert result["status"] == "INTEGRITY_FAIL"
+    assert "authorization_integrity" in result["failures"]
+    assert "frozen_plan_integrity" in result["failures"]
+
+
+def test_r02_integrity_detects_candidate_spec_tamper(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    candidate_id = block["candidates"][0]["candidate_id"]
+    with connect(db) as conn:
+        _drop_trigger(conn, "research_r02_candidate_no_update")
+        conn.execute(
+            """
+            UPDATE research_r02_candidate_specs
+            SET seed=999
+            WHERE candidate_id=?
+            """,
+            (candidate_id,),
+        )
+    result = validate_r02_integrity(RESEARCH_ID, path=db)
+    assert result["status"] == "INTEGRITY_FAIL"
+    assert "candidate_specs_integrity" in result["failures"]
+
+
+def test_r02_integrity_detects_outcome_tamper(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    ledger = commit_r02_terminal_outcomes(
+        RESEARCH_ID,
+        _outcomes(block),
+        path=db,
+    )
+    outcome_id = ledger["outcomes"][0]["outcome_id"]
+    with connect(db) as conn:
+        _drop_trigger(conn, "research_r02_outcome_no_update")
+        conn.execute(
+            """
+            UPDATE research_r02_candidate_outcomes
+            SET outcome_sha256=?
+            WHERE outcome_id=?
+            """,
+            ("0" * 64, outcome_id),
+        )
+    result = validate_r02_integrity(RESEARCH_ID, path=db)
+    assert result["status"] == "INTEGRITY_FAIL"
+    assert "outcome_integrity" in result["failures"]
+    assert "terminal_integrity" in result["failures"]
+
+
+def test_r02_integrity_detects_terminal_tamper(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    ledger = commit_r02_terminal_outcomes(
+        RESEARCH_ID,
+        _outcomes(block),
+        path=db,
+    )
+    terminal_id = ledger["terminal"]["terminal_id"]
+    with connect(db) as conn:
+        _drop_trigger(conn, "research_r02_terminal_no_update")
+        conn.execute(
+            """
+            UPDATE research_r02_block_terminals
+            SET screen_pass_count=99
+            WHERE terminal_id=?
+            """,
+            (terminal_id,),
+        )
+    result = validate_r02_integrity(RESEARCH_ID, path=db)
+    assert result["status"] == "INTEGRITY_FAIL"
+    assert "terminal_integrity" in result["failures"]
+
+
+def test_r02_integrity_detects_partial_outcomes_without_terminal(
+    tmp_path: Path,
+) -> None:
+    db, block = _frozen_block(tmp_path)
+    ledger = commit_r02_terminal_outcomes(
+        RESEARCH_ID,
+        _outcomes(block),
+        path=db,
+    )
+    terminal_id = ledger["terminal"]["terminal_id"]
+    with connect(db) as conn:
+        _drop_trigger(conn, "research_r02_terminal_no_delete")
+        conn.execute(
+            "DELETE FROM research_r02_block_terminals WHERE terminal_id=?",
+            (terminal_id,),
+        )
+    result = validate_r02_integrity(RESEARCH_ID, path=db)
+    assert result["status"] == "INTEGRITY_FAIL"
+    assert "outcome_integrity" in result["failures"]
+    assert "terminal_integrity" in result["failures"]

@@ -45,6 +45,11 @@ def _install(
     monkeypatch.setattr(r02, "verify_no_training_side_effects", lambda *_args, **_kwargs: deepcopy(current_side_effects))
     monkeypatch.setattr(r02, "get_r02_discovery_block", lambda *_args, **_kwargs: None)
     monkeypatch.setattr(r02, "get_r02_terminal", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(
+        r02,
+        "validate_r02_integrity",
+        lambda *_args, **_kwargs: {"status": "VERIFIED_FROZEN"},
+    )
 
 
 def test_fresh_epoch_without_research_is_blocked(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -217,3 +222,36 @@ def test_terminal_outcome_ledger_reports_complete_without_qualification(
     assert result["qualified_pool_admission_authority"] == "R03_FULL_WFA_ONLY"
     assert result["r02_executable"] is False
     assert result["model_training"] == 0
+
+
+
+def test_frozen_r02_integrity_failure_blocks_preflight(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _install(monkeypatch)
+    monkeypatch.setattr(
+        r02,
+        "get_r02_discovery_block",
+        lambda research_id, **_kwargs: {
+            "block_id": "RDISC-TAMPERED",
+            "authorization_id": "RAUTH-R02-TAMPERED",
+            "plan_id": "RPLAN-TAMPERED",
+            "plan_sha256": "b" * 64,
+            "candidate_count": 3,
+            "compute_budget": {
+                "value": 120,
+                "unit": "FIT_SECONDS",
+                "execution_semantics": "FROZEN_ONLY_NOT_EXECUTED",
+            },
+        },
+    )
+    monkeypatch.setattr(
+        r02,
+        "validate_r02_integrity",
+        lambda *_args, **_kwargs: {
+            "status": "INTEGRITY_FAIL",
+            "failures": ["candidate_specs_integrity"],
+        },
+    )
+    with pytest.raises(RuntimeError, match="R02_INTEGRITY_REQUIRED"):
+        r02.r02_preflight(path=Path("unused.db"))

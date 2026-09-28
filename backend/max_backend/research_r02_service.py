@@ -19,6 +19,7 @@ from .research_r02_store import (
     get_r02_authorization,
     get_r02_discovery_block,
     get_r02_terminal,
+    validate_r02_integrity,
 )
 from .optimizer_store import utc_now
 from .research_contract import stable_hash
@@ -92,6 +93,15 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
 
     frozen = get_r02_discovery_block(research_id, path=path)
     if frozen is not None:
+        r02_integrity = validate_r02_integrity(
+            research_id,
+            path=path,
+        )
+        if str(r02_integrity.get("status") or "") not in {
+            "VERIFIED_FROZEN",
+            "VERIFIED_COMPLETE",
+        }:
+            raise RuntimeError("R02_INTEGRITY_REQUIRED")
         terminal = get_r02_terminal(research_id, path=path)
         if terminal is not None:
             return {

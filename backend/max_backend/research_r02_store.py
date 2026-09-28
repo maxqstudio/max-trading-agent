@@ -9,7 +9,8 @@ from .config import DATABASE_PATH
 from .db import connect
 from .optimizer_store import utc_now
 from .research_contract import candidate_id as derive_candidate_id, stable_hash
-from .research_r02_outcome import build_terminal_manifest
+from .research_r02_contract import build_discovery_plan
+from .research_r02_outcome import build_candidate_outcome, build_terminal_manifest
 from .workflow_store import migrate_current
 
 
@@ -617,3 +618,278 @@ def commit_r02_terminal_outcomes(
     if len(ledger["outcomes"]) != int(ledger["block"]["candidate_count"]):
         raise RuntimeError("R02_OUTCOME_LEDGER_INCOMPLETE")
     return ledger
+
+
+
+def validate_r02_integrity(
+    research_id: str,
+    *,
+    path: Path = DATABASE_PATH,
+) -> dict[str, Any]:
+    migrate_current(path)
+    research_id = str(research_id or "").strip()
+    if not research_id:
+        raise ValueError("R02_INTEGRITY_RESEARCH_ID_REQUIRED")
+
+    failures: list[str] = []
+    checks: dict[str, bool] = {}
+
+    try:
+        block = get_r02_discovery_block(research_id, path=path)
+    except Exception:
+        return {
+            "status": "INTEGRITY_FAIL",
+            "research_id": research_id,
+            "checks": {"block_readable": False},
+            "failures": ["block_readable"],
+        }
+    if block is None:
+        return {
+            "status": "NOT_STARTED",
+            "research_id": research_id,
+            "checks": {},
+            "failures": [],
+        }
+
+    checks["block_readable"] = True
+    authorization: dict[str, Any] | None = None
+    try:
+        authorization = get_r02_authorization(
+            str(block["authorization_id"]),
+            path=path,
+        )
+        if authorization is None:
+            raise RuntimeError("R02_AUTHORIZATION_MISSING")
+        _validate_authorization_record(authorization)
+        checks["authorization_integrity"] = True
+    except Exception:
+        checks["authorization_integrity"] = False
+        failures.append("authorization_integrity")
+
+    candidate_rows = list(block.get("candidates") or [])
+    candidate_specs: list[dict[str, Any]] = []
+    candidate_ids: list[str] = []
+    candidate_integrity = (
+        len(candidate_rows) == int(block.get("candidate_count") or 0)
+        and [int(row.get("ordinal", -1)) for row in candidate_rows]
+        == list(range(len(candidate_rows)))
+    )
+    for row in candidate_rows:
+        spec = row.get("spec")
+        if not isinstance(spec, dict):
+            candidate_integrity = False
+            continue
+        candidate_id = str(row.get("candidate_id") or "")
+        if (
+            str(row.get("block_id") or "") != str(block.get("block_id") or "")
+            or str(row.get("spec_sha256") or "") != stable_hash(spec)
+            or derive_candidate_id(spec) != candidate_id
+            or str(row.get("model_family") or "")
+            != str(spec.get("model_family") or "")
+            or int(row.get("seed", -1)) != int(spec.get("seed", -2))
+        ):
+            candidate_integrity = False
+        candidate_specs.append(deepcopy(spec))
+        candidate_ids.append(candidate_id)
+    checks["candidate_specs_integrity"] = candidate_integrity
+    if not candidate_integrity:
+        failures.append("candidate_specs_integrity")
+
+    plan: dict[str, Any] | None = None
+    plan_integrity = False
+    if candidate_integrity and candidate_specs:
+        try:
+            first = candidate_specs[0]
+            raw_budget = deepcopy(block["compute_budget"])
+            raw_budget.pop("execution_semantics", None)
+            plan = build_discovery_plan(
+                {
+                    "research_id": research_id,
+                    "r01_output_manifest_sha256": str(
+                        block["r01_output_manifest_sha256"]
+                    ),
+                    "feature_contract": str(first["feature_contract"]),
+                    "label_contract": str(first["label_contract"]),
+                    "parent_lineage": deepcopy(first["parent_lineage"]),
+                    "candidate_count": int(block["candidate_count"]),
+                    "compute_budget": raw_budget,
+                    "candidates": candidate_specs,
+                }
+            )
+            plan_integrity = bool(
+                str(plan["plan_id"]) == str(block["plan_id"])
+                and str(plan["plan_sha256"]) == str(block["plan_sha256"])
+                and list(plan["candidate_ids"]) == candidate_ids
+                and plan["compute_budget"] == block["compute_budget"]
+            )
+            if authorization is not None:
+                resolved_research_id, resolved_block_id, _ = (
+                    _validated_freeze_identity(
+                        authorization=authorization,
+                        plan=plan,
+                    )
+                )
+                plan_integrity = bool(
+                    plan_integrity
+                    and resolved_research_id == research_id
+                    and resolved_block_id == str(block["block_id"])
+                )
+        except Exception:
+            plan_integrity = False
+    checks["frozen_plan_integrity"] = plan_integrity
+    if not plan_integrity:
+        failures.append("frozen_plan_integrity")
+
+    r01_binding_ok = False
+    try:
+        with connect(path) as conn:
+            r01 = conn.execute(
+                """
+                SELECT state,output_manifest_sha
+                FROM research_r01_runs
+                WHERE research_id=?
+                """,
+                (research_id,),
+            ).fetchone()
+        r01_binding_ok = bool(
+            r01 is not None
+            and str(r01["state"]) == "PASS_WAITING_OWNER"
+            and str(r01["output_manifest_sha"] or "").lower()
+            == str(block["r01_output_manifest_sha256"]).lower()
+        )
+    except Exception:
+        r01_binding_ok = False
+    checks["r01_binding_integrity"] = r01_binding_ok
+    if not r01_binding_ok:
+        failures.append("r01_binding_integrity")
+
+    try:
+        ledger = get_r02_outcome_ledger(research_id, path=path)
+    except Exception:
+        ledger = None
+        checks["outcome_ledger_readable"] = False
+        failures.append("outcome_ledger_readable")
+    else:
+        checks["outcome_ledger_readable"] = True
+
+    outcome_integrity = True
+    terminal_integrity = True
+    terminal_present = False
+    if ledger is None:
+        outcome_integrity = False
+        terminal_integrity = False
+    else:
+        rows = list(ledger.get("outcomes") or [])
+        terminal = ledger.get("terminal")
+        terminal_present = terminal is not None
+        if terminal is None:
+            outcome_integrity = len(rows) == 0
+            terminal_integrity = len(rows) == 0
+        else:
+            if len(rows) != len(candidate_ids):
+                outcome_integrity = False
+            requests: list[dict[str, Any]] = []
+            budget_unit = str(block["compute_budget"].get("unit") or "")
+            for row, expected_candidate_id in zip(rows, candidate_ids):
+                payload = row.get("outcome")
+                if not isinstance(payload, dict):
+                    outcome_integrity = False
+                    continue
+                request = {
+                    "candidate_id": payload.get("candidate_id"),
+                    "status": payload.get("status"),
+                    "metrics": deepcopy(payload.get("metrics")),
+                    "compute_consumed": deepcopy(
+                        payload.get("compute_consumed")
+                    ),
+                    "failure_code": payload.get("failure_code"),
+                }
+                try:
+                    rebuilt = build_candidate_outcome(
+                        request,
+                        block_id=str(block["block_id"]),
+                        candidate_ids=candidate_ids,
+                        budget_unit=budget_unit,
+                    )
+                except Exception:
+                    outcome_integrity = False
+                    continue
+                if (
+                    str(row.get("block_id") or "")
+                    != str(block["block_id"])
+                    or str(row.get("candidate_id") or "")
+                    != expected_candidate_id
+                    or str(row.get("status") or "")
+                    != str(rebuilt["status"])
+                    or str(row.get("outcome_id") or "")
+                    != str(rebuilt["outcome_id"])
+                    or str(row.get("outcome_sha256") or "")
+                    != str(rebuilt["outcome_sha256"])
+                    or payload != rebuilt
+                ):
+                    outcome_integrity = False
+                requests.append(request)
+
+            if outcome_integrity:
+                try:
+                    rebuilt_terminal = build_terminal_manifest(
+                        block_id=str(block["block_id"]),
+                        candidate_ids=candidate_ids,
+                        compute_budget=deepcopy(block["compute_budget"]),
+                        outcome_requests=requests,
+                    )
+                    terminal_integrity = bool(
+                        str(terminal.get("terminal_id") or "")
+                        == str(rebuilt_terminal["terminal_id"])
+                        and str(terminal.get("block_id") or "")
+                        == str(block["block_id"])
+                        and str(terminal.get("state") or "")
+                        == "COMPLETE_WAITING_OWNER"
+                        and str(
+                            terminal.get("outcome_manifest_sha256") or ""
+                        )
+                        == str(
+                            rebuilt_terminal["outcome_manifest_sha256"]
+                        )
+                        and int(terminal.get("candidate_count", -1))
+                        == int(rebuilt_terminal["candidate_count"])
+                        and int(terminal.get("screen_pass_count", -1))
+                        == int(rebuilt_terminal["screen_pass_count"])
+                        and int(terminal.get("screen_fail_count", -1))
+                        == int(rebuilt_terminal["screen_fail_count"])
+                        and int(
+                            terminal.get("execution_error_count", -1)
+                        )
+                        == int(
+                            rebuilt_terminal["execution_error_count"]
+                        )
+                        and terminal.get("compute_consumed")
+                        == rebuilt_terminal["compute_consumed"]
+                    )
+                except Exception:
+                    terminal_integrity = False
+            else:
+                terminal_integrity = False
+
+    checks["outcome_integrity"] = outcome_integrity
+    if not outcome_integrity:
+        failures.append("outcome_integrity")
+    checks["terminal_integrity"] = terminal_integrity
+    if not terminal_integrity:
+        failures.append("terminal_integrity")
+
+    status = "INTEGRITY_FAIL"
+    if not failures:
+        status = (
+            "VERIFIED_COMPLETE"
+            if terminal_present
+            else "VERIFIED_FROZEN"
+        )
+    return {
+        "status": status,
+        "research_id": research_id,
+        "block_id": str(block["block_id"]),
+        "terminal_present": terminal_present,
+        "checks": checks,
+        "failures": failures,
+    }
