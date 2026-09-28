@@ -74,9 +74,9 @@
     },
     {
       "id": "GOV-004",
-      "status": "FIXED_PENDING_HOSTED_CI",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
       "summary": "Duplicate D-018/D-019/D-020 decision identifiers from H0 migration",
-      "evidence": "R02 source-foundation governance keeps original hosted-workflow/final-runtime/public-source decisions, renumbers distinct duplicated authority/Windows-CI decisions, and removes the semantically duplicate public-source row; hosted validation pending."
+      "evidence": "Decision IDs are unique on the R02 candidate; Windows CI run 36374307305 passed Project Truth/sequence governance at ee5e93cb039b37294452ba42239991514a3c80a5."
     }
   ],
   "schema_version": 1

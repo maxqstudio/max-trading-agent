@@ -208,13 +208,14 @@
       ],
       "id": "TRUTH-R02-BLOCK-001",
       "runtime_evidence": [
+        "HOSTED_R02_SOURCE_FOUNDATION_RUN_36374307305",
         "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
       ],
       "source_owners": [
         "backend/max_backend/research_r02_service.py::r02_preflight",
         "backend/max_backend/research_r02_contract.py::build_discovery_plan"
       ],
-      "status": "NOT_PROVEN",
+      "status": "PASS",
       "tests": [
         "backend/tests/test_r02_preflight.py",
         "backend/tests/test_r02_discovery_contract.py"
