@@ -233,3 +233,11 @@ Status: CURRENT
 The durable R02 candidate-outcome and block-terminal tables advance CURRENT_SCHEMA_VERSION from 11 to 12.
 
 Rationale: Append-only R02 outcome/terminal authority is a persistent schema change and must be distinguishable from the authorization-only schema epoch.
+
+## D-030 — Reconstruct R02 authority before trust
+
+Status: CURRENT
+
+R02 persisted authorization, frozen plan/candidate specs, outcome rows and terminal summary must be deterministically reconstructed and verified at authority read/write boundaries. SQLite immutability triggers are defense-in-depth, not sufficient proof against out-of-band database tamper.
+
+Rationale: A public/Owner runtime database can be modified outside application triggers; scientific authority must fail closed from content/binding integrity rather than row existence.

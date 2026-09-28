@@ -10,10 +10,10 @@ Governance profile: strict
 
 ## Repositories
 Repository: maxqstudio/max-trading-agent
-Active branch: work/r02-outcome-ledger
+Active branch: work/r02-integrity-read
 Current authoritative SHA: external final acceptance evidence
-Last accepted SHA: eb6192873eb518b9fe4c7f15d03600ca4ac1e73d
-Current source digest: 6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68
+Last accepted SHA: c913c47a45ca54d805470caf40bb54bf655b45c6
+Current source digest: 0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.

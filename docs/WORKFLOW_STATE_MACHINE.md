@@ -266,6 +266,51 @@ Authority: research_r01_service + research_source/dataset/leakage/store + immuta
 
 - Pre-terminal partial artifacts are cleaned or rejected; accepted parent/history remains immutable.
 
+## FLOW-R02-AUTHORITY-INTEGRITY — R02 persisted authority integrity verification
+
+Purpose: Reconstruct and verify frozen R02 and complete outcome authority before preflight presentation or terminal write acceptance.
+Critical: TRUE
+Entry condition: R01 is accepted and R02 may be not-started, frozen or complete; verification itself performs no scientific execution.
+Authority: R02 canonical plan/outcome contracts plus immutable SQLite authority; row presence alone is insufficient.
+
+### States
+
+- NOT_STARTED
+- VERIFIED_FROZEN
+- VERIFIED_COMPLETE
+- INTEGRITY_FAIL
+
+### Legal transitions
+
+| From | To | Action | Authority | Side effects |
+|---|---|---|---|---|
+| NOT_STARTED | VERIFIED_FROZEN | After a legal atomic freeze, reconstruct authorization/block/plan/candidate bindings before trust. | R02 canonical plan/outcome contracts plus immutable SQLite authority; row presence alone is insufficient. |  |
+| VERIFIED_FROZEN | VERIFIED_COMPLETE | After legal terminalization, rebuild every outcome and terminal manifest and verify row/json/hash/count/compute bindings. | R02 canonical plan/outcome contracts plus immutable SQLite authority; row presence alone is insufficient. |  |
+| VERIFIED_FROZEN | INTEGRITY_FAIL | Any tamper, orphan, malformed value, partial state or lineage mismatch fails closed. | R02 canonical plan/outcome contracts plus immutable SQLite authority; row presence alone is insufficient. |  |
+| VERIFIED_COMPLETE | INTEGRITY_FAIL | Any outcome/terminal tamper or binding mismatch fails closed. | R02 canonical plan/outcome contracts plus immutable SQLite authority; row presence alone is insufficient. |  |
+
+### Invariants
+
+- Row existence is never sufficient scientific authority.
+- Frozen authorization payload hash/id, plan hash/id, candidate spec hash/id/order and current R01 output binding are reconstructed.
+- Complete outcome rows and terminal authority are rebuilt from canonical contracts.
+- Orphan authorization and partial outcome state are integrity failures.
+- Preflight exposes FROZEN/COMPLETE only after verified integrity.
+- Terminal writes require verified frozen/complete authority.
+- Integrity verification creates no training, qualification, ONNX, Challenger or Champion authority.
+
+### Failure behavior
+
+- Integrity mismatch raises R02_INTEGRITY_REQUIRED at service/write boundaries; no fallback trusts corrupted rows.
+
+### Restart behavior
+
+- Verification is deterministic and read-only; retry recomputes from current persisted authority.
+
+### Rollback behavior
+
+- No rollback is needed for read verification; terminal writes remain separately atomic.
+
 ## FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER — R02 Cheap Screen immutable outcome ledger
 
 Purpose: Define deterministic append-only all-candidate outcome and terminal authority for a future executor without performing model fitting or granting qualification.

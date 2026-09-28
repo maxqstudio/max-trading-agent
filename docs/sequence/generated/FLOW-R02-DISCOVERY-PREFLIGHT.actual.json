@@ -333,6 +333,62 @@
       "to": "backend/max_backend/research_r02_contract.py::_require_sha256"
     },
     {
+      "action": "_require_text",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_outcome.py::_require_text"
+    },
+    {
+      "action": "stable_hash",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_contract.py::stable_hash"
+    },
+    {
+      "action": "_canonical_compute_consumed",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed"
+    },
+    {
+      "action": "_canonical_json",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_outcome.py::_canonical_json"
+    },
+    {
+      "action": "_require_text",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_outcome.py::_require_text"
+    },
+    {
+      "action": "stable_hash",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_contract.py::stable_hash"
+    },
+    {
+      "action": "_require_text",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_outcome.py::_require_text"
+    },
+    {
+      "action": "build_candidate_outcome",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome"
+    },
+    {
       "action": "r02_discovery_contract",
       "evidence": "STATIC",
       "from": "backend/max_backend/research_r02_service.py::_blocked",
@@ -382,6 +438,13 @@
       "to": "backend/max_backend/research_r02_store.py::get_r02_terminal"
     },
     {
+      "action": "validate_r02_integrity",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_store.py::validate_r02_integrity"
+    },
+    {
       "action": "verify_no_training_side_effects",
       "evidence": "STATIC",
       "from": "backend/max_backend/research_r02_service.py::r02_preflight",
@@ -394,6 +457,55 @@
       "from": "backend/max_backend/research_r02_service.py::r02_preflight",
       "resolver": "python_ast",
       "to": "backend/max_backend/research_store.py::latest_research"
+    },
+    {
+      "action": "stable_hash",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_contract.py::stable_hash"
+    },
+    {
+      "action": "stable_hash",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::_validate_plan_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_contract.py::stable_hash"
+    },
+    {
+      "action": "stable_hash",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_contract.py::stable_hash"
+    },
+    {
+      "action": "_validate_plan_integrity",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_store.py::_validate_plan_integrity"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::get_r02_authorization",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_decode_authorization",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::get_r02_authorization",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_store.py::_decode_authorization"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::get_r02_authorization",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
     },
     {
       "action": "connect",
@@ -412,6 +524,34 @@
     {
       "action": "connect",
       "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "get_r02_discovery_block",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_store.py::get_r02_discovery_block"
+    },
+    {
+      "action": "get_r02_terminal",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_store.py::get_r02_terminal"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
       "from": "backend/max_backend/research_r02_store.py::get_r02_terminal",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
@@ -420,6 +560,83 @@
       "action": "migrate_current",
       "evidence": "STATIC",
       "from": "backend/max_backend/research_r02_store.py::get_r02_terminal",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::validate_r02_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "stable_hash",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::validate_r02_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_contract.py::stable_hash"
+    },
+    {
+      "action": "build_discovery_plan",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::validate_r02_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_contract.py::build_discovery_plan"
+    },
+    {
+      "action": "build_candidate_outcome",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::validate_r02_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome"
+    },
+    {
+      "action": "build_terminal_manifest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::validate_r02_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest"
+    },
+    {
+      "action": "_validate_authorization_record",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::validate_r02_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_store.py::_validate_authorization_record"
+    },
+    {
+      "action": "_validated_freeze_identity",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::validate_r02_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_store.py::_validated_freeze_identity"
+    },
+    {
+      "action": "get_r02_authorization",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::validate_r02_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_store.py::get_r02_authorization"
+    },
+    {
+      "action": "get_r02_discovery_block",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::validate_r02_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_store.py::get_r02_discovery_block"
+    },
+    {
+      "action": "get_r02_outcome_ledger",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::validate_r02_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::validate_r02_integrity",
       "resolver": "python_ast",
       "to": "backend/max_backend/workflow_store.py::migrate_current"
     },
@@ -1014,12 +1231,57 @@
       "locator": "backend/max_backend/research_r02_contract.py::r02_discovery_contract"
     },
     {
+      "id": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed",
+      "language": "Python",
+      "line_end": 62,
+      "line_start": 44,
+      "locator": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed"
+    },
+    {
+      "id": "backend/max_backend/research_r02_outcome.py::_canonical_json",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_outcome.py::_canonical_json",
+      "language": "Python",
+      "line_end": 41,
+      "line_start": 22,
+      "locator": "backend/max_backend/research_r02_outcome.py::_canonical_json"
+    },
+    {
+      "id": "backend/max_backend/research_r02_outcome.py::_require_text",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_outcome.py::_require_text",
+      "language": "Python",
+      "line_end": 19,
+      "line_start": 15,
+      "locator": "backend/max_backend/research_r02_outcome.py::_require_text"
+    },
+    {
+      "id": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
+      "language": "Python",
+      "line_end": 132,
+      "line_start": 65,
+      "locator": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome"
+    },
+    {
+      "id": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
+      "language": "Python",
+      "line_end": 229,
+      "line_start": 135,
+      "locator": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest"
+    },
+    {
       "id": "backend/max_backend/research_r02_service.py::_blocked",
       "kind": "function",
       "label": "backend/max_backend/research_r02_service.py::_blocked",
       "language": "Python",
-      "line_end": 46,
-      "line_start": 27,
+      "line_end": 47,
+      "line_start": 28,
       "locator": "backend/max_backend/research_r02_service.py::_blocked"
     },
     {
@@ -1027,27 +1289,90 @@
       "kind": "function",
       "label": "backend/max_backend/research_r02_service.py::r02_preflight",
       "language": "Python",
-      "line_end": 182,
-      "line_start": 49,
+      "line_end": 208,
+      "line_start": 50,
       "locator": "backend/max_backend/research_r02_service.py::r02_preflight"
+    },
+    {
+      "id": "backend/max_backend/research_r02_store.py::_decode_authorization",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_store.py::_decode_authorization",
+      "language": "Python",
+      "line_end": 21,
+      "line_start": 17,
+      "locator": "backend/max_backend/research_r02_store.py::_decode_authorization"
+    },
+    {
+      "id": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "language": "Python",
+      "line_end": 69,
+      "line_start": 38,
+      "locator": "backend/max_backend/research_r02_store.py::_validate_authorization_record"
+    },
+    {
+      "id": "backend/max_backend/research_r02_store.py::_validate_plan_integrity",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_store.py::_validate_plan_integrity",
+      "language": "Python",
+      "line_end": 185,
+      "line_start": 155,
+      "locator": "backend/max_backend/research_r02_store.py::_validate_plan_integrity"
+    },
+    {
+      "id": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "language": "Python",
+      "line_end": 228,
+      "line_start": 188,
+      "locator": "backend/max_backend/research_r02_store.py::_validated_freeze_identity"
+    },
+    {
+      "id": "backend/max_backend/research_r02_store.py::get_r02_authorization",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_store.py::get_r02_authorization",
+      "language": "Python",
+      "line_end": 35,
+      "line_start": 24,
+      "locator": "backend/max_backend/research_r02_store.py::get_r02_authorization"
     },
     {
       "id": "backend/max_backend/research_r02_store.py::get_r02_discovery_block",
       "kind": "function",
       "label": "backend/max_backend/research_r02_store.py::get_r02_discovery_block",
       "language": "Python",
-      "line_end": 151,
-      "line_start": 123,
+      "line_end": 152,
+      "line_start": 124,
       "locator": "backend/max_backend/research_r02_store.py::get_r02_discovery_block"
+    },
+    {
+      "id": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger",
+      "language": "Python",
+      "line_end": 503,
+      "line_start": 473,
+      "locator": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger"
     },
     {
       "id": "backend/max_backend/research_r02_store.py::get_r02_terminal",
       "kind": "function",
       "label": "backend/max_backend/research_r02_store.py::get_r02_terminal",
       "language": "Python",
-      "line_end": 469,
-      "line_start": 446,
+      "line_end": 470,
+      "line_start": 447,
       "locator": "backend/max_backend/research_r02_store.py::get_r02_terminal"
+    },
+    {
+      "id": "backend/max_backend/research_r02_store.py::validate_r02_integrity",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_store.py::validate_r02_integrity",
+      "language": "Python",
+      "line_end": 931,
+      "line_start": 631,
+      "locator": "backend/max_backend/research_r02_store.py::validate_r02_integrity"
     },
     {
       "id": "backend/max_backend/research_service.py::_artifact_count",
@@ -1248,7 +1573,7 @@
       "locator": "backend/max_backend/workflow_store.py::migrate_current"
     }
   ],
-  "observed_head": "50f3f5f77632d81c7f9f1f794508723127e32e1f",
+  "observed_head": "3bd3ff62d138dbc0cff2aadc345b65cc1949f2aa",
   "schema_version": 1,
-  "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68"
+  "source_digest": "0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8"
 }

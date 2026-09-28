@@ -4,25 +4,22 @@
 
 ## Evidence boundary
 
-R02 Cheap Screen outcome-ledger source phase pre-closeout after numeric-overflow hardening. Exact branch Windows CI run 36413020299 passed at a178b4be591c42e88bb6a5ea3bcec1d113987dcb: backend 581 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, lint/build and npm dependency tree PASS. Targeted overflow run 36412664127 separately passed 84 R02 tests and proves huge integers fail closed as validation errors rather than escaping as OverflowError/HTTP 500. No trainer/executor or outcome-submit API exists; real model fitting/outcome, R03 qualification, ONNX, Research Challenger, Champion mutation, MT5 runtime and Owner-PC/browser E2E remain NOT_PROVEN.
+R02 authority-integrity source phase. Targeted Windows run 36439985226 passed 96 R02 tests at 8e7f834f989ccaf23ab188fc25cf3218d5dbc9e2. Frozen authorization/block/candidate authority and outcome/terminal authority are reconstructed and hash/binding checked on read; preflight and terminal writes fail closed on tamper, orphan authorization, malformed persisted values or partial outcome state. Full generated-governance/full-regression closeout remains pending. No real model fitting, Cheap Screen runtime result, R03 qualification, ONNX, Research Challenger, Champion mutation or Owner-PC/MT5/browser runtime is claimed.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68
+Current source digest: 0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
-| R02OL-01 | Every frozen candidate must have exactly one deterministic outcome before terminalization; missing, duplicate and unknown candidate outcomes fail closed. | research_r02_outcome.py + test_r02_outcome_contract.py + test_r02_authorization_store.py | PASS |
-| R02OL-02 | Outcome status is canonical SCREEN_PASS, SCREEN_FAIL or EXECUTION_ERROR; non-pass records retain an explicit failure code and all failures are persisted rather than filtered out. | research_r02_outcome.py + targeted tests | PASS |
-| R02OL-03 | Outcome metrics and compute accounting reject non-finite or unrepresentable numeric values; compute unit must match the frozen block and total consumption cannot exceed the frozen budget. | research_r02_contract.py + research_r02_outcome.py + targeted overflow regressions | PASS |
-| R02OL-04 | All candidate outcomes plus one COMPLETE_WAITING_OWNER terminal authority commit atomically; a mid-batch persistence fault leaves zero new outcome/terminal rows. | commit_r02_terminal_outcomes + fault-injection regression | PASS |
-| R02OL-05 | Exact terminal replay is idempotent while a different second terminal manifest is rejected. | test_r02_authorization_store.py | PASS |
-| R02OL-06 | Outcome and terminal rows are immutable/append-only and do not mutate model-training, ONNX, Research-Challenger or Champion counters. | SQLite triggers + test_r02_authorization_store.py | PASS |
-| R02OL-07 | Cheap Screen outcome and COMPLETE_WAITING_OWNER have zero scientific qualification authority; R03 Full WFA remains the only future Qualified Pool admission authority. | research_r02_outcome.py + r02_preflight + tests | PASS |
-| R02OL-08 | No trainer/model-fit implementation, outcome-submit API/UI, heavy ML dependency, ONNX, Challenger or Champion mutation is introduced in this slice. | source review + source-only/security CI | PASS |
-| R02OL-09 | Durable outcome/terminal persistence advances cumulative SQLite schema authority from 11 to 12. | schema.py + workflow_store.py + test_r02_authorization_store.py | PASS |
-| R02OL-10 | Scientist knowledge manifest hashes R02 outcome contract/store/service source so advisory context cannot drift. | scientist_knowledge.py + regenerated source_manifest.json | PASS |
-| R02OL-11 | Skill Workflow provenance/STRICT, Project Truth, cross-document consistency and sequence contracts remain synchronized. | Windows CI governance gates | PASS |
-| R02OL-12 | Full backend/frontend/source-only/security/dependency regression remains green. | Windows CI | PASS |
+| R02I-01 | Frozen R02 authorization payload hash/id, block identity/state, plan hash/id, candidate identities/spec hashes/order and accepted R01 output binding are reconstructed and verified before authority is trusted. | research_r02_store.py::validate_r02_integrity + test_r02_authorization_store.py | NOT_PROVEN |
+| R02I-02 | Complete outcome authority revalidates each persisted candidate outcome against its JSON/hash/row bindings and reconstructs the terminal manifest/counts/compute summary. | validate_r02_integrity + outcome/terminal tamper regressions | NOT_PROVEN |
+| R02I-03 | Orphan authorization without a Discovery block and partial outcomes without terminal authority fail closed rather than appearing NOT_STARTED or complete. | test_r02_authorization_store.py | NOT_PROVEN |
+| R02I-04 | Malformed persisted numeric/JSON values fail closed as integrity errors and do not escape preflight as unhandled HTTP-500 paths. | research_r02_service.py + malformed persisted-value regressions | NOT_PROVEN |
+| R02I-05 | R02 preflight returns frozen/complete authority only after integrity status VERIFIED_FROZEN or VERIFIED_COMPLETE. | research_r02_service.py::r02_preflight + test_r02_preflight.py | NOT_PROVEN |
+| R02I-06 | Terminal outcome writes are gated by current verified frozen/complete authority so a tampered block cannot be sealed into a new terminal. | commit_r02_terminal_outcomes + write-boundary tamper regression | NOT_PROVEN |
+| R02I-07 | Integrity verification adds no schema change, trainer, model fitting, qualification, ONNX, Challenger or Champion authority. | source review + source-only/security CI | NOT_PROVEN |
+| R02I-08 | Skill Workflow provenance/STRICT, Project Truth, sequence and Scientist knowledge projections remain synchronized. | Windows CI governance gates | NOT_PROVEN |
+| R02I-09 | Full backend/frontend/source-only/security/dependency regression remains green. | Windows CI | NOT_PROVEN |
 
 ## Test commands
 
@@ -50,7 +47,7 @@ Current source digest: 6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111
 ## Sequence contract evidence
 
 Sequence mode for this phase/session: DURING
-Sequence session contract: docs/sequence/sessions/ (11 current DURING sessions after R02 outcome-ledger flow)
+Sequence session contract: docs/sequence/sessions/ (12 current DURING sessions after R02 integrity flow)
 SEQUENCE_SYNC: PASS
 
 ## Project Truth Compiler evidence

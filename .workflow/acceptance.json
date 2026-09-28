@@ -17,57 +17,57 @@
   "human_comprehension_status": "PASS",
   "requirements": [
     {
+      "evidence": "research_r02_store.py::validate_r02_integrity + test_r02_authorization_store.py",
       "id": "R02I-01",
       "requirement": "Frozen R02 authorization payload hash/id, block identity/state, plan hash/id, candidate identities/spec hashes/order and accepted R01 output binding are reconstructed and verified before authority is trusted.",
-      "evidence": "research_r02_store.py::validate_r02_integrity + test_r02_authorization_store.py",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "validate_r02_integrity + outcome/terminal tamper regressions",
       "id": "R02I-02",
       "requirement": "Complete outcome authority revalidates each persisted candidate outcome against its JSON/hash/row bindings and reconstructs the terminal manifest/counts/compute summary.",
-      "evidence": "validate_r02_integrity + outcome/terminal tamper regressions",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "test_r02_authorization_store.py",
       "id": "R02I-03",
       "requirement": "Orphan authorization without a Discovery block and partial outcomes without terminal authority fail closed rather than appearing NOT_STARTED or complete.",
-      "evidence": "test_r02_authorization_store.py",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "research_r02_service.py + malformed persisted-value regressions",
       "id": "R02I-04",
       "requirement": "Malformed persisted numeric/JSON values fail closed as integrity errors and do not escape preflight as unhandled HTTP-500 paths.",
-      "evidence": "research_r02_service.py + malformed persisted-value regressions",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "research_r02_service.py::r02_preflight + test_r02_preflight.py",
       "id": "R02I-05",
       "requirement": "R02 preflight returns frozen/complete authority only after integrity status VERIFIED_FROZEN or VERIFIED_COMPLETE.",
-      "evidence": "research_r02_service.py::r02_preflight + test_r02_preflight.py",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "commit_r02_terminal_outcomes + write-boundary tamper regression",
       "id": "R02I-06",
       "requirement": "Terminal outcome writes are gated by current verified frozen/complete authority so a tampered block cannot be sealed into a new terminal.",
-      "evidence": "commit_r02_terminal_outcomes + write-boundary tamper regression",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "source review + source-only/security CI",
       "id": "R02I-07",
       "requirement": "Integrity verification adds no schema change, trainer, model fitting, qualification, ONNX, Challenger or Champion authority.",
-      "evidence": "source review + source-only/security CI",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "Windows CI governance gates",
       "id": "R02I-08",
       "requirement": "Skill Workflow provenance/STRICT, Project Truth, sequence and Scientist knowledge projections remain synchronized.",
-      "evidence": "Windows CI governance gates",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "Windows CI",
       "id": "R02I-09",
       "requirement": "Full backend/frontend/source-only/security/dependency regression remains green.",
-      "evidence": "Windows CI",
       "status": "NOT_PROVEN"
     }
   ],
@@ -77,41 +77,41 @@
       "status": "NOT_RUN",
       "tested_sha": null
     },
+    "regression": {
+      "backend_floor": 581,
+      "backend_status": "NOT_RUN",
+      "build": "NOT_RUN",
+      "frontend_files_floor": 10,
+      "frontend_status": "NOT_RUN",
+      "frontend_tests_floor": 53,
+      "lint": "NOT_RUN",
+      "npm_ls_all": "NOT_RUN",
+      "pip_check": "NOT_RUN"
+    },
+    "runtime": {
+      "browser_e2e": "NOT_PROVEN",
+      "mt5": "NOT_PROVEN",
+      "owner_pc": "NOT_PROVEN"
+    },
+    "schema_version": 12,
+    "scientific_state": {
+      "cheap_screen_runs": 0,
+      "current_research_project": "NONE",
+      "model_training": 0,
+      "onnx": 0,
+      "r00": "NOT STARTED",
+      "r01": "BLOCKED / NOT STARTED",
+      "r02": "BLOCKED / NOT STARTED",
+      "research_challenger": 0,
+      "strategy_champion": "NONE_SOURCE_GOVERNANCE"
+    },
+    "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720",
     "targeted": {
       "run_id": 36439985226,
       "status": "PASS",
       "tested_sha": "8e7f834f989ccaf23ab188fc25cf3218d5dbc9e2",
       "tests": 96
-    },
-    "regression": {
-      "backend_floor": 581,
-      "backend_status": "NOT_RUN",
-      "frontend_files_floor": 10,
-      "frontend_tests_floor": 53,
-      "frontend_status": "NOT_RUN",
-      "lint": "NOT_RUN",
-      "build": "NOT_RUN",
-      "npm_ls_all": "NOT_RUN",
-      "pip_check": "NOT_RUN"
-    },
-    "runtime": {
-      "owner_pc": "NOT_PROVEN",
-      "mt5": "NOT_PROVEN",
-      "browser_e2e": "NOT_PROVEN"
-    },
-    "schema_version": 12,
-    "scientific_state": {
-      "strategy_champion": "NONE_SOURCE_GOVERNANCE",
-      "current_research_project": "NONE",
-      "r00": "NOT STARTED",
-      "r01": "BLOCKED / NOT STARTED",
-      "r02": "BLOCKED / NOT STARTED",
-      "cheap_screen_runs": 0,
-      "model_training": 0,
-      "onnx": 0,
-      "research_challenger": 0
-    },
-    "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720"
+    }
   },
   "runtime_checks": [
     "NOT_RUN: real Owner-PC database/bootstrap.",
@@ -142,13 +142,13 @@
   "truth_gates": {
     "BEHAVIORAL_SYNC": "NOT_PROVEN",
     "CROSS_DOCUMENT_CONSISTENCY": "NOT_PROVEN",
-    "DOC_LAYOUT": "NOT_PROVEN",
-    "DOC_READABILITY": "NOT_PROVEN",
+    "DOC_LAYOUT": "PASS",
+    "DOC_READABILITY": "PASS",
     "DOC_SOURCE_TRACEABILITY": "NOT_PROVEN",
     "DOC_TEST_TRACEABILITY": "NOT_PROVEN",
     "HUMAN_COMPREHENSION": "NOT_PROVEN",
-    "PROJECT_DOCS_NORMALIZED": "NOT_PROVEN",
-    "PROJECT_DOCS_SYNC": "NOT_PROVEN",
+    "PROJECT_DOCS_NORMALIZED": "PASS",
+    "PROJECT_DOCS_SYNC": "PASS",
     "PROJECT_STATE_SYNC": "NOT_PROVEN",
     "PROVENANCE_SYNC": "NOT_PROVEN",
     "REFERENCE_SYNC": "NOT_PROVEN",

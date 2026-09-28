@@ -9,12 +9,12 @@
       "backend/max_backend/research_r01_service.py::prepare_r01_verified_source"
     ],
     "graph": "docs/sequence/generated/FLOW-R01-SOURCE-PIPELINE.actual.json",
-    "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68"
+    "source_digest": "0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8"
   },
   "critical": true,
-  "implementation_base_sha": "eb6192873eb518b9fe4c7f15d03600ca4ac1e73d",
+  "implementation_base_sha": "c913c47a45ca54d805470caf40bb54bf655b45c6",
   "mode": "DURING",
-  "phase": "R02_CHEAP_SCREEN_OUTCOME_LEDGER",
+  "phase": "R02_AUTHORITY_INTEGRITY",
   "plan": {
     "contract": "",
     "diagram": "",

@@ -25,7 +25,7 @@
       "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
+      "source_digest": "0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8",
       "tests": [
         "backend/tests/test_m06_challenger_operations.py",
         "backend/tests/test_m08_strategy_results.py"
@@ -55,7 +55,7 @@
       "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
+      "source_digest": "0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8",
       "tests": [
         "backend/tests/test_m03_challenger.py",
         "backend/tests/test_m06_challenger_operations.py"
@@ -86,7 +86,7 @@
       "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
+      "source_digest": "0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8",
       "tests": [
         "backend/tests/test_m04_promotion.py",
         "backend/tests/test_m04_store.py"
@@ -119,7 +119,7 @@
       "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
+      "source_digest": "0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_m03_challenger.py"
@@ -150,7 +150,7 @@
       "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
+      "source_digest": "0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8",
       "tests": [
         "backend/tests/test_r00_research.py"
       ],
@@ -190,7 +190,7 @@
       "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
+      "source_digest": "0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8",
       "tests": [
         "backend/tests/test_r01_source.py",
         "backend/tests/test_r01_dataset.py",
@@ -224,7 +224,7 @@
       "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
+      "source_digest": "0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8",
       "tests": [
         "backend/tests/test_r00_research.py",
         "backend/tests/test_r01_research.py"
@@ -254,7 +254,7 @@
       "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
+      "source_digest": "0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8",
       "tests": [
         "backend/tests/test_m05_scientist.py",
         "backend/tests/test_m05_final_evidence_contract.py",
@@ -280,7 +280,7 @@
       "non_python_structured_source_owners": [],
       "generated_nodes": 57,
       "generated_edges": 97,
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
+      "source_digest": "0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8",
       "semantic_review": "PASS",
       "outside_graph_classification": "NONE",
       "outside_graph_resolution": "NOT_APPLICABLE",
@@ -311,7 +311,7 @@
       "non_python_structured_source_owners": [],
       "generated_nodes": 66,
       "generated_edges": 124,
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
+      "source_digest": "0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8",
       "semantic_review": "PASS",
       "outside_graph_classification": "NONE",
       "outside_graph_resolution": "NOT_APPLICABLE",
@@ -342,7 +342,7 @@
       "non_python_structured_source_owners": [],
       "generated_nodes": 57,
       "generated_edges": 103,
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
+      "source_digest": "0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8",
       "semantic_review": "PASS",
       "outside_graph_classification": "NONE",
       "outside_graph_resolution": "NOT_APPLICABLE",
@@ -371,9 +371,9 @@
       ],
       "python_source_owners_outside_static_reachable_graph": [],
       "non_python_structured_source_owners": [],
-      "generated_nodes": 0,
-      "generated_edges": 0,
-      "source_digest": "",
+      "generated_nodes": 70,
+      "generated_edges": 135,
+      "source_digest": "0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8",
       "semantic_review": "PASS",
       "outside_graph_classification": "NONE",
       "outside_graph_resolution": "NOT_APPLICABLE",
@@ -387,8 +387,8 @@
   ],
   "generation_anchor_policy": {
     "meaning": "Pre-commit generation anchor only; final hosted provenance is the exact GitHub candidate SHA and final real-runtime provenance is the final main SHA accepted on Owner PC. Structural sequence binding remains deterministic product source_digest.",
-    "observed_head": "8e7f834f989ccaf23ab188fc25cf3218d5dbc9e2",
-    "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68"
+    "observed_head": "3bd3ff62d138dbc0cff2aadc345b65cc1949f2aa",
+    "source_digest": "0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8"
   },
   "mode": "DURING",
   "parse_failure_boundary": {

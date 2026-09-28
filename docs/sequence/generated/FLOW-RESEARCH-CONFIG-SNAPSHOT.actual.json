@@ -6759,7 +6759,7 @@
       "locator": "backend/tests/test_r01_source.py::_capture.run"
     }
   ],
-  "observed_head": "50f3f5f77632d81c7f9f1f794508723127e32e1f",
+  "observed_head": "3bd3ff62d138dbc0cff2aadc345b65cc1949f2aa",
   "schema_version": 1,
-  "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68"
+  "source_digest": "0e841b771c6acae245ad94bb901656ef1f38fd02f6cec952fb908787bbf0faa8"
 }
