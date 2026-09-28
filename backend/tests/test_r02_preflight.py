@@ -145,3 +145,32 @@ def test_api_preflight_maps_contract_without_start_endpoint(monkeypatch: pytest.
     monkeypatch.setattr(research_api, "r02_preflight", lambda: deepcopy(expected))
     assert research_api.get_r02_preflight() == expected
     assert not hasattr(research_api, "start_research_r02")
+
+
+
+def test_frozen_discovery_block_prevents_second_authorization_surface(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _install(monkeypatch)
+    monkeypatch.setattr(
+        r02,
+        "get_r02_discovery_block",
+        lambda research_id, **_kwargs: {
+            "block_id": "RDISC-TEST",
+            "authorization_id": "RAUTH-R02-TEST",
+            "plan_id": "RPLAN-TEST",
+            "plan_sha256": "b" * 64,
+            "candidate_count": 3,
+            "compute_budget": {
+                "value": 120,
+                "unit": "FIT_SECONDS",
+                "execution_semantics": "FROZEN_ONLY_NOT_EXECUTED",
+            },
+        },
+    )
+    result = r02.r02_preflight(path=Path("unused.db"))
+    assert result["status"] == "FROZEN_WAITING_EXECUTION"
+    assert result["owner_authorization_required"] is False
+    assert result["owner_authorized"] is True
+    assert result["runtime_start_available"] is False
+    assert result["r02_executable"] is False

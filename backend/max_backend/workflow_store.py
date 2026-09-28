@@ -314,6 +314,83 @@ def migrate_current(path: Path = DATABASE_PATH) -> None:
             CREATE INDEX IF NOT EXISTS ix_research_r01_runs_state
             ON research_r01_runs(state, updated_utc DESC, run_id DESC);
 
+            CREATE TABLE IF NOT EXISTS research_r02_authorizations (
+                authorization_id TEXT PRIMARY KEY,
+                research_id TEXT NOT NULL UNIQUE,
+                confirmed INTEGER NOT NULL CHECK(confirmed IN (0,1)),
+                payload_sha256 TEXT NOT NULL UNIQUE,
+                payload_json TEXT NOT NULL,
+                authorized_utc TEXT NOT NULL,
+                FOREIGN KEY(research_id) REFERENCES research_projects(research_id)
+            );
+            CREATE INDEX IF NOT EXISTS ix_research_r02_authorizations_research
+            ON research_r02_authorizations(research_id, authorized_utc, authorization_id);
+
+            CREATE TABLE IF NOT EXISTS research_r02_discovery_blocks (
+                block_id TEXT PRIMARY KEY,
+                research_id TEXT NOT NULL UNIQUE,
+                authorization_id TEXT NOT NULL UNIQUE,
+                state TEXT NOT NULL CHECK(state='FROZEN_WAITING_EXECUTION'),
+                r01_output_manifest_sha256 TEXT NOT NULL,
+                plan_id TEXT NOT NULL UNIQUE,
+                plan_sha256 TEXT NOT NULL UNIQUE,
+                candidate_count INTEGER NOT NULL CHECK(candidate_count > 0),
+                compute_budget_json TEXT NOT NULL,
+                created_utc TEXT NOT NULL,
+                FOREIGN KEY(research_id) REFERENCES research_projects(research_id),
+                FOREIGN KEY(authorization_id)
+                    REFERENCES research_r02_authorizations(authorization_id)
+            );
+            CREATE INDEX IF NOT EXISTS ix_research_r02_blocks_created
+            ON research_r02_discovery_blocks(created_utc DESC, block_id DESC);
+
+            CREATE TABLE IF NOT EXISTS research_r02_candidate_specs (
+                candidate_id TEXT PRIMARY KEY,
+                block_id TEXT NOT NULL,
+                ordinal INTEGER NOT NULL CHECK(ordinal >= 0),
+                model_family TEXT NOT NULL,
+                seed INTEGER NOT NULL CHECK(seed >= 0),
+                spec_sha256 TEXT NOT NULL UNIQUE,
+                spec_json TEXT NOT NULL,
+                created_utc TEXT NOT NULL,
+                UNIQUE(block_id, ordinal),
+                FOREIGN KEY(block_id)
+                    REFERENCES research_r02_discovery_blocks(block_id)
+            );
+            CREATE INDEX IF NOT EXISTS ix_research_r02_candidates_block
+            ON research_r02_candidate_specs(block_id, ordinal, candidate_id);
+
+            CREATE TRIGGER IF NOT EXISTS research_r02_authorization_no_update
+            BEFORE UPDATE ON research_r02_authorizations
+            BEGIN
+                SELECT RAISE(ABORT, 'R02_AUTHORIZATION_IMMUTABLE');
+            END;
+            CREATE TRIGGER IF NOT EXISTS research_r02_authorization_no_delete
+            BEFORE DELETE ON research_r02_authorizations
+            BEGIN
+                SELECT RAISE(ABORT, 'R02_AUTHORIZATION_APPEND_ONLY');
+            END;
+            CREATE TRIGGER IF NOT EXISTS research_r02_block_no_update
+            BEFORE UPDATE ON research_r02_discovery_blocks
+            BEGIN
+                SELECT RAISE(ABORT, 'R02_DISCOVERY_BLOCK_IMMUTABLE');
+            END;
+            CREATE TRIGGER IF NOT EXISTS research_r02_block_no_delete
+            BEFORE DELETE ON research_r02_discovery_blocks
+            BEGIN
+                SELECT RAISE(ABORT, 'R02_DISCOVERY_BLOCK_APPEND_ONLY');
+            END;
+            CREATE TRIGGER IF NOT EXISTS research_r02_candidate_no_update
+            BEFORE UPDATE ON research_r02_candidate_specs
+            BEGIN
+                SELECT RAISE(ABORT, 'R02_CANDIDATE_SPEC_IMMUTABLE');
+            END;
+            CREATE TRIGGER IF NOT EXISTS research_r02_candidate_no_delete
+            BEFORE DELETE ON research_r02_candidate_specs
+            BEGIN
+                SELECT RAISE(ABORT, 'R02_CANDIDATE_SPEC_APPEND_ONLY');
+            END;
+
             CREATE TABLE IF NOT EXISTS research_r01_sources (
                 source_id TEXT PRIMARY KEY,
                 research_id TEXT NOT NULL,
