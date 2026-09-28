@@ -156,5 +156,6 @@
   "unmapped_current_semantics": 0,
   "current_repository": "maxqstudio/max-trading-agent",
   "historical_repository": "maxqstudio/max_rebuild",
-  "hosted_authority_model": "GitHub main source authority -> GitHub Actions windows-latest hosted build/test authority -> final Owner-PC real MT5/runtime acceptance after roadmap closure."
+  "hosted_authority_model": "GitHub main source authority -> GitHub Actions windows-latest hosted build/test authority -> final Owner-PC real MT5/runtime acceptance after roadmap closure.",
+  "authority_transition": "Historical MAX REBUILD source/runtime records remain historical where accurate; current authority is GitHub main plus Windows GitHub Actions, with Owner-PC real MT5 runtime deferred to final acceptance."
 }
