@@ -3,20 +3,20 @@
 # CURRENT STATE
 
 Last updated: generated from current specs
-Authority verified at SHA: 08f5a741412a2f5c69478b157529245b9a9a260e
+Authority verified at SHA: 5c0df514632964dd942cba59a73f3b822e09085a
 Governance profile: strict
 
 ## Current phase
-Phase: R01_CURRENT_LINEAGE_REPAIR
-Status: SOURCE_REPAIR_PRE_CLOSEOUT_PASS
+Phase: R02_DISCOVERY_SOURCE_FOUNDATION
+Status: ACTIVE
 
 ## Source
 Repository: maxqstudio/max-trading-agent
-Branch: work/r01-current-lineage
+Branch: work/r02-discovery-source-foundation
 Authoritative SHA: external final acceptance evidence
-Last accepted SHA: 08f5a741412a2f5c69478b157529245b9a9a260e
+Last accepted SHA: 5c0df514632964dd942cba59a73f3b822e09085a
 Current candidate SHA: external final acceptance evidence
-Current source digest: 205e1014611af244e5752da817a13e755fc04e18e9e42443ca57f1b14a75b34e
+Current source digest: 0c8e778bdb5dda3565a7f748a3f61fb86122f052fdb94c731e3482d8e9ae7480
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
@@ -33,42 +33,43 @@ PROJECT_DOCS_SYNC: PASS
 ## Sequence governance
 Sequence policy: REQUIRED
 Current sequence mode: DURING
-Current sequence session: docs/sequence/sessions/ (8 current DURING sessions)
+Current sequence session: docs/sequence/sessions/ (9 current DURING sessions after R02 source flow)
 SEQUENCE_SYNC: PASS
 
 ## Proven
-- H0 is merged to main at 08f5a741412a2f5c69478b157529245b9a9a260e and Windows CI run 36366607560 passed source-only/security, Skill Workflow, governance, backend, frontend and dependency gates.
-- Skill Workflow main advanced by one compatible governance-only commit to 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720; this phase adopts that exact authority and re-vendors its changed tools byte-identically.
+- H0 governance rebase is merged and revalidated on main; Windows CI run 36366607560 passed at main SHA 08f5a741412a2f5c69478b157529245b9a9a260e.
+- R01 current-lineage source repair is merged to main as 5c0df514632964dd942cba59a73f3b822e09085a; final branch run 36370111803, PR run 36371604393 and main revalidation run 36371992178 all passed.
+- R01 final hosted regression established 497 backend tests PASS plus frontend 53/53 across 10 files, source-only/security, Skill provenance/STRICT, governance, pip check, lint/build and npm dependency tree.
 - Previous-epoch R00/Champion/Research identifiers remain historical evidence only and are not current product-source authority.
-- The fresh source-governed epoch still declares Strategy Champion NONE, current Research project NONE, R00 NOT STARTED, R01 BLOCKED / NOT STARTED, R02 BLOCKED / NOT STARTED, model training 0, ONNX 0 and Research Challenger 0.
-- R01 current-lineage source repair pre-closeout Windows CI run 36369408053 passed at exact SHA 5dc96103c85ed9fd208101f060529e94bff31e76: 497 backend tests, source-only/security, Skill Workflow provenance/STRICT selftest, governance, pip check, frontend 53/53 across 10 files, lint/build and npm dependency tree.
-- R01 product source no longer contains the retired previous-epoch Research/R00/Strategy identity constants and now resolves the latest accepted current R00 with fail-closed immutable lineage verification.
+- Skill Workflow authority remains 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720.
 
 ## Not proven
-- Final branch closeout CI after evidence regeneration.
-- Any current-epoch R00 or real R01 scientific result.
+- R02 Discovery source foundation until generated governance and Windows CI pass on the current branch.
+- Any current-epoch R00/R01 scientific result or real R02 authorization/execution.
+- Any actual candidate training, Cheap Screen result, Qualified Pool, ONNX or Research Challenger.
 - Any real Owner-PC runtime/bootstrap/MT5/browser behavior.
-- Any R02 execution, model training, ONNX generation or Research Challenger creation.
 
 ## Known blockers
-- The fresh source-governed epoch still has no accepted current R00; therefore real R01 remains BLOCKED / NOT STARTED after this source repair.
+- The fresh source-governed epoch still has no accepted current R00 or R01 scientific result; therefore real R02 execution remains BLOCKED / NOT STARTED.
+- The current R02 slice implements only deterministic contracts and read-only preflight; no R02 start endpoint or candidate persistence exists yet.
 - Real MetaTrader 5, MetaEditor, broker/data-root, filesystem deployment and browser E2E remain NOT_PROVEN until final Owner-PC acceptance.
 
 ## Known defects
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Regenerate governed docs/sequence/Scientist knowledge with pre-closeout evidence.
-- Remove the temporary regeneration workflow, run exact final branch Windows CI, then merge to main only if green.
-- Revalidate main after merge; continue the next source-only roadmap phase without Owner-PC testing.
+- Regenerate Project Truth Compiler and DURING sequence projections for the R02 source foundation.
+- Validate deterministic candidate-plan contracts, read-only R02 preflight, negative/fail-closed cases and full hosted regression.
+- Merge only after exact-branch Windows CI is green, then revalidate main before the next source-only R02 slice.
 
 ## Explicitly blocked
 - Owner-PC testing between ordinary GitHub development phases.
-- Any real Research execution, including current-epoch R00 or R01.
-- R02 execution.
-- Model training.
+- Any real current-epoch R00, R01 or R02 scientific execution.
+- Any R02 start/authorization mutation in this source-foundation phase.
+- Model training or Cheap Screen execution.
 - ONNX generation.
 - Research Challenger creation.
 - Strategy Champion mutation.
 - Live trading.
-- Unrelated Strategy, optimizer, EA, database-schema, or UI refactors during the R01 lineage repair.
+- Adding heavy ML dependencies before an executing R02 slice requires them.
+- Unrelated Strategy, optimizer, EA, database-schema or UI refactors.

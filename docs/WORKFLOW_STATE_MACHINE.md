@@ -266,6 +266,51 @@ Authority: research_r01_service + research_source/dataset/leakage/store + immuta
 
 - Pre-terminal partial artifacts are cleaned or rejected; accepted parent/history remains immutable.
 
+## FLOW-R02-DISCOVERY-PREFLIGHT — R02 Discovery source preflight and deterministic plan contract
+
+Purpose: Expose fail-closed R02 source readiness and deterministic bounded Discovery planning contracts without authorizing or executing R02 scientific work.
+Critical: TRUE
+Entry condition: Caller inspects R02 readiness or constructs a source-level Discovery plan; no scientific start authority is granted by this flow.
+Authority: research_r02_service + research_r02_contract + accepted immutable R01 authority; future R02 execution still requires separate Owner authorization.
+
+### States
+
+- CHECK_R01_AUTHORITY
+- BLOCKED
+- READY_FOR_OWNER_AUTHORIZATION
+- PLAN_INPUT
+- PLAN_VALIDATED
+
+### Legal transitions
+
+| From | To | Action | Authority | Side effects |
+|---|---|---|---|---|
+| CHECK_R01_AUTHORITY | BLOCKED | Return semantic blocker when current accepted R01 authority is absent. | research_r02_service + research_r02_contract + accepted immutable R01 authority; future R02 execution still requires separate Owner authorization. |  |
+| CHECK_R01_AUTHORITY | READY_FOR_OWNER_AUTHORIZATION | Verify terminal R01 PASS, immutable integrity/output authority and zero prior scientific side effects. | research_r02_service + research_r02_contract + accepted immutable R01 authority; future R02 execution still requires separate Owner authorization. |  |
+| PLAN_INPUT | PLAN_VALIDATED | Canonicalize exact candidate identities, explicit candidate count and explicit compute budget into deterministic source plan. | research_r02_service + research_r02_contract + accepted immutable R01 authority; future R02 execution still requires separate Owner authorization. |  |
+
+### Invariants
+
+- Source readiness is not Owner authorization and is not R02 scientific PASS.
+- This source-foundation flow exposes no R02 start endpoint.
+- Candidate count and compute budget have no hidden defaults.
+- Cheap Screen has no scientific qualification authority; future R03 Full WFA owns Qualified Pool admission.
+- Temporal model families remain unopened until separate sequence/causality/resource/runtime proof.
+- No model training, ONNX, Research Challenger or Champion mutation occurs in this flow.
+
+### Failure behavior
+
+- Absent/unaccepted R01 returns BLOCKED; malformed/tampered R01 output authority or prior scientific side-effect regression fails closed.
+- Invalid/duplicate/mismatched candidate plan inputs are rejected before any scientific execution surface exists.
+
+### Restart behavior
+
+- No scientific mutable state is created by this source-foundation flow, so retry re-evaluates current authority deterministically.
+
+### Rollback behavior
+
+- No scientific rollback is required because the flow does not mutate R02 execution state.
+
 ## FLOW-RESEARCH-CONFIG-SNAPSHOT — Editable Research configuration to immutable execution snapshot
 
 Purpose: Keep Owner-editable current sample configuration distinct from immutable per-execution R00/R01 authority.

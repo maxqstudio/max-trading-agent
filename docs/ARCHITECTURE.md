@@ -2,7 +2,7 @@
 
 # ARCHITECTURE
 
-Current source digest: 205e1014611af244e5752da817a13e755fc04e18e9e42443ca57f1b14a75b34e
+Current source digest: 0c8e778bdb5dda3565a7f748a3f61fb86122f052fdb94c731e3482d8e9ae7480
 
 ## Components
 
@@ -10,7 +10,7 @@ Current source digest: 205e1014611af244e5752da817a13e755fc04e18e9e42443ca57f1b14
 |---|---|---|---|---|
 | owner-ui | Owner React Control Surface | Present semantic Strategy, Research, Artifacts and Settings state and explicit Owner actions without manufacturing authority. | frontend/src/App.tsx::App, frontend/src/OptimizerPage.tsx::OptimizerPage, frontend/src/ChallengersPage.tsx::ChallengersPage, frontend/src/ChampionPage.tsx::ChampionPage, frontend/src/ResearchPage.tsx::ResearchPage, frontend/src/DataPage.tsx::DataPage, frontend/src/ScientistPage.tsx::ScientistPage | FastAPI semantic APIs |
 | strategy-domain | Strategy lifecycle domain | Own optimizer qualification, Challenger registration/lifecycle and Champion promotion/tenure semantics. | backend/max_backend/optimizer_candidates.py::qualified_candidates_page, backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration, backend/max_backend/challenger_selection.py::create_selected_challengers, backend/max_backend/challenger_store.py::consumed_source_identities, backend/max_backend/challenger_registry.py::challenger_detail, backend/max_backend/challenger_operations.py::retire_challenger, backend/max_backend/champion_store.py::commit_promotion_authority, backend/max_backend/promotion_service.py::promote_strategy_challenger | SQLite, immutable Challenger/optimizer evidence, MT5/MetaEditor |
-| research-domain | Research authority and R00/R01 domain | Own editable current Research configuration, immutable R00/R01 authorization snapshots, source/dataset/label/leakage and terminal evidence. | backend/max_backend/research_settings.py::get_research_sample_configuration, backend/max_backend/research_settings.py::set_research_sample_configuration, backend/max_backend/research_service.py::r00_preflight, backend/max_backend/research_service.py::start_r00, backend/max_backend/research_service.py::canonical_research_stage, backend/max_backend/research_source.py::prepare_r01_source, backend/max_backend/research_dataset.py::build_labels, backend/max_backend/research_dataset.py::build_dataset, backend/max_backend/research_leakage.py::bind_protected_partition_rows, backend/max_backend/research_leakage.py::bind_protected_target_dependency_authority, backend/max_backend/research_leakage.py::run_adversarial_suite, backend/max_backend/research_r01_store.py::commit_r01_terminal_authority, backend/max_backend/research_r01_service.py::r01_preflight, backend/max_backend/research_r01_service.py::prepare_r01_verified_source, backend/max_backend/research_r01_service.py::start_r01, backend/max_backend/research_r01_service.py::r01_detail | Strategy parent authority, SQLite, immutable Research artifacts, MT5 source capture |
+| research-domain | Research authority and R00/R01 plus R02 source-foundation domain | Own editable current Research configuration, immutable R00/R01 authority, source/dataset/label/leakage evidence, and non-executing R02 Discovery contracts/readiness without manufacturing scientific PASS. | backend/max_backend/research_settings.py::get_research_sample_configuration, backend/max_backend/research_settings.py::set_research_sample_configuration, backend/max_backend/research_service.py::r00_preflight, backend/max_backend/research_service.py::start_r00, backend/max_backend/research_service.py::canonical_research_stage, backend/max_backend/research_source.py::prepare_r01_source, backend/max_backend/research_dataset.py::build_labels, backend/max_backend/research_dataset.py::build_dataset, backend/max_backend/research_leakage.py::bind_protected_partition_rows, backend/max_backend/research_leakage.py::bind_protected_target_dependency_authority, backend/max_backend/research_leakage.py::run_adversarial_suite, backend/max_backend/research_r01_store.py::commit_r01_terminal_authority, backend/max_backend/research_r01_service.py::r01_preflight, backend/max_backend/research_r01_service.py::prepare_r01_verified_source, backend/max_backend/research_r01_service.py::start_r01, backend/max_backend/research_r01_service.py::r01_detail, backend/max_backend/research_r02_contract.py::build_discovery_plan, backend/max_backend/research_r02_service.py::r02_preflight | Strategy parent authority, SQLite, immutable Research artifacts, MT5 source capture, accepted R01 scientific authority for future R02 execution |
 | scientist | Scientist advisory subsystem | Expose hash-verified static knowledge and bounded committed runtime context to an advisory LLM/chat workflow. | backend/max_backend/scientist_knowledge.py::load_knowledge, backend/max_backend/scientist_api.py::get_status, frontend/src/ScientistPage.tsx::ScientistPage | scientist/knowledge/source_manifest.json, Scientist store/provider settings |
 | backend-runtime | FastAPI runtime | Start migrations/recovery, route semantic APIs and expose overview/readiness. | backend/max_backend/main.py::lifespan, backend/max_backend/main.py::overview, backend/max_backend/main.py::app | domain services, SQLite, MT5 detection |
 | launcher | Windows launcher/readiness | Verify or start canonical backend/frontend instances, reject invalid occupied ports and emit MAX_READY only after authority/readiness checks. | RUN_MAX.cmd, scripts/run_max.ps1 | backend /api/overview, frontend proxy/root, Scientist status, ports 8000/5173 |
@@ -40,9 +40,9 @@ Current source digest: 205e1014611af244e5752da817a13e755fc04e18e9e42443ca57f1b14
 
 ## Observed implementation inventory
 
-Source files: 129
-Source lines: 61954
-Languages: PowerShell=2, Python=103, TypeScript=3, TypeScript/React=21
+Source files: 133
+Source lines: 62626
+Languages: PowerShell=2, Python=107, TypeScript=3, TypeScript/React=21
 
 Structural facts come from the code extractor. Component meaning comes from
 .workflow/architecture.json.

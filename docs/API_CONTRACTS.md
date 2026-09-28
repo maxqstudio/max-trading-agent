@@ -38,5 +38,6 @@
 | GET | /api/artifacts | Governed artifact inventory | artifact control | controlled reconciliation only | No scientific/promotion authority. |
 | POST | /api/artifacts/preflight | Artifact action legality | artifact control | none | Path/dependency/ownership blockers fail closed. |
 | POST | /api/artifacts/action | Governed artifact action | artifact control | legal controlled cleanup/delete | Protected/current authority cannot be silently deleted. |
+| GET | /api/research/r02/preflight | Read R02 Discovery source readiness without starting or authorizing R02 | backend/max_backend/research_r02_service.py::r02_preflight | none scientific; ordinary store migration/read compatibility only | Missing/unaccepted R01 returns BLOCKED; contradictory R01 output/integrity/side-effect authority fails closed with 409. |
 
 Declared in .workflow/contracts.json. Observed routes are listed in FLOW_INDEX.

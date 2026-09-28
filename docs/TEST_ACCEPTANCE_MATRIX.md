@@ -4,25 +4,25 @@
 
 ## Evidence boundary
 
-R01 current-lineage source repair hosted closeout. Windows CI run 36369408053 at exact pre-closeout SHA 5dc96103c85ed9fd208101f060529e94bff31e76 passed source-only/security, Skill Workflow 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 provenance/STRICT selftest, generated governance, backend 497 tests, pip check, frontend 53 tests across 10 files, lint/build and npm dependency tree. Real current-epoch R00/R01 and Owner-PC/MT5/browser runtime remain intentionally NOT_PROVEN.
+R02 Discovery source-foundation phase. Hosted source/contracts/tests/governance only. No real R00/R01/R02 execution, model training, Cheap Screen result, candidate persistence, Qualified Pool, ONNX, Research Challenger, Champion mutation, MT5 runtime or Owner-PC/browser E2E is authorized or claimed.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 205e1014611af244e5752da817a13e755fc04e18e9e42443ca57f1b14a75b34e
+Current source digest: 0c8e778bdb5dda3565a7f748a3f61fb86122f052fdb94c731e3482d8e9ae7480
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
-| R01L-01 | R01 contains no retired previous-epoch R00/Research/Strategy identity constants and derives current R00 from current Research authority. | backend/max_backend/research_r01_service.py + targeted static regression | PASS |
-| R01L-02 | Current R00 must be terminal PASS_WAITING_OWNER with verified frozen integrity and exact Research parent, Strategy parent and parent-authority bindings. | backend/tests/test_r01_current_lineage.py | PASS |
-| R01L-03 | Wrong Research ID, wrong Research parent, wrong Strategy parent, unaccepted/tampered R00, parent-authority mismatch and cross-epoch request all fail closed. | backend/tests/test_r01_current_lineage.py | PASS |
-| R01L-04 | R01 preserves frozen R00 sample authority and verifies no training/ONNX/Research-Challenger/Champion side-effect regression before use. | research_r01_service.py + existing R01 regressions | PASS |
-| R01L-05 | Vendored Skill Workflow tools are byte-identical to 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 and STRICT deterministic-LF selftest passes. | Windows CI Skill Workflow provenance + STRICT selftest | PASS |
-| R01L-06 | Full backend regression remains at or above 488 PASS and includes the new lineage tests. | Windows CI backend pytest | PASS |
-| R01L-07 | Frontend 53-test/10-file baseline, lint, production build, npm dependency tree and pip check remain green. | Windows CI frontend/dependency jobs | PASS |
-| R01L-08 | Project Truth Compiler, sequence sessions, Scientist knowledge and source-only/security gates remain synchronized. | Windows CI governance + source-only policy | PASS |
+| R02SF-01 | R02 source contract exposes baseline LightGBM/XGBoost and optional Random Forest control only; temporal families remain unopened in this slice. | backend/max_backend/research_r02_contract.py + test_r02_discovery_contract.py | NOT_PROVEN |
+| R02SF-02 | Discovery plan freezes explicit positive candidate count and explicit finite compute budget with no hidden defaults. | backend/tests/test_r02_discovery_contract.py | NOT_PROVEN |
+| R02SF-03 | Candidate identities are deterministic, exact-lineage bound, duplicate-safe and input-order independent. | backend/tests/test_r02_discovery_contract.py | NOT_PROVEN |
+| R02SF-04 | Cheap Screen has zero qualification authority; only future R03 Full WFA may admit a Qualified Pool. | research_r02_contract.py + tests | NOT_PROVEN |
+| R02SF-05 | R02 preflight is read-only scientific state and blocks absent/unaccepted R01 while failing closed on malformed/tampered R01 authority or prior training/promotion side effects. | backend/tests/test_r02_preflight.py | NOT_PROVEN |
+| R02SF-06 | No R02 START endpoint, ML runtime dependency, candidate persistence schema, training, ONNX, Research Challenger or Champion mutation is introduced. | source review + source-only/security CI | NOT_PROVEN |
+| R02SF-07 | Skill Workflow provenance/STRICT and Project Truth/sequence/Scientist projections remain synchronized. | Windows CI governance gates | NOT_PROVEN |
+| R02SF-08 | Full backend/frontend/dependency regression remains green after the source foundation. | Windows CI | NOT_PROVEN |
 
 ## Test commands
 
-- python -m pytest backend/tests/test_r01_current_lineage.py backend/tests/test_r01_research.py -q -o addopts=
+- python -m pytest backend/tests/test_r02_discovery_contract.py backend/tests/test_r02_preflight.py -q -o addopts=
 - python .workflow/tools/validate_project_docs.py
 - python .workflow/tools/validate_sequence_sessions.py
 - python .workflow/tools/validate_handoff.py
@@ -38,14 +38,14 @@ Current source digest: 205e1014611af244e5752da817a13e755fc04e18e9e42443ca57f1b14
 ## Runtime checks
 
 - NOT_RUN: real Owner-PC database/bootstrap.
-- NOT_RUN: real MT5 detection, MetaEditor compile, Strategy Tester, broker/data-root or filesystem deployment.
-- NOT_RUN: real R00/R01 scientific execution or browser E2E.
-- All real runtime checks remain deferred to final Owner-PC acceptance.
+- NOT_RUN: real MT5/MetaEditor/broker/data-root/filesystem/browser runtime.
+- NOT_RUN: real R00/R01/R02 scientific execution.
+- NOT_RUN: model training, Cheap Screen execution, ONNX, Research Challenger or Champion mutation.
 
 ## Sequence contract evidence
 
 Sequence mode for this phase/session: DURING
-Sequence session contract: docs/sequence/sessions/ (8 current DURING sessions)
+Sequence session contract: docs/sequence/sessions/ (9 current DURING sessions after R02 source flow)
 SEQUENCE_SYNC: PASS
 
 ## Project Truth Compiler evidence

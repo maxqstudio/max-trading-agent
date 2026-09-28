@@ -17,83 +17,83 @@
   "human_comprehension_status": "PASS",
   "requirements": [
     {
+      "evidence": "backend/max_backend/research_r02_contract.py + test_r02_discovery_contract.py",
       "id": "R02SF-01",
       "requirement": "R02 source contract exposes baseline LightGBM/XGBoost and optional Random Forest control only; temporal families remain unopened in this slice.",
-      "evidence": "backend/max_backend/research_r02_contract.py + test_r02_discovery_contract.py",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "backend/tests/test_r02_discovery_contract.py",
       "id": "R02SF-02",
       "requirement": "Discovery plan freezes explicit positive candidate count and explicit finite compute budget with no hidden defaults.",
-      "evidence": "backend/tests/test_r02_discovery_contract.py",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "backend/tests/test_r02_discovery_contract.py",
       "id": "R02SF-03",
       "requirement": "Candidate identities are deterministic, exact-lineage bound, duplicate-safe and input-order independent.",
-      "evidence": "backend/tests/test_r02_discovery_contract.py",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "research_r02_contract.py + tests",
       "id": "R02SF-04",
       "requirement": "Cheap Screen has zero qualification authority; only future R03 Full WFA may admit a Qualified Pool.",
-      "evidence": "research_r02_contract.py + tests",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "backend/tests/test_r02_preflight.py",
       "id": "R02SF-05",
       "requirement": "R02 preflight is read-only scientific state and blocks absent/unaccepted R01 while failing closed on malformed/tampered R01 authority or prior training/promotion side effects.",
-      "evidence": "backend/tests/test_r02_preflight.py",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "source review + source-only/security CI",
       "id": "R02SF-06",
       "requirement": "No R02 START endpoint, ML runtime dependency, candidate persistence schema, training, ONNX, Research Challenger or Champion mutation is introduced.",
-      "evidence": "source review + source-only/security CI",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "Windows CI governance gates",
       "id": "R02SF-07",
       "requirement": "Skill Workflow provenance/STRICT and Project Truth/sequence/Scientist projections remain synchronized.",
-      "evidence": "Windows CI governance gates",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "Windows CI",
       "id": "R02SF-08",
       "requirement": "Full backend/frontend/dependency regression remains green after the source foundation.",
-      "evidence": "Windows CI",
       "status": "NOT_PROVEN"
     }
   ],
   "results": {
     "hosted_ci": {
+      "run_id": null,
       "status": "NOT_RUN",
-      "tested_sha": null,
-      "run_id": null
+      "tested_sha": null
     },
     "regression": {
       "backend_status": "NOT_RUN",
+      "build": "NOT_RUN",
       "frontend_status": "NOT_RUN",
       "lint": "NOT_RUN",
-      "build": "NOT_RUN",
       "npm_ls_all": "NOT_RUN",
       "pip_check": "NOT_RUN"
     },
     "runtime": {
-      "owner_pc": "NOT_PROVEN",
+      "browser_e2e": "NOT_PROVEN",
       "mt5": "NOT_PROVEN",
-      "browser_e2e": "NOT_PROVEN"
+      "owner_pc": "NOT_PROVEN"
     },
     "scientific_state": {
-      "strategy_champion": "NONE_SOURCE_GOVERNANCE",
+      "cheap_screen_runs": 0,
       "current_research_project": "NONE",
+      "model_training": 0,
+      "onnx": 0,
       "r00": "NOT STARTED",
       "r01": "BLOCKED / NOT STARTED",
       "r02": "BLOCKED / NOT STARTED",
-      "model_training": 0,
-      "cheap_screen_runs": 0,
-      "onnx": 0,
-      "research_challenger": 0
+      "research_challenger": 0,
+      "strategy_champion": "NONE_SOURCE_GOVERNANCE"
     },
     "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720"
   },
@@ -125,13 +125,13 @@
   "truth_gates": {
     "BEHAVIORAL_SYNC": "NOT_PROVEN",
     "CROSS_DOCUMENT_CONSISTENCY": "NOT_PROVEN",
-    "DOC_LAYOUT": "NOT_PROVEN",
-    "DOC_READABILITY": "NOT_PROVEN",
+    "DOC_LAYOUT": "PASS",
+    "DOC_READABILITY": "PASS",
     "DOC_SOURCE_TRACEABILITY": "NOT_PROVEN",
     "DOC_TEST_TRACEABILITY": "NOT_PROVEN",
     "HUMAN_COMPREHENSION": "NOT_PROVEN",
-    "PROJECT_DOCS_NORMALIZED": "NOT_PROVEN",
-    "PROJECT_DOCS_SYNC": "NOT_PROVEN",
+    "PROJECT_DOCS_NORMALIZED": "PASS",
+    "PROJECT_DOCS_SYNC": "PASS",
     "PROJECT_STATE_SYNC": "NOT_PROVEN",
     "PROVENANCE_SYNC": "NOT_PROVEN",
     "REFERENCE_SYNC": "NOT_PROVEN",

@@ -27,7 +27,7 @@
     ],
     "graph": "docs/sequence/generated/FLOW-R02-DISCOVERY-PREFLIGHT.actual.json",
     "diagram": "docs/sequence/generated/FLOW-R02-DISCOVERY-PREFLIGHT.actual.mmd",
-    "source_digest": ""
+    "source_digest": "0c8e778bdb5dda3565a7f748a3f61fb86122f052fdb94c731e3482d8e9ae7480"
   },
   "runtime_trace": {
     "required": false,
