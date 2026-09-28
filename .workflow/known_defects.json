@@ -68,9 +68,9 @@
     },
     {
       "id": "KD-006",
-      "status": "REPAIR_IN_PROGRESS",
-      "summary": "R01 retired previous-epoch hardcoded lineage replaced in source by dynamic current accepted R00 lineage; hosted acceptance pending",
-      "evidence": "backend/max_backend/research_r01_service.py no longer declares ACCEPTED_R00_RESEARCH_ID / ACCEPTED_R00_PARENT_ID / ACCEPTED_R00_CHAMPION_ID; targeted fail-closed lineage tests added on work/r01-current-lineage."
+      "status": "FIXED_PENDING_FINAL_CI",
+      "summary": "R01 retired previous-epoch hardcoded lineage removed; dynamic current accepted R00 immutable lineage source repair passed pre-closeout CI",
+      "evidence": "Windows CI run 36369408053 at 5dc96103c85ed9fd208101f060529e94bff31e76 passed 497 backend tests plus full hosted gates; final generated-evidence branch/main CI remains required."
     }
   ],
   "schema_version": 1

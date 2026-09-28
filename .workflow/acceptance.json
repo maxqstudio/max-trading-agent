@@ -1,5 +1,5 @@
 {
-  "evidence_boundary": "R01 current-lineage source repair phase. Hosted source/tests/governance only; no real Research execution, model training, ONNX, Research Challenger, Champion mutation, MT5 runtime or Owner-PC E2E is authorized or claimed.",
+  "evidence_boundary": "R01 current-lineage source repair hosted closeout. Windows CI run 36369408053 at exact pre-closeout SHA 5dc96103c85ed9fd208101f060529e94bff31e76 passed source-only/security, Skill Workflow 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 provenance/STRICT selftest, generated governance, backend 497 tests, pip check, frontend 53 tests across 10 files, lint/build and npm dependency tree. Real current-epoch R00/R01 and Owner-PC/MT5/browser runtime remain intentionally NOT_PROVEN.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
     "How does important data flow through the system?": "PASS",
@@ -20,82 +20,82 @@
       "evidence": "backend/max_backend/research_r01_service.py + targeted static regression",
       "id": "R01L-01",
       "requirement": "R01 contains no retired previous-epoch R00/Research/Strategy identity constants and derives current R00 from current Research authority.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "backend/tests/test_r01_current_lineage.py",
       "id": "R01L-02",
       "requirement": "Current R00 must be terminal PASS_WAITING_OWNER with verified frozen integrity and exact Research parent, Strategy parent and parent-authority bindings.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "backend/tests/test_r01_current_lineage.py",
       "id": "R01L-03",
       "requirement": "Wrong Research ID, wrong Research parent, wrong Strategy parent, unaccepted/tampered R00, parent-authority mismatch and cross-epoch request all fail closed.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "research_r01_service.py + existing R01 regressions",
       "id": "R01L-04",
       "requirement": "R01 preserves frozen R00 sample authority and verifies no training/ONNX/Research-Challenger/Champion side-effect regression before use.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "Windows CI Skill Workflow provenance + STRICT selftest",
       "id": "R01L-05",
       "requirement": "Vendored Skill Workflow tools are byte-identical to 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 and STRICT deterministic-LF selftest passes.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "Windows CI backend pytest",
       "id": "R01L-06",
       "requirement": "Full backend regression remains at or above 488 PASS and includes the new lineage tests.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "Windows CI frontend/dependency jobs",
       "id": "R01L-07",
       "requirement": "Frontend 53-test/10-file baseline, lint, production build, npm dependency tree and pip check remain green.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "Windows CI governance + source-only policy",
       "id": "R01L-08",
       "requirement": "Project Truth Compiler, sequence sessions, Scientist knowledge and source-only/security gates remain synchronized.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     }
   ],
   "results": {
     "hosted_ci": {
-      "run_id": null,
-      "status": "NOT_RUN",
-      "tested_sha": null
+      "status": "PASS_PRE_CLOSEOUT",
+      "tested_sha": "5dc96103c85ed9fd208101f060529e94bff31e76",
+      "run_id": 36369408053
     },
     "regression": {
-      "backend_floor": 488,
-      "backend_status": "NOT_RUN",
-      "build": "NOT_RUN",
-      "frontend_files_floor": 10,
-      "frontend_status": "NOT_RUN",
-      "frontend_tests_floor": 53,
-      "lint": "NOT_RUN",
-      "npm_ls_all": "NOT_RUN",
-      "pip_check": "NOT_RUN"
+      "backend": 497,
+      "backend_status": "PASS",
+      "frontend_files": 10,
+      "frontend_tests": 53,
+      "frontend_status": "PASS",
+      "lint": "PASS_0_WARNINGS_0_ERRORS",
+      "build": "PASS",
+      "npm_ls_all": "PASS",
+      "pip_check": "PASS"
     },
     "runtime": {
-      "browser_e2e": "NOT_PROVEN",
+      "owner_pc": "NOT_PROVEN",
       "mt5": "NOT_PROVEN",
-      "owner_pc": "NOT_PROVEN"
+      "browser_e2e": "NOT_PROVEN"
     },
     "scientific_state": {
+      "strategy_champion": "NONE_SOURCE_GOVERNANCE",
       "current_research_project": "NONE",
-      "model_training": 0,
-      "onnx": 0,
       "r00": "NOT STARTED",
       "r01": "BLOCKED / NOT STARTED",
       "r02": "BLOCKED / NOT STARTED",
-      "research_challenger": 0,
-      "strategy_champion": "NONE_SOURCE_GOVERNANCE"
+      "model_training": 0,
+      "onnx": 0,
+      "research_challenger": 0
     },
     "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720"
   },
@@ -125,23 +125,23 @@
     "python -m pip check"
   ],
   "truth_gates": {
-    "BEHAVIORAL_SYNC": "NOT_PROVEN",
-    "CROSS_DOCUMENT_CONSISTENCY": "NOT_PROVEN",
-    "DOC_LAYOUT": "PASS",
-    "DOC_READABILITY": "PASS",
-    "DOC_SOURCE_TRACEABILITY": "NOT_PROVEN",
-    "DOC_TEST_TRACEABILITY": "NOT_PROVEN",
-    "HUMAN_COMPREHENSION": "PASS",
-    "PROJECT_DOCS_NORMALIZED": "PASS",
-    "PROJECT_DOCS_SYNC": "PASS",
-    "PROJECT_STATE_SYNC": "NOT_PROVEN",
-    "PROVENANCE_SYNC": "NOT_PROVEN",
-    "REFERENCE_SYNC": "PASS",
+    "SOURCE_TESTS": "PASS",
     "RUNTIME_E2E": "NOT_PROVEN",
+    "PROVENANCE_SYNC": "PASS",
+    "REFERENCE_SYNC": "PASS",
+    "STRUCTURAL_SYNC": "PASS",
     "SEMANTIC_SYNC": "PASS",
+    "BEHAVIORAL_SYNC": "PASS",
+    "CROSS_DOCUMENT_CONSISTENCY": "PASS",
+    "HUMAN_COMPREHENSION": "PASS",
     "SEQUENCE_SYNC": "PASS",
-    "SOURCE_TESTS": "NOT_PROVEN",
-    "STRUCTURAL_SYNC": "NOT_PROVEN",
-    "TEST_RUNTIME_TRACEABILITY": "NOT_PROVEN"
+    "DOC_LAYOUT": "PASS",
+    "PROJECT_DOCS_NORMALIZED": "PASS",
+    "DOC_READABILITY": "PASS",
+    "PROJECT_DOCS_SYNC": "PASS",
+    "DOC_SOURCE_TRACEABILITY": "PASS",
+    "DOC_TEST_TRACEABILITY": "PASS",
+    "TEST_RUNTIME_TRACEABILITY": "NOT_PROVEN",
+    "PROJECT_STATE_SYNC": "PASS"
   }
 }
