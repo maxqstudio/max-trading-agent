@@ -120,3 +120,13 @@ Type: repair
 - Discovery compute-budget and outcome/terminal compute validation now map unrepresentable numeric input to deterministic validation errors instead of allowing OverflowError to escape.
 - Add huge-integer regressions for Owner authorization budget and outcome/terminal budget paths.
 - Windows targeted run 36412664127 passed 84 R02 tests at 02644bb471c8c605a27413b4a1f8677a1f30dffd.
+
+## 2026-09-28 — R02 outcome authority readback integrity
+
+Type: repair
+
+- Recompute and verify R02 authorization payload, Discovery block ID/plan binding, candidate spec hashes/IDs/order, every candidate outcome and terminal manifest before reporting terminal state.
+- Frozen preflight now requires verified Discovery authority even before a terminal exists.
+- Malformed persisted candidate/terminal/outcome JSON and malformed integral authority values fail closed as governed RuntimeError codes.
+- Tamper regressions cover authorization payload, candidate spec, outcome payload, terminal counts and partial outcome-without-terminal state.
+- Targeted Windows run 36429847329 passed 94 R02 tests at 9d3f474f4d9f0793311a01a80dbdd851d0cd3941.

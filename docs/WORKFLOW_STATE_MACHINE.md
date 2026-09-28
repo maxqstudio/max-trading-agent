@@ -271,7 +271,7 @@ Authority: research_r01_service + research_source/dataset/leakage/store + immuta
 Purpose: Define deterministic append-only all-candidate outcome and terminal authority for a future executor without performing model fitting or granting qualification.
 Critical: TRUE
 Entry condition: A frozen R02 Discovery block exists. Hosted tests may pass synthetic outcome requests directly to the store; no public outcome-submit runtime surface exists.
-Authority: Immutable frozen R02 Discovery block/candidate specs + deterministic outcome contract/store; no trainer or qualification authority.
+Authority: Immutable frozen R02 Discovery authority + deterministic outcome contract/store + mandatory readback reconstruction; no trainer or qualification authority.
 
 ### States
 
@@ -283,8 +283,8 @@ Authority: Immutable frozen R02 Discovery block/candidate specs + deterministic 
 
 | From | To | Action | Authority | Side effects |
 |---|---|---|---|---|
-| FROZEN_WAITING_EXECUTION | OUTCOME_SET_VALIDATED | Validate exact frozen candidate set, deterministic outcome identities, explicit failure retention and frozen compute budget. | Immutable frozen R02 Discovery block/candidate specs + deterministic outcome contract/store; no trainer or qualification authority. |  |
-| OUTCOME_SET_VALIDATED | COMPLETE_WAITING_OWNER | Atomically append every candidate outcome and one immutable terminal authority. | Immutable frozen R02 Discovery block/candidate specs + deterministic outcome contract/store; no trainer or qualification authority. | R02_CANDIDATE_OUTCOMES, R02_BLOCK_TERMINAL |
+| FROZEN_WAITING_EXECUTION | OUTCOME_SET_VALIDATED | Validate exact frozen candidate set, deterministic outcome identities, explicit failure retention and frozen compute budget. | Immutable frozen R02 Discovery authority + deterministic outcome contract/store + mandatory readback reconstruction; no trainer or qualification authority. |  |
+| OUTCOME_SET_VALIDATED | COMPLETE_WAITING_OWNER | Atomically append every candidate outcome and one immutable terminal authority. | Immutable frozen R02 Discovery authority + deterministic outcome contract/store + mandatory readback reconstruction; no trainer or qualification authority. | R02_CANDIDATE_OUTCOMES, R02_BLOCK_TERMINAL |
 
 ### Invariants
 
@@ -297,11 +297,15 @@ Authority: Immutable frozen R02 Discovery block/candidate specs + deterministic 
 - COMPLETE_WAITING_OWNER is block completeness only, not scientific qualification.
 - Cheap Screen has zero Qualified Pool authority; future R03 Full WFA owns admission.
 - No trainer, model fitting, ONNX, Research Challenger or Champion mutation occurs in this flow.
+- Frozen Discovery authority is revalidated before FROZEN_WAITING_EXECUTION is reported.
+- COMPLETE_WAITING_OWNER is reported only after reconstruction verifies authorization, block, candidate, outcome and terminal authority.
+- Malformed persisted JSON or integral authority fields fail closed through governed integrity errors.
 
 ### Failure behavior
 
 - Missing/duplicate/unknown candidates, malformed metrics, wrong compute units, budget excess or different terminal replay fail closed before/without terminal authority.
 - A mid-batch persistence fault rolls back all newly inserted outcome and terminal rows.
+- Offline/tampered/malformed persisted authorization, candidate, outcome or terminal authority is rejected during readback before a valid frozen/terminal state is exposed.
 
 ### Restart behavior
 

@@ -17,63 +17,63 @@
   "human_comprehension_status": "PASS",
   "requirements": [
     {
+      "evidence": "validate_r02_discovery_block_integrity + tamper tests",
       "id": "R02IR-01",
       "requirement": "Discovery readback recomputes authorization payload hash/ID, Research binding, block ID, R01 output/plan binding and frozen compute budget before frozen authority is trusted.",
-      "evidence": "validate_r02_discovery_block_integrity + tamper tests",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "validate_r02_discovery_block_integrity + candidate tamper tests",
       "id": "R02IR-02",
       "requirement": "Every persisted candidate spec is re-decoded and verified for ordinal, block binding, spec hash, deterministic candidate ID, family and seed; authorization candidate IDs/count must match exactly.",
-      "evidence": "validate_r02_discovery_block_integrity + candidate tamper tests",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "validate_r02_outcome_integrity + outcome tamper tests",
       "id": "R02IR-03",
       "requirement": "Every terminal outcome is reconstructed from persisted semantic fields and must match stored payload, ID, SHA, status, candidate order and frozen block budget unit.",
-      "evidence": "validate_r02_outcome_integrity + outcome tamper tests",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "validate_r02_outcome_integrity + terminal-count tamper tests",
       "id": "R02IR-04",
       "requirement": "Terminal manifest is rebuilt from the verified candidate outcome set and must match terminal ID, manifest SHA, state, counts and compute consumption exactly.",
-      "evidence": "validate_r02_outcome_integrity + terminal-count tamper tests",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "test_outcome_integrity_rejects_partial_outcome_without_terminal",
       "id": "R02IR-05",
       "requirement": "Partial persisted outcomes without a terminal fail closed rather than being interpreted as a valid frozen or complete state.",
-      "evidence": "test_outcome_integrity_rejects_partial_outcome_without_terminal",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "read-path malformed persistence regressions",
       "id": "R02IR-06",
       "requirement": "Malformed persisted candidate/outcome/terminal JSON and invalid integral authority values map to governed RuntimeError integrity failures rather than raw decode/conversion errors.",
-      "evidence": "read-path malformed persistence regressions",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "research_r02_service.py + test_r02_preflight.py",
       "id": "R02IR-07",
       "requirement": "r02_preflight requires verified Discovery integrity for frozen state and verified complete outcome integrity for COMPLETE_WAITING_OWNER.",
-      "evidence": "research_r02_service.py + test_r02_preflight.py",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "source review + source-only/security CI",
       "id": "R02IR-08",
       "requirement": "No trainer/executor, outcome-submit API/UI, qualification authority, heavy ML dependency, ONNX, Challenger or Champion mutation is introduced.",
-      "evidence": "source review + source-only/security CI",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "Windows CI governance gates",
       "id": "R02IR-09",
       "requirement": "Skill Workflow provenance/STRICT, Project Truth, cross-document consistency and sequence contracts remain synchronized.",
-      "evidence": "Windows CI governance gates",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "Windows CI",
       "id": "R02IR-10",
       "requirement": "Full backend/frontend/source-only/security/dependency regression remains green.",
-      "evidence": "Windows CI",
       "status": "NOT_PROVEN"
     }
   ],
@@ -83,42 +83,42 @@
       "status": "NOT_RUN",
       "tested_sha": null
     },
+    "regression": {
+      "backend_floor": 581,
+      "backend_status": "NOT_RUN",
+      "build": "NOT_RUN",
+      "frontend_files_floor": 10,
+      "frontend_status": "NOT_RUN",
+      "frontend_tests_floor": 53,
+      "lint": "NOT_RUN",
+      "npm_ls_all": "NOT_RUN",
+      "pip_check": "NOT_RUN"
+    },
+    "runtime": {
+      "browser_e2e": "NOT_PROVEN",
+      "mt5": "NOT_PROVEN",
+      "owner_pc": "NOT_PROVEN"
+    },
+    "schema_version": 12,
+    "scientific_state": {
+      "cheap_screen_runs": 0,
+      "current_research_project": "NONE",
+      "model_training": 0,
+      "onnx": 0,
+      "r00": "NOT STARTED",
+      "r01": "BLOCKED / NOT STARTED",
+      "r02": "BLOCKED / NOT STARTED",
+      "r02_frozen_block": "NONE_REAL_RUNTIME",
+      "research_challenger": 0,
+      "strategy_champion": "NONE_SOURCE_GOVERNANCE"
+    },
+    "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720",
     "targeted": {
       "run_id": 36429847329,
       "status": "PASS",
       "tested_sha": "9d3f474f4d9f0793311a01a80dbdd851d0cd3941",
       "tests": 94
-    },
-    "regression": {
-      "backend_floor": 581,
-      "backend_status": "NOT_RUN",
-      "frontend_files_floor": 10,
-      "frontend_tests_floor": 53,
-      "frontend_status": "NOT_RUN",
-      "lint": "NOT_RUN",
-      "build": "NOT_RUN",
-      "npm_ls_all": "NOT_RUN",
-      "pip_check": "NOT_RUN"
-    },
-    "runtime": {
-      "owner_pc": "NOT_PROVEN",
-      "mt5": "NOT_PROVEN",
-      "browser_e2e": "NOT_PROVEN"
-    },
-    "schema_version": 12,
-    "scientific_state": {
-      "strategy_champion": "NONE_SOURCE_GOVERNANCE",
-      "current_research_project": "NONE",
-      "r00": "NOT STARTED",
-      "r01": "BLOCKED / NOT STARTED",
-      "r02": "BLOCKED / NOT STARTED",
-      "r02_frozen_block": "NONE_REAL_RUNTIME",
-      "cheap_screen_runs": 0,
-      "model_training": 0,
-      "onnx": 0,
-      "research_challenger": 0
-    },
-    "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720"
+    }
   },
   "runtime_checks": [
     "NOT_RUN: real Owner-PC database/bootstrap.",
@@ -149,13 +149,13 @@
   "truth_gates": {
     "BEHAVIORAL_SYNC": "NOT_PROVEN",
     "CROSS_DOCUMENT_CONSISTENCY": "NOT_PROVEN",
-    "DOC_LAYOUT": "NOT_PROVEN",
-    "DOC_READABILITY": "NOT_PROVEN",
+    "DOC_LAYOUT": "PASS",
+    "DOC_READABILITY": "PASS",
     "DOC_SOURCE_TRACEABILITY": "NOT_PROVEN",
     "DOC_TEST_TRACEABILITY": "NOT_PROVEN",
     "HUMAN_COMPREHENSION": "NOT_PROVEN",
-    "PROJECT_DOCS_NORMALIZED": "NOT_PROVEN",
-    "PROJECT_DOCS_SYNC": "NOT_PROVEN",
+    "PROJECT_DOCS_NORMALIZED": "PASS",
+    "PROJECT_DOCS_SYNC": "PASS",
     "PROJECT_STATE_SYNC": "NOT_PROVEN",
     "PROVENANCE_SYNC": "NOT_PROVEN",
     "REFERENCE_SYNC": "NOT_PROVEN",

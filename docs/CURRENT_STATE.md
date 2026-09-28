@@ -3,20 +3,20 @@
 # CURRENT STATE
 
 Last updated: generated from current specs
-Authority verified at SHA: eb6192873eb518b9fe4c7f15d03600ca4ac1e73d
+Authority verified at SHA: c913c47a45ca54d805470caf40bb54bf655b45c6
 Governance profile: strict
 
 ## Current phase
-Phase: R02_CHEAP_SCREEN_OUTCOME_LEDGER
-Status: SOURCE_PHASE_PRE_CLOSEOUT_PASS
+Phase: R02_OUTCOME_INTEGRITY_READBACK
+Status: ACTIVE_TARGETED_PASS
 
 ## Source
 Repository: maxqstudio/max-trading-agent
-Branch: work/r02-outcome-ledger
+Branch: work/r02-outcome-integrity
 Authoritative SHA: external final acceptance evidence
-Last accepted SHA: eb6192873eb518b9fe4c7f15d03600ca4ac1e73d
+Last accepted SHA: c913c47a45ca54d805470caf40bb54bf655b45c6
 Current candidate SHA: external final acceptance evidence
-Current source digest: 6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68
+Current source digest: 23209a70bb583c6591a87bb99dc8cb8d380f9ce48e96f9e599296fa4cb8cc934
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
@@ -40,31 +40,30 @@ SEQUENCE_SYNC: PASS
 - H0 governance rebase remains accepted on main.
 - R01 current-lineage source repair remains accepted on main.
 - R02 Discovery source foundation remains accepted on main.
-- R02 authorization/freeze is merged to main as eb6192873eb518b9fe4c7f15d03600ca4ac1e73d; main Windows CI run 36409834797 passed 558 backend tests, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, governance, pip check, lint/build and npm dependency tree.
-- R02 outcome-ledger targeted Windows run 36411091220 passed 82 synthetic tests.
-- R02 numeric-overflow hardening targeted Windows run 36412664127 passed 84 R02 tests.
-- Exact R02 outcome-ledger branch Windows CI run 36413020299 passed at a178b4be591c42e88bb6a5ea3bcec1d113987dcb: backend 581 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, lint/build and npm dependency tree PASS.
+- R02 authorization/freeze remains accepted on main.
+- R02 immutable outcome ledger is merged to main as c913c47a45ca54d805470caf40bb54bf655b45c6; main Windows CI run 36424489731 passed 581 backend tests, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, governance, pip check, lint/build and npm dependency tree.
+- R02 outcome-integrity targeted Windows run 36429847329 passed 94 tests at 9d3f474f4d9f0793311a01a80dbdd851d0cd3941, including tampered authorization/candidate/outcome/terminal and malformed persisted-JSON regressions.
 - Skill Workflow authority remains 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720.
 
 ## Not proven
-- Final branch closeout CI after acceptance evidence regeneration.
+- R02 outcome-integrity full hosted regression and generated-governance synchronization.
 - Any real current-epoch R00/R01 scientific result or real R02 authorization/execution.
 - Any actual model training, Cheap Screen runtime outcome, Qualified Pool, ONNX or Research Challenger.
 - Any real Owner-PC runtime/bootstrap/MT5/browser behavior.
 
 ## Known blockers
 - The fresh runtime still has no accepted current R00/R01 scientific result, so real R02 remains BLOCKED / NOT STARTED.
-- The source now has an immutable outcome ledger/terminal contract, but no trainer/executor is implemented or authorized; hosted tests use synthetic outcome requests only.
-- Cheap Screen outcome status has zero scientific qualification authority; R03 Full WFA remains the only future Qualified Pool admission authority.
+- R02 outcome authority is source-governed and now targeted-tested for cryptographic/readback integrity, but no trainer/executor or real Cheap Screen runtime outcome exists.
+- Cheap Screen outcomes retain zero scientific qualification authority; R03 Full WFA remains the only future Qualified Pool admission authority.
 - Real MetaTrader 5, MetaEditor, broker/data-root, filesystem deployment and browser E2E remain NOT_PROVEN until final Owner-PC acceptance.
 
 ## Known defects
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Regenerate governed docs with exact R02 outcome-ledger pre-closeout evidence.
-- Run exact final branch Windows CI and merge only if all jobs remain green.
-- Revalidate main after merge before any trainer/executor slice.
+- Regenerate Project Truth, sequence projections and governed documentation for R02 outcome-integrity readback.
+- Run exact branch Windows CI and require full regression green.
+- Merge to main only after full hosted closeout, then revalidate main before any trainer/executor slice.
 
 ## Explicitly blocked
 - Owner-PC testing between ordinary GitHub development phases.

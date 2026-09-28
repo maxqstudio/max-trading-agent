@@ -454,11 +454,11 @@
     },
     {
       "path": "backend/max_backend/research_r02_service.py",
-      "sha256": "69e876958e8eab561a49e203d840c07b04d50013598c98b7b300602f832dd656"
+      "sha256": "df57e461da281f866c1a62c31dd0989cf1e18f8d25017240ff11d38b2e674835"
     },
     {
       "path": "backend/max_backend/research_r02_store.py",
-      "sha256": "dc2f5f8a05483bb1832a1dbca13ac0baef7f03b2c48242979a9726bcbd0f3889"
+      "sha256": "194bf6dfe9a6eb3cfe7aef214d8955ff6c23ea7913852d4a39aaf979264d4f59"
     },
     {
       "path": "backend/max_backend/scientist_knowledge.py",
