@@ -144,27 +144,6 @@
       "to": "backend/max_backend/optimizer_store.py::migrate_m01"
     },
     {
-      "action": "r02_preflight",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/research_api.py::get_r02_preflight",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/research_r02_service.py::r02_preflight"
-    },
-    {
-      "action": "candidate_identity_contract",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/research_contract.py::candidate_id",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/research_contract.py::candidate_identity_contract"
-    },
-    {
-      "action": "stable_hash",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/research_contract.py::candidate_id",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/research_contract.py::stable_hash"
-    },
-    {
       "action": "canonical_json",
       "evidence": "STATIC",
       "from": "backend/max_backend/research_contract.py::stable_hash",
@@ -263,74 +242,60 @@
       "to": "backend/max_backend/workflow_store.py::migrate_current"
     },
     {
-      "action": "candidate_id",
+      "action": "_require_text",
       "evidence": "STATIC",
-      "from": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "from": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed",
       "resolver": "python_ast",
-      "to": "backend/max_backend/research_contract.py::candidate_id"
-    },
-    {
-      "action": "candidate_identity_contract",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/research_contract.py::candidate_identity_contract"
-    },
-    {
-      "action": "_require_nonempty_text",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/research_r02_contract.py::_require_nonempty_text"
-    },
-    {
-      "action": "_require_nonempty_text",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/research_r02_contract.py::_require_nonempty_text"
-    },
-    {
-      "action": "_require_nonempty_text",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/research_r02_contract.py::_require_sha256",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/research_r02_contract.py::_require_nonempty_text"
+      "to": "backend/max_backend/research_r02_outcome.py::_require_text"
     },
     {
       "action": "stable_hash",
       "evidence": "STATIC",
-      "from": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "from": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
       "resolver": "python_ast",
       "to": "backend/max_backend/research_contract.py::stable_hash"
     },
     {
-      "action": "_canonical_candidate_spec",
+      "action": "_canonical_compute_consumed",
       "evidence": "STATIC",
-      "from": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "from": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
       "resolver": "python_ast",
-      "to": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec"
+      "to": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed"
     },
     {
-      "action": "_canonical_compute_budget",
+      "action": "_canonical_json",
       "evidence": "STATIC",
-      "from": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "from": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
       "resolver": "python_ast",
-      "to": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget"
+      "to": "backend/max_backend/research_r02_outcome.py::_canonical_json"
     },
     {
-      "action": "_require_nonempty_text",
+      "action": "_require_text",
       "evidence": "STATIC",
-      "from": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "from": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
       "resolver": "python_ast",
-      "to": "backend/max_backend/research_r02_contract.py::_require_nonempty_text"
+      "to": "backend/max_backend/research_r02_outcome.py::_require_text"
     },
     {
-      "action": "_require_sha256",
+      "action": "stable_hash",
       "evidence": "STATIC",
-      "from": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "from": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
       "resolver": "python_ast",
-      "to": "backend/max_backend/research_r02_contract.py::_require_sha256"
+      "to": "backend/max_backend/research_contract.py::stable_hash"
+    },
+    {
+      "action": "_require_text",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_outcome.py::_require_text"
+    },
+    {
+      "action": "build_candidate_outcome",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome"
     },
     {
       "action": "r02_discovery_contract",
@@ -398,6 +363,34 @@
     {
       "action": "connect",
       "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "build_terminal_manifest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest"
+    },
+    {
+      "action": "get_r02_outcome_ledger",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
       "from": "backend/max_backend/research_r02_store.py::get_r02_discovery_block",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
@@ -406,6 +399,34 @@
       "action": "migrate_current",
       "evidence": "STATIC",
       "from": "backend/max_backend/research_r02_store.py::get_r02_discovery_block",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "get_r02_discovery_block",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_store.py::get_r02_discovery_block"
+    },
+    {
+      "action": "get_r02_terminal",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_store.py::get_r02_terminal"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger",
       "resolver": "python_ast",
       "to": "backend/max_backend/workflow_store.py::migrate_current"
     },
@@ -719,8 +740,8 @@
     }
   ],
   "entries": [
-    "backend/max_backend/research_api.py::get_r02_preflight",
-    "backend/max_backend/research_r02_contract.py::build_discovery_plan"
+    "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
+    "backend/max_backend/research_r02_service.py::r02_preflight"
   ],
   "generated": true,
   "generated_by": "generate_sequence_actual.py",
@@ -861,33 +882,6 @@
       "locator": "backend/max_backend/optimizer_store.py::migrate_m02"
     },
     {
-      "id": "backend/max_backend/research_api.py::get_r02_preflight",
-      "kind": "function",
-      "label": "backend/max_backend/research_api.py::get_r02_preflight",
-      "language": "Python",
-      "line_end": 191,
-      "line_start": 187,
-      "locator": "backend/max_backend/research_api.py::get_r02_preflight"
-    },
-    {
-      "id": "backend/max_backend/research_contract.py::candidate_id",
-      "kind": "function",
-      "label": "backend/max_backend/research_contract.py::candidate_id",
-      "language": "Python",
-      "line_end": 210,
-      "line_start": 204,
-      "locator": "backend/max_backend/research_contract.py::candidate_id"
-    },
-    {
-      "id": "backend/max_backend/research_contract.py::candidate_identity_contract",
-      "kind": "function",
-      "label": "backend/max_backend/research_contract.py::candidate_identity_contract",
-      "language": "Python",
-      "line_end": 201,
-      "line_start": 183,
-      "locator": "backend/max_backend/research_contract.py::candidate_identity_contract"
-    },
-    {
       "id": "backend/max_backend/research_contract.py::canonical_json",
       "kind": "function",
       "label": "backend/max_backend/research_contract.py::canonical_json",
@@ -960,51 +954,6 @@
       "locator": "backend/max_backend/research_r01_store.py::get_r01_run"
     },
     {
-      "id": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
-      "kind": "function",
-      "label": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
-      "language": "Python",
-      "line_end": 150,
-      "line_start": 92,
-      "locator": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec"
-    },
-    {
-      "id": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
-      "kind": "function",
-      "label": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
-      "language": "Python",
-      "line_end": 89,
-      "line_start": 71,
-      "locator": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget"
-    },
-    {
-      "id": "backend/max_backend/research_r02_contract.py::_require_nonempty_text",
-      "kind": "function",
-      "label": "backend/max_backend/research_r02_contract.py::_require_nonempty_text",
-      "language": "Python",
-      "line_end": 61,
-      "line_start": 57,
-      "locator": "backend/max_backend/research_r02_contract.py::_require_nonempty_text"
-    },
-    {
-      "id": "backend/max_backend/research_r02_contract.py::_require_sha256",
-      "kind": "function",
-      "label": "backend/max_backend/research_r02_contract.py::_require_sha256",
-      "language": "Python",
-      "line_end": 68,
-      "line_start": 64,
-      "locator": "backend/max_backend/research_r02_contract.py::_require_sha256"
-    },
-    {
-      "id": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
-      "kind": "function",
-      "label": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
-      "language": "Python",
-      "line_end": 270,
-      "line_start": 153,
-      "locator": "backend/max_backend/research_r02_contract.py::build_discovery_plan"
-    },
-    {
       "id": "backend/max_backend/research_r02_contract.py::r02_discovery_contract",
       "kind": "function",
       "label": "backend/max_backend/research_r02_contract.py::r02_discovery_contract",
@@ -1012,6 +961,51 @@
       "line_end": 54,
       "line_start": 33,
       "locator": "backend/max_backend/research_r02_contract.py::r02_discovery_contract"
+    },
+    {
+      "id": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed",
+      "language": "Python",
+      "line_end": 58,
+      "line_start": 44,
+      "locator": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed"
+    },
+    {
+      "id": "backend/max_backend/research_r02_outcome.py::_canonical_json",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_outcome.py::_canonical_json",
+      "language": "Python",
+      "line_end": 41,
+      "line_start": 22,
+      "locator": "backend/max_backend/research_r02_outcome.py::_canonical_json"
+    },
+    {
+      "id": "backend/max_backend/research_r02_outcome.py::_require_text",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_outcome.py::_require_text",
+      "language": "Python",
+      "line_end": 19,
+      "line_start": 15,
+      "locator": "backend/max_backend/research_r02_outcome.py::_require_text"
+    },
+    {
+      "id": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
+      "language": "Python",
+      "line_end": 128,
+      "line_start": 61,
+      "locator": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome"
+    },
+    {
+      "id": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
+      "language": "Python",
+      "line_end": 221,
+      "line_start": 131,
+      "locator": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest"
     },
     {
       "id": "backend/max_backend/research_r02_service.py::_blocked",
@@ -1032,6 +1026,15 @@
       "locator": "backend/max_backend/research_r02_service.py::r02_preflight"
     },
     {
+      "id": "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
+      "language": "Python",
+      "line_end": 619,
+      "line_start": 505,
+      "locator": "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes"
+    },
+    {
       "id": "backend/max_backend/research_r02_store.py::get_r02_discovery_block",
       "kind": "function",
       "label": "backend/max_backend/research_r02_store.py::get_r02_discovery_block",
@@ -1039,6 +1042,15 @@
       "line_end": 151,
       "line_start": 123,
       "locator": "backend/max_backend/research_r02_store.py::get_r02_discovery_block"
+    },
+    {
+      "id": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger",
+      "language": "Python",
+      "line_end": 502,
+      "line_start": 472,
+      "locator": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger"
     },
     {
       "id": "backend/max_backend/research_r02_store.py::get_r02_terminal",

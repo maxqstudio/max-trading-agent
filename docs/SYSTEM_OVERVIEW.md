@@ -26,7 +26,7 @@ Users / External Systems
     -> State / Evidence Authorities
     -> External Runtime / Outputs
 
-Observed source inventory: 136 files, 4 language categories.
+Observed source inventory: 138 files, 4 language categories.
 
 ## Major components
 
@@ -34,7 +34,7 @@ Observed source inventory: 136 files, 4 language categories.
 |---|---|---|---|
 | Owner React Control Surface | Present semantic Strategy, Research, Artifacts and Settings state and explicit Owner actions without manufacturing authority. | frontend/src/App.tsx::App, frontend/src/OptimizerPage.tsx::OptimizerPage, frontend/src/ChallengersPage.tsx::ChallengersPage, frontend/src/ChampionPage.tsx::ChampionPage, frontend/src/ResearchPage.tsx::ResearchPage, frontend/src/DataPage.tsx::DataPage, frontend/src/ScientistPage.tsx::ScientistPage | FastAPI semantic APIs |
 | Strategy lifecycle domain | Own optimizer qualification, Challenger registration/lifecycle and Champion promotion/tenure semantics. | backend/max_backend/optimizer_candidates.py::qualified_candidates_page, backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration, backend/max_backend/challenger_selection.py::create_selected_challengers, backend/max_backend/challenger_store.py::consumed_source_identities, backend/max_backend/challenger_registry.py::challenger_detail, backend/max_backend/challenger_operations.py::retire_challenger, backend/max_backend/champion_store.py::commit_promotion_authority, backend/max_backend/promotion_service.py::promote_strategy_challenger | SQLite, immutable Challenger/optimizer evidence, MT5/MetaEditor |
-| Research authority through R02 frozen Discovery authorization | Own editable Research configuration, immutable R00/R01 authority, and deterministic non-executing R02 planning/authorization/frozen candidate specifications without manufacturing scientific PASS. | backend/max_backend/research_settings.py::get_research_sample_configuration, backend/max_backend/research_settings.py::set_research_sample_configuration, backend/max_backend/research_service.py::r00_preflight, backend/max_backend/research_service.py::start_r00, backend/max_backend/research_service.py::canonical_research_stage, backend/max_backend/research_source.py::prepare_r01_source, backend/max_backend/research_dataset.py::build_labels, backend/max_backend/research_dataset.py::build_dataset, backend/max_backend/research_leakage.py::bind_protected_partition_rows, backend/max_backend/research_leakage.py::bind_protected_target_dependency_authority, backend/max_backend/research_leakage.py::run_adversarial_suite, backend/max_backend/research_r01_store.py::commit_r01_terminal_authority, backend/max_backend/research_r01_service.py::r01_preflight, backend/max_backend/research_r01_service.py::prepare_r01_verified_source, backend/max_backend/research_r01_service.py::start_r01, backend/max_backend/research_r01_service.py::r01_detail, backend/max_backend/research_r02_contract.py::build_discovery_plan, backend/max_backend/research_r02_service.py::r02_preflight, backend/max_backend/research_r02_service.py::authorize_r02_discovery, backend/max_backend/research_r02_store.py::create_r02_authorization, backend/max_backend/research_r02_store.py::freeze_r02_discovery_block | Strategy parent authority, SQLite, immutable Research artifacts, MT5 source capture, accepted R01 scientific authority for future R02 execution, separate future R02 executor implementation before any model training |
+| Research authority through R02 immutable outcome ledger | Own editable Research configuration, immutable R00/R01 authority, deterministic R02 planning/authorization, and append-only Cheap Screen outcome/terminal contracts without implementing a trainer or manufacturing scientific qualification. | backend/max_backend/research_settings.py::get_research_sample_configuration, backend/max_backend/research_settings.py::set_research_sample_configuration, backend/max_backend/research_service.py::r00_preflight, backend/max_backend/research_service.py::start_r00, backend/max_backend/research_service.py::canonical_research_stage, backend/max_backend/research_source.py::prepare_r01_source, backend/max_backend/research_dataset.py::build_labels, backend/max_backend/research_dataset.py::build_dataset, backend/max_backend/research_leakage.py::bind_protected_partition_rows, backend/max_backend/research_leakage.py::bind_protected_target_dependency_authority, backend/max_backend/research_leakage.py::run_adversarial_suite, backend/max_backend/research_r01_store.py::commit_r01_terminal_authority, backend/max_backend/research_r01_service.py::r01_preflight, backend/max_backend/research_r01_service.py::prepare_r01_verified_source, backend/max_backend/research_r01_service.py::start_r01, backend/max_backend/research_r01_service.py::r01_detail, backend/max_backend/research_r02_contract.py::build_discovery_plan, backend/max_backend/research_r02_service.py::r02_preflight, backend/max_backend/research_r02_service.py::authorize_r02_discovery, backend/max_backend/research_r02_store.py::create_r02_authorization, backend/max_backend/research_r02_store.py::freeze_r02_discovery_block, backend/max_backend/research_r02_outcome.py::build_candidate_outcome, backend/max_backend/research_r02_outcome.py::build_terminal_manifest, backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes, backend/max_backend/research_r02_store.py::get_r02_outcome_ledger | Strategy parent authority, SQLite, immutable Research artifacts, MT5 source capture, accepted R01 scientific authority for future R02 execution, separate future R02 trainer/executor implementation before any model fitting |
 | Scientist advisory subsystem | Expose hash-verified static knowledge and bounded committed runtime context to an advisory LLM/chat workflow. | backend/max_backend/scientist_knowledge.py::load_knowledge, backend/max_backend/scientist_api.py::get_status, frontend/src/ScientistPage.tsx::ScientistPage | scientist/knowledge/source_manifest.json, Scientist store/provider settings |
 | FastAPI runtime | Start migrations/recovery, route semantic APIs and expose overview/readiness. | backend/max_backend/main.py::lifespan, backend/max_backend/main.py::overview, backend/max_backend/main.py::app | domain services, SQLite, MT5 detection |
 | Windows launcher/readiness | Verify or start canonical backend/frontend instances, reject invalid occupied ports and emit MAX_READY only after authority/readiness checks. | RUN_MAX.cmd, scripts/run_max.ps1 | backend /api/overview, frontend proxy/root, Scientist status, ports 8000/5173 |
@@ -124,6 +124,15 @@ Authority: research_r01_service + research_source/dataset/leakage/store + immuta
 - LEAKAGE_VALIDATED -> PASS_WAITING_OWNER : Atomically commit artifact registry/run/gate/non-adaptive memory terminal authority.
 - STARTING -> FAIL_WAITING_OWNER : Fail closed on source/data/label/leakage/invariant error.
 
+### FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER — R02 Cheap Screen immutable outcome ledger
+
+Define deterministic append-only all-candidate outcome and terminal authority for a future executor without performing model fitting or granting qualification.
+
+Authority: Immutable frozen R02 Discovery block/candidate specs + deterministic outcome contract/store; no trainer or qualification authority.
+
+- FROZEN_WAITING_EXECUTION -> OUTCOME_SET_VALIDATED : Validate exact frozen candidate set, deterministic outcome identities, explicit failure retention and frozen compute budget.
+- OUTCOME_SET_VALIDATED -> COMPLETE_WAITING_OWNER : Atomically append every candidate outcome and one immutable terminal authority.
+
 ### FLOW-R02-DISCOVERY-AUTHORIZATION — R02 Owner authorization and immutable Discovery freeze
 
 Validate explicit Owner authorization against current accepted R01 output, then persist one immutable non-executing Discovery block and candidate set.
@@ -167,9 +176,9 @@ Authority: scientist_knowledge hash manifest + bounded Scientist context/store; 
 
 ## Lifecycle and state
 
-Current phase: R02_DISCOVERY_AUTHORIZATION_FREEZE
+Current phase: R02_CHEAP_SCREEN_OUTCOME_LEDGER
 
-Current status: SOURCE_PHASE_PRE_CLOSEOUT_PASS
+Current status: ACTIVE_TARGETED_PASS
 
 See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 
@@ -240,6 +249,8 @@ compiler does not infer them from implementation names.
 - FLOW-OPTIMIZER-TO-CHALLENGER: Partial post-directory state becomes recovery-required rather than invented success.
 - FLOW-R00-INITIALIZATION: Missing parent/config/authorization/hash/invariant prevents terminal PASS.
 - FLOW-R01-SOURCE-PIPELINE: Incomplete materialization is discarded/recovered fail-closed; protected-data/leakage failure cannot become PASS.
+- FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER: Missing/duplicate/unknown candidates, malformed metrics, wrong compute units, budget excess or different terminal replay fail closed before/without terminal authority.
+- FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER: A mid-batch persistence fault rolls back all newly inserted outcome and terminal rows.
 - FLOW-R02-DISCOVERY-AUTHORIZATION: Missing/wrong Owner confirmation, stale Research/R01 output, tampered hashes/IDs, prior scientific side effects or a different second block fail closed.
 - FLOW-R02-DISCOVERY-AUTHORIZATION: Any persistence fault while creating a new authorization/block/candidate set rolls back the entire new R02 authority transaction; no orphan immutable authorization is permitted.
 - FLOW-R02-DISCOVERY-PREFLIGHT: Absent/unaccepted R01 returns BLOCKED; malformed/tampered R01 output authority or prior scientific side-effect regression fails closed.
@@ -250,14 +261,15 @@ compiler does not infer them from implementation names.
 ## Current project state
 
 Next authorized actions:
-- Regenerate governed docs and Scientist knowledge with exact R02 pre-closeout evidence.
-- Run exact final branch Windows CI, then merge only if all jobs remain green.
-- Revalidate main after merge before any R02 executor/trainer slice.
+- Regenerate Project Truth, sequence projections and Scientist knowledge for the R02 outcome-ledger source slice.
+- Run exact branch Windows CI and require full regression green.
+- Merge to main only after full hosted closeout, then revalidate main before any trainer/executor slice.
 
 Blocked actions:
 - Owner-PC testing between ordinary GitHub development phases.
 - Any real current-epoch R00, R01 or R02 scientific execution.
-- Any R02 model-training or Cheap Screen executor in this authorization-freeze phase.
+- Any model fitting/training or Cheap Screen executor in this outcome-ledger phase.
+- Any API or UI action that submits fabricated Cheap Screen outcomes.
 - Automatic second Discovery block creation.
 - Cheap Screen scientific qualification or Qualified Pool admission.
 - ONNX generation.
@@ -268,8 +280,9 @@ Blocked actions:
 - Unrelated Strategy, optimizer, EA or UI refactors.
 
 Known blockers:
-- The fresh source-governed epoch still has no accepted current R00 or R01 scientific result; therefore real R02 authorization/runtime remains unavailable in the actual fresh runtime despite source implementation.
-- This slice freezes authorization and candidate specifications only; no trainer, Cheap Screen executor or scientific outcome persistence exists.
+- The fresh runtime still has no accepted current R00/R01 scientific result, so real R02 remains BLOCKED / NOT STARTED.
+- The source now has an immutable outcome ledger/terminal contract, but no trainer/executor is implemented or authorized; hosted tests use synthetic outcome requests only.
+- Cheap Screen outcome status has zero scientific qualification authority; R03 Full WFA remains the only future Qualified Pool admission authority.
 - Real MetaTrader 5, MetaEditor, broker/data-root, filesystem deployment and browser E2E remain NOT_PROVEN until final Owner-PC acceptance.
 
 ## Proven vs not proven
@@ -278,18 +291,16 @@ Known blockers:
 
 - H0 governance rebase remains accepted on main.
 - R01 current-lineage source repair remains accepted on main.
-- R02 Discovery source foundation is merged to main as 936b8a9878bc158285cfc1c5343bfd4112c3093d with post-merge Windows CI run 36376007589 SUCCESS: backend 537 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, governance, pip check, lint/build and npm dependency tree PASS.
-- R02 authorization/freeze targeted Windows run 36378628948 passed 59 synthetic tests on source candidate cb1917a210f6aca23ab43a11400392332af7816f.
+- R02 Discovery source foundation remains accepted on main.
+- R02 authorization/freeze is merged to main as eb6192873eb518b9fe4c7f15d03600ca4ac1e73d; main Windows CI run 36409834797 passed 558 backend tests, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, governance, pip check, lint/build and npm dependency tree.
+- R02 outcome-ledger targeted Windows run 36411091220 passed 82 synthetic tests on candidate 59d61a20b5a7a54be0ff10893a3a63216a91250b.
 - Skill Workflow authority remains 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720.
-- R02 authorization/freeze atomic targeted Windows run 36380098875 passed 61 tests at f4c05908114bc3d830bd39b4eb864ce105301991, including rollback fault injection proving no orphan authorization/block/candidate rows on persistence failure.
-- R02 authorization/freeze exact branch Windows CI run 36380453938 passed at 7f60da88d25d38753b200dceaa71131856304dd9: backend 558 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, lint/build and npm dependency tree PASS.
-- Atomic R02 persistence targeted run 36380098875 passed 61 tests and fault-injection rollback proof.
 
 ### Not proven
 
-- Final branch closeout CI after pre-closeout evidence regeneration.
-- Any current-epoch R00/R01 scientific result or real R02 authorization/execution.
-- Any model training, Cheap Screen result, Qualified Pool, ONNX or Research Challenger.
+- R02 outcome-ledger full hosted regression and generated-governance synchronization.
+- Any real current-epoch R00/R01 scientific result or real R02 authorization/execution.
+- Any actual model training, Cheap Screen runtime outcome, Qualified Pool, ONNX or Research Challenger.
 - Any real Owner-PC runtime/bootstrap/MT5/browser behavior.
 
 ## Important limitations

@@ -41,7 +41,7 @@
   },
   {
     "path": "backend/max_backend/schema.py",
-    "sha256": "328cc1f154fdfd184f18d38f06fb98990ad4e9250816bab1e7a7abaff93d5ca8"
+    "sha256": "fb026c5cae33d9eb08422dcfc6f767a2383ad9b22ccaca166f6564624d190a7a"
   },
   {
     "path": "backend/max_backend/workflow_contract.py",
@@ -49,7 +49,7 @@
   },
   {
     "path": "backend/max_backend/workflow_store.py",
-    "sha256": "3a9d990daa0aa89dee14cab0cf379899772129de6f8e6a3275d5e7cff36251c5"
+    "sha256": "e09ea91ee12c2298f00cc8d0eafe402292abdbc07ac5db3111bbe96dc0b7fa3e"
   },
   {
     "path": "backend/max_backend/mtf_geometry.py",
@@ -196,16 +196,20 @@
     "sha256": "0436e7cae6f0d6525ca76a491d7a33ff152f195447b8a10fe652b299d638da58"
   },
   {
+    "path": "backend/max_backend/research_r02_outcome.py",
+    "sha256": "ad87d616629273e5e314de97562c7ec892e360b05b6db86ec17feb6d83c4ffc6"
+  },
+  {
     "path": "backend/max_backend/research_r02_service.py",
-    "sha256": "ebc9d64f30c34efab4027210dfbb019d3deaac18446de2bcf9c36518ddc66529"
+    "sha256": "69e876958e8eab561a49e203d840c07b04d50013598c98b7b300602f832dd656"
   },
   {
     "path": "backend/max_backend/research_r02_store.py",
-    "sha256": "c5b108f1d5562b9e1a385c3bc9550bb3dc97534d600f1d6b15454fc653358c69"
+    "sha256": "dc2f5f8a05483bb1832a1dbca13ac0baef7f03b2c48242979a9726bcbd0f3889"
   },
   {
     "path": "backend/max_backend/scientist_knowledge.py",
-    "sha256": "d74d929b29e120ae76087ef39127c0492917fb49d1bd9f1e4bc40b36b2399c54"
+    "sha256": "4f17c7a9d9c937faecdd68add46f9ad3c8e0c33ffd3abcec296d20e4f9dc7220"
   },
   {
     "path": "backend/max_backend/scientist_context.py",

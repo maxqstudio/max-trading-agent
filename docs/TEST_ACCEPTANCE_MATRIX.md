@@ -4,28 +4,29 @@
 
 ## Evidence boundary
 
-R02 Discovery Owner-authorization/frozen-block source phase pre-closeout. Exact branch Windows CI run 36380453938 passed at 7f60da88d25d38753b200dceaa71131856304dd9: backend 558 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, lint/build and npm dependency tree PASS. Atomic targeted run 36380098875 separately passed 61 R02 tests including fault-injection rollback proof. Real R00/R01/R02 scientific execution, trainer/Cheap Screen outcome, qualification, Qualified Pool, ONNX, Research Challenger, Champion mutation and Owner-PC/MT5/browser runtime remain intentionally NOT_PROVEN.
+R02 Cheap Screen outcome-ledger source phase. Hosted synthetic targeted run 36411091220 passed 82 tests at 59d61a20b5a7a54be0ff10893a3a63216a91250b. The source can validate and atomically persist a complete immutable candidate-outcome ledger, including SCREEN_FAIL and EXECUTION_ERROR, but no trainer/executor or outcome-submit API exists and no real model fitting/outcome is claimed. Full generated-governance/full-regression closeout remains pending; real R00/R01/R02 scientific runtime and Owner-PC/MT5/browser E2E remain NOT_PROVEN.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb
+Current source digest: a74b94c6b01bbc79550856bca36e55e324123e15cd7b5e7707b6695cbd9a0453
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
-| R02AF-01 | R02 Owner authorization requires exact explicit confirmation and an exact canonical Discovery plan bound to current Research and accepted R01 output authority. | research_r02_service.py + test_r02_authorization_service.py | PASS |
-| R02AF-02 | Authorization identity and payload hash, plan identity/hash, candidate identities and exact R01 output binding are recomputed at the persistence boundary and tampering fails closed. | research_r02_store.py + test_r02_authorization_store.py | PASS |
-| R02AF-03 | At most one bounded Discovery block may be frozen per Research identity; exact replay is idempotent and a different second block is rejected. | research_r02_store.py + tests | PASS |
-| R02AF-04 | Frozen R02 authorization, Discovery block and candidate-spec rows are update-immutable and append-only. | SQLite triggers + test_r02_authorization_store.py | PASS |
-| R02AF-05 | Frozen state is FROZEN_WAITING_EXECUTION, not STARTING; no trainer, Cheap Screen executor, scientific result or qualification authority is opened. | research_r02_service.py + research_r02_store.py + tests | PASS |
-| R02AF-06 | R02 freeze preserves zero model-training, ONNX, Research-Challenger and Champion-mutation counters. | test_r02_authorization_store.py + test_r02_authorization_service.py | PASS |
-| R02AF-07 | The durable R02 persistence extension advances cumulative SQLite schema authority from 10 to 11. | backend/max_backend/schema.py + test_r02_authorization_store.py | PASS |
-| R02AF-08 | Scientist knowledge manifest hashes R02 contract/service/store source so advisory context cannot drift from implemented R02 authority. | scientist_knowledge.py + regenerated source_manifest.json | PASS |
-| R02AF-09 | Skill Workflow provenance/STRICT, Project Truth, cross-document consistency and sequence contracts remain synchronized. | Windows CI governance gates | PASS |
-| R02AF-10 | Full backend/frontend/source-only/security/dependency regression remains green. | Windows CI | PASS |
-| R02AF-11 | Production R02 authorize-and-freeze is atomic: a persistence fault after authorization insertion rolls back authorization, block and all candidate rows together, leaving no orphan immutable authority. | research_r02_store.py::authorize_and_freeze_r02_discovery + fault-injection regression in test_r02_authorization_store.py | PASS |
+| R02OL-01 | Every frozen candidate must have exactly one deterministic outcome before terminalization; missing, duplicate and unknown candidate outcomes fail closed. | research_r02_outcome.py + test_r02_outcome_contract.py + test_r02_authorization_store.py | NOT_PROVEN |
+| R02OL-02 | Outcome status is canonical SCREEN_PASS, SCREEN_FAIL or EXECUTION_ERROR; non-pass records retain an explicit failure code and all failures are persisted rather than filtered out. | research_r02_outcome.py + targeted tests | NOT_PROVEN |
+| R02OL-03 | Outcome metrics and compute accounting reject non-finite values; compute unit must match the frozen block and total consumption cannot exceed the frozen budget. | test_r02_outcome_contract.py + test_r02_authorization_store.py | NOT_PROVEN |
+| R02OL-04 | All candidate outcomes plus one COMPLETE_WAITING_OWNER terminal authority commit atomically; a mid-batch persistence fault leaves zero new outcome/terminal rows. | commit_r02_terminal_outcomes + fault-injection regression | NOT_PROVEN |
+| R02OL-05 | Exact terminal replay is idempotent while a different second terminal manifest is rejected. | test_r02_authorization_store.py | NOT_PROVEN |
+| R02OL-06 | Outcome and terminal rows are immutable/append-only and do not mutate model-training, ONNX, Research-Challenger or Champion counters. | SQLite triggers + test_r02_authorization_store.py | NOT_PROVEN |
+| R02OL-07 | Cheap Screen outcome and COMPLETE_WAITING_OWNER have zero scientific qualification authority; R03 Full WFA remains the only future Qualified Pool admission authority. | research_r02_outcome.py + r02_preflight + tests | NOT_PROVEN |
+| R02OL-08 | No trainer/model-fit implementation, outcome-submit API/UI, heavy ML dependency, ONNX, Challenger or Champion mutation is introduced in this slice. | source review + source-only/security CI | NOT_PROVEN |
+| R02OL-09 | Durable outcome/terminal persistence advances cumulative SQLite schema authority from 11 to 12. | schema.py + workflow_store.py + test_r02_authorization_store.py | NOT_PROVEN |
+| R02OL-10 | Scientist knowledge manifest hashes R02 outcome contract/store/service source so advisory context cannot drift. | scientist_knowledge.py + regenerated source_manifest.json | NOT_PROVEN |
+| R02OL-11 | Skill Workflow provenance/STRICT, Project Truth, cross-document consistency and sequence contracts remain synchronized. | Windows CI governance gates | NOT_PROVEN |
+| R02OL-12 | Full backend/frontend/source-only/security/dependency regression remains green. | Windows CI | NOT_PROVEN |
 
 ## Test commands
 
-- python -m pytest backend/tests/test_r02_discovery_contract.py backend/tests/test_r02_preflight.py backend/tests/test_r02_authorization_store.py backend/tests/test_r02_authorization_service.py -q -o addopts=
+- python -m pytest backend/tests/test_r02_discovery_contract.py backend/tests/test_r02_preflight.py backend/tests/test_r02_authorization_store.py backend/tests/test_r02_authorization_service.py backend/tests/test_r02_outcome_contract.py -q -o addopts=
 - python .workflow/tools/validate_project_docs.py
 - python .workflow/tools/validate_sequence_sessions.py
 - python .workflow/tools/validate_handoff.py
@@ -43,13 +44,14 @@ Current source digest: 8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f6008846
 - NOT_RUN: real Owner-PC database/bootstrap.
 - NOT_RUN: real MT5/MetaEditor/broker/data-root/filesystem/browser runtime.
 - NOT_RUN: real R00/R01 scientific execution or real R02 authorization.
-- NOT_RUN: model training, Cheap Screen execution, qualification, ONNX, Research Challenger or Champion mutation.
+- NOT_RUN: model fitting/training or real Cheap Screen execution/outcome.
+- NOT_RUN: R03 qualification, ONNX, Research Challenger or Champion mutation.
 
 ## Sequence contract evidence
 
 Sequence mode for this phase/session: DURING
-Sequence session contract: docs/sequence/sessions/ (10 current DURING sessions after R02 authorization flow)
-SEQUENCE_SYNC: PASS
+Sequence session contract: docs/sequence/sessions/ (11 current DURING sessions after R02 outcome-ledger flow)
+SEQUENCE_SYNC: NOT_PROVEN
 
 ## Project Truth Compiler evidence
 

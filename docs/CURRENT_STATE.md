@@ -3,20 +3,20 @@
 # CURRENT STATE
 
 Last updated: generated from current specs
-Authority verified at SHA: 936b8a9878bc158285cfc1c5343bfd4112c3093d
+Authority verified at SHA: eb6192873eb518b9fe4c7f15d03600ca4ac1e73d
 Governance profile: strict
 
 ## Current phase
-Phase: R02_DISCOVERY_AUTHORIZATION_FREEZE
-Status: SOURCE_PHASE_PRE_CLOSEOUT_PASS
+Phase: R02_CHEAP_SCREEN_OUTCOME_LEDGER
+Status: ACTIVE_TARGETED_PASS
 
 ## Source
 Repository: maxqstudio/max-trading-agent
-Branch: work/r02-authorization-freeze
+Branch: work/r02-outcome-ledger
 Authoritative SHA: external final acceptance evidence
-Last accepted SHA: 936b8a9878bc158285cfc1c5343bfd4112c3093d
+Last accepted SHA: eb6192873eb518b9fe4c7f15d03600ca4ac1e73d
 Current candidate SHA: external final acceptance evidence
-Current source digest: 8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb
+Current source digest: a74b94c6b01bbc79550856bca36e55e324123e15cd7b5e7707b6695cbd9a0453
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
@@ -33,42 +33,42 @@ PROJECT_DOCS_SYNC: PASS
 ## Sequence governance
 Sequence policy: REQUIRED
 Current sequence mode: DURING
-Current sequence session: docs/sequence/sessions/ (10 current DURING sessions after R02 authorization flow)
-SEQUENCE_SYNC: PASS
+Current sequence session: docs/sequence/sessions/ (11 current DURING sessions after R02 outcome-ledger flow)
+SEQUENCE_SYNC: NOT_PROVEN
 
 ## Proven
 - H0 governance rebase remains accepted on main.
 - R01 current-lineage source repair remains accepted on main.
-- R02 Discovery source foundation is merged to main as 936b8a9878bc158285cfc1c5343bfd4112c3093d with post-merge Windows CI run 36376007589 SUCCESS: backend 537 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, governance, pip check, lint/build and npm dependency tree PASS.
-- R02 authorization/freeze targeted Windows run 36378628948 passed 59 synthetic tests on source candidate cb1917a210f6aca23ab43a11400392332af7816f.
+- R02 Discovery source foundation remains accepted on main.
+- R02 authorization/freeze is merged to main as eb6192873eb518b9fe4c7f15d03600ca4ac1e73d; main Windows CI run 36409834797 passed 558 backend tests, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, governance, pip check, lint/build and npm dependency tree.
+- R02 outcome-ledger targeted Windows run 36411091220 passed 82 synthetic tests on candidate 59d61a20b5a7a54be0ff10893a3a63216a91250b.
 - Skill Workflow authority remains 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720.
-- R02 authorization/freeze atomic targeted Windows run 36380098875 passed 61 tests at f4c05908114bc3d830bd39b4eb864ce105301991, including rollback fault injection proving no orphan authorization/block/candidate rows on persistence failure.
-- R02 authorization/freeze exact branch Windows CI run 36380453938 passed at 7f60da88d25d38753b200dceaa71131856304dd9: backend 558 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, lint/build and npm dependency tree PASS.
-- Atomic R02 persistence targeted run 36380098875 passed 61 tests and fault-injection rollback proof.
 
 ## Not proven
-- Final branch closeout CI after pre-closeout evidence regeneration.
-- Any current-epoch R00/R01 scientific result or real R02 authorization/execution.
-- Any model training, Cheap Screen result, Qualified Pool, ONNX or Research Challenger.
+- R02 outcome-ledger full hosted regression and generated-governance synchronization.
+- Any real current-epoch R00/R01 scientific result or real R02 authorization/execution.
+- Any actual model training, Cheap Screen runtime outcome, Qualified Pool, ONNX or Research Challenger.
 - Any real Owner-PC runtime/bootstrap/MT5/browser behavior.
 
 ## Known blockers
-- The fresh source-governed epoch still has no accepted current R00 or R01 scientific result; therefore real R02 authorization/runtime remains unavailable in the actual fresh runtime despite source implementation.
-- This slice freezes authorization and candidate specifications only; no trainer, Cheap Screen executor or scientific outcome persistence exists.
+- The fresh runtime still has no accepted current R00/R01 scientific result, so real R02 remains BLOCKED / NOT STARTED.
+- The source now has an immutable outcome ledger/terminal contract, but no trainer/executor is implemented or authorized; hosted tests use synthetic outcome requests only.
+- Cheap Screen outcome status has zero scientific qualification authority; R03 Full WFA remains the only future Qualified Pool admission authority.
 - Real MetaTrader 5, MetaEditor, broker/data-root, filesystem deployment and browser E2E remain NOT_PROVEN until final Owner-PC acceptance.
 
 ## Known defects
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Regenerate governed docs and Scientist knowledge with exact R02 pre-closeout evidence.
-- Run exact final branch Windows CI, then merge only if all jobs remain green.
-- Revalidate main after merge before any R02 executor/trainer slice.
+- Regenerate Project Truth, sequence projections and Scientist knowledge for the R02 outcome-ledger source slice.
+- Run exact branch Windows CI and require full regression green.
+- Merge to main only after full hosted closeout, then revalidate main before any trainer/executor slice.
 
 ## Explicitly blocked
 - Owner-PC testing between ordinary GitHub development phases.
 - Any real current-epoch R00, R01 or R02 scientific execution.
-- Any R02 model-training or Cheap Screen executor in this authorization-freeze phase.
+- Any model fitting/training or Cheap Screen executor in this outcome-ledger phase.
+- Any API or UI action that submits fabricated Cheap Screen outcomes.
 - Automatic second Discovery block creation.
 - Cheap Screen scientific qualification or Qualified Pool admission.
 - ONNX generation.

@@ -28,7 +28,7 @@
     ],
     "graph": "docs/sequence/generated/FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER.actual.json",
     "diagram": "docs/sequence/generated/FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER.actual.mmd",
-    "source_digest": ""
+    "source_digest": "a74b94c6b01bbc79550856bca36e55e324123e15cd7b5e7707b6695cbd9a0453"
   },
   "runtime_trace": {
     "required": false,

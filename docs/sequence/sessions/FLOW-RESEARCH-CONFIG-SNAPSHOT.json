@@ -8,12 +8,12 @@
       "backend/max_backend/research_r01_service.py::start_r01"
     ],
     "graph": "docs/sequence/generated/FLOW-RESEARCH-CONFIG-SNAPSHOT.actual.json",
-    "source_digest": "8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb"
+    "source_digest": "a74b94c6b01bbc79550856bca36e55e324123e15cd7b5e7707b6695cbd9a0453"
   },
   "critical": true,
-  "implementation_base_sha": "936b8a9878bc158285cfc1c5343bfd4112c3093d",
+  "implementation_base_sha": "eb6192873eb518b9fe4c7f15d03600ca4ac1e73d",
   "mode": "DURING",
-  "phase": "R02_DISCOVERY_AUTHORIZATION_FREEZE",
+  "phase": "R02_CHEAP_SCREEN_OUTCOME_LEDGER",
   "plan": {
     "contract": "",
     "diagram": "",

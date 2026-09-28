@@ -266,6 +266,51 @@ Authority: research_r01_service + research_source/dataset/leakage/store + immuta
 
 - Pre-terminal partial artifacts are cleaned or rejected; accepted parent/history remains immutable.
 
+## FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER — R02 Cheap Screen immutable outcome ledger
+
+Purpose: Define deterministic append-only all-candidate outcome and terminal authority for a future executor without performing model fitting or granting qualification.
+Critical: TRUE
+Entry condition: A frozen R02 Discovery block exists. Hosted tests may pass synthetic outcome requests directly to the store; no public outcome-submit runtime surface exists.
+Authority: Immutable frozen R02 Discovery block/candidate specs + deterministic outcome contract/store; no trainer or qualification authority.
+
+### States
+
+- FROZEN_WAITING_EXECUTION
+- OUTCOME_SET_VALIDATED
+- COMPLETE_WAITING_OWNER
+
+### Legal transitions
+
+| From | To | Action | Authority | Side effects |
+|---|---|---|---|---|
+| FROZEN_WAITING_EXECUTION | OUTCOME_SET_VALIDATED | Validate exact frozen candidate set, deterministic outcome identities, explicit failure retention and frozen compute budget. | Immutable frozen R02 Discovery block/candidate specs + deterministic outcome contract/store; no trainer or qualification authority. |  |
+| OUTCOME_SET_VALIDATED | COMPLETE_WAITING_OWNER | Atomically append every candidate outcome and one immutable terminal authority. | Immutable frozen R02 Discovery block/candidate specs + deterministic outcome contract/store; no trainer or qualification authority. | R02_CANDIDATE_OUTCOMES, R02_BLOCK_TERMINAL |
+
+### Invariants
+
+- Every frozen candidate must appear exactly once before terminal commit.
+- SCREEN_FAIL and EXECUTION_ERROR are retained as outcomes rather than discarded.
+- Non-finite metrics and compute values fail closed.
+- Total compute consumption cannot exceed the frozen block budget and units must match.
+- Outcome plus terminal persistence is all-or-nothing.
+- Outcome and terminal rows are immutable and append-only.
+- COMPLETE_WAITING_OWNER is block completeness only, not scientific qualification.
+- Cheap Screen has zero Qualified Pool authority; future R03 Full WFA owns admission.
+- No trainer, model fitting, ONNX, Research Challenger or Champion mutation occurs in this flow.
+
+### Failure behavior
+
+- Missing/duplicate/unknown candidates, malformed metrics, wrong compute units, budget excess or different terminal replay fail closed before/without terminal authority.
+- A mid-batch persistence fault rolls back all newly inserted outcome and terminal rows.
+
+### Restart behavior
+
+- Exact same complete outcome set is idempotent; a different second terminal manifest is rejected.
+
+### Rollback behavior
+
+- One SQLite transaction covers all new candidate outcome rows and the block terminal row.
+
 ## FLOW-R02-DISCOVERY-AUTHORIZATION — R02 Owner authorization and immutable Discovery freeze
 
 Purpose: Validate explicit Owner authorization against current accepted R01 output, then persist one immutable non-executing Discovery block and candidate set.

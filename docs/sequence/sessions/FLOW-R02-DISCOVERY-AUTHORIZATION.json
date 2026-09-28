@@ -4,8 +4,8 @@
   "status": "CURRENT",
   "mode": "DURING",
   "scope": "CURRENT",
-  "phase": "R02_DISCOVERY_AUTHORIZATION_FREEZE",
-  "implementation_base_sha": "936b8a9878bc158285cfc1c5343bfd4112c3093d",
+  "phase": "R02_CHEAP_SCREEN_OUTCOME_LEDGER",
+  "implementation_base_sha": "eb6192873eb518b9fe4c7f15d03600ca4ac1e73d",
   "critical": true,
   "test_traceability_required": true,
   "tests": [
@@ -29,7 +29,7 @@
     ],
     "graph": "docs/sequence/generated/FLOW-R02-DISCOVERY-AUTHORIZATION.actual.json",
     "diagram": "docs/sequence/generated/FLOW-R02-DISCOVERY-AUTHORIZATION.actual.mmd",
-    "source_digest": "8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb"
+    "source_digest": "a74b94c6b01bbc79550856bca36e55e324123e15cd7b5e7707b6695cbd9a0453"
   },
   "runtime_trace": {
     "required": false,
