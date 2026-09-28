@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   regenerate:
-    if: github.actor != 'github-actions[bot]'
+    if: ${{ false }} # pre-closeout CI gate; re-enabled only for evidence sync
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
