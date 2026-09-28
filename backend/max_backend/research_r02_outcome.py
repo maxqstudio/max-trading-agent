@@ -45,10 +45,14 @@ def _canonical_compute_consumed(value: Any, *, budget_unit: str) -> dict[str, An
     if not isinstance(value, dict) or set(value) != {"value", "unit"}:
         raise ValueError("R02_OUTCOME_COMPUTE_FIELDS_INVALID")
     amount = value["value"]
+    try:
+        finite_amount = float(amount)
+    except (OverflowError, TypeError, ValueError) as exc:
+        raise ValueError("R02_OUTCOME_COMPUTE_VALUE_INVALID") from exc
     if (
         isinstance(amount, bool)
         or not isinstance(amount, (int, float))
-        or not math.isfinite(float(amount))
+        or not math.isfinite(finite_amount)
         or amount < 0
     ):
         raise ValueError("R02_OUTCOME_COMPUTE_VALUE_INVALID")
@@ -145,10 +149,14 @@ def build_terminal_manifest(
         compute_budget.get("unit"),
         "R02_TERMINAL_COMPUTE_BUDGET_UNIT_REQUIRED",
     )
+    try:
+        finite_budget = float(budget_value)
+    except (OverflowError, TypeError, ValueError) as exc:
+        raise ValueError("R02_TERMINAL_COMPUTE_BUDGET_INVALID") from exc
     if (
         isinstance(budget_value, bool)
         or not isinstance(budget_value, (int, float))
-        or not math.isfinite(float(budget_value))
+        or not math.isfinite(finite_budget)
         or budget_value <= 0
     ):
         raise ValueError("R02_TERMINAL_COMPUTE_BUDGET_INVALID")
@@ -181,7 +189,7 @@ def build_terminal_manifest(
         float(outcome["compute_consumed"]["value"])
         for outcome in outcomes
     )
-    if total > float(budget_value) + 1e-9:
+    if total > finite_budget + 1e-9:
         raise ValueError("R02_TERMINAL_COMPUTE_BUDGET_EXCEEDED")
 
     status_counts = {

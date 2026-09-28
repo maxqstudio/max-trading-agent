@@ -74,10 +74,14 @@ def _canonical_compute_budget(value: Any) -> dict[str, Any]:
     if set(value) != {"value", "unit"}:
         raise ValueError("R02_COMPUTE_BUDGET_FIELDS_INVALID")
     amount = value["value"]
+    try:
+        finite_amount = float(amount)
+    except (OverflowError, TypeError, ValueError) as exc:
+        raise ValueError("R02_COMPUTE_BUDGET_VALUE_INVALID") from exc
     if (
         isinstance(amount, bool)
         or not isinstance(amount, (int, float))
-        or not math.isfinite(float(amount))
+        or not math.isfinite(finite_amount)
         or amount <= 0
     ):
         raise ValueError("R02_COMPUTE_BUDGET_VALUE_INVALID")

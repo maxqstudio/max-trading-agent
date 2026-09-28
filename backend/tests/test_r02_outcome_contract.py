@@ -55,6 +55,32 @@ def test_nonfinite_metric_is_rejected(value: float) -> None:
         )
 
 
+def test_huge_integer_compute_values_fail_closed_as_validation_errors() -> None:
+    request = _outcome("RCAND-A")
+    request["compute_consumed"]["value"] = 10 ** 10000
+    with pytest.raises(ValueError, match="R02_OUTCOME_COMPUTE_VALUE_INVALID"):
+        build_candidate_outcome(
+            request,
+            block_id="RDISC-TEST",
+            candidate_ids=CANDIDATES,
+            budget_unit="FIT_SECONDS",
+        )
+
+    with pytest.raises(ValueError, match="R02_TERMINAL_COMPUTE_BUDGET_INVALID"):
+        build_terminal_manifest(
+            block_id="RDISC-TEST",
+            candidate_ids=CANDIDATES,
+            compute_budget={
+                "value": 10 ** 10000,
+                "unit": "FIT_SECONDS",
+            },
+            outcome_requests=[
+                _outcome(candidate_id)
+                for candidate_id in CANDIDATES
+            ],
+        )
+
+
 def test_screen_pass_forbids_failure_code() -> None:
     request = _outcome("RCAND-A")
     request["failure_code"] = "SHOULD_NOT_EXIST"
