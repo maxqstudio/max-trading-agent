@@ -331,11 +331,13 @@
         "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
         "backend/max_backend/research_r02_service.py::r02_preflight"
       ],
-      "python_source_owners_declared": 4,
+      "python_source_owners_declared": 6,
       "python_source_owners_in_static_graph": [
         "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
         "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
         "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
+        "backend/max_backend/research_r02_store.py::validate_r02_discovery_block_integrity",
+        "backend/max_backend/research_r02_store.py::validate_r02_outcome_integrity",
         "backend/max_backend/research_r02_service.py::r02_preflight"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
@@ -352,12 +354,12 @@
         "backend/tests/test_r02_authorization_store.py",
         "backend/tests/test_r02_preflight.py"
       ],
-      "runtime_evidence_boundary": "Hosted Windows CI validates synthetic outcome/SQLite contracts only. No real model fitting, Cheap Screen runtime result, R03 qualification or Owner MT5/browser runtime is proven."
+      "runtime_evidence_boundary": "Hosted Windows CI validates synthetic persistence/tamper/readback contracts only. No real model fitting, Cheap Screen runtime result, R03 qualification or Owner MT5/browser runtime is proven."
     }
   ],
   "generation_anchor_policy": {
     "meaning": "Pre-commit generation anchor only; final hosted provenance is the exact GitHub candidate SHA and final real-runtime provenance is the final main SHA accepted on Owner PC. Structural sequence binding remains deterministic product source_digest.",
-    "observed_head": "50f3f5f77632d81c7f9f1f794508723127e32e1f",
+    "observed_head": "9d3f474f4d9f0793311a01a80dbdd851d0cd3941",
     "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68"
   },
   "mode": "DURING",

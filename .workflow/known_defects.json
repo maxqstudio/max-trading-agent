@@ -89,6 +89,12 @@
       "status": "FIXED/ACCEPTED_CANDIDATE",
       "summary": "R02 compute-budget validation converted arbitrary integers to float without catching OverflowError, allowing extreme API numeric input to escape the intended fail-closed validation path.",
       "evidence": "research_r02_contract.py and research_r02_outcome.py catch OverflowError/TypeError/ValueError around numeric conversion. Targeted Windows run 36412664127 passed 84 R02 tests; exact full branch Windows CI run 36413020299 passed 581 backend tests plus complete frontend/source-only/governance/dependency gates at a178b4be591c42e88bb6a5ea3bcec1d113987dcb."
+    },
+    {
+      "id": "KD-009",
+      "status": "FIXED_PENDING_FULL_CI",
+      "summary": "R02 persisted outcome/frozen authority could be reported from stored rows without complete readback reconstruction, and malformed persisted JSON could escape the governed integrity error path.",
+      "evidence": "validate_r02_discovery_block_integrity + validate_r02_outcome_integrity plus preflight integration; targeted Windows run 36429847329 passed 94 tamper/fail-closed R02 tests. Full hosted closeout pending."
     }
   ],
   "schema_version": 1

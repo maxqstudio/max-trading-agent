@@ -498,7 +498,9 @@
         "candidate/outcome hashes and frozen compute budget are revalidated",
         "commit of all candidate outcomes plus terminal row is atomic",
         "Cheap Screen outcome has zero scientific qualification authority",
-        "R03 Full WFA exclusively owns future Qualified Pool admission"
+        "R03 Full WFA exclusively owns future Qualified Pool admission",
+        "readback recomputes authorization, block, candidate, outcome and terminal identity before terminal authority is trusted",
+        "malformed persisted JSON and non-integral persisted authority fields fail closed as governed integrity errors rather than leaking raw decode/conversion failures"
       ],
       "retention": "retained scientific lineage; no cleanup/update mutation"
     }
