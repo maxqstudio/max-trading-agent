@@ -675,6 +675,13 @@ notes:
             str(root),
         )
 
+        acceptance_bytes = (root / ".workflow" / "acceptance.json").read_bytes()
+        if b"\r\n" in acceptance_bytes:
+            raise RuntimeError("sync_project_truth wrote CRLF into acceptance.json")
+        if not acceptance_bytes.endswith(b"\n"):
+            raise RuntimeError("sync_project_truth acceptance.json missing final LF")
+        print("DETERMINISTIC_JSON_LF=PASS")
+
         git(root, "add", ".")
         git(root, "commit", "-m", "test: seal strict governance fixture")
         final_sha = git(root, "rev-parse", "HEAD")
