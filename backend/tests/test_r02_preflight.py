@@ -81,6 +81,15 @@ def test_r01_pass_without_output_authority_fails_closed(monkeypatch: pytest.Monk
         r02.r02_preflight(path=Path("unused.db"))
 
 
+
+def test_r01_pass_with_malformed_output_authority_fails_closed(monkeypatch: pytest.MonkeyPatch) -> None:
+    run = _run()
+    run["output_manifest_sha"] = "not-a-sha"
+    _install(monkeypatch, run=run)
+    with pytest.raises(RuntimeError, match="R02_R01_OUTPUT_AUTHORITY_INVALID"):
+        r02.r02_preflight(path=Path("unused.db"))
+
+
 @pytest.mark.parametrize(
     "integrity",
     [
