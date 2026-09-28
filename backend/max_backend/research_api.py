@@ -21,6 +21,7 @@ from .research_r01_service import (
     r01_source_overview,
     start_r01,
 )
+from .research_r02_service import r02_preflight
 
 
 class R00StartRequest(BaseModel):
@@ -170,6 +171,14 @@ def start_research_r01(payload: R01StartRequest) -> dict:
         )
         code = 409 if any(token in message for token in conflict_tokens) else 400
         raise HTTPException(status_code=code, detail=message) from exc
+
+
+@router.get("/api/research/r02/preflight")
+def get_r02_preflight() -> dict:
+    try:
+        return r02_preflight()
+    except RuntimeError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
 
 
 @router.get("/api/research/{research_id}")
