@@ -25,6 +25,7 @@ def _candidate(family: str, seed: int) -> dict:
             "research_parent_id": "RPAR-R02-TEST",
             "parent_strategy_id": "STRAT-R02-TEST",
             "dataset_id": "RDATA-R02-TEST",
+            "r01_output_manifest_sha256": "a" * 64,
         },
     }
 
@@ -39,6 +40,7 @@ def _request() -> dict:
             "research_parent_id": "RPAR-R02-TEST",
             "parent_strategy_id": "STRAT-R02-TEST",
             "dataset_id": "RDATA-R02-TEST",
+            "r01_output_manifest_sha256": "a" * 64,
         },
         "candidate_count": 3,
         "compute_budget": {"value": 120, "unit": "FIT_SECONDS"},
@@ -84,6 +86,24 @@ def test_candidate_count_must_be_explicit_positive_integer(candidate_count: obje
     request = _request()
     request["candidate_count"] = candidate_count
     with pytest.raises(ValueError, match="R02_CANDIDATE_COUNT_INVALID"):
+        build_discovery_plan(request)
+
+
+def test_parent_lineage_must_bind_exact_r01_output_authority() -> None:
+    request = _request()
+    request["parent_lineage"]["r01_output_manifest_sha256"] = "b" * 64
+    for candidate in request["candidates"]:
+        candidate["parent_lineage"]["r01_output_manifest_sha256"] = "b" * 64
+    with pytest.raises(ValueError, match="R02_PARENT_LINEAGE_OUTPUT_SHA_MISMATCH"):
+        build_discovery_plan(request)
+
+
+def test_parent_lineage_fields_are_exact() -> None:
+    request = _request()
+    request["parent_lineage"]["unexpected"] = True
+    for candidate in request["candidates"]:
+        candidate["parent_lineage"]["unexpected"] = True
+    with pytest.raises(ValueError, match="R02_PARENT_LINEAGE_FIELDS_INVALID"):
         build_discovery_plan(request)
 
 

@@ -193,8 +193,29 @@ def build_discovery_plan(request: dict[str, Any]) -> dict[str, Any]:
         "R02_LABEL_CONTRACT_REQUIRED",
     )
     parent_lineage = request["parent_lineage"]
-    if not isinstance(parent_lineage, dict) or not parent_lineage:
+    if not isinstance(parent_lineage, dict):
         raise ValueError("R02_PARENT_LINEAGE_REQUIRED")
+    required_parent_lineage = {
+        "research_parent_id",
+        "parent_strategy_id",
+        "dataset_id",
+        "r01_output_manifest_sha256",
+    }
+    if set(parent_lineage) != required_parent_lineage:
+        raise ValueError("R02_PARENT_LINEAGE_FIELDS_INVALID")
+    for field in ("research_parent_id", "parent_strategy_id", "dataset_id"):
+        _require_nonempty_text(
+            parent_lineage[field],
+            "R02_PARENT_LINEAGE_VALUE_REQUIRED:" + field,
+        )
+    lineage_output_sha = _require_sha256(
+        parent_lineage["r01_output_manifest_sha256"],
+        "R02_PARENT_LINEAGE_OUTPUT_SHA_INVALID",
+    )
+    if lineage_output_sha != r01_output_sha:
+        raise ValueError("R02_PARENT_LINEAGE_OUTPUT_SHA_MISMATCH")
+    parent_lineage = deepcopy(parent_lineage)
+    parent_lineage["r01_output_manifest_sha256"] = lineage_output_sha
 
     candidate_count = request["candidate_count"]
     if (
