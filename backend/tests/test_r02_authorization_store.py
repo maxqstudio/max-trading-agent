@@ -369,6 +369,27 @@ def test_r02_frozen_rows_are_append_only(tmp_path: Path) -> None:
             )
 
 
+def test_r02_persistence_advances_cumulative_schema_to_11(tmp_path: Path) -> None:
+    db = _database(tmp_path)
+    with connect(db) as conn:
+        version = conn.execute(
+            "SELECT value FROM schema_meta WHERE key='schema_version'"
+        ).fetchone()
+        tables = {
+            str(row["name"])
+            for row in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table'"
+            ).fetchall()
+        }
+    assert version is not None
+    assert int(version["value"]) == 11
+    assert {
+        "research_r02_authorizations",
+        "research_r02_discovery_blocks",
+        "research_r02_candidate_specs",
+    }.issubset(tables)
+
+
 def test_get_block_returns_none_before_authorization(tmp_path: Path) -> None:
     db = _database(tmp_path)
     assert get_r02_discovery_block(RESEARCH_ID, path=db) is None
