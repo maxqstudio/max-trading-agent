@@ -54,6 +54,28 @@
         "Backend 497 PASS; frontend 53 PASS across 10 files; Skill provenance/STRICT, governance, source-only/security, pip check, lint/build/npm dependency tree PASS.",
         "Real current-epoch R00/R01, MT5 and Owner-PC runtime remain NOT_PROVEN."
       ]
+    },
+    {
+      "date": "2026-09-28",
+      "title": "R01 current-lineage source repair final closure",
+      "type": "acceptance",
+      "changes": [
+        "R01 source repair merged to main as 5c0df514632964dd942cba59a73f3b822e09085a.",
+        "Final branch Windows CI 36370111803, PR CI 36371604393 and main revalidation 36371992178 all passed.",
+        "Real current-epoch R00/R01 scientific execution and MT5/Owner runtime remain NOT_PROVEN."
+      ]
+    },
+    {
+      "date": "2026-09-28",
+      "title": "R02 Discovery source foundation",
+      "type": "source_foundation",
+      "changes": [
+        "Add deterministic R02 candidate-plan contract for LightGBM/XGBoost baselines and Random Forest control without importing ML runtimes.",
+        "Require explicit candidate count, explicit compute budget, canonical candidate identity/lineage and reject unopened temporal families.",
+        "Add read-only R02 preflight that requires accepted verified R01 authority and zero prior scientific side-effect regression.",
+        "Expose GET /api/research/r02/preflight only; no R02 START endpoint, training, candidate persistence, qualification, ONNX or Challenger mutation is added.",
+        "Normalize duplicate governance decision identifiers introduced during H0 migration."
+      ]
     }
   ],
   "schema_version": 1

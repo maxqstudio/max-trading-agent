@@ -42,10 +42,11 @@
         "Strategy parent authority",
         "SQLite",
         "immutable Research artifacts",
-        "MT5 source capture"
+        "MT5 source capture",
+        "accepted R01 scientific authority for future R02 execution"
       ],
       "id": "research-domain",
-      "name": "Research authority and R00/R01 domain",
+      "name": "Research authority and R00/R01 plus R02 source-foundation domain",
       "owns": [
         "backend/max_backend/research_settings.py::get_research_sample_configuration",
         "backend/max_backend/research_settings.py::set_research_sample_configuration",
@@ -62,9 +63,11 @@
         "backend/max_backend/research_r01_service.py::r01_preflight",
         "backend/max_backend/research_r01_service.py::prepare_r01_verified_source",
         "backend/max_backend/research_r01_service.py::start_r01",
-        "backend/max_backend/research_r01_service.py::r01_detail"
+        "backend/max_backend/research_r01_service.py::r01_detail",
+        "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+        "backend/max_backend/research_r02_service.py::r02_preflight"
       ],
-      "purpose": "Own editable current Research configuration, immutable R00/R01 authorization snapshots, source/dataset/label/leakage and terminal evidence."
+      "purpose": "Own editable current Research configuration, immutable R00/R01 authority, source/dataset/label/leakage evidence, and non-executing R02 Discovery contracts/readiness without manufacturing scientific PASS."
     },
     {
       "depends_on": [

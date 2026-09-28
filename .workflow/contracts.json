@@ -271,6 +271,14 @@
       "mutation": "legal controlled cleanup/delete",
       "path": "/api/artifacts/action",
       "purpose": "Governed artifact action"
+    },
+    {
+      "method": "GET",
+      "path": "/api/research/r02/preflight",
+      "purpose": "Read R02 Discovery source readiness without starting or authorizing R02",
+      "authority": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "mutation": "none scientific; ordinary store migration/read compatibility only",
+      "error_behavior": "Missing/unaccepted R01 returns BLOCKED; contradictory R01 output/integrity/side-effect authority fails closed with 409."
     }
   ],
   "data_contracts": [

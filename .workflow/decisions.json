@@ -141,24 +141,17 @@
       "status": "CURRENT"
     },
     {
-      "id": "D-018",
+      "id": "D-023",
       "title": "GitHub-hosted development authority",
       "decision": "GitHub main exact SHA in maxqstudio/max-trading-agent is source authority; GitHub Actions on windows-latest is the hosted build/test authority for ordinary development phases; Owner PC plus real MetaTrader 5 is reserved for final runtime/E2E acceptance after GitHub development closure.",
       "rationale": "Separate reproducible public-source development from the hardware/broker/runtime boundary that GitHub Actions cannot prove.",
       "status": "CURRENT"
     },
     {
-      "id": "D-019",
+      "id": "D-024",
       "title": "Windows-only hosted CI",
       "decision": "MAX application CI remains Windows-only and must not add Linux/macOS matrix coverage merely for platform breadth.",
       "rationale": "The production execution boundary is MetaTrader 5 on Windows; hosted CI should validate the supported application platform without pretending to emulate real MT5 runtime.",
-      "status": "CURRENT"
-    },
-    {
-      "id": "D-020",
-      "title": "Public source-only repository",
-      "decision": "Runtime databases, evidence, artifacts, optimizer outputs, Research datasets, Owner terminal state and real credentials are excluded from the public repository; tests must use synthetic fixtures.",
-      "rationale": "Public-source reproducibility and credential/privacy safety require runtime/private state to remain outside Git authority.",
       "status": "CURRENT"
     },
     {
@@ -173,6 +166,13 @@
       "title": "R01 binds to latest accepted current R00",
       "decision": "R01 derives its parent from the latest Research project in current runtime authority and fails closed unless that R00 is terminal PASS_WAITING_OWNER with verified frozen integrity and exact Research/Strategy/parent-authority bindings. Retired previous-epoch IDs are not product constants.",
       "rationale": "This preserves immutable R00 lineage while allowing future fresh epochs to proceed without source edits or hardcoded Research/Champion identities.",
+      "status": "CURRENT"
+    },
+    {
+      "id": "D-025",
+      "title": "R02 source foundation is non-executing",
+      "decision": "Hosted R02 source work may define deterministic candidate identity/planning contracts and read-only preflight before a real R01 result exists, but it must not expose a start endpoint, persist scientific candidate outcomes, train models, qualify candidates, or bypass the later explicit Owner R02 authorization.",
+      "rationale": "Build and test the control contract early without confusing source readiness with scientific execution or qualification authority.",
       "status": "CURRENT"
     }
   ],

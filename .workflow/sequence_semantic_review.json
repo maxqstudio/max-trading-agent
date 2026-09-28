@@ -261,11 +261,40 @@
         "frontend/src/ScientistPage.test.tsx"
       ],
       "unresolved_bindings": []
+    },
+    {
+      "flow_id": "FLOW-R02-DISCOVERY-PREFLIGHT",
+      "mode": "DURING",
+      "scope": "CURRENT",
+      "declared_entries": [
+        "backend/max_backend/research_api.py::get_r02_preflight",
+        "backend/max_backend/research_r02_contract.py::build_discovery_plan"
+      ],
+      "python_source_owners_declared": 3,
+      "python_source_owners_in_static_graph": [
+        "backend/max_backend/research_api.py::get_r02_preflight",
+        "backend/max_backend/research_r02_service.py::r02_preflight",
+        "backend/max_backend/research_r02_contract.py::build_discovery_plan"
+      ],
+      "python_source_owners_outside_static_reachable_graph": [],
+      "non_python_structured_source_owners": [],
+      "generated_nodes": 0,
+      "generated_edges": 0,
+      "source_digest": "",
+      "semantic_review": "PASS",
+      "outside_graph_classification": "NONE",
+      "outside_graph_resolution": "NOT_APPLICABLE",
+      "unresolved_bindings": [],
+      "tests": [
+        "backend/tests/test_r02_discovery_contract.py",
+        "backend/tests/test_r02_preflight.py"
+      ],
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real R02 execution/training and Owner MT5/browser runtime remain deferred."
     }
   ],
   "generation_anchor_policy": {
     "meaning": "Pre-commit generation anchor only; final hosted provenance is the exact GitHub candidate SHA and final real-runtime provenance is the final main SHA accepted on Owner PC. Structural sequence binding remains deterministic product source_digest.",
-    "observed_head": "303ebc5d89b29871f5170282b6a49640db40c1c3",
+    "observed_head": "07ae37ea2a6a0f278f156f549966204baa0e3270",
     "source_digest": "205e1014611af244e5752da817a13e755fc04e18e9e42443ca57f1b14a75b34e"
   },
   "mode": "DURING",
