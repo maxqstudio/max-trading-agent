@@ -17,7 +17,9 @@ from max_backend.research_r02_store import (
     authorize_and_freeze_r02_discovery,
     create_r02_authorization,
     freeze_r02_discovery_block,
+    commit_r02_terminal_outcomes,
     get_r02_discovery_block,
+    get_r02_outcome_ledger,
 )
 from max_backend.research_store import create_authorization, create_research, update_gate_state
 from max_backend.workflow_store import migrate_current
@@ -433,7 +435,7 @@ def test_atomic_authorization_freeze_persists_exact_authority(tmp_path: Path) ->
     assert [item["candidate_id"] for item in block["candidates"]] == plan["candidate_ids"]
 
 
-def test_r02_persistence_advances_cumulative_schema_to_11(tmp_path: Path) -> None:
+def test_r02_persistence_advances_cumulative_schema_to_12(tmp_path: Path) -> None:
     db = _database(tmp_path)
     with connect(db) as conn:
         version = conn.execute(
@@ -446,14 +448,232 @@ def test_r02_persistence_advances_cumulative_schema_to_11(tmp_path: Path) -> Non
             ).fetchall()
         }
     assert version is not None
-    assert int(version["value"]) == 11
+    assert int(version["value"]) == 12
     assert {
         "research_r02_authorizations",
         "research_r02_discovery_blocks",
         "research_r02_candidate_specs",
+        "research_r02_candidate_outcomes",
+        "research_r02_block_terminals",
     }.issubset(tables)
 
 
 def test_get_block_returns_none_before_authorization(tmp_path: Path) -> None:
     db = _database(tmp_path)
     assert get_r02_discovery_block(RESEARCH_ID, path=db) is None
+
+
+
+def _frozen_block(tmp_path: Path) -> tuple[Path, dict]:
+    db = _database(tmp_path)
+    plan = _plan()
+    _authorization_row, block = authorize_and_freeze_r02_discovery(
+        authorization_record=_authorization(plan),
+        plan=plan,
+        path=db,
+    )
+    return db, block
+
+
+def _outcomes(block: dict) -> list[dict]:
+    statuses = (
+        ("SCREEN_PASS", None),
+        ("SCREEN_FAIL", "CHEAP_SCREEN_REJECT"),
+        ("EXECUTION_ERROR", "CANDIDATE_EXECUTION_ERROR"),
+    )
+    result = []
+    for index, candidate in enumerate(block["candidates"]):
+        status, failure_code = statuses[index]
+        result.append(
+            {
+                "candidate_id": candidate["candidate_id"],
+                "status": status,
+                "metrics": {
+                    "proxy_score": 0.8 - (index * 0.1),
+                    "folds_seen": 2,
+                },
+                "compute_consumed": {
+                    "value": 10 + index,
+                    "unit": "FIT_SECONDS",
+                },
+                "failure_code": failure_code,
+            }
+        )
+    return result
+
+
+def test_terminal_ledger_persists_every_candidate_outcome_including_failures(
+    tmp_path: Path,
+) -> None:
+    db, block = _frozen_block(tmp_path)
+    ledger = commit_r02_terminal_outcomes(
+        RESEARCH_ID,
+        _outcomes(block),
+        path=db,
+    )
+    assert ledger["terminal"]["state"] == "COMPLETE_WAITING_OWNER"
+    assert ledger["terminal"]["screen_pass_count"] == 1
+    assert ledger["terminal"]["screen_fail_count"] == 1
+    assert ledger["terminal"]["execution_error_count"] == 1
+    assert len(ledger["outcomes"]) == 3
+    assert {
+        row["outcome"]["status"] for row in ledger["outcomes"]
+    } == {"SCREEN_PASS", "SCREEN_FAIL", "EXECUTION_ERROR"}
+    assert all(
+        row["outcome"]["cheap_screen_qualification_authority"] is False
+        for row in ledger["outcomes"]
+    )
+    assert all(
+        row["outcome"]["qualified_pool_admission_authority"]
+        == "R03_FULL_WFA_ONLY"
+        for row in ledger["outcomes"]
+    )
+
+
+def test_terminal_commit_requires_exact_candidate_set(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    outcomes = _outcomes(block)
+    with pytest.raises(ValueError, match="R02_TERMINAL_CANDIDATE_SET_MISMATCH"):
+        commit_r02_terminal_outcomes(RESEARCH_ID, outcomes[:-1], path=db)
+    assert get_r02_outcome_ledger(RESEARCH_ID, path=db)["terminal"] is None
+
+
+def test_terminal_commit_rejects_duplicate_candidate_outcome(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    outcomes = _outcomes(block)
+    outcomes[2] = deepcopy(outcomes[1])
+    with pytest.raises(
+        ValueError,
+        match="R02_TERMINAL_DUPLICATE_CANDIDATE_OUTCOME",
+    ):
+        commit_r02_terminal_outcomes(RESEARCH_ID, outcomes, path=db)
+
+
+def test_terminal_commit_rejects_unknown_candidate(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    outcomes = _outcomes(block)
+    outcomes[2]["candidate_id"] = "RCAND-UNKNOWN"
+    with pytest.raises(ValueError, match="R02_TERMINAL_CANDIDATE_SET_MISMATCH"):
+        commit_r02_terminal_outcomes(RESEARCH_ID, outcomes, path=db)
+
+
+def test_terminal_commit_enforces_frozen_compute_budget(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    outcomes = _outcomes(block)
+    for outcome in outcomes:
+        outcome["compute_consumed"]["value"] = 50
+    with pytest.raises(ValueError, match="R02_TERMINAL_COMPUTE_BUDGET_EXCEEDED"):
+        commit_r02_terminal_outcomes(RESEARCH_ID, outcomes, path=db)
+
+    outcomes = _outcomes(block)
+    outcomes[0]["compute_consumed"]["unit"] = "GPU_SECONDS"
+    with pytest.raises(ValueError, match="R02_OUTCOME_COMPUTE_UNIT_MISMATCH"):
+        commit_r02_terminal_outcomes(RESEARCH_ID, outcomes, path=db)
+
+
+def test_terminal_commit_exact_replay_is_idempotent(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    outcomes = _outcomes(block)
+    first = commit_r02_terminal_outcomes(RESEARCH_ID, outcomes, path=db)
+    second = commit_r02_terminal_outcomes(RESEARCH_ID, outcomes, path=db)
+    assert first == second
+
+
+def test_terminal_commit_different_replay_is_rejected(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    outcomes = _outcomes(block)
+    commit_r02_terminal_outcomes(RESEARCH_ID, outcomes, path=db)
+    changed = deepcopy(outcomes)
+    changed[0]["metrics"]["proxy_score"] = 0.99
+    with pytest.raises(RuntimeError, match="R02_TERMINAL_ALREADY_COMMITTED"):
+        commit_r02_terminal_outcomes(RESEARCH_ID, changed, path=db)
+
+
+def test_terminal_outcome_commit_is_atomic_on_mid_batch_fault(
+    tmp_path: Path,
+) -> None:
+    db, block = _frozen_block(tmp_path)
+    with connect(db) as conn:
+        conn.executescript(
+            """
+            CREATE TRIGGER r02_test_outcome_fault
+            BEFORE INSERT ON research_r02_candidate_outcomes
+            WHEN NEW.candidate_id=(
+                SELECT candidate_id
+                FROM research_r02_candidate_specs
+                WHERE block_id=NEW.block_id
+                ORDER BY ordinal
+                LIMIT 1 OFFSET 1
+            )
+            BEGIN
+                SELECT RAISE(ABORT, 'R02_TEST_OUTCOME_FAULT');
+            END;
+            """
+        )
+    with pytest.raises(Exception, match="R02_TEST_OUTCOME_FAULT"):
+        commit_r02_terminal_outcomes(
+            RESEARCH_ID,
+            _outcomes(block),
+            path=db,
+        )
+    with connect(db) as conn:
+        outcomes = conn.execute(
+            "SELECT COUNT(*) AS n FROM research_r02_candidate_outcomes"
+        ).fetchone()["n"]
+        terminals = conn.execute(
+            "SELECT COUNT(*) AS n FROM research_r02_block_terminals"
+        ).fetchone()["n"]
+    assert int(outcomes) == 0
+    assert int(terminals) == 0
+
+
+def test_terminal_rows_are_immutable_append_only_and_do_not_mutate_science_counters(
+    tmp_path: Path,
+) -> None:
+    db, block = _frozen_block(tmp_path)
+    ledger = commit_r02_terminal_outcomes(
+        RESEARCH_ID,
+        _outcomes(block),
+        path=db,
+    )
+    with connect(db) as conn:
+        project = conn.execute(
+            """
+            SELECT training_count,onnx_count,research_challenger_count,
+                   champion_mutation
+            FROM research_projects WHERE research_id=?
+            """,
+            (RESEARCH_ID,),
+        ).fetchone()
+        with pytest.raises(Exception, match="R02_OUTCOME_IMMUTABLE"):
+            conn.execute(
+                """
+                UPDATE research_r02_candidate_outcomes
+                SET status='SCREEN_PASS'
+                WHERE outcome_id=?
+                """,
+                (ledger["outcomes"][1]["outcome_id"],),
+            )
+        with pytest.raises(Exception, match="R02_OUTCOME_APPEND_ONLY"):
+            conn.execute(
+                "DELETE FROM research_r02_candidate_outcomes WHERE outcome_id=?",
+                (ledger["outcomes"][0]["outcome_id"],),
+            )
+        with pytest.raises(Exception, match="R02_TERMINAL_IMMUTABLE"):
+            conn.execute(
+                """
+                UPDATE research_r02_block_terminals
+                SET screen_pass_count=99
+                WHERE terminal_id=?
+                """,
+                (ledger["terminal"]["terminal_id"],),
+            )
+        with pytest.raises(Exception, match="R02_TERMINAL_APPEND_ONLY"):
+            conn.execute(
+                "DELETE FROM research_r02_block_terminals WHERE terminal_id=?",
+                (ledger["terminal"]["terminal_id"],),
+            )
+    assert int(project["training_count"]) == 0
+    assert int(project["onnx_count"]) == 0
+    assert int(project["research_challenger_count"]) == 0
+    assert project["champion_mutation"] == "NONE"

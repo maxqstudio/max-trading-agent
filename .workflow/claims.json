@@ -202,18 +202,19 @@
       ]
     },
     {
-      "claim": "R02 source may now freeze one Owner-authorized bounded Discovery block after an accepted current R01 authority, but this is not scientific execution: no trainer, Cheap Screen outcome, qualification, R03 admission, ONNX, Challenger or Champion authority is opened.",
+      "claim": "R02 source may freeze one Owner-authorized bounded Discovery block after an accepted current R01 authority, but this accepted freeze authority is not scientific execution: no trainer, model fitting, R03 qualification, ONNX, Challenger or Champion authority is opened.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
       "id": "TRUTH-R02-BLOCK-001",
       "runtime_evidence": [
+        "HOSTED_MAIN_REVALIDATION_RUN_36409834797",
         "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
       ],
       "source_owners": [
         "backend/max_backend/research_r02_service.py::r02_preflight",
         "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
-        "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block"
+        "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery"
       ],
       "status": "PASS",
       "tests": [
@@ -257,6 +258,29 @@
       "runtime_evidence": [
         "HOSTED_ATOMIC_TARGETED_RUN_36380098875",
         "HOSTED_FULL_PRE_CLOSEOUT_RUN_36380453938",
+        "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "TRUTH-R02-OUTCOME-001",
+      "claim": "R02 Cheap Screen outcome authority is append-only and block-complete: every frozen candidate must have exactly one deterministic SCREEN_PASS, SCREEN_FAIL or EXECUTION_ERROR record; terminalization is atomic, bounded by the frozen compute budget, and has zero scientific qualification authority.",
+      "documents": [
+        "PROJECT_TRUTH_SYNC.md"
+      ],
+      "source_owners": [
+        "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
+        "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
+        "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes"
+      ],
+      "tests": [
+        "backend/tests/test_r02_outcome_contract.py",
+        "backend/tests/test_r02_authorization_store.py",
+        "backend/tests/test_r02_preflight.py"
+      ],
+      "runtime_evidence": [
+        "HOSTED_TARGETED_RUN_36412664127",
+        "HOSTED_FULL_PRE_CLOSEOUT_RUN_36413020299",
         "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
       ],
       "status": "PASS"

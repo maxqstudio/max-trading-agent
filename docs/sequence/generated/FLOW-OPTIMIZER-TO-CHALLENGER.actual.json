@@ -2356,8 +2356,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::get_batch",
       "language": "Python",
-      "line_end": 607,
-      "line_start": 584,
+      "line_end": 661,
+      "line_start": 638,
       "locator": "backend/max_backend/workflow_store.py::get_batch"
     },
     {
@@ -2365,8 +2365,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::insert_challenger_batch_rows",
       "language": "Python",
-      "line_end": 816,
-      "line_start": 702,
+      "line_end": 870,
+      "line_start": 756,
       "locator": "backend/max_backend/workflow_store.py::insert_challenger_batch_rows"
     },
     {
@@ -2374,7 +2374,7 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::migrate_current",
       "language": "Python",
-      "line_end": 581,
+      "line_end": 635,
       "line_start": 137,
       "locator": "backend/max_backend/workflow_store.py::migrate_current"
     },
@@ -2383,8 +2383,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::prepare_batch",
       "language": "Python",
-      "line_end": 659,
-      "line_start": 610,
+      "line_end": 713,
+      "line_start": 664,
       "locator": "backend/max_backend/workflow_store.py::prepare_batch"
     },
     {
@@ -2392,8 +2392,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::update_batch",
       "language": "Python",
-      "line_end": 699,
-      "line_start": 662,
+      "line_end": 753,
+      "line_start": 716,
       "locator": "backend/max_backend/workflow_store.py::update_batch"
     },
     {
@@ -2415,7 +2415,7 @@
       "locator": "backend/tests/test_m01_recovery.py::good_pass"
     }
   ],
-  "observed_head": "c9be8c556e7626db1f34668c51194af35aad2be2",
+  "observed_head": "50f3f5f77632d81c7f9f1f794508723127e32e1f",
   "schema_version": 1,
-  "source_digest": "8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb"
+  "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68"
 }

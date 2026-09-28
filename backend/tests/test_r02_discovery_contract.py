@@ -135,6 +135,16 @@ def test_compute_budget_has_no_hidden_default(budget: object) -> None:
         build_discovery_plan(request)
 
 
+def test_compute_budget_huge_integer_fails_closed_as_validation_error() -> None:
+    request = _request()
+    request["compute_budget"] = {
+        "value": 10 ** 10000,
+        "unit": "FIT_SECONDS",
+    }
+    with pytest.raises(ValueError, match="R02_COMPUTE_BUDGET_VALUE_INVALID"):
+        build_discovery_plan(request)
+
+
 def test_duplicate_candidate_identity_is_rejected() -> None:
     request = _request()
     request["candidates"][1] = deepcopy(request["candidates"][0])

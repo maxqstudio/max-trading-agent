@@ -217,3 +217,19 @@ Status: CURRENT
 The durable R02 authorization, Discovery-block and candidate-spec tables advance CURRENT_SCHEMA_VERSION from 10 to 11.
 
 Rationale: Persistent schema additions require a distinct launcher/database authority version; keeping version 10 would make pre-R02 and post-R02 databases indistinguishable by schema authority.
+
+## D-028 — Cheap Screen outcome ledger is not an executor
+
+Status: CURRENT
+
+R02 source may persist deterministic synthetic-tested candidate outcomes and one COMPLETE_WAITING_OWNER terminal authority before a real trainer/executor exists. No API accepts outcome submissions in this phase, and ledger presence does not prove model fitting or scientific qualification.
+
+Rationale: Define immutable all-candidate outcome/terminal semantics independently from future execution so failures, retries and qualification boundaries are testable without violating the no-training development boundary.
+
+## D-029 — Advance cumulative SQLite schema to 12
+
+Status: CURRENT
+
+The durable R02 candidate-outcome and block-terminal tables advance CURRENT_SCHEMA_VERSION from 11 to 12.
+
+Rationale: Append-only R02 outcome/terminal authority is a persistent schema change and must be distinguishable from the authorization-only schema epoch.

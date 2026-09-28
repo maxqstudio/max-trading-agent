@@ -18,6 +18,7 @@ from .research_r02_store import (
     authorize_and_freeze_r02_discovery,
     get_r02_authorization,
     get_r02_discovery_block,
+    get_r02_terminal,
 )
 from .optimizer_store import utc_now
 from .research_contract import stable_hash
@@ -91,6 +92,47 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
 
     frozen = get_r02_discovery_block(research_id, path=path)
     if frozen is not None:
+        terminal = get_r02_terminal(research_id, path=path)
+        if terminal is not None:
+            return {
+                "schema": R02_SCHEMA,
+                "stage": "MODEL_DISCOVERY",
+                "status": "COMPLETE_WAITING_OWNER",
+                "reason": None,
+                "research_id": research_id,
+                "r01_state": r01_state,
+                "r01_output_manifest_sha256": output_sha,
+                "r01_integrity": "VERIFIED",
+                "source_foundation_ready": True,
+                "owner_authorization_required": False,
+                "owner_authorized": True,
+                "authorization_id": frozen["authorization_id"],
+                "block_id": frozen["block_id"],
+                "plan_id": frozen["plan_id"],
+                "plan_sha256": frozen["plan_sha256"],
+                "candidate_count": frozen["candidate_count"],
+                "compute_budget": frozen["compute_budget"],
+                "outcome_manifest_sha256": terminal[
+                    "outcome_manifest_sha256"
+                ],
+                "screen_pass_count": terminal["screen_pass_count"],
+                "screen_fail_count": terminal["screen_fail_count"],
+                "execution_error_count": terminal["execution_error_count"],
+                "compute_consumed": terminal["compute_consumed"],
+                "cheap_screen_qualification_authority": False,
+                "qualified_pool_admission_authority": "R03_FULL_WFA_ONLY",
+                "runtime_start_available": False,
+                "r02_executable": False,
+                "model_training": int(side_effects["training_count"]),
+                "onnx": int(side_effects["onnx_count"]),
+                "research_challenger": int(
+                    side_effects["research_challenger_count"]
+                ),
+                "champion_mutation": str(
+                    side_effects["champion_mutation"]
+                ),
+                "contract": r02_discovery_contract(),
+            }
         return {
             "schema": R02_SCHEMA,
             "stage": "MODEL_DISCOVERY",
@@ -168,7 +210,10 @@ def authorize_r02_discovery(
     ):
         raise RuntimeError("R02_R01_OUTPUT_AUTHORITY_STALE")
 
-    if preflight["status"] == "FROZEN_WAITING_EXECUTION":
+    if preflight["status"] in {
+        "FROZEN_WAITING_EXECUTION",
+        "COMPLETE_WAITING_OWNER",
+    }:
         existing = get_r02_discovery_block(research_id, path=path)
         if existing is None:
             raise RuntimeError("R02_FROZEN_BLOCK_MISSING")
@@ -181,7 +226,7 @@ def authorize_r02_discovery(
         if authorization is None:
             raise RuntimeError("R02_FROZEN_AUTHORIZATION_MISSING")
         return {
-            "status": "FROZEN_WAITING_EXECUTION",
+            "status": str(preflight["status"]),
             "idempotent": True,
             "authorization": authorization,
             "block": existing,

@@ -83,6 +83,12 @@
       "status": "FIXED/ACCEPTED_CANDIDATE",
       "summary": "R02 authorization and Discovery freeze were separate transactions, allowing an orphan immutable authorization if later block/candidate persistence failed.",
       "evidence": "Production path uses one SQLite transaction in authorize_and_freeze_r02_discovery. Atomic targeted run 36380098875 passed 61 tests including zero-orphan fault injection; full branch Windows CI run 36380453938 passed 558 backend tests at 7f60da88d25d38753b200dceaa71131856304dd9."
+    },
+    {
+      "id": "KD-008",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "R02 compute-budget validation converted arbitrary integers to float without catching OverflowError, allowing extreme API numeric input to escape the intended fail-closed validation path.",
+      "evidence": "research_r02_contract.py and research_r02_outcome.py catch OverflowError/TypeError/ValueError around numeric conversion. Targeted Windows run 36412664127 passed 84 R02 tests; exact full branch Windows CI run 36413020299 passed 581 backend tests plus complete frontend/source-only/governance/dependency gates at a178b4be591c42e88bb6a5ea3bcec1d113987dcb."
     }
   ],
   "schema_version": 1

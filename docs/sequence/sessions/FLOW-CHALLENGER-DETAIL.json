@@ -7,12 +7,12 @@
       "backend/max_backend/challenger_operations.py::challenger_registry_page"
     ],
     "graph": "docs/sequence/generated/FLOW-CHALLENGER-DETAIL.actual.json",
-    "source_digest": "8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb"
+    "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68"
   },
   "critical": true,
-  "implementation_base_sha": "936b8a9878bc158285cfc1c5343bfd4112c3093d",
+  "implementation_base_sha": "eb6192873eb518b9fe4c7f15d03600ca4ac1e73d",
   "mode": "DURING",
-  "phase": "R02_DISCOVERY_AUTHORIZATION_FREEZE",
+  "phase": "R02_CHEAP_SCREEN_OUTCOME_LEDGER",
   "plan": {
     "contract": "",
     "diagram": "",
