@@ -58,9 +58,13 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
             r01_state=r01_state,
         )
 
-    output_sha = str(run.get("output_manifest_sha") or "").strip()
+    output_sha = str(run.get("output_manifest_sha") or "").strip().lower()
     if not output_sha:
         raise RuntimeError("R02_R01_OUTPUT_AUTHORITY_MISSING")
+    if len(output_sha) != 64 or any(
+        char not in "0123456789abcdef" for char in output_sha
+    ):
+        raise RuntimeError("R02_R01_OUTPUT_AUTHORITY_INVALID")
 
     integrity = validate_r01_integrity(path=path)
     if (
