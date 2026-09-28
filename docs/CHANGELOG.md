@@ -65,3 +65,11 @@ Type: source_foundation
 - Add read-only R02 preflight that requires accepted verified R01 authority and zero prior scientific side-effect regression.
 - Expose GET /api/research/r02/preflight only; no R02 START endpoint, training, candidate persistence, qualification, ONNX or Challenger mutation is added.
 - Normalize duplicate governance decision identifiers introduced during H0 migration.
+
+## 2026-09-28 — R02 Discovery source foundation pre-closeout
+
+Type: acceptance
+
+- Windows CI run 36374307305 passed at ee5e93cb039b37294452ba42239991514a3c80a5.
+- Backend 537 PASS; frontend 53 PASS across 10 files; source-only/security, Skill Workflow provenance/STRICT, generated governance/sequence, pip check, lint/build/npm dependency tree PASS.
+- Candidate identity is bound to exact R01 output authority; real R02 start/training/qualification remains blocked.

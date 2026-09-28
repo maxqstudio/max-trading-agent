@@ -160,7 +160,7 @@ Authority: scientist_knowledge hash manifest + bounded Scientist context/store; 
 
 Current phase: R02_DISCOVERY_SOURCE_FOUNDATION
 
-Current status: ACTIVE
+Current status: SOURCE_FOUNDATION_PRE_CLOSEOUT_PASS
 
 See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 
@@ -239,9 +239,9 @@ compiler does not infer them from implementation names.
 ## Current project state
 
 Next authorized actions:
-- Regenerate Project Truth Compiler and DURING sequence projections for the R02 source foundation.
-- Validate deterministic candidate-plan contracts, read-only R02 preflight, negative/fail-closed cases and full hosted regression.
-- Merge only after exact-branch Windows CI is green, then revalidate main before the next source-only R02 slice.
+- Regenerate governed docs and Scientist knowledge with R02 pre-closeout evidence.
+- Run exact final branch Windows CI, then merge to main only if green.
+- Revalidate main after merge before advancing to the next source-only R02 implementation slice.
 
 Blocked actions:
 - Owner-PC testing between ordinary GitHub development phases.
@@ -269,10 +269,11 @@ Known blockers:
 - R01 final hosted regression established 497 backend tests PASS plus frontend 53/53 across 10 files, source-only/security, Skill provenance/STRICT, governance, pip check, lint/build and npm dependency tree.
 - Previous-epoch R00/Champion/Research identifiers remain historical evidence only and are not current product-source authority.
 - Skill Workflow authority remains 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720.
+- R02 source foundation pre-closeout Windows CI run 36374307305 passed at exact SHA ee5e93cb039b37294452ba42239991514a3c80a5: 537 backend tests, source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, frontend 53/53 across 10 files, lint/build and npm dependency tree.
 
 ### Not proven
 
-- R02 Discovery source foundation until generated governance and Windows CI pass on the current branch.
+- Final R02 source-foundation branch closeout CI after evidence regeneration.
 - Any current-epoch R00/R01 scientific result or real R02 authorization/execution.
 - Any actual candidate training, Cheap Screen result, Qualified Pool, ONNX or Research Challenger.
 - Any real Owner-PC runtime/bootstrap/MT5/browser behavior.

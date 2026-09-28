@@ -4,21 +4,21 @@
 
 ## Evidence boundary
 
-R02 Discovery source-foundation phase. Hosted source/contracts/tests/governance only. No real R00/R01/R02 execution, model training, Cheap Screen result, candidate persistence, Qualified Pool, ONNX, Research Challenger, Champion mutation, MT5 runtime or Owner-PC/browser E2E is authorized or claimed.
+R02 Discovery source-foundation hosted pre-closeout. Windows CI run 36374307305 at exact SHA ee5e93cb039b37294452ba42239991514a3c80a5 passed source-only/security, Skill Workflow 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 provenance/STRICT selftest, generated governance/sequence, backend 537 tests, pip check, frontend 53 tests across 10 files, lint/build and npm dependency tree. Real R00/R01/R02 scientific execution, model training, Cheap Screen outcomes, ONNX, Research Challenger, Champion mutation and Owner-PC/MT5/browser runtime remain intentionally NOT_PROVEN.
 
 Final tested source: external final acceptance evidence.
 Current source digest: 46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c7986bda
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
-| R02SF-01 | R02 source contract exposes baseline LightGBM/XGBoost and optional Random Forest control only; temporal families remain unopened in this slice. | backend/max_backend/research_r02_contract.py + test_r02_discovery_contract.py | NOT_PROVEN |
-| R02SF-02 | Discovery plan freezes explicit positive candidate count and explicit finite compute budget with no hidden defaults. | backend/tests/test_r02_discovery_contract.py | NOT_PROVEN |
-| R02SF-03 | Candidate identities are deterministic, exact-lineage bound, duplicate-safe and input-order independent. | backend/tests/test_r02_discovery_contract.py | NOT_PROVEN |
-| R02SF-04 | Cheap Screen has zero qualification authority; only future R03 Full WFA may admit a Qualified Pool. | research_r02_contract.py + tests | NOT_PROVEN |
-| R02SF-05 | R02 preflight is read-only scientific state and blocks absent/unaccepted R01 while failing closed on malformed/tampered R01 authority or prior training/promotion side effects. | backend/tests/test_r02_preflight.py | NOT_PROVEN |
-| R02SF-06 | No R02 START endpoint, ML runtime dependency, candidate persistence schema, training, ONNX, Research Challenger or Champion mutation is introduced. | source review + source-only/security CI | NOT_PROVEN |
-| R02SF-07 | Skill Workflow provenance/STRICT and Project Truth/sequence/Scientist projections remain synchronized. | Windows CI governance gates | NOT_PROVEN |
-| R02SF-08 | Full backend/frontend/dependency regression remains green after the source foundation. | Windows CI | NOT_PROVEN |
+| R02SF-01 | R02 source contract exposes baseline LightGBM/XGBoost and optional Random Forest control only; temporal families remain unopened in this slice. | backend/max_backend/research_r02_contract.py + test_r02_discovery_contract.py | PASS |
+| R02SF-02 | Discovery plan freezes explicit positive candidate count and explicit finite compute budget with no hidden defaults. | backend/tests/test_r02_discovery_contract.py | PASS |
+| R02SF-03 | Candidate identities are deterministic, exact-lineage bound, duplicate-safe and input-order independent. | backend/tests/test_r02_discovery_contract.py | PASS |
+| R02SF-04 | Cheap Screen has zero qualification authority; only future R03 Full WFA may admit a Qualified Pool. | research_r02_contract.py + tests | PASS |
+| R02SF-05 | R02 preflight is read-only scientific state and blocks absent/unaccepted R01 while failing closed on malformed/tampered R01 authority or prior training/promotion side effects. | backend/tests/test_r02_preflight.py | PASS |
+| R02SF-06 | No R02 START endpoint, ML runtime dependency, candidate persistence schema, training, ONNX, Research Challenger or Champion mutation is introduced. | source review + source-only/security CI | PASS |
+| R02SF-07 | Skill Workflow provenance/STRICT and Project Truth/sequence/Scientist projections remain synchronized. | Windows CI governance gates | PASS |
+| R02SF-08 | Full backend/frontend/dependency regression remains green after the source foundation. | Windows CI | PASS |
 
 ## Test commands
 

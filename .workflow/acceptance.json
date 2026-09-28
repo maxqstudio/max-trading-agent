@@ -74,29 +74,29 @@
     "regression": {
       "backend": 537,
       "backend_status": "PASS",
-      "frontend_files": 10,
-      "frontend_tests": 53,
-      "frontend_status": "PASS",
-      "lint": "PASS_0_WARNINGS_0_ERRORS",
       "build": "PASS",
+      "frontend_files": 10,
+      "frontend_status": "PASS",
+      "frontend_tests": 53,
+      "lint": "PASS_0_WARNINGS_0_ERRORS",
       "npm_ls_all": "PASS",
       "pip_check": "PASS"
     },
     "runtime": {
-      "owner_pc": "NOT_PROVEN",
+      "browser_e2e": "NOT_PROVEN",
       "mt5": "NOT_PROVEN",
-      "browser_e2e": "NOT_PROVEN"
+      "owner_pc": "NOT_PROVEN"
     },
     "scientific_state": {
-      "strategy_champion": "NONE_SOURCE_GOVERNANCE",
+      "cheap_screen_runs": 0,
       "current_research_project": "NONE",
+      "model_training": 0,
+      "onnx": 0,
       "r00": "NOT STARTED",
       "r01": "BLOCKED / NOT STARTED",
       "r02": "BLOCKED / NOT STARTED",
-      "model_training": 0,
-      "cheap_screen_runs": 0,
-      "onnx": 0,
-      "research_challenger": 0
+      "research_challenger": 0,
+      "strategy_champion": "NONE_SOURCE_GOVERNANCE"
     },
     "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720"
   },
