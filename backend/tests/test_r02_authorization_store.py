@@ -20,6 +20,8 @@ from max_backend.research_r02_store import (
     commit_r02_terminal_outcomes,
     get_r02_discovery_block,
     get_r02_outcome_ledger,
+    validate_r02_discovery_block_integrity,
+    validate_r02_outcome_integrity,
 )
 from max_backend.research_store import create_authorization, create_research, update_gate_state
 from max_backend.workflow_store import migrate_current
@@ -677,3 +679,187 @@ def test_terminal_rows_are_immutable_append_only_and_do_not_mutate_science_count
     assert int(project["onnx_count"]) == 0
     assert int(project["research_challenger_count"]) == 0
     assert project["champion_mutation"] == "NONE"
+
+
+
+def _drop_integrity_trigger(db: Path, trigger: str) -> None:
+    with connect(db) as conn:
+        conn.execute(f"DROP TRIGGER IF EXISTS {trigger}")
+
+
+def test_valid_r02_discovery_and_outcome_integrity_rebuilds_exact_authority(
+    tmp_path: Path,
+) -> None:
+    db, block = _frozen_block(tmp_path)
+    commit_r02_terminal_outcomes(RESEARCH_ID, _outcomes(block), path=db)
+
+    discovery = validate_r02_discovery_block_integrity(RESEARCH_ID, path=db)
+    terminal = validate_r02_outcome_integrity(RESEARCH_ID, path=db)
+
+    assert discovery["status"] == "VERIFIED"
+    assert discovery["candidate_ids"] == [
+        item["candidate_id"] for item in block["candidates"]
+    ]
+    assert terminal["status"] == "VERIFIED"
+    assert terminal["terminal_state"] == "COMPLETE_WAITING_OWNER"
+    assert terminal["candidate_count"] == 3
+    assert terminal["outcome_count"] == 3
+
+
+def test_outcome_integrity_rejects_tampered_outcome_json(
+    tmp_path: Path,
+) -> None:
+    db, block = _frozen_block(tmp_path)
+    ledger = commit_r02_terminal_outcomes(
+        RESEARCH_ID,
+        _outcomes(block),
+        path=db,
+    )
+    _drop_integrity_trigger(db, "research_r02_outcome_no_update")
+    outcome_id = ledger["outcomes"][0]["outcome_id"]
+    tampered = deepcopy(ledger["outcomes"][0]["outcome"])
+    tampered["metrics"]["proxy_score"] = 999.0
+    with connect(db) as conn:
+        conn.execute(
+            """
+            UPDATE research_r02_candidate_outcomes
+            SET outcome_json=?
+            WHERE outcome_id=?
+            """,
+            (
+                json.dumps(tampered, sort_keys=True, separators=(",", ":")),
+                outcome_id,
+            ),
+        )
+    with pytest.raises(
+        RuntimeError,
+        match="R02_INTEGRITY_OUTCOME_PAYLOAD_MISMATCH",
+    ):
+        validate_r02_outcome_integrity(RESEARCH_ID, path=db)
+
+
+def test_outcome_integrity_rejects_tampered_terminal_counts(
+    tmp_path: Path,
+) -> None:
+    db, block = _frozen_block(tmp_path)
+    ledger = commit_r02_terminal_outcomes(
+        RESEARCH_ID,
+        _outcomes(block),
+        path=db,
+    )
+    _drop_integrity_trigger(db, "research_r02_terminal_no_update")
+    with connect(db) as conn:
+        conn.execute(
+            """
+            UPDATE research_r02_block_terminals
+            SET screen_pass_count=99
+            WHERE terminal_id=?
+            """,
+            (ledger["terminal"]["terminal_id"],),
+        )
+    with pytest.raises(
+        RuntimeError,
+        match="R02_INTEGRITY_TERMINAL_FIELD_MISMATCH:screen_pass_count",
+    ):
+        validate_r02_outcome_integrity(RESEARCH_ID, path=db)
+
+
+def test_discovery_integrity_rejects_tampered_candidate_spec(
+    tmp_path: Path,
+) -> None:
+    db, block = _frozen_block(tmp_path)
+    _drop_integrity_trigger(db, "research_r02_candidate_no_update")
+    candidate = block["candidates"][0]
+    tampered = deepcopy(candidate["spec"])
+    tampered["seed"] = int(tampered["seed"]) + 1
+    with connect(db) as conn:
+        conn.execute(
+            """
+            UPDATE research_r02_candidate_specs
+            SET spec_json=?
+            WHERE candidate_id=?
+            """,
+            (
+                json.dumps(tampered, sort_keys=True, separators=(",", ":")),
+                candidate["candidate_id"],
+            ),
+        )
+    with pytest.raises(
+        RuntimeError,
+        match="R02_INTEGRITY_CANDIDATE_SPEC_SHA_MISMATCH",
+    ):
+        validate_r02_discovery_block_integrity(RESEARCH_ID, path=db)
+
+
+def test_discovery_integrity_rejects_tampered_authorization_payload(
+    tmp_path: Path,
+) -> None:
+    db, block = _frozen_block(tmp_path)
+    _drop_integrity_trigger(db, "research_r02_authorization_no_update")
+    with connect(db) as conn:
+        row = conn.execute(
+            """
+            SELECT authorization_id,payload_json
+            FROM research_r02_authorizations
+            WHERE research_id=?
+            """,
+            (RESEARCH_ID,),
+        ).fetchone()
+        payload = json.loads(str(row["payload_json"]))
+        payload["candidate_count"] = 999
+        conn.execute(
+            """
+            UPDATE research_r02_authorizations
+            SET payload_json=?
+            WHERE authorization_id=?
+            """,
+            (
+                json.dumps(payload, sort_keys=True, separators=(",", ":")),
+                row["authorization_id"],
+            ),
+        )
+    with pytest.raises(
+        RuntimeError,
+        match="R02_INTEGRITY_AUTHORIZATION_INVALID",
+    ):
+        validate_r02_discovery_block_integrity(RESEARCH_ID, path=db)
+
+
+def test_outcome_integrity_rejects_partial_outcome_without_terminal(
+    tmp_path: Path,
+) -> None:
+    db, block = _frozen_block(tmp_path)
+    manifest_request = _outcomes(block)[0]
+    from max_backend.research_r02_outcome import build_candidate_outcome
+
+    outcome = build_candidate_outcome(
+        manifest_request,
+        block_id=block["block_id"],
+        candidate_ids=[
+            item["candidate_id"] for item in block["candidates"]
+        ],
+        budget_unit=block["compute_budget"]["unit"],
+    )
+    with connect(db) as conn:
+        conn.execute(
+            """
+            INSERT INTO research_r02_candidate_outcomes(
+                outcome_id,block_id,candidate_id,status,
+                outcome_sha256,outcome_json,created_utc
+            ) VALUES(?,?,?,?,?,?,?)
+            """,
+            (
+                outcome["outcome_id"],
+                block["block_id"],
+                outcome["candidate_id"],
+                outcome["status"],
+                outcome["outcome_sha256"],
+                json.dumps(outcome, sort_keys=True, separators=(",", ":")),
+                "2026-09-28T00:04:00+00:00",
+            ),
+        )
+    with pytest.raises(
+        RuntimeError,
+        match="R02_INTEGRITY_PARTIAL_OUTCOME_STATE",
+    ):
+        validate_r02_outcome_integrity(RESEARCH_ID, path=db)

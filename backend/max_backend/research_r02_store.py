@@ -9,7 +9,7 @@ from .config import DATABASE_PATH
 from .db import connect
 from .optimizer_store import utc_now
 from .research_contract import candidate_id as derive_candidate_id, stable_hash
-from .research_r02_outcome import build_terminal_manifest
+from .research_r02_outcome import build_candidate_outcome, build_terminal_manifest
 from .workflow_store import migrate_current
 
 
@@ -502,6 +502,289 @@ def get_r02_outcome_ledger(
     }
 
 
+def validate_r02_discovery_block_integrity(
+    research_id: str,
+    *,
+    path: Path = DATABASE_PATH,
+) -> dict[str, Any]:
+    migrate_current(path)
+    research_id = str(research_id or "").strip()
+    if not research_id:
+        raise ValueError("R02_INTEGRITY_RESEARCH_ID_REQUIRED")
+
+    with connect(path) as conn:
+        block_row = conn.execute(
+            "SELECT * FROM research_r02_discovery_blocks WHERE research_id=?",
+            (research_id,),
+        ).fetchone()
+        if block_row is None:
+            raise RuntimeError("R02_INTEGRITY_BLOCK_REQUIRED")
+        auth_row = conn.execute(
+            "SELECT * FROM research_r02_authorizations WHERE authorization_id=?",
+            (str(block_row["authorization_id"]),),
+        ).fetchone()
+        if auth_row is None:
+            raise RuntimeError("R02_INTEGRITY_AUTHORIZATION_MISSING")
+        candidate_rows = conn.execute(
+            """
+            SELECT * FROM research_r02_candidate_specs
+            WHERE block_id=?
+            ORDER BY ordinal,candidate_id
+            """,
+            (str(block_row["block_id"]),),
+        ).fetchall()
+
+    block = dict(block_row)
+    authorization = _decode_authorization(auth_row)
+    payload = authorization["payload"]
+    try:
+        _validate_authorization_record(
+            {
+                "authorization_id": authorization["authorization_id"],
+                "research_id": authorization["research_id"],
+                "confirmed": authorization["confirmed"],
+                "payload_sha256": authorization["payload_sha256"],
+                "payload": payload,
+                "authorized_utc": authorization["authorized_utc"],
+            }
+        )
+    except (RuntimeError, ValueError) as exc:
+        raise RuntimeError("R02_INTEGRITY_AUTHORIZATION_INVALID") from exc
+
+    if str(block["research_id"]) != research_id:
+        raise RuntimeError("R02_INTEGRITY_BLOCK_RESEARCH_MISMATCH")
+    if str(authorization["research_id"]) != research_id:
+        raise RuntimeError("R02_INTEGRITY_AUTHORIZATION_RESEARCH_MISMATCH")
+    if str(block["state"]) != "FROZEN_WAITING_EXECUTION":
+        raise RuntimeError("R02_INTEGRITY_BLOCK_STATE_INVALID")
+
+    block_body = {
+        "research_id": research_id,
+        "authorization_id": str(block["authorization_id"]),
+        "r01_output_manifest_sha256": str(block["r01_output_manifest_sha256"]),
+        "plan_id": str(block["plan_id"]),
+        "plan_sha256": str(block["plan_sha256"]),
+    }
+    expected_block_id = "RDISC-" + stable_hash(block_body)[:24]
+    if str(block["block_id"]) != expected_block_id:
+        raise RuntimeError("R02_INTEGRITY_BLOCK_ID_MISMATCH")
+
+    if str(payload.get("r01_output_manifest_sha256") or "") != str(
+        block["r01_output_manifest_sha256"]
+    ):
+        raise RuntimeError("R02_INTEGRITY_R01_OUTPUT_MISMATCH")
+    if str(payload.get("plan_id") or "") != str(block["plan_id"]):
+        raise RuntimeError("R02_INTEGRITY_PLAN_ID_MISMATCH")
+    if str(payload.get("plan_sha256") or "") != str(block["plan_sha256"]):
+        raise RuntimeError("R02_INTEGRITY_PLAN_SHA_MISMATCH")
+
+    try:
+        compute_budget = json.loads(str(block["compute_budget_json"]))
+    except (TypeError, ValueError, json.JSONDecodeError) as exc:
+        raise RuntimeError("R02_INTEGRITY_COMPUTE_BUDGET_INVALID") from exc
+    if compute_budget != payload.get("compute_budget"):
+        raise RuntimeError("R02_INTEGRITY_COMPUTE_BUDGET_MISMATCH")
+
+    expected_count = int(block["candidate_count"])
+    if expected_count <= 0 or len(candidate_rows) != expected_count:
+        raise RuntimeError("R02_INTEGRITY_CANDIDATE_COUNT_MISMATCH")
+    if int(payload.get("candidate_count") or 0) != expected_count:
+        raise RuntimeError("R02_INTEGRITY_AUTH_CANDIDATE_COUNT_MISMATCH")
+
+    candidates: list[dict[str, Any]] = []
+    candidate_ids: list[str] = []
+    for ordinal, row in enumerate(candidate_rows):
+        item = dict(row)
+        if int(item["ordinal"]) != ordinal:
+            raise RuntimeError("R02_INTEGRITY_CANDIDATE_ORDINAL_MISMATCH")
+        if str(item["block_id"]) != str(block["block_id"]):
+            raise RuntimeError("R02_INTEGRITY_CANDIDATE_BLOCK_MISMATCH")
+        try:
+            spec = json.loads(str(item["spec_json"]))
+        except (TypeError, ValueError, json.JSONDecodeError) as exc:
+            raise RuntimeError("R02_INTEGRITY_CANDIDATE_SPEC_JSON_INVALID") from exc
+        if not isinstance(spec, dict):
+            raise RuntimeError("R02_INTEGRITY_CANDIDATE_SPEC_INVALID")
+        expected_spec_sha = stable_hash(spec)
+        if str(item["spec_sha256"]) != expected_spec_sha:
+            raise RuntimeError("R02_INTEGRITY_CANDIDATE_SPEC_SHA_MISMATCH")
+        expected_candidate_id = derive_candidate_id(spec)
+        if str(item["candidate_id"]) != expected_candidate_id:
+            raise RuntimeError("R02_INTEGRITY_CANDIDATE_ID_MISMATCH")
+        if str(item["model_family"]) != str(spec.get("model_family") or ""):
+            raise RuntimeError("R02_INTEGRITY_CANDIDATE_FAMILY_MISMATCH")
+        if int(item["seed"]) != int(spec.get("seed")):
+            raise RuntimeError("R02_INTEGRITY_CANDIDATE_SEED_MISMATCH")
+        candidate_ids.append(str(item["candidate_id"]))
+        item["spec"] = spec
+        candidates.append(item)
+
+    if candidate_ids != list(payload.get("candidate_ids") or []):
+        raise RuntimeError("R02_INTEGRITY_AUTH_CANDIDATE_IDS_MISMATCH")
+
+    return {
+        "status": "VERIFIED",
+        "research_id": research_id,
+        "authorization": authorization,
+        "block": {
+            **block,
+            "compute_budget": compute_budget,
+        },
+        "candidates": candidates,
+        "candidate_ids": candidate_ids,
+    }
+
+
+def validate_r02_outcome_integrity(
+    research_id: str,
+    *,
+    path: Path = DATABASE_PATH,
+) -> dict[str, Any]:
+    authority = validate_r02_discovery_block_integrity(
+        research_id,
+        path=path,
+    )
+    block = authority["block"]
+    candidate_ids = authority["candidate_ids"]
+
+    with connect(path) as conn:
+        outcome_rows = conn.execute(
+            """
+            SELECT outcome.*, spec.ordinal
+            FROM research_r02_candidate_outcomes AS outcome
+            JOIN research_r02_candidate_specs AS spec
+              ON spec.candidate_id=outcome.candidate_id
+            WHERE outcome.block_id=?
+            ORDER BY spec.ordinal,spec.candidate_id
+            """,
+            (str(block["block_id"]),),
+        ).fetchall()
+        terminal_row = conn.execute(
+            "SELECT * FROM research_r02_block_terminals WHERE block_id=?",
+            (str(block["block_id"]),),
+        ).fetchone()
+
+    if terminal_row is None:
+        if outcome_rows:
+            raise RuntimeError("R02_INTEGRITY_PARTIAL_OUTCOME_STATE")
+        return {
+            "status": "VERIFIED",
+            "terminal_state": "NOT_COMMITTED",
+            "research_id": research_id,
+            "block_id": block["block_id"],
+            "candidate_count": len(candidate_ids),
+            "outcome_count": 0,
+        }
+
+    if len(outcome_rows) != len(candidate_ids):
+        raise RuntimeError("R02_INTEGRITY_OUTCOME_COUNT_MISMATCH")
+
+    outcome_requests: list[dict[str, Any]] = []
+    reconstructed_outcomes: list[dict[str, Any]] = []
+    for ordinal, row in enumerate(outcome_rows):
+        item = dict(row)
+        expected_candidate_id = candidate_ids[ordinal]
+        if int(item["ordinal"]) != ordinal:
+            raise RuntimeError("R02_INTEGRITY_OUTCOME_ORDINAL_MISMATCH")
+        if str(item["block_id"]) != str(block["block_id"]):
+            raise RuntimeError("R02_INTEGRITY_OUTCOME_BLOCK_MISMATCH")
+        if str(item["candidate_id"]) != expected_candidate_id:
+            raise RuntimeError("R02_INTEGRITY_OUTCOME_CANDIDATE_MISMATCH")
+        try:
+            payload = json.loads(str(item["outcome_json"]))
+        except (TypeError, ValueError, json.JSONDecodeError) as exc:
+            raise RuntimeError("R02_INTEGRITY_OUTCOME_JSON_INVALID") from exc
+        if not isinstance(payload, dict):
+            raise RuntimeError("R02_INTEGRITY_OUTCOME_PAYLOAD_INVALID")
+
+        request = {
+            "candidate_id": payload.get("candidate_id"),
+            "status": payload.get("status"),
+            "metrics": payload.get("metrics"),
+            "compute_consumed": payload.get("compute_consumed"),
+            "failure_code": payload.get("failure_code"),
+        }
+        try:
+            rebuilt = build_candidate_outcome(
+                request,
+                block_id=str(block["block_id"]),
+                candidate_ids=candidate_ids,
+                budget_unit=str(block["compute_budget"]["unit"]),
+            )
+        except ValueError as exc:
+            raise RuntimeError("R02_INTEGRITY_OUTCOME_REBUILD_FAILED") from exc
+
+        if rebuilt != payload:
+            raise RuntimeError("R02_INTEGRITY_OUTCOME_PAYLOAD_MISMATCH")
+        if str(item["outcome_id"]) != str(rebuilt["outcome_id"]):
+            raise RuntimeError("R02_INTEGRITY_OUTCOME_ID_MISMATCH")
+        if str(item["outcome_sha256"]) != str(rebuilt["outcome_sha256"]):
+            raise RuntimeError("R02_INTEGRITY_OUTCOME_SHA_MISMATCH")
+        if str(item["status"]) != str(rebuilt["status"]):
+            raise RuntimeError("R02_INTEGRITY_OUTCOME_STATUS_MISMATCH")
+        outcome_requests.append(request)
+        reconstructed_outcomes.append(rebuilt)
+
+    try:
+        terminal = build_terminal_manifest(
+            block_id=str(block["block_id"]),
+            candidate_ids=candidate_ids,
+            compute_budget=block["compute_budget"],
+            outcome_requests=outcome_requests,
+        )
+    except ValueError as exc:
+        raise RuntimeError("R02_INTEGRITY_TERMINAL_REBUILD_FAILED") from exc
+
+    stored_terminal = dict(terminal_row)
+    try:
+        stored_compute = json.loads(
+            str(stored_terminal["compute_consumed_json"])
+        )
+    except (TypeError, ValueError, json.JSONDecodeError) as exc:
+        raise RuntimeError("R02_INTEGRITY_TERMINAL_COMPUTE_INVALID") from exc
+
+    terminal_checks = {
+        "terminal_id": str(terminal["terminal_id"]),
+        "block_id": str(block["block_id"]),
+        "state": str(terminal["state"]),
+        "outcome_manifest_sha256": str(
+            terminal["outcome_manifest_sha256"]
+        ),
+        "candidate_count": int(terminal["candidate_count"]),
+        "screen_pass_count": int(terminal["screen_pass_count"]),
+        "screen_fail_count": int(terminal["screen_fail_count"]),
+        "execution_error_count": int(terminal["execution_error_count"]),
+    }
+    for key, expected in terminal_checks.items():
+        actual = stored_terminal[key]
+        if isinstance(expected, int):
+            actual = int(actual)
+        else:
+            actual = str(actual)
+        if actual != expected:
+            raise RuntimeError(
+                "R02_INTEGRITY_TERMINAL_FIELD_MISMATCH:" + key
+            )
+    if stored_compute != terminal["compute_consumed"]:
+        raise RuntimeError("R02_INTEGRITY_TERMINAL_COMPUTE_MISMATCH")
+
+    return {
+        "status": "VERIFIED",
+        "terminal_state": "COMPLETE_WAITING_OWNER",
+        "research_id": research_id,
+        "block_id": block["block_id"],
+        "candidate_count": len(candidate_ids),
+        "outcome_count": len(reconstructed_outcomes),
+        "outcome_manifest_sha256": terminal[
+            "outcome_manifest_sha256"
+        ],
+        "screen_pass_count": terminal["screen_pass_count"],
+        "screen_fail_count": terminal["screen_fail_count"],
+        "execution_error_count": terminal["execution_error_count"],
+        "compute_consumed": terminal["compute_consumed"],
+    }
+
+
 def commit_r02_terminal_outcomes(
     research_id: str,
     outcome_requests: list[dict[str, Any]],
@@ -611,9 +894,13 @@ def commit_r02_terminal_outcomes(
                 ),
             )
 
+    integrity = validate_r02_outcome_integrity(
+        research_id,
+        path=path,
+    )
+    if integrity["terminal_state"] != "COMPLETE_WAITING_OWNER":
+        raise RuntimeError("R02_TERMINAL_PERSISTENCE_MISSING")
     ledger = get_r02_outcome_ledger(research_id, path=path)
     if ledger is None or ledger["terminal"] is None:
         raise RuntimeError("R02_TERMINAL_PERSISTENCE_MISSING")
-    if len(ledger["outcomes"]) != int(ledger["block"]["candidate_count"]):
-        raise RuntimeError("R02_OUTCOME_LEDGER_INCOMPLETE")
     return ledger

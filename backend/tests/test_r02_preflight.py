@@ -45,6 +45,7 @@ def _install(
     monkeypatch.setattr(r02, "verify_no_training_side_effects", lambda *_args, **_kwargs: deepcopy(current_side_effects))
     monkeypatch.setattr(r02, "get_r02_discovery_block", lambda *_args, **_kwargs: None)
     monkeypatch.setattr(r02, "get_r02_terminal", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(r02, "validate_r02_outcome_integrity", lambda *_args, **_kwargs: {"status": "VERIFIED", "terminal_state": "NOT_COMMITTED"})
 
 
 def test_fresh_epoch_without_research_is_blocked(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -179,6 +180,45 @@ def test_frozen_discovery_block_prevents_second_authorization_surface(
 
 
 
+def test_terminal_preflight_requires_rebuilt_integrity(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _install(monkeypatch)
+    monkeypatch.setattr(
+        r02,
+        "get_r02_discovery_block",
+        lambda *_args, **_kwargs: {
+            "block_id": "RDISC-TAMPER",
+            "authorization_id": "RAUTH-R02-TAMPER",
+            "plan_id": "RPLAN-TAMPER",
+            "plan_sha256": "b" * 64,
+            "candidate_count": 3,
+            "compute_budget": {
+                "value": 120,
+                "unit": "FIT_SECONDS",
+                "execution_semantics": "FROZEN_ONLY_NOT_EXECUTED",
+            },
+        },
+    )
+    monkeypatch.setattr(
+        r02,
+        "get_r02_terminal",
+        lambda *_args, **_kwargs: {
+            "terminal_id": "RTERM-TAMPER",
+        },
+    )
+    monkeypatch.setattr(
+        r02,
+        "validate_r02_outcome_integrity",
+        lambda *_args, **_kwargs: {
+            "status": "VERIFIED",
+            "terminal_state": "NOT_COMMITTED",
+        },
+    )
+    with pytest.raises(RuntimeError, match="R02_OUTCOME_INTEGRITY_REQUIRED"):
+        r02.r02_preflight(path=Path("unused.db"))
+
+
 def test_terminal_outcome_ledger_reports_complete_without_qualification(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -204,6 +244,14 @@ def test_terminal_outcome_ledger_reports_complete_without_qualification(
         "get_r02_terminal",
         lambda research_id, **_kwargs: {
             "terminal_id": "RTERM-COMPLETE",
+        },
+    )
+    monkeypatch.setattr(
+        r02,
+        "validate_r02_outcome_integrity",
+        lambda *_args, **_kwargs: {
+            "status": "VERIFIED",
+            "terminal_state": "COMPLETE_WAITING_OWNER",
             "outcome_manifest_sha256": "c" * 64,
             "screen_pass_count": 1,
             "screen_fail_count": 1,

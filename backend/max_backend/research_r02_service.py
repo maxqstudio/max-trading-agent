@@ -19,6 +19,7 @@ from .research_r02_store import (
     get_r02_authorization,
     get_r02_discovery_block,
     get_r02_terminal,
+    validate_r02_outcome_integrity,
 )
 from .optimizer_store import utc_now
 from .research_contract import stable_hash
@@ -94,6 +95,16 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
     if frozen is not None:
         terminal = get_r02_terminal(research_id, path=path)
         if terminal is not None:
+            outcome_integrity = validate_r02_outcome_integrity(
+                research_id,
+                path=path,
+            )
+            if (
+                outcome_integrity["status"] != "VERIFIED"
+                or outcome_integrity["terminal_state"]
+                != "COMPLETE_WAITING_OWNER"
+            ):
+                raise RuntimeError("R02_OUTCOME_INTEGRITY_REQUIRED")
             return {
                 "schema": R02_SCHEMA,
                 "stage": "MODEL_DISCOVERY",
@@ -112,13 +123,15 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
                 "plan_sha256": frozen["plan_sha256"],
                 "candidate_count": frozen["candidate_count"],
                 "compute_budget": frozen["compute_budget"],
-                "outcome_manifest_sha256": terminal[
+                "outcome_manifest_sha256": outcome_integrity[
                     "outcome_manifest_sha256"
                 ],
-                "screen_pass_count": terminal["screen_pass_count"],
-                "screen_fail_count": terminal["screen_fail_count"],
-                "execution_error_count": terminal["execution_error_count"],
-                "compute_consumed": terminal["compute_consumed"],
+                "screen_pass_count": outcome_integrity["screen_pass_count"],
+                "screen_fail_count": outcome_integrity["screen_fail_count"],
+                "execution_error_count": outcome_integrity[
+                    "execution_error_count"
+                ],
+                "compute_consumed": outcome_integrity["compute_consumed"],
                 "cheap_screen_qualification_authority": False,
                 "qualified_pool_admission_authority": "R03_FULL_WFA_ONLY",
                 "runtime_start_available": False,
