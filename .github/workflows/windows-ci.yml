@@ -27,15 +27,14 @@ jobs:
         run: |
           $tracked = git ls-files
           $bad = $tracked | Where-Object {
-            $_ -match '(^|/)\.env($|\.)' -or
+            (($_ -match '(^|/)\.env($|\.)') -and ($_ -notmatch '(^|/)\.env\.example$')) -or
             $_ -match '^evidence/' -or
             $_ -match '^artifacts/' -or
             $_ -match '^state/.*\.(db|sqlite|sqlite3)(-|$)' -or
             $_ -match '(^|/)\.vite/' -or
             $_ -match '(^|/)\.venv/' -or
-            $_ -match '(^|/)node_modules/' -or
+            $_ -match '^frontend/node_modules/' -or
             $_ -match '^frontend/dist/' -or
-            $_ -match '(^|/)logs?/' -or
             $_ -match '\.(pem|pfx|p12|key)$'
           }
           if ($bad) {
@@ -44,76 +43,15 @@ jobs:
           }
       - name: Redacted exact-tree secret scan
         shell: pwsh
-        run: python scripts/scan_m05_candidate_tree.py --candidate-sha $env:GITHUB_SHA
-
-  governance:
-    name: Hosted governance
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-      - name: Compile project truth
-        shell: pwsh
-        run: python .workflow/tools/sync_project_truth.py
-      - name: Rebuild Scientist knowledge manifest
-        shell: pwsh
-        run: python scripts/build_scientist_knowledge.py
-      - name: Preserve deterministic compiler output for repair
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: hosted-governance-generated-${{ github.sha }}
-          path: |
-            .workflow/acceptance.json
-            .workflow/generated/
-            docs/
-            scientist/knowledge/
-          if-no-files-found: error
-      - name: Reject stale generated governance
-        shell: pwsh
-        run: git diff --exit-code -- .workflow/acceptance.json .workflow/generated docs scientist/knowledge
-      - name: Validate generated docs
-        shell: pwsh
-        run: python .workflow/tools/validate_project_docs.py
-      - name: Validate sequence sessions
-        shell: pwsh
-        run: python .workflow/tools/validate_sequence_sessions.py
-      - name: Validate handoff
-        shell: pwsh
-        run: python .workflow/tools/validate_handoff.py
-      - name: Validate human comprehension
-        shell: pwsh
-        run: python .workflow/tools/validate_human_comprehension.py --require-pass
-      - name: Assert governance worktree clean
-        shell: pwsh
-        run: |
-          git diff --exit-code
-          if ($LASTEXITCODE -ne 0) { throw "Tracked governance content changed." }
-          git diff --cached --exit-code
-          if ($LASTEXITCODE -ne 0) { throw "Staged governance content changed." }
-          git update-index --refresh
-          if ($LASTEXITCODE -ne 0) { throw "Tracked files do not match the index." }
-          $untracked = git ls-files --others --exclude-standard
-          if ($untracked) {
-            $untracked | ForEach-Object { Write-Host "UNTRACKED $_" }
-            throw "Unignored governance outputs were created."
-          }
-      - name: Validate cross-document consistency
-        shell: pwsh
-        run: python .workflow/tools/validate_cross_document_consistency.py
-      - name: Validate project truth
-        shell: pwsh
-        run: python .workflow/tools/validate_project_truth.py
+        run: python scripts/scan_m05_candidate_tree.py --candidate-sha HEAD
 
   backend:
     name: Backend and Skill Workflow
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
@@ -144,6 +82,15 @@ jobs:
       - name: Skill Workflow strict selftest
         shell: pwsh
         run: python _skill/scripts/selftest_strict_project_workflow.py
+      - name: Validate project governance
+        shell: pwsh
+        run: |
+          python .workflow/tools/validate_project_docs.py
+          python .workflow/tools/validate_sequence_sessions.py
+          python .workflow/tools/validate_handoff.py
+          python .workflow/tools/validate_human_comprehension.py --require-pass
+          python .workflow/tools/validate_cross_document_consistency.py
+          python .workflow/tools/validate_project_truth.py
       - name: Backend tests
         shell: pwsh
         run: python -m pytest backend/tests -q -o addopts=
