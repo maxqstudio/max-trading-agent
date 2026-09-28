@@ -652,6 +652,11 @@ def validate_r02_integrity(
         }
 
     checks["block_readable"] = True
+    block_state_ok = str(block.get("state") or "") == "FROZEN_WAITING_EXECUTION"
+    checks["block_state_integrity"] = block_state_ok
+    if not block_state_ok:
+        failures.append("block_state_integrity")
+
     authorization: dict[str, Any] | None = None
     try:
         authorization = get_r02_authorization(

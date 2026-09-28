@@ -702,6 +702,24 @@ def test_r02_integrity_verifies_complete_outcome_authority(tmp_path: Path) -> No
     assert all(result["checks"].values())
 
 
+def test_r02_integrity_detects_block_state_tamper(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    with connect(db) as conn:
+        _drop_trigger(conn, "research_r02_block_no_update")
+        conn.execute("PRAGMA ignore_check_constraints=ON")
+        conn.execute(
+            """
+            UPDATE research_r02_discovery_blocks
+            SET state='TAMPERED'
+            WHERE block_id=?
+            """,
+            (block["block_id"],),
+        )
+    result = validate_r02_integrity(RESEARCH_ID, path=db)
+    assert result["status"] == "INTEGRITY_FAIL"
+    assert "block_state_integrity" in result["failures"]
+
+
 def test_r02_integrity_detects_authorization_tamper(tmp_path: Path) -> None:
     db, block = _frozen_block(tmp_path)
     with connect(db) as conn:
