@@ -1,5 +1,4 @@
 {
-  "schema_version": 1,
   "evidence_boundary": "Phase H0 Hosted Governance Rebase. GitHub source and Windows CI are being established as current development authority. No Owner-PC or real MT5 runtime execution is part of H0; those claims remain NOT_PROVEN until final project acceptance.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
@@ -18,92 +17,92 @@
   "human_comprehension_status": "PASS",
   "requirements": [
     {
+      "evidence": ".workflow semantic specs + generated docs",
       "id": "H0-01",
       "requirement": "Current project identity/repository authority is maxqstudio/max-trading-agent; MAX REBUILD references remain only where historically correct.",
-      "evidence": ".workflow semantic specs + generated docs",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": ".github/workflows/windows-ci.yml + authority/architecture/state specs",
       "id": "H0-02",
       "requirement": "GitHub Actions windows-latest is hosted build/test authority; Owner PC real MT5 runtime is final-only and not claimed by CI.",
-      "evidence": ".github/workflows/windows-ci.yml + authority/architecture/state specs",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "Source-only policy + redacted exact-tree secret scan",
       "id": "H0-03",
       "requirement": "Public repository remains source-only and contains no tracked runtime/private state or detected plaintext production secret.",
-      "evidence": "Source-only policy + redacted exact-tree secret scan",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "Windows CI provenance + STRICT selftest",
       "id": "H0-04",
       "requirement": "Vendored Skill Workflow tools remain byte-identical to exact authority 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f and STRICT selftest passes.",
-      "evidence": "Windows CI provenance + STRICT selftest",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "sync_project_truth + build_scientist_knowledge + validate_project_docs",
       "id": "H0-05",
       "requirement": "Project Truth Compiler outputs and Scientist knowledge manifest are regenerated from current semantic/source authority.",
-      "evidence": "sync_project_truth + build_scientist_knowledge + validate_project_docs",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "Windows CI backend pytest",
       "id": "H0-06",
       "requirement": "Backend regression does not fall below migration floor 488 PASS.",
-      "evidence": "Windows CI backend pytest",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "Windows CI frontend",
       "id": "H0-07",
       "requirement": "Frontend regression does not fall below 53 PASS across 10 files; lint/build/npm dependency tree pass.",
-      "evidence": "Windows CI frontend",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": ".workflow state/known-defects + unchanged product source",
       "id": "H0-08",
       "requirement": "R01 retired hardcoded lineage remains explicitly blocked for future execution and is not weakened during H0.",
-      "evidence": ".workflow state/known-defects + unchanged product source",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "Source-only GitHub phase; no runtime artifacts; product source unchanged",
       "id": "H0-09",
       "requirement": "No real Research execution, training, ONNX, Challenger/Champion mutation or live trading occurs during H0.",
-      "evidence": "Source-only GitHub phase; no runtime artifacts; product source unchanged",
       "status": "NOT_PROVEN"
     }
   ],
   "results": {
     "hosted_ci": {
-      "status": "NOT_PROVEN",
-      "run_id": null
+      "run_id": null,
+      "status": "NOT_PROVEN"
     },
     "regression": {
-      "backend_status": "NOT_PROVEN",
       "backend": null,
-      "frontend_status": "NOT_PROVEN",
+      "backend_status": "NOT_PROVEN",
+      "build": "NOT_PROVEN",
       "frontend_files": null,
+      "frontend_status": "NOT_PROVEN",
       "frontend_tests": null,
       "lint": "NOT_PROVEN",
-      "build": "NOT_PROVEN",
       "npm_ls_all": "NOT_PROVEN",
       "pip_check": "NOT_PROVEN"
     },
     "runtime": {
-      "owner_pc": "NOT_PROVEN",
+      "browser_e2e": "NOT_PROVEN",
       "mt5": "NOT_PROVEN",
-      "browser_e2e": "NOT_PROVEN"
+      "owner_pc": "NOT_PROVEN"
     },
     "scientific_state": {
-      "strategy_champion": "NONE_SOURCE_GOVERNANCE",
       "active_challenger": 0,
       "active_optimizer_job": "NONE",
       "current_research_project": "NONE",
+      "model_training": 0,
+      "onnx": 0,
       "r00": "NOT STARTED",
       "r01": "BLOCKED / NOT STARTED",
       "r02": "BLOCKED / NOT STARTED",
-      "model_training": 0,
-      "onnx": 0,
-      "research_challenger": 0
+      "research_challenger": 0,
+      "strategy_champion": "NONE_SOURCE_GOVERNANCE"
     },
     "skill_authority_sha": "9e22feddb8f94e8c0f1af6a33e14b64de5068f8f"
   },
@@ -114,6 +113,7 @@
     "These checks are intentionally deferred to final Owner-PC acceptance after GitHub development closure."
   ],
   "runtime_status": "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED",
+  "schema_version": 1,
   "sequence_mode": "DURING",
   "sequence_session": "docs/sequence/sessions/ (8 current DURING sessions)",
   "sequence_sync_status": "PASS",
@@ -131,23 +131,23 @@
     "python -m pip check"
   ],
   "truth_gates": {
-    "SOURCE_TESTS": "NOT_PROVEN",
-    "RUNTIME_E2E": "NOT_PROVEN",
-    "PROVENANCE_SYNC": "NOT_PROVEN",
-    "REFERENCE_SYNC": "NOT_PROVEN",
-    "STRUCTURAL_SYNC": "NOT_PROVEN",
-    "SEMANTIC_SYNC": "NOT_PROVEN",
     "BEHAVIORAL_SYNC": "NOT_PROVEN",
     "CROSS_DOCUMENT_CONSISTENCY": "NOT_PROVEN",
-    "HUMAN_COMPREHENSION": "PASS",
-    "SEQUENCE_SYNC": "PASS",
-    "DOC_LAYOUT": "NOT_PROVEN",
-    "PROJECT_DOCS_NORMALIZED": "NOT_PROVEN",
-    "DOC_READABILITY": "NOT_PROVEN",
-    "PROJECT_DOCS_SYNC": "NOT_PROVEN",
+    "DOC_LAYOUT": "PASS",
+    "DOC_READABILITY": "PASS",
     "DOC_SOURCE_TRACEABILITY": "NOT_PROVEN",
     "DOC_TEST_TRACEABILITY": "NOT_PROVEN",
-    "TEST_RUNTIME_TRACEABILITY": "NOT_PROVEN",
-    "PROJECT_STATE_SYNC": "NOT_PROVEN"
+    "HUMAN_COMPREHENSION": "PASS",
+    "PROJECT_DOCS_NORMALIZED": "PASS",
+    "PROJECT_DOCS_SYNC": "PASS",
+    "PROJECT_STATE_SYNC": "NOT_PROVEN",
+    "PROVENANCE_SYNC": "NOT_PROVEN",
+    "REFERENCE_SYNC": "NOT_PROVEN",
+    "RUNTIME_E2E": "NOT_PROVEN",
+    "SEMANTIC_SYNC": "NOT_PROVEN",
+    "SEQUENCE_SYNC": "PASS",
+    "SOURCE_TESTS": "NOT_PROVEN",
+    "STRUCTURAL_SYNC": "NOT_PROVEN",
+    "TEST_RUNTIME_TRACEABILITY": "NOT_PROVEN"
   }
 }

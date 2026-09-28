@@ -789,7 +789,7 @@
       "file": "scripts/build_scientist_knowledge.py",
       "is_test": false,
       "language": "Python",
-      "lines": 283
+      "lines": 289
     },
     {
       "directory": "scripts",
@@ -81485,7 +81485,7 @@
     {
       "file": "scripts/build_scientist_knowledge.py",
       "kind": "function",
-      "line_end": 279,
+      "line_end": 285,
       "line_start": 19,
       "locator": "scripts/build_scientist_knowledge.py::main",
       "symbol": "main"
@@ -82860,7 +82860,7 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca",
+  "source_digest": "d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0",
   "source_summary": {
     "files": 128,
     "languages": {
@@ -82869,7 +82869,7 @@
       "TypeScript": 3,
       "TypeScript/React": 21
     },
-    "lines": 61765,
+    "lines": 61771,
     "test_files": 39
   },
   "tests": [

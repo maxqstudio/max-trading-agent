@@ -2,7 +2,7 @@
 
 # ARCHITECTURE
 
-Current source digest: be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca
+Current source digest: d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0
 
 ## Components
 
@@ -16,8 +16,8 @@ Current source digest: be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a056288
 | launcher | Windows launcher/readiness | Verify or start canonical backend/frontend instances, reject invalid occupied ports and emit MAX_READY only after authority/readiness checks. | RUN_MAX.cmd, scripts/run_max.ps1 | backend /api/overview, frontend proxy/root, Scientist status, ports 8000/5173 |
 | mt5 | MT5/MetaEditor execution boundary | Provide Strategy Tester simulation/optimization and MQL5 compile/execution truth. | ea/baseline/Max_MTF.mq5 | MetaTrader 5 terminal, MetaEditor |
 | operational-state | SQLite operational state | Persist mutable Strategy/Research/Scientist operational state through owning stores and transactions. | state/max.db | backend store modules |
-| immutable-evidence | Immutable evidence/artifact layer | Define retained execution/scientific lineage at runtime; private runtime artifacts/evidence are not tracked in the public source-only GitHub repository. | artifacts/, evidence/, docs/audits/ | domain services and artifact registry |
-| governance | Current project governance | Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth. | PROJECT_PROFILE.yaml, .workflow/*.json, .workflow/workflows/*.json, .workflow/tools/*.py, docs/sequence/sessions/*.json, docs/sequence/generated/*.actual.json, docs/sequence/generated/*.actual.mmd | Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f |
+| immutable-evidence | Immutable evidence/artifact layer | Represent runtime scientific/execution lineage owned by domain contracts; evidence/ and artifacts/ are runtime-only and intentionally absent from the public source repository. | artifacts/, evidence/, docs/audits/ | domain services and artifact registry |
+| governance | Current project governance | Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth for the GitHub-hosted workflow. | PROJECT_PROFILE.yaml, .workflow/*.json, .workflow/workflows/*.json, .workflow/tools/*.py, docs/sequence/sessions/*.json, docs/sequence/generated/*.actual.json, docs/sequence/generated/*.actual.mmd | Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f, GitHub Actions windows-latest hosted validation |
 
 ## Data flow
 
@@ -31,9 +31,9 @@ Current source digest: be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a056288
 
 ## External boundaries
 
-- GitHub: maxqstudio/max-trading-agent main exact commit is source authority.
-- GitHub Actions: windows-latest is hosted build/test authority for ordinary development phases; it does not prove real MT5 or Owner-PC runtime.
-- Owner PC: Final exact-SHA clean install plus real MT5/MetaEditor/browser/filesystem behavior is runtime/E2E authority only after the hosted roadmap is complete.
+- GitHub: maxqstudio/max-trading-agent main exact SHA is source authority; working branches are proposals until required hosted gates pass and merge.
+- GitHub Actions: windows-latest is hosted build/test authority for source-only policy, Skill Workflow, backend, frontend, dependency and public-source validation; it does not prove real MT5 runtime.
+- Owner PC: Final runtime/E2E authority only after GitHub development closure; real MT5, MetaEditor, broker data, terminal data root, deployment and browser E2E remain deferred.
 - MetaTrader 5: Simulation and optimization execution truth only; Python validates workflow legality and evidence.
 - MetaEditor: MQL5 compile truth used by promotion/deployment checks.
 - Scientist provider: Untrusted/advisory provider output is bounded and cannot mutate Strategy/Research authority.
@@ -41,7 +41,7 @@ Current source digest: be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a056288
 ## Observed implementation inventory
 
 Source files: 128
-Source lines: 61765
+Source lines: 61771
 Languages: PowerShell=2, Python=102, TypeScript=3, TypeScript/React=21
 
 Structural facts come from the code extractor. Component meaning comes from

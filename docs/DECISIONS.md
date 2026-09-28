@@ -4,7 +4,7 @@
 
 ## D-001 — Three-layer GitHub / Windows CI / final Owner-PC authority
 
-Status: CURRENT
+Status: SUPERSEDED
 
 GitHub main exact commit is source authority; GitHub Actions windows-latest is ordinary hosted build/test authority; Owner PC plus real MT5 is final runtime/E2E authority only after the hosted roadmap is complete.
 
@@ -161,3 +161,27 @@ Status: CURRENT
 The public repository contains source, deterministic governance and synthetic test fixtures only; private/runtime databases, evidence, artifacts, datasets, credentials, terminal data, logs and local dependency/build outputs are excluded.
 
 Rationale: Keep a public clean clone reproducible without leaking private state or coupling tests to Owner runtime artifacts.
+
+## D-018 — GitHub-hosted development authority
+
+Status: CURRENT
+
+GitHub main exact SHA in maxqstudio/max-trading-agent is source authority; GitHub Actions on windows-latest is the hosted build/test authority for ordinary development phases; Owner PC plus real MetaTrader 5 is reserved for final runtime/E2E acceptance after GitHub development closure.
+
+Rationale: Separate reproducible public-source development from the hardware/broker/runtime boundary that GitHub Actions cannot prove.
+
+## D-019 — Windows-only hosted CI
+
+Status: CURRENT
+
+MAX application CI remains Windows-only and must not add Linux/macOS matrix coverage merely for platform breadth.
+
+Rationale: The production execution boundary is MetaTrader 5 on Windows; hosted CI should validate the supported application platform without pretending to emulate real MT5 runtime.
+
+## D-020 — Public source-only repository
+
+Status: CURRENT
+
+Runtime databases, evidence, artifacts, optimizer outputs, Research datasets, Owner terminal state and real credentials are excluded from the public repository; tests must use synthetic fixtures.
+
+Rationale: Public-source reproducibility and credential/privacy safety require runtime/private state to remain outside Git authority.

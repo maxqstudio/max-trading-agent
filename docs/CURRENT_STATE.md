@@ -8,7 +8,7 @@ Governance profile: strict
 
 ## Current phase
 Phase: H0_HOSTED_GOVERNANCE_REBASE
-Status: HOSTED_GOVERNANCE_REBASE_ACTIVE
+Status: ACTIVE
 
 ## Source
 Repository: maxqstudio/max-trading-agent
@@ -16,7 +16,7 @@ Branch: work/hosted-governance-rebase
 Authoritative SHA: external final acceptance evidence
 Last accepted SHA: ce66946efb23cd479b43239087601ad30c8ac239
 Current candidate SHA: external final acceptance evidence
-Current source digest: be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca
+Current source digest: d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
@@ -33,14 +33,14 @@ PROJECT_DOCS_SYNC: PASS
 ## Sequence governance
 Sequence policy: REQUIRED
 Current sequence mode: DURING
-Current sequence session: docs/sequence/sessions/ (current DURING sessions)
+Current sequence session: docs/sequence/sessions/ (8 current DURING sessions)
 SEQUENCE_SYNC: PASS
 
 ## Proven
-- Previous MAX REBUILD runtime/scientific evidence is historical provenance only and does not become current MAX Trading Agent runtime authority.
-- The public migration source tree intentionally excludes runtime databases, runtime evidence, artifacts, datasets, local dependency/build outputs and credentials.
-- Migration tests use synthetic source-controlled fixtures instead of private historical Challenger/runtime bundles.
-- Skill Workflow current main remains exact SHA 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f at H0 start.
+- Migration baseline main ce66946efb23cd479b43239087601ad30c8ac239 is a public source-only snapshot whose clean Windows CI verification reported Source-only policy PASS, Skill Workflow provenance/STRICT selftest PASS, backend 488 PASS, frontend 53 PASS across 10 files, lint/build/dependency checks PASS.
+- Current Skill Workflow main is exactly 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f, matching the project pin at H0 start.
+- Previous-epoch R00 acceptance, Strategy Champion STRAT-20260924-115344-R01-P8912 and prior Research project are historical evidence only and are not current Research authority.
+- The source-governed fresh epoch declares Strategy Champion NONE, active Challenger 0, active Optimizer job NONE, current Research project NONE, R00 NOT STARTED, R01 BLOCKED / NOT STARTED, R02 BLOCKED / NOT STARTED, model training 0, ONNX 0 and Research Challenger 0.
 - Historical exact-16D and current exact-17D Challenger compatibility is executable-regression covered.
 - Durable consumed optimizer sources are excluded from the active qualified pool.
 - Former Champion tenure remains FORMER history and does not automatically reactivate its source Challenger.
@@ -48,30 +48,34 @@ SEQUENCE_SYNC: PASS
 - Protected outcome feedback is non-adaptive.
 
 ## Not proven
-- Any post-migration Owner-PC fresh-database/bootstrap, real MT5/MetaEditor, broker/data-root, filesystem deployment or browser E2E result for maxqstudio/max-trading-agent.
-- Any current-epoch R00 execution or real R01 scientific result.
+- H0 hosted governance rebase acceptance until regenerated governance and exact-branch Windows CI are green.
+- Any real current-epoch runtime database bootstrap or operational row counts on Owner PC.
+- Real MT5 detection, MetaEditor compile, Strategy Tester, broker data, terminal data root or filesystem deployment.
+- Real browser E2E on the final Owner-PC checkout.
+- Any current-epoch R00 or real R01 scientific result.
 - Any R02 execution, model training, ONNX generation or Research Challenger creation.
-- Final Owner-PC runtime acceptance at the final GitHub main SHA.
 
 ## Known blockers
-- Future current-epoch R01 execution is blocked by previous-epoch hardcoded R00/Research/Strategy identifiers in backend/max_backend/research_r01_service.py until immutable current-R00 lineage binding is repaired and negative-tested.
-- R02 remains blocked by the absence of an accepted current-epoch R01 scientific result and separate Owner authorization.
+- backend/max_backend/research_r01_service.py still binds R01 to retired previous-epoch hardcoded R00/Strategy identifiers; current-epoch R01 must remain blocked until repaired with immutable current-R00 lineage.
+- Real MetaTrader 5, MetaEditor, broker/data-root, filesystem deployment and browser E2E are intentionally NOT_PROVEN until final Owner-PC acceptance.
 
 ## Known defects
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Complete H0 Hosted Governance Rebase on work/hosted-governance-rebase, regenerate Project Truth, pass Windows GitHub Actions, merge to main, and revalidate main.
-- After H0 main revalidation, repair R01 binding so it resolves immutable accepted CURRENT R00 authority instead of retired epoch constants, with fail-closed cross-epoch/tamper negative tests.
-- Continue GitHub-only source phases without requesting Owner-PC runtime testing until the hosted roadmap is complete.
+- Complete H0 by rebasing current semantic authority to maxqstudio/max-trading-agent, regenerating Project Truth Compiler outputs, validating Skill Workflow, and running Windows GitHub Actions until green.
+- Merge H0 to main only after all hosted gates pass and main is revalidated.
+- Repair R01 current-R00 immutable lineage binding with negative cross-epoch/tamper tests before any future real R01 execution.
+- Continue source/design/test roadmap on GitHub; defer Owner-PC final runtime acceptance until GitHub development closure.
 
 ## Explicitly blocked
-- Starting any real Research execution without separate Owner authorization.
-- R01 runtime/scientific execution before current-epoch R00 authority and R01 lineage repair are accepted.
+- Owner-PC testing between ordinary GitHub development phases.
+- Any real Research execution, including a new current-epoch R00 or R01.
+- R01 execution until current accepted R00 lineage binding replaces retired hardcoded previous-epoch identifiers.
 - R02 execution.
 - Model training.
 - ONNX generation.
 - Research Challenger creation.
 - Strategy Champion mutation.
 - Live trading.
-- Unrelated product behavior, algorithm, EA, or database schema changes outside an explicitly authorized phase.
+- Unrelated product behavior, algorithm, EA, or database-schema changes during H0.

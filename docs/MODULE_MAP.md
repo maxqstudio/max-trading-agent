@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca
+Source digest: d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -118,7 +118,7 @@ Generated/refreshed: current compiler run
 | frontend/vite.config.ts | TypeScript | 18 | frontend | NO |
 | scripts/build_m05_final_evidence.py | Python | 586 | scripts | NO |
 | scripts/build_m05_partial_evidence.py | Python | 217 | scripts | NO |
-| scripts/build_scientist_knowledge.py | Python | 283 | scripts | NO |
+| scripts/build_scientist_knowledge.py | Python | 289 | scripts | NO |
 | scripts/generate_module_map.py | Python | 120 | scripts | NO |
 | scripts/generate_symbol_index.py | Python | 261 | scripts | NO |
 | scripts/launcher_authority.py | Python | 161 | scripts | NO |

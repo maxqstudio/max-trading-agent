@@ -1,6 +1,9 @@
 {
   "authority_summary": [
-    "MT5 = simulation/optimization truth",
+    "GitHub main exact SHA = source authority",
+    "GitHub Actions windows-latest = hosted build/test authority",
+    "Owner PC + real MT5 = final runtime/E2E authority",
+    "MT5 = simulation/optimization truth when runtime execution is authorized",
     "Deterministic Python = legality/KPI qualification/evidence validation authority",
     "SQLite = mutable operational authority",
     "Immutable artifacts = evidence authority",
@@ -19,7 +22,9 @@
     {
       "classification": "EXISTING",
       "facts": [
-        "MT5 Strategy Tester is simulation and optimization truth.",
+        "GitHub main exact SHA is source authority and GitHub Actions on windows-latest is hosted build/test authority during development.",
+        "Owner PC plus real MetaTrader 5 is final runtime/E2E authority only after GitHub development closure.",
+        "MT5 Strategy Tester is simulation and optimization truth when real runtime execution is authorized.",
         "Deterministic Python owns legality, KPI qualification, evidence validation and selected-candidate revalidation.",
         "SQLite is mutable operational authority and immutable artifacts are evidence authority.",
         "Owner alone authorizes Strategy Champion promotion; Scientist is advisory and explanatory only."
@@ -155,8 +160,8 @@
     {
       "classification": "EXISTING",
       "facts": [
-        "R00 is accepted with source audit PASS and Owner-PC runtime acceptance PASS.",
-        "R01 source/runtime repair has Control Room targeted re-audit PASS; the real R01 scientific run has not started, no R01 scientific result is proven, and R02 remains blocked.",
+        "Previous-epoch R00 is accepted historical evidence; the current fresh epoch has no Research project and current-epoch R00 has not started.",
+        "Previous-epoch R01 source/runtime repair has historical targeted re-audit PASS; current-epoch R01 is blocked/not started until immutable current-R00 lineage replaces retired hardcoded identifiers, and R02 remains blocked.",
         "The system owns deterministic scientific PASS/FAIL and may recommend; the Owner selects which qualified candidates advance.",
         "No Research gate automatically opens the next gate, creates a Strategy Challenger, or mutates Champion authority."
       ],
@@ -166,7 +171,7 @@
     {
       "classification": "EXISTING",
       "facts": [
-        "R00 is accepted and freezes one immutable verified Strategy Champion parent into one deterministic Research identity and stores backend gate authority in SQLite.",
+        "The historical previous-epoch R00 acceptance froze one immutable verified Strategy Champion parent into one deterministic Research identity; current-epoch R00 has not started.",
         "R00 feature authority is CP32_TRUE_MTF_V1; Python Research does not own or silently redefine feature semantics.",
         "Research H1 minimum trades/month is a persistent Owner configuration with no Strategy Optimizer inheritance; each Research execution snapshots the exact configured value into immutable evidence, so later configuration edits do not rewrite historical or running execution authority.",
         "R00 freezes Research KPI hard-gate dimensions while numeric thresholds remain gate-scoped Owner authority before first scientific qualification.",
@@ -231,17 +236,18 @@
     "M06 retained-contract Challenger Backtest and Retirement / Archive",
     "M07 accepted causal true-MTF Strategy epoch",
     "M08 accepted qualified pool, multi-Challenger selection, Backtest results and Artifact control plane",
-    "R00 Research Authority Foundation accepted with persisted Owner authorization, frozen Champion parent, gate state, lineage, hardware authority and append-only Research Memory",
-    "R01 Dataset + Label + Leakage Foundation implementation/runtime repair with targeted re-audit PASS, MAX-managed verified source preparation, causal CP32 parity, parent-bound labels, dependency-derived purge/embargo, deterministic physical partition ownership, inherited original-row protected target-boundary purge, Discovery-only Owner/Scientist outcome summaries with protected-outcome isolation, executable adversarial leakage attacks, canonical current-stage derivation and atomic terminal publication; real R01 scientific execution remains not started",
+    "Historical previous-epoch R00 Research Authority Foundation accepted; current fresh Research epoch has no current Research project and R00 has not started",
+    "Historical previous-epoch R01 Dataset + Label + Leakage Foundation implementation/runtime repair has targeted re-audit PASS; current-epoch R01 remains blocked/not started until current-R00 immutable lineage binding replaces retired hardcoded identifiers",
     "V6 Strategy Optimizer source candidate with 17 dimensions including an exact Owner-grid InpRiskPct 0.5%..5.0% step 0.5% that refinement cannot shift off-grid, plus fixed 5.0% daily-loss authority for new jobs"
   ],
   "planned_capabilities": [
-    "Separate Owner-authorized real R01 scientific execution and acceptance before any R02 authorization",
+    "Current-epoch R00 initialization and acceptance under the fresh epoch before any real R01 execution",
+    "Repair current-R00 immutable lineage binding before any Owner-authorized real R01 scientific execution and acceptance",
     "R02 Discovery / Cheap Screen only after separate explicit Owner authorization following accepted R01"
   ],
   "project": {
-    "name": "MAX Rebuild",
-    "phase": "Phase 1"
+    "name": "MAX Trading Agent",
+    "phase": "GitHub-hosted development / fresh Research epoch"
   },
   "schema": "MAX_REBUILD_PHASE1_SCIENTIST_KNOWLEDGE_V1",
   "source_manifest": [

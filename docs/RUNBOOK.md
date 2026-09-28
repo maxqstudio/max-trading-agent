@@ -2,20 +2,18 @@
 
 # RUNBOOK
 
-1. Verify hosted source authority — git fetch origin main; git switch main; git pull --ff-only; git rev-parse HEAD; git status --porcelain — expected: Latest maxqstudio/max-trading-agent main exact SHA and clean worktree.
-2. Create phase branch — git switch -c work/<semantic-phase-name> — expected: Work branch descends from latest main; no reset/rewrite of valid work.
-3. Python environment — py -3.13 -m venv .venv; .\.venv\Scripts\python.exe -m pip install -r requirements.lock.txt — expected: Python 3.13 environment with locked dependencies.
-4. Frontend dependencies — cd frontend; npm ci; cd .. — expected: package-lock resolves without required dependency errors.
-5. Sync generated governance — .\.venv\Scripts\python.exe .workflow\tools\sync_project_truth.py — expected: PROJECT_DOCS_SYNC=PASS; commit only deterministic compiler outputs.
-6. Validate generated docs — .\.venv\Scripts\python.exe .workflow\tools\validate_project_docs.py — expected: No stale/missing generated canonical docs.
-7. Validate sequence sessions — .\.venv\Scripts\python.exe .workflow\tools\validate_sequence_sessions.py — expected: Eight current DURING sessions with zero failed sessions.
-8. Validate handoff and human comprehension — .\.venv\Scripts\python.exe .workflow\tools\validate_handoff.py; .\.venv\Scripts\python.exe .workflow\tools\validate_human_comprehension.py --require-pass — expected: STRICT handoff and HUMAN_COMPREHENSION PASS.
-9. Validate cross-document consistency — .\.venv\Scripts\python.exe .workflow\tools\validate_cross_document_consistency.py — expected: RESULT=PASS without stale repository/runtime authority conflicts.
-10. Validate project truth — .\.venv\Scripts\python.exe .workflow\tools\validate_project_truth.py — expected: RESULT=PASS for the current hosted scope; final real runtime remains explicitly deferred.
-11. Backend cumulative tests — .\.venv\Scripts\python.exe -m pytest backend\tests -q -o addopts= — expected: At least the verified migration floor of 488 PASS; any unexplained decrease blocks the phase.
-12. Python dependencies — .\.venv\Scripts\python.exe -m pip check — expected: No broken requirements.
-13. Frontend tests lint build dependencies — cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all; cd .. — expected: At least 53 tests across 10 files, lint PASS, production build PASS, dependency tree exit 0.
-14. Public exact-tree secret scan — .\.venv\Scripts\python.exe scripts\scan_m05_candidate_tree.py --candidate-sha HEAD — expected: PASS with no plaintext high-confidence secret or forbidden secret-storage path.
-15. Hosted phase acceptance — Push work branch and inspect .github/workflows/windows-ci.yml for the exact candidate commit. — expected: Source-only policy, governance, Skill provenance/selftest, backend, pip, frontend test/lint/build/dependency gates all PASS on windows-latest.
-16. Merge and main revalidation — Merge the green phase branch to main, then inspect Windows CI for the resulting main commit. — expected: Main Windows CI PASS before beginning the next ordinary development phase.
-17. Final runtime acceptance boundary — Only after hosted roadmap closure: clean-clone final main and run INSTALL.ps1 on Owner PC before real MT5/MetaEditor/browser/E2E checks. — expected: OWNER_PC_FINAL_ACCEPTANCE_REQUIRED until that final phase; never infer runtime PASS from GitHub Actions.
+1. Verify hosted source — git fetch origin main; git switch work/hosted-governance-rebase; git rev-parse HEAD; git status --porcelain — expected: Branch descends from current main and worktree is clean before validation.
+2. Python environment — py -3.13 -m venv .venv; .\.venv\Scripts\python.exe -m pip install -r requirements.lock.txt — expected: Python 3.13 environment with locked dependencies.
+3. Frontend dependencies — cd frontend; npm ci; cd .. — expected: package-lock resolves without required dependency errors.
+4. Sync generated governance — .\.venv\Scripts\python.exe .workflow\tools\sync_project_truth.py — expected: PROJECT_DOCS_SYNC=PASS; generated docs are compiler output, not manual edits.
+5. Rebuild Scientist knowledge — .\.venv\Scripts\python.exe scripts\build_scientist_knowledge.py — expected: Scientist source manifest and knowledge snapshot bind to current authoritative source/docs.
+6. Validate generated docs — .\.venv\Scripts\python.exe .workflow\tools\validate_project_docs.py — expected: PROJECT_DOCS_SYNC=PASS with no stale/missing generated docs.
+7. Validate sequence sessions — .\.venv\Scripts\python.exe .workflow\tools\validate_sequence_sessions.py — expected: Eight current DURING sessions, zero failed sessions.
+8. Validate handoff — .\.venv\Scripts\python.exe .workflow\tools\validate_handoff.py — expected: STRICT required docs present/current.
+9. Validate human comprehension — .\.venv\Scripts\python.exe .workflow\tools\validate_human_comprehension.py --require-pass — expected: HUMAN_COMPREHENSION_GATE PASS.
+10. Validate project truth — .\.venv\Scripts\python.exe .workflow\tools\validate_project_truth.py — expected: No explicit FAIL; hosted phase may retain final Owner runtime as NOT_PROVEN.
+11. Backend cumulative tests — .\.venv\Scripts\python.exe -m pytest backend\tests -q -o addopts= — expected: At least migration floor 488 PASS; investigate any unexplained decrease.
+12. Frontend tests/lint/build — cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all; cd .. — expected: At least 53 tests across 10 files, lint PASS, production build PASS, dependency tree exit 0.
+13. Python dependencies — .\.venv\Scripts\python.exe -m pip check — expected: No broken requirements.
+14. Hosted phase authority — GitHub Actions workflow .github/workflows/windows-ci.yml — expected: Source-only policy, public secret scan, Skill provenance/STRICT selftest, project governance, backend, frontend and dependency gates all PASS on windows-latest before merge.
+15. Final Owner-PC runtime acceptance — Deferred until GitHub development roadmap closure; then use INSTALL.ps1 and the final acceptance runbook. — expected: Only final Owner-PC acceptance may prove fresh DB, real MT5/MetaEditor/Strategy Tester, deployment and browser E2E.

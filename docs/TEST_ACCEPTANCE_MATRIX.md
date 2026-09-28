@@ -4,51 +4,48 @@
 
 ## Evidence boundary
 
-H0 Hosted Governance Rebase for public maxqstudio/max-trading-agent. GitHub main is source authority and windows-latest GitHub Actions is ordinary hosted build/test authority. No Owner-PC runtime action is part of H0. Previous MAX REBUILD runtime evidence is historical provenance only; real MT5/MetaEditor/broker/data-root/browser/filesystem behavior remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the GitHub roadmap closes.
+Phase H0 Hosted Governance Rebase. GitHub source and Windows CI are being established as current development authority. No Owner-PC or real MT5 runtime execution is part of H0; those claims remain NOT_PROVEN until final project acceptance.
 
 Final tested source: external final acceptance evidence.
-Current source digest: be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca
+Current source digest: d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
-| H0-0 | Hosted branch descends from migration main ce66946efb23cd479b43239087601ad30c8ac239 without resetting valid work. | GitHub branch ancestry | PASS |
-| H0-1 | Skill Workflow authority is current main 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f and vendored tools remain byte-identical. | Windows CI Skill Workflow provenance and STRICT selftest | NOT_PROVEN |
-| H0-2 | Public repository source-only policy rejects prohibited runtime/private paths and exact-tree secret findings. | Windows CI Source-only policy plus redacted exact-tree secret scan | NOT_PROVEN |
-| H0-3 | Current repository identity and authority model are maxqstudio/max-trading-agent -> windows-latest CI -> deferred final Owner-PC runtime. | .workflow semantic specs and generated governance | NOT_PROVEN |
-| H0-4 | Project Truth Compiler and strict governance validators reproduce canonical docs without manual generated-Markdown edits. | Hosted governance CI | NOT_PROVEN |
-| H0-5 | Backend regression remains at or above verified 488-pass migration floor and pip check passes. | Windows CI Backend and Skill Workflow job | NOT_PROVEN |
-| H0-6 | Frontend remains at or above 53 tests / 10 files with lint, production build and npm dependency tree PASS. | Windows CI Frontend job | NOT_PROVEN |
-| H0-7 | Historical previous-repository/runtime evidence is distinguished from current authority without blind rewriting. | migration audit, decisions, claims, state, generated docs | NOT_PROVEN |
-| H0-8 | Exact H0 work-branch candidate passes every required Windows CI job before merge. | GitHub Actions Windows CI | NOT_PROVEN |
-| H0-9 | H0 merges only after green branch CI and resulting main commit is revalidated by Windows CI. | GitHub PR/merge and main Windows CI | NOT_PROVEN |
-| H0-10 | No GitHub evidence claims real MT5, broker, terminal data-root, browser or Owner-PC runtime PASS. | runtime status and authority semantics | PASS |
+| H0-01 | Current project identity/repository authority is maxqstudio/max-trading-agent; MAX REBUILD references remain only where historically correct. | .workflow semantic specs + generated docs | NOT_PROVEN |
+| H0-02 | GitHub Actions windows-latest is hosted build/test authority; Owner PC real MT5 runtime is final-only and not claimed by CI. | .github/workflows/windows-ci.yml + authority/architecture/state specs | NOT_PROVEN |
+| H0-03 | Public repository remains source-only and contains no tracked runtime/private state or detected plaintext production secret. | Source-only policy + redacted exact-tree secret scan | NOT_PROVEN |
+| H0-04 | Vendored Skill Workflow tools remain byte-identical to exact authority 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f and STRICT selftest passes. | Windows CI provenance + STRICT selftest | NOT_PROVEN |
+| H0-05 | Project Truth Compiler outputs and Scientist knowledge manifest are regenerated from current semantic/source authority. | sync_project_truth + build_scientist_knowledge + validate_project_docs | NOT_PROVEN |
+| H0-06 | Backend regression does not fall below migration floor 488 PASS. | Windows CI backend pytest | NOT_PROVEN |
+| H0-07 | Frontend regression does not fall below 53 PASS across 10 files; lint/build/npm dependency tree pass. | Windows CI frontend | NOT_PROVEN |
+| H0-08 | R01 retired hardcoded lineage remains explicitly blocked for future execution and is not weakened during H0. | .workflow state/known-defects + unchanged product source | NOT_PROVEN |
+| H0-09 | No real Research execution, training, ONNX, Challenger/Champion mutation or live trading occurs during H0. | Source-only GitHub phase; no runtime artifacts; product source unchanged | NOT_PROVEN |
 
 ## Test commands
 
-- python .workflow/tools/sync_project_truth.py
 - python .workflow/tools/validate_project_docs.py
 - python .workflow/tools/validate_sequence_sessions.py
 - python .workflow/tools/validate_handoff.py
 - python .workflow/tools/validate_human_comprehension.py --require-pass
-- python .workflow/tools/validate_cross_document_consistency.py
 - python .workflow/tools/validate_project_truth.py
-- python scripts/scan_m05_candidate_tree.py --candidate-sha HEAD
 - python -m pytest backend/tests -q -o addopts=
-- python -m pip check
 - npm test -- --run (workdir: frontend)
 - npm run lint (workdir: frontend)
 - npm run build (workdir: frontend)
 - npm ls --all (workdir: frontend)
+- python -m pip check
 
 ## Runtime checks
 
-- H0 intentionally performs no Owner-PC runtime checks.
-- Real MT5, MetaEditor, broker/data-root, browser and fresh-database behavior remain OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after hosted roadmap closure.
+- NOT_RUN in H0: real Owner-PC fresh database/bootstrap.
+- NOT_RUN in H0: real MT5 detection, MetaEditor compile, Strategy Tester, broker/data-root and filesystem deployment.
+- NOT_RUN in H0: real Owner browser E2E.
+- These checks are intentionally deferred to final Owner-PC acceptance after GitHub development closure.
 
 ## Sequence contract evidence
 
 Sequence mode for this phase/session: DURING
-Sequence session contract: docs/sequence/sessions/ (current DURING sessions)
+Sequence session contract: docs/sequence/sessions/ (8 current DURING sessions)
 SEQUENCE_SYNC: PASS
 
 ## Project Truth Compiler evidence
