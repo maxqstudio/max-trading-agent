@@ -13,6 +13,16 @@ from .research_r02_outcome import build_candidate_outcome, build_terminal_manife
 from .workflow_store import migrate_current
 
 
+def _int_value(value: Any, code: str) -> int:
+    try:
+        result = int(value)
+    except (OverflowError, TypeError, ValueError) as exc:
+        raise RuntimeError(code) from exc
+    if isinstance(value, bool):
+        raise RuntimeError(code)
+    return result
+
+
 def _json_object(raw: Any, code: str) -> dict[str, Any]:
     try:
         value = json.loads(str(raw))
@@ -37,14 +47,50 @@ def _authorization_payload(row: Any, research_id: str) -> dict[str, Any]:
         raise RuntimeError("R02_INTEGRITY_AUTHORIZATION_ID_MISMATCH")
     if str(row["research_id"]) != research_id:
         raise RuntimeError("R02_INTEGRITY_AUTHORIZATION_RESEARCH_MISMATCH")
-    if int(row["confirmed"]) != 1 or payload.get("confirmed") is not True:
+    if _int_value(
+        row["confirmed"],
+        "R02_INTEGRITY_AUTHORIZATION_CONFIRMATION_MISMATCH",
+    ) != 1 or payload.get("confirmed") is not True:
         raise RuntimeError("R02_INTEGRITY_AUTHORIZATION_CONFIRMATION_MISMATCH")
+
+    expected_fields = {
+        "schema",
+        "gate",
+        "action",
+        "confirmed",
+        "owner_confirmation",
+        "research_id",
+        "r01_output_manifest_sha256",
+        "plan_id",
+        "plan_sha256",
+        "candidate_count",
+        "candidate_ids",
+        "compute_budget",
+        "cheap_screen_qualification_authority",
+        "automatic_second_discovery_block",
+        "execution_available",
+    }
+    if set(payload) != expected_fields:
+        raise RuntimeError("R02_INTEGRITY_AUTHORIZATION_FIELDS_MISMATCH")
+    if payload.get("schema") != "MAX_RESEARCH_OWNER_AUTHORIZATION_R02_V1":
+        raise RuntimeError("R02_INTEGRITY_AUTHORIZATION_SCHEMA_MISMATCH")
     if str(payload.get("research_id") or "") != research_id:
         raise RuntimeError("R02_INTEGRITY_AUTHORIZATION_RESEARCH_MISMATCH")
     if str(payload.get("gate") or "") != "R02":
         raise RuntimeError("R02_INTEGRITY_AUTHORIZATION_GATE_MISMATCH")
     if str(payload.get("action") or "") != "AUTHORIZE_DISCOVERY":
         raise RuntimeError("R02_INTEGRITY_AUTHORIZATION_ACTION_MISMATCH")
+    if (
+        payload.get("owner_confirmation")
+        != "OWNER_EXPLICIT_R02_DISCOVERY_AUTHORIZE"
+    ):
+        raise RuntimeError("R02_INTEGRITY_OWNER_CONFIRMATION_MISMATCH")
+    if payload.get("cheap_screen_qualification_authority") is not False:
+        raise RuntimeError("R02_INTEGRITY_QUALIFICATION_AUTHORITY_MISMATCH")
+    if payload.get("automatic_second_discovery_block") is not False:
+        raise RuntimeError("R02_INTEGRITY_SECOND_BLOCK_POLICY_MISMATCH")
+    if payload.get("execution_available") is not False:
+        raise RuntimeError("R02_INTEGRITY_EXECUTION_AUTHORITY_MISMATCH")
     return payload
 
 
@@ -59,7 +105,10 @@ def _candidate_specs(
         raise RuntimeError("R02_INTEGRITY_CANDIDATE_SPECS_MISSING")
     specs: list[dict[str, Any]] = []
     for expected_ordinal, row in enumerate(rows):
-        if int(row["ordinal"]) != expected_ordinal:
+        if _int_value(
+            row["ordinal"],
+            "R02_INTEGRITY_CANDIDATE_ORDINAL_MISMATCH",
+        ) != expected_ordinal:
             raise RuntimeError("R02_INTEGRITY_CANDIDATE_ORDINAL_MISMATCH")
         if str(row["block_id"]) != block_id:
             raise RuntimeError("R02_INTEGRITY_CANDIDATE_BLOCK_MISMATCH")
@@ -69,14 +118,23 @@ def _candidate_specs(
         )
         if stable_hash(spec) != str(row["spec_sha256"]):
             raise RuntimeError("R02_INTEGRITY_CANDIDATE_SPEC_HASH_MISMATCH")
-        candidate_id = derive_candidate_id(spec)
+        try:
+            candidate_id = derive_candidate_id(spec)
+        except (KeyError, RuntimeError, TypeError, ValueError) as exc:
+            raise RuntimeError("R02_INTEGRITY_CANDIDATE_ID_REBUILD_FAILED") from exc
         if candidate_id != str(row["candidate_id"]):
             raise RuntimeError("R02_INTEGRITY_CANDIDATE_ID_MISMATCH")
         if str(spec.get("research_id") or "") != research_id:
             raise RuntimeError("R02_INTEGRITY_CANDIDATE_RESEARCH_MISMATCH")
         if str(spec.get("model_family") or "") != str(row["model_family"]):
             raise RuntimeError("R02_INTEGRITY_CANDIDATE_FAMILY_MISMATCH")
-        if int(spec.get("seed")) != int(row["seed"]):
+        if _int_value(
+            spec.get("seed"),
+            "R02_INTEGRITY_CANDIDATE_SEED_MISMATCH",
+        ) != _int_value(
+            row["seed"],
+            "R02_INTEGRITY_CANDIDATE_SEED_MISMATCH",
+        ):
             raise RuntimeError("R02_INTEGRITY_CANDIDATE_SEED_MISMATCH")
         parent = spec.get("parent_lineage")
         if not isinstance(parent, dict):
@@ -95,7 +153,11 @@ def _rebuild_plan(
     authorization_payload: dict[str, Any],
     candidates: list[dict[str, Any]],
 ) -> dict[str, Any]:
-    if len(candidates) != int(block["candidate_count"]):
+    candidate_count = _int_value(
+        block["candidate_count"],
+        "R02_INTEGRITY_CANDIDATE_COUNT_MISMATCH",
+    )
+    if len(candidates) != candidate_count:
         raise RuntimeError("R02_INTEGRITY_CANDIDATE_COUNT_MISMATCH")
     first = candidates[0]
     parent_lineage = first.get("parent_lineage")
@@ -116,7 +178,7 @@ def _rebuild_plan(
         "feature_contract": str(first.get("feature_contract") or ""),
         "label_contract": str(first.get("label_contract") or ""),
         "parent_lineage": deepcopy(parent_lineage),
-        "candidate_count": int(block["candidate_count"]),
+        "candidate_count": candidate_count,
         "compute_budget": {
             "value": budget["value"],
             "unit": budget["unit"],
@@ -141,9 +203,10 @@ def _rebuild_plan(
     candidate_ids = [str(item["candidate_id"]) for item in plan["candidates"]]
     if candidate_ids != list(authorization_payload.get("candidate_ids") or []):
         raise RuntimeError("R02_INTEGRITY_AUTHORIZATION_CANDIDATE_IDS_MISMATCH")
-    if int(authorization_payload.get("candidate_count") or 0) != int(
-        block["candidate_count"]
-    ):
+    if _int_value(
+        authorization_payload.get("candidate_count"),
+        "R02_INTEGRITY_AUTHORIZATION_CANDIDATE_COUNT_MISMATCH",
+    ) != candidate_count:
         raise RuntimeError("R02_INTEGRITY_AUTHORIZATION_CANDIDATE_COUNT_MISMATCH")
     if authorization_payload.get("compute_budget") != budget:
         raise RuntimeError("R02_INTEGRITY_AUTHORIZATION_COMPUTE_BUDGET_MISMATCH")

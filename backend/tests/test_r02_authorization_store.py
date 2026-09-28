@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import json
 from pathlib import Path
 
 import pytest
@@ -13,7 +14,10 @@ from max_backend.research_contract import (
 )
 from max_backend.research_r01_store import create_r01_authorization, create_r01_run
 from max_backend.research_r02_contract import build_discovery_plan
-from max_backend.research_r02_integrity import verify_r02_authority_integrity
+from max_backend.research_r02_integrity import (
+    _authorization_payload,
+    verify_r02_authority_integrity,
+)
 from max_backend.research_r02_store import (
     authorize_and_freeze_r02_discovery,
     create_r02_authorization,
@@ -829,3 +833,29 @@ def test_r02_integrity_rejects_partial_outcome_state_without_terminal(
         match="R02_INTEGRITY_PARTIAL_OUTCOME_STATE",
     ):
         verify_r02_authority_integrity(RESEARCH_ID, path=db)
+
+
+
+def test_r02_integrity_rejects_hash_consistent_semantic_authorization_forgery() -> None:
+    plan = _plan()
+    record = _authorization(plan)
+    payload = deepcopy(record["payload"])
+    payload["execution_available"] = True
+    payload_sha = stable_hash(payload)
+    row = {
+        "authorization_id": "RAUTH-R02-" + payload_sha[:24],
+        "research_id": RESEARCH_ID,
+        "confirmed": 1,
+        "payload_sha256": payload_sha,
+        "payload_json": json.dumps(
+            payload,
+            sort_keys=True,
+            separators=(",", ":"),
+        ),
+        "authorized_utc": "2026-09-28T00:03:00+00:00",
+    }
+    with pytest.raises(
+        RuntimeError,
+        match="R02_INTEGRITY_EXECUTION_AUTHORITY_MISMATCH",
+    ):
+        _authorization_payload(row, RESEARCH_ID)
