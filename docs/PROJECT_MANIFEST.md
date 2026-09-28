@@ -3,22 +3,22 @@
 # PROJECT MANIFEST
 
 ## Project
-Name: MAX REBUILD
-Purpose: Local Windows control plane for deterministic Strategy optimization, Challenger and Champion governance plus a separately gated scientific Research pipeline using MT5 execution evidence and immutable lineage.
+Name: MAX Trading Agent
+Purpose: Windows-only GitHub-first control plane for deterministic Strategy optimization, Challenger and Champion governance plus a separately gated scientific Research pipeline whose real execution boundary is MetaTrader 5.
 Primary users: Owner, authorized Builder, Control Room auditor
 Governance profile: strict
 
 ## Repositories
-Repository: maxqstudio/max_rebuild
-Active branch: work/skill-workflow-strict-adoption
+Repository: maxqstudio/max-trading-agent
+Active branch: work/hosted-governance-rebase
 Current authoritative SHA: external final acceptance evidence
-Last accepted SHA: ad7e61c9d944677e1d7a48e9bfbfc9d049b2542e
-Current source digest: 385d2b167fbcf71a6311bfa92f3e567cb6d4c08fef1a00c963f58721e4145429
+Last accepted SHA: ce66946efb23cd479b43239087601ad30c8ac239
+Current source digest: d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0
 
 ## Authorities
-Source authority: Tracked source/spec/governance state is authoritative by exact commit; final candidate HEAD must equal locally tested HEAD.
-Runtime authority: Windows/MT5/browser runtime and E2E behavior are accepted only from the Owner-PC checkout at the tested SHA.
-Acceptance authority: No individual validator or historical PASS alone grants project acceptance.
+Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.
+Runtime authority: Real MetaTrader terminal, MetaEditor, broker-data, filesystem deployment and browser E2E remain NOT_PROVEN during hosted development and are accepted only in the final Owner-PC phase.
+Acceptance authority: Hosted source/build/test phases require green windows-latest CI at the exact candidate SHA; only the final Owner-PC phase may prove real MT5/runtime behavior.
 Data authority: see SOURCE_AUTHORITY_MAP.md
 UI authority: see SOURCE_AUTHORITY_MAP.md
 Historical/reference authority: see SOURCE_AUTHORITY_MAP.md
@@ -27,7 +27,7 @@ Historical/reference authority: see SOURCE_AUTHORITY_MAP.md
 Languages: Python 3.13, TypeScript/TSX, MQL5, PowerShell, CMD
 Frameworks: FastAPI, React 19, Vite, Vitest
 Persistence: SQLite mutable operational state, immutable filesystem artifacts/evidence
-External systems: MetaTrader 5 Strategy Tester, MetaEditor, GitHub source authority, Owner PC D:\MAX_REBUILD runtime authority
+External systems: MetaTrader 5 Strategy Tester, MetaEditor, GitHub source authority, GitHub Actions Windows hosted build/test authority, Owner PC final MT5/browser runtime acceptance boundary
 
 ## Entry points
 
@@ -63,8 +63,10 @@ Generated from PROJECT_PROFILE.yaml.
 
 ## Non-negotiable constraints
 
-- GitHub is source authority; Owner PC D:\MAX_REBUILD is runtime/E2E authority.
-- Do not use GitHub Actions.
+- GitHub main exact SHA in maxqstudio/max-trading-agent is source authority.
+- GitHub Actions on windows-latest is the hosted build/test authority for ordinary development phases.
+- Owner PC plus real MetaTrader 5 is final runtime/E2E authority only after the GitHub development roadmap is complete.
+- The public repository is source-only: runtime databases, evidence, artifacts, datasets, credentials and Owner terminal state are not source authority and must not be tracked.
 - Owner explicitly authorizes Strategy promotion and Research advancement where required.
 - Scientist is advisory only and cannot create scientific, promotion, risk or execution authority.
 - R01 source/runtime readiness is not R01 scientific PASS.

@@ -150,8 +150,12 @@
       "precompiler_document": "docs/generated/SYMBOL_INDEX.generated.md"
     }
   ],
-  "repair_parent": "ad7e61c9d944677e1d7a48e9bfbfc9d049b2542e",
+  "repair_parent": "ce66946efb23cd479b43239087601ad30c8ac239",
   "schema_version": 1,
   "skill_authority_sha": "9e22feddb8f94e8c0f1af6a33e14b64de5068f8f",
-  "unmapped_current_semantics": 0
+  "unmapped_current_semantics": 0,
+  "current_repository": "maxqstudio/max-trading-agent",
+  "historical_repository": "maxqstudio/max_rebuild",
+  "hosted_authority_model": "GitHub main source authority -> GitHub Actions windows-latest hosted build/test authority -> final Owner-PC real MT5/runtime acceptance after roadmap closure.",
+  "authority_transition": "Historical MAX REBUILD source/runtime records remain historical where accurate; current authority is GitHub main plus Windows GitHub Actions, with Owner-PC real MT5 runtime deferred to final acceptance."
 }

@@ -144,11 +144,12 @@
         "evidence/",
         "docs/audits/"
       ],
-      "purpose": "Retain execution/scientific lineage that current configuration or active-role changes cannot rewrite."
+      "purpose": "Represent runtime scientific/execution lineage owned by domain contracts; evidence/ and artifacts/ are runtime-only and intentionally absent from the public source repository."
     },
     {
       "depends_on": [
-        "Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f"
+        "Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f",
+        "GitHub Actions windows-latest hosted validation"
       ],
       "id": "governance",
       "name": "Current project governance",
@@ -161,7 +162,7 @@
         "docs/sequence/generated/*.actual.json",
         "docs/sequence/generated/*.actual.mmd"
       ],
-      "purpose": "Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth."
+      "purpose": "Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth for the GitHub-hosted workflow."
     }
   ],
   "data_flows": [
@@ -203,24 +204,28 @@
   ],
   "external_boundaries": [
     {
-      "contract": "Exact commit is source authority; no GitHub Actions acceptance.",
-      "name": "GitHub"
+      "name": "GitHub",
+      "contract": "maxqstudio/max-trading-agent main exact SHA is source authority; working branches are proposals until required hosted gates pass and merge."
     },
     {
-      "contract": "D:\\MAX_REBUILD exact checkout is runtime/browser/MT5 acceptance authority.",
-      "name": "Owner PC"
+      "name": "GitHub Actions",
+      "contract": "windows-latest is hosted build/test authority for source-only policy, Skill Workflow, backend, frontend, dependency and public-source validation; it does not prove real MT5 runtime."
     },
     {
-      "contract": "Simulation and optimization execution truth only; Python validates workflow legality and evidence.",
-      "name": "MetaTrader 5"
+      "name": "Owner PC",
+      "contract": "Final runtime/E2E authority only after GitHub development closure; real MT5, MetaEditor, broker data, terminal data root, deployment and browser E2E remain deferred."
     },
     {
-      "contract": "MQL5 compile truth used by promotion/deployment checks.",
-      "name": "MetaEditor"
+      "name": "MetaTrader 5",
+      "contract": "Simulation and optimization execution truth only; Python validates workflow legality and evidence."
     },
     {
-      "contract": "Untrusted/advisory provider output is bounded and cannot mutate Strategy/Research authority.",
-      "name": "Scientist provider"
+      "name": "MetaEditor",
+      "contract": "MQL5 compile truth used by promotion/deployment checks."
+    },
+    {
+      "name": "Scientist provider",
+      "contract": "Untrusted/advisory provider output is bounded and cannot mutate Strategy/Research authority."
     }
   ],
   "schema_version": 1

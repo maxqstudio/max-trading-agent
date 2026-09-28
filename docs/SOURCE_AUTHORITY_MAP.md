@@ -6,11 +6,12 @@ Canonical authority is declared in .workflow/authority.json.
 
 | Concern | Authority | Meaning | Mutable |
 |---|---|---|---|
-| source | GitHub exact commit in maxqstudio/max_rebuild | Tracked source/spec/governance state is authoritative by exact commit; final candidate HEAD must equal locally tested HEAD. | YES |
-| runtime | Owner PC D:\MAX_REBUILD exact-SHA checkout | Windows/MT5/browser runtime and E2E behavior are accepted only from the Owner-PC checkout at the tested SHA. | YES |
-| acceptance | Control Room audit over exact-SHA source/test/runtime evidence | No individual validator or historical PASS alone grants project acceptance. | YES |
+| source | GitHub main exact commit in maxqstudio/max-trading-agent | Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes. | YES |
+| hosted_build_test | .github/workflows/windows-ci.yml on GitHub Actions windows-latest | Blocking source-only, Skill provenance/governance, backend, frontend, dependency and public-source checks execute in GitHub Actions for each development phase. | YES |
+| runtime | Owner PC plus real MetaTrader 5 final acceptance | Real MetaTrader terminal, MetaEditor, broker-data, filesystem deployment and browser E2E remain NOT_PROVEN during hosted development and are accepted only in the final Owner-PC phase. | YES |
+| acceptance | GitHub Actions Windows CI for hosted gates plus final Owner-PC runtime acceptance | Hosted source/build/test phases require green windows-latest CI at the exact candidate SHA; only the final Owner-PC phase may prove real MT5/runtime behavior. | YES |
 | sqlite_operational_state | Owning backend store over state/max.db | Mutable operational lifecycle/settings state is authoritative only where the corresponding store/service owns it. | YES |
-| immutable_scientific_evidence | Sealed manifests, bundles, reports and retained artifacts | Scientific/execution history is immutable when its owning contract marks it immutable; current config cannot rewrite it. | NO |
+| immutable_scientific_evidence | Sealed manifests, bundles, reports and retained artifacts | Scientific/execution history is immutable when its owning runtime contract marks it immutable; runtime evidence/artifacts are intentionally not tracked in the public source repository. | NO |
 | strategy_champion | backend/max_backend/champion_store.py::commit_promotion_authority plus explicit Owner promotion | Current Champion tenure changes only through verified promotion authority; prior tenure becomes FORMER history. | YES |
 | strategy_challenger | backend/max_backend/challenger_store.py plus retained immutable Challenger bundle | Active eligibility and historical PROMOTED/RETIRED identity are distinct; retained request epoch defines exact parameter universe. | YES |
 | optimizer | MT5 optimizer reports/sidecars plus Python canonical revalidation | MT5 executes optimization; Python verifies identity, hashes, hard gates, request epoch and durable consumed-source eligibility. | YES |
@@ -20,7 +21,7 @@ Canonical authority is declared in .workflow/authority.json.
 | mt5_execution | MetaTrader 5 Strategy Tester and MetaEditor | MT5/MetaEditor own simulation, optimization and compile execution truth; Python owns legality/orchestration/evidence verification. | YES |
 | scientist | Hash-verified static knowledge plus bounded committed runtime context | Scientist output is advisory only and cannot mutate Strategy/Research scientific authority. | YES |
 | frontend | Semantic backend API representation | React presents authority; UI labels/local state do not create domain eligibility, gate completion or scientific PASS. | YES |
-| tests | Executable suites at the exact tested HEAD | A test PASS is evidence only for the layer and snapshot actually executed. | YES |
+| tests | GitHub Actions windows-latest at the exact tested commit | A hosted test PASS is evidence only for source, synthetic/mocked behavior, dependencies and build layers actually executed; it does not prove real MT5 or Owner runtime. | YES |
 | historical_evidence | Retained docs/audits/acceptance and immutable artifacts | Historical evidence remains historically truthful and is not rewritten to mimic current terminology or configuration. | NO |
 | documentation | .workflow semantic specs + Project Truth Compiler at Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f | Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden. | YES |
 | sequence | DURING-mode generated actual sequence graphs plus source/test/runtime semantic review | Existing implementation is reconstructed from current source; retrospective BEFORE plans are forbidden. | YES |
@@ -29,7 +30,9 @@ Canonical authority is declared in .workflow/authority.json.
 ## Invariants
 
 - Authority conflicts fail closed; do not infer from UI labels, chat memory or stale prose.
-- TESTED_HEAD = FINAL_SOURCE_HEAD = FINAL_DOCUMENTATION_HEAD.
+- Each ordinary development phase is merged only after required GitHub Actions Windows CI is green at the exact candidate SHA.
+- GitHub Actions must not claim real MetaTrader 5, broker, Owner filesystem deployment or Owner browser runtime PASS.
+- Final Owner-PC acceptance uses the final main SHA after the GitHub development roadmap is complete.
 - Historical retained Challenger evidence remains exact legacy 16D while current V6 is exact 17D including InpRiskPct; mixed/missing/extra universes fail closed.
 - Durable optimizer consumption survives Challenger promotion, retirement and later permitted physical deletion while registry or COMMITTED batch authority remains.
 - Former Champion tenure does not recreate active Challenger eligibility.

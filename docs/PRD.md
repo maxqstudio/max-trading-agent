@@ -1,9 +1,9 @@
-# MAX Rebuild â€” Phase 1 PRD
+# MAX Trading Agent — Phase 1 PRD
 
 Status: CURRENT EPOCH FRESH; NO RESEARCH PROJECT; R00 NOT STARTED; R01 BLOCKED / NOT STARTED; R02 BLOCKED
 Implementation history: PREVIOUS-EPOCH R01 DATASET + LABEL + LEAKAGE FOUNDATION IMPLEMENTATION/RUNTIME REPAIR TARGETED REAUDIT PASS; no real R01 scientific run occurred.
-Current runtime epoch: FRESH; no Research project or gate; current-epoch R00 NOT STARTED; R01 BLOCKED / NOT STARTED; R02 BLOCKED. M00-M08 remain ACCEPTED + MERGED. Previous-epoch R00 acceptance and R01 targeted re-audit are historical evidence only.
-Owner authority: this PRD is the self-contained Phase-1 product and contract authority for the rebuild.
+Current source-governed epoch: FRESH; no Research project or gate; current-epoch R00 NOT STARTED; R01 BLOCKED / NOT STARTED; R02 BLOCKED. M00-M08 remain historical ACCEPTED + MERGED implementation lineage. Previous-epoch R00 acceptance and R01 targeted re-audit are historical evidence only. Real Owner-PC runtime for the migrated repository remains NOT_PROVEN until final acceptance.
+Product contract: this PRD describes Phase-1 behavior. Current repository, development and acceptance authority is governed by PROJECT_PROFILE.yaml plus .workflow semantic specs and their generated docs.
 
 ## Product goal
 
@@ -20,6 +20,9 @@ Phase 1 also includes compact Scientist Knowledge and read-only Scientist Chat.
 
 ## Authorities
 
+- Current source authority: exact `main` SHA in `maxqstudio/max-trading-agent`.
+- Hosted build/test authority: GitHub Actions on `windows-latest`.
+- Final runtime/E2E authority: Owner PC plus real MetaTrader 5 after GitHub development closure; hosted CI does not prove this layer.
 - Historical MAX MTF / Research source reference: `maxqstudio/max_research_agent@3e969efcdeb4ca6a2ae63acbd80592e378d2a446`, read-only concept/source authority for R00 audit; it is not current build authority.
 - MT5 Strategy Tester: simulation/execution truth.
 - Deterministic Python domain engine: legality, KPI gates, ranking, selection.
@@ -308,7 +311,7 @@ The R00 entry prerequisites were satisfied only for the previous-epoch Research 
 
 ## Research implementation authority
 
-Historical scope: the accepted R00 and targeted R01 repair described below belong to the previous runtime epoch. Current runtime has no Research project or gate; current-epoch R00 has not started, and R01 remains blocked/not started.
+Historical scope: the accepted R00 and targeted R01 repair described below belong to the previous runtime epoch. Current source governance declares no Research project or gate; current-epoch R00 has not started, R01 remains blocked/not started, and real Owner-PC runtime remains deferred.
 
 **Previous runtime epoch: R00 — Research Authority Foundation was ACCEPTED, and R01 implementation/runtime repair received TARGETED REAUDIT PASS. Current fresh epoch: no Research project or gate; R00 is NOT STARTED and R01 is BLOCKED / NOT STARTED.** The canonical gate-by-gate plan remains [RESEARCH_MODEL_ROADMAP.md](RESEARCH_MODEL_ROADMAP.md). No real R01 scientific run or result is proven, and R02 has not been authorized or started.
 
@@ -336,7 +339,7 @@ The Artifacts workspace is a global generated-data control plane, not a second S
 
 `Clean Generated Data` requires preflight and no active operations. It may delete currently deletable generated Optimizer jobs, obsolete dependency-free Challengers, Backtests, runtime residue/orphans and safe Scientist operational chat data. It must not delete source code, baseline EA, current required Strategy authority, accepted historical authority, or provider/settings configuration.
 
-Normal tests construct deterministic temporary SQLite/filesystem fixtures; mutable Owner runtime DB is not a test fixture. Final M08 Owner acceptance is performed only after an exact GitHub candidate is frozen, the old `D:\MAX_REBUILD` is deleted, and a clean exact-SHA clone is created.
+Normal tests construct deterministic temporary SQLite/filesystem fixtures; mutable Owner runtime DB is not a test fixture. Historical M08 Owner acceptance was performed only after an exact GitHub candidate was frozen, the old `D:\MAX_REBUILD` was deleted, and a clean exact-SHA clone was created.
 
 ## M08 Operational Authority and Acceptance Contract
 
@@ -350,4 +353,4 @@ Generated operational namespaces are semantic:
 
 Accepted milestone evidence remains protected historical authority and is not reclassified as generated cleanup data.
 
-M08 Builder acceptance uses a contamination-free Owner-PC deployment: source is completed and frozen in GitHub first, then the previous `D:\MAX_REBUILD` directory is deleted in full, the exact candidate SHA is freshly cloned, dependencies are installed from repository contracts, and runtime/E2E acceptance is executed only on that clean clone. Builder-created E2E Optimizer/Challenger/Backtest data must be removed through M08 controls before handoff. At that M08 acceptance boundary, Research remained blocked. R00 was later executed and accepted in the previous runtime epoch under the canonical R00 closeout authority above. The previous-epoch R01 implementation/runtime repair received targeted re-audit PASS; the current fresh epoch has no Research project, R00 has not started, R01 remains blocked/not started, and R02 remains blocked.
+Historical M08 Builder acceptance used a contamination-free Owner-PC deployment: source is completed and frozen in GitHub first, then the previous `D:\MAX_REBUILD` directory is deleted in full, the exact candidate SHA is freshly cloned, dependencies are installed from repository contracts, and runtime/E2E acceptance is executed only on that clean clone. Builder-created E2E Optimizer/Challenger/Backtest data must be removed through M08 controls before handoff. At that M08 acceptance boundary, Research remained blocked. R00 was later executed and accepted in the previous runtime epoch under the canonical R00 closeout authority above. The previous-epoch R01 implementation/runtime repair received targeted re-audit PASS; the current fresh epoch has no Research project, R00 has not started, R01 remains blocked/not started, and R02 remains blocked.

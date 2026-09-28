@@ -8,12 +8,12 @@
       "backend/max_backend/research_r01_service.py::start_r01"
     ],
     "graph": "docs/sequence/generated/FLOW-RESEARCH-CONFIG-SNAPSHOT.actual.json",
-    "source_digest": "385d2b167fbcf71a6311bfa92f3e567cb6d4c08fef1a00c963f58721e4145429"
+    "source_digest": "d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0"
   },
   "critical": true,
-  "implementation_base_sha": "ad7e61c9d944677e1d7a48e9bfbfc9d049b2542e",
+  "implementation_base_sha": "ce66946efb23cd479b43239087601ad30c8ac239",
   "mode": "DURING",
-  "phase": "FRESH_RUNTIME_EPOCH_RESET",
+  "phase": "H0_HOSTED_GOVERNANCE_REBASE",
   "plan": {
     "contract": "",
     "diagram": "",

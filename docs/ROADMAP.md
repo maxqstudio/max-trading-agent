@@ -1,4 +1,6 @@
-# MAX Rebuild â€” Phase 1 Roadmap
+# MAX Trading Agent — Phase 1 Roadmap
+
+Current development governance: GitHub `main` is source authority; ordinary phase validation runs on GitHub Actions `windows-latest`; each green phase merges to `main`; real Owner-PC/MT5 runtime acceptance is deferred until GitHub development closure. Older milestone acceptance sequences below are retained as historical implementation evidence, not current development procedure.
 
 ## M00 â€” Existing Contract Extraction + New Foundation
 
@@ -254,9 +256,9 @@ Optimizer addendum retained in the same accepted targeted-repair implementation:
 
 Real R01 scientific run = NOT STARTED. Model training = NOT STARTED. ONNX = NOT STARTED. Research Challenger = NONE. Research Champion mutation = NONE. R02 = BLOCKED.
 
-## M08 Builder Acceptance Sequence
+## Historical M08 Builder Acceptance Sequence — superseded for current development
 
-The M08 source/build authority is GitHub only. The required Builder sequence is:
+The following sequence records the historical M08 acceptance procedure. It is not the current GitHub-only phase workflow:
 
 1. Build and verify M08 on `work/m08-strategy-results-artifacts`.
 2. Freeze and push an exact candidate SHA.

@@ -22,10 +22,10 @@
       "python_source_owners_outside_static_reachable_graph": [
         "backend/max_backend/challenger_operations.py::run_challenger_backtest"
       ],
-      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "source_digest": "d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0",
       "tests": [
         "backend/tests/test_m06_challenger_operations.py",
         "backend/tests/test_m08_strategy_results.py"
@@ -52,10 +52,10 @@
         "backend/max_backend/challenger_operations.py::challenger_registry_page"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "source_digest": "d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0",
       "tests": [
         "backend/tests/test_m03_challenger.py",
         "backend/tests/test_m06_challenger_operations.py"
@@ -83,10 +83,10 @@
         "backend/max_backend/promotion_service.py::verify_current_strategy_champion"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "source_digest": "d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0",
       "tests": [
         "backend/tests/test_m04_promotion.py",
         "backend/tests/test_m04_store.py"
@@ -116,10 +116,10 @@
         "backend/max_backend/challenger_store.py::consumed_source_identities"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "source_digest": "d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_m03_challenger.py"
@@ -147,10 +147,10 @@
         "backend/max_backend/research_service.py::canonical_research_stage"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "source_digest": "d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0",
       "tests": [
         "backend/tests/test_r00_research.py"
       ],
@@ -187,10 +187,10 @@
         "backend/max_backend/research_r01_service.py::r01_detail"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "source_digest": "d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0",
       "tests": [
         "backend/tests/test_r01_source.py",
         "backend/tests/test_r01_dataset.py",
@@ -221,10 +221,10 @@
         "backend/max_backend/research_r01_service.py::start_r01"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "source_digest": "d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0",
       "tests": [
         "backend/tests/test_r00_research.py",
         "backend/tests/test_r01_research.py"
@@ -251,10 +251,10 @@
         "backend/max_backend/scientist_api.py::get_status"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "Final repaired MAX candidate requires exact-SHA Owner-PC runtime/E2E acceptance; runtime trace is not required by sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2",
+      "source_digest": "d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0",
       "tests": [
         "backend/tests/test_m05_scientist.py",
         "backend/tests/test_m05_final_evidence_contract.py",
@@ -264,9 +264,9 @@
     }
   ],
   "generation_anchor_policy": {
-    "meaning": "Pre-commit generation anchor only; final candidate provenance is external exact Git SHA while structural sequence binding uses deterministic product source_digest.",
-    "observed_head": "3f7dc9a684f0342c42ca9ebe409f69cdb6741250",
-    "source_digest": "1ec00dbfca17e900bd70b48df1e9ab934542e469f51f37d7eb0c3c8ed1f6c2b2"
+    "meaning": "Pre-commit generation anchor only; final hosted provenance is the exact GitHub candidate SHA and final real-runtime provenance is the final main SHA accepted on Owner PC. Structural sequence binding remains deterministic product source_digest.",
+    "observed_head": "c4bc48404ebacb83bb1b4dc226540b5467cca6a3",
+    "source_digest": "d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0"
   },
   "mode": "DURING",
   "parse_failure_boundary": {
@@ -281,5 +281,11 @@
   "schema_version": 1,
   "scope": "CURRENT",
   "skill_authority_sha": "9e22feddb8f94e8c0f1af6a33e14b64de5068f8f",
-  "unresolved_critical_sequence_bindings": 0
+  "unresolved_critical_sequence_bindings": 0,
+  "hosted_governance_rebase": {
+    "repository": "maxqstudio/max-trading-agent",
+    "windows_ci_authority": ".github/workflows/windows-ci.yml",
+    "real_runtime": "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED",
+    "product_source_change": "NONE"
+  }
 }

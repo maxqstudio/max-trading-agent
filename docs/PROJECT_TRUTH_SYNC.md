@@ -12,7 +12,7 @@ HEAD is recorded externally after the commit exists.
 | Gate | Status | Evidence / Notes |
 |---|---|---|
 | SOURCE_TESTS | PASS | |
-| RUNTIME_E2E | PASS | |
+| RUNTIME_E2E | NOT_PROVEN | |
 | PROVENANCE_SYNC | PASS | |
 | REFERENCE_SYNC | PASS | |
 | STRUCTURAL_SYNC | PASS | |
@@ -27,25 +27,26 @@ HEAD is recorded externally after the commit exists.
 | PROJECT_DOCS_SYNC | PASS | |
 | DOC_SOURCE_TRACEABILITY | PASS | |
 | DOC_TEST_TRACEABILITY | PASS | |
-| TEST_RUNTIME_TRACEABILITY | PASS | |
-| PROJECT_STATE_SYNC | PASS | |
+| TEST_RUNTIME_TRACEABILITY | NOT_PROVEN | |
+| PROJECT_STATE_SYNC | NOT_PROVEN | |
 
 ## Critical claim traceability
 
 | Claim ID | Claim | Documents | Source owner(s) | Test(s) | Runtime/E2E evidence | Status |
 |---|---|---|---|---|---|---|
-| TRUTH-AUTHORITY-001 | GitHub source and Owner-PC runtime authority are separate and explicit. | PROJECT_TRUTH_SYNC.md | scripts/launcher_authority.py::expected_authority | backend/tests/test_m07_launcher_authority.py | RUNTIME_ACCEPTANCE_EXTERNAL | PASS |
-| TRUTH-SHA-001 | Final delivered candidate must have GitHub HEAD equal to locally tested HEAD. | PROJECT_TRUTH_SYNC.md | scripts/launcher_authority.py::expected_authority | backend/tests/test_m07_launcher_authority.py | FINAL_SHA_MATCH_EXTERNAL | PASS |
+| TRUTH-AUTHORITY-001 | GitHub main exact SHA and GitHub Actions Windows CI are the current source/hosted-test authorities; Owner PC plus real MT5 is final runtime/E2E authority only. | PROJECT_TRUTH_SYNC.md | .github/workflows/windows-ci.yml | .github/workflows/windows-ci.yml | OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | PASS |
+| TRUTH-SHA-001 | Each ordinary development phase is accepted only at an exact GitHub candidate SHA with required Windows CI green; final Owner-PC runtime acceptance is separately bound to the final main SHA. | PROJECT_TRUTH_SYNC.md | .github/workflows/windows-ci.yml | .github/workflows/windows-ci.yml | GITHUB_ACTIONS_WINDOWS_CI; OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | PASS |
 | TRUTH-CHALLENGER-001 | Challenger detail supports exact retained legacy 16D and current 17D; mixed, missing or extra universes fail closed. | PROJECT_TRUTH_SYNC.md | backend/max_backend/optimizer_core.py::LEGACY_ABSOLUTE_BOUNDS; backend/max_backend/optimizer_core.py::ABSOLUTE_BOUNDS; backend/max_backend/challenger_registry.py::challenger_detail | backend/tests/test_m06_challenger_operations.py | LIVE_17D_ROW_NOT_PROVEN_REGRESSION_ONLY | PASS |
 | TRUTH-OPTIMIZER-001 | Durable consumed source tuples are excluded from the active qualified pool. | PROJECT_TRUTH_SYNC.md | backend/max_backend/challenger_store.py::consumed_source_identities; backend/max_backend/optimizer_candidates.py::qualified_candidates_page | backend/tests/test_m08_strategy_results.py | NON_MUTATING_UI_RUNTIME | PASS |
-| TRUTH-CHAMPION-001 | The previous-epoch Champion remains historical and is absent in the fresh runtime; its source does not automatically return to active Challengers. | PROJECT_TRUTH_SYNC.md | backend/max_backend/champion_store.py::commit_promotion_authority | backend/tests/test_m04_store.py; backend/tests/test_m04_promotion.py | FRESH_RUNTIME_CHAMPION_NONE; MUTATION_PROHIBITED_REGRESSION_AUTHORITY | PASS |
+| TRUTH-CHAMPION-001 | The previous-epoch Champion remains historical; the current source-governed fresh epoch declares Strategy Champion NONE and does not automatically reactivate the former Champion source as an active Challenger. | PROJECT_TRUTH_SYNC.md | backend/max_backend/champion_store.py::commit_promotion_authority | backend/tests/test_m04_store.py; backend/tests/test_m04_promotion.py | OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | PASS |
 | TRUTH-RESEARCH-CONFIG-001 | Research sample requirement is editable current configuration. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_settings.py::set_research_sample_configuration | backend/tests/test_r00_research.py; backend/tests/test_r01_research.py | RESEARCH_UI_NON_MUTATING_VIEW | PASS |
 | TRUTH-RESEARCH-SNAPSHOT-001 | Each Research execution freezes its own immutable sample snapshot. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_service.py::start_r00; backend/max_backend/research_r01_service.py::start_r01 | backend/tests/test_r00_research.py; backend/tests/test_r01_research.py | HISTORICAL_R00_RUNTIME_EVIDENCE | PASS |
-| TRUTH-R00-HISTORY-001 | The previous-epoch accepted R00 used 4 trades/month and remains immutable historical evidence; current-epoch R00 has not started. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_service.py::start_r00 | backend/tests/test_r00_research.py | HISTORICAL_R00_RUNTIME_EVIDENCE; FRESH_RUNTIME_R00_NOT_STARTED | PASS |
+| TRUTH-R00-HISTORY-001 | Previous-epoch accepted R00 is immutable historical evidence only; it is not current Research authority for the fresh MAX Trading Agent epoch. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_service.py::start_r00 | backend/tests/test_r00_research.py | HISTORICAL_R00_EVIDENCE; CURRENT_SOURCE_GOVERNANCE_R00_NOT_STARTED | PASS |
 | TRUTH-PROTECTED-DATA-001 | Protected Locked OOS and Fresh outcomes are not adaptive tuning feedback under their protected authority. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_r01_store.py::commit_r01_terminal_authority; backend/max_backend/research_contract.py::memory_learning_zone | backend/tests/test_r01_research.py; backend/tests/test_r01_dataset.py | REAL_R01_NOT_RUN_PROTECTION_REGRESSION | PASS |
-| TRUTH-R01-STATE-001 | The previous-epoch R01 implementation/runtime repair passed targeted re-audit; current-epoch R01 is blocked/not started and has no scientific result. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_r01_service.py::r01_detail | backend/tests/test_r01_research.py | FRESH_RUNTIME_R01_PREFLIGHT_BLOCKED; FRESH_RUNTIME_R00_NOT_STARTED | PASS |
-| TRUTH-FRESH-EPOCH-001 | The fresh Research epoch has no current project or gate; Research initialization remains a separate Owner-authorized action. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_service.py::current_research; backend/max_backend/research_r01_service.py::r01_preflight | backend/tests/test_fresh_runtime.py | FRESH_RUNTIME_READONLY_API; FRESH_RUNTIME_DOMAIN_COUNTS_ZERO | PASS |
-| TRUTH-R02-BLOCK-001 | R02 remains blocked and has not started. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_service.py::attempt_gate_transition | backend/tests/test_r01_research.py | OWNER_RUNTIME_NO_R02 | PASS |
+| TRUTH-R01-STATE-001 | The previous-epoch R01 implementation/runtime repair is historical; current-epoch R01 is blocked/not started and cannot proceed until retired hardcoded R00/Strategy identifiers are replaced by immutable current-R00 lineage binding. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_r01_service.py::r01_detail | backend/tests/test_r01_research.py | OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | PASS |
+| TRUTH-FRESH-EPOCH-001 | The current source-governed fresh epoch declares no current Research project or gate; Research initialization remains a separate Owner-authorized action and real runtime state is deferred to final acceptance. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_service.py::current_research; backend/max_backend/research_r01_service.py::r01_preflight | backend/tests/test_fresh_runtime.py | OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | NOT_PROVEN |
+| TRUTH-R02-BLOCK-001 | R02 remains blocked and has not been authorized in hosted development; it requires accepted current-epoch R01 scientific authority plus separate Owner advancement. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_service.py::attempt_gate_transition | backend/tests/test_r01_research.py | OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | PASS |
+| TRUTH-PUBLIC-SOURCE-001 | The public GitHub repository is source-only: runtime databases, evidence, artifacts, Research datasets, Owner terminal state and real credentials are prohibited from tracked source; tests use synthetic fixtures. | PROJECT_TRUTH_SYNC.md | .github/workflows/windows-ci.yml | backend/tests/test_m05_candidate_tree_scan.py | NOT_APPLICABLE | PASS |
 
 ## Claim relations
 

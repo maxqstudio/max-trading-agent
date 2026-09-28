@@ -4,56 +4,43 @@
 
 ## Evidence boundary
 
-Authorized fresh runtime/Research epoch reset and narrow empty-state repair. Previous-epoch R00 acceptance, Strategy Champion and Research project remain historical only. Exact pushed SHA bc785476b39f8ffe160f7def5df34909e85a654a passed RUN_MAX fresh-port and verified-existing paths, MAX_READY, 13 read-only API checks, all eight real Edge routes, and scientific non-mutation against the existing application-created empty schema-10 database. Deletion/recreation of that DB after push was explicitly authorized but refused by execution policy, so G13 fresh-database acceptance remains BLOCKED and Control Room final acceptance remains external.
+Phase H0 Hosted Governance Rebase closeout candidate. Windows CI run 36364128446 on 17b69115ab179adc63c4dc17e943d3fa257063f1 passed source-only/public-secret policy, Skill Workflow provenance/STRICT selftest, project governance, backend 488 tests, frontend 53 tests across 10 files, lint/build/dependency checks and pip check. Real Owner-PC/MT5 runtime remains intentionally NOT_PROVEN and is outside H0.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 385d2b167fbcf71a6311bfa92f3e567cb6d4c08fef1a00c963f58721e4145429
+Current source digest: d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
-| G0 | Branch lineage descends from ad7e61c without reset/rewrite. | git merge-base --is-ancestor + preflight | PASS |
-| G1 | Vendored .workflow/tools are byte-identical to Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f with no local patch. | Deterministic SHA-256 comparison against exact repaired current Skill main tool pack. | PASS |
-| G2 | Only authorized fresh-state/bootstrap handling changed; no unrelated product behavior, algorithm, EA, or database schema change. | Changed-path and diff classification against ad7e61c; database schema comparison. | PASS |
-| G3 | STRICT generated documentation and sequence policy. | PROJECT_PROFILE.yaml parser/validator | PASS |
-| G4 | Machine-readable semantic specs genuinely populated and placeholder-free. | .workflow spec audit | PASS |
-| G4A | Every current pre-compiler semantic section mapped or classified historical/non-authoritative. | .workflow/migration_audit.json | PASS |
-| G5 | Eight real current MAX workflow specs with R02 non-executable. | .workflow/workflows/*.json | PASS |
-| G5A | All prior critical authority symbols preserved; non-Python structured traceability PASS. | .workflow/critical_symbol_traceability.json | PASS |
-| G6 | Project Truth Compiler deterministic generation/check PASS. | sync_project_truth + validate_project_docs | PASS |
-| G7 | PROJECT_DOCS_SYNC PASS. | .workflow/acceptance.json + independent validator | PASS |
-| G8 | Human Comprehension semantic and executable gate PASS. | SYSTEM_OVERVIEW review + validate_human_comprehension --require-pass | PASS |
-| G9 | Eight DURING sessions with zero retrospective plan artifacts and current generated actual evidence. | validate_sequence_sessions | PASS |
-| G10 | SEQUENCE_SYNC PASS after semantic sequence review. | workflow/actual/source/test/runtime-boundary reconciliation | PASS |
-| G11 | Twelve current claims and three relations; no false relation conflict, unknown claim, or contradictory claim. | Current semantic ledger plus cross-document validator outputs. | PASS |
-| G12 | HISTORICAL_COUNT_ONLY_ACCEPTANCE_DEFECT: Git history and local reports do not recover a reproducible command for the former 236 count. The replacement contract is the exact twelve-file command in test_commands with a 236-pass minimum; its M01 optimizer core/store/fail-closed/jobs/lifecycle/recovery, M02 Scientist/store, M03 worker/store/challenger, and M08 strategy-results coverage preserves the optimizer-to-Challenger lifecycle scope. The full backend suite remains independently required. | The exact twelve-file Optimizer command in test_commands; latest run 238 passed. | PASS |
-| G13 | Exact pushed-SHA Owner-PC runtime/E2E after fresh database recreation; recreation is blocked by the tool policy refusal for the authorized runtime DB deletion. | Exact-SHA runtime/E2E against existing empty database PASS; required post-push database recreation was refused by execution policy. | BLOCKED |
-| G14 | Current pre/post runtime probes show no Champion/Research gate and no scientific/domain mutation; exact-SHA recheck remains tied to blocked fresh-database recreation. | Research/Champion runtime state probes | PASS |
-| G15 | Final GitHub branch SHA equals the locally tested exact commit SHA. | git local/remote comparison | NOT_PROVEN |
-| G16 | After exact-SHA runtime/E2E, worktree clean, diff-check passes, no conflicts/actions/post-test tracked mutation. | final Git audit | NOT_PROVEN |
+| H0-01 | Current project identity/repository authority is maxqstudio/max-trading-agent; MAX REBUILD references remain only where historically correct. | .workflow semantic specs + generated docs | PASS |
+| H0-02 | GitHub Actions windows-latest is hosted build/test authority; Owner PC real MT5 runtime is final-only and not claimed by CI. | .github/workflows/windows-ci.yml + authority/architecture/state specs | PASS |
+| H0-03 | Public repository remains source-only and contains no tracked runtime/private state or detected plaintext production secret. | Source-only policy + redacted exact-tree secret scan | PASS |
+| H0-04 | Vendored Skill Workflow tools remain byte-identical to exact authority 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f and STRICT selftest passes. | Windows CI provenance + STRICT selftest | PASS |
+| H0-05 | Project Truth Compiler outputs and Scientist knowledge manifest are regenerated from current semantic/source authority. | sync_project_truth + build_scientist_knowledge + validate_project_docs | PASS |
+| H0-06 | Backend regression does not fall below migration floor 488 PASS. | Windows CI backend pytest | PASS |
+| H0-07 | Frontend regression does not fall below 53 PASS across 10 files; lint/build/npm dependency tree pass. | Windows CI frontend | PASS |
+| H0-08 | R01 retired hardcoded lineage remains explicitly blocked for future execution and is not weakened during H0. | .workflow state/known-defects + unchanged product source | PASS |
+| H0-09 | No real Research execution, training, ONNX, Challenger/Champion mutation or live trading occurs during H0. | Source-only GitHub phase; no runtime artifacts; product source unchanged | PASS |
 
 ## Test commands
 
-- .\.venv\Scripts\python.exe -m pytest backend\tests -q -o addopts=
-- .\.venv\Scripts\python.exe -m pytest backend\tests\test_r01_source.py backend\tests\test_r01_dataset.py backend\tests\test_r01_research.py -q -o addopts=
-- .\.venv\Scripts\python.exe -m pytest backend\tests\test_r01_dataset.py::test_r01_dependency_and_adversarial_suite -q -o addopts=
-- .\.venv\Scripts\python.exe -m pytest backend\tests\test_m06_challenger_operations.py -q -o addopts=
-- .\.venv\Scripts\python.exe -m pytest backend\tests\test_m01_optimizer_core.py backend\tests\test_m01_optimizer_store.py backend\tests\test_m01_fail_closed.py backend\tests\test_m01_jobs.py backend\tests\test_m01_lifecycle.py backend\tests\test_m01_recovery.py backend\tests\test_m02_scientist.py backend\tests\test_m02_store.py backend\tests\test_m03_worker.py backend\tests\test_m03_store.py backend\tests\test_m03_challenger.py backend\tests\test_m08_strategy_results.py -q -o addopts=
-- .\.venv\Scripts\python.exe -m pytest backend\tests\test_m02_scientist.py backend\tests\test_m05_scientist.py backend\tests\test_m05_provider_settings.py backend\tests\test_m05_final_evidence_contract.py backend\tests\test_m05_candidate_tree_scan.py -q -o addopts=
+- python .workflow/tools/validate_project_docs.py
+- python .workflow/tools/validate_sequence_sessions.py
+- python .workflow/tools/validate_handoff.py
+- python .workflow/tools/validate_human_comprehension.py --require-pass
+- python .workflow/tools/validate_project_truth.py
+- python -m pytest backend/tests -q -o addopts=
 - npm test -- --run (workdir: frontend)
 - npm run lint (workdir: frontend)
-- npm run build (workdir: frontend; includes tsc -b)
+- npm run build (workdir: frontend)
 - npm ls --all (workdir: frontend)
-- .\.venv\Scripts\python.exe -m pip check
+- python -m pip check
 
 ## Runtime checks
 
-- RUN_MAX.cmd --no-pause fresh-port path passed on the exact pushed SHA bc785476b39f8ffe160f7def5df34909e85a654a using the existing application-created empty schema-10 database; this does not satisfy fresh-database recreation.
-- RUN_MAX.cmd --no-pause verified-existing path passed on exact pushed SHA bc785476b39f8ffe160f7def5df34909e85a654a.
-- MAX_READY: Backend READY, SQLite schema 10 READY, Scientist knowledge/provider READY, Champion NONE, and MT5 READY_EXECUTABLE_AND_DATA_ROOT.
-- Thirteen read-only API GET checks returned HTTP 200; Strategy/Research operational SQLite rows remained zero and generated storage remained zero.
-- Real isolated Microsoft Edge E2E passed all eight required routes; zero API 4xx/5xx, zero console errors, zero browser runtime exceptions.
-- Scientist drawer inspection caused two UI-settings PUT requests; the original closed preference was restored and all pre/post domain row counts were identical.
-- After the authorized database deletion attempt was refused by execution policy, no alternate deletion route was attempted; the required fresh-database rebootstrap remains blocked.
+- NOT_RUN in H0: real Owner-PC fresh database/bootstrap.
+- NOT_RUN in H0: real MT5 detection, MetaEditor compile, Strategy Tester, broker/data-root and filesystem deployment.
+- NOT_RUN in H0: real Owner browser E2E.
+- These checks are intentionally deferred to final Owner-PC acceptance after GitHub development closure.
 
 ## Sequence contract evidence
 
