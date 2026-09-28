@@ -275,6 +275,10 @@ def test_candidate_identity_tamper_is_rejected_even_with_resealed_plan(tmp_path:
     plan = _plan()
     tampered = deepcopy(plan)
     tampered["candidates"][0]["seed"] = 999
+    id_body = deepcopy(tampered)
+    id_body.pop("plan_id")
+    id_body.pop("plan_sha256")
+    tampered["plan_id"] = "RPLAN-" + stable_hash(id_body)[:24]
     sha_body = deepcopy(tampered)
     sha_body.pop("plan_sha256")
     tampered["plan_sha256"] = stable_hash(sha_body)
