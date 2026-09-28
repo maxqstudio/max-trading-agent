@@ -9,6 +9,7 @@ from .research_r01_service import validate_r01_integrity
 from .research_r01_store import get_r01_run
 from .research_service import verify_no_training_side_effects
 from .research_store import latest_research
+from .research_r02_integrity import verify_r02_authority_integrity
 from .research_r02_contract import (
     R02_SCHEMA,
     build_discovery_plan,
@@ -92,7 +93,16 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
 
     frozen = get_r02_discovery_block(research_id, path=path)
     if frozen is not None:
+        r02_integrity = verify_r02_authority_integrity(
+            research_id,
+            path=path,
+        )
         terminal = get_r02_terminal(research_id, path=path)
+        expected_integrity = (
+            "VERIFIED_COMPLETE" if terminal is not None else "VERIFIED_FROZEN"
+        )
+        if str(r02_integrity.get("status") or "") != expected_integrity:
+            raise RuntimeError("R02_AUTHORITY_INTEGRITY_REQUIRED")
         if terminal is not None:
             return {
                 "schema": R02_SCHEMA,
@@ -103,6 +113,7 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
                 "r01_state": r01_state,
                 "r01_output_manifest_sha256": output_sha,
                 "r01_integrity": "VERIFIED",
+                "r02_authority_integrity": "VERIFIED",
                 "source_foundation_ready": True,
                 "owner_authorization_required": False,
                 "owner_authorized": True,
@@ -141,7 +152,16 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
             "research_id": research_id,
             "r01_state": r01_state,
             "r01_output_manifest_sha256": output_sha,
+        return {
+            "schema": R02_SCHEMA,
+            "stage": "MODEL_DISCOVERY",
+            "status": "FROZEN_WAITING_EXECUTION",
+            "reason": None,
+            "research_id": research_id,
+            "r01_state": r01_state,
+            "r01_output_manifest_sha256": output_sha,
             "r01_integrity": "VERIFIED",
+            "r02_authority_integrity": "VERIFIED",
             "source_foundation_ready": True,
             "owner_authorization_required": False,
             "owner_authorized": True,

@@ -45,6 +45,11 @@ def _install(
     monkeypatch.setattr(r02, "verify_no_training_side_effects", lambda *_args, **_kwargs: deepcopy(current_side_effects))
     monkeypatch.setattr(r02, "get_r02_discovery_block", lambda *_args, **_kwargs: None)
     monkeypatch.setattr(r02, "get_r02_terminal", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(
+        r02,
+        "verify_r02_authority_integrity",
+        lambda *_args, **_kwargs: {"status": "VERIFIED_FROZEN"},
+    )
 
 
 def test_fresh_epoch_without_research_is_blocked(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -172,6 +177,7 @@ def test_frozen_discovery_block_prevents_second_authorization_surface(
     )
     result = r02.r02_preflight(path=Path("unused.db"))
     assert result["status"] == "FROZEN_WAITING_EXECUTION"
+    assert result["r02_authority_integrity"] == "VERIFIED"
     assert result["owner_authorization_required"] is False
     assert result["owner_authorized"] is True
     assert result["runtime_start_available"] is False
@@ -211,9 +217,45 @@ def test_terminal_outcome_ledger_reports_complete_without_qualification(
             "compute_consumed": {"value": 60.0, "unit": "FIT_SECONDS"},
         },
     )
+    monkeypatch.setattr(
+        r02,
+        "verify_r02_authority_integrity",
+        lambda *_args, **_kwargs: {"status": "VERIFIED_COMPLETE"},
+    )
     result = r02.r02_preflight(path=Path("unused.db"))
     assert result["status"] == "COMPLETE_WAITING_OWNER"
+    assert result["r02_authority_integrity"] == "VERIFIED"
     assert result["cheap_screen_qualification_authority"] is False
     assert result["qualified_pool_admission_authority"] == "R03_FULL_WFA_ONLY"
     assert result["r02_executable"] is False
     assert result["model_training"] == 0
+
+
+
+def test_frozen_preflight_fails_closed_when_r02_authority_integrity_is_not_verified(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _install(monkeypatch)
+    monkeypatch.setattr(
+        r02,
+        "get_r02_discovery_block",
+        lambda research_id, **_kwargs: {
+            "block_id": "RDISC-TAMPERED",
+            "authorization_id": "RAUTH-R02-TAMPERED",
+            "plan_id": "RPLAN-TAMPERED",
+            "plan_sha256": "b" * 64,
+            "candidate_count": 3,
+            "compute_budget": {
+                "value": 120,
+                "unit": "FIT_SECONDS",
+                "execution_semantics": "FROZEN_ONLY_NOT_EXECUTED",
+            },
+        },
+    )
+    monkeypatch.setattr(
+        r02,
+        "verify_r02_authority_integrity",
+        lambda *_args, **_kwargs: {"status": "TAMPERED"},
+    )
+    with pytest.raises(RuntimeError, match="R02_AUTHORITY_INTEGRITY_REQUIRED"):
+        r02.r02_preflight(path=Path("unused.db"))

@@ -13,6 +13,7 @@ from max_backend.research_contract import (
 )
 from max_backend.research_r01_store import create_r01_authorization, create_r01_run
 from max_backend.research_r02_contract import build_discovery_plan
+from max_backend.research_r02_integrity import verify_r02_authority_integrity
 from max_backend.research_r02_store import (
     authorize_and_freeze_r02_discovery,
     create_r02_authorization,
@@ -677,3 +678,154 @@ def test_terminal_rows_are_immutable_append_only_and_do_not_mutate_science_count
     assert int(project["onnx_count"]) == 0
     assert int(project["research_challenger_count"]) == 0
     assert project["champion_mutation"] == "NONE"
+
+
+
+def _drop_trigger_and_update(
+    db: Path,
+    trigger: str,
+    sql: str,
+    params: tuple[object, ...],
+) -> None:
+    with connect(db) as conn:
+        conn.execute(f"DROP TRIGGER IF EXISTS {trigger}")
+        conn.execute(sql, params)
+
+
+def test_r02_integrity_verifies_frozen_authority(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    result = verify_r02_authority_integrity(RESEARCH_ID, path=db)
+    assert result["status"] == "VERIFIED_FROZEN"
+    assert result["block_id"] == block["block_id"]
+    assert result["candidate_count"] == 3
+    assert result["outcome_count"] == 0
+
+
+def test_r02_integrity_verifies_complete_outcome_ledger(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    ledger = commit_r02_terminal_outcomes(
+        RESEARCH_ID,
+        _outcomes(block),
+        path=db,
+    )
+    result = verify_r02_authority_integrity(RESEARCH_ID, path=db)
+    assert result["status"] == "VERIFIED_COMPLETE"
+    assert result["outcome_count"] == 3
+    assert result["terminal_id"] == ledger["terminal"]["terminal_id"]
+    assert (
+        result["outcome_manifest_sha256"]
+        == ledger["terminal"]["outcome_manifest_sha256"]
+    )
+
+
+def test_r02_integrity_rejects_tampered_authorization_payload(tmp_path: Path) -> None:
+    db, _block = _frozen_block(tmp_path)
+    _drop_trigger_and_update(
+        db,
+        "research_r02_authorization_no_update",
+        "UPDATE research_r02_authorizations SET payload_json=? WHERE research_id=?",
+        ("{}", RESEARCH_ID),
+    )
+    with pytest.raises(
+        RuntimeError,
+        match="R02_INTEGRITY_AUTHORIZATION_PAYLOAD_HASH_MISMATCH",
+    ):
+        verify_r02_authority_integrity(RESEARCH_ID, path=db)
+
+
+def test_r02_integrity_rejects_tampered_block_plan_authority(tmp_path: Path) -> None:
+    db, _block = _frozen_block(tmp_path)
+    _drop_trigger_and_update(
+        db,
+        "research_r02_block_no_update",
+        "UPDATE research_r02_discovery_blocks SET plan_sha256=? WHERE research_id=?",
+        ("0" * 64, RESEARCH_ID),
+    )
+    with pytest.raises(
+        RuntimeError,
+        match="R02_INTEGRITY_(BLOCK_ID|PLAN_SHA)_MISMATCH",
+    ):
+        verify_r02_authority_integrity(RESEARCH_ID, path=db)
+
+
+def test_r02_integrity_rejects_tampered_candidate_spec(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    candidate_id = block["candidates"][0]["candidate_id"]
+    _drop_trigger_and_update(
+        db,
+        "research_r02_candidate_no_update",
+        "UPDATE research_r02_candidate_specs SET spec_json=? WHERE candidate_id=?",
+        ("{}", candidate_id),
+    )
+    with pytest.raises(
+        RuntimeError,
+        match="R02_INTEGRITY_CANDIDATE_SPEC_HASH_MISMATCH",
+    ):
+        verify_r02_authority_integrity(RESEARCH_ID, path=db)
+
+
+def test_r02_integrity_rejects_tampered_outcome_payload(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    ledger = commit_r02_terminal_outcomes(
+        RESEARCH_ID,
+        _outcomes(block),
+        path=db,
+    )
+    outcome_id = ledger["outcomes"][0]["outcome_id"]
+    _drop_trigger_and_update(
+        db,
+        "research_r02_outcome_no_update",
+        "UPDATE research_r02_candidate_outcomes SET outcome_json=? WHERE outcome_id=?",
+        ("{}", outcome_id),
+    )
+    with pytest.raises(
+        RuntimeError,
+        match="R02_INTEGRITY_OUTCOME_REBUILD_FAILED",
+    ):
+        verify_r02_authority_integrity(RESEARCH_ID, path=db)
+
+
+def test_r02_integrity_rejects_tampered_terminal_summary(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    commit_r02_terminal_outcomes(
+        RESEARCH_ID,
+        _outcomes(block),
+        path=db,
+    )
+    _drop_trigger_and_update(
+        db,
+        "research_r02_terminal_no_update",
+        """
+        UPDATE research_r02_block_terminals
+        SET screen_pass_count=99
+        WHERE block_id=?
+        """,
+        (block["block_id"],),
+    )
+    with pytest.raises(
+        RuntimeError,
+        match="R02_INTEGRITY_TERMINAL_FIELD_MISMATCH:screen_pass_count",
+    ):
+        verify_r02_authority_integrity(RESEARCH_ID, path=db)
+
+
+def test_r02_integrity_rejects_partial_outcome_state_without_terminal(
+    tmp_path: Path,
+) -> None:
+    db, block = _frozen_block(tmp_path)
+    ledger = commit_r02_terminal_outcomes(
+        RESEARCH_ID,
+        _outcomes(block),
+        path=db,
+    )
+    with connect(db) as conn:
+        conn.execute("DROP TRIGGER IF EXISTS research_r02_terminal_no_delete")
+        conn.execute(
+            "DELETE FROM research_r02_block_terminals WHERE terminal_id=?",
+            (ledger["terminal"]["terminal_id"],),
+        )
+    with pytest.raises(
+        RuntimeError,
+        match="R02_INTEGRITY_PARTIAL_OUTCOME_STATE",
+    ):
+        verify_r02_authority_integrity(RESEARCH_ID, path=db)
