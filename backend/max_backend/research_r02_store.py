@@ -13,10 +13,35 @@ from .research_r02_outcome import build_candidate_outcome, build_terminal_manife
 from .workflow_store import migrate_current
 
 
+def _decode_json_object(value: Any, code: str) -> dict[str, Any]:
+    try:
+        decoded = json.loads(str(value))
+    except (TypeError, ValueError, json.JSONDecodeError) as exc:
+        raise RuntimeError(code) from exc
+    if not isinstance(decoded, dict):
+        raise RuntimeError(code)
+    return decoded
+
+
+def _integrity_int(value: Any, code: str) -> int:
+    if isinstance(value, bool):
+        raise RuntimeError(code)
+    try:
+        result = int(value)
+    except (TypeError, ValueError, OverflowError) as exc:
+        raise RuntimeError(code) from exc
+    if isinstance(value, float) and not value.is_integer():
+        raise RuntimeError(code)
+    return result
+
+
 def _decode_authorization(row: Any) -> dict[str, Any]:
     result = dict(row)
     result["confirmed"] = bool(result["confirmed"])
-    result["payload"] = json.loads(result.pop("payload_json"))
+    result["payload"] = _decode_json_object(
+        result.pop("payload_json"),
+        "R02_AUTHORIZATION_PAYLOAD_JSON_INVALID",
+    )
     return result
 
 
@@ -142,11 +167,17 @@ def get_r02_discovery_block(
             (str(block["block_id"]),),
         ).fetchall()
     result = dict(block)
-    result["compute_budget"] = json.loads(result.pop("compute_budget_json"))
+    result["compute_budget"] = _decode_json_object(
+        result.pop("compute_budget_json"),
+        "R02_DISCOVERY_COMPUTE_BUDGET_JSON_INVALID",
+    )
     result["candidates"] = []
     for row in candidates:
         item = dict(row)
-        item["spec"] = json.loads(item.pop("spec_json"))
+        item["spec"] = _decode_json_object(
+            item.pop("spec_json"),
+            "R02_CANDIDATE_SPEC_JSON_INVALID",
+        )
         result["candidates"].append(item)
     return result
 
@@ -463,8 +494,9 @@ def get_r02_terminal(
     if row is None:
         return None
     result = dict(row)
-    result["compute_consumed"] = json.loads(
-        result.pop("compute_consumed_json")
+    result["compute_consumed"] = _decode_json_object(
+        result.pop("compute_consumed_json"),
+        "R02_TERMINAL_COMPUTE_JSON_INVALID",
     )
     return result
 
@@ -493,7 +525,10 @@ def get_r02_outcome_ledger(
     outcomes = []
     for row in rows:
         item = dict(row)
-        item["outcome"] = json.loads(item.pop("outcome_json"))
+        item["outcome"] = _decode_json_object(
+            item.pop("outcome_json"),
+            "R02_OUTCOME_JSON_INVALID",
+        )
         outcomes.append(item)
     return {
         "block": block,
@@ -585,17 +620,26 @@ def validate_r02_discovery_block_integrity(
     if compute_budget != payload.get("compute_budget"):
         raise RuntimeError("R02_INTEGRITY_COMPUTE_BUDGET_MISMATCH")
 
-    expected_count = int(block["candidate_count"])
+    expected_count = _integrity_int(
+        block["candidate_count"],
+        "R02_INTEGRITY_CANDIDATE_COUNT_INVALID",
+    )
     if expected_count <= 0 or len(candidate_rows) != expected_count:
         raise RuntimeError("R02_INTEGRITY_CANDIDATE_COUNT_MISMATCH")
-    if int(payload.get("candidate_count") or 0) != expected_count:
+    if _integrity_int(
+        payload.get("candidate_count"),
+        "R02_INTEGRITY_AUTH_CANDIDATE_COUNT_INVALID",
+    ) != expected_count:
         raise RuntimeError("R02_INTEGRITY_AUTH_CANDIDATE_COUNT_MISMATCH")
 
     candidates: list[dict[str, Any]] = []
     candidate_ids: list[str] = []
     for ordinal, row in enumerate(candidate_rows):
         item = dict(row)
-        if int(item["ordinal"]) != ordinal:
+        if _integrity_int(
+            item["ordinal"],
+            "R02_INTEGRITY_CANDIDATE_ORDINAL_INVALID",
+        ) != ordinal:
             raise RuntimeError("R02_INTEGRITY_CANDIDATE_ORDINAL_MISMATCH")
         if str(item["block_id"]) != str(block["block_id"]):
             raise RuntimeError("R02_INTEGRITY_CANDIDATE_BLOCK_MISMATCH")
@@ -608,12 +652,25 @@ def validate_r02_discovery_block_integrity(
         expected_spec_sha = stable_hash(spec)
         if str(item["spec_sha256"]) != expected_spec_sha:
             raise RuntimeError("R02_INTEGRITY_CANDIDATE_SPEC_SHA_MISMATCH")
-        expected_candidate_id = derive_candidate_id(spec)
+        try:
+            expected_candidate_id = derive_candidate_id(spec)
+        except (KeyError, TypeError, ValueError, OverflowError) as exc:
+            raise RuntimeError(
+                "R02_INTEGRITY_CANDIDATE_SPEC_AUTHORITY_INVALID"
+            ) from exc
         if str(item["candidate_id"]) != expected_candidate_id:
             raise RuntimeError("R02_INTEGRITY_CANDIDATE_ID_MISMATCH")
         if str(item["model_family"]) != str(spec.get("model_family") or ""):
             raise RuntimeError("R02_INTEGRITY_CANDIDATE_FAMILY_MISMATCH")
-        if int(item["seed"]) != int(spec.get("seed")):
+        stored_seed = _integrity_int(
+            item["seed"],
+            "R02_INTEGRITY_CANDIDATE_SEED_INVALID",
+        )
+        spec_seed = _integrity_int(
+            spec.get("seed"),
+            "R02_INTEGRITY_CANDIDATE_SPEC_SEED_INVALID",
+        )
+        if stored_seed != spec_seed:
             raise RuntimeError("R02_INTEGRITY_CANDIDATE_SEED_MISMATCH")
         candidate_ids.append(str(item["candidate_id"]))
         item["spec"] = spec
@@ -684,7 +741,10 @@ def validate_r02_outcome_integrity(
     for ordinal, row in enumerate(outcome_rows):
         item = dict(row)
         expected_candidate_id = candidate_ids[ordinal]
-        if int(item["ordinal"]) != ordinal:
+        if _integrity_int(
+            item["ordinal"],
+            "R02_INTEGRITY_OUTCOME_ORDINAL_INVALID",
+        ) != ordinal:
             raise RuntimeError("R02_INTEGRITY_OUTCOME_ORDINAL_MISMATCH")
         if str(item["block_id"]) != str(block["block_id"]):
             raise RuntimeError("R02_INTEGRITY_OUTCOME_BLOCK_MISMATCH")
@@ -758,7 +818,10 @@ def validate_r02_outcome_integrity(
     for key, expected in terminal_checks.items():
         actual = stored_terminal[key]
         if isinstance(expected, int):
-            actual = int(actual)
+            actual = _integrity_int(
+                actual,
+                "R02_INTEGRITY_TERMINAL_FIELD_INVALID:" + key,
+            )
         else:
             actual = str(actual)
         if actual != expected:

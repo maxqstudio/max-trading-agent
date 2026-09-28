@@ -864,3 +864,51 @@ def test_outcome_integrity_rejects_partial_outcome_without_terminal(
         match="R02_INTEGRITY_PARTIAL_OUTCOME_STATE",
     ):
         validate_r02_outcome_integrity(RESEARCH_ID, path=db)
+
+
+
+def test_read_path_maps_malformed_candidate_json_to_fail_closed_runtime_error(
+    tmp_path: Path,
+) -> None:
+    db, block = _frozen_block(tmp_path)
+    _drop_integrity_trigger(db, "research_r02_candidate_no_update")
+    with connect(db) as conn:
+        conn.execute(
+            """
+            UPDATE research_r02_candidate_specs
+            SET spec_json='{'
+            WHERE candidate_id=?
+            """,
+            (block["candidates"][0]["candidate_id"],),
+        )
+    with pytest.raises(
+        RuntimeError,
+        match="R02_CANDIDATE_SPEC_JSON_INVALID",
+    ):
+        get_r02_discovery_block(RESEARCH_ID, path=db)
+
+
+def test_read_path_maps_malformed_terminal_compute_json_to_fail_closed_error(
+    tmp_path: Path,
+) -> None:
+    db, block = _frozen_block(tmp_path)
+    ledger = commit_r02_terminal_outcomes(
+        RESEARCH_ID,
+        _outcomes(block),
+        path=db,
+    )
+    _drop_integrity_trigger(db, "research_r02_terminal_no_update")
+    with connect(db) as conn:
+        conn.execute(
+            """
+            UPDATE research_r02_block_terminals
+            SET compute_consumed_json='{'
+            WHERE terminal_id=?
+            """,
+            (ledger["terminal"]["terminal_id"],),
+        )
+    with pytest.raises(
+        RuntimeError,
+        match="R02_TERMINAL_COMPUTE_JSON_INVALID",
+    ):
+        get_r02_terminal(RESEARCH_ID, path=db)

@@ -46,6 +46,7 @@ def _install(
     monkeypatch.setattr(r02, "get_r02_discovery_block", lambda *_args, **_kwargs: None)
     monkeypatch.setattr(r02, "get_r02_terminal", lambda *_args, **_kwargs: None)
     monkeypatch.setattr(r02, "validate_r02_outcome_integrity", lambda *_args, **_kwargs: {"status": "VERIFIED", "terminal_state": "NOT_COMMITTED"})
+    monkeypatch.setattr(r02, "validate_r02_discovery_block_integrity", lambda research_id, **_kwargs: {"status": "VERIFIED", "block": deepcopy(current_run and {"block_id": "RDISC-MOCK", "authorization_id": "RAUTH-R02-MOCK", "plan_id": "RPLAN-MOCK", "plan_sha256": "b" * 64, "candidate_count": 3, "compute_budget": {"value": 120, "unit": "FIT_SECONDS", "execution_semantics": "FROZEN_ONLY_NOT_EXECUTED"}})})
 
 
 def test_fresh_epoch_without_research_is_blocked(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -171,6 +172,15 @@ def test_frozen_discovery_block_prevents_second_authorization_surface(
             },
         },
     )
+    frozen = r02.get_r02_discovery_block("RSRCH-R02-TEST", path=Path("unused.db"))
+    monkeypatch.setattr(
+        r02,
+        "validate_r02_discovery_block_integrity",
+        lambda *_args, **_kwargs: {
+            "status": "VERIFIED",
+            "block": deepcopy(frozen),
+        },
+    )
     result = r02.r02_preflight(path=Path("unused.db"))
     assert result["status"] == "FROZEN_WAITING_EXECUTION"
     assert result["owner_authorization_required"] is False
@@ -178,6 +188,29 @@ def test_frozen_discovery_block_prevents_second_authorization_surface(
     assert result["runtime_start_available"] is False
     assert result["r02_executable"] is False
 
+
+
+def test_frozen_preflight_requires_discovery_integrity(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _install(monkeypatch)
+    monkeypatch.setattr(
+        r02,
+        "get_r02_discovery_block",
+        lambda *_args, **_kwargs: {
+            "block_id": "RDISC-TAMPER",
+        },
+    )
+    monkeypatch.setattr(
+        r02,
+        "validate_r02_discovery_block_integrity",
+        lambda *_args, **_kwargs: {
+            "status": "INVALID",
+            "block": {},
+        },
+    )
+    with pytest.raises(RuntimeError, match="R02_DISCOVERY_INTEGRITY_REQUIRED"):
+        r02.r02_preflight(path=Path("unused.db"))
 
 
 def test_terminal_preflight_requires_rebuilt_integrity(
@@ -198,6 +231,15 @@ def test_terminal_preflight_requires_rebuilt_integrity(
                 "unit": "FIT_SECONDS",
                 "execution_semantics": "FROZEN_ONLY_NOT_EXECUTED",
             },
+        },
+    )
+    frozen = r02.get_r02_discovery_block("RSRCH-R02-TEST", path=Path("unused.db"))
+    monkeypatch.setattr(
+        r02,
+        "validate_r02_discovery_block_integrity",
+        lambda *_args, **_kwargs: {
+            "status": "VERIFIED",
+            "block": deepcopy(frozen),
         },
     )
     monkeypatch.setattr(
@@ -237,6 +279,15 @@ def test_terminal_outcome_ledger_reports_complete_without_qualification(
                 "unit": "FIT_SECONDS",
                 "execution_semantics": "FROZEN_ONLY_NOT_EXECUTED",
             },
+        },
+    )
+    frozen = r02.get_r02_discovery_block("RSRCH-R02-TEST", path=Path("unused.db"))
+    monkeypatch.setattr(
+        r02,
+        "validate_r02_discovery_block_integrity",
+        lambda *_args, **_kwargs: {
+            "status": "VERIFIED",
+            "block": deepcopy(frozen),
         },
     )
     monkeypatch.setattr(

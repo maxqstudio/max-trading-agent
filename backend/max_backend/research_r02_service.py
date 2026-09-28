@@ -19,6 +19,7 @@ from .research_r02_store import (
     get_r02_authorization,
     get_r02_discovery_block,
     get_r02_terminal,
+    validate_r02_discovery_block_integrity,
     validate_r02_outcome_integrity,
 )
 from .optimizer_store import utc_now
@@ -93,6 +94,13 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
 
     frozen = get_r02_discovery_block(research_id, path=path)
     if frozen is not None:
+        discovery_integrity = validate_r02_discovery_block_integrity(
+            research_id,
+            path=path,
+        )
+        if discovery_integrity["status"] != "VERIFIED":
+            raise RuntimeError("R02_DISCOVERY_INTEGRITY_REQUIRED")
+        verified_block = discovery_integrity["block"]
         terminal = get_r02_terminal(research_id, path=path)
         if terminal is not None:
             outcome_integrity = validate_r02_outcome_integrity(
@@ -117,12 +125,12 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
                 "source_foundation_ready": True,
                 "owner_authorization_required": False,
                 "owner_authorized": True,
-                "authorization_id": frozen["authorization_id"],
-                "block_id": frozen["block_id"],
-                "plan_id": frozen["plan_id"],
-                "plan_sha256": frozen["plan_sha256"],
-                "candidate_count": frozen["candidate_count"],
-                "compute_budget": frozen["compute_budget"],
+                "authorization_id": verified_block["authorization_id"],
+                "block_id": verified_block["block_id"],
+                "plan_id": verified_block["plan_id"],
+                "plan_sha256": verified_block["plan_sha256"],
+                "candidate_count": verified_block["candidate_count"],
+                "compute_budget": verified_block["compute_budget"],
                 "outcome_manifest_sha256": outcome_integrity[
                     "outcome_manifest_sha256"
                 ],
@@ -158,12 +166,12 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
             "source_foundation_ready": True,
             "owner_authorization_required": False,
             "owner_authorized": True,
-            "authorization_id": frozen["authorization_id"],
-            "block_id": frozen["block_id"],
-            "plan_id": frozen["plan_id"],
-            "plan_sha256": frozen["plan_sha256"],
-            "candidate_count": frozen["candidate_count"],
-            "compute_budget": frozen["compute_budget"],
+            "authorization_id": verified_block["authorization_id"],
+            "block_id": verified_block["block_id"],
+            "plan_id": verified_block["plan_id"],
+            "plan_sha256": verified_block["plan_sha256"],
+            "candidate_count": verified_block["candidate_count"],
+            "compute_budget": verified_block["compute_budget"],
             "runtime_start_available": False,
             "r02_executable": False,
             "model_training": int(side_effects["training_count"]),
