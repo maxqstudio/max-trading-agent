@@ -863,7 +863,7 @@
       "locator": "backend/max_backend/scientist_store.py::migrate_m05"
     }
   ],
-  "observed_head": "056aa9265353a05cbc3be3cebe956fcde447d6da",
+  "observed_head": "17b69115ab179adc63c4dc17e943d3fa257063f1",
   "schema_version": 1,
   "source_digest": "d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0"
 }
