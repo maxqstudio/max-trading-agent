@@ -110,9 +110,8 @@ def main() -> int:
         gates["PROJECT_DOCS_NORMALIZED"] = "PASS"
         gates["DOC_READABILITY"] = "PASS"
         gates["PROJECT_DOCS_SYNC"] = "PASS"
-        acceptance_path.write_text(
-            json.dumps(acceptance, indent=2, sort_keys=True) + "\n",
-            encoding="utf-8",
+        acceptance_path.write_bytes(
+            (json.dumps(acceptance, indent=2, sort_keys=True) + "\n").encode("utf-8")
         )
     except Exception as exc:
         print("FAIL ACCEPTANCE_SPEC_UPDATE_ERROR:" + str(exc))
