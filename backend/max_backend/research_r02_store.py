@@ -651,10 +651,26 @@ def validate_r02_integrity(
             "failures": ["block_readable"],
         }
     if block is None:
+        with connect(path) as conn:
+            orphan_authorization = conn.execute(
+                """
+                SELECT authorization_id
+                FROM research_r02_authorizations
+                WHERE research_id=?
+                """,
+                (research_id,),
+            ).fetchone()
+        if orphan_authorization is not None:
+            return {
+                "status": "INTEGRITY_FAIL",
+                "research_id": research_id,
+                "checks": {"orphan_authorization_absent": False},
+                "failures": ["orphan_authorization"],
+            }
         return {
             "status": "NOT_STARTED",
             "research_id": research_id,
-            "checks": {},
+            "checks": {"orphan_authorization_absent": True},
             "failures": [],
         }
 

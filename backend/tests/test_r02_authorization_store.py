@@ -685,6 +685,17 @@ def _drop_trigger(conn, name: str) -> None:
     conn.execute(f"DROP TRIGGER IF EXISTS {name}")
 
 
+def test_r02_integrity_rejects_orphan_authorization_without_block(
+    tmp_path: Path,
+) -> None:
+    db = _database(tmp_path)
+    plan = _plan()
+    create_r02_authorization(_authorization(plan), path=db)
+    result = validate_r02_integrity(RESEARCH_ID, path=db)
+    assert result["status"] == "INTEGRITY_FAIL"
+    assert result["failures"] == ["orphan_authorization"]
+
+
 def test_r02_integrity_verifies_frozen_authority(tmp_path: Path) -> None:
     db, _block = _frozen_block(tmp_path)
     result = validate_r02_integrity(RESEARCH_ID, path=db)
