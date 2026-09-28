@@ -31,10 +31,10 @@
       "summary": "Optimizer parameter-grid display issue"
     },
     {
-      "evidence": "Any previous Owner-runtime Challenger population belongs to the retired MAX REBUILD epoch. Post-migration Owner runtime for maxqstudio/max-trading-agent is deferred and NOT_PROVEN.",
+      "evidence": "Current public source contains no Owner runtime database or real MT5 evidence; current 17D runtime behavior remains deferred to final Owner-PC acceptance.",
       "id": "NP-001",
       "status": "HISTORICAL_NOT_CURRENT_AUTHORITY",
-      "summary": "Previous Owner-runtime Challenger population is not current hosted authority"
+      "summary": "Real current 17D Challenger runtime on final Owner environment"
     },
     {
       "evidence": "Real R01 scientific run has not started.",
@@ -71,6 +71,12 @@
       "status": "OPEN_BLOCKING_FUTURE_R01",
       "summary": "R01 binds retired previous-epoch R00/Research/Strategy identifiers",
       "evidence": "backend/max_backend/research_r01_service.py hardcoded ACCEPTED_R00_RESEARCH_ID, ACCEPTED_R00_PARENT_ID, ACCEPTED_R00_CHAMPION_ID and exact-ID normalization block a legal new current-epoch R01."
+    },
+    {
+      "id": "KD-R01-LINEAGE-001",
+      "status": "OPEN_BLOCKING_R01",
+      "summary": "R01 service binds to retired previous-epoch hardcoded R00/Strategy identifiers",
+      "evidence": "backend/max_backend/research_r01_service.py constants ACCEPTED_R00_RESEARCH_ID / ACCEPTED_R00_PARENT_ID / ACCEPTED_R00_CHAMPION_ID and _normalized_r00_parent() require historical IDs; must be repaired before any future real R01 execution."
     }
   ],
   "schema_version": 1
