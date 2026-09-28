@@ -48,7 +48,17 @@ def _install(
     monkeypatch.setattr(
         r02,
         "validate_r02_integrity",
-        lambda *_args, **_kwargs: {"status": "VERIFIED_FROZEN"},
+        lambda research_id, **_kwargs: {
+            "status": (
+                "VERIFIED_FROZEN"
+                if r02.get_r02_discovery_block(
+                    research_id,
+                    **_kwargs,
+                )
+                is not None
+                else "NOT_STARTED"
+            )
+        },
     )
 
 
