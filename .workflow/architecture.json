@@ -144,11 +144,12 @@
         "evidence/",
         "docs/audits/"
       ],
-      "purpose": "Define retained execution/scientific lineage at runtime; private runtime artifacts/evidence are not tracked in the public source-only GitHub repository."
+      "purpose": "Represent runtime scientific/execution lineage owned by domain contracts; evidence/ and artifacts/ are runtime-only and intentionally absent from the public source repository."
     },
     {
       "depends_on": [
-        "Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f"
+        "Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f",
+        "GitHub Actions windows-latest hosted validation"
       ],
       "id": "governance",
       "name": "Current project governance",
@@ -161,7 +162,7 @@
         "docs/sequence/generated/*.actual.json",
         "docs/sequence/generated/*.actual.mmd"
       ],
-      "purpose": "Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth."
+      "purpose": "Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth for the GitHub-hosted workflow."
     }
   ],
   "data_flows": [
@@ -204,15 +205,15 @@
   "external_boundaries": [
     {
       "name": "GitHub",
-      "contract": "maxqstudio/max-trading-agent main exact commit is source authority."
+      "contract": "maxqstudio/max-trading-agent main exact SHA is source authority; working branches are proposals until required hosted gates pass and merge."
     },
     {
       "name": "GitHub Actions",
-      "contract": "windows-latest is hosted build/test authority for ordinary development phases; it does not prove real MT5 or Owner-PC runtime."
+      "contract": "windows-latest is hosted build/test authority for source-only policy, Skill Workflow, backend, frontend, dependency and public-source validation; it does not prove real MT5 runtime."
     },
     {
       "name": "Owner PC",
-      "contract": "Final exact-SHA clean install plus real MT5/MetaEditor/browser/filesystem behavior is runtime/E2E authority only after the hosted roadmap is complete."
+      "contract": "Final runtime/E2E authority only after GitHub development closure; real MT5, MetaEditor, broker data, terminal data root, deployment and browser E2E remain deferred."
     },
     {
       "name": "MetaTrader 5",
