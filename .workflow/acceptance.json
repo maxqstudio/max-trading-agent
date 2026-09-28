@@ -1,5 +1,5 @@
 {
-  "evidence_boundary": "R02 Cheap Screen outcome-ledger source phase. Hosted synthetic targeted run 36411091220 passed 82 tests at 59d61a20b5a7a54be0ff10893a3a63216a91250b. The source can validate and atomically persist a complete immutable candidate-outcome ledger, including SCREEN_FAIL and EXECUTION_ERROR, but no trainer/executor or outcome-submit API exists and no real model fitting/outcome is claimed. Full generated-governance/full-regression closeout remains pending; real R00/R01/R02 scientific runtime and Owner-PC/MT5/browser E2E remain NOT_PROVEN.",
+  "evidence_boundary": "R02 Cheap Screen outcome-ledger source phase after numeric-overflow hardening. Windows targeted run 36412664127 passed 84 R02 tests at 02644bb471c8c605a27413b4a1f8677a1f30dffd, including huge-integer regressions proving discovery/outcome compute values fail closed as validation errors rather than escaping as OverflowError/HTTP 500. Full regenerated-governance/full-regression closeout remains pending. No trainer/executor or outcome-submit API exists and no real model fitting/outcome, R03 qualification, ONNX, Research Challenger, Champion mutation, MT5 runtime or Owner-PC/browser E2E is claimed.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
     "How does important data flow through the system?": "PASS",
@@ -29,9 +29,9 @@
       "status": "NOT_PROVEN"
     },
     {
-      "evidence": "test_r02_outcome_contract.py + test_r02_authorization_store.py",
+      "evidence": "research_r02_contract.py + research_r02_outcome.py + targeted overflow regressions",
       "id": "R02OL-03",
-      "requirement": "Outcome metrics and compute accounting reject non-finite values; compute unit must match the frozen block and total consumption cannot exceed the frozen budget.",
+      "requirement": "Outcome metrics and compute accounting reject non-finite or unrepresentable numeric values; compute unit must match the frozen block and total consumption cannot exceed the frozen budget.",
       "status": "NOT_PROVEN"
     },
     {
@@ -92,7 +92,7 @@
   "results": {
     "hosted_ci": {
       "run_id": null,
-      "status": "NOT_RUN",
+      "status": "NOT_RUN_AFTER_OVERFLOW_REPAIR",
       "tested_sha": null
     },
     "regression": {
@@ -126,10 +126,10 @@
     },
     "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720",
     "targeted": {
-      "run_id": 36411091220,
-      "status": "PASS",
-      "tested_sha": "59d61a20b5a7a54be0ff10893a3a63216a91250b",
-      "tests": 82
+      "run_id": 36412664127,
+      "status": "PASS_OVERFLOW_HARDENED",
+      "tested_sha": "02644bb471c8c605a27413b4a1f8677a1f30dffd",
+      "tests": 84
     }
   },
   "runtime_checks": [
