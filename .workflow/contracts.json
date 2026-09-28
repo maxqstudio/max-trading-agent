@@ -501,6 +501,24 @@
         "R03 Full WFA exclusively owns future Qualified Pool admission"
       ],
       "retention": "retained scientific lineage; no cleanup/update mutation"
+    },
+    {
+      "name": "R02 persisted authority integrity",
+      "source_of_truth": "deterministic reconstruction from research_r02_authorizations, discovery block, candidate specs, candidate outcomes and block terminal",
+      "mutability": "read-only verification over immutable/append-only authority",
+      "legal_writes": [
+        "NONE"
+      ],
+      "invariants": [
+        "row presence is never sufficient authority",
+        "authorization payload hash/id and block/plan identity are rebound",
+        "candidate spec hash/id/order and R01 output lineage are rebound",
+        "each persisted outcome is rebuilt from canonical contract and compared to row/json hashes",
+        "terminal manifest/counts/compute summary are reconstructed from exact candidate outcomes",
+        "orphan authorization and partial outcome state fail closed",
+        "terminal writes require verified frozen/complete authority"
+      ],
+      "retention": "verification result is derived; persisted scientific rows remain append-only"
     }
   ],
   "runbook_steps": [

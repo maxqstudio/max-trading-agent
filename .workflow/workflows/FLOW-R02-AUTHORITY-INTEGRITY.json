@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "flow_id": "FLOW-R02-AUTHORITY-INTEGRITY",
+  "title": "R02 persisted authority integrity verification",
+  "purpose": "Reconstruct and verify frozen R02 and complete outcome authority before preflight presentation or terminal write acceptance.",
+  "critical": true,
+  "authority": "R02 canonical plan/outcome contracts plus immutable SQLite authority; row presence alone is insufficient.",
+  "entry_condition": "R01 is accepted and R02 may be not-started, frozen or complete; verification itself performs no scientific execution.",
+  "source_owners": [
+    "backend/max_backend/research_r02_store.py::validate_r02_integrity",
+    "backend/max_backend/research_r02_service.py::r02_preflight",
+    "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes"
+  ],
+  "states": [
+    "NOT_STARTED",
+    "VERIFIED_FROZEN",
+    "VERIFIED_COMPLETE",
+    "INTEGRITY_FAIL"
+  ],
+  "transitions": [
+    {
+      "from": "NOT_STARTED",
+      "to": "VERIFIED_FROZEN",
+      "action": "After a legal atomic freeze, reconstruct authorization/block/plan/candidate bindings before trust.",
+      "side_effects": []
+    },
+    {
+      "from": "VERIFIED_FROZEN",
+      "to": "VERIFIED_COMPLETE",
+      "action": "After legal terminalization, rebuild every outcome and terminal manifest and verify row/json/hash/count/compute bindings.",
+      "side_effects": []
+    },
+    {
+      "from": "VERIFIED_FROZEN",
+      "to": "INTEGRITY_FAIL",
+      "action": "Any tamper, orphan, malformed value, partial state or lineage mismatch fails closed.",
+      "side_effects": []
+    },
+    {
+      "from": "VERIFIED_COMPLETE",
+      "to": "INTEGRITY_FAIL",
+      "action": "Any outcome/terminal tamper or binding mismatch fails closed.",
+      "side_effects": []
+    }
+  ],
+  "invariants": [
+    "Row existence is never sufficient scientific authority.",
+    "Frozen authorization payload hash/id, plan hash/id, candidate spec hash/id/order and current R01 output binding are reconstructed.",
+    "Complete outcome rows and terminal authority are rebuilt from canonical contracts.",
+    "Orphan authorization and partial outcome state are integrity failures.",
+    "Preflight exposes FROZEN/COMPLETE only after verified integrity.",
+    "Terminal writes require verified frozen/complete authority.",
+    "Integrity verification creates no training, qualification, ONNX, Challenger or Champion authority."
+  ],
+  "failure_behavior": [
+    "Integrity mismatch raises R02_INTEGRITY_REQUIRED at service/write boundaries; no fallback trusts corrupted rows."
+  ],
+  "restart_behavior": [
+    "Verification is deterministic and read-only; retry recomputes from current persisted authority."
+  ],
+  "rollback_behavior": [
+    "No rollback is needed for read verification; terminal writes remain separately atomic."
+  ],
+  "tests": [
+    "backend/tests/test_r02_authorization_store.py",
+    "backend/tests/test_r02_preflight.py"
+  ],
+  "sequence_session": "docs/sequence/sessions/FLOW-R02-AUTHORITY-INTEGRITY.json"
+}

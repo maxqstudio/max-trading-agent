@@ -353,11 +353,41 @@
         "backend/tests/test_r02_preflight.py"
       ],
       "runtime_evidence_boundary": "Hosted Windows CI validates synthetic outcome/SQLite contracts only. No real model fitting, Cheap Screen runtime result, R03 qualification or Owner MT5/browser runtime is proven."
+    },
+    {
+      "flow_id": "FLOW-R02-AUTHORITY-INTEGRITY",
+      "mode": "DURING",
+      "scope": "CURRENT",
+      "declared_entries": [
+        "backend/max_backend/research_r02_store.py::validate_r02_integrity",
+        "backend/max_backend/research_r02_service.py::r02_preflight",
+        "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes"
+      ],
+      "python_source_owners_declared": 3,
+      "python_source_owners_in_static_graph": [
+        "backend/max_backend/research_r02_store.py::validate_r02_integrity",
+        "backend/max_backend/research_r02_service.py::r02_preflight",
+        "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes"
+      ],
+      "python_source_owners_outside_static_reachable_graph": [],
+      "non_python_structured_source_owners": [],
+      "generated_nodes": 0,
+      "generated_edges": 0,
+      "source_digest": "",
+      "semantic_review": "PASS",
+      "outside_graph_classification": "NONE",
+      "outside_graph_resolution": "NOT_APPLICABLE",
+      "unresolved_bindings": [],
+      "tests": [
+        "backend/tests/test_r02_authorization_store.py",
+        "backend/tests/test_r02_preflight.py"
+      ],
+      "runtime_evidence_boundary": "Hosted Windows CI validates synthetic SQLite tamper/integrity behavior only; real R02 execution and Owner MT5/browser runtime remain deferred."
     }
   ],
   "generation_anchor_policy": {
     "meaning": "Pre-commit generation anchor only; final hosted provenance is the exact GitHub candidate SHA and final real-runtime provenance is the final main SHA accepted on Owner PC. Structural sequence binding remains deterministic product source_digest.",
-    "observed_head": "50f3f5f77632d81c7f9f1f794508723127e32e1f",
+    "observed_head": "8e7f834f989ccaf23ab188fc25cf3218d5dbc9e2",
     "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68"
   },
   "mode": "DURING",

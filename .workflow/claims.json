@@ -284,6 +284,27 @@
         "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
       ],
       "status": "PASS"
+    },
+    {
+      "id": "TRUTH-R02-INTEGRITY-001",
+      "claim": "Persisted R02 authority is never trusted from SQLite row presence alone: frozen authorization/block/candidate specs and complete outcome/terminal authority are deterministically reconstructed and binding/hash verified; preflight and terminal writes fail closed on tamper, orphan or partial state.",
+      "documents": [
+        "PROJECT_TRUTH_SYNC.md"
+      ],
+      "source_owners": [
+        "backend/max_backend/research_r02_store.py::validate_r02_integrity",
+        "backend/max_backend/research_r02_service.py::r02_preflight",
+        "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes"
+      ],
+      "tests": [
+        "backend/tests/test_r02_authorization_store.py",
+        "backend/tests/test_r02_preflight.py"
+      ],
+      "runtime_evidence": [
+        "HOSTED_TARGETED_RUN_36439985226",
+        "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
+      ],
+      "status": "NOT_PROVEN"
     }
   ],
   "relations": [
