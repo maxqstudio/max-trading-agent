@@ -202,24 +202,25 @@
       ]
     },
     {
-      "claim": "R02 source can freeze one bounded Owner-authorized Discovery block and define an immutable synthetic-tested outcome ledger, but real Cheap Screen execution/model fitting remains absent and blocked; no outcome creates R03 qualification, ONNX, Challenger or Champion authority.",
+      "claim": "R02 source may freeze one Owner-authorized bounded Discovery block after an accepted current R01 authority, but this accepted freeze authority is not scientific execution: no trainer, model fitting, R03 qualification, ONNX, Challenger or Champion authority is opened.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
       "id": "TRUTH-R02-BLOCK-001",
       "runtime_evidence": [
+        "HOSTED_MAIN_REVALIDATION_RUN_36409834797",
         "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
       ],
       "source_owners": [
         "backend/max_backend/research_r02_service.py::r02_preflight",
-        "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
-        "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes"
+        "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
+        "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery"
       ],
-      "status": "NOT_PROVEN",
+      "status": "PASS",
       "tests": [
         "backend/tests/test_r02_preflight.py",
-        "backend/tests/test_r02_authorization_store.py",
-        "backend/tests/test_r02_outcome_contract.py"
+        "backend/tests/test_r02_authorization_service.py",
+        "backend/tests/test_r02_authorization_store.py"
       ]
     },
     {
