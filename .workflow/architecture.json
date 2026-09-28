@@ -44,10 +44,10 @@
         "immutable Research artifacts",
         "MT5 source capture",
         "accepted R01 scientific authority for future R02 execution",
-        "separate future R02 executor implementation before any model training"
+        "separate future R02 trainer/executor implementation before any model fitting"
       ],
       "id": "research-domain",
-      "name": "Research authority through R02 frozen Discovery authorization",
+      "name": "Research authority through R02 immutable outcome ledger",
       "owns": [
         "backend/max_backend/research_settings.py::get_research_sample_configuration",
         "backend/max_backend/research_settings.py::set_research_sample_configuration",
@@ -69,9 +69,13 @@
         "backend/max_backend/research_r02_service.py::r02_preflight",
         "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
         "backend/max_backend/research_r02_store.py::create_r02_authorization",
-        "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block"
+        "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
+        "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
+        "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
+        "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
+        "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger"
       ],
-      "purpose": "Own editable Research configuration, immutable R00/R01 authority, and deterministic non-executing R02 planning/authorization/frozen candidate specifications without manufacturing scientific PASS."
+      "purpose": "Own editable Research configuration, immutable R00/R01 authority, deterministic R02 planning/authorization, and append-only Cheap Screen outcome/terminal contracts without implementing a trainer or manufacturing scientific qualification."
     },
     {
       "depends_on": [

@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "flow_id": "FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER",
+  "title": "R02 Cheap Screen immutable outcome ledger",
+  "purpose": "Define deterministic append-only all-candidate outcome and terminal authority for a future executor without performing model fitting or granting qualification.",
+  "critical": true,
+  "authority": "Immutable frozen R02 Discovery block/candidate specs + deterministic outcome contract/store; no trainer or qualification authority.",
+  "entry_condition": "A frozen R02 Discovery block exists. Hosted tests may pass synthetic outcome requests directly to the store; no public outcome-submit runtime surface exists.",
+  "source_owners": [
+    "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
+    "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
+    "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
+    "backend/max_backend/research_r02_service.py::r02_preflight"
+  ],
+  "states": [
+    "FROZEN_WAITING_EXECUTION",
+    "OUTCOME_SET_VALIDATED",
+    "COMPLETE_WAITING_OWNER"
+  ],
+  "transitions": [
+    {
+      "from": "FROZEN_WAITING_EXECUTION",
+      "to": "OUTCOME_SET_VALIDATED",
+      "action": "Validate exact frozen candidate set, deterministic outcome identities, explicit failure retention and frozen compute budget.",
+      "side_effects": []
+    },
+    {
+      "from": "OUTCOME_SET_VALIDATED",
+      "to": "COMPLETE_WAITING_OWNER",
+      "action": "Atomically append every candidate outcome and one immutable terminal authority.",
+      "side_effects": [
+        "R02_CANDIDATE_OUTCOMES",
+        "R02_BLOCK_TERMINAL"
+      ]
+    }
+  ],
+  "invariants": [
+    "Every frozen candidate must appear exactly once before terminal commit.",
+    "SCREEN_FAIL and EXECUTION_ERROR are retained as outcomes rather than discarded.",
+    "Non-finite metrics and compute values fail closed.",
+    "Total compute consumption cannot exceed the frozen block budget and units must match.",
+    "Outcome plus terminal persistence is all-or-nothing.",
+    "Outcome and terminal rows are immutable and append-only.",
+    "COMPLETE_WAITING_OWNER is block completeness only, not scientific qualification.",
+    "Cheap Screen has zero Qualified Pool authority; future R03 Full WFA owns admission.",
+    "No trainer, model fitting, ONNX, Research Challenger or Champion mutation occurs in this flow."
+  ],
+  "failure_behavior": [
+    "Missing/duplicate/unknown candidates, malformed metrics, wrong compute units, budget excess or different terminal replay fail closed before/without terminal authority.",
+    "A mid-batch persistence fault rolls back all newly inserted outcome and terminal rows."
+  ],
+  "restart_behavior": [
+    "Exact same complete outcome set is idempotent; a different second terminal manifest is rejected."
+  ],
+  "rollback_behavior": [
+    "One SQLite transaction covers all new candidate outcome rows and the block terminal row."
+  ],
+  "tests": [
+    "backend/tests/test_r02_outcome_contract.py",
+    "backend/tests/test_r02_authorization_store.py",
+    "backend/tests/test_r02_preflight.py"
+  ],
+  "sequence_session": "docs/sequence/sessions/FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER.json"
+}

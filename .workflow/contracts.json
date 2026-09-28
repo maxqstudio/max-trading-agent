@@ -275,10 +275,10 @@
     {
       "method": "GET",
       "path": "/api/research/r02/preflight",
-      "purpose": "Read R02 readiness or currently frozen Discovery authorization without starting or executing R02",
+      "purpose": "Read R02 readiness, frozen Discovery authority, or immutable outcome-terminal summary without starting/executing R02",
       "authority": "backend/max_backend/research_r02_service.py::r02_preflight",
       "mutation": "none scientific; ordinary store migration/read compatibility only",
-      "error_behavior": "Absent/unaccepted R01 returns BLOCKED; contradictory R01 authority fails closed; a frozen block returns FROZEN_WAITING_EXECUTION with execution still unavailable."
+      "error_behavior": "Absent/unaccepted R01 returns BLOCKED; contradictory authority fails closed; frozen blocks return FROZEN_WAITING_EXECUTION; an existing ledger terminal returns COMPLETE_WAITING_OWNER with zero qualification authority."
     },
     {
       "method": "POST",
@@ -484,6 +484,23 @@
       "name": "EA baseline",
       "retention": "current plus predecessor lineage",
       "source_of_truth": "ea/baseline/manifest.json + ea/baseline/Max_MTF.mq5"
+    },
+    {
+      "name": "R02 Cheap Screen outcome ledger",
+      "source_of_truth": "research_r02_candidate_outcomes + research_r02_block_terminals bound to immutable research_r02_candidate_specs",
+      "mutability": "append-only immutable per candidate/block",
+      "legal_writes": [
+        "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes"
+      ],
+      "invariants": [
+        "every frozen candidate appears exactly once before COMPLETE_WAITING_OWNER",
+        "SCREEN_FAIL and EXECUTION_ERROR are retained rather than dropped",
+        "candidate/outcome hashes and frozen compute budget are revalidated",
+        "commit of all candidate outcomes plus terminal row is atomic",
+        "Cheap Screen outcome has zero scientific qualification authority",
+        "R03 Full WFA exclusively owns future Qualified Pool admission"
+      ],
+      "retention": "retained scientific lineage; no cleanup/update mutation"
     }
   ],
   "runbook_steps": [
