@@ -37,7 +37,7 @@ R01 implementation/runtime readiness is not R01 scientific PASS.
 MAX uses Skill Workflow exact authority:
 
 ```text
-9e22feddb8f94e8c0f1af6a33e14b64de5068f8f
+1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720
 ```
 
 Governance model:
