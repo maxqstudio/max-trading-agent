@@ -101,6 +101,8 @@ def test_candidate_count_mismatch_fails_closed() -> None:
         {},
         {"value": 0, "unit": "FIT_SECONDS"},
         {"value": -1, "unit": "FIT_SECONDS"},
+        {"value": float("nan"), "unit": "FIT_SECONDS"},
+        {"value": float("inf"), "unit": "FIT_SECONDS"},
         {"value": True, "unit": "FIT_SECONDS"},
         {"value": 1, "unit": ""},
         {"value": 1, "unit": "FIT_SECONDS", "extra": 1},
