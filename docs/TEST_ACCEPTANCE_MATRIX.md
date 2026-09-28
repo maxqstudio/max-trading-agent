@@ -4,25 +4,28 @@
 
 ## Evidence boundary
 
-R02 Discovery source-foundation hosted pre-closeout. Windows CI run 36374307305 at exact SHA ee5e93cb039b37294452ba42239991514a3c80a5 passed source-only/security, Skill Workflow 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 provenance/STRICT selftest, generated governance/sequence, backend 537 tests, pip check, frontend 53 tests across 10 files, lint/build and npm dependency tree. Real R00/R01/R02 scientific execution, model training, Cheap Screen outcomes, ONNX, Research Challenger, Champion mutation and Owner-PC/MT5/browser runtime remain intentionally NOT_PROVEN.
+R02 Discovery Owner-authorization/frozen-block source phase pre-closeout. Exact branch Windows CI run 36380453938 passed at 7f60da88d25d38753b200dceaa71131856304dd9: backend 558 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, lint/build and npm dependency tree PASS. Atomic targeted run 36380098875 separately passed 61 R02 tests including fault-injection rollback proof. Real R00/R01/R02 scientific execution, trainer/Cheap Screen outcome, qualification, Qualified Pool, ONNX, Research Challenger, Champion mutation and Owner-PC/MT5/browser runtime remain intentionally NOT_PROVEN.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c7986bda
+Current source digest: 8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
-| R02SF-01 | R02 source contract exposes baseline LightGBM/XGBoost and optional Random Forest control only; temporal families remain unopened in this slice. | backend/max_backend/research_r02_contract.py + test_r02_discovery_contract.py | PASS |
-| R02SF-02 | Discovery plan freezes explicit positive candidate count and explicit finite compute budget with no hidden defaults. | backend/tests/test_r02_discovery_contract.py | PASS |
-| R02SF-03 | Candidate identities are deterministic, exact-lineage bound, duplicate-safe and input-order independent. | backend/tests/test_r02_discovery_contract.py | PASS |
-| R02SF-04 | Cheap Screen has zero qualification authority; only future R03 Full WFA may admit a Qualified Pool. | research_r02_contract.py + tests | PASS |
-| R02SF-05 | R02 preflight is read-only scientific state and blocks absent/unaccepted R01 while failing closed on malformed/tampered R01 authority or prior training/promotion side effects. | backend/tests/test_r02_preflight.py | PASS |
-| R02SF-06 | No R02 START endpoint, ML runtime dependency, candidate persistence schema, training, ONNX, Research Challenger or Champion mutation is introduced. | source review + source-only/security CI | PASS |
-| R02SF-07 | Skill Workflow provenance/STRICT and Project Truth/sequence/Scientist projections remain synchronized. | Windows CI governance gates | PASS |
-| R02SF-08 | Full backend/frontend/dependency regression remains green after the source foundation. | Windows CI | PASS |
+| R02AF-01 | R02 Owner authorization requires exact explicit confirmation and an exact canonical Discovery plan bound to current Research and accepted R01 output authority. | research_r02_service.py + test_r02_authorization_service.py | PASS |
+| R02AF-02 | Authorization identity and payload hash, plan identity/hash, candidate identities and exact R01 output binding are recomputed at the persistence boundary and tampering fails closed. | research_r02_store.py + test_r02_authorization_store.py | PASS |
+| R02AF-03 | At most one bounded Discovery block may be frozen per Research identity; exact replay is idempotent and a different second block is rejected. | research_r02_store.py + tests | PASS |
+| R02AF-04 | Frozen R02 authorization, Discovery block and candidate-spec rows are update-immutable and append-only. | SQLite triggers + test_r02_authorization_store.py | PASS |
+| R02AF-05 | Frozen state is FROZEN_WAITING_EXECUTION, not STARTING; no trainer, Cheap Screen executor, scientific result or qualification authority is opened. | research_r02_service.py + research_r02_store.py + tests | PASS |
+| R02AF-06 | R02 freeze preserves zero model-training, ONNX, Research-Challenger and Champion-mutation counters. | test_r02_authorization_store.py + test_r02_authorization_service.py | PASS |
+| R02AF-07 | The durable R02 persistence extension advances cumulative SQLite schema authority from 10 to 11. | backend/max_backend/schema.py + test_r02_authorization_store.py | PASS |
+| R02AF-08 | Scientist knowledge manifest hashes R02 contract/service/store source so advisory context cannot drift from implemented R02 authority. | scientist_knowledge.py + regenerated source_manifest.json | PASS |
+| R02AF-09 | Skill Workflow provenance/STRICT, Project Truth, cross-document consistency and sequence contracts remain synchronized. | Windows CI governance gates | PASS |
+| R02AF-10 | Full backend/frontend/source-only/security/dependency regression remains green. | Windows CI | PASS |
+| R02AF-11 | Production R02 authorize-and-freeze is atomic: a persistence fault after authorization insertion rolls back authorization, block and all candidate rows together, leaving no orphan immutable authority. | research_r02_store.py::authorize_and_freeze_r02_discovery + fault-injection regression in test_r02_authorization_store.py | PASS |
 
 ## Test commands
 
-- python -m pytest backend/tests/test_r02_discovery_contract.py backend/tests/test_r02_preflight.py -q -o addopts=
+- python -m pytest backend/tests/test_r02_discovery_contract.py backend/tests/test_r02_preflight.py backend/tests/test_r02_authorization_store.py backend/tests/test_r02_authorization_service.py -q -o addopts=
 - python .workflow/tools/validate_project_docs.py
 - python .workflow/tools/validate_sequence_sessions.py
 - python .workflow/tools/validate_handoff.py
@@ -39,13 +42,13 @@ Current source digest: 46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c
 
 - NOT_RUN: real Owner-PC database/bootstrap.
 - NOT_RUN: real MT5/MetaEditor/broker/data-root/filesystem/browser runtime.
-- NOT_RUN: real R00/R01/R02 scientific execution.
-- NOT_RUN: model training, Cheap Screen execution, ONNX, Research Challenger or Champion mutation.
+- NOT_RUN: real R00/R01 scientific execution or real R02 authorization.
+- NOT_RUN: model training, Cheap Screen execution, qualification, ONNX, Research Challenger or Champion mutation.
 
 ## Sequence contract evidence
 
 Sequence mode for this phase/session: DURING
-Sequence session contract: docs/sequence/sessions/ (9 current DURING sessions after R02 source flow)
+Sequence session contract: docs/sequence/sessions/ (10 current DURING sessions after R02 authorization flow)
 SEQUENCE_SYNC: PASS
 
 ## Project Truth Compiler evidence

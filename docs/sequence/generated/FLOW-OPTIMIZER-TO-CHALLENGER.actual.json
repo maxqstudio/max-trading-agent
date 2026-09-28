@@ -2356,8 +2356,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::get_batch",
       "language": "Python",
-      "line_end": 530,
-      "line_start": 507,
+      "line_end": 607,
+      "line_start": 584,
       "locator": "backend/max_backend/workflow_store.py::get_batch"
     },
     {
@@ -2365,8 +2365,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::insert_challenger_batch_rows",
       "language": "Python",
-      "line_end": 739,
-      "line_start": 625,
+      "line_end": 816,
+      "line_start": 702,
       "locator": "backend/max_backend/workflow_store.py::insert_challenger_batch_rows"
     },
     {
@@ -2374,7 +2374,7 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::migrate_current",
       "language": "Python",
-      "line_end": 504,
+      "line_end": 581,
       "line_start": 137,
       "locator": "backend/max_backend/workflow_store.py::migrate_current"
     },
@@ -2383,8 +2383,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::prepare_batch",
       "language": "Python",
-      "line_end": 582,
-      "line_start": 533,
+      "line_end": 659,
+      "line_start": 610,
       "locator": "backend/max_backend/workflow_store.py::prepare_batch"
     },
     {
@@ -2392,8 +2392,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::update_batch",
       "language": "Python",
-      "line_end": 622,
-      "line_start": 585,
+      "line_end": 699,
+      "line_start": 662,
       "locator": "backend/max_backend/workflow_store.py::update_batch"
     },
     {
@@ -2415,7 +2415,7 @@
       "locator": "backend/tests/test_m01_recovery.py::good_pass"
     }
   ],
-  "observed_head": "02a5ae48658021c58a283c244a3b65b48e7f7a2b",
+  "observed_head": "c9be8c556e7626db1f34668c51194af35aad2be2",
   "schema_version": 1,
-  "source_digest": "46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c7986bda"
+  "source_digest": "8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb"
 }

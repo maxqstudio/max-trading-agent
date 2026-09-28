@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c7986bda
+Source digest: 8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -41,7 +41,7 @@ Generated/refreshed: current compiler run
 | backend/max_backend/optimizer_worker.py | Python | 638 | backend/max_backend | NO |
 | backend/max_backend/path_safety.py | Python | 98 | backend/max_backend | NO |
 | backend/max_backend/promotion_service.py | Python | 1178 | backend/max_backend | NO |
-| backend/max_backend/research_api.py | Python | 212 | backend/max_backend | NO |
+| backend/max_backend/research_api.py | Python | 245 | backend/max_backend | NO |
 | backend/max_backend/research_contract.py | Python | 352 | backend/max_backend | NO |
 | backend/max_backend/research_cp32.py | Python | 537 | backend/max_backend | NO |
 | backend/max_backend/research_dataset.py | Python | 1209 | backend/max_backend | NO |
@@ -51,7 +51,8 @@ Generated/refreshed: current compiler run
 | backend/max_backend/research_r01_service.py | Python | 1758 | backend/max_backend | NO |
 | backend/max_backend/research_r01_store.py | Python | 502 | backend/max_backend | NO |
 | backend/max_backend/research_r02_contract.py | Python | 270 | backend/max_backend | NO |
-| backend/max_backend/research_r02_service.py | Python | 99 | backend/max_backend | NO |
+| backend/max_backend/research_r02_service.py | Python | 240 | backend/max_backend | NO |
+| backend/max_backend/research_r02_store.py | Python | 441 | backend/max_backend | NO |
 | backend/max_backend/research_service.py | Python | 1423 | backend/max_backend | NO |
 | backend/max_backend/research_settings.py | Python | 73 | backend/max_backend | NO |
 | backend/max_backend/research_source.py | Python | 900 | backend/max_backend | NO |
@@ -60,11 +61,11 @@ Generated/refreshed: current compiler run
 | backend/max_backend/scientist_api.py | Python | 270 | backend/max_backend | NO |
 | backend/max_backend/scientist_chat.py | Python | 449 | backend/max_backend | NO |
 | backend/max_backend/scientist_context.py | Python | 879 | backend/max_backend | NO |
-| backend/max_backend/scientist_knowledge.py | Python | 183 | backend/max_backend | NO |
+| backend/max_backend/scientist_knowledge.py | Python | 186 | backend/max_backend | NO |
 | backend/max_backend/scientist_provider.py | Python | 993 | backend/max_backend | NO |
 | backend/max_backend/scientist_store.py | Python | 594 | backend/max_backend | NO |
 | backend/max_backend/workflow_contract.py | Python | 45 | backend/max_backend | NO |
-| backend/max_backend/workflow_store.py | Python | 781 | backend/max_backend | NO |
+| backend/max_backend/workflow_store.py | Python | 858 | backend/max_backend | NO |
 | backend/tests/conftest.py | Python | 17 | backend/tests | YES |
 | backend/tests/test_fresh_runtime.py | Python | 158 | backend/tests | YES |
 | backend/tests/test_m00_foundation.py | Python | 326 | backend/tests | YES |
@@ -95,8 +96,10 @@ Generated/refreshed: current compiler run
 | backend/tests/test_r01_dataset.py | Python | 932 | backend/tests | YES |
 | backend/tests/test_r01_research.py | Python | 1077 | backend/tests | YES |
 | backend/tests/test_r01_source.py | Python | 471 | backend/tests | YES |
+| backend/tests/test_r02_authorization_service.py | Python | 206 | backend/tests | YES |
+| backend/tests/test_r02_authorization_store.py | Python | 459 | backend/tests | YES |
 | backend/tests/test_r02_discovery_contract.py | Python | 188 | backend/tests | YES |
-| backend/tests/test_r02_preflight.py | Python | 147 | backend/tests | YES |
+| backend/tests/test_r02_preflight.py | Python | 177 | backend/tests | YES |
 | frontend/src/App.test.tsx | TypeScript/React | 241 | frontend/src | YES |
 | frontend/src/App.tsx | TypeScript/React | 290 | frontend/src | NO |
 | frontend/src/ArtifactsPage.test.tsx | TypeScript/React | 252 | frontend/src | YES |
@@ -123,7 +126,7 @@ Generated/refreshed: current compiler run
 | frontend/vite.config.ts | TypeScript | 18 | frontend | NO |
 | scripts/build_m05_final_evidence.py | Python | 586 | scripts | NO |
 | scripts/build_m05_partial_evidence.py | Python | 217 | scripts | NO |
-| scripts/build_scientist_knowledge.py | Python | 289 | scripts | NO |
+| scripts/build_scientist_knowledge.py | Python | 290 | scripts | NO |
 | scripts/generate_module_map.py | Python | 120 | scripts | NO |
 | scripts/generate_symbol_index.py | Python | 261 | scripts | NO |
 | scripts/launcher_authority.py | Python | 161 | scripts | NO |

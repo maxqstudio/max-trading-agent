@@ -3,20 +3,20 @@
 # CURRENT STATE
 
 Last updated: generated from current specs
-Authority verified at SHA: 5c0df514632964dd942cba59a73f3b822e09085a
+Authority verified at SHA: 936b8a9878bc158285cfc1c5343bfd4112c3093d
 Governance profile: strict
 
 ## Current phase
-Phase: R02_DISCOVERY_SOURCE_FOUNDATION
-Status: SOURCE_FOUNDATION_PRE_CLOSEOUT_PASS
+Phase: R02_DISCOVERY_AUTHORIZATION_FREEZE
+Status: SOURCE_PHASE_PRE_CLOSEOUT_PASS
 
 ## Source
 Repository: maxqstudio/max-trading-agent
-Branch: work/r02-discovery-source-foundation
+Branch: work/r02-authorization-freeze
 Authoritative SHA: external final acceptance evidence
-Last accepted SHA: 5c0df514632964dd942cba59a73f3b822e09085a
+Last accepted SHA: 936b8a9878bc158285cfc1c5343bfd4112c3093d
 Current candidate SHA: external final acceptance evidence
-Current source digest: 46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c7986bda
+Current source digest: 8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
@@ -33,44 +33,47 @@ PROJECT_DOCS_SYNC: PASS
 ## Sequence governance
 Sequence policy: REQUIRED
 Current sequence mode: DURING
-Current sequence session: docs/sequence/sessions/ (9 current DURING sessions after R02 source flow)
+Current sequence session: docs/sequence/sessions/ (10 current DURING sessions after R02 authorization flow)
 SEQUENCE_SYNC: PASS
 
 ## Proven
-- H0 governance rebase is merged and revalidated on main; Windows CI run 36366607560 passed at main SHA 08f5a741412a2f5c69478b157529245b9a9a260e.
-- R01 current-lineage source repair is merged to main as 5c0df514632964dd942cba59a73f3b822e09085a; final branch run 36370111803, PR run 36371604393 and main revalidation run 36371992178 all passed.
-- R01 final hosted regression established 497 backend tests PASS plus frontend 53/53 across 10 files, source-only/security, Skill provenance/STRICT, governance, pip check, lint/build and npm dependency tree.
-- Previous-epoch R00/Champion/Research identifiers remain historical evidence only and are not current product-source authority.
+- H0 governance rebase remains accepted on main.
+- R01 current-lineage source repair remains accepted on main.
+- R02 Discovery source foundation is merged to main as 936b8a9878bc158285cfc1c5343bfd4112c3093d with post-merge Windows CI run 36376007589 SUCCESS: backend 537 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, governance, pip check, lint/build and npm dependency tree PASS.
+- R02 authorization/freeze targeted Windows run 36378628948 passed 59 synthetic tests on source candidate cb1917a210f6aca23ab43a11400392332af7816f.
 - Skill Workflow authority remains 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720.
-- R02 source foundation pre-closeout Windows CI run 36374307305 passed at exact SHA ee5e93cb039b37294452ba42239991514a3c80a5: 537 backend tests, source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, frontend 53/53 across 10 files, lint/build and npm dependency tree.
+- R02 authorization/freeze atomic targeted Windows run 36380098875 passed 61 tests at f4c05908114bc3d830bd39b4eb864ce105301991, including rollback fault injection proving no orphan authorization/block/candidate rows on persistence failure.
+- R02 authorization/freeze exact branch Windows CI run 36380453938 passed at 7f60da88d25d38753b200dceaa71131856304dd9: backend 558 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, lint/build and npm dependency tree PASS.
+- Atomic R02 persistence targeted run 36380098875 passed 61 tests and fault-injection rollback proof.
 
 ## Not proven
-- Final R02 source-foundation branch closeout CI after evidence regeneration.
+- Final branch closeout CI after pre-closeout evidence regeneration.
 - Any current-epoch R00/R01 scientific result or real R02 authorization/execution.
-- Any actual candidate training, Cheap Screen result, Qualified Pool, ONNX or Research Challenger.
+- Any model training, Cheap Screen result, Qualified Pool, ONNX or Research Challenger.
 - Any real Owner-PC runtime/bootstrap/MT5/browser behavior.
 
 ## Known blockers
-- The fresh source-governed epoch still has no accepted current R00 or R01 scientific result; therefore real R02 execution remains BLOCKED / NOT STARTED.
-- The current R02 slice implements only deterministic contracts and read-only preflight; no R02 start endpoint or candidate persistence exists yet.
+- The fresh source-governed epoch still has no accepted current R00 or R01 scientific result; therefore real R02 authorization/runtime remains unavailable in the actual fresh runtime despite source implementation.
+- This slice freezes authorization and candidate specifications only; no trainer, Cheap Screen executor or scientific outcome persistence exists.
 - Real MetaTrader 5, MetaEditor, broker/data-root, filesystem deployment and browser E2E remain NOT_PROVEN until final Owner-PC acceptance.
 
 ## Known defects
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Regenerate governed docs and Scientist knowledge with R02 pre-closeout evidence.
-- Run exact final branch Windows CI, then merge to main only if green.
-- Revalidate main after merge before advancing to the next source-only R02 implementation slice.
+- Regenerate governed docs and Scientist knowledge with exact R02 pre-closeout evidence.
+- Run exact final branch Windows CI, then merge only if all jobs remain green.
+- Revalidate main after merge before any R02 executor/trainer slice.
 
 ## Explicitly blocked
 - Owner-PC testing between ordinary GitHub development phases.
 - Any real current-epoch R00, R01 or R02 scientific execution.
-- Any R02 start/authorization mutation in this source-foundation phase.
-- Model training or Cheap Screen execution.
+- Any R02 model-training or Cheap Screen executor in this authorization-freeze phase.
+- Automatic second Discovery block creation.
+- Cheap Screen scientific qualification or Qualified Pool admission.
 - ONNX generation.
 - Research Challenger creation.
 - Strategy Champion mutation.
 - Live trading.
-- Adding heavy ML dependencies before an executing R02 slice requires them.
-- Unrelated Strategy, optimizer, EA, database-schema or UI refactors.
+- Adding heavy ML runtime dependencies before an executing R02 slice requires them.
+- Unrelated Strategy, optimizer, EA or UI refactors.

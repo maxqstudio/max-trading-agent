@@ -692,8 +692,8 @@
       "kind": "function",
       "label": "backend/max_backend/scientist_knowledge.py::_canonical_json",
       "language": "Python",
-      "line_end": 95,
-      "line_start": 88,
+      "line_end": 98,
+      "line_start": 91,
       "locator": "backend/max_backend/scientist_knowledge.py::_canonical_json"
     },
     {
@@ -701,8 +701,8 @@
       "kind": "function",
       "label": "backend/max_backend/scientist_knowledge.py::_sha256_bytes",
       "language": "Python",
-      "line_end": 79,
-      "line_start": 78,
+      "line_end": 82,
+      "line_start": 81,
       "locator": "backend/max_backend/scientist_knowledge.py::_sha256_bytes"
     },
     {
@@ -710,8 +710,8 @@
       "kind": "function",
       "label": "backend/max_backend/scientist_knowledge.py::knowledge_sha256",
       "language": "Python",
-      "line_end": 130,
-      "line_start": 129,
+      "line_end": 133,
+      "line_start": 132,
       "locator": "backend/max_backend/scientist_knowledge.py::knowledge_sha256"
     },
     {
@@ -719,8 +719,8 @@
       "kind": "function",
       "label": "backend/max_backend/scientist_knowledge.py::knowledge_status",
       "language": "Python",
-      "line_end": 151,
-      "line_start": 133,
+      "line_end": 154,
+      "line_start": 136,
       "locator": "backend/max_backend/scientist_knowledge.py::knowledge_status"
     },
     {
@@ -728,8 +728,8 @@
       "kind": "function",
       "label": "backend/max_backend/scientist_knowledge.py::load_knowledge",
       "language": "Python",
-      "line_end": 126,
-      "line_start": 98,
+      "line_end": 129,
+      "line_start": 101,
       "locator": "backend/max_backend/scientist_knowledge.py::load_knowledge"
     },
     {
@@ -737,8 +737,8 @@
       "kind": "function",
       "label": "backend/max_backend/scientist_knowledge.py::source_sha256",
       "language": "Python",
-      "line_end": 85,
-      "line_start": 82,
+      "line_end": 88,
+      "line_start": 85,
       "locator": "backend/max_backend/scientist_knowledge.py::source_sha256"
     },
     {
@@ -967,7 +967,7 @@
       "locator": "backend/max_backend/scientist_store.py::scientist_database_status"
     }
   ],
-  "observed_head": "02a5ae48658021c58a283c244a3b65b48e7f7a2b",
+  "observed_head": "c9be8c556e7626db1f34668c51194af35aad2be2",
   "schema_version": 1,
-  "source_digest": "46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c7986bda"
+  "source_digest": "8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb"
 }

@@ -174,6 +174,20 @@
       "decision": "Hosted R02 source work may define deterministic candidate identity/planning contracts and read-only preflight before a real R01 result exists, but it must not expose a start endpoint, persist scientific candidate outcomes, train models, qualify candidates, or bypass the later explicit Owner R02 authorization.",
       "rationale": "Build and test the control contract early without confusing source readiness with scientific execution or qualification authority.",
       "status": "CURRENT"
+    },
+    {
+      "id": "D-026",
+      "title": "Freeze R02 authorization before execution",
+      "decision": "R02 Owner authorization persists one immutable FROZEN_WAITING_EXECUTION Discovery block and immutable candidate specs. Authorization is intentionally separated from any future trainer/executor and cannot create scientific results, qualification, ONNX, Research Challenger or Champion authority.",
+      "rationale": "Separate what is authorized from what is executed so retries, cross-epoch requests, plan tampering and accidental training cannot blur causal scientific authority.",
+      "status": "CURRENT"
+    },
+    {
+      "id": "D-027",
+      "title": "Advance cumulative SQLite schema to 11",
+      "decision": "The durable R02 authorization, Discovery-block and candidate-spec tables advance CURRENT_SCHEMA_VERSION from 10 to 11.",
+      "rationale": "Persistent schema additions require a distinct launcher/database authority version; keeping version 10 would make pre-R02 and post-R02 databases indistinguishable by schema authority.",
+      "status": "CURRENT"
     }
   ],
   "schema_version": 1

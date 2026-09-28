@@ -4810,12 +4810,12 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::migrate_current",
       "language": "Python",
-      "line_end": 504,
+      "line_end": 581,
       "line_start": 137,
       "locator": "backend/max_backend/workflow_store.py::migrate_current"
     }
   ],
-  "observed_head": "02a5ae48658021c58a283c244a3b65b48e7f7a2b",
+  "observed_head": "c9be8c556e7626db1f34668c51194af35aad2be2",
   "schema_version": 1,
-  "source_digest": "46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c7986bda"
+  "source_digest": "8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb"
 }

@@ -203,6 +203,7 @@ def main() -> int:
                 "Current Research stage is derived from immutable R00 history plus the persisted R01 run; R00 evidence is not rewritten after R01 begins.",
                 "R01 terminal publication atomically binds run state, immutable artifacts, gate events and non-adaptive Research Memory, then stops waiting for Owner.",
                 "R01 performs zero model training, zero ONNX export, zero Research Challenger creation, no Champion mutation and cannot execute R02.",
+                "R02 frozen Discovery authorization is immutable, one-block-per-Research and non-executing; plan/candidate hashes are revalidated at persistence and no Cheap Screen result or qualification is created.",
             ],
         },
         {
@@ -254,7 +255,7 @@ def main() -> int:
         "planned_capabilities": [
             "Current-epoch R00 initialization and acceptance under the fresh epoch before any real R01 execution",
             "R01 current-lineage source binding is merged/revalidated; real current-epoch R00/R01 execution remains deferred to final Owner runtime",
-            "R02 source foundation may define deterministic Discovery planning and read-only preflight; real R02 start/Cheap Screen execution still requires accepted current R01 plus separate explicit Owner authorization",
+            "R02 source can deterministically plan and freeze one explicit Owner-authorized Discovery block after accepted current R01 authority; frozen authorization remains non-executing and real Cheap Screen training/results remain separately blocked",
         ],
         "explicit_deferred_capabilities": [
             "model training",

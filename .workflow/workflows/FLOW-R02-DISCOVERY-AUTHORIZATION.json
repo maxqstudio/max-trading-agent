@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "flow_id": "FLOW-R02-DISCOVERY-AUTHORIZATION",
+  "title": "R02 Owner authorization and immutable Discovery freeze",
+  "purpose": "Validate explicit Owner authorization against current accepted R01 output, then persist one immutable non-executing Discovery block and candidate set.",
+  "critical": true,
+  "authority": "Owner explicit confirmation + deterministic R02 planner/store + accepted current R01 immutable output authority.",
+  "entry_condition": "R02 preflight is READY_FOR_OWNER_AUTHORIZATION and caller submits the exact canonical plan plus OWNER_EXPLICIT_R02_DISCOVERY_AUTHORIZE.",
+  "source_owners": [
+    "backend/max_backend/research_api.py::authorize_research_r02",
+    "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
+    "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+    "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block"
+  ],
+  "states": [
+    "READY_FOR_OWNER_AUTHORIZATION",
+    "AUTHORIZATION_VALIDATED",
+    "FROZEN_WAITING_EXECUTION"
+  ],
+  "transitions": [
+    {
+      "from": "READY_FOR_OWNER_AUTHORIZATION",
+      "to": "AUTHORIZATION_VALIDATED",
+      "action": "Validate exact Owner confirmation, Research identity, accepted R01 output and canonical plan authority.",
+      "side_effects": []
+    },
+    {
+      "from": "AUTHORIZATION_VALIDATED",
+      "to": "FROZEN_WAITING_EXECUTION",
+      "action": "Atomically persist immutable authorization, one bounded Discovery block and immutable candidate specs in one SQLite transaction.",
+      "side_effects": [
+        "R02_AUTHORIZATION_ROW",
+        "R02_DISCOVERY_BLOCK",
+        "R02_CANDIDATE_SPECS"
+      ]
+    }
+  ],
+  "invariants": [
+    "Authorization is not scientific execution and creates no training or Cheap Screen result.",
+    "Exactly one different Discovery block per Research identity is permitted; exact replay is idempotent.",
+    "Authorization, plan and candidate identities are recomputed at persistence boundary.",
+    "Production authorization+block+candidate freeze is atomic: either all rows commit or none of the new authority rows persist.",
+    "Frozen rows are update-immutable and append-only.",
+    "Candidate count and compute budget are explicit and frozen.",
+    "Cheap Screen has zero qualification authority and R03 owns future Qualified Pool admission.",
+    "No ONNX, Research Challenger or Champion mutation occurs."
+  ],
+  "failure_behavior": [
+    "Missing/wrong Owner confirmation, stale Research/R01 output, tampered hashes/IDs, prior scientific side effects or a different second block fail closed.",
+    "Any persistence fault while creating a new authorization/block/candidate set rolls back the entire new R02 authority transaction; no orphan immutable authorization is permitted."
+  ],
+  "restart_behavior": [
+    "Exact same authorization/plan replay is idempotent; a different plan for the same Research identity is rejected."
+  ],
+  "rollback_behavior": [
+    "Production authorize-and-freeze uses one SQLite transaction. Candidate/block failure rolls back newly inserted authorization, block and candidate rows together."
+  ],
+  "tests": [
+    "backend/tests/test_r02_authorization_service.py",
+    "backend/tests/test_r02_authorization_store.py",
+    "backend/tests/test_r02_preflight.py"
+  ],
+  "sequence_session": "docs/sequence/sessions/FLOW-R02-DISCOVERY-AUTHORIZATION.json"
+}

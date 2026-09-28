@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -21,7 +23,7 @@ from .research_r01_service import (
     r01_source_overview,
     start_r01,
 )
-from .research_r02_service import r02_preflight
+from .research_r02_service import authorize_r02_discovery, r02_preflight
 
 
 class R00StartRequest(BaseModel):
@@ -48,6 +50,14 @@ class R01SourcePrepareRequest(BaseModel):
     from_date: str
     to_date: str
     confirmed: bool
+
+
+class R02AuthorizeRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    confirmed: bool
+    owner_confirmation: str
+    plan: dict[str, Any]
 
 
 class R01StartRequest(BaseModel):
@@ -179,6 +189,29 @@ def get_r02_preflight() -> dict:
         return r02_preflight()
     except RuntimeError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
+@router.post("/api/research/r02/authorize")
+def authorize_research_r02(payload: R02AuthorizeRequest) -> dict:
+    try:
+        return authorize_r02_discovery(payload.model_dump())
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except (RuntimeError, ValueError) as exc:
+        message = str(exc)
+        conflict_tokens = (
+            "STALE",
+            "COLLISION",
+            "ALREADY",
+            "INTEGRITY",
+            "MISMATCH",
+            "IMMUTABLE",
+            "REQUIRED",
+            "FROZEN",
+            "NOT_READY",
+        )
+        code = 409 if any(token in message for token in conflict_tokens) else 400
+        raise HTTPException(status_code=code, detail=message) from exc
 
 
 @router.get("/api/research/{research_id}")

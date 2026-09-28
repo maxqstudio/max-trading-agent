@@ -86,6 +86,41 @@
         "Backend 537 PASS; frontend 53 PASS across 10 files; source-only/security, Skill Workflow provenance/STRICT, generated governance/sequence, pip check, lint/build/npm dependency tree PASS.",
         "Candidate identity is bound to exact R01 output authority; real R02 start/training/qualification remains blocked."
       ]
+    },
+    {
+      "date": "2026-09-28",
+      "title": "R02 authorization/frozen-block source phase",
+      "type": "source_foundation",
+      "changes": [
+        "Add explicit Owner R02 Discovery authorization that freezes but does not execute one bounded block.",
+        "Persist immutable R02 authorization, Discovery block and candidate specs with append-only/update-immutable triggers.",
+        "Recompute authorization, plan and candidate identities at the store boundary and reject tampering/replay collisions/cross-authority mismatches.",
+        "Advance cumulative SQLite schema version from 10 to 11.",
+        "Targeted Windows run 36378628948 passed 59 R02 tests before governance regeneration.",
+        "No trainer, Cheap Screen outcome, scientific qualification, ONNX, Research Challenger or Champion mutation is introduced."
+      ]
+    },
+    {
+      "date": "2026-09-28",
+      "title": "R02 authorization freeze atomic hardening",
+      "type": "repair",
+      "changes": [
+        "Move production Owner authorization + Discovery block + candidate-spec persistence into one SQLite transaction.",
+        "Add fault-injection rollback regression proving a candidate insert failure leaves zero new R02 authorization, block and candidate rows.",
+        "Windows targeted run 36380098875 passed 61 R02 tests at f4c05908114bc3d830bd39b4eb864ce105301991.",
+        "No trainer, Cheap Screen result, qualification, ONNX, Research Challenger or Champion mutation is opened."
+      ]
+    },
+    {
+      "date": "2026-09-28",
+      "title": "R02 authorization freeze pre-closeout",
+      "type": "acceptance",
+      "changes": [
+        "Exact branch Windows CI run 36380453938 passed at 7f60da88d25d38753b200dceaa71131856304dd9.",
+        "Backend 558 PASS; frontend 53 PASS across 10 files; source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, lint/build/npm dependency tree PASS.",
+        "Atomic targeted run 36380098875 passed 61 R02 tests including rollback fault injection.",
+        "Real R02 execution/training/qualification and Owner runtime remain NOT_PROVEN."
+      ]
     }
   ],
   "schema_version": 1
