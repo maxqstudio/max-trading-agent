@@ -202,23 +202,24 @@
       ]
     },
     {
-      "claim": "R02 source foundation may expose deterministic candidate-plan contracts and read-only preflight, but real R02 authorization/execution remains blocked in hosted development; opening R02 still requires an accepted current-epoch R01 scientific result plus separate Owner authorization.",
+      "claim": "R02 source may now freeze one Owner-authorized bounded Discovery block after an accepted current R01 authority, but this is not scientific execution: no trainer, Cheap Screen outcome, qualification, R03 admission, ONNX, Challenger or Champion authority is opened.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
       "id": "TRUTH-R02-BLOCK-001",
       "runtime_evidence": [
-        "HOSTED_R02_SOURCE_FOUNDATION_RUN_36374307305",
         "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
       ],
       "source_owners": [
         "backend/max_backend/research_r02_service.py::r02_preflight",
-        "backend/max_backend/research_r02_contract.py::build_discovery_plan"
+        "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
+        "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block"
       ],
-      "status": "PASS",
+      "status": "NOT_PROVEN",
       "tests": [
         "backend/tests/test_r02_preflight.py",
-        "backend/tests/test_r02_discovery_contract.py"
+        "backend/tests/test_r02_authorization_service.py",
+        "backend/tests/test_r02_authorization_store.py"
       ]
     },
     {
@@ -237,6 +238,27 @@
       "tests": [
         "backend/tests/test_m05_candidate_tree_scan.py"
       ]
+    },
+    {
+      "id": "TRUTH-R02-FREEZE-001",
+      "claim": "R02 authorization/frozen Discovery authority is deterministic and immutable: exact Owner confirmation, current Research/R01 output lineage, plan hash/id, candidate identities, one-block cardinality and explicit compute budget are frozen before any future executor may exist.",
+      "documents": [
+        "PROJECT_TRUTH_SYNC.md"
+      ],
+      "source_owners": [
+        "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
+        "backend/max_backend/research_r02_store.py::create_r02_authorization",
+        "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block"
+      ],
+      "tests": [
+        "backend/tests/test_r02_authorization_service.py",
+        "backend/tests/test_r02_authorization_store.py"
+      ],
+      "runtime_evidence": [
+        "HOSTED_SYNTHETIC_ONLY",
+        "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
+      ],
+      "status": "NOT_PROVEN"
     }
   ],
   "relations": [
@@ -257,6 +279,12 @@
       "notes": "R02 remains blocked while no accepted R01 scientific result exists.",
       "other_claim_id": "TRUTH-R01-STATE-001",
       "relation": "REQUIRES"
+    },
+    {
+      "claim_id": "TRUTH-R02-FREEZE-001",
+      "other_claim_id": "TRUTH-R02-BLOCK-001",
+      "relation": "REQUIRES",
+      "notes": "Frozen authorization preserves the execution block; authorization is not scientific execution."
     }
   ],
   "schema_version": 1

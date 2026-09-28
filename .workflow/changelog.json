@@ -86,6 +86,19 @@
         "Backend 537 PASS; frontend 53 PASS across 10 files; source-only/security, Skill Workflow provenance/STRICT, generated governance/sequence, pip check, lint/build/npm dependency tree PASS.",
         "Candidate identity is bound to exact R01 output authority; real R02 start/training/qualification remains blocked."
       ]
+    },
+    {
+      "date": "2026-09-28",
+      "title": "R02 authorization/frozen-block source phase",
+      "type": "source_foundation",
+      "changes": [
+        "Add explicit Owner R02 Discovery authorization that freezes but does not execute one bounded block.",
+        "Persist immutable R02 authorization, Discovery block and candidate specs with append-only/update-immutable triggers.",
+        "Recompute authorization, plan and candidate identities at the store boundary and reject tampering/replay collisions/cross-authority mismatches.",
+        "Advance cumulative SQLite schema version from 10 to 11.",
+        "Targeted Windows run 36378628948 passed 59 R02 tests before governance regeneration.",
+        "No trainer, Cheap Screen outcome, scientific qualification, ONNX, Research Challenger or Champion mutation is introduced."
+      ]
     }
   ],
   "schema_version": 1

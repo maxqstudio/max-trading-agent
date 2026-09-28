@@ -290,11 +290,43 @@
         "backend/tests/test_r02_preflight.py"
       ],
       "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real R02 execution/training and Owner MT5/browser runtime remain deferred."
+    },
+    {
+      "flow_id": "FLOW-R02-DISCOVERY-AUTHORIZATION",
+      "mode": "DURING",
+      "scope": "CURRENT",
+      "declared_entries": [
+        "backend/max_backend/research_api.py::authorize_research_r02",
+        "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
+        "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block"
+      ],
+      "python_source_owners_declared": 4,
+      "python_source_owners_in_static_graph": [
+        "backend/max_backend/research_api.py::authorize_research_r02",
+        "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
+        "backend/max_backend/research_r02_store.py::create_r02_authorization",
+        "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block"
+      ],
+      "python_source_owners_outside_static_reachable_graph": [],
+      "non_python_structured_source_owners": [],
+      "generated_nodes": 0,
+      "generated_edges": 0,
+      "source_digest": "",
+      "semantic_review": "PASS",
+      "outside_graph_classification": "NONE",
+      "outside_graph_resolution": "NOT_APPLICABLE",
+      "unresolved_bindings": [],
+      "tests": [
+        "backend/tests/test_r02_authorization_service.py",
+        "backend/tests/test_r02_authorization_store.py",
+        "backend/tests/test_r02_preflight.py"
+      ],
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates synthetic SQLite/API contracts only; real R02 authorization/execution and Owner MT5/browser runtime remain deferred."
     }
   ],
   "generation_anchor_policy": {
     "meaning": "Pre-commit generation anchor only; final hosted provenance is the exact GitHub candidate SHA and final real-runtime provenance is the final main SHA accepted on Owner PC. Structural sequence binding remains deterministic product source_digest.",
-    "observed_head": "02a5ae48658021c58a283c244a3b65b48e7f7a2b",
+    "observed_head": "9983b8425fbd51c4688ac906bd9c14d80aa918be",
     "source_digest": "46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c7986bda"
   },
   "mode": "DURING",

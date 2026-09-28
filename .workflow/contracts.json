@@ -275,10 +275,18 @@
     {
       "method": "GET",
       "path": "/api/research/r02/preflight",
-      "purpose": "Read R02 Discovery source readiness without starting or authorizing R02",
+      "purpose": "Read R02 readiness or currently frozen Discovery authorization without starting or executing R02",
       "authority": "backend/max_backend/research_r02_service.py::r02_preflight",
       "mutation": "none scientific; ordinary store migration/read compatibility only",
-      "error_behavior": "Missing/unaccepted R01 returns BLOCKED; contradictory R01 output/integrity/side-effect authority fails closed with 409."
+      "error_behavior": "Absent/unaccepted R01 returns BLOCKED; contradictory R01 authority fails closed; a frozen block returns FROZEN_WAITING_EXECUTION with execution still unavailable."
+    },
+    {
+      "method": "POST",
+      "path": "/api/research/r02/authorize",
+      "purpose": "Freeze one exact Owner-authorized bounded R02 Discovery plan without starting training",
+      "authority": "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
+      "mutation": "Creates immutable R02 authorization, one FROZEN_WAITING_EXECUTION block and immutable candidate specs only; no scientific counters or outcomes mutate.",
+      "error_behavior": "Missing confirmation, stale Research/R01 authority, tampered plan/candidate identity, replay collision or second different block fail closed with 4xx."
     }
   ],
   "data_contracts": [
