@@ -22,7 +22,7 @@
       "python_source_owners_outside_static_reachable_graph": [
         "backend/max_backend/challenger_operations.py::run_challenger_backtest"
       ],
-      "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
       "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca",
@@ -52,7 +52,7 @@
         "backend/max_backend/challenger_operations.py::challenger_registry_page"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
       "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca",
@@ -83,7 +83,7 @@
         "backend/max_backend/promotion_service.py::verify_current_strategy_champion"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
       "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca",
@@ -116,7 +116,7 @@
         "backend/max_backend/challenger_store.py::consumed_source_identities"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
       "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca",
@@ -147,7 +147,7 @@
         "backend/max_backend/research_service.py::canonical_research_stage"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
       "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca",
@@ -187,7 +187,7 @@
         "backend/max_backend/research_r01_service.py::r01_detail"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
       "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca",
@@ -221,7 +221,7 @@
         "backend/max_backend/research_r01_service.py::start_r01"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
       "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca",
@@ -251,7 +251,7 @@
         "backend/max_backend/scientist_api.py::get_status"
       ],
       "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "GitHub Actions validates source/build/test behavior only. Real Owner-PC MT5/MetaEditor/browser/filesystem runtime remains OWNER_PC_FINAL_ACCEPTANCE_REQUIRED after the hosted roadmap; runtime trace is not required by current sequence policy.",
+      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
       "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca",
@@ -264,7 +264,7 @@
     }
   ],
   "generation_anchor_policy": {
-    "meaning": "Hosted H0 regeneration anchor only; exact phase/final acceptance SHA remains external while structural sequence binding uses deterministic product source_digest.",
+    "meaning": "Pre-commit generation anchor only; final hosted provenance is the exact GitHub candidate SHA and final real-runtime provenance is the final main SHA accepted on Owner PC. Structural sequence binding remains deterministic product source_digest.",
     "observed_head": "9c14b214831c8fd57ee1f78b243a07a2957b36db",
     "source_digest": "be9f2552b924ef53fc6d7ba1b34c0b6432c92dbde50bf30486a0562889a5a0ca"
   },
@@ -281,5 +281,11 @@
   "schema_version": 1,
   "scope": "CURRENT",
   "skill_authority_sha": "9e22feddb8f94e8c0f1af6a33e14b64de5068f8f",
-  "unresolved_critical_sequence_bindings": 0
+  "unresolved_critical_sequence_bindings": 0,
+  "hosted_governance_rebase": {
+    "repository": "maxqstudio/max-trading-agent",
+    "windows_ci_authority": ".github/workflows/windows-ci.yml",
+    "real_runtime": "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED",
+    "product_source_change": "NONE"
+  }
 }
