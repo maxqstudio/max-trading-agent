@@ -859,3 +859,37 @@ def test_r02_integrity_rejects_hash_consistent_semantic_authorization_forgery() 
         match="R02_INTEGRITY_EXECUTION_AUTHORITY_MISMATCH",
     ):
         _authorization_payload(row, RESEARCH_ID)
+
+
+
+def test_r02_integrity_invalid_candidate_json_fails_before_decoded_store_read(
+    tmp_path: Path,
+) -> None:
+    db, block = _frozen_block(tmp_path)
+    candidate_id = block["candidates"][0]["candidate_id"]
+    _drop_trigger_and_update(
+        db,
+        "research_r02_candidate_no_update",
+        "UPDATE research_r02_candidate_specs SET spec_json=? WHERE candidate_id=?",
+        ("{not-json", candidate_id),
+    )
+    with pytest.raises(
+        RuntimeError,
+        match="R02_INTEGRITY_CANDIDATE_SPEC_JSON_INVALID",
+    ):
+        verify_r02_authority_integrity(RESEARCH_ID, path=db)
+
+
+def test_r02_store_json_decoders_fail_closed_on_corrupt_json(tmp_path: Path) -> None:
+    db, block = _frozen_block(tmp_path)
+    _drop_trigger_and_update(
+        db,
+        "research_r02_block_no_update",
+        "UPDATE research_r02_discovery_blocks SET compute_budget_json=? WHERE research_id=?",
+        ("{not-json", RESEARCH_ID),
+    )
+    with pytest.raises(
+        RuntimeError,
+        match="R02_DISCOVERY_COMPUTE_BUDGET_JSON_INVALID",
+    ):
+        get_r02_discovery_block(RESEARCH_ID, path=db)

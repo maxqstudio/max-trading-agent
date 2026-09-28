@@ -48,7 +48,7 @@ def _install(
     monkeypatch.setattr(
         r02,
         "verify_r02_authority_integrity",
-        lambda *_args, **_kwargs: {"status": "VERIFIED_FROZEN"},
+        lambda *_args, **_kwargs: {"status": "ABSENT"},
     )
 
 
@@ -174,6 +174,11 @@ def test_frozen_discovery_block_prevents_second_authorization_surface(
                 "execution_semantics": "FROZEN_ONLY_NOT_EXECUTED",
             },
         },
+    )
+    monkeypatch.setattr(
+        r02,
+        "verify_r02_authority_integrity",
+        lambda *_args, **_kwargs: {"status": "VERIFIED_FROZEN"},
     )
     result = r02.r02_preflight(path=Path("unused.db"))
     assert result["status"] == "FROZEN_WAITING_EXECUTION"

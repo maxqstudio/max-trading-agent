@@ -91,17 +91,26 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
     if side_effects["status"] != "PASS":
         raise RuntimeError("R02_PREVIOUS_SIDE_EFFECT_REGRESSION")
 
-    frozen = get_r02_discovery_block(research_id, path=path)
-    if frozen is not None:
-        r02_integrity = verify_r02_authority_integrity(
-            research_id,
-            path=path,
+    r02_integrity = verify_r02_authority_integrity(
+        research_id,
+        path=path,
+    )
+    integrity_status = str(r02_integrity.get("status") or "")
+    if integrity_status != "ABSENT":
+        if integrity_status not in {"VERIFIED_FROZEN", "VERIFIED_COMPLETE"}:
+            raise RuntimeError("R02_AUTHORITY_INTEGRITY_REQUIRED")
+        frozen = get_r02_discovery_block(research_id, path=path)
+        if frozen is None:
+            raise RuntimeError("R02_VERIFIED_BLOCK_MISSING")
+        terminal = (
+            get_r02_terminal(research_id, path=path)
+            if integrity_status == "VERIFIED_COMPLETE"
+            else None
         )
-        terminal = get_r02_terminal(research_id, path=path)
         expected_integrity = (
             "VERIFIED_COMPLETE" if terminal is not None else "VERIFIED_FROZEN"
         )
-        if str(r02_integrity.get("status") or "") != expected_integrity:
+        if integrity_status != expected_integrity:
             raise RuntimeError("R02_AUTHORITY_INTEGRITY_REQUIRED")
         if terminal is not None:
             return {

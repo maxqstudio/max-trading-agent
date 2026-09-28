@@ -13,10 +13,23 @@ from .research_r02_outcome import build_terminal_manifest
 from .workflow_store import migrate_current
 
 
+def _decode_json_object(raw: Any, code: str) -> dict[str, Any]:
+    try:
+        value = json.loads(str(raw))
+    except (TypeError, ValueError, json.JSONDecodeError) as exc:
+        raise RuntimeError(code) from exc
+    if not isinstance(value, dict):
+        raise RuntimeError(code)
+    return value
+
+
 def _decode_authorization(row: Any) -> dict[str, Any]:
     result = dict(row)
     result["confirmed"] = bool(result["confirmed"])
-    result["payload"] = json.loads(result.pop("payload_json"))
+    result["payload"] = _decode_json_object(
+        result.pop("payload_json"),
+        "R02_AUTHORIZATION_PAYLOAD_JSON_INVALID",
+    )
     return result
 
 
@@ -142,11 +155,17 @@ def get_r02_discovery_block(
             (str(block["block_id"]),),
         ).fetchall()
     result = dict(block)
-    result["compute_budget"] = json.loads(result.pop("compute_budget_json"))
+    result["compute_budget"] = _decode_json_object(
+        result.pop("compute_budget_json"),
+        "R02_DISCOVERY_COMPUTE_BUDGET_JSON_INVALID",
+    )
     result["candidates"] = []
     for row in candidates:
         item = dict(row)
-        item["spec"] = json.loads(item.pop("spec_json"))
+        item["spec"] = _decode_json_object(
+            item.pop("spec_json"),
+            "R02_CANDIDATE_SPEC_JSON_INVALID",
+        )
         result["candidates"].append(item)
     return result
 
@@ -463,8 +482,9 @@ def get_r02_terminal(
     if row is None:
         return None
     result = dict(row)
-    result["compute_consumed"] = json.loads(
-        result.pop("compute_consumed_json")
+    result["compute_consumed"] = _decode_json_object(
+        result.pop("compute_consumed_json"),
+        "R02_TERMINAL_COMPUTE_JSON_INVALID",
     )
     return result
 
@@ -493,7 +513,10 @@ def get_r02_outcome_ledger(
     outcomes = []
     for row in rows:
         item = dict(row)
-        item["outcome"] = json.loads(item.pop("outcome_json"))
+        item["outcome"] = _decode_json_object(
+            item.pop("outcome_json"),
+            "R02_OUTCOME_JSON_INVALID",
+        )
         outcomes.append(item)
     return {
         "block": block,
@@ -538,7 +561,10 @@ def commit_r02_terminal_outcomes(
         manifest = build_terminal_manifest(
             block_id=str(block["block_id"]),
             candidate_ids=candidate_ids,
-            compute_budget=json.loads(str(block["compute_budget_json"])),
+            compute_budget=_decode_json_object(
+                block["compute_budget_json"],
+                "R02_DISCOVERY_COMPUTE_BUDGET_JSON_INVALID",
+            ),
             outcome_requests=outcome_requests,
         )
 
