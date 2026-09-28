@@ -4,7 +4,7 @@
 
 ## Evidence boundary
 
-Phase H0 Hosted Governance Rebase closeout candidate. Windows CI run 36364128446 on 17b69115ab179adc63c4dc17e943d3fa257063f1 passed source-only/public-secret policy, Skill Workflow provenance/STRICT selftest, project governance, backend 488 tests, frontend 53 tests across 10 files, lint/build/dependency checks and pip check. Real Owner-PC/MT5 runtime remains intentionally NOT_PROVEN and is outside H0.
+Skill Workflow authority refresh after accepted H0 main 08f5a741412a2f5c69478b157529245b9a9a260e. Current Skill main 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 differs from H0 authority by one governance-only deterministic-LF commit. This phase may change governance tooling/specs/generated docs only; product/scientific/runtime behavior remains unchanged and Owner-PC/MT5 runtime remains intentionally NOT_PROVEN.
 
 Final tested source: external final acceptance evidence.
 Current source digest: d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0
@@ -20,6 +20,11 @@ Current source digest: d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2
 | H0-07 | Frontend regression does not fall below 53 PASS across 10 files; lint/build/npm dependency tree pass. | Windows CI frontend | PASS |
 | H0-08 | R01 retired hardcoded lineage remains explicitly blocked for future execution and is not weakened during H0. | .workflow state/known-defects + unchanged product source | PASS |
 | H0-09 | No real Research execution, training, ONNX, Challenger/Champion mutation or live trading occurs during H0. | Source-only GitHub phase; no runtime artifacts; product source unchanged | PASS |
+| S1-01 | Current Skill Workflow main 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 is the declared governance authority; prior 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f remains historical H0 evidence. | Skill main exact SHA + .workflow current semantic authority | PASS |
+| S1-02 | Changed Skill tools are re-vendored byte-identically with no MAX-local validator compatibility patch. | Windows CI Skill provenance comparison | PASS |
+| S1-03 | Project Truth sync writes acceptance.json with byte-exact LF and STRICT selftest proves the deterministic serialization contract. | Skill strict selftest DETERMINISTIC_JSON_LF + generated governance validation | PASS |
+| S1-04 | Governance decision IDs are unique after removal of duplicate D-018/D-019/D-020 entries. | .workflow/decisions.json semantic audit | PASS |
+| S1-05 | No product/scientific/database-schema behavior changes occur in the Skill authority refresh. | Phase diff + Windows cumulative regression | PASS |
 
 ## Test commands
 

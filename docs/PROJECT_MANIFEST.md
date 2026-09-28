@@ -10,9 +10,9 @@ Governance profile: strict
 
 ## Repositories
 Repository: maxqstudio/max-trading-agent
-Active branch: work/hosted-governance-rebase
+Active branch: work/skill-authority-refresh
 Current authoritative SHA: external final acceptance evidence
-Last accepted SHA: ce66946efb23cd479b43239087601ad30c8ac239
+Last accepted SHA: 08f5a741412a2f5c69478b157529245b9a9a260e
 Current source digest: d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0
 
 ## Authorities
@@ -72,4 +72,4 @@ Generated from PROJECT_PROFILE.yaml.
 - R01 source/runtime readiness is not R01 scientific PASS.
 - R02 remains blocked until an accepted R01 scientific result and separate Owner authorization.
 - Protected Locked OOS/Fresh outcomes must not silently become adaptive tuning feedback.
-- Current governance method is Skill Workflow exact SHA 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f with generated documentation and DURING sequence evidence.
+- Current governance method is Skill Workflow exact SHA 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 with generated documentation and DURING sequence evidence.

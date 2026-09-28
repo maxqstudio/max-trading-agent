@@ -39,3 +39,14 @@ Type: governance
 - Prior authority 414104e9d56b59374a6e3c94c6883d295427cfa3 remains historical; the Skill advance only adds explicit SELFTEST=PASS and STRICT_SELFTEST=PASS output markers.
 - Re-vendor the current project-local governance tool pack byte-identically.
 - Preserve product behavior, scientific state, sequence mode and database schema unchanged.
+
+## 2026-09-28 — Forward-pin Skill authority for deterministic LF project truth
+
+Type: governance
+
+- Adopt exact current Skill Workflow main 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720.
+- Supersede 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f as current authority while retaining it as H0 historical evidence.
+- Re-vendor sync_project_truth.py and selftest_strict_project_workflow.py byte-identically; no MAX-local validator patch.
+- Enforce byte-exact LF serialization for .workflow/acceptance.json on Windows.
+- Repair duplicate D-018/D-019/D-020 governance decision IDs discovered during the refresh.
+- Preserve product behavior, scientific state, sequence mode and database schema unchanged.

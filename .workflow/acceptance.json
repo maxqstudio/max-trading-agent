@@ -71,40 +71,40 @@
       "status": "PASS"
     },
     {
+      "evidence": "Skill main exact SHA + .workflow current semantic authority",
       "id": "S1-01",
       "requirement": "Current Skill Workflow main 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 is the declared governance authority; prior 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f remains historical H0 evidence.",
-      "evidence": "Skill main exact SHA + .workflow current semantic authority",
       "status": "PASS"
     },
     {
+      "evidence": "Windows CI Skill provenance comparison",
       "id": "S1-02",
       "requirement": "Changed Skill tools are re-vendored byte-identically with no MAX-local validator compatibility patch.",
-      "evidence": "Windows CI Skill provenance comparison",
       "status": "PASS"
     },
     {
+      "evidence": "Skill strict selftest DETERMINISTIC_JSON_LF + generated governance validation",
       "id": "S1-03",
       "requirement": "Project Truth sync writes acceptance.json with byte-exact LF and STRICT selftest proves the deterministic serialization contract.",
-      "evidence": "Skill strict selftest DETERMINISTIC_JSON_LF + generated governance validation",
       "status": "PASS"
     },
     {
+      "evidence": ".workflow/decisions.json semantic audit",
       "id": "S1-04",
       "requirement": "Governance decision IDs are unique after removal of duplicate D-018/D-019/D-020 entries.",
-      "evidence": ".workflow/decisions.json semantic audit",
       "status": "PASS"
     },
     {
+      "evidence": "Phase diff + Windows cumulative regression",
       "id": "S1-05",
       "requirement": "No product/scientific/database-schema behavior changes occur in the Skill authority refresh.",
-      "evidence": "Phase diff + Windows cumulative regression",
       "status": "PASS"
     }
   ],
   "results": {
     "hosted_ci": {
-      "status": "PENDING_EXACT_BRANCH_CI",
-      "note": "Exact branch/main Windows CI closure is external evidence and is not self-referenced in tracked governance."
+      "note": "Exact branch/main Windows CI closure is external evidence and is not self-referenced in tracked governance.",
+      "status": "PENDING_EXACT_BRANCH_CI"
     },
     "regression": {
       "backend": 488,
