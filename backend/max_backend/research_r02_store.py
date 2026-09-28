@@ -514,6 +514,13 @@ def commit_r02_terminal_outcomes(
     if not research_id:
         raise ValueError("R02_OUTCOME_RESEARCH_ID_REQUIRED")
 
+    integrity = validate_r02_integrity(research_id, path=path)
+    if str(integrity.get("status") or "") not in {
+        "VERIFIED_FROZEN",
+        "VERIFIED_COMPLETE",
+    }:
+        raise RuntimeError("R02_INTEGRITY_REQUIRED")
+
     with connect(path) as conn:
         conn.execute("BEGIN IMMEDIATE")
         block = conn.execute(

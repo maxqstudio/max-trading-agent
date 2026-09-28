@@ -776,6 +776,40 @@ def test_r02_integrity_detects_candidate_spec_tamper(tmp_path: Path) -> None:
     assert "candidate_specs_integrity" in result["failures"]
 
 
+def test_terminal_commit_rejects_tampered_frozen_authority(
+    tmp_path: Path,
+) -> None:
+    db, block = _frozen_block(tmp_path)
+    candidate_id = block["candidates"][0]["candidate_id"]
+    with connect(db) as conn:
+        _drop_trigger(conn, "research_r02_candidate_no_update")
+        conn.execute(
+            """
+            UPDATE research_r02_candidate_specs
+            SET seed=999
+            WHERE candidate_id=?
+            """,
+            (candidate_id,),
+        )
+    with pytest.raises(RuntimeError, match="R02_INTEGRITY_REQUIRED"):
+        commit_r02_terminal_outcomes(
+            RESEARCH_ID,
+            _outcomes(block),
+            path=db,
+        )
+    with connect(db) as conn:
+        assert int(
+            conn.execute(
+                "SELECT COUNT(*) AS n FROM research_r02_candidate_outcomes"
+            ).fetchone()["n"]
+        ) == 0
+        assert int(
+            conn.execute(
+                "SELECT COUNT(*) AS n FROM research_r02_block_terminals"
+            ).fetchone()["n"]
+        ) == 0
+
+
 def test_r02_integrity_detects_outcome_tamper(tmp_path: Path) -> None:
     db, block = _frozen_block(tmp_path)
     ledger = commit_r02_terminal_outcomes(
