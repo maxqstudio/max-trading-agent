@@ -1,9 +1,11 @@
 # Phase-1 Architecture Contract
 
-## Isolation
+Status: HISTORICAL IMPLEMENTATION CONTRACT. Current generated architecture authority is `docs/ARCHITECTURE.md`; current source authority is `maxqstudio/max-trading-agent`.
 
-Rebuild root: D:\MAX_REBUILD
-Reference source: D:\MAX_MTF\MAX_MTF_v2_0_1 (read-only)
+## Historical isolation
+
+Historical rebuild root: D:\MAX_REBUILD
+Historical reference source: D:\MAX_MTF\MAX_MTF_v2_0_1 (read-only)
 
 The imported EA snapshot is byte-identical to the reference baseline and verified by SHA-256.
 Runtime rebuild code uses the rebuild snapshot, not the old project path.

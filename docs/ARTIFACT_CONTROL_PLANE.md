@@ -1,4 +1,4 @@
-# MAX Rebuild — Artifact Control Plane
+# MAX Trading Agent — Artifact Control Plane
 
 Status: M08 ACCEPTED authority with R00 Research artifact extension in source candidate.
 
@@ -187,7 +187,7 @@ Scientist operational chat data may be cleared only when safe; provider/settings
 
 Unit/integration tests use deterministic temporary DB/filesystem fixtures and may inject canonical roots. They do not copy or depend on mutable Owner `state/max.db`.
 
-Owner runtime acceptance is performed only after the exact GitHub candidate is frozen, the prior `D:\MAX_REBUILD` is deleted in full, and a clean clone is checked out at that exact SHA.
+Historical M08 Owner runtime acceptance was performed only after the exact GitHub candidate was frozen, the prior `D:\MAX_REBUILD` was deleted in full, and a clean clone was checked out at that exact SHA. Current development defers one final Owner-PC runtime acceptance until GitHub roadmap closure.
 
 ## Canonical Authority / Anti-Hardcoding Rules
 
@@ -195,8 +195,8 @@ The Artifact control plane consumes canonical runtime authority; it does not def
 
 Legacy `MAX_M06_*` and accepted milestone paths may be recognized only to preserve/read/clean known historical objects safely. Compatibility recognition must never cause new output to be written with historical naming.
 
-## Fresh-Clone Acceptance
+## Historical M08 Fresh-Clone Acceptance
 
-Before Owner-PC M08 acceptance, the GitHub candidate SHA must already be frozen. The old `D:\MAX_REBUILD` tree is then deleted entirely and recreated by a fresh clone at that exact SHA. No old SQLite state, evidence, generated artifacts, dependencies or build output is copied back. M08 E2E uses disposable data created after the fresh clone, and that data is cleaned using registered artifact/backtest/Challenger/Optimizer controls before Builder handoff.
+For the historical Owner-PC M08 acceptance, the GitHub candidate SHA had to be frozen first. The old `D:\MAX_REBUILD` tree is then deleted entirely and recreated by a fresh clone at that exact SHA. No old SQLite state, evidence, generated artifacts, dependencies or build output is copied back. M08 E2E uses disposable data created after the fresh clone, and that data is cleaned using registered artifact/backtest/Challenger/Optimizer controls before Builder handoff.
 
 This workflow proves that inventory, ownership, cleanup and deletion do not depend on hidden residue from earlier milestones or manual Explorer intervention.

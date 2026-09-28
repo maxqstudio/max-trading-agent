@@ -3,9 +3,9 @@ requires = ["setuptools>=75"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "max-rebuild"
+name = "max-trading-agent"
 version = "0.0.1"
-description = "MAX Phase-1 strategy lifecycle rebuild"
+description = "MAX Trading Agent Windows strategy and research control plane"
 requires-python = ">=3.12"
 dependencies = [
   "fastapi>=0.116",
