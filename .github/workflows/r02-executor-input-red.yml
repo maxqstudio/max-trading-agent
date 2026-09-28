@@ -1,0 +1,30 @@
+name: R02 Executor Input RED
+
+on:
+  push:
+    branches: ["work/r02-executor-input-contract"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: r02-executor-input-red
+  cancel-in-progress: true
+
+jobs:
+  red:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: Install locked dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.lock.txt
+      - name: RED expected - executor input contract not implemented yet
+        shell: pwsh
+        run: python -m pytest backend/tests/test_r02_executor_input_contract.py -q -o addopts=
