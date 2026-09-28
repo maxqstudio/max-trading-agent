@@ -130,7 +130,7 @@
   "schema_version": 1,
   "sequence_mode": "DURING",
   "sequence_session": "docs/sequence/sessions/ (10 current DURING sessions after R02 authorization flow)",
-  "sequence_sync_status": "NOT_PROVEN",
+  "sequence_sync_status": "PASS",
   "test_commands": [
     "python -m pytest backend/tests/test_r02_discovery_contract.py backend/tests/test_r02_preflight.py backend/tests/test_r02_authorization_store.py backend/tests/test_r02_authorization_service.py -q -o addopts=",
     "python .workflow/tools/validate_project_docs.py",
@@ -160,7 +160,7 @@
     "REFERENCE_SYNC": "NOT_PROVEN",
     "RUNTIME_E2E": "NOT_PROVEN",
     "SEMANTIC_SYNC": "NOT_PROVEN",
-    "SEQUENCE_SYNC": "NOT_PROVEN",
+    "SEQUENCE_SYNC": "PASS",
     "SOURCE_TESTS": "NOT_PROVEN",
     "STRUCTURAL_SYNC": "NOT_PROVEN",
     "TEST_RUNTIME_TRACEABILITY": "NOT_PROVEN"
