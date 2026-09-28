@@ -4,22 +4,22 @@
 
 ## Evidence boundary
 
-Phase H0 Hosted Governance Rebase. GitHub source and Windows CI are being established as current development authority. No Owner-PC or real MT5 runtime execution is part of H0; those claims remain NOT_PROVEN until final project acceptance.
+Phase H0 Hosted Governance Rebase closeout candidate. Windows CI run 36364128446 on 17b69115ab179adc63c4dc17e943d3fa257063f1 passed source-only/public-secret policy, Skill Workflow provenance/STRICT selftest, project governance, backend 488 tests, frontend 53 tests across 10 files, lint/build/dependency checks and pip check. Real Owner-PC/MT5 runtime remains intentionally NOT_PROVEN and is outside H0.
 
 Final tested source: external final acceptance evidence.
 Current source digest: d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
-| H0-01 | Current project identity/repository authority is maxqstudio/max-trading-agent; MAX REBUILD references remain only where historically correct. | .workflow semantic specs + generated docs | NOT_PROVEN |
-| H0-02 | GitHub Actions windows-latest is hosted build/test authority; Owner PC real MT5 runtime is final-only and not claimed by CI. | .github/workflows/windows-ci.yml + authority/architecture/state specs | NOT_PROVEN |
-| H0-03 | Public repository remains source-only and contains no tracked runtime/private state or detected plaintext production secret. | Source-only policy + redacted exact-tree secret scan | NOT_PROVEN |
-| H0-04 | Vendored Skill Workflow tools remain byte-identical to exact authority 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f and STRICT selftest passes. | Windows CI provenance + STRICT selftest | NOT_PROVEN |
-| H0-05 | Project Truth Compiler outputs and Scientist knowledge manifest are regenerated from current semantic/source authority. | sync_project_truth + build_scientist_knowledge + validate_project_docs | NOT_PROVEN |
-| H0-06 | Backend regression does not fall below migration floor 488 PASS. | Windows CI backend pytest | NOT_PROVEN |
-| H0-07 | Frontend regression does not fall below 53 PASS across 10 files; lint/build/npm dependency tree pass. | Windows CI frontend | NOT_PROVEN |
-| H0-08 | R01 retired hardcoded lineage remains explicitly blocked for future execution and is not weakened during H0. | .workflow state/known-defects + unchanged product source | NOT_PROVEN |
-| H0-09 | No real Research execution, training, ONNX, Challenger/Champion mutation or live trading occurs during H0. | Source-only GitHub phase; no runtime artifacts; product source unchanged | NOT_PROVEN |
+| H0-01 | Current project identity/repository authority is maxqstudio/max-trading-agent; MAX REBUILD references remain only where historically correct. | .workflow semantic specs + generated docs | PASS |
+| H0-02 | GitHub Actions windows-latest is hosted build/test authority; Owner PC real MT5 runtime is final-only and not claimed by CI. | .github/workflows/windows-ci.yml + authority/architecture/state specs | PASS |
+| H0-03 | Public repository remains source-only and contains no tracked runtime/private state or detected plaintext production secret. | Source-only policy + redacted exact-tree secret scan | PASS |
+| H0-04 | Vendored Skill Workflow tools remain byte-identical to exact authority 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f and STRICT selftest passes. | Windows CI provenance + STRICT selftest | PASS |
+| H0-05 | Project Truth Compiler outputs and Scientist knowledge manifest are regenerated from current semantic/source authority. | sync_project_truth + build_scientist_knowledge + validate_project_docs | PASS |
+| H0-06 | Backend regression does not fall below migration floor 488 PASS. | Windows CI backend pytest | PASS |
+| H0-07 | Frontend regression does not fall below 53 PASS across 10 files; lint/build/npm dependency tree pass. | Windows CI frontend | PASS |
+| H0-08 | R01 retired hardcoded lineage remains explicitly blocked for future execution and is not weakened during H0. | .workflow state/known-defects + unchanged product source | PASS |
+| H0-09 | No real Research execution, training, ONNX, Challenger/Champion mutation or live trading occurs during H0. | Source-only GitHub phase; no runtime artifacts; product source unchanged | PASS |
 
 ## Test commands
 

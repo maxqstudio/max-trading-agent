@@ -8,7 +8,7 @@ Governance profile: strict
 
 ## Current phase
 Phase: H0_HOSTED_GOVERNANCE_REBASE
-Status: ACTIVE
+Status: H0_CLOSEOUT_CANDIDATE
 
 ## Source
 Repository: maxqstudio/max-trading-agent
@@ -37,7 +37,7 @@ Current sequence session: docs/sequence/sessions/ (8 current DURING sessions)
 SEQUENCE_SYNC: PASS
 
 ## Proven
-- Migration baseline main ce66946efb23cd479b43239087601ad30c8ac239 is a public source-only snapshot whose clean Windows CI verification reported Source-only policy PASS, Skill Workflow provenance/STRICT selftest PASS, backend 488 PASS, frontend 53 PASS across 10 files, lint/build/dependency checks PASS.
+- Hosted H0 Windows CI run 36364128446 at tested SHA 17b69115ab179adc63c4dc17e943d3fa257063f1 passed source-only/public-secret policy, Skill Workflow provenance and STRICT selftest, project governance, backend 488 PASS, frontend 53 PASS across 10 files, lint/build/npm dependency tree PASS and pip check PASS.
 - Current Skill Workflow main is exactly 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f, matching the project pin at H0 start.
 - Previous-epoch R00 acceptance, Strategy Champion STRAT-20260924-115344-R01-P8912 and prior Research project are historical evidence only and are not current Research authority.
 - The source-governed fresh epoch declares Strategy Champion NONE, active Challenger 0, active Optimizer job NONE, current Research project NONE, R00 NOT STARTED, R01 BLOCKED / NOT STARTED, R02 BLOCKED / NOT STARTED, model training 0, ONNX 0 and Research Challenger 0.
@@ -48,7 +48,6 @@ SEQUENCE_SYNC: PASS
 - Protected outcome feedback is non-adaptive.
 
 ## Not proven
-- H0 hosted governance rebase acceptance until regenerated governance and exact-branch Windows CI are green.
 - Any real current-epoch runtime database bootstrap or operational row counts on Owner PC.
 - Real MT5 detection, MetaEditor compile, Strategy Tester, broker data, terminal data root or filesystem deployment.
 - Real browser E2E on the final Owner-PC checkout.
@@ -63,9 +62,9 @@ SEQUENCE_SYNC: PASS
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Complete H0 by rebasing current semantic authority to maxqstudio/max-trading-agent, regenerating Project Truth Compiler outputs, validating Skill Workflow, and running Windows GitHub Actions until green.
-- Merge H0 to main only after all hosted gates pass and main is revalidated.
-- Repair R01 current-R00 immutable lineage binding with negative cross-epoch/tamper tests before any future real R01 execution.
+- Remove the temporary H0 regeneration workflow after generated outputs are synchronized, then run final exact-branch Windows CI.
+- Merge H0 to main only after final branch CI is green, then revalidate main.
+- After H0 main revalidation, repair R01 current-R00 immutable lineage binding with negative wrong-ID/wrong-parent/wrong-Strategy/unaccepted/tampered/cross-epoch tests.
 - Continue source/design/test roadmap on GitHub; defer Owner-PC final runtime acceptance until GitHub development closure.
 
 ## Explicitly blocked

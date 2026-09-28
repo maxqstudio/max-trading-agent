@@ -73,19 +73,19 @@
   ],
   "results": {
     "hosted_ci": {
-      "status": "PASS_PRE_CLOSEOUT",
+      "note": "Final branch/main CI is external exact-SHA closure evidence and is not self-referenced in tracked governance.",
       "run_id": 36364128446,
-      "tested_sha": "17b69115ab179adc63c4dc17e943d3fa257063f1",
-      "note": "Final branch/main CI is external exact-SHA closure evidence and is not self-referenced in tracked governance."
+      "status": "PASS_PRE_CLOSEOUT",
+      "tested_sha": "17b69115ab179adc63c4dc17e943d3fa257063f1"
     },
     "regression": {
-      "backend_status": "PASS",
       "backend": 488,
-      "frontend_status": "PASS",
+      "backend_status": "PASS",
+      "build": "PASS",
       "frontend_files": 10,
+      "frontend_status": "PASS",
       "frontend_tests": 53,
       "lint": "PASS_0_WARNINGS_0_ERRORS",
-      "build": "PASS",
       "npm_ls_all": "PASS",
       "pip_check": "PASS"
     },

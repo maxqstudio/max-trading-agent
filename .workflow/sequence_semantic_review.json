@@ -265,7 +265,7 @@
   ],
   "generation_anchor_policy": {
     "meaning": "Pre-commit generation anchor only; final hosted provenance is the exact GitHub candidate SHA and final real-runtime provenance is the final main SHA accepted on Owner PC. Structural sequence binding remains deterministic product source_digest.",
-    "observed_head": "17b69115ab179adc63c4dc17e943d3fa257063f1",
+    "observed_head": "c4bc48404ebacb83bb1b4dc226540b5467cca6a3",
     "source_digest": "d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0"
   },
   "mode": "DURING",
