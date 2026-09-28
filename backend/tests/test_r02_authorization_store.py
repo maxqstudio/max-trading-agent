@@ -247,6 +247,47 @@ def test_second_different_discovery_block_is_rejected(tmp_path: Path) -> None:
         create_r02_authorization(_authorization(other), path=db)
 
 
+def test_authorization_id_must_bind_payload_hash(tmp_path: Path) -> None:
+    db = _database(tmp_path)
+    plan = _plan()
+    record = _authorization(plan)
+    record["authorization_id"] = "RAUTH-R02-WRONG"
+    with pytest.raises(ValueError, match="R02_AUTHORIZATION_ID_INVALID"):
+        create_r02_authorization(record, path=db)
+
+
+def test_plan_content_tamper_with_stale_hash_is_rejected(tmp_path: Path) -> None:
+    db = _database(tmp_path)
+    plan = _plan()
+    authorization = create_r02_authorization(_authorization(plan), path=db)
+    tampered = deepcopy(plan)
+    tampered["compute_budget"]["value"] = 999
+    with pytest.raises(RuntimeError, match="R02_PLAN_INTEGRITY_MISMATCH"):
+        freeze_r02_discovery_block(
+            authorization=authorization,
+            plan=tampered,
+            path=db,
+        )
+
+
+def test_candidate_identity_tamper_is_rejected_even_with_resealed_plan(tmp_path: Path) -> None:
+    db = _database(tmp_path)
+    plan = _plan()
+    tampered = deepcopy(plan)
+    tampered["candidates"][0]["seed"] = 999
+    sha_body = deepcopy(tampered)
+    sha_body.pop("plan_sha256")
+    tampered["plan_sha256"] = stable_hash(sha_body)
+    authorization_record = _authorization(tampered)
+    authorization = create_r02_authorization(authorization_record, path=db)
+    with pytest.raises(RuntimeError, match="R02_CANDIDATE_ID_INTEGRITY_MISMATCH"):
+        freeze_r02_discovery_block(
+            authorization=authorization,
+            plan=tampered,
+            path=db,
+        )
+
+
 def test_r01_output_authority_mismatch_is_rejected(tmp_path: Path) -> None:
     db = _database(tmp_path)
     plan = _plan()

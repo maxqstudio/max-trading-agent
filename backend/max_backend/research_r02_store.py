@@ -8,7 +8,7 @@ from typing import Any
 from .config import DATABASE_PATH
 from .db import connect
 from .optimizer_store import utc_now
-from .research_contract import stable_hash
+from .research_contract import candidate_id as derive_candidate_id, stable_hash
 from .workflow_store import migrate_current
 
 
@@ -54,8 +54,11 @@ def create_r02_authorization(
     payload = record["payload"]
     if not isinstance(payload, dict):
         raise ValueError("R02_AUTHORIZATION_PAYLOAD_REQUIRED")
-    if stable_hash(payload) != str(record["payload_sha256"]):
+    payload_sha = stable_hash(payload)
+    if payload_sha != str(record["payload_sha256"]):
         raise ValueError("R02_AUTHORIZATION_PAYLOAD_HASH_MISMATCH")
+    if str(record["authorization_id"]) != "RAUTH-R02-" + payload_sha[:24]:
+        raise ValueError("R02_AUTHORIZATION_ID_INVALID")
     if str(payload.get("research_id") or "") != str(record["research_id"]):
         raise ValueError("R02_AUTHORIZATION_RESEARCH_ID_MISMATCH")
     if str(payload.get("gate") or "") != "R02":
@@ -142,6 +145,39 @@ def get_r02_discovery_block(
     return result
 
 
+def _validate_plan_integrity(plan: dict[str, Any]) -> None:
+    if not isinstance(plan, dict):
+        raise ValueError("R02_PLAN_REQUIRED")
+    supplied_sha = str(plan.get("plan_sha256") or "")
+    supplied_id = str(plan.get("plan_id") or "")
+    if not supplied_sha or not supplied_id:
+        raise RuntimeError("R02_PLAN_AUTHORITY_MISSING")
+
+    sha_body = deepcopy(plan)
+    sha_body.pop("plan_sha256", None)
+    if stable_hash(sha_body) != supplied_sha:
+        raise RuntimeError("R02_PLAN_INTEGRITY_MISMATCH")
+
+    id_body = deepcopy(sha_body)
+    id_body.pop("plan_id", None)
+    if "RPLAN-" + stable_hash(id_body)[:24] != supplied_id:
+        raise RuntimeError("R02_PLAN_ID_INTEGRITY_MISMATCH")
+
+    candidates = list(plan.get("candidates") or [])
+    ids = [str(item.get("candidate_id") or "") for item in candidates]
+    if ids != list(plan.get("candidate_ids") or []):
+        raise RuntimeError("R02_PLAN_CANDIDATE_IDS_MISMATCH")
+    if len(ids) != int(plan.get("candidate_count") or 0):
+        raise RuntimeError("R02_PLAN_CANDIDATE_COUNT_MISMATCH")
+    for candidate in candidates:
+        spec = deepcopy(candidate)
+        supplied_candidate_id = str(spec.pop("candidate_id", ""))
+        if not supplied_candidate_id:
+            raise RuntimeError("R02_CANDIDATE_ID_MISSING")
+        if derive_candidate_id(spec) != supplied_candidate_id:
+            raise RuntimeError("R02_CANDIDATE_ID_INTEGRITY_MISMATCH")
+
+
 def freeze_r02_discovery_block(
     *,
     authorization: dict[str, Any],
@@ -149,6 +185,7 @@ def freeze_r02_discovery_block(
     path: Path = DATABASE_PATH,
 ) -> dict[str, Any]:
     migrate_current(path)
+    _validate_plan_integrity(plan)
     research_id = str(plan.get("research_id") or "")
     if not research_id:
         raise ValueError("R02_RESEARCH_ID_REQUIRED")
@@ -157,6 +194,12 @@ def freeze_r02_discovery_block(
     payload = authorization.get("payload")
     if not isinstance(payload, dict):
         raise RuntimeError("R02_AUTHORIZATION_PAYLOAD_REQUIRED")
+    if stable_hash(payload) != str(authorization.get("payload_sha256") or ""):
+        raise RuntimeError("R02_AUTHORIZATION_PAYLOAD_HASH_MISMATCH")
+    if str(authorization.get("authorization_id") or "") != (
+        "RAUTH-R02-" + stable_hash(payload)[:24]
+    ):
+        raise RuntimeError("R02_AUTHORIZATION_ID_INVALID")
     if str(payload.get("plan_id") or "") != str(plan.get("plan_id") or ""):
         raise RuntimeError("R02_AUTHORIZATION_PLAN_ID_MISMATCH")
     if str(payload.get("plan_sha256") or "") != str(plan.get("plan_sha256") or ""):
