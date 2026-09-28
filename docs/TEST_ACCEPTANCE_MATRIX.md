@@ -4,24 +4,24 @@
 
 ## Evidence boundary
 
-R02 Discovery Owner-authorization/frozen-block source phase with atomic persistence hardening. Hosted synthetic targeted run 36380098875 passed 61 tests at f4c05908114bc3d830bd39b4eb864ce105301991, including fault-injection proof that a candidate persistence failure leaves zero new authorization, block and candidate rows. Full generated-governance/full-regression closeout remains pending. No real R02 trainer, Cheap Screen execution/result, qualification, Qualified Pool, ONNX, Research Challenger, Champion mutation, MT5 runtime or Owner-PC/browser E2E is authorized or claimed.
+R02 Discovery Owner-authorization/frozen-block source phase pre-closeout. Exact branch Windows CI run 36380453938 passed at 7f60da88d25d38753b200dceaa71131856304dd9: backend 558 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, lint/build and npm dependency tree PASS. Atomic targeted run 36380098875 separately passed 61 R02 tests including fault-injection rollback proof. Real R00/R01/R02 scientific execution, trainer/Cheap Screen outcome, qualification, Qualified Pool, ONNX, Research Challenger, Champion mutation and Owner-PC/MT5/browser runtime remain intentionally NOT_PROVEN.
 
 Final tested source: external final acceptance evidence.
 Current source digest: 8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
-| R02AF-01 | R02 Owner authorization requires exact explicit confirmation and an exact canonical Discovery plan bound to current Research and accepted R01 output authority. | research_r02_service.py + test_r02_authorization_service.py | NOT_PROVEN |
-| R02AF-02 | Authorization identity and payload hash, plan identity/hash, candidate identities and exact R01 output binding are recomputed at the persistence boundary and tampering fails closed. | research_r02_store.py + test_r02_authorization_store.py | NOT_PROVEN |
-| R02AF-03 | At most one bounded Discovery block may be frozen per Research identity; exact replay is idempotent and a different second block is rejected. | research_r02_store.py + tests | NOT_PROVEN |
-| R02AF-04 | Frozen R02 authorization, Discovery block and candidate-spec rows are update-immutable and append-only. | SQLite triggers + test_r02_authorization_store.py | NOT_PROVEN |
-| R02AF-05 | Frozen state is FROZEN_WAITING_EXECUTION, not STARTING; no trainer, Cheap Screen executor, scientific result or qualification authority is opened. | research_r02_service.py + research_r02_store.py + tests | NOT_PROVEN |
-| R02AF-06 | R02 freeze preserves zero model-training, ONNX, Research-Challenger and Champion-mutation counters. | test_r02_authorization_store.py + test_r02_authorization_service.py | NOT_PROVEN |
-| R02AF-07 | The durable R02 persistence extension advances cumulative SQLite schema authority from 10 to 11. | backend/max_backend/schema.py + test_r02_authorization_store.py | NOT_PROVEN |
-| R02AF-08 | Scientist knowledge manifest hashes R02 contract/service/store source so advisory context cannot drift from implemented R02 authority. | scientist_knowledge.py + regenerated source_manifest.json | NOT_PROVEN |
-| R02AF-09 | Skill Workflow provenance/STRICT, Project Truth, cross-document consistency and sequence contracts remain synchronized. | Windows CI governance gates | NOT_PROVEN |
-| R02AF-10 | Full backend/frontend/source-only/security/dependency regression remains green. | Windows CI | NOT_PROVEN |
-| R02AF-11 | Production R02 authorize-and-freeze is atomic: a persistence fault after authorization insertion rolls back authorization, block and all candidate rows together, leaving no orphan immutable authority. | research_r02_store.py::authorize_and_freeze_r02_discovery + fault-injection regression in test_r02_authorization_store.py | NOT_PROVEN |
+| R02AF-01 | R02 Owner authorization requires exact explicit confirmation and an exact canonical Discovery plan bound to current Research and accepted R01 output authority. | research_r02_service.py + test_r02_authorization_service.py | PASS |
+| R02AF-02 | Authorization identity and payload hash, plan identity/hash, candidate identities and exact R01 output binding are recomputed at the persistence boundary and tampering fails closed. | research_r02_store.py + test_r02_authorization_store.py | PASS |
+| R02AF-03 | At most one bounded Discovery block may be frozen per Research identity; exact replay is idempotent and a different second block is rejected. | research_r02_store.py + tests | PASS |
+| R02AF-04 | Frozen R02 authorization, Discovery block and candidate-spec rows are update-immutable and append-only. | SQLite triggers + test_r02_authorization_store.py | PASS |
+| R02AF-05 | Frozen state is FROZEN_WAITING_EXECUTION, not STARTING; no trainer, Cheap Screen executor, scientific result or qualification authority is opened. | research_r02_service.py + research_r02_store.py + tests | PASS |
+| R02AF-06 | R02 freeze preserves zero model-training, ONNX, Research-Challenger and Champion-mutation counters. | test_r02_authorization_store.py + test_r02_authorization_service.py | PASS |
+| R02AF-07 | The durable R02 persistence extension advances cumulative SQLite schema authority from 10 to 11. | backend/max_backend/schema.py + test_r02_authorization_store.py | PASS |
+| R02AF-08 | Scientist knowledge manifest hashes R02 contract/service/store source so advisory context cannot drift from implemented R02 authority. | scientist_knowledge.py + regenerated source_manifest.json | PASS |
+| R02AF-09 | Skill Workflow provenance/STRICT, Project Truth, cross-document consistency and sequence contracts remain synchronized. | Windows CI governance gates | PASS |
+| R02AF-10 | Full backend/frontend/source-only/security/dependency regression remains green. | Windows CI | PASS |
+| R02AF-11 | Production R02 authorize-and-freeze is atomic: a persistence fault after authorization insertion rolls back authorization, block and all candidate rows together, leaving no orphan immutable authority. | research_r02_store.py::authorize_and_freeze_r02_discovery + fault-injection regression in test_r02_authorization_store.py | PASS |
 
 ## Test commands
 

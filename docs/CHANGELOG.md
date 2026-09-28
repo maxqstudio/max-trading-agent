@@ -93,3 +93,12 @@ Type: repair
 - Add fault-injection rollback regression proving a candidate insert failure leaves zero new R02 authorization, block and candidate rows.
 - Windows targeted run 36380098875 passed 61 R02 tests at f4c05908114bc3d830bd39b4eb864ce105301991.
 - No trainer, Cheap Screen result, qualification, ONNX, Research Challenger or Champion mutation is opened.
+
+## 2026-09-28 — R02 authorization freeze pre-closeout
+
+Type: acceptance
+
+- Exact branch Windows CI run 36380453938 passed at 7f60da88d25d38753b200dceaa71131856304dd9.
+- Backend 558 PASS; frontend 53 PASS across 10 files; source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, lint/build/npm dependency tree PASS.
+- Atomic targeted run 36380098875 passed 61 R02 tests including rollback fault injection.
+- Real R02 execution/training/qualification and Owner runtime remain NOT_PROVEN.
