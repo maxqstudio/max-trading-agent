@@ -3,19 +3,25 @@
     {
       "authority": "GitHub main exact commit in maxqstudio/max-trading-agent",
       "concern": "source",
-      "meaning": "Tracked source/spec/governance state is authoritative by exact main commit. Ordinary phases branch from latest main, validate in Windows CI, merge only when green, then revalidate main.",
+      "meaning": "Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.",
       "mutable": true
     },
     {
-      "authority": "Owner PC clean exact-SHA checkout plus real MetaTrader 5",
+      "authority": ".github/workflows/windows-ci.yml on GitHub Actions windows-latest",
+      "concern": "hosted_build_test",
+      "meaning": "Blocking source-only, Skill provenance/governance, backend, frontend, dependency and public-source checks execute in GitHub Actions for each development phase.",
+      "mutable": true
+    },
+    {
+      "authority": "Owner PC plus real MetaTrader 5 final acceptance",
       "concern": "runtime",
-      "meaning": "Real MT5, MetaEditor, broker/data-root, browser and filesystem runtime behavior is final acceptance authority only after the GitHub development roadmap is complete. GitHub Actions cannot prove this boundary.",
+      "meaning": "Real MetaTrader terminal, MetaEditor, broker-data, filesystem deployment and browser E2E remain NOT_PROVEN during hosted development and are accepted only in the final Owner-PC phase.",
       "mutable": true
     },
     {
-      "authority": "GitHub Actions Windows CI for hosted phases; Owner PC for final runtime acceptance",
+      "authority": "GitHub Actions Windows CI for hosted gates plus final Owner-PC runtime acceptance",
       "concern": "acceptance",
-      "meaning": "Ordinary source phases require green Windows CI at the phase candidate and green main after merge. Final real runtime/E2E remains separately unproven until Owner-PC final acceptance.",
+      "meaning": "Hosted source/build/test phases require green windows-latest CI at the exact candidate SHA; only the final Owner-PC phase may prove real MT5/runtime behavior.",
       "mutable": true
     },
     {
@@ -27,7 +33,7 @@
     {
       "authority": "Sealed manifests, bundles, reports and retained artifacts",
       "concern": "immutable_scientific_evidence",
-      "meaning": "Scientific/execution history is immutable when its owning contract marks it immutable; current config cannot rewrite it.",
+      "meaning": "Scientific/execution history is immutable when its owning runtime contract marks it immutable; runtime evidence/artifacts are intentionally not tracked in the public source repository.",
       "mutable": false
     },
     {
@@ -85,9 +91,9 @@
       "mutable": true
     },
     {
-      "authority": "Executable suites at the exact GitHub-tested commit",
+      "authority": "GitHub Actions windows-latest at the exact tested commit",
       "concern": "tests",
-      "meaning": "A test PASS is evidence only for the layer and commit actually executed; Windows CI does not imply real MT5 runtime PASS.",
+      "meaning": "A hosted test PASS is evidence only for source, synthetic/mocked behavior, dependencies and build layers actually executed; it does not prove real MT5 or Owner runtime.",
       "mutable": true
     },
     {
@@ -117,9 +123,9 @@
   ],
   "invariants": [
     "Authority conflicts fail closed; do not infer from UI labels, chat memory or stale prose.",
-    "Ordinary development phase: latest main -> work branch -> exact-commit Windows CI PASS -> merge -> main Windows CI revalidation.",
-    "Final Owner-PC runtime acceptance must use the final GitHub main exact SHA after the hosted roadmap closes.",
-    "GitHub Actions may prove source/build/test contracts but must not claim real MT5, broker, terminal data-root, browser runtime or Owner-PC filesystem behavior.",
+    "Each ordinary development phase is merged only after required GitHub Actions Windows CI is green at the exact candidate SHA.",
+    "GitHub Actions must not claim real MetaTrader 5, broker, Owner filesystem deployment or Owner browser runtime PASS.",
+    "Final Owner-PC acceptance uses the final main SHA after the GitHub development roadmap is complete.",
     "Historical retained Challenger evidence remains exact legacy 16D while current V6 is exact 17D including InpRiskPct; mixed/missing/extra universes fail closed.",
     "Durable optimizer consumption survives Challenger promotion, retirement and later permitted physical deletion while registry or COMMITTED batch authority remains.",
     "Former Champion tenure does not recreate active Challenger eligibility.",
