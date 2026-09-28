@@ -115,8 +115,8 @@
     {
       "decision": "MAX uses Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f; .workflow/tools are byte-identical to that exact current main; generated canonical governance docs remain under docs/; sequence mode remains DURING/CURRENT without retrospective plans.",
       "id": "D-017",
-      "rationale": "Skill main advanced from 414104e9d56b59374a6e3c94c6883d295427cfa3 only to emit the prompt-required SELFTEST=PASS and STRICT_SELFTEST=PASS integration markers. Validator behavior, product behavior, scientific state and database schema are unchanged.",
-      "status": "CURRENT",
+      "rationale": "Superseded by D-021 after Skill Workflow main advanced by one deterministic-LF repair commit; retained as historical H0 authority.",
+      "status": "SUPERSEDED",
       "title": "Current Skill Workflow authority with explicit self-test PASS markers"
     },
     {
@@ -141,24 +141,10 @@
       "status": "CURRENT"
     },
     {
-      "id": "D-018",
-      "title": "GitHub-hosted development authority",
-      "decision": "GitHub main exact SHA in maxqstudio/max-trading-agent is source authority; GitHub Actions on windows-latest is the hosted build/test authority for ordinary development phases; Owner PC plus real MetaTrader 5 is reserved for final runtime/E2E acceptance after GitHub development closure.",
-      "rationale": "Separate reproducible public-source development from the hardware/broker/runtime boundary that GitHub Actions cannot prove.",
-      "status": "CURRENT"
-    },
-    {
-      "id": "D-019",
-      "title": "Windows-only hosted CI",
-      "decision": "MAX application CI remains Windows-only and must not add Linux/macOS matrix coverage merely for platform breadth.",
-      "rationale": "The production execution boundary is MetaTrader 5 on Windows; hosted CI should validate the supported application platform without pretending to emulate real MT5 runtime.",
-      "status": "CURRENT"
-    },
-    {
-      "id": "D-020",
-      "title": "Public source-only repository",
-      "decision": "Runtime databases, evidence, artifacts, optimizer outputs, Research datasets, Owner terminal state and real credentials are excluded from the public repository; tests must use synthetic fixtures.",
-      "rationale": "Public-source reproducibility and credential/privacy safety require runtime/private state to remain outside Git authority.",
+      "id": "D-021",
+      "title": "Current Skill Workflow deterministic-LF authority",
+      "decision": "MAX uses Skill Workflow 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720; .workflow/tools are vendored byte-identically to that exact current main; generated governance remains under docs/; acceptance.json serialization is byte-exact LF; sequence mode remains DURING/CURRENT.",
+      "rationale": "Skill main advanced from 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f by one governance-only commit that writes acceptance.json with deterministic LF bytes and adds a STRICT selftest assertion. Product behavior, scientific state and database schema are unchanged.",
       "status": "CURRENT"
     }
   ],
