@@ -65,15 +65,18 @@ jobs:
         shell: pwsh
         run: |
           $skillSha = "9e22feddb8f94e8c0f1af6a33e14b64de5068f8f"
-          git clone --quiet https://github.com/maxqstudio/Skill_Workflow.git _skill
-          git -C _skill checkout --quiet $skillSha
+          $skillDir = Join-Path $env:RUNNER_TEMP "Skill_Workflow"
+          if (Test-Path $skillDir) { Remove-Item -Recurse -Force $skillDir }
+          git clone --quiet https://github.com/maxqstudio/Skill_Workflow.git $skillDir
+          git -C $skillDir checkout --quiet $skillSha
+          Add-Content -Path $env:GITHUB_ENV -Value "SKILL_WORKFLOW_DIR=$skillDir"
           $exclude = @("initialize_project_truth.py", "selftest_project_truth_compiler.py")
-          $upstream = Get-ChildItem "_skill/scripts/*.py" | Where-Object { $_.Name -notin $exclude }
+          $upstream = Get-ChildItem (Join-Path $skillDir "scripts/*.py") | Where-Object { $_.Name -notin $exclude }
           if ($upstream.Count -ne 18) { throw "Unexpected Skill Workflow tool count: $($upstream.Count)" }
           foreach ($file in $upstream) {
             $local = Join-Path ".workflow/tools" $file.Name
             if (-not (Test-Path $local)) { throw "Missing vendored tool: $($file.Name)" }
-            $upstreamBlob = git -C _skill rev-parse "${skillSha}:scripts/$($file.Name)"
+            $upstreamBlob = git -C $skillDir rev-parse "${skillSha}:scripts/$($file.Name)"
             $localBlob = git rev-parse "HEAD:.workflow/tools/$($file.Name)"
             if ($upstreamBlob.Trim() -ne $localBlob.Trim()) {
               throw "Skill Workflow provenance mismatch: $($file.Name)"
@@ -81,7 +84,7 @@ jobs:
           }
       - name: Skill Workflow strict selftest
         shell: pwsh
-        run: python _skill/scripts/selftest_strict_project_workflow.py
+        run: python "$env:SKILL_WORKFLOW_DIR\scripts\selftest_strict_project_workflow.py"
       - name: Validate project governance
         shell: pwsh
         run: |
