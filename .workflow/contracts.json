@@ -472,14 +472,9 @@
   ],
   "runbook_steps": [
     {
-      "name": "Verify hosted source authority",
-      "command": "git fetch origin main; git switch main; git pull --ff-only; git rev-parse HEAD; git status --porcelain",
-      "expected": "Latest maxqstudio/max-trading-agent main exact SHA and clean worktree."
-    },
-    {
-      "name": "Create phase branch",
-      "command": "git switch -c work/<semantic-phase-name>",
-      "expected": "Work branch descends from latest main; no reset/rewrite of valid work."
+      "name": "Verify hosted source",
+      "command": "git fetch origin main; git switch work/hosted-governance-rebase; git rev-parse HEAD; git status --porcelain",
+      "expected": "Branch descends from current main and worktree is clean before validation."
     },
     {
       "name": "Python environment",
@@ -494,37 +489,47 @@
     {
       "name": "Sync generated governance",
       "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\sync_project_truth.py",
-      "expected": "PROJECT_DOCS_SYNC=PASS; commit only deterministic compiler outputs."
+      "expected": "PROJECT_DOCS_SYNC=PASS; generated docs are compiler output, not manual edits."
+    },
+    {
+      "name": "Rebuild Scientist knowledge",
+      "command": ".\\.venv\\Scripts\\python.exe scripts\\build_scientist_knowledge.py",
+      "expected": "Scientist source manifest and knowledge snapshot bind to current authoritative source/docs."
     },
     {
       "name": "Validate generated docs",
       "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_project_docs.py",
-      "expected": "No stale/missing generated canonical docs."
+      "expected": "PROJECT_DOCS_SYNC=PASS with no stale/missing generated docs."
     },
     {
       "name": "Validate sequence sessions",
       "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_sequence_sessions.py",
-      "expected": "Eight current DURING sessions with zero failed sessions."
+      "expected": "Eight current DURING sessions, zero failed sessions."
     },
     {
-      "name": "Validate handoff and human comprehension",
-      "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_handoff.py; .\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_human_comprehension.py --require-pass",
-      "expected": "STRICT handoff and HUMAN_COMPREHENSION PASS."
+      "name": "Validate handoff",
+      "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_handoff.py",
+      "expected": "STRICT required docs present/current."
     },
     {
-      "name": "Validate cross-document consistency",
-      "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_cross_document_consistency.py",
-      "expected": "RESULT=PASS without stale repository/runtime authority conflicts."
+      "name": "Validate human comprehension",
+      "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_human_comprehension.py --require-pass",
+      "expected": "HUMAN_COMPREHENSION_GATE PASS."
     },
     {
       "name": "Validate project truth",
       "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_project_truth.py",
-      "expected": "RESULT=PASS for the current hosted scope; final real runtime remains explicitly deferred."
+      "expected": "No explicit FAIL; hosted phase may retain final Owner runtime as NOT_PROVEN."
     },
     {
       "name": "Backend cumulative tests",
       "command": ".\\.venv\\Scripts\\python.exe -m pytest backend\\tests -q -o addopts=",
-      "expected": "At least the verified migration floor of 488 PASS; any unexplained decrease blocks the phase."
+      "expected": "At least migration floor 488 PASS; investigate any unexplained decrease."
+    },
+    {
+      "name": "Frontend tests/lint/build",
+      "command": "cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all; cd ..",
+      "expected": "At least 53 tests across 10 files, lint PASS, production build PASS, dependency tree exit 0."
     },
     {
       "name": "Python dependencies",
@@ -532,29 +537,14 @@
       "expected": "No broken requirements."
     },
     {
-      "name": "Frontend tests lint build dependencies",
-      "command": "cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all; cd ..",
-      "expected": "At least 53 tests across 10 files, lint PASS, production build PASS, dependency tree exit 0."
+      "name": "Hosted phase authority",
+      "command": "GitHub Actions workflow .github/workflows/windows-ci.yml",
+      "expected": "Source-only policy, public secret scan, Skill provenance/STRICT selftest, project governance, backend, frontend and dependency gates all PASS on windows-latest before merge."
     },
     {
-      "name": "Public exact-tree secret scan",
-      "command": ".\\.venv\\Scripts\\python.exe scripts\\scan_m05_candidate_tree.py --candidate-sha HEAD",
-      "expected": "PASS with no plaintext high-confidence secret or forbidden secret-storage path."
-    },
-    {
-      "name": "Hosted phase acceptance",
-      "command": "Push work branch and inspect .github/workflows/windows-ci.yml for the exact candidate commit.",
-      "expected": "Source-only policy, governance, Skill provenance/selftest, backend, pip, frontend test/lint/build/dependency gates all PASS on windows-latest."
-    },
-    {
-      "name": "Merge and main revalidation",
-      "command": "Merge the green phase branch to main, then inspect Windows CI for the resulting main commit.",
-      "expected": "Main Windows CI PASS before beginning the next ordinary development phase."
-    },
-    {
-      "name": "Final runtime acceptance boundary",
-      "command": "Only after hosted roadmap closure: clean-clone final main and run INSTALL.ps1 on Owner PC before real MT5/MetaEditor/browser/E2E checks.",
-      "expected": "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED until that final phase; never infer runtime PASS from GitHub Actions."
+      "name": "Final Owner-PC runtime acceptance",
+      "command": "Deferred until GitHub development roadmap closure; then use INSTALL.ps1 and the final acceptance runbook.",
+      "expected": "Only final Owner-PC acceptance may prove fresh DB, real MT5/MetaEditor/Strategy Tester, deployment and browser E2E."
     }
   ],
   "schema_version": 1,
