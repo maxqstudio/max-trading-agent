@@ -39,3 +39,11 @@ Type: governance
 - Prior authority 414104e9d56b59374a6e3c94c6883d295427cfa3 remains historical; the Skill advance only adds explicit SELFTEST=PASS and STRICT_SELFTEST=PASS output markers.
 - Re-vendor the current project-local governance tool pack byte-identically.
 - Preserve product behavior, scientific state, sequence mode and database schema unchanged.
+
+## 2026-09-28 —
+
+Type: acceptance
+
+- R01 current-lineage source repair pre-closeout Windows CI run 36369408053 passed at 5dc96103c85ed9fd208101f060529e94bff31e76.
+- Backend 497 PASS; frontend 53 PASS across 10 files; Skill provenance/STRICT, governance, source-only/security, pip check, lint/build/npm dependency tree PASS.
+- Real current-epoch R00/R01, MT5 and Owner-PC runtime remain NOT_PROVEN.

@@ -8,7 +8,7 @@ Governance profile: strict
 
 ## Current phase
 Phase: R01_CURRENT_LINEAGE_REPAIR
-Status: ACTIVE
+Status: SOURCE_REPAIR_PRE_CLOSEOUT_PASS
 
 ## Source
 Repository: maxqstudio/max-trading-agent
@@ -41,9 +41,11 @@ SEQUENCE_SYNC: PASS
 - Skill Workflow main advanced by one compatible governance-only commit to 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720; this phase adopts that exact authority and re-vendors its changed tools byte-identically.
 - Previous-epoch R00/Champion/Research identifiers remain historical evidence only and are not current product-source authority.
 - The fresh source-governed epoch still declares Strategy Champion NONE, current Research project NONE, R00 NOT STARTED, R01 BLOCKED / NOT STARTED, R02 BLOCKED / NOT STARTED, model training 0, ONNX 0 and Research Challenger 0.
+- R01 current-lineage source repair pre-closeout Windows CI run 36369408053 passed at exact SHA 5dc96103c85ed9fd208101f060529e94bff31e76: 497 backend tests, source-only/security, Skill Workflow provenance/STRICT selftest, governance, pip check, frontend 53/53 across 10 files, lint/build and npm dependency tree.
+- R01 product source no longer contains the retired previous-epoch Research/R00/Strategy identity constants and now resolves the latest accepted current R00 with fail-closed immutable lineage verification.
 
 ## Not proven
-- R01 current-lineage source repair until exact-branch Windows CI and targeted negative tests pass.
+- Final branch closeout CI after evidence regeneration.
 - Any current-epoch R00 or real R01 scientific result.
 - Any real Owner-PC runtime/bootstrap/MT5/browser behavior.
 - Any R02 execution, model training, ONNX generation or Research Challenger creation.
@@ -56,9 +58,9 @@ SEQUENCE_SYNC: PASS
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Verify the R01 current-R00 immutable lineage repair with targeted fail-closed tests and the full Windows CI regression.
-- Regenerate Project Truth Compiler, sequence and Scientist knowledge outputs from this phase authority.
-- Merge only after all hosted gates pass, then revalidate main; continue source roadmap without Owner-PC testing.
+- Regenerate governed docs/sequence/Scientist knowledge with pre-closeout evidence.
+- Remove the temporary regeneration workflow, run exact final branch Windows CI, then merge to main only if green.
+- Revalidate main after merge; continue the next source-only roadmap phase without Owner-PC testing.
 
 ## Explicitly blocked
 - Owner-PC testing between ordinary GitHub development phases.

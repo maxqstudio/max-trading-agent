@@ -4,21 +4,21 @@
 
 ## Evidence boundary
 
-R01 current-lineage source repair phase. Hosted source/tests/governance only; no real Research execution, model training, ONNX, Research Challenger, Champion mutation, MT5 runtime or Owner-PC E2E is authorized or claimed.
+R01 current-lineage source repair hosted closeout. Windows CI run 36369408053 at exact pre-closeout SHA 5dc96103c85ed9fd208101f060529e94bff31e76 passed source-only/security, Skill Workflow 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 provenance/STRICT selftest, generated governance, backend 497 tests, pip check, frontend 53 tests across 10 files, lint/build and npm dependency tree. Real current-epoch R00/R01 and Owner-PC/MT5/browser runtime remain intentionally NOT_PROVEN.
 
 Final tested source: external final acceptance evidence.
 Current source digest: 205e1014611af244e5752da817a13e755fc04e18e9e42443ca57f1b14a75b34e
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
-| R01L-01 | R01 contains no retired previous-epoch R00/Research/Strategy identity constants and derives current R00 from current Research authority. | backend/max_backend/research_r01_service.py + targeted static regression | NOT_PROVEN |
-| R01L-02 | Current R00 must be terminal PASS_WAITING_OWNER with verified frozen integrity and exact Research parent, Strategy parent and parent-authority bindings. | backend/tests/test_r01_current_lineage.py | NOT_PROVEN |
-| R01L-03 | Wrong Research ID, wrong Research parent, wrong Strategy parent, unaccepted/tampered R00, parent-authority mismatch and cross-epoch request all fail closed. | backend/tests/test_r01_current_lineage.py | NOT_PROVEN |
-| R01L-04 | R01 preserves frozen R00 sample authority and verifies no training/ONNX/Research-Challenger/Champion side-effect regression before use. | research_r01_service.py + existing R01 regressions | NOT_PROVEN |
-| R01L-05 | Vendored Skill Workflow tools are byte-identical to 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 and STRICT deterministic-LF selftest passes. | Windows CI Skill Workflow provenance + STRICT selftest | NOT_PROVEN |
-| R01L-06 | Full backend regression remains at or above 488 PASS and includes the new lineage tests. | Windows CI backend pytest | NOT_PROVEN |
-| R01L-07 | Frontend 53-test/10-file baseline, lint, production build, npm dependency tree and pip check remain green. | Windows CI frontend/dependency jobs | NOT_PROVEN |
-| R01L-08 | Project Truth Compiler, sequence sessions, Scientist knowledge and source-only/security gates remain synchronized. | Windows CI governance + source-only policy | NOT_PROVEN |
+| R01L-01 | R01 contains no retired previous-epoch R00/Research/Strategy identity constants and derives current R00 from current Research authority. | backend/max_backend/research_r01_service.py + targeted static regression | PASS |
+| R01L-02 | Current R00 must be terminal PASS_WAITING_OWNER with verified frozen integrity and exact Research parent, Strategy parent and parent-authority bindings. | backend/tests/test_r01_current_lineage.py | PASS |
+| R01L-03 | Wrong Research ID, wrong Research parent, wrong Strategy parent, unaccepted/tampered R00, parent-authority mismatch and cross-epoch request all fail closed. | backend/tests/test_r01_current_lineage.py | PASS |
+| R01L-04 | R01 preserves frozen R00 sample authority and verifies no training/ONNX/Research-Challenger/Champion side-effect regression before use. | research_r01_service.py + existing R01 regressions | PASS |
+| R01L-05 | Vendored Skill Workflow tools are byte-identical to 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 and STRICT deterministic-LF selftest passes. | Windows CI Skill Workflow provenance + STRICT selftest | PASS |
+| R01L-06 | Full backend regression remains at or above 488 PASS and includes the new lineage tests. | Windows CI backend pytest | PASS |
+| R01L-07 | Frontend 53-test/10-file baseline, lint, production build, npm dependency tree and pip check remain green. | Windows CI frontend/dependency jobs | PASS |
+| R01L-08 | Project Truth Compiler, sequence sessions, Scientist knowledge and source-only/security gates remain synchronized. | Windows CI governance + source-only policy | PASS |
 
 ## Test commands
 

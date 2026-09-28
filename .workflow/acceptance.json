@@ -67,35 +67,35 @@
   ],
   "results": {
     "hosted_ci": {
+      "run_id": 36369408053,
       "status": "PASS_PRE_CLOSEOUT",
-      "tested_sha": "5dc96103c85ed9fd208101f060529e94bff31e76",
-      "run_id": 36369408053
+      "tested_sha": "5dc96103c85ed9fd208101f060529e94bff31e76"
     },
     "regression": {
       "backend": 497,
       "backend_status": "PASS",
-      "frontend_files": 10,
-      "frontend_tests": 53,
-      "frontend_status": "PASS",
-      "lint": "PASS_0_WARNINGS_0_ERRORS",
       "build": "PASS",
+      "frontend_files": 10,
+      "frontend_status": "PASS",
+      "frontend_tests": 53,
+      "lint": "PASS_0_WARNINGS_0_ERRORS",
       "npm_ls_all": "PASS",
       "pip_check": "PASS"
     },
     "runtime": {
-      "owner_pc": "NOT_PROVEN",
+      "browser_e2e": "NOT_PROVEN",
       "mt5": "NOT_PROVEN",
-      "browser_e2e": "NOT_PROVEN"
+      "owner_pc": "NOT_PROVEN"
     },
     "scientific_state": {
-      "strategy_champion": "NONE_SOURCE_GOVERNANCE",
       "current_research_project": "NONE",
+      "model_training": 0,
+      "onnx": 0,
       "r00": "NOT STARTED",
       "r01": "BLOCKED / NOT STARTED",
       "r02": "BLOCKED / NOT STARTED",
-      "model_training": 0,
-      "onnx": 0,
-      "research_challenger": 0
+      "research_challenger": 0,
+      "strategy_champion": "NONE_SOURCE_GOVERNANCE"
     },
     "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720"
   },
@@ -125,23 +125,23 @@
     "python -m pip check"
   ],
   "truth_gates": {
-    "SOURCE_TESTS": "PASS",
-    "RUNTIME_E2E": "NOT_PROVEN",
-    "PROVENANCE_SYNC": "PASS",
-    "REFERENCE_SYNC": "PASS",
-    "STRUCTURAL_SYNC": "PASS",
-    "SEMANTIC_SYNC": "PASS",
     "BEHAVIORAL_SYNC": "PASS",
     "CROSS_DOCUMENT_CONSISTENCY": "PASS",
-    "HUMAN_COMPREHENSION": "PASS",
-    "SEQUENCE_SYNC": "PASS",
     "DOC_LAYOUT": "PASS",
-    "PROJECT_DOCS_NORMALIZED": "PASS",
     "DOC_READABILITY": "PASS",
-    "PROJECT_DOCS_SYNC": "PASS",
     "DOC_SOURCE_TRACEABILITY": "PASS",
     "DOC_TEST_TRACEABILITY": "PASS",
-    "TEST_RUNTIME_TRACEABILITY": "NOT_PROVEN",
-    "PROJECT_STATE_SYNC": "NOT_PROVEN"
+    "HUMAN_COMPREHENSION": "PASS",
+    "PROJECT_DOCS_NORMALIZED": "PASS",
+    "PROJECT_DOCS_SYNC": "PASS",
+    "PROJECT_STATE_SYNC": "NOT_PROVEN",
+    "PROVENANCE_SYNC": "PASS",
+    "REFERENCE_SYNC": "PASS",
+    "RUNTIME_E2E": "NOT_PROVEN",
+    "SEMANTIC_SYNC": "PASS",
+    "SEQUENCE_SYNC": "PASS",
+    "SOURCE_TESTS": "PASS",
+    "STRUCTURAL_SYNC": "PASS",
+    "TEST_RUNTIME_TRACEABILITY": "NOT_PROVEN"
   }
 }
