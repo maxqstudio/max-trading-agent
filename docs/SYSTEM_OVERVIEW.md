@@ -178,7 +178,7 @@ Authority: scientist_knowledge hash manifest + bounded Scientist context/store; 
 
 Current phase: R02_CHEAP_SCREEN_OUTCOME_LEDGER
 
-Current status: ACTIVE_TARGETED_PASS
+Current status: SOURCE_PHASE_PRE_CLOSEOUT_PASS
 
 See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 
@@ -261,9 +261,9 @@ compiler does not infer them from implementation names.
 ## Current project state
 
 Next authorized actions:
-- Regenerate Project Truth, sequence projections and Scientist knowledge for the R02 outcome-ledger source slice.
-- Run exact branch Windows CI and require full regression green.
-- Merge to main only after full hosted closeout, then revalidate main before any trainer/executor slice.
+- Regenerate governed docs with exact R02 outcome-ledger pre-closeout evidence.
+- Run exact final branch Windows CI and merge only if all jobs remain green.
+- Revalidate main after merge before any trainer/executor slice.
 
 Blocked actions:
 - Owner-PC testing between ordinary GitHub development phases.
@@ -293,13 +293,14 @@ Known blockers:
 - R01 current-lineage source repair remains accepted on main.
 - R02 Discovery source foundation remains accepted on main.
 - R02 authorization/freeze is merged to main as eb6192873eb518b9fe4c7f15d03600ca4ac1e73d; main Windows CI run 36409834797 passed 558 backend tests, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, governance, pip check, lint/build and npm dependency tree.
-- R02 outcome-ledger targeted Windows run 36411091220 passed 82 synthetic tests on candidate 59d61a20b5a7a54be0ff10893a3a63216a91250b.
+- R02 outcome-ledger targeted Windows run 36411091220 passed 82 synthetic tests.
+- R02 numeric-overflow hardening targeted Windows run 36412664127 passed 84 R02 tests.
+- Exact R02 outcome-ledger branch Windows CI run 36413020299 passed at a178b4be591c42e88bb6a5ea3bcec1d113987dcb: backend 581 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, lint/build and npm dependency tree PASS.
 - Skill Workflow authority remains 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720.
-- R02 numeric-overflow hardening targeted Windows run 36412664127 passed 84 R02 tests after discovery-budget and outcome-budget validation were changed to fail closed on unrepresentable numeric inputs.
 
 ### Not proven
 
-- R02 outcome-ledger full hosted regression and regenerated-governance synchronization after numeric-overflow hardening.
+- Final branch closeout CI after acceptance evidence regeneration.
 - Any real current-epoch R00/R01 scientific result or real R02 authorization/execution.
 - Any actual model training, Cheap Screen runtime outcome, Qualified Pool, ONNX or Research Challenger.
 - Any real Owner-PC runtime/bootstrap/MT5/browser behavior.

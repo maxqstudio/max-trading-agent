@@ -11,22 +11,22 @@ HEAD is recorded externally after the commit exists.
 
 | Gate | Status | Evidence / Notes |
 |---|---|---|
-| SOURCE_TESTS | NOT_PROVEN | |
+| SOURCE_TESTS | PASS | |
 | RUNTIME_E2E | NOT_PROVEN | |
-| PROVENANCE_SYNC | NOT_PROVEN | |
-| REFERENCE_SYNC | NOT_PROVEN | |
-| STRUCTURAL_SYNC | NOT_PROVEN | |
-| SEMANTIC_SYNC | NOT_PROVEN | |
-| BEHAVIORAL_SYNC | NOT_PROVEN | |
-| CROSS_DOCUMENT_CONSISTENCY | NOT_PROVEN | |
-| HUMAN_COMPREHENSION | NOT_PROVEN | |
+| PROVENANCE_SYNC | PASS | |
+| REFERENCE_SYNC | PASS | |
+| STRUCTURAL_SYNC | PASS | |
+| SEMANTIC_SYNC | PASS | |
+| BEHAVIORAL_SYNC | PASS | |
+| CROSS_DOCUMENT_CONSISTENCY | PASS | |
+| HUMAN_COMPREHENSION | PASS | |
 | SEQUENCE_SYNC | PASS | |
 | DOC_LAYOUT | PASS | |
 | PROJECT_DOCS_NORMALIZED | PASS | |
 | DOC_READABILITY | PASS | |
 | PROJECT_DOCS_SYNC | PASS | |
-| DOC_SOURCE_TRACEABILITY | NOT_PROVEN | |
-| DOC_TEST_TRACEABILITY | NOT_PROVEN | |
+| DOC_SOURCE_TRACEABILITY | PASS | |
+| DOC_TEST_TRACEABILITY | PASS | |
 | TEST_RUNTIME_TRACEABILITY | NOT_PROVEN | |
 | PROJECT_STATE_SYNC | NOT_PROVEN | |
 
@@ -48,7 +48,7 @@ HEAD is recorded externally after the commit exists.
 | TRUTH-R02-BLOCK-001 | R02 source may freeze one Owner-authorized bounded Discovery block after an accepted current R01 authority, but this accepted freeze authority is not scientific execution: no trainer, model fitting, R03 qualification, ONNX, Challenger or Champion authority is opened. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_r02_service.py::r02_preflight; backend/max_backend/research_r02_service.py::authorize_r02_discovery; backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery | backend/tests/test_r02_preflight.py; backend/tests/test_r02_authorization_service.py; backend/tests/test_r02_authorization_store.py | HOSTED_MAIN_REVALIDATION_RUN_36409834797; OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | PASS |
 | TRUTH-PUBLIC-SOURCE-001 | The public GitHub repository is source-only: runtime databases, evidence, artifacts, Research datasets, Owner terminal state and real credentials are prohibited from tracked source; tests use synthetic fixtures. | PROJECT_TRUTH_SYNC.md | .github/workflows/windows-ci.yml | backend/tests/test_m05_candidate_tree_scan.py | NOT_APPLICABLE | PASS |
 | TRUTH-R02-FREEZE-001 | R02 authorization/frozen Discovery authority is deterministic, immutable and atomic: exact Owner confirmation, current Research/R01 output lineage, plan hash/id, candidate identities, one-block cardinality and explicit compute budget are frozen all-or-nothing before any future executor may exist. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_r02_service.py::authorize_r02_discovery; backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery; backend/max_backend/research_r02_store.py::freeze_r02_discovery_block | backend/tests/test_r02_authorization_service.py; backend/tests/test_r02_authorization_store.py | HOSTED_ATOMIC_TARGETED_RUN_36380098875; HOSTED_FULL_PRE_CLOSEOUT_RUN_36380453938; OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | PASS |
-| TRUTH-R02-OUTCOME-001 | R02 Cheap Screen outcome authority is append-only and block-complete: every frozen candidate must have exactly one deterministic SCREEN_PASS, SCREEN_FAIL or EXECUTION_ERROR record; terminalization is atomic, bounded by the frozen compute budget, and has zero scientific qualification authority. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_r02_outcome.py::build_candidate_outcome; backend/max_backend/research_r02_outcome.py::build_terminal_manifest; backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes | backend/tests/test_r02_outcome_contract.py; backend/tests/test_r02_authorization_store.py; backend/tests/test_r02_preflight.py | HOSTED_TARGETED_RUN_36411091220; OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | NOT_PROVEN |
+| TRUTH-R02-OUTCOME-001 | R02 Cheap Screen outcome authority is append-only and block-complete: every frozen candidate must have exactly one deterministic SCREEN_PASS, SCREEN_FAIL or EXECUTION_ERROR record; terminalization is atomic, bounded by the frozen compute budget, and has zero scientific qualification authority. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_r02_outcome.py::build_candidate_outcome; backend/max_backend/research_r02_outcome.py::build_terminal_manifest; backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes | backend/tests/test_r02_outcome_contract.py; backend/tests/test_r02_authorization_store.py; backend/tests/test_r02_preflight.py | HOSTED_TARGETED_RUN_36412664127; HOSTED_FULL_PRE_CLOSEOUT_RUN_36413020299; OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | PASS |
 
 ## Claim relations
 
