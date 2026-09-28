@@ -7,7 +7,7 @@
 R02 Discovery source-foundation phase. Hosted source/contracts/tests/governance only. No real R00/R01/R02 execution, model training, Cheap Screen result, candidate persistence, Qualified Pool, ONNX, Research Challenger, Champion mutation, MT5 runtime or Owner-PC/browser E2E is authorized or claimed.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 0c8e778bdb5dda3565a7f748a3f61fb86122f052fdb94c731e3482d8e9ae7480
+Current source digest: 46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c7986bda
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|

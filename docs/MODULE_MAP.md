@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 0c8e778bdb5dda3565a7f748a3f61fb86122f052fdb94c731e3482d8e9ae7480
+Source digest: 46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c7986bda
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -50,7 +50,7 @@ Generated/refreshed: current compiler run
 | backend/max_backend/research_owner_view.py | Python | 347 | backend/max_backend | NO |
 | backend/max_backend/research_r01_service.py | Python | 1758 | backend/max_backend | NO |
 | backend/max_backend/research_r01_store.py | Python | 502 | backend/max_backend | NO |
-| backend/max_backend/research_r02_contract.py | Python | 249 | backend/max_backend | NO |
+| backend/max_backend/research_r02_contract.py | Python | 270 | backend/max_backend | NO |
 | backend/max_backend/research_r02_service.py | Python | 99 | backend/max_backend | NO |
 | backend/max_backend/research_service.py | Python | 1423 | backend/max_backend | NO |
 | backend/max_backend/research_settings.py | Python | 73 | backend/max_backend | NO |
@@ -95,7 +95,7 @@ Generated/refreshed: current compiler run
 | backend/tests/test_r01_dataset.py | Python | 932 | backend/tests | YES |
 | backend/tests/test_r01_research.py | Python | 1077 | backend/tests | YES |
 | backend/tests/test_r01_source.py | Python | 471 | backend/tests | YES |
-| backend/tests/test_r02_discovery_contract.py | Python | 168 | backend/tests | YES |
+| backend/tests/test_r02_discovery_contract.py | Python | 188 | backend/tests | YES |
 | backend/tests/test_r02_preflight.py | Python | 147 | backend/tests | YES |
 | frontend/src/App.test.tsx | TypeScript/React | 241 | frontend/src | YES |
 | frontend/src/App.tsx | TypeScript/React | 290 | frontend/src | NO |

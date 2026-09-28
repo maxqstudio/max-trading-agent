@@ -313,7 +313,7 @@
       "file": "backend/max_backend/research_r02_contract.py",
       "is_test": false,
       "language": "Python",
-      "lines": 249
+      "lines": 270
     },
     {
       "directory": "backend/max_backend",
@@ -628,7 +628,7 @@
       "file": "backend/tests/test_r02_discovery_contract.py",
       "is_test": true,
       "language": "Python",
-      "lines": 168
+      "lines": 188
     },
     {
       "directory": "backend/tests",
@@ -32545,6 +32545,30 @@
     },
     {
       "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "_require_nonempty_text"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "_require_sha256"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
       "target_token": "isinstance"
     },
     {
@@ -58424,6 +58448,30 @@
       "target_token": "build_discovery_plan"
     },
     {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_parent_lineage_must_bind_exact_r01_output_authority",
+      "target_token": "_request"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_parent_lineage_must_bind_exact_r01_output_authority",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_parent_lineage_must_bind_exact_r01_output_authority",
+      "target_token": "build_discovery_plan"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_parent_lineage_fields_are_exact",
+      "target_token": "_request"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_parent_lineage_fields_are_exact",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_parent_lineage_fields_are_exact",
+      "target_token": "build_discovery_plan"
+    },
+    {
       "caller": "backend/tests/test_r02_discovery_contract.py::test_candidate_count_mismatch_fails_closed",
       "target_token": "_request"
     },
@@ -76353,7 +76401,7 @@
     {
       "file": "backend/max_backend/research_r02_contract.py",
       "kind": "function",
-      "line_end": 249,
+      "line_end": 270,
       "line_start": 153,
       "locator": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
       "symbol": "build_discovery_plan"
@@ -82841,7 +82889,7 @@
     {
       "file": "backend/tests/test_r02_discovery_contract.py",
       "kind": "function",
-      "line_end": 29,
+      "line_end": 30,
       "line_start": 14,
       "locator": "backend/tests/test_r02_discovery_contract.py::_candidate",
       "symbol": "_candidate"
@@ -82849,88 +82897,104 @@
     {
       "file": "backend/tests/test_r02_discovery_contract.py",
       "kind": "function",
-      "line_end": 50,
-      "line_start": 32,
+      "line_end": 52,
+      "line_start": 33,
       "locator": "backend/tests/test_r02_discovery_contract.py::_request",
       "symbol": "_request"
     },
     {
       "file": "backend/tests/test_r02_discovery_contract.py",
       "kind": "function",
-      "line_end": 62,
-      "line_start": 53,
+      "line_end": 64,
+      "line_start": 55,
       "locator": "backend/tests/test_r02_discovery_contract.py::test_discovery_contract_preserves_gate_boundaries",
       "symbol": "test_discovery_contract_preserves_gate_boundaries"
     },
     {
       "file": "backend/tests/test_r02_discovery_contract.py",
       "kind": "function",
-      "line_end": 79,
-      "line_start": 65,
+      "line_end": 81,
+      "line_start": 67,
       "locator": "backend/tests/test_r02_discovery_contract.py::test_discovery_plan_is_deterministic_and_order_independent",
       "symbol": "test_discovery_plan_is_deterministic_and_order_independent"
     },
     {
       "file": "backend/tests/test_r02_discovery_contract.py",
       "kind": "function",
-      "line_end": 87,
-      "line_start": 83,
+      "line_end": 89,
+      "line_start": 85,
       "locator": "backend/tests/test_r02_discovery_contract.py::test_candidate_count_must_be_explicit_positive_integer",
       "symbol": "test_candidate_count_must_be_explicit_positive_integer"
     },
     {
       "file": "backend/tests/test_r02_discovery_contract.py",
       "kind": "function",
-      "line_end": 94,
-      "line_start": 90,
+      "line_end": 98,
+      "line_start": 92,
+      "locator": "backend/tests/test_r02_discovery_contract.py::test_parent_lineage_must_bind_exact_r01_output_authority",
+      "symbol": "test_parent_lineage_must_bind_exact_r01_output_authority"
+    },
+    {
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "kind": "function",
+      "line_end": 107,
+      "line_start": 101,
+      "locator": "backend/tests/test_r02_discovery_contract.py::test_parent_lineage_fields_are_exact",
+      "symbol": "test_parent_lineage_fields_are_exact"
+    },
+    {
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "kind": "function",
+      "line_end": 114,
+      "line_start": 110,
       "locator": "backend/tests/test_r02_discovery_contract.py::test_candidate_count_mismatch_fails_closed",
       "symbol": "test_candidate_count_mismatch_fails_closed"
     },
     {
       "file": "backend/tests/test_r02_discovery_contract.py",
       "kind": "function",
-      "line_end": 115,
-      "line_start": 111,
+      "line_end": 135,
+      "line_start": 131,
       "locator": "backend/tests/test_r02_discovery_contract.py::test_compute_budget_has_no_hidden_default",
       "symbol": "test_compute_budget_has_no_hidden_default"
     },
     {
       "file": "backend/tests/test_r02_discovery_contract.py",
       "kind": "function",
-      "line_end": 122,
-      "line_start": 118,
+      "line_end": 142,
+      "line_start": 138,
       "locator": "backend/tests/test_r02_discovery_contract.py::test_duplicate_candidate_identity_is_rejected",
       "symbol": "test_duplicate_candidate_identity_is_rejected"
     },
     {
       "file": "backend/tests/test_r02_discovery_contract.py",
       "kind": "function",
-      "line_end": 138,
-      "line_start": 134,
+      "line_end": 158,
+      "line_start": 154,
       "locator": "backend/tests/test_r02_discovery_contract.py::test_unopened_or_noncanonical_model_family_is_rejected",
       "symbol": "test_unopened_or_noncanonical_model_family_is_rejected"
     },
     {
       "file": "backend/tests/test_r02_discovery_contract.py",
       "kind": "function",
-      "line_end": 154,
-      "line_start": 150,
+      "line_end": 174,
+      "line_start": 170,
       "locator": "backend/tests/test_r02_discovery_contract.py::test_candidate_lineage_mismatch_is_rejected",
       "symbol": "test_candidate_lineage_mismatch_is_rejected"
     },
     {
       "file": "backend/tests/test_r02_discovery_contract.py",
       "kind": "function",
-      "line_end": 161,
-      "line_start": 157,
+      "line_end": 181,
+      "line_start": 177,
       "locator": "backend/tests/test_r02_discovery_contract.py::test_candidate_identity_fields_are_exact_and_explicit",
       "symbol": "test_candidate_identity_fields_are_exact_and_explicit"
     },
     {
       "file": "backend/tests/test_r02_discovery_contract.py",
       "kind": "function",
-      "line_end": 168,
-      "line_start": 164,
+      "line_end": 188,
+      "line_start": 184,
       "locator": "backend/tests/test_r02_discovery_contract.py::test_plan_rejects_unknown_top_level_fields",
       "symbol": "test_plan_rejects_unknown_top_level_fields"
     },
@@ -84488,7 +84552,7 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "0c8e778bdb5dda3565a7f748a3f61fb86122f052fdb94c731e3482d8e9ae7480",
+  "source_digest": "46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c7986bda",
   "source_summary": {
     "files": 133,
     "languages": {
@@ -84497,7 +84561,7 @@
       "TypeScript": 3,
       "TypeScript/React": 21
     },
-    "lines": 62626,
+    "lines": 62667,
     "test_files": 42
   },
   "tests": [

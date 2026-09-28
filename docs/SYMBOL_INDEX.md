@@ -3,7 +3,7 @@
 # SYMBOL INDEX
 
 Authority SHA: external final acceptance evidence
-Source digest: 0c8e778bdb5dda3565a7f748a3f61fb86122f052fdb94c731e3482d8e9ae7480
+Source digest: 46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c7986bda
 Status: CURRENT
 
 | File | Symbol | Kind | Lines@SHA | Responsibility | Reads/Writes | Called By | Tests |
@@ -600,7 +600,7 @@ Status: CURRENT
 | backend/max_backend/research_r02_contract.py | _require_sha256 | function | 64-68 | Observed Python symbol | | | |
 | backend/max_backend/research_r02_contract.py | _canonical_compute_budget | function | 71-89 | Observed Python symbol | | | |
 | backend/max_backend/research_r02_contract.py | _canonical_candidate_spec | function | 92-150 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_contract.py | build_discovery_plan | function | 153-249 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_contract.py | build_discovery_plan | function | 153-270 | Observed Python symbol | | | |
 | backend/max_backend/research_r02_service.py | _blocked | function | 14-33 | Observed Python symbol | | | |
 | backend/max_backend/research_r02_service.py | r02_preflight | function | 36-99 | Observed Python symbol | | | |
 | backend/max_backend/research_service.py | _manifest_hash | function | 78-81 | Observed Python symbol | | | |
@@ -1411,18 +1411,20 @@ Status: CURRENT
 | backend/tests/test_r01_source.py | test_feature_capture_set_preserves_frozen_parent_values | function | 390-404 | Observed Python symbol | | | |
 | backend/tests/test_r01_source.py | test_frozen_parent_ea_resolves_from_retained_source_challenger | function | 407-440 | Observed Python symbol | | | |
 | backend/tests/test_r01_source.py | test_r01_api_rejects_manual_source_authority_fields | function | 443-471 | Observed Python symbol | | | |
-| backend/tests/test_r02_discovery_contract.py | _candidate | function | 14-29 | Observed Python symbol | | | |
-| backend/tests/test_r02_discovery_contract.py | _request | function | 32-50 | Observed Python symbol | | | |
-| backend/tests/test_r02_discovery_contract.py | test_discovery_contract_preserves_gate_boundaries | function | 53-62 | Observed Python symbol | | | |
-| backend/tests/test_r02_discovery_contract.py | test_discovery_plan_is_deterministic_and_order_independent | function | 65-79 | Observed Python symbol | | | |
-| backend/tests/test_r02_discovery_contract.py | test_candidate_count_must_be_explicit_positive_integer | function | 83-87 | Observed Python symbol | | | |
-| backend/tests/test_r02_discovery_contract.py | test_candidate_count_mismatch_fails_closed | function | 90-94 | Observed Python symbol | | | |
-| backend/tests/test_r02_discovery_contract.py | test_compute_budget_has_no_hidden_default | function | 111-115 | Observed Python symbol | | | |
-| backend/tests/test_r02_discovery_contract.py | test_duplicate_candidate_identity_is_rejected | function | 118-122 | Observed Python symbol | | | |
-| backend/tests/test_r02_discovery_contract.py | test_unopened_or_noncanonical_model_family_is_rejected | function | 134-138 | Observed Python symbol | | | |
-| backend/tests/test_r02_discovery_contract.py | test_candidate_lineage_mismatch_is_rejected | function | 150-154 | Observed Python symbol | | | |
-| backend/tests/test_r02_discovery_contract.py | test_candidate_identity_fields_are_exact_and_explicit | function | 157-161 | Observed Python symbol | | | |
-| backend/tests/test_r02_discovery_contract.py | test_plan_rejects_unknown_top_level_fields | function | 164-168 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | _candidate | function | 14-30 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | _request | function | 33-52 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_discovery_contract_preserves_gate_boundaries | function | 55-64 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_discovery_plan_is_deterministic_and_order_independent | function | 67-81 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_candidate_count_must_be_explicit_positive_integer | function | 85-89 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_parent_lineage_must_bind_exact_r01_output_authority | function | 92-98 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_parent_lineage_fields_are_exact | function | 101-107 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_candidate_count_mismatch_fails_closed | function | 110-114 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_compute_budget_has_no_hidden_default | function | 131-135 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_duplicate_candidate_identity_is_rejected | function | 138-142 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_unopened_or_noncanonical_model_family_is_rejected | function | 154-158 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_candidate_lineage_mismatch_is_rejected | function | 170-174 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_candidate_identity_fields_are_exact_and_explicit | function | 177-181 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_plan_rejects_unknown_top_level_fields | function | 184-188 | Observed Python symbol | | | |
 | backend/tests/test_r02_preflight.py | _run | function | 12-18 | Observed Python symbol | | | |
 | backend/tests/test_r02_preflight.py | _install | function | 21-45 | Observed Python symbol | | | |
 | backend/tests/test_r02_preflight.py | test_fresh_epoch_without_research_is_blocked | function | 48-55 | Observed Python symbol | | | |
