@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import math
 from typing import Any
 
 from .research_contract import (
@@ -73,7 +74,12 @@ def _canonical_compute_budget(value: Any) -> dict[str, Any]:
     if set(value) != {"value", "unit"}:
         raise ValueError("R02_COMPUTE_BUDGET_FIELDS_INVALID")
     amount = value["value"]
-    if isinstance(amount, bool) or not isinstance(amount, (int, float)) or amount <= 0:
+    if (
+        isinstance(amount, bool)
+        or not isinstance(amount, (int, float))
+        or not math.isfinite(float(amount))
+        or amount <= 0
+    ):
         raise ValueError("R02_COMPUTE_BUDGET_VALUE_INVALID")
     unit = _require_nonempty_text(value["unit"], "R02_COMPUTE_BUDGET_UNIT_REQUIRED")
     return {
