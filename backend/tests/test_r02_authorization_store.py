@@ -14,6 +14,7 @@ from max_backend.research_contract import (
 from max_backend.research_r01_store import create_r01_authorization, create_r01_run
 from max_backend.research_r02_contract import build_discovery_plan
 from max_backend.research_r02_store import (
+    authorize_and_freeze_r02_discovery,
     create_r02_authorization,
     freeze_r02_discovery_block,
     get_r02_discovery_block,
@@ -367,6 +368,69 @@ def test_r02_frozen_rows_are_append_only(tmp_path: Path) -> None:
                 "DELETE FROM research_r02_authorizations WHERE authorization_id=?",
                 (authorization["authorization_id"],),
             )
+
+
+def test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault(
+    tmp_path: Path,
+) -> None:
+    db = _database(tmp_path)
+    plan = _plan()
+    record = _authorization(plan)
+    with connect(db) as conn:
+        conn.executescript(
+            """
+            CREATE TRIGGER r02_test_candidate_fault
+            BEFORE INSERT ON research_r02_candidate_specs
+            WHEN NEW.ordinal=1
+            BEGIN
+                SELECT RAISE(ABORT, 'R02_TEST_CANDIDATE_FAULT');
+            END;
+            """
+        )
+
+    with pytest.raises(Exception, match="R02_TEST_CANDIDATE_FAULT"):
+        authorize_and_freeze_r02_discovery(
+            authorization_record=record,
+            plan=plan,
+            path=db,
+        )
+
+    with connect(db) as conn:
+        authorization_count = conn.execute(
+            "SELECT COUNT(*) AS n FROM research_r02_authorizations WHERE research_id=?",
+            (RESEARCH_ID,),
+        ).fetchone()["n"]
+        block_count = conn.execute(
+            "SELECT COUNT(*) AS n FROM research_r02_discovery_blocks WHERE research_id=?",
+            (RESEARCH_ID,),
+        ).fetchone()["n"]
+        candidate_count = conn.execute(
+            """
+            SELECT COUNT(*) AS n FROM research_r02_candidate_specs
+            WHERE block_id IN (
+                SELECT block_id FROM research_r02_discovery_blocks WHERE research_id=?
+            )
+            """,
+            (RESEARCH_ID,),
+        ).fetchone()["n"]
+    assert int(authorization_count) == 0
+    assert int(block_count) == 0
+    assert int(candidate_count) == 0
+
+
+def test_atomic_authorization_freeze_persists_exact_authority(tmp_path: Path) -> None:
+    db = _database(tmp_path)
+    plan = _plan()
+    record = _authorization(plan)
+    authorization, block = authorize_and_freeze_r02_discovery(
+        authorization_record=record,
+        plan=plan,
+        path=db,
+    )
+    assert authorization["authorization_id"] == record["authorization_id"]
+    assert block["authorization_id"] == record["authorization_id"]
+    assert block["plan_sha256"] == plan["plan_sha256"]
+    assert [item["candidate_id"] for item in block["candidates"]] == plan["candidate_ids"]
 
 
 def test_r02_persistence_advances_cumulative_schema_to_11(tmp_path: Path) -> None:

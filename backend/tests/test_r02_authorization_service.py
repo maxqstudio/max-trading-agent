@@ -123,8 +123,12 @@ def test_authorization_freezes_plan_without_execution(monkeypatch: pytest.Monkey
             "candidates": [],
         }
 
-    monkeypatch.setattr(r02, "create_r02_authorization", fake_create)
-    monkeypatch.setattr(r02, "freeze_r02_discovery_block", fake_freeze)
+    def fake_atomic(*, authorization_record: dict, plan: dict, **_kwargs):
+        authorization = fake_create(authorization_record)
+        block = fake_freeze(authorization=authorization, plan=plan)
+        return authorization, block
+
+    monkeypatch.setattr(r02, "authorize_and_freeze_r02_discovery", fake_atomic)
 
     result = r02.authorize_r02_discovery(_request(), path=Path("unused.db"))
 

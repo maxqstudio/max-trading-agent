@@ -15,8 +15,7 @@ from .research_r02_contract import (
     r02_discovery_contract,
 )
 from .research_r02_store import (
-    create_r02_authorization,
-    freeze_r02_discovery_block,
+    authorize_and_freeze_r02_discovery,
     get_r02_authorization,
     get_r02_discovery_block,
 )
@@ -215,8 +214,8 @@ def authorize_r02_discovery(
         "execution_available": False,
     }
     payload_sha = stable_hash(body)
-    authorization = create_r02_authorization(
-        {
+    authorization, block = authorize_and_freeze_r02_discovery(
+        authorization_record={
             "authorization_id": "RAUTH-R02-" + payload_sha[:24],
             "research_id": research_id,
             "confirmed": True,
@@ -224,10 +223,6 @@ def authorize_r02_discovery(
             "payload": body,
             "authorized_utc": utc_now(),
         },
-        path=path,
-    )
-    block = freeze_r02_discovery_block(
-        authorization=authorization,
         plan=plan,
         path=path,
     )
