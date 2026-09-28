@@ -43,6 +43,7 @@ def _install(
     monkeypatch.setattr(r02, "get_r01_run", lambda *_args, **_kwargs: deepcopy(current_run))
     monkeypatch.setattr(r02, "validate_r01_integrity", lambda **_kwargs: deepcopy(current_integrity))
     monkeypatch.setattr(r02, "verify_no_training_side_effects", lambda *_args, **_kwargs: deepcopy(current_side_effects))
+    monkeypatch.setattr(r02, "get_r02_discovery_block", lambda *_args, **_kwargs: None)
 
 
 def test_fresh_epoch_without_research_is_blocked(monkeypatch: pytest.MonkeyPatch) -> None:
