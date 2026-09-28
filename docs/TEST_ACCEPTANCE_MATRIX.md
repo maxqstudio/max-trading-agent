@@ -4,16 +4,16 @@
 
 ## Evidence boundary
 
-R02 Cheap Screen outcome-ledger source phase. Hosted synthetic targeted run 36411091220 passed 82 tests at 59d61a20b5a7a54be0ff10893a3a63216a91250b. The source can validate and atomically persist a complete immutable candidate-outcome ledger, including SCREEN_FAIL and EXECUTION_ERROR, but no trainer/executor or outcome-submit API exists and no real model fitting/outcome is claimed. Full generated-governance/full-regression closeout remains pending; real R00/R01/R02 scientific runtime and Owner-PC/MT5/browser E2E remain NOT_PROVEN.
+R02 Cheap Screen outcome-ledger source phase after numeric-overflow hardening. Windows targeted run 36412664127 passed 84 R02 tests at 02644bb471c8c605a27413b4a1f8677a1f30dffd, including huge-integer regressions proving discovery/outcome compute values fail closed as validation errors rather than escaping as OverflowError/HTTP 500. Full regenerated-governance/full-regression closeout remains pending. No trainer/executor or outcome-submit API exists and no real model fitting/outcome, R03 qualification, ONNX, Research Challenger, Champion mutation, MT5 runtime or Owner-PC/browser E2E is claimed.
 
 Final tested source: external final acceptance evidence.
-Current source digest: a74b94c6b01bbc79550856bca36e55e324123e15cd7b5e7707b6695cbd9a0453
+Current source digest: 6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
 | R02OL-01 | Every frozen candidate must have exactly one deterministic outcome before terminalization; missing, duplicate and unknown candidate outcomes fail closed. | research_r02_outcome.py + test_r02_outcome_contract.py + test_r02_authorization_store.py | NOT_PROVEN |
 | R02OL-02 | Outcome status is canonical SCREEN_PASS, SCREEN_FAIL or EXECUTION_ERROR; non-pass records retain an explicit failure code and all failures are persisted rather than filtered out. | research_r02_outcome.py + targeted tests | NOT_PROVEN |
-| R02OL-03 | Outcome metrics and compute accounting reject non-finite values; compute unit must match the frozen block and total consumption cannot exceed the frozen budget. | test_r02_outcome_contract.py + test_r02_authorization_store.py | NOT_PROVEN |
+| R02OL-03 | Outcome metrics and compute accounting reject non-finite or unrepresentable numeric values; compute unit must match the frozen block and total consumption cannot exceed the frozen budget. | research_r02_contract.py + research_r02_outcome.py + targeted overflow regressions | NOT_PROVEN |
 | R02OL-04 | All candidate outcomes plus one COMPLETE_WAITING_OWNER terminal authority commit atomically; a mid-batch persistence fault leaves zero new outcome/terminal rows. | commit_r02_terminal_outcomes + fault-injection regression | NOT_PROVEN |
 | R02OL-05 | Exact terminal replay is idempotent while a different second terminal manifest is rejected. | test_r02_authorization_store.py | NOT_PROVEN |
 | R02OL-06 | Outcome and terminal rows are immutable/append-only and do not mutate model-training, ONNX, Research-Challenger or Champion counters. | SQLite triggers + test_r02_authorization_store.py | NOT_PROVEN |

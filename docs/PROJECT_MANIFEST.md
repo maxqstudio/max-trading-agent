@@ -13,7 +13,7 @@ Repository: maxqstudio/max-trading-agent
 Active branch: work/r02-outcome-ledger
 Current authoritative SHA: external final acceptance evidence
 Last accepted SHA: eb6192873eb518b9fe4c7f15d03600ca4ac1e73d
-Current source digest: a74b94c6b01bbc79550856bca36e55e324123e15cd7b5e7707b6695cbd9a0453
+Current source digest: 6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.

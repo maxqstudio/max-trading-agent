@@ -967,7 +967,7 @@
       "kind": "function",
       "label": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed",
       "language": "Python",
-      "line_end": 58,
+      "line_end": 62,
       "line_start": 44,
       "locator": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed"
     },
@@ -994,8 +994,8 @@
       "kind": "function",
       "label": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
       "language": "Python",
-      "line_end": 128,
-      "line_start": 61,
+      "line_end": 132,
+      "line_start": 65,
       "locator": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome"
     },
     {
@@ -1003,8 +1003,8 @@
       "kind": "function",
       "label": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
       "language": "Python",
-      "line_end": 221,
-      "line_start": 131,
+      "line_end": 229,
+      "line_start": 135,
       "locator": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest"
     },
     {
@@ -1260,7 +1260,7 @@
       "locator": "backend/max_backend/workflow_store.py::migrate_current"
     }
   ],
-  "observed_head": "042685ee81c0e3205c7cf5a33c64228e1dd5409b",
+  "observed_head": "50f3f5f77632d81c7f9f1f794508723127e32e1f",
   "schema_version": 1,
-  "source_digest": "a74b94c6b01bbc79550856bca36e55e324123e15cd7b5e7707b6695cbd9a0453"
+  "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68"
 }

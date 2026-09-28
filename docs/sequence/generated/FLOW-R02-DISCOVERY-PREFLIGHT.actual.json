@@ -964,8 +964,8 @@
       "kind": "function",
       "label": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
       "language": "Python",
-      "line_end": 150,
-      "line_start": 92,
+      "line_end": 154,
+      "line_start": 96,
       "locator": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec"
     },
     {
@@ -973,7 +973,7 @@
       "kind": "function",
       "label": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
       "language": "Python",
-      "line_end": 89,
+      "line_end": 93,
       "line_start": 71,
       "locator": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget"
     },
@@ -1000,8 +1000,8 @@
       "kind": "function",
       "label": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
       "language": "Python",
-      "line_end": 270,
-      "line_start": 153,
+      "line_end": 274,
+      "line_start": 157,
       "locator": "backend/max_backend/research_r02_contract.py::build_discovery_plan"
     },
     {
@@ -1248,7 +1248,7 @@
       "locator": "backend/max_backend/workflow_store.py::migrate_current"
     }
   ],
-  "observed_head": "042685ee81c0e3205c7cf5a33c64228e1dd5409b",
+  "observed_head": "50f3f5f77632d81c7f9f1f794508723127e32e1f",
   "schema_version": 1,
-  "source_digest": "a74b94c6b01bbc79550856bca36e55e324123e15cd7b5e7707b6695cbd9a0453"
+  "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68"
 }

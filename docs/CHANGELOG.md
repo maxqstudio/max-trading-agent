@@ -112,3 +112,11 @@ Type: source_foundation
 - Add rollback fault-injection, idempotent replay, immutable-row and zero-scientific-counter regressions.
 - Targeted Windows run 36411091220 passed 82 synthetic R02 tests at 59d61a20b5a7a54be0ff10893a3a63216a91250b.
 - No trainer, model fitting, outcome-submit API, Qualified Pool admission, ONNX, Research Challenger or Champion mutation is added.
+
+## 2026-09-28 — R02 numeric input fail-closed hardening
+
+Type: repair
+
+- Discovery compute-budget and outcome/terminal compute validation now map unrepresentable numeric input to deterministic validation errors instead of allowing OverflowError to escape.
+- Add huge-integer regressions for Owner authorization budget and outcome/terminal budget paths.
+- Windows targeted run 36412664127 passed 84 R02 tests at 02644bb471c8c605a27413b4a1f8677a1f30dffd.

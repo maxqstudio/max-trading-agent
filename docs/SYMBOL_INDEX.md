@@ -3,7 +3,7 @@
 # SYMBOL INDEX
 
 Authority SHA: external final acceptance evidence
-Source digest: a74b94c6b01bbc79550856bca36e55e324123e15cd7b5e7707b6695cbd9a0453
+Source digest: 6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68
 Status: CURRENT
 
 | File | Symbol | Kind | Lines@SHA | Responsibility | Reads/Writes | Called By | Tests |
@@ -600,14 +600,14 @@ Status: CURRENT
 | backend/max_backend/research_r02_contract.py | r02_discovery_contract | function | 33-54 | Observed Python symbol | | | |
 | backend/max_backend/research_r02_contract.py | _require_nonempty_text | function | 57-61 | Observed Python symbol | | | |
 | backend/max_backend/research_r02_contract.py | _require_sha256 | function | 64-68 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_contract.py | _canonical_compute_budget | function | 71-89 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_contract.py | _canonical_candidate_spec | function | 92-150 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_contract.py | build_discovery_plan | function | 153-270 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_contract.py | _canonical_compute_budget | function | 71-93 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_contract.py | _canonical_candidate_spec | function | 96-154 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_contract.py | build_discovery_plan | function | 157-274 | Observed Python symbol | | | |
 | backend/max_backend/research_r02_outcome.py | _require_text | function | 15-19 | Observed Python symbol | | | |
 | backend/max_backend/research_r02_outcome.py | _canonical_json | function | 22-41 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_outcome.py | _canonical_compute_consumed | function | 44-58 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_outcome.py | build_candidate_outcome | function | 61-128 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_outcome.py | build_terminal_manifest | function | 131-221 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_outcome.py | _canonical_compute_consumed | function | 44-62 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_outcome.py | build_candidate_outcome | function | 65-132 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_outcome.py | build_terminal_manifest | function | 135-229 | Observed Python symbol | | | |
 | backend/max_backend/research_r02_service.py | _blocked | function | 27-46 | Observed Python symbol | | | |
 | backend/max_backend/research_r02_service.py | r02_preflight | function | 49-182 | Observed Python symbol | | | |
 | backend/max_backend/research_r02_service.py | authorize_r02_discovery | function | 189-285 | Observed Python symbol | | | |
@@ -1479,20 +1479,22 @@ Status: CURRENT
 | backend/tests/test_r02_discovery_contract.py | test_parent_lineage_fields_are_exact | function | 101-107 | Observed Python symbol | | | |
 | backend/tests/test_r02_discovery_contract.py | test_candidate_count_mismatch_fails_closed | function | 110-114 | Observed Python symbol | | | |
 | backend/tests/test_r02_discovery_contract.py | test_compute_budget_has_no_hidden_default | function | 131-135 | Observed Python symbol | | | |
-| backend/tests/test_r02_discovery_contract.py | test_duplicate_candidate_identity_is_rejected | function | 138-142 | Observed Python symbol | | | |
-| backend/tests/test_r02_discovery_contract.py | test_unopened_or_noncanonical_model_family_is_rejected | function | 154-158 | Observed Python symbol | | | |
-| backend/tests/test_r02_discovery_contract.py | test_candidate_lineage_mismatch_is_rejected | function | 170-174 | Observed Python symbol | | | |
-| backend/tests/test_r02_discovery_contract.py | test_candidate_identity_fields_are_exact_and_explicit | function | 177-181 | Observed Python symbol | | | |
-| backend/tests/test_r02_discovery_contract.py | test_plan_rejects_unknown_top_level_fields | function | 184-188 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_compute_budget_huge_integer_fails_closed_as_validation_error | function | 138-145 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_duplicate_candidate_identity_is_rejected | function | 148-152 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_unopened_or_noncanonical_model_family_is_rejected | function | 164-168 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_candidate_lineage_mismatch_is_rejected | function | 180-184 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_candidate_identity_fields_are_exact_and_explicit | function | 187-191 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_plan_rejects_unknown_top_level_fields | function | 194-198 | Observed Python symbol | | | |
 | backend/tests/test_r02_outcome_contract.py | _outcome | function | 16-23 | Observed Python symbol | | | |
 | backend/tests/test_r02_outcome_contract.py | test_candidate_outcome_is_deterministic_and_has_no_qualification_authority | function | 26-42 | Observed Python symbol | | | |
 | backend/tests/test_r02_outcome_contract.py | test_nonfinite_metric_is_rejected | function | 46-55 | Observed Python symbol | | | |
-| backend/tests/test_r02_outcome_contract.py | test_screen_pass_forbids_failure_code | function | 58-70 | Observed Python symbol | | | |
-| backend/tests/test_r02_outcome_contract.py | test_nonpass_outcome_requires_failure_code | function | 74-83 | Observed Python symbol | | | |
-| backend/tests/test_r02_outcome_contract.py | test_outcome_root_fields_are_exact | function | 86-95 | Observed Python symbol | | | |
-| backend/tests/test_r02_outcome_contract.py | test_terminal_manifest_orders_by_frozen_candidate_authority | function | 98-122 | Observed Python symbol | | | |
-| backend/tests/test_r02_outcome_contract.py | test_terminal_manifest_requires_every_candidate_exactly_once | function | 125-133 | Observed Python symbol | | | |
-| backend/tests/test_r02_outcome_contract.py | test_terminal_manifest_enforces_budget_and_unit | function | 136-157 | Observed Python symbol | | | |
+| backend/tests/test_r02_outcome_contract.py | test_huge_integer_compute_values_fail_closed_as_validation_errors | function | 58-81 | Observed Python symbol | | | |
+| backend/tests/test_r02_outcome_contract.py | test_screen_pass_forbids_failure_code | function | 84-96 | Observed Python symbol | | | |
+| backend/tests/test_r02_outcome_contract.py | test_nonpass_outcome_requires_failure_code | function | 100-109 | Observed Python symbol | | | |
+| backend/tests/test_r02_outcome_contract.py | test_outcome_root_fields_are_exact | function | 112-121 | Observed Python symbol | | | |
+| backend/tests/test_r02_outcome_contract.py | test_terminal_manifest_orders_by_frozen_candidate_authority | function | 124-148 | Observed Python symbol | | | |
+| backend/tests/test_r02_outcome_contract.py | test_terminal_manifest_requires_every_candidate_exactly_once | function | 151-159 | Observed Python symbol | | | |
+| backend/tests/test_r02_outcome_contract.py | test_terminal_manifest_enforces_budget_and_unit | function | 162-183 | Observed Python symbol | | | |
 | backend/tests/test_r02_preflight.py | _run | function | 12-18 | Observed Python symbol | | | |
 | backend/tests/test_r02_preflight.py | _install | function | 21-47 | Observed Python symbol | | | |
 | backend/tests/test_r02_preflight.py | test_fresh_epoch_without_research_is_blocked | function | 50-57 | Observed Python symbol | | | |

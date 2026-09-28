@@ -313,14 +313,14 @@
       "file": "backend/max_backend/research_r02_contract.py",
       "is_test": false,
       "language": "Python",
-      "lines": 270
+      "lines": 274
     },
     {
       "directory": "backend/max_backend",
       "file": "backend/max_backend/research_r02_outcome.py",
       "is_test": false,
       "language": "Python",
-      "lines": 221
+      "lines": 229
     },
     {
       "directory": "backend/max_backend",
@@ -656,14 +656,14 @@
       "file": "backend/tests/test_r02_discovery_contract.py",
       "is_test": true,
       "language": "Python",
-      "lines": 188
+      "lines": 198
     },
     {
       "directory": "backend/tests",
       "file": "backend/tests/test_r02_outcome_contract.py",
       "is_test": true,
       "language": "Python",
-      "lines": 157
+      "lines": 183
     },
     {
       "directory": "backend/tests",
@@ -32348,6 +32348,14 @@
     },
     {
       "caller": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
+      "target_token": "float"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
       "target_token": "isinstance"
     },
     {
@@ -32357,10 +32365,6 @@
     {
       "caller": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
       "target_token": "math.isfinite"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
-      "target_token": "float"
     },
     {
       "caller": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
@@ -32796,6 +32800,14 @@
     },
     {
       "caller": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed",
+      "target_token": "float"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed",
       "target_token": "isinstance"
     },
     {
@@ -32805,10 +32817,6 @@
     {
       "caller": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed",
       "target_token": "math.isfinite"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed",
-      "target_token": "float"
     },
     {
       "caller": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed",
@@ -32936,6 +32944,14 @@
     },
     {
       "caller": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
+      "target_token": "float"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
       "target_token": "isinstance"
     },
     {
@@ -32945,10 +32961,6 @@
     {
       "caller": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
       "target_token": "math.isfinite"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
-      "target_token": "float"
     },
     {
       "caller": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
@@ -33013,10 +33025,6 @@
     {
       "caller": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
       "target_token": "math.fsum"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
-      "target_token": "float"
     },
     {
       "caller": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
@@ -61363,6 +61371,18 @@
       "target_token": "build_discovery_plan"
     },
     {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_compute_budget_huge_integer_fails_closed_as_validation_error",
+      "target_token": "_request"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_compute_budget_huge_integer_fails_closed_as_validation_error",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_compute_budget_huge_integer_fails_closed_as_validation_error",
+      "target_token": "build_discovery_plan"
+    },
+    {
       "caller": "backend/tests/test_r02_discovery_contract.py::test_duplicate_candidate_identity_is_rejected",
       "target_token": "_request"
     },
@@ -61453,6 +61473,30 @@
     {
       "caller": "backend/tests/test_r02_outcome_contract.py::test_nonfinite_metric_is_rejected",
       "target_token": "build_candidate_outcome"
+    },
+    {
+      "caller": "backend/tests/test_r02_outcome_contract.py::test_huge_integer_compute_values_fail_closed_as_validation_errors",
+      "target_token": "_outcome"
+    },
+    {
+      "caller": "backend/tests/test_r02_outcome_contract.py::test_huge_integer_compute_values_fail_closed_as_validation_errors",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_outcome_contract.py::test_huge_integer_compute_values_fail_closed_as_validation_errors",
+      "target_token": "build_candidate_outcome"
+    },
+    {
+      "caller": "backend/tests/test_r02_outcome_contract.py::test_huge_integer_compute_values_fail_closed_as_validation_errors",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_outcome_contract.py::test_huge_integer_compute_values_fail_closed_as_validation_errors",
+      "target_token": "build_terminal_manifest"
+    },
+    {
+      "caller": "backend/tests/test_r02_outcome_contract.py::test_huge_integer_compute_values_fail_closed_as_validation_errors",
+      "target_token": "_outcome"
     },
     {
       "caller": "backend/tests/test_r02_outcome_contract.py::test_screen_pass_forbids_failure_code",
@@ -79453,7 +79497,7 @@
     {
       "file": "backend/max_backend/research_r02_contract.py",
       "kind": "function",
-      "line_end": 89,
+      "line_end": 93,
       "line_start": 71,
       "locator": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
       "symbol": "_canonical_compute_budget"
@@ -79461,16 +79505,16 @@
     {
       "file": "backend/max_backend/research_r02_contract.py",
       "kind": "function",
-      "line_end": 150,
-      "line_start": 92,
+      "line_end": 154,
+      "line_start": 96,
       "locator": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
       "symbol": "_canonical_candidate_spec"
     },
     {
       "file": "backend/max_backend/research_r02_contract.py",
       "kind": "function",
-      "line_end": 270,
-      "line_start": 153,
+      "line_end": 274,
+      "line_start": 157,
       "locator": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
       "symbol": "build_discovery_plan"
     },
@@ -79493,7 +79537,7 @@
     {
       "file": "backend/max_backend/research_r02_outcome.py",
       "kind": "function",
-      "line_end": 58,
+      "line_end": 62,
       "line_start": 44,
       "locator": "backend/max_backend/research_r02_outcome.py::_canonical_compute_consumed",
       "symbol": "_canonical_compute_consumed"
@@ -79501,16 +79545,16 @@
     {
       "file": "backend/max_backend/research_r02_outcome.py",
       "kind": "function",
-      "line_end": 128,
-      "line_start": 61,
+      "line_end": 132,
+      "line_start": 65,
       "locator": "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
       "symbol": "build_candidate_outcome"
     },
     {
       "file": "backend/max_backend/research_r02_outcome.py",
       "kind": "function",
-      "line_end": 221,
-      "line_start": 131,
+      "line_end": 229,
+      "line_start": 135,
       "locator": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
       "symbol": "build_terminal_manifest"
     },
@@ -86485,40 +86529,48 @@
     {
       "file": "backend/tests/test_r02_discovery_contract.py",
       "kind": "function",
-      "line_end": 142,
+      "line_end": 145,
       "line_start": 138,
+      "locator": "backend/tests/test_r02_discovery_contract.py::test_compute_budget_huge_integer_fails_closed_as_validation_error",
+      "symbol": "test_compute_budget_huge_integer_fails_closed_as_validation_error"
+    },
+    {
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "kind": "function",
+      "line_end": 152,
+      "line_start": 148,
       "locator": "backend/tests/test_r02_discovery_contract.py::test_duplicate_candidate_identity_is_rejected",
       "symbol": "test_duplicate_candidate_identity_is_rejected"
     },
     {
       "file": "backend/tests/test_r02_discovery_contract.py",
       "kind": "function",
-      "line_end": 158,
-      "line_start": 154,
+      "line_end": 168,
+      "line_start": 164,
       "locator": "backend/tests/test_r02_discovery_contract.py::test_unopened_or_noncanonical_model_family_is_rejected",
       "symbol": "test_unopened_or_noncanonical_model_family_is_rejected"
     },
     {
       "file": "backend/tests/test_r02_discovery_contract.py",
       "kind": "function",
-      "line_end": 174,
-      "line_start": 170,
+      "line_end": 184,
+      "line_start": 180,
       "locator": "backend/tests/test_r02_discovery_contract.py::test_candidate_lineage_mismatch_is_rejected",
       "symbol": "test_candidate_lineage_mismatch_is_rejected"
     },
     {
       "file": "backend/tests/test_r02_discovery_contract.py",
       "kind": "function",
-      "line_end": 181,
-      "line_start": 177,
+      "line_end": 191,
+      "line_start": 187,
       "locator": "backend/tests/test_r02_discovery_contract.py::test_candidate_identity_fields_are_exact_and_explicit",
       "symbol": "test_candidate_identity_fields_are_exact_and_explicit"
     },
     {
       "file": "backend/tests/test_r02_discovery_contract.py",
       "kind": "function",
-      "line_end": 188,
-      "line_start": 184,
+      "line_end": 198,
+      "line_start": 194,
       "locator": "backend/tests/test_r02_discovery_contract.py::test_plan_rejects_unknown_top_level_fields",
       "symbol": "test_plan_rejects_unknown_top_level_fields"
     },
@@ -86549,48 +86601,56 @@
     {
       "file": "backend/tests/test_r02_outcome_contract.py",
       "kind": "function",
-      "line_end": 70,
+      "line_end": 81,
       "line_start": 58,
+      "locator": "backend/tests/test_r02_outcome_contract.py::test_huge_integer_compute_values_fail_closed_as_validation_errors",
+      "symbol": "test_huge_integer_compute_values_fail_closed_as_validation_errors"
+    },
+    {
+      "file": "backend/tests/test_r02_outcome_contract.py",
+      "kind": "function",
+      "line_end": 96,
+      "line_start": 84,
       "locator": "backend/tests/test_r02_outcome_contract.py::test_screen_pass_forbids_failure_code",
       "symbol": "test_screen_pass_forbids_failure_code"
     },
     {
       "file": "backend/tests/test_r02_outcome_contract.py",
       "kind": "function",
-      "line_end": 83,
-      "line_start": 74,
+      "line_end": 109,
+      "line_start": 100,
       "locator": "backend/tests/test_r02_outcome_contract.py::test_nonpass_outcome_requires_failure_code",
       "symbol": "test_nonpass_outcome_requires_failure_code"
     },
     {
       "file": "backend/tests/test_r02_outcome_contract.py",
       "kind": "function",
-      "line_end": 95,
-      "line_start": 86,
+      "line_end": 121,
+      "line_start": 112,
       "locator": "backend/tests/test_r02_outcome_contract.py::test_outcome_root_fields_are_exact",
       "symbol": "test_outcome_root_fields_are_exact"
     },
     {
       "file": "backend/tests/test_r02_outcome_contract.py",
       "kind": "function",
-      "line_end": 122,
-      "line_start": 98,
+      "line_end": 148,
+      "line_start": 124,
       "locator": "backend/tests/test_r02_outcome_contract.py::test_terminal_manifest_orders_by_frozen_candidate_authority",
       "symbol": "test_terminal_manifest_orders_by_frozen_candidate_authority"
     },
     {
       "file": "backend/tests/test_r02_outcome_contract.py",
       "kind": "function",
-      "line_end": 133,
-      "line_start": 125,
+      "line_end": 159,
+      "line_start": 151,
       "locator": "backend/tests/test_r02_outcome_contract.py::test_terminal_manifest_requires_every_candidate_exactly_once",
       "symbol": "test_terminal_manifest_requires_every_candidate_exactly_once"
     },
     {
       "file": "backend/tests/test_r02_outcome_contract.py",
       "kind": "function",
-      "line_end": 157,
-      "line_start": 136,
+      "line_end": 183,
+      "line_start": 162,
       "locator": "backend/tests/test_r02_outcome_contract.py::test_terminal_manifest_enforces_budget_and_unit",
       "symbol": "test_terminal_manifest_enforces_budget_and_unit"
     },
@@ -88164,7 +88224,7 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "a74b94c6b01bbc79550856bca36e55e324123e15cd7b5e7707b6695cbd9a0453",
+  "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
   "source_summary": {
     "files": 138,
     "languages": {
@@ -88173,7 +88233,7 @@
       "TypeScript": 3,
       "TypeScript/React": 21
     },
-    "lines": 64976,
+    "lines": 65024,
     "test_files": 45
   },
   "tests": [

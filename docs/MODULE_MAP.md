@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: a74b94c6b01bbc79550856bca36e55e324123e15cd7b5e7707b6695cbd9a0453
+Source digest: 6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -50,8 +50,8 @@ Generated/refreshed: current compiler run
 | backend/max_backend/research_owner_view.py | Python | 347 | backend/max_backend | NO |
 | backend/max_backend/research_r01_service.py | Python | 1758 | backend/max_backend | NO |
 | backend/max_backend/research_r01_store.py | Python | 502 | backend/max_backend | NO |
-| backend/max_backend/research_r02_contract.py | Python | 270 | backend/max_backend | NO |
-| backend/max_backend/research_r02_outcome.py | Python | 221 | backend/max_backend | NO |
+| backend/max_backend/research_r02_contract.py | Python | 274 | backend/max_backend | NO |
+| backend/max_backend/research_r02_outcome.py | Python | 229 | backend/max_backend | NO |
 | backend/max_backend/research_r02_service.py | Python | 285 | backend/max_backend | NO |
 | backend/max_backend/research_r02_store.py | Python | 619 | backend/max_backend | NO |
 | backend/max_backend/research_service.py | Python | 1423 | backend/max_backend | NO |
@@ -99,8 +99,8 @@ Generated/refreshed: current compiler run
 | backend/tests/test_r01_source.py | Python | 471 | backend/tests | YES |
 | backend/tests/test_r02_authorization_service.py | Python | 206 | backend/tests | YES |
 | backend/tests/test_r02_authorization_store.py | Python | 679 | backend/tests | YES |
-| backend/tests/test_r02_discovery_contract.py | Python | 188 | backend/tests | YES |
-| backend/tests/test_r02_outcome_contract.py | Python | 157 | backend/tests | YES |
+| backend/tests/test_r02_discovery_contract.py | Python | 198 | backend/tests | YES |
+| backend/tests/test_r02_outcome_contract.py | Python | 183 | backend/tests | YES |
 | backend/tests/test_r02_preflight.py | Python | 219 | backend/tests | YES |
 | frontend/src/App.test.tsx | TypeScript/React | 241 | frontend/src | YES |
 | frontend/src/App.tsx | TypeScript/React | 290 | frontend/src | NO |

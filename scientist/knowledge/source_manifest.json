@@ -193,11 +193,11 @@
   },
   {
     "path": "backend/max_backend/research_r02_contract.py",
-    "sha256": "0436e7cae6f0d6525ca76a491d7a33ff152f195447b8a10fe652b299d638da58"
+    "sha256": "f4993030f60bbc51916bced52db8f65b29508a9b057fb076a6d4b606aa4af7e7"
   },
   {
     "path": "backend/max_backend/research_r02_outcome.py",
-    "sha256": "ad87d616629273e5e314de97562c7ec892e360b05b6db86ec17feb6d83c4ffc6"
+    "sha256": "4ba39ba297fd293abe74c7eb76e0ba8e5bd0dcd1747735fd120b314720454238"
   },
   {
     "path": "backend/max_backend/research_r02_service.py",
