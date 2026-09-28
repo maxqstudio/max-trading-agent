@@ -7,12 +7,12 @@
       "backend/max_backend/challenger_store.py::consumed_source_identities"
     ],
     "graph": "docs/sequence/generated/FLOW-CHALLENGER-CONSUMPTION.actual.json",
-    "source_digest": "46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c7986bda"
+    "source_digest": "9e11596650296accc5e32b869cfcbe448d0cee960f905978c2105282d0769307"
   },
   "critical": true,
-  "implementation_base_sha": "5c0df514632964dd942cba59a73f3b822e09085a",
+  "implementation_base_sha": "936b8a9878bc158285cfc1c5343bfd4112c3093d",
   "mode": "DURING",
-  "phase": "R02_DISCOVERY_SOURCE_FOUNDATION",
+  "phase": "R02_DISCOVERY_AUTHORIZATION_FREEZE",
   "plan": {
     "contract": "",
     "diagram": "",

@@ -73,3 +73,14 @@ Type: acceptance
 - Windows CI run 36374307305 passed at ee5e93cb039b37294452ba42239991514a3c80a5.
 - Backend 537 PASS; frontend 53 PASS across 10 files; source-only/security, Skill Workflow provenance/STRICT, generated governance/sequence, pip check, lint/build/npm dependency tree PASS.
 - Candidate identity is bound to exact R01 output authority; real R02 start/training/qualification remains blocked.
+
+## 2026-09-28 — R02 authorization/frozen-block source phase
+
+Type: source_foundation
+
+- Add explicit Owner R02 Discovery authorization that freezes but does not execute one bounded block.
+- Persist immutable R02 authorization, Discovery block and candidate specs with append-only/update-immutable triggers.
+- Recompute authorization, plan and candidate identities at the store boundary and reject tampering/replay collisions/cross-authority mismatches.
+- Advance cumulative SQLite schema version from 10 to 11.
+- Targeted Windows run 36378628948 passed 59 R02 tests before governance regeneration.
+- No trainer, Cheap Screen outcome, scientific qualification, ONNX, Research Challenger or Champion mutation is introduced.

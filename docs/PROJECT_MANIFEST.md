@@ -10,10 +10,10 @@ Governance profile: strict
 
 ## Repositories
 Repository: maxqstudio/max-trading-agent
-Active branch: work/r02-discovery-source-foundation
+Active branch: work/r02-authorization-freeze
 Current authoritative SHA: external final acceptance evidence
-Last accepted SHA: 5c0df514632964dd942cba59a73f3b822e09085a
-Current source digest: 46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c7986bda
+Last accepted SHA: 936b8a9878bc158285cfc1c5343bfd4112c3093d
+Current source digest: 9e11596650296accc5e32b869cfcbe448d0cee960f905978c2105282d0769307
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.
@@ -70,6 +70,6 @@ Generated from PROJECT_PROFILE.yaml.
 - Owner explicitly authorizes Strategy promotion and Research advancement where required.
 - Scientist is advisory only and cannot create scientific, promotion, risk or execution authority.
 - R01 source/runtime readiness is not R01 scientific PASS.
-- Real R02 scientific execution remains blocked until an accepted current-epoch R01 scientific result and separate Owner authorization; non-executing R02 source foundation may be developed and hosted-tested beforehand.
+- R02 source may freeze one explicit Owner-authorized bounded Discovery block only after accepted current R01 authority; real R02 training/Cheap Screen execution and all scientific outcomes remain blocked until a separate executing slice and runtime authorization.
 - Protected Locked OOS/Fresh outcomes must not silently become adaptive tuning feedback.
 - Current governance method is Skill Workflow exact SHA 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 with generated documentation and DURING sequence evidence.

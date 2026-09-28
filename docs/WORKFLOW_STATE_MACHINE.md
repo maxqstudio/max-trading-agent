@@ -266,12 +266,55 @@ Authority: research_r01_service + research_source/dataset/leakage/store + immuta
 
 - Pre-terminal partial artifacts are cleaned or rejected; accepted parent/history remains immutable.
 
+## FLOW-R02-DISCOVERY-AUTHORIZATION — R02 Owner authorization and immutable Discovery freeze
+
+Purpose: Validate explicit Owner authorization against current accepted R01 output, then persist one immutable non-executing Discovery block and candidate set.
+Critical: TRUE
+Entry condition: R02 preflight is READY_FOR_OWNER_AUTHORIZATION and caller submits the exact canonical plan plus OWNER_EXPLICIT_R02_DISCOVERY_AUTHORIZE.
+Authority: Owner explicit confirmation + deterministic R02 planner/store + accepted current R01 immutable output authority.
+
+### States
+
+- READY_FOR_OWNER_AUTHORIZATION
+- AUTHORIZATION_VALIDATED
+- FROZEN_WAITING_EXECUTION
+
+### Legal transitions
+
+| From | To | Action | Authority | Side effects |
+|---|---|---|---|---|
+| READY_FOR_OWNER_AUTHORIZATION | AUTHORIZATION_VALIDATED | Validate exact Owner confirmation, Research identity, accepted R01 output and canonical plan authority. | Owner explicit confirmation + deterministic R02 planner/store + accepted current R01 immutable output authority. |  |
+| AUTHORIZATION_VALIDATED | FROZEN_WAITING_EXECUTION | Persist immutable authorization, one bounded Discovery block and immutable candidate specs atomically per store transaction boundaries. | Owner explicit confirmation + deterministic R02 planner/store + accepted current R01 immutable output authority. | R02_AUTHORIZATION_ROW, R02_DISCOVERY_BLOCK, R02_CANDIDATE_SPECS |
+
+### Invariants
+
+- Authorization is not scientific execution and creates no training or Cheap Screen result.
+- Exactly one different Discovery block per Research identity is permitted; exact replay is idempotent.
+- Authorization, plan and candidate identities are recomputed at persistence boundary.
+- Frozen rows are update-immutable and append-only.
+- Candidate count and compute budget are explicit and frozen.
+- Cheap Screen has zero qualification authority and R03 owns future Qualified Pool admission.
+- No ONNX, Research Challenger or Champion mutation occurs.
+
+### Failure behavior
+
+- Missing/wrong Owner confirmation, stale Research/R01 output, tampered hashes/IDs, prior scientific side effects or a different second block fail closed.
+- A failure before complete freeze creates no scientific result and cannot silently alter an existing frozen authority.
+
+### Restart behavior
+
+- Exact same authorization/plan replay is idempotent; a different plan for the same Research identity is rejected.
+
+### Rollback behavior
+
+- SQLite transaction failure rolls back the block/candidate insertion; already persisted exact authorization may only be recovered by exact replay and cannot be replaced.
+
 ## FLOW-R02-DISCOVERY-PREFLIGHT — R02 Discovery source preflight and deterministic plan contract
 
-Purpose: Expose fail-closed R02 source readiness and deterministic bounded Discovery planning contracts without authorizing or executing R02 scientific work.
+Purpose: Expose fail-closed R02 source readiness and deterministic bounded Discovery planning while distinguishing READY_FOR_OWNER_AUTHORIZATION from a separately frozen non-executing block.
 Critical: TRUE
 Entry condition: Caller inspects R02 readiness or constructs a source-level Discovery plan; no scientific start authority is granted by this flow.
-Authority: research_r02_service + research_r02_contract + accepted immutable R01 authority; future R02 execution still requires separate Owner authorization.
+Authority: research_r02_service + research_r02_contract + accepted immutable R01 authority; Owner authorization may freeze one block but execution remains separately unavailable.
 
 ### States
 
@@ -280,23 +323,24 @@ Authority: research_r02_service + research_r02_contract + accepted immutable R01
 - READY_FOR_OWNER_AUTHORIZATION
 - PLAN_INPUT
 - PLAN_VALIDATED
+- FROZEN_WAITING_EXECUTION
 
 ### Legal transitions
 
 | From | To | Action | Authority | Side effects |
 |---|---|---|---|---|
-| CHECK_R01_AUTHORITY | BLOCKED | Return semantic blocker when current accepted R01 authority is absent. | research_r02_service + research_r02_contract + accepted immutable R01 authority; future R02 execution still requires separate Owner authorization. |  |
-| CHECK_R01_AUTHORITY | READY_FOR_OWNER_AUTHORIZATION | Verify terminal R01 PASS, immutable integrity/output authority and zero prior scientific side effects. | research_r02_service + research_r02_contract + accepted immutable R01 authority; future R02 execution still requires separate Owner authorization. |  |
-| PLAN_INPUT | PLAN_VALIDATED | Canonicalize exact candidate identities, explicit candidate count and explicit compute budget into deterministic source plan. | research_r02_service + research_r02_contract + accepted immutable R01 authority; future R02 execution still requires separate Owner authorization. |  |
+| CHECK_R01_AUTHORITY | BLOCKED | Return semantic blocker when current accepted R01 authority is absent. | research_r02_service + research_r02_contract + accepted immutable R01 authority; Owner authorization may freeze one block but execution remains separately unavailable. |  |
+| CHECK_R01_AUTHORITY | READY_FOR_OWNER_AUTHORIZATION | Verify terminal R01 PASS, immutable integrity/output authority and zero prior scientific side effects. | research_r02_service + research_r02_contract + accepted immutable R01 authority; Owner authorization may freeze one block but execution remains separately unavailable. |  |
+| PLAN_INPUT | PLAN_VALIDATED | Canonicalize exact candidate identities, explicit candidate count and explicit compute budget into deterministic source plan. | research_r02_service + research_r02_contract + accepted immutable R01 authority; Owner authorization may freeze one block but execution remains separately unavailable. |  |
 
 ### Invariants
 
 - Source readiness is not Owner authorization and is not R02 scientific PASS.
-- This source-foundation flow exposes no R02 start endpoint.
 - Candidate count and compute budget have no hidden defaults.
 - Cheap Screen has no scientific qualification authority; future R03 Full WFA owns Qualified Pool admission.
 - Temporal model families remain unopened until separate sequence/causality/resource/runtime proof.
 - No model training, ONNX, Research Challenger or Champion mutation occurs in this flow.
+- No R02 scientific execution/start endpoint exists; authorization may only freeze immutable future-execution inputs.
 
 ### Failure behavior
 

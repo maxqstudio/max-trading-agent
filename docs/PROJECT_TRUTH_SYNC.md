@@ -11,22 +11,22 @@ HEAD is recorded externally after the commit exists.
 
 | Gate | Status | Evidence / Notes |
 |---|---|---|
-| SOURCE_TESTS | PASS | |
+| SOURCE_TESTS | NOT_PROVEN | |
 | RUNTIME_E2E | NOT_PROVEN | |
-| PROVENANCE_SYNC | PASS | |
-| REFERENCE_SYNC | PASS | |
-| STRUCTURAL_SYNC | PASS | |
-| SEMANTIC_SYNC | PASS | |
-| BEHAVIORAL_SYNC | PASS | |
-| CROSS_DOCUMENT_CONSISTENCY | PASS | |
-| HUMAN_COMPREHENSION | PASS | |
+| PROVENANCE_SYNC | NOT_PROVEN | |
+| REFERENCE_SYNC | NOT_PROVEN | |
+| STRUCTURAL_SYNC | NOT_PROVEN | |
+| SEMANTIC_SYNC | NOT_PROVEN | |
+| BEHAVIORAL_SYNC | NOT_PROVEN | |
+| CROSS_DOCUMENT_CONSISTENCY | NOT_PROVEN | |
+| HUMAN_COMPREHENSION | NOT_PROVEN | |
 | SEQUENCE_SYNC | PASS | |
 | DOC_LAYOUT | PASS | |
 | PROJECT_DOCS_NORMALIZED | PASS | |
 | DOC_READABILITY | PASS | |
 | PROJECT_DOCS_SYNC | PASS | |
-| DOC_SOURCE_TRACEABILITY | PASS | |
-| DOC_TEST_TRACEABILITY | PASS | |
+| DOC_SOURCE_TRACEABILITY | NOT_PROVEN | |
+| DOC_TEST_TRACEABILITY | NOT_PROVEN | |
 | TEST_RUNTIME_TRACEABILITY | NOT_PROVEN | |
 | PROJECT_STATE_SYNC | NOT_PROVEN | |
 
@@ -45,8 +45,9 @@ HEAD is recorded externally after the commit exists.
 | TRUTH-PROTECTED-DATA-001 | Protected Locked OOS and Fresh outcomes are not adaptive tuning feedback under their protected authority. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_r01_store.py::commit_r01_terminal_authority; backend/max_backend/research_contract.py::memory_learning_zone | backend/tests/test_r01_research.py; backend/tests/test_r01_dataset.py | REAL_R01_NOT_RUN_PROTECTION_REGRESSION | PASS |
 | TRUTH-R01-STATE-001 | R01 source resolves the latest current Research R00 authority dynamically and verifies immutable Research ID, Research parent ID, Strategy parent, parent authority hash, accepted R00 terminal state, frozen integrity, Owner authorization/sample authority, and no-training side effects; real current-epoch R01 execution remains blocked/not started. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_r01_service.py::_normalized_r00_parent | backend/tests/test_r01_current_lineage.py; backend/tests/test_r01_research.py | HOSTED_SOURCE_REPAIR_RUN_36369408053; OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | PASS |
 | TRUTH-FRESH-EPOCH-001 | The current source-governed fresh epoch declares no current Research project or gate; Research initialization remains a separate Owner-authorized action and real runtime state is deferred to final acceptance. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_service.py::current_research; backend/max_backend/research_r01_service.py::r01_preflight | backend/tests/test_fresh_runtime.py | OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | NOT_PROVEN |
-| TRUTH-R02-BLOCK-001 | R02 source foundation may expose deterministic candidate-plan contracts and read-only preflight, but real R02 authorization/execution remains blocked in hosted development; opening R02 still requires an accepted current-epoch R01 scientific result plus separate Owner authorization. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_r02_service.py::r02_preflight; backend/max_backend/research_r02_contract.py::build_discovery_plan | backend/tests/test_r02_preflight.py; backend/tests/test_r02_discovery_contract.py | HOSTED_R02_SOURCE_FOUNDATION_RUN_36374307305; OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | PASS |
+| TRUTH-R02-BLOCK-001 | R02 source may now freeze one Owner-authorized bounded Discovery block after an accepted current R01 authority, but this is not scientific execution: no trainer, Cheap Screen outcome, qualification, R03 admission, ONNX, Challenger or Champion authority is opened. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_r02_service.py::r02_preflight; backend/max_backend/research_r02_service.py::authorize_r02_discovery; backend/max_backend/research_r02_store.py::freeze_r02_discovery_block | backend/tests/test_r02_preflight.py; backend/tests/test_r02_authorization_service.py; backend/tests/test_r02_authorization_store.py | OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | NOT_PROVEN |
 | TRUTH-PUBLIC-SOURCE-001 | The public GitHub repository is source-only: runtime databases, evidence, artifacts, Research datasets, Owner terminal state and real credentials are prohibited from tracked source; tests use synthetic fixtures. | PROJECT_TRUTH_SYNC.md | .github/workflows/windows-ci.yml | backend/tests/test_m05_candidate_tree_scan.py | NOT_APPLICABLE | PASS |
+| TRUTH-R02-FREEZE-001 | R02 authorization/frozen Discovery authority is deterministic and immutable: exact Owner confirmation, current Research/R01 output lineage, plan hash/id, candidate identities, one-block cardinality and explicit compute budget are frozen before any future executor may exist. | PROJECT_TRUTH_SYNC.md | backend/max_backend/research_r02_service.py::authorize_r02_discovery; backend/max_backend/research_r02_store.py::create_r02_authorization; backend/max_backend/research_r02_store.py::freeze_r02_discovery_block | backend/tests/test_r02_authorization_service.py; backend/tests/test_r02_authorization_store.py | HOSTED_SYNTHETIC_ONLY; OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | NOT_PROVEN |
 
 ## Claim relations
 
@@ -55,6 +56,7 @@ HEAD is recorded externally after the commit exists.
 | TRUTH-SHA-001 | REQUIRES | TRUTH-AUTHORITY-001 | Exact-SHA acceptance depends on explicit source/runtime separation. |
 | TRUTH-RESEARCH-SNAPSHOT-001 | REQUIRES | TRUTH-RESEARCH-CONFIG-001 | Execution snapshot is captured from current configuration. |
 | TRUTH-R02-BLOCK-001 | REQUIRES | TRUTH-R01-STATE-001 | R02 remains blocked while no accepted R01 scientific result exists. |
+| TRUTH-R02-FREEZE-001 | REQUIRES | TRUTH-R02-BLOCK-001 | Frozen authorization preserves the execution block; authorization is not scientific execution. |
 
 ## Cross-document consistency audit
 

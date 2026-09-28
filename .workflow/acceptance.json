@@ -17,108 +17,108 @@
   "human_comprehension_status": "PASS",
   "requirements": [
     {
+      "evidence": "research_r02_service.py + test_r02_authorization_service.py",
       "id": "R02AF-01",
       "requirement": "R02 Owner authorization requires exact explicit confirmation and an exact canonical Discovery plan bound to current Research and accepted R01 output authority.",
-      "evidence": "research_r02_service.py + test_r02_authorization_service.py",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "research_r02_store.py + test_r02_authorization_store.py",
       "id": "R02AF-02",
       "requirement": "Authorization identity and payload hash, plan identity/hash, candidate identities and exact R01 output binding are recomputed at the persistence boundary and tampering fails closed.",
-      "evidence": "research_r02_store.py + test_r02_authorization_store.py",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "research_r02_store.py + tests",
       "id": "R02AF-03",
       "requirement": "At most one bounded Discovery block may be frozen per Research identity; exact replay is idempotent and a different second block is rejected.",
-      "evidence": "research_r02_store.py + tests",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "SQLite triggers + test_r02_authorization_store.py",
       "id": "R02AF-04",
       "requirement": "Frozen R02 authorization, Discovery block and candidate-spec rows are update-immutable and append-only.",
-      "evidence": "SQLite triggers + test_r02_authorization_store.py",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "research_r02_service.py + research_r02_store.py + tests",
       "id": "R02AF-05",
       "requirement": "Frozen state is FROZEN_WAITING_EXECUTION, not STARTING; no trainer, Cheap Screen executor, scientific result or qualification authority is opened.",
-      "evidence": "research_r02_service.py + research_r02_store.py + tests",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "test_r02_authorization_store.py + test_r02_authorization_service.py",
       "id": "R02AF-06",
       "requirement": "R02 freeze preserves zero model-training, ONNX, Research-Challenger and Champion-mutation counters.",
-      "evidence": "test_r02_authorization_store.py + test_r02_authorization_service.py",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "backend/max_backend/schema.py + test_r02_authorization_store.py",
       "id": "R02AF-07",
       "requirement": "The durable R02 persistence extension advances cumulative SQLite schema authority from 10 to 11.",
-      "evidence": "backend/max_backend/schema.py + test_r02_authorization_store.py",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "scientist_knowledge.py + regenerated source_manifest.json",
       "id": "R02AF-08",
       "requirement": "Scientist knowledge manifest hashes R02 contract/service/store source so advisory context cannot drift from implemented R02 authority.",
-      "evidence": "scientist_knowledge.py + regenerated source_manifest.json",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "Windows CI governance gates",
       "id": "R02AF-09",
       "requirement": "Skill Workflow provenance/STRICT, Project Truth, cross-document consistency and sequence contracts remain synchronized.",
-      "evidence": "Windows CI governance gates",
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "Windows CI",
       "id": "R02AF-10",
       "requirement": "Full backend/frontend/source-only/security/dependency regression remains green.",
-      "evidence": "Windows CI",
       "status": "NOT_PROVEN"
     }
   ],
   "results": {
+    "hosted_ci": {
+      "run_id": null,
+      "status": "NOT_RUN",
+      "tested_sha": null
+    },
+    "regression": {
+      "backend_floor": 537,
+      "backend_status": "NOT_RUN",
+      "build": "NOT_RUN",
+      "frontend_files_floor": 10,
+      "frontend_status": "NOT_RUN",
+      "frontend_tests_floor": 53,
+      "lint": "NOT_RUN",
+      "npm_ls_all": "NOT_RUN",
+      "pip_check": "NOT_RUN"
+    },
+    "runtime": {
+      "browser_e2e": "NOT_PROVEN",
+      "mt5": "NOT_PROVEN",
+      "owner_pc": "NOT_PROVEN"
+    },
+    "schema_version": 11,
+    "scientific_state": {
+      "cheap_screen_runs": 0,
+      "current_research_project": "NONE",
+      "model_training": 0,
+      "onnx": 0,
+      "r00": "NOT STARTED",
+      "r01": "BLOCKED / NOT STARTED",
+      "r02": "BLOCKED / NOT STARTED",
+      "r02_frozen_block": "NONE_REAL_RUNTIME",
+      "research_challenger": 0,
+      "strategy_champion": "NONE_SOURCE_GOVERNANCE"
+    },
+    "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720",
     "targeted": {
       "run_id": 36378628948,
       "status": "PASS",
       "tested_sha": "cb1917a210f6aca23ab43a11400392332af7816f",
       "tests": 59
-    },
-    "hosted_ci": {
-      "status": "NOT_RUN",
-      "tested_sha": null,
-      "run_id": null
-    },
-    "regression": {
-      "backend_floor": 537,
-      "backend_status": "NOT_RUN",
-      "frontend_files_floor": 10,
-      "frontend_tests_floor": 53,
-      "frontend_status": "NOT_RUN",
-      "lint": "NOT_RUN",
-      "build": "NOT_RUN",
-      "npm_ls_all": "NOT_RUN",
-      "pip_check": "NOT_RUN"
-    },
-    "runtime": {
-      "owner_pc": "NOT_PROVEN",
-      "mt5": "NOT_PROVEN",
-      "browser_e2e": "NOT_PROVEN"
-    },
-    "scientific_state": {
-      "strategy_champion": "NONE_SOURCE_GOVERNANCE",
-      "current_research_project": "NONE",
-      "r00": "NOT STARTED",
-      "r01": "BLOCKED / NOT STARTED",
-      "r02": "BLOCKED / NOT STARTED",
-      "r02_frozen_block": "NONE_REAL_RUNTIME",
-      "model_training": 0,
-      "cheap_screen_runs": 0,
-      "onnx": 0,
-      "research_challenger": 0
-    },
-    "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720",
-    "schema_version": 11
+    }
   },
   "runtime_checks": [
     "NOT_RUN: real Owner-PC database/bootstrap.",
@@ -148,13 +148,13 @@
   "truth_gates": {
     "BEHAVIORAL_SYNC": "NOT_PROVEN",
     "CROSS_DOCUMENT_CONSISTENCY": "NOT_PROVEN",
-    "DOC_LAYOUT": "NOT_PROVEN",
-    "DOC_READABILITY": "NOT_PROVEN",
+    "DOC_LAYOUT": "PASS",
+    "DOC_READABILITY": "PASS",
     "DOC_SOURCE_TRACEABILITY": "NOT_PROVEN",
     "DOC_TEST_TRACEABILITY": "NOT_PROVEN",
     "HUMAN_COMPREHENSION": "NOT_PROVEN",
-    "PROJECT_DOCS_NORMALIZED": "NOT_PROVEN",
-    "PROJECT_DOCS_SYNC": "NOT_PROVEN",
+    "PROJECT_DOCS_NORMALIZED": "PASS",
+    "PROJECT_DOCS_SYNC": "PASS",
     "PROJECT_STATE_SYNC": "NOT_PROVEN",
     "PROVENANCE_SYNC": "NOT_PROVEN",
     "REFERENCE_SYNC": "NOT_PROVEN",
