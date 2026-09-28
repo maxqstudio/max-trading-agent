@@ -1,5 +1,5 @@
 {
-  "evidence_boundary": "Phase H0 Hosted Governance Rebase closeout candidate. Windows CI run 36364128446 on 17b69115ab179adc63c4dc17e943d3fa257063f1 passed source-only/public-secret policy, Skill Workflow provenance/STRICT selftest, project governance, backend 488 tests, frontend 53 tests across 10 files, lint/build/dependency checks and pip check. Real Owner-PC/MT5 runtime remains intentionally NOT_PROVEN and is outside H0.",
+  "evidence_boundary": "Skill Workflow authority refresh after accepted H0 main 08f5a741412a2f5c69478b157529245b9a9a260e. Current Skill main 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 differs from H0 authority by one governance-only deterministic-LF commit. This phase may change governance tooling/specs/generated docs only; product/scientific/runtime behavior remains unchanged and Owner-PC/MT5 runtime remains intentionally NOT_PROVEN.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
     "How does important data flow through the system?": "PASS",
@@ -69,14 +69,42 @@
       "id": "H0-09",
       "requirement": "No real Research execution, training, ONNX, Challenger/Champion mutation or live trading occurs during H0.",
       "status": "PASS"
+    },
+    {
+      "id": "S1-01",
+      "requirement": "Current Skill Workflow main 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 is the declared governance authority; prior 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f remains historical H0 evidence.",
+      "evidence": "Skill main exact SHA + .workflow current semantic authority",
+      "status": "PASS"
+    },
+    {
+      "id": "S1-02",
+      "requirement": "Changed Skill tools are re-vendored byte-identically with no MAX-local validator compatibility patch.",
+      "evidence": "Windows CI Skill provenance comparison",
+      "status": "PASS"
+    },
+    {
+      "id": "S1-03",
+      "requirement": "Project Truth sync writes acceptance.json with byte-exact LF and STRICT selftest proves the deterministic serialization contract.",
+      "evidence": "Skill strict selftest DETERMINISTIC_JSON_LF + generated governance validation",
+      "status": "PASS"
+    },
+    {
+      "id": "S1-04",
+      "requirement": "Governance decision IDs are unique after removal of duplicate D-018/D-019/D-020 entries.",
+      "evidence": ".workflow/decisions.json semantic audit",
+      "status": "PASS"
+    },
+    {
+      "id": "S1-05",
+      "requirement": "No product/scientific/database-schema behavior changes occur in the Skill authority refresh.",
+      "evidence": "Phase diff + Windows cumulative regression",
+      "status": "PASS"
     }
   ],
   "results": {
     "hosted_ci": {
-      "note": "Final branch/main CI is external exact-SHA closure evidence and is not self-referenced in tracked governance.",
-      "run_id": 36364128446,
-      "status": "PASS_PRE_CLOSEOUT",
-      "tested_sha": "17b69115ab179adc63c4dc17e943d3fa257063f1"
+      "status": "PENDING_EXACT_BRANCH_CI",
+      "note": "Exact branch/main Windows CI closure is external evidence and is not self-referenced in tracked governance."
     },
     "regression": {
       "backend": 488,
@@ -106,7 +134,7 @@
       "research_challenger": 0,
       "strategy_champion": "NONE_SOURCE_GOVERNANCE"
     },
-    "skill_authority_sha": "9e22feddb8f94e8c0f1af6a33e14b64de5068f8f"
+    "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720"
   },
   "runtime_checks": [
     "NOT_RUN in H0: real Owner-PC fresh database/bootstrap.",
