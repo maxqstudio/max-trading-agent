@@ -136,7 +136,7 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
         return {
             "schema": R02_SCHEMA,
             "stage": "MODEL_DISCOVERY",
-            "status": str(preflight["status"]),
+            "status": "FROZEN_WAITING_EXECUTION",
             "reason": None,
             "research_id": research_id,
             "r01_state": r01_state,
@@ -226,7 +226,7 @@ def authorize_r02_discovery(
         if authorization is None:
             raise RuntimeError("R02_FROZEN_AUTHORIZATION_MISSING")
         return {
-            "status": "FROZEN_WAITING_EXECUTION",
+            "status": str(preflight["status"]),
             "idempotent": True,
             "authorization": authorization,
             "block": existing,
