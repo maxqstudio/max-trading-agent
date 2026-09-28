@@ -298,6 +298,13 @@ def test_r01_output_authority_mismatch_is_rejected(tmp_path: Path) -> None:
     authorization = create_r02_authorization(_authorization(plan), path=db)
     tampered = deepcopy(plan)
     tampered["r01_output_manifest_sha256"] = "9" * 64
+    id_body = deepcopy(tampered)
+    id_body.pop("plan_id")
+    id_body.pop("plan_sha256")
+    tampered["plan_id"] = "RPLAN-" + stable_hash(id_body)[:24]
+    sha_body = deepcopy(tampered)
+    sha_body.pop("plan_sha256")
+    tampered["plan_sha256"] = stable_hash(sha_body)
     with pytest.raises(RuntimeError, match="R02_AUTHORIZATION_R01_OUTPUT_MISMATCH"):
         freeze_r02_discovery_block(
             authorization=authorization,
