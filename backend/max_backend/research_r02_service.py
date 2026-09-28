@@ -91,18 +91,34 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
     if side_effects["status"] != "PASS":
         raise RuntimeError("R02_PREVIOUS_SIDE_EFFECT_REGRESSION")
 
-    frozen = get_r02_discovery_block(research_id, path=path)
-    if frozen is not None:
-        r02_integrity = validate_r02_integrity(
-            research_id,
-            path=path,
-        )
-        if str(r02_integrity.get("status") or "") not in {
-            "VERIFIED_FROZEN",
-            "VERIFIED_COMPLETE",
-        }:
+    r02_integrity = validate_r02_integrity(
+        research_id,
+        path=path,
+    )
+    integrity_status = str(r02_integrity.get("status") or "")
+    if integrity_status == "INTEGRITY_FAIL":
+        raise RuntimeError("R02_INTEGRITY_REQUIRED")
+    if integrity_status not in {
+        "NOT_STARTED",
+        "VERIFIED_FROZEN",
+        "VERIFIED_COMPLETE",
+    }:
+        raise RuntimeError("R02_INTEGRITY_STATUS_INVALID")
+
+    frozen = None
+    if integrity_status != "NOT_STARTED":
+        try:
+            frozen = get_r02_discovery_block(research_id, path=path)
+        except (TypeError, ValueError, KeyError) as exc:
+            raise RuntimeError("R02_INTEGRITY_REQUIRED") from exc
+        if frozen is None:
             raise RuntimeError("R02_INTEGRITY_REQUIRED")
-        terminal = get_r02_terminal(research_id, path=path)
+
+    if frozen is not None:
+        try:
+            terminal = get_r02_terminal(research_id, path=path)
+        except (TypeError, ValueError, KeyError) as exc:
+            raise RuntimeError("R02_INTEGRITY_REQUIRED") from exc
         if terminal is not None:
             return {
                 "schema": R02_SCHEMA,

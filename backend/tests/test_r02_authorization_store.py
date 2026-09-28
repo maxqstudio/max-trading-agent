@@ -720,6 +720,26 @@ def test_r02_integrity_detects_authorization_tamper(tmp_path: Path) -> None:
     assert "frozen_plan_integrity" in result["failures"]
 
 
+def test_r02_integrity_malformed_candidate_seed_fails_closed(
+    tmp_path: Path,
+) -> None:
+    db, block = _frozen_block(tmp_path)
+    candidate_id = block["candidates"][0]["candidate_id"]
+    with connect(db) as conn:
+        _drop_trigger(conn, "research_r02_candidate_no_update")
+        conn.execute(
+            """
+            UPDATE research_r02_candidate_specs
+            SET seed='not-an-int'
+            WHERE candidate_id=?
+            """,
+            (candidate_id,),
+        )
+    result = validate_r02_integrity(RESEARCH_ID, path=db)
+    assert result["status"] == "INTEGRITY_FAIL"
+    assert "candidate_specs_integrity" in result["failures"]
+
+
 def test_r02_integrity_detects_candidate_spec_tamper(tmp_path: Path) -> None:
     db, block = _frozen_block(tmp_path)
     candidate_id = block["candidates"][0]["candidate_id"]

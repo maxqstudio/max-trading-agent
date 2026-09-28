@@ -669,25 +669,33 @@ def validate_r02_integrity(
     candidate_rows = list(block.get("candidates") or [])
     candidate_specs: list[dict[str, Any]] = []
     candidate_ids: list[str] = []
-    candidate_integrity = (
-        len(candidate_rows) == int(block.get("candidate_count") or 0)
-        and [int(row.get("ordinal", -1)) for row in candidate_rows]
-        == list(range(len(candidate_rows)))
-    )
+    try:
+        candidate_integrity = (
+            len(candidate_rows) == int(block.get("candidate_count") or 0)
+            and [int(row.get("ordinal", -1)) for row in candidate_rows]
+            == list(range(len(candidate_rows)))
+        )
+    except (TypeError, ValueError, OverflowError):
+        candidate_integrity = False
     for row in candidate_rows:
         spec = row.get("spec")
         if not isinstance(spec, dict):
             candidate_integrity = False
             continue
         candidate_id = str(row.get("candidate_id") or "")
-        if (
-            str(row.get("block_id") or "") != str(block.get("block_id") or "")
-            or str(row.get("spec_sha256") or "") != stable_hash(spec)
-            or derive_candidate_id(spec) != candidate_id
-            or str(row.get("model_family") or "")
-            != str(spec.get("model_family") or "")
-            or int(row.get("seed", -1)) != int(spec.get("seed", -2))
-        ):
+        try:
+            row_integrity = bool(
+                str(row.get("block_id") or "")
+                == str(block.get("block_id") or "")
+                and str(row.get("spec_sha256") or "") == stable_hash(spec)
+                and derive_candidate_id(spec) == candidate_id
+                and str(row.get("model_family") or "")
+                == str(spec.get("model_family") or "")
+                and int(row.get("seed", -1)) == int(spec.get("seed", -2))
+            )
+        except (TypeError, ValueError, OverflowError):
+            row_integrity = False
+        if not row_integrity:
             candidate_integrity = False
         candidate_specs.append(deepcopy(spec))
         candidate_ids.append(candidate_id)
