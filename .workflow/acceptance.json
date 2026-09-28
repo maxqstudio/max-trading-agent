@@ -1,5 +1,5 @@
 {
-  "evidence_boundary": "R02 Cheap Screen outcome-ledger source phase after numeric-overflow hardening. Windows targeted run 36412664127 passed 84 R02 tests at 02644bb471c8c605a27413b4a1f8677a1f30dffd, including huge-integer regressions proving discovery/outcome compute values fail closed as validation errors rather than escaping as OverflowError/HTTP 500. Full regenerated-governance/full-regression closeout remains pending. No trainer/executor or outcome-submit API exists and no real model fitting/outcome, R03 qualification, ONNX, Research Challenger, Champion mutation, MT5 runtime or Owner-PC/browser E2E is claimed.",
+  "evidence_boundary": "R02 Cheap Screen outcome-ledger source phase pre-closeout after numeric-overflow hardening. Exact branch Windows CI run 36413020299 passed at a178b4be591c42e88bb6a5ea3bcec1d113987dcb: backend 581 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, lint/build and npm dependency tree PASS. Targeted overflow run 36412664127 separately passed 84 R02 tests and proves huge integers fail closed as validation errors rather than escaping as OverflowError/HTTP 500. No trainer/executor or outcome-submit API exists; real model fitting/outcome, R03 qualification, ONNX, Research Challenger, Champion mutation, MT5 runtime and Owner-PC/browser E2E remain NOT_PROVEN.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
     "How does important data flow through the system?": "PASS",
@@ -20,91 +20,94 @@
       "evidence": "research_r02_outcome.py + test_r02_outcome_contract.py + test_r02_authorization_store.py",
       "id": "R02OL-01",
       "requirement": "Every frozen candidate must have exactly one deterministic outcome before terminalization; missing, duplicate and unknown candidate outcomes fail closed.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "research_r02_outcome.py + targeted tests",
       "id": "R02OL-02",
       "requirement": "Outcome status is canonical SCREEN_PASS, SCREEN_FAIL or EXECUTION_ERROR; non-pass records retain an explicit failure code and all failures are persisted rather than filtered out.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "research_r02_contract.py + research_r02_outcome.py + targeted overflow regressions",
       "id": "R02OL-03",
       "requirement": "Outcome metrics and compute accounting reject non-finite or unrepresentable numeric values; compute unit must match the frozen block and total consumption cannot exceed the frozen budget.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "commit_r02_terminal_outcomes + fault-injection regression",
       "id": "R02OL-04",
       "requirement": "All candidate outcomes plus one COMPLETE_WAITING_OWNER terminal authority commit atomically; a mid-batch persistence fault leaves zero new outcome/terminal rows.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "test_r02_authorization_store.py",
       "id": "R02OL-05",
       "requirement": "Exact terminal replay is idempotent while a different second terminal manifest is rejected.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "SQLite triggers + test_r02_authorization_store.py",
       "id": "R02OL-06",
       "requirement": "Outcome and terminal rows are immutable/append-only and do not mutate model-training, ONNX, Research-Challenger or Champion counters.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "research_r02_outcome.py + r02_preflight + tests",
       "id": "R02OL-07",
       "requirement": "Cheap Screen outcome and COMPLETE_WAITING_OWNER have zero scientific qualification authority; R03 Full WFA remains the only future Qualified Pool admission authority.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "source review + source-only/security CI",
       "id": "R02OL-08",
       "requirement": "No trainer/model-fit implementation, outcome-submit API/UI, heavy ML dependency, ONNX, Challenger or Champion mutation is introduced in this slice.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "schema.py + workflow_store.py + test_r02_authorization_store.py",
       "id": "R02OL-09",
       "requirement": "Durable outcome/terminal persistence advances cumulative SQLite schema authority from 11 to 12.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "scientist_knowledge.py + regenerated source_manifest.json",
       "id": "R02OL-10",
       "requirement": "Scientist knowledge manifest hashes R02 outcome contract/store/service source so advisory context cannot drift.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "Windows CI governance gates",
       "id": "R02OL-11",
       "requirement": "Skill Workflow provenance/STRICT, Project Truth, cross-document consistency and sequence contracts remain synchronized.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "Windows CI",
       "id": "R02OL-12",
       "requirement": "Full backend/frontend/source-only/security/dependency regression remains green.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     }
   ],
   "results": {
     "hosted_ci": {
-      "run_id": null,
-      "status": "NOT_RUN_AFTER_OVERFLOW_REPAIR",
-      "tested_sha": null
+      "run_id": 36413020299,
+      "status": "PASS_PRE_CLOSEOUT",
+      "tested_sha": "a178b4be591c42e88bb6a5ea3bcec1d113987dcb"
     },
     "regression": {
+      "backend": 581,
       "backend_floor": 558,
-      "backend_status": "NOT_RUN",
-      "build": "NOT_RUN",
+      "backend_status": "PASS",
+      "frontend_files": 10,
       "frontend_files_floor": 10,
-      "frontend_status": "NOT_RUN",
+      "frontend_tests": 53,
       "frontend_tests_floor": 53,
-      "lint": "NOT_RUN",
-      "npm_ls_all": "NOT_RUN",
-      "pip_check": "NOT_RUN"
+      "frontend_status": "PASS",
+      "lint": "PASS_0_WARNINGS_0_ERRORS",
+      "build": "PASS",
+      "npm_ls_all": "PASS",
+      "pip_check": "PASS"
     },
     "runtime": {
       "browser_e2e": "NOT_PROVEN",
@@ -143,7 +146,7 @@
   "schema_version": 1,
   "sequence_mode": "DURING",
   "sequence_session": "docs/sequence/sessions/ (11 current DURING sessions after R02 outcome-ledger flow)",
-  "sequence_sync_status": "NOT_PROVEN",
+  "sequence_sync_status": "PASS",
   "test_commands": [
     "python -m pytest backend/tests/test_r02_discovery_contract.py backend/tests/test_r02_preflight.py backend/tests/test_r02_authorization_store.py backend/tests/test_r02_authorization_service.py backend/tests/test_r02_outcome_contract.py -q -o addopts=",
     "python .workflow/tools/validate_project_docs.py",
@@ -159,23 +162,23 @@
     "python -m pip check"
   ],
   "truth_gates": {
-    "BEHAVIORAL_SYNC": "NOT_PROVEN",
-    "CROSS_DOCUMENT_CONSISTENCY": "NOT_PROVEN",
+    "BEHAVIORAL_SYNC": "PASS",
+    "CROSS_DOCUMENT_CONSISTENCY": "PASS",
     "DOC_LAYOUT": "PASS",
     "DOC_READABILITY": "PASS",
-    "DOC_SOURCE_TRACEABILITY": "NOT_PROVEN",
-    "DOC_TEST_TRACEABILITY": "NOT_PROVEN",
-    "HUMAN_COMPREHENSION": "NOT_PROVEN",
+    "DOC_SOURCE_TRACEABILITY": "PASS",
+    "DOC_TEST_TRACEABILITY": "PASS",
+    "HUMAN_COMPREHENSION": "PASS",
     "PROJECT_DOCS_NORMALIZED": "PASS",
     "PROJECT_DOCS_SYNC": "PASS",
     "PROJECT_STATE_SYNC": "NOT_PROVEN",
-    "PROVENANCE_SYNC": "NOT_PROVEN",
-    "REFERENCE_SYNC": "NOT_PROVEN",
+    "PROVENANCE_SYNC": "PASS",
+    "REFERENCE_SYNC": "PASS",
     "RUNTIME_E2E": "NOT_PROVEN",
-    "SEMANTIC_SYNC": "NOT_PROVEN",
+    "SEMANTIC_SYNC": "PASS",
     "SEQUENCE_SYNC": "PASS",
-    "SOURCE_TESTS": "NOT_PROVEN",
-    "STRUCTURAL_SYNC": "NOT_PROVEN",
+    "SOURCE_TESTS": "PASS",
+    "STRUCTURAL_SYNC": "PASS",
     "TEST_RUNTIME_TRACEABILITY": "NOT_PROVEN"
   }
 }
