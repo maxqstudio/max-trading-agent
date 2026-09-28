@@ -295,7 +295,6 @@ def test_candidate_identity_tamper_is_rejected_even_with_resealed_plan(tmp_path:
 def test_r01_output_authority_mismatch_is_rejected(tmp_path: Path) -> None:
     db = _database(tmp_path)
     plan = _plan()
-    authorization = create_r02_authorization(_authorization(plan), path=db)
     tampered = deepcopy(plan)
     tampered["r01_output_manifest_sha256"] = "9" * 64
     id_body = deepcopy(tampered)
@@ -305,6 +304,16 @@ def test_r01_output_authority_mismatch_is_rejected(tmp_path: Path) -> None:
     sha_body = deepcopy(tampered)
     sha_body.pop("plan_sha256")
     tampered["plan_sha256"] = stable_hash(sha_body)
+
+    record = _authorization(tampered)
+    record["payload"]["r01_output_manifest_sha256"] = plan[
+        "r01_output_manifest_sha256"
+    ]
+    payload_sha = stable_hash(record["payload"])
+    record["payload_sha256"] = payload_sha
+    record["authorization_id"] = "RAUTH-R02-" + payload_sha[:24]
+    authorization = create_r02_authorization(record, path=db)
+
     with pytest.raises(RuntimeError, match="R02_AUTHORIZATION_R01_OUTPUT_MISMATCH"):
         freeze_r02_discovery_block(
             authorization=authorization,
