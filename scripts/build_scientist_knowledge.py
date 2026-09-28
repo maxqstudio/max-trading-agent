@@ -203,7 +203,7 @@ def main() -> int:
                 "Current Research stage is derived from immutable R00 history plus the persisted R01 run; R00 evidence is not rewritten after R01 begins.",
                 "R01 terminal publication atomically binds run state, immutable artifacts, gate events and non-adaptive Research Memory, then stops waiting for Owner.",
                 "R01 performs zero model training, zero ONNX export, zero Research Challenger creation, no Champion mutation and cannot execute R02.",
-                "R02 frozen Discovery authorization is immutable and one-block-per-Research; source also defines an append-only all-candidate Cheap Screen outcome ledger/COMPLETE_WAITING_OWNER terminal contract, but no trainer executes it and no outcome has R03 qualification authority.",
+                "R02 frozen Discovery authorization and append-only outcome ledger are read back only after deterministic R02 authority integrity verification reconstructs accepted R01 lineage, Owner authorization semantics, plan/candidate identities and any terminal outcome manifest; no trainer executes it and no outcome has R03 qualification authority.",
             ],
         },
         {
@@ -255,7 +255,7 @@ def main() -> int:
         "planned_capabilities": [
             "Current-epoch R00 initialization and acceptance under the fresh epoch before any real R01 execution",
             "R01 current-lineage source binding is merged/revalidated; real current-epoch R00/R01 execution remains deferred to final Owner runtime",
-            "R02 source can deterministically plan/freeze one Owner-authorized Discovery block and define an immutable outcome ledger; real model fitting/execution remains separately blocked and only future R03 Full WFA can create Qualified Pool authority",
+            "R02 source can deterministically plan/freeze one Owner-authorized Discovery block, define an immutable outcome ledger, and fail closed on tampered persisted authority; real model fitting/execution remains separately blocked and only future R03 Full WFA can create Qualified Pool authority",
         ],
         "explicit_deferred_capabilities": [
             "model training",

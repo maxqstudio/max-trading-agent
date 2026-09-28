@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "flow_id": "FLOW-R02-AUTHORITY-INTEGRITY",
+  "title": "R02 read-time authority integrity verification",
+  "purpose": "Fail closed before exposing persisted R02 frozen/complete authority by reconstructing its deterministic lineage and hashes.",
+  "critical": true,
+  "authority": "Accepted current R01 output + canonical R02 authorization/plan/candidate/outcome/terminal contracts.",
+  "entry_condition": "R02 preflight finds a persisted Discovery block.",
+  "source_owners": [
+    "backend/max_backend/research_r02_integrity.py::verify_r02_authority_integrity",
+    "backend/max_backend/research_r02_service.py::r02_preflight"
+  ],
+  "states": [
+    "PERSISTED_R02_FOUND",
+    "VERIFY_FROZEN_AUTHORITY",
+    "VERIFY_COMPLETE_LEDGER",
+    "VERIFIED_FROZEN",
+    "VERIFIED_COMPLETE",
+    "REJECTED"
+  ],
+  "transitions": [
+    {
+      "from": "PERSISTED_R02_FOUND",
+      "to": "VERIFY_FROZEN_AUTHORITY",
+      "action": "Re-derive accepted R01 binding, Owner authorization semantics, block ID, candidate specs and Discovery plan.",
+      "side_effects": []
+    },
+    {
+      "from": "VERIFY_FROZEN_AUTHORITY",
+      "to": "VERIFIED_FROZEN",
+      "action": "Return verified frozen authority only when no outcome rows or terminal exist.",
+      "side_effects": []
+    },
+    {
+      "from": "VERIFY_FROZEN_AUTHORITY",
+      "to": "VERIFY_COMPLETE_LEDGER",
+      "action": "When terminal exists, rebuild every candidate outcome and terminal manifest.",
+      "side_effects": []
+    },
+    {
+      "from": "VERIFY_COMPLETE_LEDGER",
+      "to": "VERIFIED_COMPLETE",
+      "action": "Return verified complete authority only when every outcome/terminal field matches deterministic reconstruction.",
+      "side_effects": []
+    },
+    {
+      "from": "VERIFY_FROZEN_AUTHORITY",
+      "to": "REJECTED",
+      "action": "Reject any hash/lineage/semantic mismatch or partial outcome state.",
+      "side_effects": []
+    }
+  ],
+  "invariants": [
+    "Read verification is non-mutating and creates no scientific result.",
+    "Accepted current R01 PASS_WAITING_OWNER output must match frozen R02 lineage.",
+    "Hash-consistent but semantically forged authorization is rejected.",
+    "Candidate specs reconstruct the exact plan ID/SHA and authorization candidate set.",
+    "Outcome rows without terminal are invalid partial authority.",
+    "COMPLETE_WAITING_OWNER is exposed only after deterministic outcome and terminal reconstruction.",
+    "Verification does not create R03 qualification, ONNX, Challenger or Champion authority."
+  ],
+  "failure_behavior": [
+    "Any malformed JSON/numeric value, hash mismatch, semantic mismatch, lineage mismatch, partial ledger or terminal mismatch fails closed before preflight exposes persisted R02 authority."
+  ],
+  "restart_behavior": [
+    "Verification is pure/read-only and can be repeated deterministically."
+  ],
+  "rollback_behavior": [
+    "No rollback required because verifier performs no scientific mutation."
+  ],
+  "tests": [
+    "backend/tests/test_r02_authorization_store.py",
+    "backend/tests/test_r02_preflight.py"
+  ],
+  "sequence_session": "docs/sequence/sessions/FLOW-R02-AUTHORITY-INTEGRITY.json"
+}

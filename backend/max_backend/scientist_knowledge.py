@@ -67,6 +67,7 @@ SOURCE_ALLOWLIST = (
     "backend/max_backend/research_r01_store.py",
     "backend/max_backend/research_r01_service.py",
     "backend/max_backend/research_r02_contract.py",
+    "backend/max_backend/research_r02_integrity.py",
     "backend/max_backend/research_r02_outcome.py",
     "backend/max_backend/research_r02_service.py",
     "backend/max_backend/research_r02_store.py",

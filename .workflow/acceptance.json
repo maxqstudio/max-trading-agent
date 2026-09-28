@@ -1,5 +1,5 @@
 {
-  "evidence_boundary": "R02 Cheap Screen outcome-ledger source phase pre-closeout after numeric-overflow hardening. Exact branch Windows CI run 36413020299 passed at a178b4be591c42e88bb6a5ea3bcec1d113987dcb: backend 581 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, lint/build and npm dependency tree PASS. Targeted overflow run 36412664127 separately passed 84 R02 tests and proves huge integers fail closed as validation errors rather than escaping as OverflowError/HTTP 500. No trainer/executor or outcome-submit API exists; real model fitting/outcome, R03 qualification, ONNX, Research Challenger, Champion mutation, MT5 runtime and Owner-PC/browser E2E remain NOT_PROVEN.",
+  "evidence_boundary": "R02 authority-integrity source phase. Hosted targeted Windows run 36433759495 passed 94 R02 tests at 2a4fad68e13b53a49fc651d80742cd460e27736c, including direct-DB tamper, partial-ledger and hash-consistent semantic-forgery rejection. Full generated-governance/full-regression closeout remains pending. No real R00/R01/R02 execution, model fitting, Cheap Screen runtime outcome, R03 qualification, ONNX, Research Challenger, Champion mutation, MT5 runtime or Owner-PC/browser E2E is authorized or claimed.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
     "How does important data flow through the system?": "PASS",
@@ -17,123 +17,119 @@
   "human_comprehension_status": "PASS",
   "requirements": [
     {
-      "evidence": "research_r02_outcome.py + test_r02_outcome_contract.py + test_r02_authorization_store.py",
-      "id": "R02OL-01",
-      "requirement": "Every frozen candidate must have exactly one deterministic outcome before terminalization; missing, duplicate and unknown candidate outcomes fail closed.",
-      "status": "PASS"
+      "id": "R02IV-01",
+      "requirement": "Frozen/complete R02 preflight authority is exposed only after read-time verifier returns VERIFIED_FROZEN or VERIFIED_COMPLETE.",
+      "evidence": "research_r02_service.py::r02_preflight + test_r02_preflight.py",
+      "status": "NOT_PROVEN"
     },
     {
-      "evidence": "research_r02_outcome.py + targeted tests",
-      "id": "R02OL-02",
-      "requirement": "Outcome status is canonical SCREEN_PASS, SCREEN_FAIL or EXECUTION_ERROR; non-pass records retain an explicit failure code and all failures are persisted rather than filtered out.",
-      "status": "PASS"
+      "id": "R02IV-02",
+      "requirement": "Authorization payload hash/id, exact field set, Owner confirmation and non-execution/non-qualification semantic constants are revalidated.",
+      "evidence": "research_r02_integrity.py + semantic-forgery regression",
+      "status": "NOT_PROVEN"
     },
     {
-      "evidence": "research_r02_contract.py + research_r02_outcome.py + targeted overflow regressions",
-      "id": "R02OL-03",
-      "requirement": "Outcome metrics and compute accounting reject non-finite or unrepresentable numeric values; compute unit must match the frozen block and total consumption cannot exceed the frozen budget.",
-      "status": "PASS"
+      "id": "R02IV-03",
+      "requirement": "Block identity and accepted current R01 PASS_WAITING_OWNER output binding are reconstructed and mismatches fail closed.",
+      "evidence": "research_r02_integrity.py + tamper regressions",
+      "status": "NOT_PROVEN"
     },
     {
-      "evidence": "commit_r02_terminal_outcomes + fault-injection regression",
-      "id": "R02OL-04",
-      "requirement": "All candidate outcomes plus one COMPLETE_WAITING_OWNER terminal authority commit atomically; a mid-batch persistence fault leaves zero new outcome/terminal rows.",
-      "status": "PASS"
+      "id": "R02IV-04",
+      "requirement": "Candidate spec JSON/hash/ID/order/family/seed/Research/R01 lineage and complete Discovery plan ID/SHA are reconstructed.",
+      "evidence": "research_r02_integrity.py + candidate/block tamper regressions",
+      "status": "NOT_PROVEN"
     },
     {
-      "evidence": "test_r02_authorization_store.py",
-      "id": "R02OL-05",
-      "requirement": "Exact terminal replay is idempotent while a different second terminal manifest is rejected.",
-      "status": "PASS"
+      "id": "R02IV-05",
+      "requirement": "If terminal exists, every candidate outcome is rebuilt from canonical fields and row ID/SHA/status must match.",
+      "evidence": "research_r02_integrity.py + outcome tamper regression",
+      "status": "NOT_PROVEN"
     },
     {
-      "evidence": "SQLite triggers + test_r02_authorization_store.py",
-      "id": "R02OL-06",
-      "requirement": "Outcome and terminal rows are immutable/append-only and do not mutate model-training, ONNX, Research-Challenger or Champion counters.",
-      "status": "PASS"
+      "id": "R02IV-06",
+      "requirement": "Terminal manifest counts, compute summary, terminal ID and outcome manifest SHA are rebuilt and must match.",
+      "evidence": "research_r02_integrity.py + terminal-summary tamper regression",
+      "status": "NOT_PROVEN"
     },
     {
-      "evidence": "research_r02_outcome.py + r02_preflight + tests",
-      "id": "R02OL-07",
-      "requirement": "Cheap Screen outcome and COMPLETE_WAITING_OWNER have zero scientific qualification authority; R03 Full WFA remains the only future Qualified Pool admission authority.",
-      "status": "PASS"
+      "id": "R02IV-07",
+      "requirement": "Outcome rows without terminal authority are rejected as partial state.",
+      "evidence": "test_r02_authorization_store.py partial-ledger regression",
+      "status": "NOT_PROVEN"
     },
     {
+      "id": "R02IV-08",
+      "requirement": "Malformed/tampered numeric or JSON authority fails through deterministic validation/runtime errors rather than escaping as HTTP 500-prone parsing exceptions.",
+      "evidence": "integrity helpers + targeted regressions",
+      "status": "NOT_PROVEN"
+    },
+    {
+      "id": "R02IV-09",
+      "requirement": "No trainer/model-fit implementation, new scientific mutation, schema bump, outcome-submit API, R03 admission, ONNX, Challenger or Champion mutation is introduced.",
       "evidence": "source review + source-only/security CI",
-      "id": "R02OL-08",
-      "requirement": "No trainer/model-fit implementation, outcome-submit API/UI, heavy ML dependency, ONNX, Challenger or Champion mutation is introduced in this slice.",
-      "status": "PASS"
+      "status": "NOT_PROVEN"
     },
     {
-      "evidence": "schema.py + workflow_store.py + test_r02_authorization_store.py",
-      "id": "R02OL-09",
-      "requirement": "Durable outcome/terminal persistence advances cumulative SQLite schema authority from 11 to 12.",
-      "status": "PASS"
-    },
-    {
+      "id": "R02IV-10",
+      "requirement": "Scientist knowledge hashes the R02 integrity verifier source.",
       "evidence": "scientist_knowledge.py + regenerated source_manifest.json",
-      "id": "R02OL-10",
-      "requirement": "Scientist knowledge manifest hashes R02 outcome contract/store/service source so advisory context cannot drift.",
-      "status": "PASS"
+      "status": "NOT_PROVEN"
     },
     {
+      "id": "R02IV-11",
+      "requirement": "Skill Workflow provenance/STRICT, Project Truth/cross-document/sequence governance remains synchronized.",
       "evidence": "Windows CI governance gates",
-      "id": "R02OL-11",
-      "requirement": "Skill Workflow provenance/STRICT, Project Truth, cross-document consistency and sequence contracts remain synchronized.",
-      "status": "PASS"
+      "status": "NOT_PROVEN"
     },
     {
-      "evidence": "Windows CI",
-      "id": "R02OL-12",
+      "id": "R02IV-12",
       "requirement": "Full backend/frontend/source-only/security/dependency regression remains green.",
-      "status": "PASS"
+      "evidence": "Windows CI",
+      "status": "NOT_PROVEN"
     }
   ],
   "results": {
     "hosted_ci": {
-      "run_id": 36413020299,
-      "status": "PASS_PRE_CLOSEOUT",
-      "tested_sha": "a178b4be591c42e88bb6a5ea3bcec1d113987dcb"
+      "run_id": null,
+      "status": "NOT_RUN",
+      "tested_sha": null
+    },
+    "targeted": {
+      "run_id": 36433759495,
+      "status": "PASS",
+      "tested_sha": "2a4fad68e13b53a49fc651d80742cd460e27736c",
+      "tests": 94
     },
     "regression": {
-      "backend": 581,
-      "backend_floor": 558,
-      "backend_status": "PASS",
-      "build": "PASS",
-      "frontend_files": 10,
+      "backend_floor": 581,
+      "backend_status": "NOT_RUN",
       "frontend_files_floor": 10,
-      "frontend_status": "PASS",
-      "frontend_tests": 53,
       "frontend_tests_floor": 53,
-      "lint": "PASS_0_WARNINGS_0_ERRORS",
-      "npm_ls_all": "PASS",
-      "pip_check": "PASS"
+      "frontend_status": "NOT_RUN",
+      "lint": "NOT_RUN",
+      "build": "NOT_RUN",
+      "npm_ls_all": "NOT_RUN",
+      "pip_check": "NOT_RUN"
     },
     "runtime": {
-      "browser_e2e": "NOT_PROVEN",
+      "owner_pc": "NOT_PROVEN",
       "mt5": "NOT_PROVEN",
-      "owner_pc": "NOT_PROVEN"
+      "browser_e2e": "NOT_PROVEN"
     },
     "schema_version": 12,
     "scientific_state": {
-      "cheap_screen_runs": 0,
+      "strategy_champion": "NONE_SOURCE_GOVERNANCE",
       "current_research_project": "NONE",
-      "model_training": 0,
-      "onnx": 0,
       "r00": "NOT STARTED",
       "r01": "BLOCKED / NOT STARTED",
       "r02": "BLOCKED / NOT STARTED",
-      "r02_frozen_block": "NONE_REAL_RUNTIME",
-      "research_challenger": 0,
-      "strategy_champion": "NONE_SOURCE_GOVERNANCE"
+      "cheap_screen_runs": 0,
+      "model_training": 0,
+      "onnx": 0,
+      "research_challenger": 0
     },
-    "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720",
-    "targeted": {
-      "run_id": 36412664127,
-      "status": "PASS_OVERFLOW_HARDENED",
-      "tested_sha": "02644bb471c8c605a27413b4a1f8677a1f30dffd",
-      "tests": 84
-    }
+    "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720"
   },
   "runtime_checks": [
     "NOT_RUN: real Owner-PC database/bootstrap.",
@@ -145,8 +141,8 @@
   "runtime_status": "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED",
   "schema_version": 1,
   "sequence_mode": "DURING",
-  "sequence_session": "docs/sequence/sessions/ (11 current DURING sessions after R02 outcome-ledger flow)",
-  "sequence_sync_status": "PASS",
+  "sequence_session": "docs/sequence/sessions/ (12 current DURING sessions after R02 authority-integrity flow)",
+  "sequence_sync_status": "NOT_PROVEN",
   "test_commands": [
     "python -m pytest backend/tests/test_r02_discovery_contract.py backend/tests/test_r02_preflight.py backend/tests/test_r02_authorization_store.py backend/tests/test_r02_authorization_service.py backend/tests/test_r02_outcome_contract.py -q -o addopts=",
     "python .workflow/tools/validate_project_docs.py",
@@ -162,23 +158,23 @@
     "python -m pip check"
   ],
   "truth_gates": {
-    "BEHAVIORAL_SYNC": "PASS",
-    "CROSS_DOCUMENT_CONSISTENCY": "PASS",
-    "DOC_LAYOUT": "PASS",
-    "DOC_READABILITY": "PASS",
-    "DOC_SOURCE_TRACEABILITY": "PASS",
-    "DOC_TEST_TRACEABILITY": "PASS",
-    "HUMAN_COMPREHENSION": "PASS",
-    "PROJECT_DOCS_NORMALIZED": "PASS",
-    "PROJECT_DOCS_SYNC": "PASS",
+    "BEHAVIORAL_SYNC": "NOT_PROVEN",
+    "CROSS_DOCUMENT_CONSISTENCY": "NOT_PROVEN",
+    "DOC_LAYOUT": "NOT_PROVEN",
+    "DOC_READABILITY": "NOT_PROVEN",
+    "DOC_SOURCE_TRACEABILITY": "NOT_PROVEN",
+    "DOC_TEST_TRACEABILITY": "NOT_PROVEN",
+    "HUMAN_COMPREHENSION": "NOT_PROVEN",
+    "PROJECT_DOCS_NORMALIZED": "NOT_PROVEN",
+    "PROJECT_DOCS_SYNC": "NOT_PROVEN",
     "PROJECT_STATE_SYNC": "NOT_PROVEN",
-    "PROVENANCE_SYNC": "PASS",
-    "REFERENCE_SYNC": "PASS",
+    "PROVENANCE_SYNC": "NOT_PROVEN",
+    "REFERENCE_SYNC": "NOT_PROVEN",
     "RUNTIME_E2E": "NOT_PROVEN",
-    "SEMANTIC_SYNC": "PASS",
-    "SEQUENCE_SYNC": "PASS",
-    "SOURCE_TESTS": "PASS",
-    "STRUCTURAL_SYNC": "PASS",
+    "SEMANTIC_SYNC": "NOT_PROVEN",
+    "SEQUENCE_SYNC": "NOT_PROVEN",
+    "SOURCE_TESTS": "NOT_PROVEN",
+    "STRUCTURAL_SYNC": "NOT_PROVEN",
     "TEST_RUNTIME_TRACEABILITY": "NOT_PROVEN"
   }
 }

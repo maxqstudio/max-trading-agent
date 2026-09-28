@@ -275,10 +275,10 @@
     {
       "method": "GET",
       "path": "/api/research/r02/preflight",
-      "purpose": "Read R02 readiness, frozen Discovery authority, or immutable outcome-terminal summary without starting/executing R02",
+      "purpose": "Read R02 readiness/frozen/complete authority only after deterministic stored-authority integrity verification; never starts or executes R02.",
       "authority": "backend/max_backend/research_r02_service.py::r02_preflight",
       "mutation": "none scientific; ordinary store migration/read compatibility only",
-      "error_behavior": "Absent/unaccepted R01 returns BLOCKED; contradictory authority fails closed; frozen blocks return FROZEN_WAITING_EXECUTION; an existing ledger terminal returns COMPLETE_WAITING_OWNER with zero qualification authority."
+      "error_behavior": "Absent/unaccepted R01 returns BLOCKED; frozen/complete R02 authority is re-derived from hashes/lineage and tampered, partial or semantically forged authority fails closed with 409."
     },
     {
       "method": "POST",
@@ -501,6 +501,21 @@
         "R03 Full WFA exclusively owns future Qualified Pool admission"
       ],
       "retention": "retained scientific lineage; no cleanup/update mutation"
+    },
+    {
+      "name": "R02 authority integrity verification",
+      "source_of_truth": "accepted R01 output + research_r02_authorizations + discovery block + candidate specs + optional outcome/terminal ledger",
+      "mutability": "read-only verification contract",
+      "legal_writes": [],
+      "invariants": [
+        "authorization payload hash/id and exact semantic constants are verified",
+        "block id and accepted R01 output binding are reconstructed",
+        "candidate spec hashes/IDs/order and full deterministic Discovery plan are reconstructed",
+        "if terminal exists every outcome is rebuilt and terminal manifest/count/compute summary must match",
+        "outcomes without terminal are rejected as partial authority",
+        "preflight exposes frozen/complete R02 only after VERIFIED_FROZEN or VERIFIED_COMPLETE"
+      ],
+      "retention": "verification only; no mutation"
     }
   ],
   "runbook_steps": [
