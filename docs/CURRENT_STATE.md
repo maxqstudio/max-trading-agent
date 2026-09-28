@@ -8,7 +8,7 @@ Governance profile: strict
 
 ## Current phase
 Phase: R02_DISCOVERY_AUTHORIZATION_FREEZE
-Status: ACTIVE
+Status: ACTIVE_ATOMIC_HARDENING
 
 ## Source
 Repository: maxqstudio/max-trading-agent
@@ -16,7 +16,7 @@ Branch: work/r02-authorization-freeze
 Authoritative SHA: external final acceptance evidence
 Last accepted SHA: 936b8a9878bc158285cfc1c5343bfd4112c3093d
 Current candidate SHA: external final acceptance evidence
-Current source digest: 9e11596650296accc5e32b869cfcbe448d0cee960f905978c2105282d0769307
+Current source digest: 8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
@@ -42,9 +42,10 @@ SEQUENCE_SYNC: PASS
 - R02 Discovery source foundation is merged to main as 936b8a9878bc158285cfc1c5343bfd4112c3093d with post-merge Windows CI run 36376007589 SUCCESS: backend 537 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, governance, pip check, lint/build and npm dependency tree PASS.
 - R02 authorization/freeze targeted Windows run 36378628948 passed 59 synthetic tests on source candidate cb1917a210f6aca23ab43a11400392332af7816f.
 - Skill Workflow authority remains 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720.
+- R02 authorization/freeze atomic targeted Windows run 36380098875 passed 61 tests at f4c05908114bc3d830bd39b4eb864ce105301991, including rollback fault injection proving no orphan authorization/block/candidate rows on persistence failure.
 
 ## Not proven
-- R02 authorization/freeze full hosted regression and generated-governance synchronization.
+- R02 authorization/freeze full hosted regression and generated-governance synchronization after atomic hardening.
 - Any current-epoch R00/R01 scientific result or real R02 authorization/execution.
 - Any model training, Cheap Screen result, Qualified Pool, ONNX or Research Challenger.
 - Any real Owner-PC runtime/bootstrap/MT5/browser behavior.
@@ -58,9 +59,9 @@ SEQUENCE_SYNC: PASS
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Regenerate Project Truth Compiler, R02 authorization sequence actuals and Scientist knowledge from current branch authority.
-- Run full Windows CI and repair until source/security/governance/backend/frontend/dependency gates are green.
-- Merge only after exact candidate and PR checks pass, then revalidate main before the next source-only R02 execution slice.
+- Regenerate Project Truth, sequence projections and Scientist knowledge for atomic R02 authorization/freeze.
+- Run exact branch Windows CI and require full regression green.
+- Merge to main only after full hosted closeout, then revalidate main before any R02 executor slice.
 
 ## Explicitly blocked
 - Owner-PC testing between ordinary GitHub development phases.

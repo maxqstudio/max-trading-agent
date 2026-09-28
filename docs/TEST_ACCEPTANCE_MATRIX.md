@@ -4,10 +4,10 @@
 
 ## Evidence boundary
 
-R02 Discovery Owner-authorization/frozen-block source phase. Hosted synthetic source/tests/governance only. Authorization may be deterministically frozen into SQLite only when accepted current R01 authority exists; the fresh real runtime has no such R01 result. No R02 trainer, Cheap Screen execution/result, qualification, Qualified Pool, ONNX, Research Challenger, Champion mutation, MT5 runtime or Owner-PC/browser E2E is authorized or claimed.
+R02 Discovery Owner-authorization/frozen-block source phase with atomic persistence hardening. Hosted synthetic targeted run 36380098875 passed 61 tests at f4c05908114bc3d830bd39b4eb864ce105301991, including fault-injection proof that a candidate persistence failure leaves zero new authorization, block and candidate rows. Full generated-governance/full-regression closeout remains pending. No real R02 trainer, Cheap Screen execution/result, qualification, Qualified Pool, ONNX, Research Challenger, Champion mutation, MT5 runtime or Owner-PC/browser E2E is authorized or claimed.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 9e11596650296accc5e32b869cfcbe448d0cee960f905978c2105282d0769307
+Current source digest: 8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
@@ -21,6 +21,7 @@ Current source digest: 9e11596650296accc5e32b869cfcbe448d0cee960f905978c2105282d
 | R02AF-08 | Scientist knowledge manifest hashes R02 contract/service/store source so advisory context cannot drift from implemented R02 authority. | scientist_knowledge.py + regenerated source_manifest.json | NOT_PROVEN |
 | R02AF-09 | Skill Workflow provenance/STRICT, Project Truth, cross-document consistency and sequence contracts remain synchronized. | Windows CI governance gates | NOT_PROVEN |
 | R02AF-10 | Full backend/frontend/source-only/security/dependency regression remains green. | Windows CI | NOT_PROVEN |
+| R02AF-11 | Production R02 authorize-and-freeze is atomic: a persistence fault after authorization insertion rolls back authorization, block and all candidate rows together, leaving no orphan immutable authority. | research_r02_store.py::authorize_and_freeze_r02_discovery + fault-injection regression in test_r02_authorization_store.py | NOT_PROVEN |
 
 ## Test commands
 

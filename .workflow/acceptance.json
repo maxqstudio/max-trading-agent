@@ -77,9 +77,9 @@
       "status": "NOT_PROVEN"
     },
     {
+      "evidence": "research_r02_store.py::authorize_and_freeze_r02_discovery + fault-injection regression in test_r02_authorization_store.py",
       "id": "R02AF-11",
       "requirement": "Production R02 authorize-and-freeze is atomic: a persistence fault after authorization insertion rolls back authorization, block and all candidate rows together, leaving no orphan immutable authority.",
-      "evidence": "research_r02_store.py::authorize_and_freeze_r02_discovery + fault-injection regression in test_r02_authorization_store.py",
       "status": "NOT_PROVEN"
     }
   ],

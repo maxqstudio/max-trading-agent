@@ -84,3 +84,12 @@ Type: source_foundation
 - Advance cumulative SQLite schema version from 10 to 11.
 - Targeted Windows run 36378628948 passed 59 R02 tests before governance regeneration.
 - No trainer, Cheap Screen outcome, scientific qualification, ONNX, Research Challenger or Champion mutation is introduced.
+
+## 2026-09-28 — R02 authorization freeze atomic hardening
+
+Type: repair
+
+- Move production Owner authorization + Discovery block + candidate-spec persistence into one SQLite transaction.
+- Add fault-injection rollback regression proving a candidate insert failure leaves zero new R02 authorization, block and candidate rows.
+- Windows targeted run 36380098875 passed 61 R02 tests at f4c05908114bc3d830bd39b4eb864ce105301991.
+- No trainer, Cheap Screen result, qualification, ONNX, Research Challenger or Champion mutation is opened.

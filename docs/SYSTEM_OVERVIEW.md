@@ -131,7 +131,7 @@ Validate explicit Owner authorization against current accepted R01 output, then 
 Authority: Owner explicit confirmation + deterministic R02 planner/store + accepted current R01 immutable output authority.
 
 - READY_FOR_OWNER_AUTHORIZATION -> AUTHORIZATION_VALIDATED : Validate exact Owner confirmation, Research identity, accepted R01 output and canonical plan authority.
-- AUTHORIZATION_VALIDATED -> FROZEN_WAITING_EXECUTION : Persist immutable authorization, one bounded Discovery block and immutable candidate specs atomically per store transaction boundaries.
+- AUTHORIZATION_VALIDATED -> FROZEN_WAITING_EXECUTION : Atomically persist immutable authorization, one bounded Discovery block and immutable candidate specs in one SQLite transaction.
 
 ### FLOW-R02-DISCOVERY-PREFLIGHT — R02 Discovery source preflight and deterministic plan contract
 
@@ -169,7 +169,7 @@ Authority: scientist_knowledge hash manifest + bounded Scientist context/store; 
 
 Current phase: R02_DISCOVERY_AUTHORIZATION_FREEZE
 
-Current status: ACTIVE
+Current status: ACTIVE_ATOMIC_HARDENING
 
 See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 
@@ -241,7 +241,7 @@ compiler does not infer them from implementation names.
 - FLOW-R00-INITIALIZATION: Missing parent/config/authorization/hash/invariant prevents terminal PASS.
 - FLOW-R01-SOURCE-PIPELINE: Incomplete materialization is discarded/recovered fail-closed; protected-data/leakage failure cannot become PASS.
 - FLOW-R02-DISCOVERY-AUTHORIZATION: Missing/wrong Owner confirmation, stale Research/R01 output, tampered hashes/IDs, prior scientific side effects or a different second block fail closed.
-- FLOW-R02-DISCOVERY-AUTHORIZATION: A failure before complete freeze creates no scientific result and cannot silently alter an existing frozen authority.
+- FLOW-R02-DISCOVERY-AUTHORIZATION: Any persistence fault while creating a new authorization/block/candidate set rolls back the entire new R02 authority transaction; no orphan immutable authorization is permitted.
 - FLOW-R02-DISCOVERY-PREFLIGHT: Absent/unaccepted R01 returns BLOCKED; malformed/tampered R01 output authority or prior scientific side-effect regression fails closed.
 - FLOW-R02-DISCOVERY-PREFLIGHT: Invalid/duplicate/mismatched candidate plan inputs are rejected before any scientific execution surface exists.
 - FLOW-RESEARCH-CONFIG-SNAPSHOT: Missing/invalid config blocks execution authorization rather than substituting a fallback.
@@ -250,9 +250,9 @@ compiler does not infer them from implementation names.
 ## Current project state
 
 Next authorized actions:
-- Regenerate Project Truth Compiler, R02 authorization sequence actuals and Scientist knowledge from current branch authority.
-- Run full Windows CI and repair until source/security/governance/backend/frontend/dependency gates are green.
-- Merge only after exact candidate and PR checks pass, then revalidate main before the next source-only R02 execution slice.
+- Regenerate Project Truth, sequence projections and Scientist knowledge for atomic R02 authorization/freeze.
+- Run exact branch Windows CI and require full regression green.
+- Merge to main only after full hosted closeout, then revalidate main before any R02 executor slice.
 
 Blocked actions:
 - Owner-PC testing between ordinary GitHub development phases.
@@ -281,10 +281,11 @@ Known blockers:
 - R02 Discovery source foundation is merged to main as 936b8a9878bc158285cfc1c5343bfd4112c3093d with post-merge Windows CI run 36376007589 SUCCESS: backend 537 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, governance, pip check, lint/build and npm dependency tree PASS.
 - R02 authorization/freeze targeted Windows run 36378628948 passed 59 synthetic tests on source candidate cb1917a210f6aca23ab43a11400392332af7816f.
 - Skill Workflow authority remains 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720.
+- R02 authorization/freeze atomic targeted Windows run 36380098875 passed 61 tests at f4c05908114bc3d830bd39b4eb864ce105301991, including rollback fault injection proving no orphan authorization/block/candidate rows on persistence failure.
 
 ### Not proven
 
-- R02 authorization/freeze full hosted regression and generated-governance synchronization.
+- R02 authorization/freeze full hosted regression and generated-governance synchronization after atomic hardening.
 - Any current-epoch R00/R01 scientific result or real R02 authorization/execution.
 - Any model training, Cheap Screen result, Qualified Pool, ONNX or Research Challenger.
 - Any real Owner-PC runtime/bootstrap/MT5/browser behavior.

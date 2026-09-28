@@ -320,14 +320,14 @@
       "file": "backend/max_backend/research_r02_service.py",
       "is_test": false,
       "language": "Python",
-      "lines": 245
+      "lines": 240
     },
     {
       "directory": "backend/max_backend",
       "file": "backend/max_backend/research_r02_store.py",
       "is_test": false,
       "language": "Python",
-      "lines": 328
+      "lines": 441
     },
     {
       "directory": "backend/max_backend",
@@ -635,14 +635,14 @@
       "file": "backend/tests/test_r02_authorization_service.py",
       "is_test": true,
       "language": "Python",
-      "lines": 202
+      "lines": 206
     },
     {
       "directory": "backend/tests",
       "file": "backend/tests/test_r02_authorization_store.py",
       "is_test": true,
       "language": "Python",
-      "lines": 395
+      "lines": 459
     },
     {
       "directory": "backend/tests",
@@ -33002,15 +33002,11 @@
     },
     {
       "caller": "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
-      "target_token": "create_r02_authorization"
+      "target_token": "authorize_and_freeze_r02_discovery"
     },
     {
       "caller": "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
       "target_token": "utc_now"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
-      "target_token": "freeze_r02_discovery_block"
     },
     {
       "caller": "backend/max_backend/research_r02_store.py::_decode_authorization",
@@ -33053,100 +33049,104 @@
       "target_token": "_decode_authorization"
     },
     {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "stable_hash"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "payload.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "payload.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "payload.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "payload.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "target_token": "json.dumps"
+    },
+    {
       "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
       "target_token": "migrate_current"
     },
     {
       "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "set"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "ValueError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "ValueError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "isinstance"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "ValueError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "stable_hash"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "ValueError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "ValueError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "payload.get"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "ValueError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "payload.get"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "ValueError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "payload.get"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "ValueError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "payload.get"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "ValueError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
-      "target_token": "json.dumps"
+      "target_token": "_validate_authorization_record"
     },
     {
       "caller": "backend/max_backend/research_r02_store.py::create_r02_authorization",
@@ -33429,184 +33429,352 @@
       "target_token": "RuntimeError"
     },
     {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "_validate_plan_integrity"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "plan.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "authorization.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "authorization.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "stable_hash"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "authorization.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "authorization.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "stable_hash"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "payload.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "plan.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "payload.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "plan.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "payload.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "plan.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "stable_hash"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "list"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "plan.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "plan.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "fetchone"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "FileNotFoundError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "fetchone"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "lower"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "lower"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "fetchone"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "utc_now"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "json.dumps"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "enumerate"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "spec.pop"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "stable_hash"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "target_token": "json.dumps"
+    },
+    {
       "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
       "target_token": "migrate_current"
     },
     {
       "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "_validate_plan_integrity"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "plan.get"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "ValueError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "authorization.get"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "RuntimeError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "authorization.get"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "isinstance"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "RuntimeError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "stable_hash"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "authorization.get"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "RuntimeError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "authorization.get"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "stable_hash"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "RuntimeError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "payload.get"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "plan.get"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "RuntimeError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "payload.get"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "plan.get"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "RuntimeError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "payload.get"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "plan.get"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "RuntimeError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "stable_hash"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "list"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "plan.get"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "len"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "int"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "plan.get"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "RuntimeError"
+      "target_token": "_validated_freeze_identity"
     },
     {
       "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
@@ -33618,167 +33786,7 @@
     },
     {
       "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "fetchone"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "conn.execute"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "FileNotFoundError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "int"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "int"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "int"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "RuntimeError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "fetchone"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "conn.execute"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "lower"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "lower"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "RuntimeError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "fetchone"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "conn.execute"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "RuntimeError"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "utc_now"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "conn.execute"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "int"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "json.dumps"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "enumerate"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "deepcopy"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "spec.pop"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "stable_hash"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "conn.execute"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "int"
-    },
-    {
-      "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
-      "target_token": "json.dumps"
+      "target_token": "_freeze_r02_discovery_block_in_connection"
     },
     {
       "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
@@ -33798,6 +33806,122 @@
     },
     {
       "caller": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "migrate_current"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "_validate_authorization_record"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "_validated_freeze_identity"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "connect"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "fetchone"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "_decode_authorization"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "fetchone"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "_freeze_r02_discovery_block_in_connection"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "get_r02_authorization"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "get_r02_discovery_block"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
       "target_token": "RuntimeError"
     },
     {
@@ -59521,8 +59645,12 @@
       "target_token": "deepcopy"
     },
     {
-      "caller": "backend/tests/test_r02_authorization_service.py::test_authorization_freezes_plan_without_execution",
-      "target_token": "monkeypatch.setattr"
+      "caller": "backend/tests/test_r02_authorization_service.py::test_authorization_freezes_plan_without_execution.fake_atomic",
+      "target_token": "fake_create"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_service.py::test_authorization_freezes_plan_without_execution.fake_atomic",
+      "target_token": "fake_freeze"
     },
     {
       "caller": "backend/tests/test_r02_authorization_service.py::test_authorization_freezes_plan_without_execution",
@@ -60043,6 +60171,90 @@
     {
       "caller": "backend/tests/test_r02_authorization_store.py::test_r02_frozen_rows_are_append_only",
       "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "target_token": "_database"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "target_token": "_plan"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "target_token": "_authorization"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "target_token": "connect"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "target_token": "conn.executescript"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "target_token": "authorize_and_freeze_r02_discovery"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "target_token": "connect"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "target_token": "fetchone"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "target_token": "fetchone"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "target_token": "fetchone"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_persists_exact_authority",
+      "target_token": "_database"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_persists_exact_authority",
+      "target_token": "_plan"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_persists_exact_authority",
+      "target_token": "_authorization"
+    },
+    {
+      "caller": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_persists_exact_authority",
+      "target_token": "authorize_and_freeze_r02_discovery"
     },
     {
       "caller": "backend/tests/test_r02_authorization_store.py::test_r02_persistence_advances_cumulative_schema_to_11",
@@ -78155,24 +78367,24 @@
     {
       "file": "backend/max_backend/research_r02_service.py",
       "kind": "function",
-      "line_end": 46,
-      "line_start": 27,
+      "line_end": 45,
+      "line_start": 26,
       "locator": "backend/max_backend/research_r02_service.py::_blocked",
       "symbol": "_blocked"
     },
     {
       "file": "backend/max_backend/research_r02_service.py",
       "kind": "function",
-      "line_end": 141,
-      "line_start": 49,
+      "line_end": 140,
+      "line_start": 48,
       "locator": "backend/max_backend/research_r02_service.py::r02_preflight",
       "symbol": "r02_preflight"
     },
     {
       "file": "backend/max_backend/research_r02_service.py",
       "kind": "function",
-      "line_end": 245,
-      "line_start": 148,
+      "line_end": 240,
+      "line_start": 147,
       "locator": "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
       "symbol": "authorize_r02_discovery"
     },
@@ -78195,34 +78407,66 @@
     {
       "file": "backend/max_backend/research_r02_store.py",
       "kind": "function",
-      "line_end": 114,
+      "line_end": 67,
       "line_start": 36,
+      "locator": "backend/max_backend/research_r02_store.py::_validate_authorization_record",
+      "symbol": "_validate_authorization_record"
+    },
+    {
+      "file": "backend/max_backend/research_r02_store.py",
+      "kind": "function",
+      "line_end": 119,
+      "line_start": 70,
       "locator": "backend/max_backend/research_r02_store.py::create_r02_authorization",
       "symbol": "create_r02_authorization"
     },
     {
       "file": "backend/max_backend/research_r02_store.py",
       "kind": "function",
-      "line_end": 145,
-      "line_start": 117,
+      "line_end": 150,
+      "line_start": 122,
       "locator": "backend/max_backend/research_r02_store.py::get_r02_discovery_block",
       "symbol": "get_r02_discovery_block"
     },
     {
       "file": "backend/max_backend/research_r02_store.py",
       "kind": "function",
-      "line_end": 178,
-      "line_start": 148,
+      "line_end": 183,
+      "line_start": 153,
       "locator": "backend/max_backend/research_r02_store.py::_validate_plan_integrity",
       "symbol": "_validate_plan_integrity"
     },
     {
       "file": "backend/max_backend/research_r02_store.py",
       "kind": "function",
-      "line_end": 328,
-      "line_start": 181,
+      "line_end": 226,
+      "line_start": 186,
+      "locator": "backend/max_backend/research_r02_store.py::_validated_freeze_identity",
+      "symbol": "_validated_freeze_identity"
+    },
+    {
+      "file": "backend/max_backend/research_r02_store.py",
+      "kind": "function",
+      "line_end": 334,
+      "line_start": 229,
+      "locator": "backend/max_backend/research_r02_store.py::_freeze_r02_discovery_block_in_connection",
+      "symbol": "_freeze_r02_discovery_block_in_connection"
+    },
+    {
+      "file": "backend/max_backend/research_r02_store.py",
+      "kind": "function",
+      "line_end": 364,
+      "line_start": 337,
       "locator": "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block",
       "symbol": "freeze_r02_discovery_block"
+    },
+    {
+      "file": "backend/max_backend/research_r02_store.py",
+      "kind": "function",
+      "line_end": 441,
+      "line_start": 368,
+      "locator": "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
+      "symbol": "authorize_and_freeze_r02_discovery"
     },
     {
       "file": "backend/max_backend/research_service.py",
@@ -84731,7 +84975,7 @@
     {
       "file": "backend/tests/test_r02_authorization_service.py",
       "kind": "function",
-      "line_end": 140,
+      "line_end": 144,
       "line_start": 104,
       "locator": "backend/tests/test_r02_authorization_service.py::test_authorization_freezes_plan_without_execution",
       "symbol": "test_authorization_freezes_plan_without_execution"
@@ -84754,129 +84998,153 @@
     },
     {
       "file": "backend/tests/test_r02_authorization_service.py",
+      "kind": "method",
+      "line_end": 129,
+      "line_start": 126,
+      "locator": "backend/tests/test_r02_authorization_service.py::test_authorization_freezes_plan_without_execution.fake_atomic",
+      "symbol": "test_authorization_freezes_plan_without_execution.fake_atomic"
+    },
+    {
+      "file": "backend/tests/test_r02_authorization_service.py",
       "kind": "function",
-      "line_end": 188,
-      "line_start": 143,
+      "line_end": 192,
+      "line_start": 147,
       "locator": "backend/tests/test_r02_authorization_service.py::test_exact_replay_is_idempotent_but_different_plan_is_rejected",
       "symbol": "test_exact_replay_is_idempotent_but_different_plan_is_rejected"
     },
     {
       "file": "backend/tests/test_r02_authorization_service.py",
       "kind": "function",
-      "line_end": 202,
-      "line_start": 191,
+      "line_end": 206,
+      "line_start": 195,
       "locator": "backend/tests/test_r02_authorization_service.py::test_authorize_api_surface_exists_but_start_surface_does_not",
       "symbol": "test_authorize_api_surface_exists_but_start_surface_does_not"
     },
     {
       "file": "backend/tests/test_r02_authorization_store.py",
       "kind": "function",
-      "line_end": 121,
-      "line_start": 28,
+      "line_end": 122,
+      "line_start": 29,
       "locator": "backend/tests/test_r02_authorization_store.py::_database",
       "symbol": "_database"
     },
     {
       "file": "backend/tests/test_r02_authorization_store.py",
       "kind": "function",
-      "line_end": 161,
-      "line_start": 124,
+      "line_end": 162,
+      "line_start": 125,
       "locator": "backend/tests/test_r02_authorization_store.py::_plan",
       "symbol": "_plan"
     },
     {
       "file": "backend/tests/test_r02_authorization_store.py",
       "kind": "function",
-      "line_end": 190,
-      "line_start": 164,
+      "line_end": 191,
+      "line_start": 165,
       "locator": "backend/tests/test_r02_authorization_store.py::_authorization",
       "symbol": "_authorization"
     },
     {
       "file": "backend/tests/test_r02_authorization_store.py",
       "kind": "function",
-      "line_end": 219,
-      "line_start": 193,
+      "line_end": 220,
+      "line_start": 194,
       "locator": "backend/tests/test_r02_authorization_store.py::test_freeze_persists_one_immutable_block_and_all_candidate_specs",
       "symbol": "test_freeze_persists_one_immutable_block_and_all_candidate_specs"
     },
     {
       "file": "backend/tests/test_r02_authorization_store.py",
       "kind": "function",
-      "line_end": 228,
-      "line_start": 222,
+      "line_end": 229,
+      "line_start": 223,
       "locator": "backend/tests/test_r02_authorization_store.py::test_exact_freeze_replay_is_idempotent",
       "symbol": "test_exact_freeze_replay_is_idempotent"
     },
     {
       "file": "backend/tests/test_r02_authorization_store.py",
       "kind": "function",
-      "line_end": 247,
-      "line_start": 231,
+      "line_end": 248,
+      "line_start": 232,
       "locator": "backend/tests/test_r02_authorization_store.py::test_second_different_discovery_block_is_rejected",
       "symbol": "test_second_different_discovery_block_is_rejected"
     },
     {
       "file": "backend/tests/test_r02_authorization_store.py",
       "kind": "function",
-      "line_end": 256,
-      "line_start": 250,
+      "line_end": 257,
+      "line_start": 251,
       "locator": "backend/tests/test_r02_authorization_store.py::test_authorization_id_must_bind_payload_hash",
       "symbol": "test_authorization_id_must_bind_payload_hash"
     },
     {
       "file": "backend/tests/test_r02_authorization_store.py",
       "kind": "function",
-      "line_end": 270,
-      "line_start": 259,
+      "line_end": 271,
+      "line_start": 260,
       "locator": "backend/tests/test_r02_authorization_store.py::test_plan_content_tamper_with_stale_hash_is_rejected",
       "symbol": "test_plan_content_tamper_with_stale_hash_is_rejected"
     },
     {
       "file": "backend/tests/test_r02_authorization_store.py",
       "kind": "function",
-      "line_end": 292,
-      "line_start": 273,
+      "line_end": 293,
+      "line_start": 274,
       "locator": "backend/tests/test_r02_authorization_store.py::test_candidate_identity_tamper_is_rejected_even_with_resealed_plan",
       "symbol": "test_candidate_identity_tamper_is_rejected_even_with_resealed_plan"
     },
     {
       "file": "backend/tests/test_r02_authorization_store.py",
       "kind": "function",
-      "line_end": 322,
-      "line_start": 295,
+      "line_end": 323,
+      "line_start": 296,
       "locator": "backend/tests/test_r02_authorization_store.py::test_r01_output_authority_mismatch_is_rejected",
       "symbol": "test_r01_output_authority_mismatch_is_rejected"
     },
     {
       "file": "backend/tests/test_r02_authorization_store.py",
       "kind": "function",
-      "line_end": 345,
-      "line_start": 333,
+      "line_end": 346,
+      "line_start": 334,
       "locator": "backend/tests/test_r02_authorization_store.py::test_r02_frozen_authority_rows_are_update_immutable",
       "symbol": "test_r02_frozen_authority_rows_are_update_immutable"
     },
     {
       "file": "backend/tests/test_r02_authorization_store.py",
       "kind": "function",
-      "line_end": 369,
-      "line_start": 348,
+      "line_end": 370,
+      "line_start": 349,
       "locator": "backend/tests/test_r02_authorization_store.py::test_r02_frozen_rows_are_append_only",
       "symbol": "test_r02_frozen_rows_are_append_only"
     },
     {
       "file": "backend/tests/test_r02_authorization_store.py",
       "kind": "function",
-      "line_end": 390,
-      "line_start": 372,
+      "line_end": 418,
+      "line_start": 373,
+      "locator": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault",
+      "symbol": "test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault"
+    },
+    {
+      "file": "backend/tests/test_r02_authorization_store.py",
+      "kind": "function",
+      "line_end": 433,
+      "line_start": 421,
+      "locator": "backend/tests/test_r02_authorization_store.py::test_atomic_authorization_freeze_persists_exact_authority",
+      "symbol": "test_atomic_authorization_freeze_persists_exact_authority"
+    },
+    {
+      "file": "backend/tests/test_r02_authorization_store.py",
+      "kind": "function",
+      "line_end": 454,
+      "line_start": 436,
       "locator": "backend/tests/test_r02_authorization_store.py::test_r02_persistence_advances_cumulative_schema_to_11",
       "symbol": "test_r02_persistence_advances_cumulative_schema_to_11"
     },
     {
       "file": "backend/tests/test_r02_authorization_store.py",
       "kind": "function",
-      "line_end": 395,
-      "line_start": 393,
+      "line_end": 459,
+      "line_start": 457,
       "locator": "backend/tests/test_r02_authorization_store.py::test_get_block_returns_none_before_authorization",
       "symbol": "test_get_block_returns_none_before_authorization"
     },
@@ -86554,7 +86822,7 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "9e11596650296accc5e32b869cfcbe448d0cee960f905978c2105282d0769307",
+  "source_digest": "8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb",
   "source_summary": {
     "files": 136,
     "languages": {
@@ -86563,7 +86831,7 @@
       "TypeScript": 3,
       "TypeScript/React": 21
     },
-    "lines": 63882,
+    "lines": 64058,
     "test_files": 44
   },
   "tests": [

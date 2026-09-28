@@ -3,7 +3,7 @@
 # SYMBOL INDEX
 
 Authority SHA: external final acceptance evidence
-Source digest: 9e11596650296accc5e32b869cfcbe448d0cee960f905978c2105282d0769307
+Source digest: 8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb
 Status: CURRENT
 
 | File | Symbol | Kind | Lines@SHA | Responsibility | Reads/Writes | Called By | Tests |
@@ -603,15 +603,19 @@ Status: CURRENT
 | backend/max_backend/research_r02_contract.py | _canonical_compute_budget | function | 71-89 | Observed Python symbol | | | |
 | backend/max_backend/research_r02_contract.py | _canonical_candidate_spec | function | 92-150 | Observed Python symbol | | | |
 | backend/max_backend/research_r02_contract.py | build_discovery_plan | function | 153-270 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_service.py | _blocked | function | 27-46 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_service.py | r02_preflight | function | 49-141 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_service.py | authorize_r02_discovery | function | 148-245 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_service.py | _blocked | function | 26-45 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_service.py | r02_preflight | function | 48-140 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_service.py | authorize_r02_discovery | function | 147-240 | Observed Python symbol | | | |
 | backend/max_backend/research_r02_store.py | _decode_authorization | function | 15-19 | Observed Python symbol | | | |
 | backend/max_backend/research_r02_store.py | get_r02_authorization | function | 22-33 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_store.py | create_r02_authorization | function | 36-114 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_store.py | get_r02_discovery_block | function | 117-145 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_store.py | _validate_plan_integrity | function | 148-178 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_store.py | freeze_r02_discovery_block | function | 181-328 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | _validate_authorization_record | function | 36-67 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | create_r02_authorization | function | 70-119 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | get_r02_discovery_block | function | 122-150 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | _validate_plan_integrity | function | 153-183 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | _validated_freeze_identity | function | 186-226 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | _freeze_r02_discovery_block_in_connection | function | 229-334 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | freeze_r02_discovery_block | function | 337-364 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | authorize_and_freeze_r02_discovery | function | 368-441 | Observed Python symbol | | | |
 | backend/max_backend/research_service.py | _manifest_hash | function | 78-81 | Observed Python symbol | | | |
 | backend/max_backend/research_service.py | _seal | function | 84-87 | Observed Python symbol | | | |
 | backend/max_backend/research_service.py | _verify_sealed | function | 90-92 | Observed Python symbol | | | |
@@ -1425,25 +1429,28 @@ Status: CURRENT
 | backend/tests/test_r02_authorization_service.py | _ready | function | 59-64 | Observed Python symbol | | | |
 | backend/tests/test_r02_authorization_service.py | test_authorization_requires_exact_owner_confirmation | function | 67-77 | Observed Python symbol | | | |
 | backend/tests/test_r02_authorization_service.py | test_stale_research_or_r01_output_is_rejected | function | 80-101 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_service.py | test_authorization_freezes_plan_without_execution | function | 104-140 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_service.py | test_authorization_freezes_plan_without_execution | function | 104-144 | Observed Python symbol | | | |
 | backend/tests/test_r02_authorization_service.py | test_authorization_freezes_plan_without_execution.fake_create | method | 108-110 | Observed Python symbol | | | |
 | backend/tests/test_r02_authorization_service.py | test_authorization_freezes_plan_without_execution.fake_freeze | method | 112-124 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_service.py | test_exact_replay_is_idempotent_but_different_plan_is_rejected | function | 143-188 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_service.py | test_authorize_api_surface_exists_but_start_surface_does_not | function | 191-202 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_store.py | _database | function | 28-121 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_store.py | _plan | function | 124-161 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_store.py | _authorization | function | 164-190 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_store.py | test_freeze_persists_one_immutable_block_and_all_candidate_specs | function | 193-219 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_store.py | test_exact_freeze_replay_is_idempotent | function | 222-228 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_store.py | test_second_different_discovery_block_is_rejected | function | 231-247 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_store.py | test_authorization_id_must_bind_payload_hash | function | 250-256 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_store.py | test_plan_content_tamper_with_stale_hash_is_rejected | function | 259-270 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_store.py | test_candidate_identity_tamper_is_rejected_even_with_resealed_plan | function | 273-292 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_store.py | test_r01_output_authority_mismatch_is_rejected | function | 295-322 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_store.py | test_r02_frozen_authority_rows_are_update_immutable | function | 333-345 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_store.py | test_r02_frozen_rows_are_append_only | function | 348-369 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_store.py | test_r02_persistence_advances_cumulative_schema_to_11 | function | 372-390 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_store.py | test_get_block_returns_none_before_authorization | function | 393-395 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_service.py | test_authorization_freezes_plan_without_execution.fake_atomic | method | 126-129 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_service.py | test_exact_replay_is_idempotent_but_different_plan_is_rejected | function | 147-192 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_service.py | test_authorize_api_surface_exists_but_start_surface_does_not | function | 195-206 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_store.py | _database | function | 29-122 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_store.py | _plan | function | 125-162 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_store.py | _authorization | function | 165-191 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_store.py | test_freeze_persists_one_immutable_block_and_all_candidate_specs | function | 194-220 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_store.py | test_exact_freeze_replay_is_idempotent | function | 223-229 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_store.py | test_second_different_discovery_block_is_rejected | function | 232-248 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_store.py | test_authorization_id_must_bind_payload_hash | function | 251-257 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_store.py | test_plan_content_tamper_with_stale_hash_is_rejected | function | 260-271 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_store.py | test_candidate_identity_tamper_is_rejected_even_with_resealed_plan | function | 274-293 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_store.py | test_r01_output_authority_mismatch_is_rejected | function | 296-323 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_store.py | test_r02_frozen_authority_rows_are_update_immutable | function | 334-346 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_store.py | test_r02_frozen_rows_are_append_only | function | 349-370 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_store.py | test_atomic_authorization_freeze_rolls_back_everything_on_candidate_fault | function | 373-418 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_store.py | test_atomic_authorization_freeze_persists_exact_authority | function | 421-433 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_store.py | test_r02_persistence_advances_cumulative_schema_to_11 | function | 436-454 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_store.py | test_get_block_returns_none_before_authorization | function | 457-459 | Observed Python symbol | | | |
 | backend/tests/test_r02_discovery_contract.py | _candidate | function | 14-30 | Observed Python symbol | | | |
 | backend/tests/test_r02_discovery_contract.py | _request | function | 33-52 | Observed Python symbol | | | |
 | backend/tests/test_r02_discovery_contract.py | test_discovery_contract_preserves_gate_boundaries | function | 55-64 | Observed Python symbol | | | |

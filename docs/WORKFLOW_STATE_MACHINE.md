@@ -284,13 +284,14 @@ Authority: Owner explicit confirmation + deterministic R02 planner/store + accep
 | From | To | Action | Authority | Side effects |
 |---|---|---|---|---|
 | READY_FOR_OWNER_AUTHORIZATION | AUTHORIZATION_VALIDATED | Validate exact Owner confirmation, Research identity, accepted R01 output and canonical plan authority. | Owner explicit confirmation + deterministic R02 planner/store + accepted current R01 immutable output authority. |  |
-| AUTHORIZATION_VALIDATED | FROZEN_WAITING_EXECUTION | Persist immutable authorization, one bounded Discovery block and immutable candidate specs atomically per store transaction boundaries. | Owner explicit confirmation + deterministic R02 planner/store + accepted current R01 immutable output authority. | R02_AUTHORIZATION_ROW, R02_DISCOVERY_BLOCK, R02_CANDIDATE_SPECS |
+| AUTHORIZATION_VALIDATED | FROZEN_WAITING_EXECUTION | Atomically persist immutable authorization, one bounded Discovery block and immutable candidate specs in one SQLite transaction. | Owner explicit confirmation + deterministic R02 planner/store + accepted current R01 immutable output authority. | R02_AUTHORIZATION_ROW, R02_DISCOVERY_BLOCK, R02_CANDIDATE_SPECS |
 
 ### Invariants
 
 - Authorization is not scientific execution and creates no training or Cheap Screen result.
 - Exactly one different Discovery block per Research identity is permitted; exact replay is idempotent.
 - Authorization, plan and candidate identities are recomputed at persistence boundary.
+- Production authorization+block+candidate freeze is atomic: either all rows commit or none of the new authority rows persist.
 - Frozen rows are update-immutable and append-only.
 - Candidate count and compute budget are explicit and frozen.
 - Cheap Screen has zero qualification authority and R03 owns future Qualified Pool admission.
@@ -299,7 +300,7 @@ Authority: Owner explicit confirmation + deterministic R02 planner/store + accep
 ### Failure behavior
 
 - Missing/wrong Owner confirmation, stale Research/R01 output, tampered hashes/IDs, prior scientific side effects or a different second block fail closed.
-- A failure before complete freeze creates no scientific result and cannot silently alter an existing frozen authority.
+- Any persistence fault while creating a new authorization/block/candidate set rolls back the entire new R02 authority transaction; no orphan immutable authorization is permitted.
 
 ### Restart behavior
 
@@ -307,7 +308,7 @@ Authority: Owner explicit confirmation + deterministic R02 planner/store + accep
 
 ### Rollback behavior
 
-- SQLite transaction failure rolls back the block/candidate insertion; already persisted exact authorization may only be recovered by exact replay and cannot be replaced.
+- Production authorize-and-freeze uses one SQLite transaction. Candidate/block failure rolls back newly inserted authorization, block and candidate rows together.
 
 ## FLOW-R02-DISCOVERY-PREFLIGHT — R02 Discovery source preflight and deterministic plan contract
 

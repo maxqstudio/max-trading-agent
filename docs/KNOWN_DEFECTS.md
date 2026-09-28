@@ -17,5 +17,6 @@
 | GOV-003 | FIXED/ACCEPTED | Migrated semantic governance still describes maxqstudio/max_rebuild and Owner-PC-centric development | H0 merged to main and Windows CI run 36366607560 passed on exact main SHA 08f5a741412a2f5c69478b157529245b9a9a260e. |
 | KD-006 | FIXED/ACCEPTED | R01 retired previous-epoch hardcoded lineage removed; dynamic current accepted R00 immutable lineage source repair passed pre-closeout CI | R01 lineage repair merged to main as 5c0df514632964dd942cba59a73f3b822e09085a; final branch run 36370111803, PR run 36371604393 and main revalidation run 36371992178 passed. |
 | GOV-004 | FIXED/ACCEPTED_CANDIDATE | Duplicate D-018/D-019/D-020 decision identifiers from H0 migration | Decision IDs are unique on the R02 candidate; Windows CI run 36374307305 passed Project Truth/sequence governance at ee5e93cb039b37294452ba42239991514a3c80a5. |
+| KD-007 | FIXED_PENDING_FULL_CI | R02 authorization and Discovery freeze were separate transactions, allowing an orphan immutable authorization if later block/candidate persistence failed. | Production service now uses research_r02_store.py::authorize_and_freeze_r02_discovery; Windows targeted run 36380098875 passed fault-injection rollback regression with zero orphan rows. Full hosted closeout pending. |
 
 Use explicit OPEN, FIXED/ACCEPTED, HISTORICAL, or NOT_PROVEN semantics.

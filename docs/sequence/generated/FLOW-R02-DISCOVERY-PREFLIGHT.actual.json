@@ -997,8 +997,8 @@
       "kind": "function",
       "label": "backend/max_backend/research_r02_service.py::_blocked",
       "language": "Python",
-      "line_end": 46,
-      "line_start": 27,
+      "line_end": 45,
+      "line_start": 26,
       "locator": "backend/max_backend/research_r02_service.py::_blocked"
     },
     {
@@ -1006,8 +1006,8 @@
       "kind": "function",
       "label": "backend/max_backend/research_r02_service.py::r02_preflight",
       "language": "Python",
-      "line_end": 141,
-      "line_start": 49,
+      "line_end": 140,
+      "line_start": 48,
       "locator": "backend/max_backend/research_r02_service.py::r02_preflight"
     },
     {
@@ -1015,8 +1015,8 @@
       "kind": "function",
       "label": "backend/max_backend/research_r02_store.py::get_r02_discovery_block",
       "language": "Python",
-      "line_end": 145,
-      "line_start": 117,
+      "line_end": 150,
+      "line_start": 122,
       "locator": "backend/max_backend/research_r02_store.py::get_r02_discovery_block"
     },
     {
@@ -1218,7 +1218,7 @@
       "locator": "backend/max_backend/workflow_store.py::migrate_current"
     }
   ],
-  "observed_head": "91762e69ea08b22d8358284ece26a65ff112ada2",
+  "observed_head": "c9be8c556e7626db1f34668c51194af35aad2be2",
   "schema_version": 1,
-  "source_digest": "9e11596650296accc5e32b869cfcbe448d0cee960f905978c2105282d0769307"
+  "source_digest": "8a48c62f5a989e69cc75c4bca5c7eb573a956e9361730db66f600884668550eb"
 }
