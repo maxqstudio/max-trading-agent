@@ -1,5 +1,5 @@
 {
-  "evidence_boundary": "R02 Discovery Owner-authorization/frozen-block source phase with atomic persistence hardening. Hosted synthetic targeted run 36380098875 passed 61 tests at f4c05908114bc3d830bd39b4eb864ce105301991, including fault-injection proof that a candidate persistence failure leaves zero new authorization, block and candidate rows. Full generated-governance/full-regression closeout remains pending. No real R02 trainer, Cheap Screen execution/result, qualification, Qualified Pool, ONNX, Research Challenger, Champion mutation, MT5 runtime or Owner-PC/browser E2E is authorized or claimed.",
+  "evidence_boundary": "R02 Discovery Owner-authorization/frozen-block source phase pre-closeout. Exact branch Windows CI run 36380453938 passed at 7f60da88d25d38753b200dceaa71131856304dd9: backend 558 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, lint/build and npm dependency tree PASS. Atomic targeted run 36380098875 separately passed 61 R02 tests including fault-injection rollback proof. Real R00/R01/R02 scientific execution, trainer/Cheap Screen outcome, qualification, Qualified Pool, ONNX, Research Challenger, Champion mutation and Owner-PC/MT5/browser runtime remain intentionally NOT_PROVEN.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
     "How does important data flow through the system?": "PASS",
@@ -20,85 +20,88 @@
       "evidence": "research_r02_service.py + test_r02_authorization_service.py",
       "id": "R02AF-01",
       "requirement": "R02 Owner authorization requires exact explicit confirmation and an exact canonical Discovery plan bound to current Research and accepted R01 output authority.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "research_r02_store.py + test_r02_authorization_store.py",
       "id": "R02AF-02",
       "requirement": "Authorization identity and payload hash, plan identity/hash, candidate identities and exact R01 output binding are recomputed at the persistence boundary and tampering fails closed.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "research_r02_store.py + tests",
       "id": "R02AF-03",
       "requirement": "At most one bounded Discovery block may be frozen per Research identity; exact replay is idempotent and a different second block is rejected.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "SQLite triggers + test_r02_authorization_store.py",
       "id": "R02AF-04",
       "requirement": "Frozen R02 authorization, Discovery block and candidate-spec rows are update-immutable and append-only.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "research_r02_service.py + research_r02_store.py + tests",
       "id": "R02AF-05",
       "requirement": "Frozen state is FROZEN_WAITING_EXECUTION, not STARTING; no trainer, Cheap Screen executor, scientific result or qualification authority is opened.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "test_r02_authorization_store.py + test_r02_authorization_service.py",
       "id": "R02AF-06",
       "requirement": "R02 freeze preserves zero model-training, ONNX, Research-Challenger and Champion-mutation counters.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "backend/max_backend/schema.py + test_r02_authorization_store.py",
       "id": "R02AF-07",
       "requirement": "The durable R02 persistence extension advances cumulative SQLite schema authority from 10 to 11.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "scientist_knowledge.py + regenerated source_manifest.json",
       "id": "R02AF-08",
       "requirement": "Scientist knowledge manifest hashes R02 contract/service/store source so advisory context cannot drift from implemented R02 authority.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "Windows CI governance gates",
       "id": "R02AF-09",
       "requirement": "Skill Workflow provenance/STRICT, Project Truth, cross-document consistency and sequence contracts remain synchronized.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "Windows CI",
       "id": "R02AF-10",
       "requirement": "Full backend/frontend/source-only/security/dependency regression remains green.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     },
     {
       "evidence": "research_r02_store.py::authorize_and_freeze_r02_discovery + fault-injection regression in test_r02_authorization_store.py",
       "id": "R02AF-11",
       "requirement": "Production R02 authorize-and-freeze is atomic: a persistence fault after authorization insertion rolls back authorization, block and all candidate rows together, leaving no orphan immutable authority.",
-      "status": "NOT_PROVEN"
+      "status": "PASS"
     }
   ],
   "results": {
     "hosted_ci": {
-      "run_id": null,
-      "status": "NOT_RUN_AFTER_ATOMIC_REPAIR",
-      "tested_sha": null
+      "run_id": 36380453938,
+      "status": "PASS_PRE_CLOSEOUT",
+      "tested_sha": "7f60da88d25d38753b200dceaa71131856304dd9"
     },
     "regression": {
+      "backend": 558,
       "backend_floor": 537,
-      "backend_status": "NOT_RUN",
-      "build": "NOT_RUN",
+      "backend_status": "PASS",
+      "frontend_files": 10,
       "frontend_files_floor": 10,
-      "frontend_status": "NOT_RUN",
+      "frontend_tests": 53,
       "frontend_tests_floor": 53,
-      "lint": "NOT_RUN",
-      "npm_ls_all": "NOT_RUN",
-      "pip_check": "NOT_RUN"
+      "frontend_status": "PASS",
+      "lint": "PASS_0_WARNINGS_0_ERRORS",
+      "build": "PASS",
+      "npm_ls_all": "PASS",
+      "pip_check": "PASS"
     },
     "runtime": {
       "browser_e2e": "NOT_PROVEN",
@@ -152,23 +155,23 @@
     "python -m pip check"
   ],
   "truth_gates": {
-    "BEHAVIORAL_SYNC": "NOT_PROVEN",
-    "CROSS_DOCUMENT_CONSISTENCY": "NOT_PROVEN",
+    "BEHAVIORAL_SYNC": "PASS",
+    "CROSS_DOCUMENT_CONSISTENCY": "PASS",
     "DOC_LAYOUT": "PASS",
     "DOC_READABILITY": "PASS",
-    "DOC_SOURCE_TRACEABILITY": "NOT_PROVEN",
-    "DOC_TEST_TRACEABILITY": "NOT_PROVEN",
-    "HUMAN_COMPREHENSION": "NOT_PROVEN",
+    "DOC_SOURCE_TRACEABILITY": "PASS",
+    "DOC_TEST_TRACEABILITY": "PASS",
+    "HUMAN_COMPREHENSION": "PASS",
     "PROJECT_DOCS_NORMALIZED": "PASS",
     "PROJECT_DOCS_SYNC": "PASS",
     "PROJECT_STATE_SYNC": "NOT_PROVEN",
-    "PROVENANCE_SYNC": "NOT_PROVEN",
-    "REFERENCE_SYNC": "NOT_PROVEN",
+    "PROVENANCE_SYNC": "PASS",
+    "REFERENCE_SYNC": "PASS",
     "RUNTIME_E2E": "NOT_PROVEN",
-    "SEMANTIC_SYNC": "NOT_PROVEN",
+    "SEMANTIC_SYNC": "PASS",
     "SEQUENCE_SYNC": "PASS",
-    "SOURCE_TESTS": "NOT_PROVEN",
-    "STRUCTURAL_SYNC": "NOT_PROVEN",
+    "SOURCE_TESTS": "PASS",
+    "STRUCTURAL_SYNC": "PASS",
     "TEST_RUNTIME_TRACEABILITY": "NOT_PROVEN"
   }
 }

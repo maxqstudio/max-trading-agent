@@ -80,9 +80,9 @@
     },
     {
       "id": "KD-007",
-      "status": "FIXED_PENDING_FULL_CI",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
       "summary": "R02 authorization and Discovery freeze were separate transactions, allowing an orphan immutable authorization if later block/candidate persistence failed.",
-      "evidence": "Production service now uses research_r02_store.py::authorize_and_freeze_r02_discovery; Windows targeted run 36380098875 passed fault-injection rollback regression with zero orphan rows. Full hosted closeout pending."
+      "evidence": "Production path uses one SQLite transaction in authorize_and_freeze_r02_discovery. Atomic targeted run 36380098875 passed 61 tests including zero-orphan fault injection; full branch Windows CI run 36380453938 passed 558 backend tests at 7f60da88d25d38753b200dceaa71131856304dd9."
     }
   ],
   "schema_version": 1
