@@ -88,7 +88,7 @@ powershell -ExecutionPolicy Bypass -File .\INSTALL.ps1
 - full backend regression and `pip check`;
 - frontend tests, lint, production build, and dependency tree.
 
-A phase is not complete while any required job is red.
+A phase is not complete while any required job is red. After a green phase, merge it to `main` and revalidate `main`; do not request Owner-PC testing between ordinary hosted phases.
 
 ## Runtime entry point
 
