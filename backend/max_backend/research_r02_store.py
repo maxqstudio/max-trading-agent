@@ -232,7 +232,7 @@ def freeze_r02_discovery_block(
                     block_id,research_id,authorization_id,state,
                     r01_output_manifest_sha256,plan_id,plan_sha256,
                     candidate_count,compute_budget_json,created_utc
-                ) VALUES(?,?,?,'FROZEN_WAITING_EXECUTION',?,?,?,?,?,?,?)
+                ) VALUES(?,?,?,'FROZEN_WAITING_EXECUTION',?,?,?,?,?,?)
                 """,
                 (
                     block_id,
