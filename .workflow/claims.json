@@ -241,13 +241,13 @@
     },
     {
       "id": "TRUTH-R02-FREEZE-001",
-      "claim": "R02 authorization/frozen Discovery authority is deterministic and immutable: exact Owner confirmation, current Research/R01 output lineage, plan hash/id, candidate identities, one-block cardinality and explicit compute budget are frozen before any future executor may exist.",
+      "claim": "R02 authorization/frozen Discovery authority is deterministic, immutable and atomic: exact Owner confirmation, current Research/R01 output lineage, plan hash/id, candidate identities, one-block cardinality and explicit compute budget are frozen all-or-nothing before any future executor may exist.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
       "source_owners": [
         "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
-        "backend/max_backend/research_r02_store.py::create_r02_authorization",
+        "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
         "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block"
       ],
       "tests": [
@@ -255,7 +255,7 @@
         "backend/tests/test_r02_authorization_store.py"
       ],
       "runtime_evidence": [
-        "HOSTED_SYNTHETIC_ONLY",
+        "HOSTED_ATOMIC_TARGETED_RUN_36380098875",
         "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
       ],
       "status": "NOT_PROVEN"

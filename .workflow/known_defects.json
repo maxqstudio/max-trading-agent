@@ -77,6 +77,12 @@
       "status": "FIXED/ACCEPTED_CANDIDATE",
       "summary": "Duplicate D-018/D-019/D-020 decision identifiers from H0 migration",
       "evidence": "Decision IDs are unique on the R02 candidate; Windows CI run 36374307305 passed Project Truth/sequence governance at ee5e93cb039b37294452ba42239991514a3c80a5."
+    },
+    {
+      "id": "KD-007",
+      "status": "FIXED_PENDING_FULL_CI",
+      "summary": "R02 authorization and Discovery freeze were separate transactions, allowing an orphan immutable authorization if later block/candidate persistence failed.",
+      "evidence": "Production service now uses research_r02_store.py::authorize_and_freeze_r02_discovery; Windows targeted run 36380098875 passed fault-injection rollback regression with zero orphan rows. Full hosted closeout pending."
     }
   ],
   "schema_version": 1

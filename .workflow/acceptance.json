@@ -1,5 +1,5 @@
 {
-  "evidence_boundary": "R02 Discovery Owner-authorization/frozen-block source phase. Hosted synthetic source/tests/governance only. Authorization may be deterministically frozen into SQLite only when accepted current R01 authority exists; the fresh real runtime has no such R01 result. No R02 trainer, Cheap Screen execution/result, qualification, Qualified Pool, ONNX, Research Challenger, Champion mutation, MT5 runtime or Owner-PC/browser E2E is authorized or claimed.",
+  "evidence_boundary": "R02 Discovery Owner-authorization/frozen-block source phase with atomic persistence hardening. Hosted synthetic targeted run 36380098875 passed 61 tests at f4c05908114bc3d830bd39b4eb864ce105301991, including fault-injection proof that a candidate persistence failure leaves zero new authorization, block and candidate rows. Full generated-governance/full-regression closeout remains pending. No real R02 trainer, Cheap Screen execution/result, qualification, Qualified Pool, ONNX, Research Challenger, Champion mutation, MT5 runtime or Owner-PC/browser E2E is authorized or claimed.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
     "How does important data flow through the system?": "PASS",
@@ -75,12 +75,18 @@
       "id": "R02AF-10",
       "requirement": "Full backend/frontend/source-only/security/dependency regression remains green.",
       "status": "NOT_PROVEN"
+    },
+    {
+      "id": "R02AF-11",
+      "requirement": "Production R02 authorize-and-freeze is atomic: a persistence fault after authorization insertion rolls back authorization, block and all candidate rows together, leaving no orphan immutable authority.",
+      "evidence": "research_r02_store.py::authorize_and_freeze_r02_discovery + fault-injection regression in test_r02_authorization_store.py",
+      "status": "NOT_PROVEN"
     }
   ],
   "results": {
     "hosted_ci": {
       "run_id": null,
-      "status": "NOT_RUN",
+      "status": "NOT_RUN_AFTER_ATOMIC_REPAIR",
       "tested_sha": null
     },
     "regression": {
@@ -114,10 +120,10 @@
     },
     "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720",
     "targeted": {
-      "run_id": 36378628948,
-      "status": "PASS",
-      "tested_sha": "cb1917a210f6aca23ab43a11400392332af7816f",
-      "tests": 59
+      "run_id": 36380098875,
+      "status": "PASS_ATOMIC_TARGETED",
+      "tested_sha": "f4c05908114bc3d830bd39b4eb864ce105301991",
+      "tests": 61
     }
   },
   "runtime_checks": [
