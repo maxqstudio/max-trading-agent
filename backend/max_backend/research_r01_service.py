@@ -61,9 +61,6 @@ from .research_settings import (
 )
 from .research_store import latest_research
 
-ACCEPTED_R00_RESEARCH_ID = "RSRCH-653cc6cff84e14f835ef764f"
-ACCEPTED_R00_PARENT_ID = "RPAR-df9e3db4563ac1c9f119a850"
-ACCEPTED_R00_CHAMPION_ID = "STRAT-20260924-115344-R01-P8912"
 R01_OLD_MAX_AUDIT = "docs/audits/R01_OLD_MAX_SOURCE_AUDIT.md"
 DISCOVERY_LABEL_SUMMARY_SCHEMA = "MAX_RESEARCH_DISCOVERY_LABEL_SUMMARY_R01_V1"
 
@@ -88,27 +85,58 @@ def _write_immutable_json(path: Path, payload: dict[str, Any]) -> None:
 
 def _normalized_r00_parent(*, path: Path) -> dict[str, Any]:
     latest = latest_research(path=path)
-    if latest is None or latest["research_id"] != ACCEPTED_R00_RESEARCH_ID:
-        raise RuntimeError("R01_ACCEPTED_R00_RESEARCH_ID_REQUIRED")
-    detail = research_detail(ACCEPTED_R00_RESEARCH_ID, path=path)
+    if latest is None:
+        raise RuntimeError("R01_ACCEPTED_CURRENT_R00_REQUIRED")
+
+    research_id = str(latest.get("research_id") or "").strip()
+    if not research_id:
+        raise RuntimeError("R01_CURRENT_R00_RESEARCH_ID_MISSING")
+
+    detail = research_detail(research_id, path=path)
+    if str(detail.get("research_id") or "") != research_id:
+        raise RuntimeError("R01_R00_RESEARCH_ID_MISMATCH")
     if detail["integrity"]["status"] != "VERIFIED":
         raise RuntimeError("R01_R00_INTEGRITY_REQUIRED")
+
     historical_r00 = detail.get("historical_r00") or {}
     if str(historical_r00.get("state") or "") != "PASS_WAITING_OWNER":
         raise RuntimeError("R01_R00_TERMINAL_PASS_REQUIRED")
-    if detail["research_parent_id"] != ACCEPTED_R00_PARENT_ID:
+
+    parent_manifest = detail.get("parent_manifest") or {}
+    if str(parent_manifest.get("research_id") or "") != research_id:
+        raise RuntimeError("R01_R00_RESEARCH_ID_MISMATCH")
+    if str(detail.get("research_parent_id") or "") != str(
+        parent_manifest.get("research_parent_id") or ""
+    ):
         raise RuntimeError("R01_R00_PARENT_ID_MISMATCH")
-    if detail["parent_strategy_id"] != ACCEPTED_R00_CHAMPION_ID:
+    if str(detail.get("parent_strategy_id") or "") != str(
+        parent_manifest.get("strategy_champion_id") or ""
+    ):
         raise RuntimeError("R01_R00_CHAMPION_ID_MISMATCH")
+    if str(detail.get("parent_authority_sha256") or "") != str(
+        parent_manifest.get("parent_authority_sha256") or ""
+    ):
+        raise RuntimeError("R01_R00_PARENT_AUTHORITY_MISMATCH")
+
+    owner_authorization = detail.get("owner_authorization") or {}
+    if (
+        owner_authorization.get("confirmed") is not True
+        or str(owner_authorization.get("gate") or "") != "R00"
+        or str(owner_authorization.get("action") or "") != "START"
+        or str(owner_authorization.get("expected_parent_strategy_id") or "")
+        != str(detail.get("parent_strategy_id") or "")
+        or str(owner_authorization.get("expected_parent_authority_sha256") or "")
+        != str(detail.get("parent_authority_sha256") or "")
+    ):
+        raise RuntimeError("R01_R00_OWNER_AUTHORITY_MISMATCH")
+
     h1 = detail["research_policy"]["sample_policy"][
         "h1_minimum_sample_trade_policy"
     ]["value"]
-    authorization_h1 = (detail.get("owner_authorization") or {}).get(
+    authorization_h1 = owner_authorization.get("h1_minimum_trades_per_month")
+    parent_h1 = parent_manifest.get("owner_authorization", {}).get(
         "h1_minimum_trades_per_month"
     )
-    parent_h1 = (detail.get("parent_manifest") or {}).get(
-        "owner_authorization", {}
-    ).get("h1_minimum_trades_per_month")
     if (
         isinstance(h1, bool)
         or not isinstance(h1, int)
@@ -117,21 +145,19 @@ def _normalized_r00_parent(*, path: Path) -> dict[str, Any]:
         or int(parent_h1 or 0) != int(h1)
     ):
         raise RuntimeError("R01_R00_H1_AUTHORITY_MISMATCH")
-    side_effects = verify_no_training_side_effects(
-        ACCEPTED_R00_RESEARCH_ID,
-        path=path,
-    )
+
+    side_effects = verify_no_training_side_effects(research_id, path=path)
     if side_effects["status"] != "PASS":
         raise RuntimeError("R01_R00_SIDE_EFFECT_REGRESSION")
-    parent = deepcopy(detail["parent_manifest"])
+
+    parent = deepcopy(parent_manifest)
     parent["parent_strategy_id"] = str(detail["parent_strategy_id"])
-    parent["research_id"] = str(detail["research_id"])
+    parent["research_id"] = research_id
     parent["research_parent_id"] = str(detail["research_parent_id"])
     parent["parent_authority_sha256"] = str(detail["parent_authority_sha256"])
     parent["historical_r00_h1_minimum_trades_per_month"] = int(h1)
     parent["r00_parent_manifest_sha256"] = str(detail["parent_manifest_sha256"])
     return parent
-
 
 def r01_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
     if latest_research(path=path) is None:

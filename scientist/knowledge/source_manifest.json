@@ -189,7 +189,7 @@
   },
   {
     "path": "backend/max_backend/research_r01_service.py",
-    "sha256": "4389726c4baa866b76e1df1ad72eb687c865929355b380454dcd23b14aedb430"
+    "sha256": "38ac4afd360918e27912795e2cd7c1946048ca3642d230273e11a7fc97e1a5a1"
   },
   {
     "path": "backend/max_backend/scientist_knowledge.py",

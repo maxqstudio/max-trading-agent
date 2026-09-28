@@ -37,11 +37,16 @@ from max_backend.research_store import (
 from max_backend.workflow_store import migrate_current
 
 
+TEST_R00_RESEARCH_ID = "RSRCH-R01-TEST-CURRENT"
+TEST_R00_PARENT_ID = "RPAR-R01-TEST-CURRENT"
+TEST_R00_CHAMPION_ID = "STRAT-R01-TEST-CURRENT"
+
+
 def _parent() -> dict:
     return {
-        "research_id": r01.ACCEPTED_R00_RESEARCH_ID,
-        "research_parent_id": r01.ACCEPTED_R00_PARENT_ID,
-        "parent_strategy_id": r01.ACCEPTED_R00_CHAMPION_ID,
+        "research_id": TEST_R00_RESEARCH_ID,
+        "research_parent_id": TEST_R00_PARENT_ID,
+        "parent_strategy_id": TEST_R00_CHAMPION_ID,
         "parent_authority_sha256": "a" * 64,
         "r00_parent_manifest_sha256": "b" * 64,
         "strategy_contract": "MAX_TRUE_MTF_DYNAMIC_V1",
@@ -191,7 +196,7 @@ def _fake_dataset() -> dict:
     dataset_manifest = {
         "schema": "MAX_RESEARCH_DATASET_R01_V1",
         "dataset_id": dataset_id,
-        "research_id": r01.ACCEPTED_R00_RESEARCH_ID,
+        "research_id": TEST_R00_RESEARCH_ID,
         "source_identity_sha256": "1" * 64,
         "source_data_hashes": {"source_bundle": "2" * 64},
         "sealed_immutable": True,
@@ -980,7 +985,7 @@ def test_r02_remains_blocked_after_r01_source_implementation(
     db, _parent = _setup(tmp_path, monkeypatch)
     with pytest.raises(RuntimeError, match="R02_BLOCKED_OWNER_AUTHORIZATION_REQUIRED"):
         r00.attempt_gate_transition(
-            r01.ACCEPTED_R00_RESEARCH_ID,
+            TEST_R00_RESEARCH_ID,
             "R02",
             authority="OWNER",
             path=db,

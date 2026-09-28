@@ -45,6 +45,15 @@
       "date": "2026-09-27",
       "title": "Forward-pin Skill authority after explicit self-test marker repair",
       "type": "governance"
+    },
+    {
+      "date": "2026-09-28",
+      "type": "acceptance",
+      "changes": [
+        "R01 current-lineage source repair pre-closeout Windows CI run 36369408053 passed at 5dc96103c85ed9fd208101f060529e94bff31e76.",
+        "Backend 497 PASS; frontend 53 PASS across 10 files; Skill provenance/STRICT, governance, source-only/security, pip check, lint/build/npm dependency tree PASS.",
+        "Real current-epoch R00/R01, MT5 and Owner-PC runtime remain NOT_PROVEN."
+      ]
     }
   ],
   "schema_version": 1

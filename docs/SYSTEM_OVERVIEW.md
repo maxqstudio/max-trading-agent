@@ -26,7 +26,7 @@ Users / External Systems
     -> State / Evidence Authorities
     -> External Runtime / Outputs
 
-Observed source inventory: 128 files, 4 language categories.
+Observed source inventory: 129 files, 4 language categories.
 
 ## Major components
 
@@ -41,7 +41,7 @@ Observed source inventory: 128 files, 4 language categories.
 | MT5/MetaEditor execution boundary | Provide Strategy Tester simulation/optimization and MQL5 compile/execution truth. | ea/baseline/Max_MTF.mq5 | MetaTrader 5 terminal, MetaEditor |
 | SQLite operational state | Persist mutable Strategy/Research/Scientist operational state through owning stores and transactions. | state/max.db | backend store modules |
 | Immutable evidence/artifact layer | Represent runtime scientific/execution lineage owned by domain contracts; evidence/ and artifacts/ are runtime-only and intentionally absent from the public source repository. | artifacts/, evidence/, docs/audits/ | domain services and artifact registry |
-| Current project governance | Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth for the GitHub-hosted workflow. | PROJECT_PROFILE.yaml, .workflow/*.json, .workflow/workflows/*.json, .workflow/tools/*.py, docs/sequence/sessions/*.json, docs/sequence/generated/*.actual.json, docs/sequence/generated/*.actual.mmd | Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f, GitHub Actions windows-latest hosted validation |
+| Current project governance | Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth for the GitHub-hosted workflow. | PROJECT_PROFILE.yaml, .workflow/*.json, .workflow/workflows/*.json, .workflow/tools/*.py, docs/sequence/sessions/*.json, docs/sequence/generated/*.actual.json, docs/sequence/generated/*.actual.mmd | Skill Workflow 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720, GitHub Actions windows-latest hosted validation |
 
 ## Main data flow
 
@@ -148,9 +148,9 @@ Authority: scientist_knowledge hash manifest + bounded Scientist context/store; 
 
 ## Lifecycle and state
 
-Current phase: H0_HOSTED_GOVERNANCE_REBASE
+Current phase: R01_CURRENT_LINEAGE_REPAIR
 
-Current status: H0_CLOSEOUT_CANDIDATE
+Current status: SOURCE_REPAIR_PRE_CLOSEOUT_PASS
 
 See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 
@@ -175,9 +175,9 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 | frontend | Semantic backend API representation | React presents authority; UI labels/local state do not create domain eligibility, gate completion or scientific PASS. |
 | tests | GitHub Actions windows-latest at the exact tested commit | A hosted test PASS is evidence only for source, synthetic/mocked behavior, dependencies and build layers actually executed; it does not prove real MT5 or Owner runtime. |
 | historical_evidence | Retained docs/audits/acceptance and immutable artifacts | Historical evidence remains historically truthful and is not rewritten to mimic current terminology or configuration. |
-| documentation | .workflow semantic specs + Project Truth Compiler at Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f | Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden. |
+| documentation | .workflow semantic specs + Project Truth Compiler at Skill Workflow 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 | Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden. |
 | sequence | DURING-mode generated actual sequence graphs plus source/test/runtime semantic review | Existing implementation is reconstructed from current source; retrospective BEFORE plans are forbidden. |
-| governance_tools | .workflow/tools vendored byte-identically from Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f | Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed. |
+| governance_tools | .workflow/tools vendored byte-identically from Skill Workflow 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 | Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed. |
 
 ## Mutable vs immutable
 
@@ -227,47 +227,41 @@ compiler does not infer them from implementation names.
 ## Current project state
 
 Next authorized actions:
-- Remove the temporary H0 regeneration workflow after generated outputs are synchronized, then run final exact-branch Windows CI.
-- Merge H0 to main only after final branch CI is green, then revalidate main.
-- After H0 main revalidation, repair R01 current-R00 immutable lineage binding with negative wrong-ID/wrong-parent/wrong-Strategy/unaccepted/tampered/cross-epoch tests.
-- Continue source/design/test roadmap on GitHub; defer Owner-PC final runtime acceptance until GitHub development closure.
+- Regenerate governed docs/sequence/Scientist knowledge with pre-closeout evidence.
+- Remove the temporary regeneration workflow, run exact final branch Windows CI, then merge to main only if green.
+- Revalidate main after merge; continue the next source-only roadmap phase without Owner-PC testing.
 
 Blocked actions:
 - Owner-PC testing between ordinary GitHub development phases.
-- Any real Research execution, including a new current-epoch R00 or R01.
-- R01 execution until current accepted R00 lineage binding replaces retired hardcoded previous-epoch identifiers.
+- Any real Research execution, including current-epoch R00 or R01.
 - R02 execution.
 - Model training.
 - ONNX generation.
 - Research Challenger creation.
 - Strategy Champion mutation.
 - Live trading.
-- Unrelated product behavior, algorithm, EA, or database-schema changes during H0.
+- Unrelated Strategy, optimizer, EA, database-schema, or UI refactors during the R01 lineage repair.
 
 Known blockers:
-- backend/max_backend/research_r01_service.py still binds R01 to retired previous-epoch hardcoded R00/Strategy identifiers; current-epoch R01 must remain blocked until repaired with immutable current-R00 lineage.
-- Real MetaTrader 5, MetaEditor, broker/data-root, filesystem deployment and browser E2E are intentionally NOT_PROVEN until final Owner-PC acceptance.
+- The fresh source-governed epoch still has no accepted current R00; therefore real R01 remains BLOCKED / NOT STARTED after this source repair.
+- Real MetaTrader 5, MetaEditor, broker/data-root, filesystem deployment and browser E2E remain NOT_PROVEN until final Owner-PC acceptance.
 
 ## Proven vs not proven
 
 ### Proven
 
-- Hosted H0 Windows CI run 36364128446 at tested SHA 17b69115ab179adc63c4dc17e943d3fa257063f1 passed source-only/public-secret policy, Skill Workflow provenance and STRICT selftest, project governance, backend 488 PASS, frontend 53 PASS across 10 files, lint/build/npm dependency tree PASS and pip check PASS.
-- Current Skill Workflow main is exactly 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f, matching the project pin at H0 start.
-- Previous-epoch R00 acceptance, Strategy Champion STRAT-20260924-115344-R01-P8912 and prior Research project are historical evidence only and are not current Research authority.
-- The source-governed fresh epoch declares Strategy Champion NONE, active Challenger 0, active Optimizer job NONE, current Research project NONE, R00 NOT STARTED, R01 BLOCKED / NOT STARTED, R02 BLOCKED / NOT STARTED, model training 0, ONNX 0 and Research Challenger 0.
-- Historical exact-16D and current exact-17D Challenger compatibility is executable-regression covered.
-- Durable consumed optimizer sources are excluded from the active qualified pool.
-- Former Champion tenure remains FORMER history and does not automatically reactivate its source Challenger.
-- Research sample configuration is editable current state and execution snapshots are immutable per run.
-- Protected outcome feedback is non-adaptive.
+- H0 is merged to main at 08f5a741412a2f5c69478b157529245b9a9a260e and Windows CI run 36366607560 passed source-only/security, Skill Workflow, governance, backend, frontend and dependency gates.
+- Skill Workflow main advanced by one compatible governance-only commit to 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720; this phase adopts that exact authority and re-vendors its changed tools byte-identically.
+- Previous-epoch R00/Champion/Research identifiers remain historical evidence only and are not current product-source authority.
+- The fresh source-governed epoch still declares Strategy Champion NONE, current Research project NONE, R00 NOT STARTED, R01 BLOCKED / NOT STARTED, R02 BLOCKED / NOT STARTED, model training 0, ONNX 0 and Research Challenger 0.
+- R01 current-lineage source repair pre-closeout Windows CI run 36369408053 passed at exact SHA 5dc96103c85ed9fd208101f060529e94bff31e76: 497 backend tests, source-only/security, Skill Workflow provenance/STRICT selftest, governance, pip check, frontend 53/53 across 10 files, lint/build and npm dependency tree.
+- R01 product source no longer contains the retired previous-epoch Research/R00/Strategy identity constants and now resolves the latest accepted current R00 with fail-closed immutable lineage verification.
 
 ### Not proven
 
-- Any real current-epoch runtime database bootstrap or operational row counts on Owner PC.
-- Real MT5 detection, MetaEditor compile, Strategy Tester, broker data, terminal data root or filesystem deployment.
-- Real browser E2E on the final Owner-PC checkout.
+- Final branch closeout CI after evidence regeneration.
 - Any current-epoch R00 or real R01 scientific result.
+- Any real Owner-PC runtime/bootstrap/MT5/browser behavior.
 - Any R02 execution, model training, ONNX generation or Research Challenger creation.
 
 ## Important limitations

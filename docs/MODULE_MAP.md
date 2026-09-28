@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0
+Source digest: 205e1014611af244e5752da817a13e755fc04e18e9e42443ca57f1b14a75b34e
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -48,7 +48,7 @@ Generated/refreshed: current compiler run
 | backend/max_backend/research_hardware.py | Python | 267 | backend/max_backend | NO |
 | backend/max_backend/research_leakage.py | Python | 1499 | backend/max_backend | NO |
 | backend/max_backend/research_owner_view.py | Python | 347 | backend/max_backend | NO |
-| backend/max_backend/research_r01_service.py | Python | 1732 | backend/max_backend | NO |
+| backend/max_backend/research_r01_service.py | Python | 1758 | backend/max_backend | NO |
 | backend/max_backend/research_r01_store.py | Python | 502 | backend/max_backend | NO |
 | backend/max_backend/research_service.py | Python | 1423 | backend/max_backend | NO |
 | backend/max_backend/research_settings.py | Python | 73 | backend/max_backend | NO |
@@ -89,8 +89,9 @@ Generated/refreshed: current compiler run
 | backend/tests/test_m07_true_mtf.py | Python | 245 | backend/tests | YES |
 | backend/tests/test_m08_strategy_results.py | Python | 1923 | backend/tests | YES |
 | backend/tests/test_r00_research.py | Python | 949 | backend/tests | YES |
+| backend/tests/test_r01_current_lineage.py | Python | 152 | backend/tests | YES |
 | backend/tests/test_r01_dataset.py | Python | 932 | backend/tests | YES |
-| backend/tests/test_r01_research.py | Python | 1072 | backend/tests | YES |
+| backend/tests/test_r01_research.py | Python | 1077 | backend/tests | YES |
 | backend/tests/test_r01_source.py | Python | 471 | backend/tests | YES |
 | frontend/src/App.test.tsx | TypeScript/React | 241 | frontend/src | YES |
 | frontend/src/App.tsx | TypeScript/React | 290 | frontend/src | NO |

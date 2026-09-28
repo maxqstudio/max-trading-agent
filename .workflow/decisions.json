@@ -116,7 +116,7 @@
       "decision": "MAX uses Skill Workflow 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f; .workflow/tools are byte-identical to that exact current main; generated canonical governance docs remain under docs/; sequence mode remains DURING/CURRENT without retrospective plans.",
       "id": "D-017",
       "rationale": "Skill main advanced from 414104e9d56b59374a6e3c94c6883d295427cfa3 only to emit the prompt-required SELFTEST=PASS and STRICT_SELFTEST=PASS integration markers. Validator behavior, product behavior, scientific state and database schema are unchanged.",
-      "status": "CURRENT",
+      "status": "SUPERSEDED",
       "title": "Current Skill Workflow authority with explicit self-test PASS markers"
     },
     {
@@ -159,6 +159,20 @@
       "title": "Public source-only repository",
       "decision": "Runtime databases, evidence, artifacts, optimizer outputs, Research datasets, Owner terminal state and real credentials are excluded from the public repository; tests must use synthetic fixtures.",
       "rationale": "Public-source reproducibility and credential/privacy safety require runtime/private state to remain outside Git authority.",
+      "status": "CURRENT"
+    },
+    {
+      "id": "D-021",
+      "title": "Adopt deterministic-LF Skill Workflow authority",
+      "decision": "MAX adopts Skill Workflow 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720; the upstream delta from 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f enforces byte-exact LF writes for acceptance.json and validates that contract in STRICT selftest.",
+      "rationale": "Current-main governance authority must be adopted without MAX-local compatibility patches.",
+      "status": "CURRENT"
+    },
+    {
+      "id": "D-022",
+      "title": "R01 binds to latest accepted current R00",
+      "decision": "R01 derives its parent from the latest Research project in current runtime authority and fails closed unless that R00 is terminal PASS_WAITING_OWNER with verified frozen integrity and exact Research/Strategy/parent-authority bindings. Retired previous-epoch IDs are not product constants.",
+      "rationale": "This preserves immutable R00 lineage while allowing future fresh epochs to proceed without source edits or hardcoded Research/Champion identities.",
       "status": "CURRENT"
     }
   ],
