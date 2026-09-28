@@ -2747,7 +2747,7 @@
       "locator": "backend/tests/test_r01_source.py::_capture.run"
     }
   ],
-  "observed_head": "00145e1000e1d4b581719446f701ea373fe3be13",
+  "observed_head": "056aa9265353a05cbc3be3cebe956fcde447d6da",
   "schema_version": 1,
   "source_digest": "d50698031437382aa8451c41c2e19cda40833689800d37d03e7fa86d2134a5a0"
 }
