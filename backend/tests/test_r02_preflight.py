@@ -44,6 +44,7 @@ def _install(
     monkeypatch.setattr(r02, "validate_r01_integrity", lambda **_kwargs: deepcopy(current_integrity))
     monkeypatch.setattr(r02, "verify_no_training_side_effects", lambda *_args, **_kwargs: deepcopy(current_side_effects))
     monkeypatch.setattr(r02, "get_r02_discovery_block", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(r02, "get_r02_terminal", lambda *_args, **_kwargs: None)
 
 
 def test_fresh_epoch_without_research_is_blocked(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -175,3 +176,44 @@ def test_frozen_discovery_block_prevents_second_authorization_surface(
     assert result["owner_authorized"] is True
     assert result["runtime_start_available"] is False
     assert result["r02_executable"] is False
+
+
+
+def test_terminal_outcome_ledger_reports_complete_without_qualification(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _install(monkeypatch)
+    monkeypatch.setattr(
+        r02,
+        "get_r02_discovery_block",
+        lambda research_id, **_kwargs: {
+            "block_id": "RDISC-COMPLETE",
+            "authorization_id": "RAUTH-R02-COMPLETE",
+            "plan_id": "RPLAN-COMPLETE",
+            "plan_sha256": "b" * 64,
+            "candidate_count": 3,
+            "compute_budget": {
+                "value": 120,
+                "unit": "FIT_SECONDS",
+                "execution_semantics": "FROZEN_ONLY_NOT_EXECUTED",
+            },
+        },
+    )
+    monkeypatch.setattr(
+        r02,
+        "get_r02_terminal",
+        lambda research_id, **_kwargs: {
+            "terminal_id": "RTERM-COMPLETE",
+            "outcome_manifest_sha256": "c" * 64,
+            "screen_pass_count": 1,
+            "screen_fail_count": 1,
+            "execution_error_count": 1,
+            "compute_consumed": {"value": 60.0, "unit": "FIT_SECONDS"},
+        },
+    )
+    result = r02.r02_preflight(path=Path("unused.db"))
+    assert result["status"] == "COMPLETE_WAITING_OWNER"
+    assert result["cheap_screen_qualification_authority"] is False
+    assert result["qualified_pool_admission_authority"] == "R03_FULL_WFA_ONLY"
+    assert result["r02_executable"] is False
+    assert result["model_training"] == 0

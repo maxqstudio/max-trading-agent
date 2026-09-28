@@ -360,6 +360,60 @@ def migrate_current(path: Path = DATABASE_PATH) -> None:
             CREATE INDEX IF NOT EXISTS ix_research_r02_candidates_block
             ON research_r02_candidate_specs(block_id, ordinal, candidate_id);
 
+            CREATE TABLE IF NOT EXISTS research_r02_candidate_outcomes (
+                outcome_id TEXT PRIMARY KEY,
+                block_id TEXT NOT NULL,
+                candidate_id TEXT NOT NULL UNIQUE,
+                status TEXT NOT NULL CHECK(
+                    status IN ('SCREEN_PASS','SCREEN_FAIL','EXECUTION_ERROR')
+                ),
+                outcome_sha256 TEXT NOT NULL UNIQUE,
+                outcome_json TEXT NOT NULL,
+                created_utc TEXT NOT NULL,
+                FOREIGN KEY(block_id)
+                    REFERENCES research_r02_discovery_blocks(block_id),
+                FOREIGN KEY(candidate_id)
+                    REFERENCES research_r02_candidate_specs(candidate_id)
+            );
+            CREATE INDEX IF NOT EXISTS ix_research_r02_outcomes_block
+            ON research_r02_candidate_outcomes(block_id, candidate_id);
+
+            CREATE TABLE IF NOT EXISTS research_r02_block_terminals (
+                terminal_id TEXT PRIMARY KEY,
+                block_id TEXT NOT NULL UNIQUE,
+                state TEXT NOT NULL CHECK(state='COMPLETE_WAITING_OWNER'),
+                outcome_manifest_sha256 TEXT NOT NULL UNIQUE,
+                candidate_count INTEGER NOT NULL CHECK(candidate_count > 0),
+                screen_pass_count INTEGER NOT NULL CHECK(screen_pass_count >= 0),
+                screen_fail_count INTEGER NOT NULL CHECK(screen_fail_count >= 0),
+                execution_error_count INTEGER NOT NULL CHECK(execution_error_count >= 0),
+                compute_consumed_json TEXT NOT NULL,
+                created_utc TEXT NOT NULL,
+                FOREIGN KEY(block_id)
+                    REFERENCES research_r02_discovery_blocks(block_id)
+            );
+
+            CREATE TRIGGER IF NOT EXISTS research_r02_outcome_no_update
+            BEFORE UPDATE ON research_r02_candidate_outcomes
+            BEGIN
+                SELECT RAISE(ABORT, 'R02_OUTCOME_IMMUTABLE');
+            END;
+            CREATE TRIGGER IF NOT EXISTS research_r02_outcome_no_delete
+            BEFORE DELETE ON research_r02_candidate_outcomes
+            BEGIN
+                SELECT RAISE(ABORT, 'R02_OUTCOME_APPEND_ONLY');
+            END;
+            CREATE TRIGGER IF NOT EXISTS research_r02_terminal_no_update
+            BEFORE UPDATE ON research_r02_block_terminals
+            BEGIN
+                SELECT RAISE(ABORT, 'R02_TERMINAL_IMMUTABLE');
+            END;
+            CREATE TRIGGER IF NOT EXISTS research_r02_terminal_no_delete
+            BEFORE DELETE ON research_r02_block_terminals
+            BEGIN
+                SELECT RAISE(ABORT, 'R02_TERMINAL_APPEND_ONLY');
+            END;
+
             CREATE TRIGGER IF NOT EXISTS research_r02_authorization_no_update
             BEFORE UPDATE ON research_r02_authorizations
             BEGIN

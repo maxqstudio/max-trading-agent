@@ -9,6 +9,7 @@ from .config import DATABASE_PATH
 from .db import connect
 from .optimizer_store import utc_now
 from .research_contract import candidate_id as derive_candidate_id, stable_hash
+from .research_r02_outcome import build_terminal_manifest
 from .workflow_store import migrate_current
 
 
@@ -439,3 +440,180 @@ def authorize_and_freeze_r02_discovery(
     if len(block["candidates"]) != int(plan["candidate_count"]):
         raise RuntimeError("R02_DISCOVERY_BLOCK_CANDIDATE_PERSISTENCE_MISMATCH")
     return persisted_authorization, block
+
+
+
+def get_r02_terminal(
+    research_id: str,
+    *,
+    path: Path = DATABASE_PATH,
+) -> dict[str, Any] | None:
+    migrate_current(path)
+    with connect(path) as conn:
+        row = conn.execute(
+            """
+            SELECT terminal.*
+            FROM research_r02_block_terminals AS terminal
+            JOIN research_r02_discovery_blocks AS block
+              ON block.block_id=terminal.block_id
+            WHERE block.research_id=?
+            """,
+            (str(research_id),),
+        ).fetchone()
+    if row is None:
+        return None
+    result = dict(row)
+    result["compute_consumed"] = json.loads(
+        result.pop("compute_consumed_json")
+    )
+    return result
+
+
+def get_r02_outcome_ledger(
+    research_id: str,
+    *,
+    path: Path = DATABASE_PATH,
+) -> dict[str, Any] | None:
+    migrate_current(path)
+    block = get_r02_discovery_block(research_id, path=path)
+    if block is None:
+        return None
+    with connect(path) as conn:
+        rows = conn.execute(
+            """
+            SELECT outcome.*
+            FROM research_r02_candidate_outcomes AS outcome
+            JOIN research_r02_candidate_specs AS spec
+              ON spec.candidate_id=outcome.candidate_id
+            WHERE outcome.block_id=?
+            ORDER BY spec.ordinal,spec.candidate_id
+            """,
+            (str(block["block_id"]),),
+        ).fetchall()
+    outcomes = []
+    for row in rows:
+        item = dict(row)
+        item["outcome"] = json.loads(item.pop("outcome_json"))
+        outcomes.append(item)
+    return {
+        "block": block,
+        "outcomes": outcomes,
+        "terminal": get_r02_terminal(research_id, path=path),
+    }
+
+
+def commit_r02_terminal_outcomes(
+    research_id: str,
+    outcome_requests: list[dict[str, Any]],
+    *,
+    path: Path = DATABASE_PATH,
+) -> dict[str, Any]:
+    migrate_current(path)
+    research_id = str(research_id or "").strip()
+    if not research_id:
+        raise ValueError("R02_OUTCOME_RESEARCH_ID_REQUIRED")
+
+    with connect(path) as conn:
+        conn.execute("BEGIN IMMEDIATE")
+        block = conn.execute(
+            "SELECT * FROM research_r02_discovery_blocks WHERE research_id=?",
+            (research_id,),
+        ).fetchone()
+        if block is None:
+            raise RuntimeError("R02_FROZEN_BLOCK_REQUIRED")
+
+        candidates = conn.execute(
+            """
+            SELECT candidate_id
+            FROM research_r02_candidate_specs
+            WHERE block_id=?
+            ORDER BY ordinal,candidate_id
+            """,
+            (str(block["block_id"]),),
+        ).fetchall()
+        candidate_ids = [str(row["candidate_id"]) for row in candidates]
+        if len(candidate_ids) != int(block["candidate_count"]):
+            raise RuntimeError("R02_FROZEN_CANDIDATE_AUTHORITY_INCOMPLETE")
+
+        manifest = build_terminal_manifest(
+            block_id=str(block["block_id"]),
+            candidate_ids=candidate_ids,
+            compute_budget=json.loads(str(block["compute_budget_json"])),
+            outcome_requests=outcome_requests,
+        )
+
+        existing_terminal = conn.execute(
+            "SELECT * FROM research_r02_block_terminals WHERE block_id=?",
+            (str(block["block_id"]),),
+        ).fetchone()
+        if existing_terminal is not None:
+            if str(existing_terminal["outcome_manifest_sha256"]) != str(
+                manifest["outcome_manifest_sha256"]
+            ):
+                raise RuntimeError("R02_TERMINAL_ALREADY_COMMITTED")
+        else:
+            existing_outcomes = conn.execute(
+                """
+                SELECT COUNT(*) AS n
+                FROM research_r02_candidate_outcomes
+                WHERE block_id=?
+                """,
+                (str(block["block_id"]),),
+            ).fetchone()
+            if int(existing_outcomes["n"]) != 0:
+                raise RuntimeError("R02_OUTCOME_PARTIAL_STATE_DETECTED")
+
+            now = utc_now()
+            for outcome in manifest["candidate_outcomes"]:
+                conn.execute(
+                    """
+                    INSERT INTO research_r02_candidate_outcomes(
+                        outcome_id,block_id,candidate_id,status,
+                        outcome_sha256,outcome_json,created_utc
+                    ) VALUES(?,?,?,?,?,?,?)
+                    """,
+                    (
+                        str(outcome["outcome_id"]),
+                        str(block["block_id"]),
+                        str(outcome["candidate_id"]),
+                        str(outcome["status"]),
+                        str(outcome["outcome_sha256"]),
+                        json.dumps(
+                            outcome,
+                            sort_keys=True,
+                            separators=(",", ":"),
+                        ),
+                        now,
+                    ),
+                )
+            conn.execute(
+                """
+                INSERT INTO research_r02_block_terminals(
+                    terminal_id,block_id,state,outcome_manifest_sha256,
+                    candidate_count,screen_pass_count,screen_fail_count,
+                    execution_error_count,compute_consumed_json,created_utc
+                ) VALUES(?,?,'COMPLETE_WAITING_OWNER',?,?,?,?,?,?,?)
+                """,
+                (
+                    str(manifest["terminal_id"]),
+                    str(block["block_id"]),
+                    str(manifest["outcome_manifest_sha256"]),
+                    int(manifest["candidate_count"]),
+                    int(manifest["screen_pass_count"]),
+                    int(manifest["screen_fail_count"]),
+                    int(manifest["execution_error_count"]),
+                    json.dumps(
+                        manifest["compute_consumed"],
+                        sort_keys=True,
+                        separators=(",", ":"),
+                    ),
+                    now,
+                ),
+            )
+
+    ledger = get_r02_outcome_ledger(research_id, path=path)
+    if ledger is None or ledger["terminal"] is None:
+        raise RuntimeError("R02_TERMINAL_PERSISTENCE_MISSING")
+    if len(ledger["outcomes"]) != int(ledger["block"]["candidate_count"]):
+        raise RuntimeError("R02_OUTCOME_LEDGER_INCOMPLETE")
+    return ledger
