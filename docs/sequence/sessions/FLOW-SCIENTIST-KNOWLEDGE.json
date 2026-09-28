@@ -7,12 +7,12 @@
       "backend/max_backend/scientist_api.py::get_status"
     ],
     "graph": "docs/sequence/generated/FLOW-SCIENTIST-KNOWLEDGE.actual.json",
-    "source_digest": "205e1014611af244e5752da817a13e755fc04e18e9e42443ca57f1b14a75b34e"
+    "source_digest": "46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c7986bda"
   },
   "critical": true,
-  "implementation_base_sha": "08f5a741412a2f5c69478b157529245b9a9a260e",
+  "implementation_base_sha": "5c0df514632964dd942cba59a73f3b822e09085a",
   "mode": "DURING",
-  "phase": "R01_CURRENT_LINEAGE_REPAIR",
+  "phase": "R02_DISCOVERY_SOURCE_FOUNDATION",
   "plan": {
     "contract": "",
     "diagram": "",

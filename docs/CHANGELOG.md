@@ -47,3 +47,29 @@ Type: acceptance
 - R01 current-lineage source repair pre-closeout Windows CI run 36369408053 passed at 5dc96103c85ed9fd208101f060529e94bff31e76.
 - Backend 497 PASS; frontend 53 PASS across 10 files; Skill provenance/STRICT, governance, source-only/security, pip check, lint/build/npm dependency tree PASS.
 - Real current-epoch R00/R01, MT5 and Owner-PC runtime remain NOT_PROVEN.
+
+## 2026-09-28 — R01 current-lineage source repair final closure
+
+Type: acceptance
+
+- R01 source repair merged to main as 5c0df514632964dd942cba59a73f3b822e09085a.
+- Final branch Windows CI 36370111803, PR CI 36371604393 and main revalidation 36371992178 all passed.
+- Real current-epoch R00/R01 scientific execution and MT5/Owner runtime remain NOT_PROVEN.
+
+## 2026-09-28 — R02 Discovery source foundation
+
+Type: source_foundation
+
+- Add deterministic R02 candidate-plan contract for LightGBM/XGBoost baselines and Random Forest control without importing ML runtimes.
+- Require explicit candidate count, explicit compute budget, canonical candidate identity/lineage and reject unopened temporal families.
+- Add read-only R02 preflight that requires accepted verified R01 authority and zero prior scientific side-effect regression.
+- Expose GET /api/research/r02/preflight only; no R02 START endpoint, training, candidate persistence, qualification, ONNX or Challenger mutation is added.
+- Normalize duplicate governance decision identifiers introduced during H0 migration.
+
+## 2026-09-28 — R02 Discovery source foundation pre-closeout
+
+Type: acceptance
+
+- Windows CI run 36374307305 passed at ee5e93cb039b37294452ba42239991514a3c80a5.
+- Backend 537 PASS; frontend 53 PASS across 10 files; source-only/security, Skill Workflow provenance/STRICT, generated governance/sequence, pip check, lint/build/npm dependency tree PASS.
+- Candidate identity is bound to exact R01 output authority; real R02 start/training/qualification remains blocked.

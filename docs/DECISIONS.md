@@ -162,7 +162,7 @@ The public repository contains source, deterministic governance and synthetic te
 
 Rationale: Keep a public clean clone reproducible without leaking private state or coupling tests to Owner runtime artifacts.
 
-## D-018 — GitHub-hosted development authority
+## D-023 — GitHub-hosted development authority
 
 Status: CURRENT
 
@@ -170,21 +170,13 @@ GitHub main exact SHA in maxqstudio/max-trading-agent is source authority; GitHu
 
 Rationale: Separate reproducible public-source development from the hardware/broker/runtime boundary that GitHub Actions cannot prove.
 
-## D-019 — Windows-only hosted CI
+## D-024 — Windows-only hosted CI
 
 Status: CURRENT
 
 MAX application CI remains Windows-only and must not add Linux/macOS matrix coverage merely for platform breadth.
 
 Rationale: The production execution boundary is MetaTrader 5 on Windows; hosted CI should validate the supported application platform without pretending to emulate real MT5 runtime.
-
-## D-020 — Public source-only repository
-
-Status: CURRENT
-
-Runtime databases, evidence, artifacts, optimizer outputs, Research datasets, Owner terminal state and real credentials are excluded from the public repository; tests must use synthetic fixtures.
-
-Rationale: Public-source reproducibility and credential/privacy safety require runtime/private state to remain outside Git authority.
 
 ## D-021 — Adopt deterministic-LF Skill Workflow authority
 
@@ -201,3 +193,11 @@ Status: CURRENT
 R01 derives its parent from the latest Research project in current runtime authority and fails closed unless that R00 is terminal PASS_WAITING_OWNER with verified frozen integrity and exact Research/Strategy/parent-authority bindings. Retired previous-epoch IDs are not product constants.
 
 Rationale: This preserves immutable R00 lineage while allowing future fresh epochs to proceed without source edits or hardcoded Research/Champion identities.
+
+## D-025 — R02 source foundation is non-executing
+
+Status: CURRENT
+
+Hosted R02 source work may define deterministic candidate identity/planning contracts and read-only preflight before a real R01 result exists, but it must not expose a start endpoint, persist scientific candidate outcomes, train models, qualify candidates, or bypass the later explicit Owner R02 authorization.
+
+Rationale: Build and test the control contract early without confusing source readiness with scientific execution or qualification authority.

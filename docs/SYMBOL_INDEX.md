@@ -3,7 +3,7 @@
 # SYMBOL INDEX
 
 Authority SHA: external final acceptance evidence
-Source digest: 205e1014611af244e5752da817a13e755fc04e18e9e42443ca57f1b14a75b34e
+Source digest: 46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c7986bda
 Status: CURRENT
 
 | File | Symbol | Kind | Lines@SHA | Responsibility | Reads/Writes | Called By | Tests |
@@ -425,22 +425,23 @@ Status: CURRENT
 | backend/max_backend/promotion_service.py | champion_detail | function | 1135-1167 | Observed Python symbol | | | |
 | backend/max_backend/promotion_service.py | promotion_history | function | 1170-1171 | Observed Python symbol | | | |
 | backend/max_backend/promotion_service.py | promotion_detail | function | 1174-1178 | Observed Python symbol | | | |
-| backend/max_backend/research_api.py | R00StartRequest | class | 26-32 | Observed Python symbol | | | |
-| backend/max_backend/research_api.py | ResearchSampleConfigurationRequest | class | 35-38 | Observed Python symbol | | | |
-| backend/max_backend/research_api.py | R01SourcePrepareRequest | class | 41-49 | Observed Python symbol | | | |
-| backend/max_backend/research_api.py | R01StartRequest | class | 52-65 | Observed Python symbol | | | |
-| backend/max_backend/research_api.py | get_research_contracts | function | 72-73 | Observed Python symbol | | | |
-| backend/max_backend/research_api.py | get_research_sample_config | function | 77-88 | Observed Python symbol | | | |
-| backend/max_backend/research_api.py | put_research_sample_config | function | 92-100 | Observed Python symbol | | | |
-| backend/max_backend/research_api.py | get_r00_preflight | function | 104-108 | Observed Python symbol | | | |
-| backend/max_backend/research_api.py | get_current_research | function | 112-116 | Observed Python symbol | | | |
-| backend/max_backend/research_api.py | get_r01_source | function | 120-124 | Observed Python symbol | | | |
-| backend/max_backend/research_api.py | prepare_research_r01_source | function | 128-140 | Observed Python symbol | | | |
-| backend/max_backend/research_api.py | get_r01_preflight | function | 144-148 | Observed Python symbol | | | |
-| backend/max_backend/research_api.py | get_r01_detail | function | 152-156 | Observed Python symbol | | | |
-| backend/max_backend/research_api.py | start_research_r01 | function | 160-172 | Observed Python symbol | | | |
-| backend/max_backend/research_api.py | get_research_detail | function | 176-182 | Observed Python symbol | | | |
-| backend/max_backend/research_api.py | start_research_r00 | function | 186-203 | Observed Python symbol | | | |
+| backend/max_backend/research_api.py | R00StartRequest | class | 27-33 | Observed Python symbol | | | |
+| backend/max_backend/research_api.py | ResearchSampleConfigurationRequest | class | 36-39 | Observed Python symbol | | | |
+| backend/max_backend/research_api.py | R01SourcePrepareRequest | class | 42-50 | Observed Python symbol | | | |
+| backend/max_backend/research_api.py | R01StartRequest | class | 53-66 | Observed Python symbol | | | |
+| backend/max_backend/research_api.py | get_research_contracts | function | 73-74 | Observed Python symbol | | | |
+| backend/max_backend/research_api.py | get_research_sample_config | function | 78-89 | Observed Python symbol | | | |
+| backend/max_backend/research_api.py | put_research_sample_config | function | 93-101 | Observed Python symbol | | | |
+| backend/max_backend/research_api.py | get_r00_preflight | function | 105-109 | Observed Python symbol | | | |
+| backend/max_backend/research_api.py | get_current_research | function | 113-117 | Observed Python symbol | | | |
+| backend/max_backend/research_api.py | get_r01_source | function | 121-125 | Observed Python symbol | | | |
+| backend/max_backend/research_api.py | prepare_research_r01_source | function | 129-141 | Observed Python symbol | | | |
+| backend/max_backend/research_api.py | get_r01_preflight | function | 145-149 | Observed Python symbol | | | |
+| backend/max_backend/research_api.py | get_r01_detail | function | 153-157 | Observed Python symbol | | | |
+| backend/max_backend/research_api.py | start_research_r01 | function | 161-173 | Observed Python symbol | | | |
+| backend/max_backend/research_api.py | get_r02_preflight | function | 177-181 | Observed Python symbol | | | |
+| backend/max_backend/research_api.py | get_research_detail | function | 185-191 | Observed Python symbol | | | |
+| backend/max_backend/research_api.py | start_research_r00 | function | 195-212 | Observed Python symbol | | | |
 | backend/max_backend/research_contract.py | canonical_json | function | 96-103 | Observed Python symbol | | | |
 | backend/max_backend/research_contract.py | stable_hash | function | 106-107 | Observed Python symbol | | | |
 | backend/max_backend/research_contract.py | label_design_authority | function | 110-127 | Observed Python symbol | | | |
@@ -594,6 +595,14 @@ Status: CURRENT
 | backend/max_backend/research_r01_store.py | commit_r01_terminal_authority | function | 324-474 | Observed Python symbol | | | |
 | backend/max_backend/research_r01_store.py | incomplete_r01_runs | function | 477-492 | Observed Python symbol | | | |
 | backend/max_backend/research_r01_store.py | recover_incomplete_r01 | function | 495-502 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_contract.py | r02_discovery_contract | function | 33-54 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_contract.py | _require_nonempty_text | function | 57-61 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_contract.py | _require_sha256 | function | 64-68 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_contract.py | _canonical_compute_budget | function | 71-89 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_contract.py | _canonical_candidate_spec | function | 92-150 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_contract.py | build_discovery_plan | function | 153-270 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_service.py | _blocked | function | 14-33 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_service.py | r02_preflight | function | 36-99 | Observed Python symbol | | | |
 | backend/max_backend/research_service.py | _manifest_hash | function | 78-81 | Observed Python symbol | | | |
 | backend/max_backend/research_service.py | _seal | function | 84-87 | Observed Python symbol | | | |
 | backend/max_backend/research_service.py | _verify_sealed | function | 90-92 | Observed Python symbol | | | |
@@ -1402,6 +1411,31 @@ Status: CURRENT
 | backend/tests/test_r01_source.py | test_feature_capture_set_preserves_frozen_parent_values | function | 390-404 | Observed Python symbol | | | |
 | backend/tests/test_r01_source.py | test_frozen_parent_ea_resolves_from_retained_source_challenger | function | 407-440 | Observed Python symbol | | | |
 | backend/tests/test_r01_source.py | test_r01_api_rejects_manual_source_authority_fields | function | 443-471 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | _candidate | function | 14-30 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | _request | function | 33-52 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_discovery_contract_preserves_gate_boundaries | function | 55-64 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_discovery_plan_is_deterministic_and_order_independent | function | 67-81 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_candidate_count_must_be_explicit_positive_integer | function | 85-89 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_parent_lineage_must_bind_exact_r01_output_authority | function | 92-98 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_parent_lineage_fields_are_exact | function | 101-107 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_candidate_count_mismatch_fails_closed | function | 110-114 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_compute_budget_has_no_hidden_default | function | 131-135 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_duplicate_candidate_identity_is_rejected | function | 138-142 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_unopened_or_noncanonical_model_family_is_rejected | function | 154-158 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_candidate_lineage_mismatch_is_rejected | function | 170-174 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_candidate_identity_fields_are_exact_and_explicit | function | 177-181 | Observed Python symbol | | | |
+| backend/tests/test_r02_discovery_contract.py | test_plan_rejects_unknown_top_level_fields | function | 184-188 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | _run | function | 12-18 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | _install | function | 21-45 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_fresh_epoch_without_research_is_blocked | function | 48-55 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_missing_r01_run_is_blocked | function | 58-64 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_nonpassing_r01_is_blocked | function | 68-73 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_r01_pass_without_output_authority_fails_closed | function | 76-81 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_r01_pass_with_malformed_output_authority_fails_closed | function | 85-90 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_r01_integrity_or_identity_mismatch_fails_closed | function | 100-106 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_prior_training_or_promotion_side_effect_fails_closed | function | 109-121 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_valid_r01_pass_is_ready_but_cannot_start_r02 | function | 124-140 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_api_preflight_maps_contract_without_start_endpoint | function | 143-147 | Observed Python symbol | | | |
 | scripts/build_m05_final_evidence.py | write_json | function | 61-66 | Observed Python symbol | | | |
 | scripts/build_m05_final_evidence.py | parse_json | function | 69-70 | Observed Python symbol | | | |
 | scripts/build_m05_final_evidence.py | git_text | function | 73-86 | Observed Python symbol | | | |

@@ -43,34 +43,40 @@
       "summary": "R01 scientific result"
     },
     {
-      "evidence": "All remain blocked/not started.",
+      "evidence": "R02 source foundation may be built and hosted-tested, but real R02 start, Cheap Screen training/results, ONNX and Research Challenger remain blocked/not started.",
       "id": "NP-003",
       "status": "NOT_PROVEN",
-      "summary": "R02/model training/ONNX/Research Challenger"
+      "summary": "Real R02 execution/model training/ONNX/Research Challenger"
     },
     {
       "evidence": "Repaired Skill authority 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f vendored 18/18 byte-identically; canonical docs/ layout and strict validators pass on pre-final clean candidate.",
       "id": "GOV-001",
-      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "status": "FIXED/ACCEPTED",
       "summary": "Historical Skill Workflow authority drift repaired forward to current repaired authority"
     },
     {
       "evidence": "Repaired Skill validates MAX 11 canonical claims and all 3 legitimate Claim relations with zero false claim-text conflicts; explicit truth-gate FAIL is fail-closed.",
       "id": "GOV-002",
-      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "status": "FIXED/ACCEPTED",
       "summary": "Claim relation row misclassification and Project Truth fail-open repaired in current Skill Workflow"
     },
     {
       "id": "GOV-003",
-      "status": "FIXED_PENDING_FINAL_CI",
+      "status": "FIXED/ACCEPTED",
       "summary": "Migrated semantic governance still describes maxqstudio/max_rebuild and Owner-PC-centric development",
-      "evidence": "H0 semantic authority, generated docs, Scientist knowledge and Windows CI authority were rebased; hosted run 36364128446 passed all gates. Final branch/main CI remains external closeout evidence."
+      "evidence": "H0 merged to main and Windows CI run 36366607560 passed on exact main SHA 08f5a741412a2f5c69478b157529245b9a9a260e."
     },
     {
       "id": "KD-006",
-      "status": "FIXED_PENDING_FINAL_CI",
+      "status": "FIXED/ACCEPTED",
       "summary": "R01 retired previous-epoch hardcoded lineage removed; dynamic current accepted R00 immutable lineage source repair passed pre-closeout CI",
-      "evidence": "Windows CI run 36369408053 at 5dc96103c85ed9fd208101f060529e94bff31e76 passed 497 backend tests plus full hosted gates; final generated-evidence branch/main CI remains required."
+      "evidence": "R01 lineage repair merged to main as 5c0df514632964dd942cba59a73f3b822e09085a; final branch run 36370111803, PR run 36371604393 and main revalidation run 36371992178 passed."
+    },
+    {
+      "id": "GOV-004",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Duplicate D-018/D-019/D-020 decision identifiers from H0 migration",
+      "evidence": "Decision IDs are unique on the R02 candidate; Windows CI run 36374307305 passed Project Truth/sequence governance at ee5e93cb039b37294452ba42239991514a3c80a5."
     }
   ],
   "schema_version": 1

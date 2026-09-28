@@ -253,8 +253,8 @@ def main() -> int:
         ],
         "planned_capabilities": [
             "Current-epoch R00 initialization and acceptance under the fresh epoch before any real R01 execution",
-            "Validate current-R00 immutable lineage binding before any Owner-authorized real R01 scientific execution and acceptance",
-            "R02 Discovery / Cheap Screen only after separate explicit Owner authorization following accepted R01",
+            "R01 current-lineage source binding is merged/revalidated; real current-epoch R00/R01 execution remains deferred to final Owner runtime",
+            "R02 source foundation may define deterministic Discovery planning and read-only preflight; real R02 start/Cheap Screen execution still requires accepted current R01 plus separate explicit Owner authorization",
         ],
         "explicit_deferred_capabilities": [
             "model training",

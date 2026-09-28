@@ -250,7 +250,7 @@
       "file": "backend/max_backend/research_api.py",
       "is_test": false,
       "language": "Python",
-      "lines": 203
+      "lines": 212
     },
     {
       "directory": "backend/max_backend",
@@ -307,6 +307,20 @@
       "is_test": false,
       "language": "Python",
       "lines": 502
+    },
+    {
+      "directory": "backend/max_backend",
+      "file": "backend/max_backend/research_r02_contract.py",
+      "is_test": false,
+      "language": "Python",
+      "lines": 270
+    },
+    {
+      "directory": "backend/max_backend",
+      "file": "backend/max_backend/research_r02_service.py",
+      "is_test": false,
+      "language": "Python",
+      "lines": 99
     },
     {
       "directory": "backend/max_backend",
@@ -608,6 +622,20 @@
       "is_test": true,
       "language": "Python",
       "lines": 471
+    },
+    {
+      "directory": "backend/tests",
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "is_test": true,
+      "language": "Python",
+      "lines": 188
+    },
+    {
+      "directory": "backend/tests",
+      "file": "backend/tests/test_r02_preflight.py",
+      "is_test": true,
+      "language": "Python",
+      "lines": 147
     },
     {
       "directory": "frontend/src",
@@ -23168,6 +23196,18 @@
       "target_token": "HTTPException"
     },
     {
+      "caller": "backend/max_backend/research_api.py::get_r02_preflight",
+      "target_token": "r02_preflight"
+    },
+    {
+      "caller": "backend/max_backend/research_api.py::get_r02_preflight",
+      "target_token": "HTTPException"
+    },
+    {
+      "caller": "backend/max_backend/research_api.py::get_r02_preflight",
+      "target_token": "str"
+    },
+    {
       "caller": "backend/max_backend/research_api.py::get_research_detail",
       "target_token": "research_detail"
     },
@@ -32182,6 +32222,566 @@
     {
       "caller": "backend/max_backend/research_r01_store.py::recover_incomplete_r01",
       "target_token": "incomplete_r01_runs"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::r02_discovery_contract",
+      "target_token": "list"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::r02_discovery_contract",
+      "target_token": "list"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_require_nonempty_text",
+      "target_token": "strip"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_require_nonempty_text",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_require_nonempty_text",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_require_sha256",
+      "target_token": "_require_nonempty_text"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_require_sha256",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_require_sha256",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_require_sha256",
+      "target_token": "token.lower"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_require_sha256",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_require_sha256",
+      "target_token": "token.lower"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
+      "target_token": "math.isfinite"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
+      "target_token": "float"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
+      "target_token": "_require_nonempty_text"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "candidate_identity_contract"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "details.append"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "join"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "details.append"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "join"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "join"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "lower"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "_require_nonempty_text"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "target_token": "candidate_id"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "details.append"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "join"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "details.append"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "join"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "join"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "_require_nonempty_text"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "_require_sha256"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "_require_nonempty_text"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "_require_nonempty_text"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "_require_nonempty_text"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "_require_sha256"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "_canonical_candidate_spec"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "canonical.sort"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "_canonical_compute_budget"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "stable_hash"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "target_token": "stable_hash"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::_blocked",
+      "target_token": "r02_discovery_contract"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "latest_research"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "_blocked"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "strip"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "latest.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "get_r01_run"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "_blocked"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "run.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "_blocked"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "lower"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "strip"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "run.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "validate_r01_integrity"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "integrity.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "integrity.get"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "verify_no_training_side_effects"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "target_token": "r02_discovery_contract"
     },
     {
       "caller": "backend/max_backend/research_service.py::_manifest_hash",
@@ -57784,6 +58384,362 @@
       "target_token": "R01StartRequest.model_validate"
     },
     {
+      "caller": "backend/tests/test_r02_discovery_contract.py::_request",
+      "target_token": "_candidate"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::_request",
+      "target_token": "_candidate"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::_request",
+      "target_token": "_candidate"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_discovery_contract_preserves_gate_boundaries",
+      "target_token": "r02_discovery_contract"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_discovery_plan_is_deterministic_and_order_independent",
+      "target_token": "_request"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_discovery_plan_is_deterministic_and_order_independent",
+      "target_token": "build_discovery_plan"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_discovery_plan_is_deterministic_and_order_independent",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_discovery_plan_is_deterministic_and_order_independent",
+      "target_token": "list"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_discovery_plan_is_deterministic_and_order_independent",
+      "target_token": "reversed"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_discovery_plan_is_deterministic_and_order_independent",
+      "target_token": "build_discovery_plan"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_discovery_plan_is_deterministic_and_order_independent",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_discovery_plan_is_deterministic_and_order_independent",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_discovery_plan_is_deterministic_and_order_independent",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_candidate_count_must_be_explicit_positive_integer",
+      "target_token": "_request"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_candidate_count_must_be_explicit_positive_integer",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_candidate_count_must_be_explicit_positive_integer",
+      "target_token": "build_discovery_plan"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_parent_lineage_must_bind_exact_r01_output_authority",
+      "target_token": "_request"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_parent_lineage_must_bind_exact_r01_output_authority",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_parent_lineage_must_bind_exact_r01_output_authority",
+      "target_token": "build_discovery_plan"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_parent_lineage_fields_are_exact",
+      "target_token": "_request"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_parent_lineage_fields_are_exact",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_parent_lineage_fields_are_exact",
+      "target_token": "build_discovery_plan"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_candidate_count_mismatch_fails_closed",
+      "target_token": "_request"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_candidate_count_mismatch_fails_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_candidate_count_mismatch_fails_closed",
+      "target_token": "build_discovery_plan"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_compute_budget_has_no_hidden_default",
+      "target_token": "_request"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_compute_budget_has_no_hidden_default",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_compute_budget_has_no_hidden_default",
+      "target_token": "build_discovery_plan"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_duplicate_candidate_identity_is_rejected",
+      "target_token": "_request"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_duplicate_candidate_identity_is_rejected",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_duplicate_candidate_identity_is_rejected",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_duplicate_candidate_identity_is_rejected",
+      "target_token": "build_discovery_plan"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_unopened_or_noncanonical_model_family_is_rejected",
+      "target_token": "_request"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_unopened_or_noncanonical_model_family_is_rejected",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_unopened_or_noncanonical_model_family_is_rejected",
+      "target_token": "build_discovery_plan"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_candidate_lineage_mismatch_is_rejected",
+      "target_token": "_request"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_candidate_lineage_mismatch_is_rejected",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_candidate_lineage_mismatch_is_rejected",
+      "target_token": "build_discovery_plan"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_candidate_identity_fields_are_exact_and_explicit",
+      "target_token": "_request"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_candidate_identity_fields_are_exact_and_explicit",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_candidate_identity_fields_are_exact_and_explicit",
+      "target_token": "build_discovery_plan"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_plan_rejects_unknown_top_level_fields",
+      "target_token": "_request"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_plan_rejects_unknown_top_level_fields",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_discovery_contract.py::test_plan_rejects_unknown_top_level_fields",
+      "target_token": "build_discovery_plan"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::_install",
+      "target_token": "_run"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::_install",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::_install",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::_install",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::_install",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::_install",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::_install",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::_install",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::_install",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_fresh_epoch_without_research_is_blocked",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_fresh_epoch_without_research_is_blocked",
+      "target_token": "r02.r02_preflight"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_fresh_epoch_without_research_is_blocked",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_missing_r01_run_is_blocked",
+      "target_token": "_install"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_missing_r01_run_is_blocked",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_missing_r01_run_is_blocked",
+      "target_token": "r02.r02_preflight"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_missing_r01_run_is_blocked",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_nonpassing_r01_is_blocked",
+      "target_token": "_install"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_nonpassing_r01_is_blocked",
+      "target_token": "_run"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_nonpassing_r01_is_blocked",
+      "target_token": "r02.r02_preflight"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_nonpassing_r01_is_blocked",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_r01_pass_without_output_authority_fails_closed",
+      "target_token": "_run"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_r01_pass_without_output_authority_fails_closed",
+      "target_token": "_install"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_r01_pass_without_output_authority_fails_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_r01_pass_without_output_authority_fails_closed",
+      "target_token": "r02.r02_preflight"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_r01_pass_without_output_authority_fails_closed",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_r01_pass_with_malformed_output_authority_fails_closed",
+      "target_token": "_run"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_r01_pass_with_malformed_output_authority_fails_closed",
+      "target_token": "_install"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_r01_pass_with_malformed_output_authority_fails_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_r01_pass_with_malformed_output_authority_fails_closed",
+      "target_token": "r02.r02_preflight"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_r01_pass_with_malformed_output_authority_fails_closed",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_r01_integrity_or_identity_mismatch_fails_closed",
+      "target_token": "_install"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_r01_integrity_or_identity_mismatch_fails_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_r01_integrity_or_identity_mismatch_fails_closed",
+      "target_token": "r02.r02_preflight"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_r01_integrity_or_identity_mismatch_fails_closed",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_prior_training_or_promotion_side_effect_fails_closed",
+      "target_token": "_install"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_prior_training_or_promotion_side_effect_fails_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_prior_training_or_promotion_side_effect_fails_closed",
+      "target_token": "r02.r02_preflight"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_prior_training_or_promotion_side_effect_fails_closed",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_valid_r01_pass_is_ready_but_cannot_start_r02",
+      "target_token": "_install"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_valid_r01_pass_is_ready_but_cannot_start_r02",
+      "target_token": "r02.r02_preflight"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_valid_r01_pass_is_ready_but_cannot_start_r02",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_api_preflight_maps_contract_without_start_endpoint",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_api_preflight_maps_contract_without_start_endpoint",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_api_preflight_maps_contract_without_start_endpoint",
+      "target_token": "research_api.get_r02_preflight"
+    },
+    {
+      "caller": "backend/tests/test_r02_preflight.py::test_api_preflight_maps_contract_without_start_endpoint",
+      "target_token": "hasattr"
+    },
+    {
       "caller": "scripts/build_m05_final_evidence.py::write_json",
       "target_token": "path.parent.mkdir"
     },
@@ -70480,6 +71436,11 @@
       "route": "/api/research/r01/start"
     },
     {
+      "handler": "backend/max_backend/research_api.py::get_r02_preflight",
+      "method": "GET",
+      "route": "/api/research/r02/preflight"
+    },
+    {
       "handler": "backend/max_backend/research_api.py::get_research_sample_config",
       "method": "GET",
       "route": "/api/research/sample-config"
@@ -74040,128 +75001,136 @@
     {
       "file": "backend/max_backend/research_api.py",
       "kind": "class",
-      "line_end": 32,
-      "line_start": 26,
+      "line_end": 33,
+      "line_start": 27,
       "locator": "backend/max_backend/research_api.py::R00StartRequest",
       "symbol": "R00StartRequest"
     },
     {
       "file": "backend/max_backend/research_api.py",
       "kind": "class",
-      "line_end": 38,
-      "line_start": 35,
+      "line_end": 39,
+      "line_start": 36,
       "locator": "backend/max_backend/research_api.py::ResearchSampleConfigurationRequest",
       "symbol": "ResearchSampleConfigurationRequest"
     },
     {
       "file": "backend/max_backend/research_api.py",
       "kind": "class",
-      "line_end": 49,
-      "line_start": 41,
+      "line_end": 50,
+      "line_start": 42,
       "locator": "backend/max_backend/research_api.py::R01SourcePrepareRequest",
       "symbol": "R01SourcePrepareRequest"
     },
     {
       "file": "backend/max_backend/research_api.py",
       "kind": "class",
-      "line_end": 65,
-      "line_start": 52,
+      "line_end": 66,
+      "line_start": 53,
       "locator": "backend/max_backend/research_api.py::R01StartRequest",
       "symbol": "R01StartRequest"
     },
     {
       "file": "backend/max_backend/research_api.py",
       "kind": "function",
-      "line_end": 73,
-      "line_start": 72,
+      "line_end": 74,
+      "line_start": 73,
       "locator": "backend/max_backend/research_api.py::get_research_contracts",
       "symbol": "get_research_contracts"
     },
     {
       "file": "backend/max_backend/research_api.py",
       "kind": "function",
-      "line_end": 88,
-      "line_start": 77,
+      "line_end": 89,
+      "line_start": 78,
       "locator": "backend/max_backend/research_api.py::get_research_sample_config",
       "symbol": "get_research_sample_config"
     },
     {
       "file": "backend/max_backend/research_api.py",
       "kind": "function",
-      "line_end": 100,
-      "line_start": 92,
+      "line_end": 101,
+      "line_start": 93,
       "locator": "backend/max_backend/research_api.py::put_research_sample_config",
       "symbol": "put_research_sample_config"
     },
     {
       "file": "backend/max_backend/research_api.py",
       "kind": "function",
-      "line_end": 108,
-      "line_start": 104,
+      "line_end": 109,
+      "line_start": 105,
       "locator": "backend/max_backend/research_api.py::get_r00_preflight",
       "symbol": "get_r00_preflight"
     },
     {
       "file": "backend/max_backend/research_api.py",
       "kind": "function",
-      "line_end": 116,
-      "line_start": 112,
+      "line_end": 117,
+      "line_start": 113,
       "locator": "backend/max_backend/research_api.py::get_current_research",
       "symbol": "get_current_research"
     },
     {
       "file": "backend/max_backend/research_api.py",
       "kind": "function",
-      "line_end": 124,
-      "line_start": 120,
+      "line_end": 125,
+      "line_start": 121,
       "locator": "backend/max_backend/research_api.py::get_r01_source",
       "symbol": "get_r01_source"
     },
     {
       "file": "backend/max_backend/research_api.py",
       "kind": "function",
-      "line_end": 140,
-      "line_start": 128,
+      "line_end": 141,
+      "line_start": 129,
       "locator": "backend/max_backend/research_api.py::prepare_research_r01_source",
       "symbol": "prepare_research_r01_source"
     },
     {
       "file": "backend/max_backend/research_api.py",
       "kind": "function",
-      "line_end": 148,
-      "line_start": 144,
+      "line_end": 149,
+      "line_start": 145,
       "locator": "backend/max_backend/research_api.py::get_r01_preflight",
       "symbol": "get_r01_preflight"
     },
     {
       "file": "backend/max_backend/research_api.py",
       "kind": "function",
-      "line_end": 156,
-      "line_start": 152,
+      "line_end": 157,
+      "line_start": 153,
       "locator": "backend/max_backend/research_api.py::get_r01_detail",
       "symbol": "get_r01_detail"
     },
     {
       "file": "backend/max_backend/research_api.py",
       "kind": "function",
-      "line_end": 172,
-      "line_start": 160,
+      "line_end": 173,
+      "line_start": 161,
       "locator": "backend/max_backend/research_api.py::start_research_r01",
       "symbol": "start_research_r01"
     },
     {
       "file": "backend/max_backend/research_api.py",
       "kind": "function",
-      "line_end": 182,
-      "line_start": 176,
+      "line_end": 181,
+      "line_start": 177,
+      "locator": "backend/max_backend/research_api.py::get_r02_preflight",
+      "symbol": "get_r02_preflight"
+    },
+    {
+      "file": "backend/max_backend/research_api.py",
+      "kind": "function",
+      "line_end": 191,
+      "line_start": 185,
       "locator": "backend/max_backend/research_api.py::get_research_detail",
       "symbol": "get_research_detail"
     },
     {
       "file": "backend/max_backend/research_api.py",
       "kind": "function",
-      "line_end": 203,
-      "line_start": 186,
+      "line_end": 212,
+      "line_start": 195,
       "locator": "backend/max_backend/research_api.py::start_research_r00",
       "symbol": "start_research_r00"
     },
@@ -75388,6 +76357,70 @@
       "line_start": 495,
       "locator": "backend/max_backend/research_r01_store.py::recover_incomplete_r01",
       "symbol": "recover_incomplete_r01"
+    },
+    {
+      "file": "backend/max_backend/research_r02_contract.py",
+      "kind": "function",
+      "line_end": 54,
+      "line_start": 33,
+      "locator": "backend/max_backend/research_r02_contract.py::r02_discovery_contract",
+      "symbol": "r02_discovery_contract"
+    },
+    {
+      "file": "backend/max_backend/research_r02_contract.py",
+      "kind": "function",
+      "line_end": 61,
+      "line_start": 57,
+      "locator": "backend/max_backend/research_r02_contract.py::_require_nonempty_text",
+      "symbol": "_require_nonempty_text"
+    },
+    {
+      "file": "backend/max_backend/research_r02_contract.py",
+      "kind": "function",
+      "line_end": 68,
+      "line_start": 64,
+      "locator": "backend/max_backend/research_r02_contract.py::_require_sha256",
+      "symbol": "_require_sha256"
+    },
+    {
+      "file": "backend/max_backend/research_r02_contract.py",
+      "kind": "function",
+      "line_end": 89,
+      "line_start": 71,
+      "locator": "backend/max_backend/research_r02_contract.py::_canonical_compute_budget",
+      "symbol": "_canonical_compute_budget"
+    },
+    {
+      "file": "backend/max_backend/research_r02_contract.py",
+      "kind": "function",
+      "line_end": 150,
+      "line_start": 92,
+      "locator": "backend/max_backend/research_r02_contract.py::_canonical_candidate_spec",
+      "symbol": "_canonical_candidate_spec"
+    },
+    {
+      "file": "backend/max_backend/research_r02_contract.py",
+      "kind": "function",
+      "line_end": 270,
+      "line_start": 153,
+      "locator": "backend/max_backend/research_r02_contract.py::build_discovery_plan",
+      "symbol": "build_discovery_plan"
+    },
+    {
+      "file": "backend/max_backend/research_r02_service.py",
+      "kind": "function",
+      "line_end": 33,
+      "line_start": 14,
+      "locator": "backend/max_backend/research_r02_service.py::_blocked",
+      "symbol": "_blocked"
+    },
+    {
+      "file": "backend/max_backend/research_r02_service.py",
+      "kind": "function",
+      "line_end": 99,
+      "line_start": 36,
+      "locator": "backend/max_backend/research_r02_service.py::r02_preflight",
+      "symbol": "r02_preflight"
     },
     {
       "file": "backend/max_backend/research_service.py",
@@ -81854,6 +82887,206 @@
       "symbol": "test_r01_api_rejects_manual_source_authority_fields"
     },
     {
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "kind": "function",
+      "line_end": 30,
+      "line_start": 14,
+      "locator": "backend/tests/test_r02_discovery_contract.py::_candidate",
+      "symbol": "_candidate"
+    },
+    {
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "kind": "function",
+      "line_end": 52,
+      "line_start": 33,
+      "locator": "backend/tests/test_r02_discovery_contract.py::_request",
+      "symbol": "_request"
+    },
+    {
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "kind": "function",
+      "line_end": 64,
+      "line_start": 55,
+      "locator": "backend/tests/test_r02_discovery_contract.py::test_discovery_contract_preserves_gate_boundaries",
+      "symbol": "test_discovery_contract_preserves_gate_boundaries"
+    },
+    {
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "kind": "function",
+      "line_end": 81,
+      "line_start": 67,
+      "locator": "backend/tests/test_r02_discovery_contract.py::test_discovery_plan_is_deterministic_and_order_independent",
+      "symbol": "test_discovery_plan_is_deterministic_and_order_independent"
+    },
+    {
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "kind": "function",
+      "line_end": 89,
+      "line_start": 85,
+      "locator": "backend/tests/test_r02_discovery_contract.py::test_candidate_count_must_be_explicit_positive_integer",
+      "symbol": "test_candidate_count_must_be_explicit_positive_integer"
+    },
+    {
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "kind": "function",
+      "line_end": 98,
+      "line_start": 92,
+      "locator": "backend/tests/test_r02_discovery_contract.py::test_parent_lineage_must_bind_exact_r01_output_authority",
+      "symbol": "test_parent_lineage_must_bind_exact_r01_output_authority"
+    },
+    {
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "kind": "function",
+      "line_end": 107,
+      "line_start": 101,
+      "locator": "backend/tests/test_r02_discovery_contract.py::test_parent_lineage_fields_are_exact",
+      "symbol": "test_parent_lineage_fields_are_exact"
+    },
+    {
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "kind": "function",
+      "line_end": 114,
+      "line_start": 110,
+      "locator": "backend/tests/test_r02_discovery_contract.py::test_candidate_count_mismatch_fails_closed",
+      "symbol": "test_candidate_count_mismatch_fails_closed"
+    },
+    {
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "kind": "function",
+      "line_end": 135,
+      "line_start": 131,
+      "locator": "backend/tests/test_r02_discovery_contract.py::test_compute_budget_has_no_hidden_default",
+      "symbol": "test_compute_budget_has_no_hidden_default"
+    },
+    {
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "kind": "function",
+      "line_end": 142,
+      "line_start": 138,
+      "locator": "backend/tests/test_r02_discovery_contract.py::test_duplicate_candidate_identity_is_rejected",
+      "symbol": "test_duplicate_candidate_identity_is_rejected"
+    },
+    {
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "kind": "function",
+      "line_end": 158,
+      "line_start": 154,
+      "locator": "backend/tests/test_r02_discovery_contract.py::test_unopened_or_noncanonical_model_family_is_rejected",
+      "symbol": "test_unopened_or_noncanonical_model_family_is_rejected"
+    },
+    {
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "kind": "function",
+      "line_end": 174,
+      "line_start": 170,
+      "locator": "backend/tests/test_r02_discovery_contract.py::test_candidate_lineage_mismatch_is_rejected",
+      "symbol": "test_candidate_lineage_mismatch_is_rejected"
+    },
+    {
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "kind": "function",
+      "line_end": 181,
+      "line_start": 177,
+      "locator": "backend/tests/test_r02_discovery_contract.py::test_candidate_identity_fields_are_exact_and_explicit",
+      "symbol": "test_candidate_identity_fields_are_exact_and_explicit"
+    },
+    {
+      "file": "backend/tests/test_r02_discovery_contract.py",
+      "kind": "function",
+      "line_end": 188,
+      "line_start": 184,
+      "locator": "backend/tests/test_r02_discovery_contract.py::test_plan_rejects_unknown_top_level_fields",
+      "symbol": "test_plan_rejects_unknown_top_level_fields"
+    },
+    {
+      "file": "backend/tests/test_r02_preflight.py",
+      "kind": "function",
+      "line_end": 18,
+      "line_start": 12,
+      "locator": "backend/tests/test_r02_preflight.py::_run",
+      "symbol": "_run"
+    },
+    {
+      "file": "backend/tests/test_r02_preflight.py",
+      "kind": "function",
+      "line_end": 45,
+      "line_start": 21,
+      "locator": "backend/tests/test_r02_preflight.py::_install",
+      "symbol": "_install"
+    },
+    {
+      "file": "backend/tests/test_r02_preflight.py",
+      "kind": "function",
+      "line_end": 55,
+      "line_start": 48,
+      "locator": "backend/tests/test_r02_preflight.py::test_fresh_epoch_without_research_is_blocked",
+      "symbol": "test_fresh_epoch_without_research_is_blocked"
+    },
+    {
+      "file": "backend/tests/test_r02_preflight.py",
+      "kind": "function",
+      "line_end": 64,
+      "line_start": 58,
+      "locator": "backend/tests/test_r02_preflight.py::test_missing_r01_run_is_blocked",
+      "symbol": "test_missing_r01_run_is_blocked"
+    },
+    {
+      "file": "backend/tests/test_r02_preflight.py",
+      "kind": "function",
+      "line_end": 73,
+      "line_start": 68,
+      "locator": "backend/tests/test_r02_preflight.py::test_nonpassing_r01_is_blocked",
+      "symbol": "test_nonpassing_r01_is_blocked"
+    },
+    {
+      "file": "backend/tests/test_r02_preflight.py",
+      "kind": "function",
+      "line_end": 81,
+      "line_start": 76,
+      "locator": "backend/tests/test_r02_preflight.py::test_r01_pass_without_output_authority_fails_closed",
+      "symbol": "test_r01_pass_without_output_authority_fails_closed"
+    },
+    {
+      "file": "backend/tests/test_r02_preflight.py",
+      "kind": "function",
+      "line_end": 90,
+      "line_start": 85,
+      "locator": "backend/tests/test_r02_preflight.py::test_r01_pass_with_malformed_output_authority_fails_closed",
+      "symbol": "test_r01_pass_with_malformed_output_authority_fails_closed"
+    },
+    {
+      "file": "backend/tests/test_r02_preflight.py",
+      "kind": "function",
+      "line_end": 106,
+      "line_start": 100,
+      "locator": "backend/tests/test_r02_preflight.py::test_r01_integrity_or_identity_mismatch_fails_closed",
+      "symbol": "test_r01_integrity_or_identity_mismatch_fails_closed"
+    },
+    {
+      "file": "backend/tests/test_r02_preflight.py",
+      "kind": "function",
+      "line_end": 121,
+      "line_start": 109,
+      "locator": "backend/tests/test_r02_preflight.py::test_prior_training_or_promotion_side_effect_fails_closed",
+      "symbol": "test_prior_training_or_promotion_side_effect_fails_closed"
+    },
+    {
+      "file": "backend/tests/test_r02_preflight.py",
+      "kind": "function",
+      "line_end": 140,
+      "line_start": 124,
+      "locator": "backend/tests/test_r02_preflight.py::test_valid_r01_pass_is_ready_but_cannot_start_r02",
+      "symbol": "test_valid_r01_pass_is_ready_but_cannot_start_r02"
+    },
+    {
+      "file": "backend/tests/test_r02_preflight.py",
+      "kind": "function",
+      "line_end": 147,
+      "line_start": 143,
+      "locator": "backend/tests/test_r02_preflight.py::test_api_preflight_maps_contract_without_start_endpoint",
+      "symbol": "test_api_preflight_maps_contract_without_start_endpoint"
+    },
+    {
       "file": "scripts/build_m05_final_evidence.py",
       "kind": "function",
       "line_end": 66,
@@ -83319,17 +84552,17 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "205e1014611af244e5752da817a13e755fc04e18e9e42443ca57f1b14a75b34e",
+  "source_digest": "46e887213244edb2fbc678e88fad708c58eae6a998563e403a61f048c7986bda",
   "source_summary": {
-    "files": 129,
+    "files": 133,
     "languages": {
       "PowerShell": 2,
-      "Python": 103,
+      "Python": 107,
       "TypeScript": 3,
       "TypeScript/React": 21
     },
-    "lines": 61954,
-    "test_files": 40
+    "lines": 62667,
+    "test_files": 42
   },
   "tests": [
     "backend/tests/conftest.py",
@@ -83362,6 +84595,8 @@
     "backend/tests/test_r01_dataset.py",
     "backend/tests/test_r01_research.py",
     "backend/tests/test_r01_source.py",
+    "backend/tests/test_r02_discovery_contract.py",
+    "backend/tests/test_r02_preflight.py",
     "frontend/src/App.test.tsx",
     "frontend/src/ArtifactsPage.test.tsx",
     "frontend/src/ChallengersPage.test.tsx",

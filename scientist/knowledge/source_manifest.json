@@ -165,7 +165,7 @@
   },
   {
     "path": "backend/max_backend/research_api.py",
-    "sha256": "a0bc3f335fb21f304b7293eca2aa7f5817ee194965a90cd88e13c11905e1796d"
+    "sha256": "25616991b45aff4dface7950289ccb01193cf6f27b734f6a0529004a7ed61d48"
   },
   {
     "path": "backend/max_backend/research_cp32.py",
