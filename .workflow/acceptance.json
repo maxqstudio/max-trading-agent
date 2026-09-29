@@ -1,5 +1,5 @@
 {
-  "evidence_boundary": "Previous phase R02_CHEAP_SCREEN_OUTCOME_LEDGER was accepted at main c913c47a45ca54d805470caf40bb54bf655b45c6; main Windows CI run 36424489731 passed with backend 581, frontend 53 tests across 10 files, source-only policy, Skill Workflow provenance, STRICT_SELFTEST, governance, pip check, lint, build and npm dependency tree. Current phase R02_OUTCOME_READBACK_INTEGRITY remains IN_PROGRESS from that accepted base. Local final source gates pass: targeted R02 147 tests, backend 644 tests, frontend 53 tests across 10 files, pip check, lint, build, npm dependency tree, Project Docs, human comprehension, cross-document and 12-session sequence validation. The exact candidate-tree secret scan, branch/PR CI, squash merge and exact merged-main CI remain pending. Supplied New-PC evidence reports symlink probe PASS, M08 path-safety PASS, and baseline 581 passed, 0 skipped, 0 failed. Skill Workflow authority remains pinned at 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720. No trainer/executor or outcome-submit API is introduced; real model fitting/outcome, R03 qualification, ONNX, Research Challenger, Champion mutation, MT5 runtime and Owner-PC/browser E2E remain NOT_PROVEN.",
+  "evidence_boundary": "Previously accepted parent phase R02_CHEAP_SCREEN_OUTCOME_LEDGER remains main c913c47a45ca54d805470caf40bb54bf655b45c6; Windows CI run 36424489731 passed with backend 581 and frontend 53 tests across 10 files. R02_OUTCOME_READBACK_INTEGRITY implementation and tracked governance are complete. Source validation, exact candidate-tree scan, branch CI, PR-head CI, squash merge and exact merged-main CI passed. The exact final tested SHA and CI identity are recorded in external acceptance evidence per D-012, not duplicated in tracked state. Local final evidence includes targeted R02 147 tests, backend 644 tests, frontend 53 tests across 10 files, pip check, lint, build, npm dependency tree, Project Docs, Doc Quality, 12-session sequence, handoff, human comprehension, cross-document consistency and Project Truth validation. Supplied New-PC evidence reports the symlink probe and M08 path-safety test PASS, with baseline 581 passed, 0 skipped and 0 failed. Skill Workflow authority remains pinned at 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720. Schema remains 12. No trainer, executor or outcome-submit API is introduced. Real R00 is NOT STARTED; real R01 and R02 remain BLOCKED / NOT STARTED. Model training, real Cheap Screen runs, R03, ONNX, Research Challenger and Champion mutation remain zero or NOT STARTED. Owner-PC and real MT5 runtime remain NOT_PROVEN and deferred. Control Room determines the next authorized GitHub source phase.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
     "How does important data flow through the system?": "PASS",
@@ -92,37 +92,37 @@
       "evidence": "research_r02_store.py + R02 readback-integrity tests",
       "id": "R02RI-01",
       "requirement": "Persisted authorization identity, confirmation, canonical payload hash and R02/research/plan/R01 bindings are revalidated from the same read snapshot.",
-      "status": "PASS_LOCAL"
+      "status": "PASS"
     },
     {
       "evidence": "research_r02_store.py + R02 readback-integrity tests",
       "id": "R02RI-02",
       "requirement": "Frozen block identity, state, bindings, compute budget and exact ordered candidate-spec universe are reconstructed and verified.",
-      "status": "PASS_LOCAL"
+      "status": "PASS"
     },
     {
       "evidence": "build_candidate_outcome + R02 readback-integrity tests",
       "id": "R02RI-03",
       "requirement": "Every persisted candidate outcome is rebuilt canonically; duplicate, missing, extra, unknown or row/JSON-mismatched outcomes fail closed.",
-      "status": "PASS_LOCAL"
+      "status": "PASS"
     },
     {
       "evidence": "build_terminal_manifest + R02 readback-integrity tests",
       "id": "R02RI-04",
       "requirement": "Terminal identity, state, manifest hash, counts and compute totals are reconstructed only after the frozen universe and every outcome verify; Cheap Screen grants no scientific or Qualified Pool authority.",
-      "status": "PASS_LOCAL"
+      "status": "PASS"
     },
     {
       "evidence": "r02_preflight + public R02 getters + R02 readback-integrity tests",
       "id": "R02RI-05",
       "requirement": "Public R02 reads use one SQLite snapshot and fail closed with deterministic integrity errors; COMPLETE_WAITING_OWNER is returned only for a verified terminal ledger.",
-      "status": "PASS_LOCAL"
+      "status": "PASS"
     },
     {
       "evidence": "backend/tests/test_r02_readback_integrity.py",
       "id": "R02RI-06",
       "requirement": "Synthetic test-database corruption cases cover persisted authorization, block, candidates, outcomes, terminal, malformed JSON and partial ledgers without weakening production immutability triggers.",
-      "status": "PASS_LOCAL"
+      "status": "PASS"
     }
   ],
   "results": {
