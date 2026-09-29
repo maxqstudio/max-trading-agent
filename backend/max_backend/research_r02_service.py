@@ -16,9 +16,7 @@ from .research_r02_contract import (
 )
 from .research_r02_store import (
     authorize_and_freeze_r02_discovery,
-    get_r02_authorization,
-    get_r02_discovery_block,
-    get_r02_terminal,
+    get_r02_outcome_ledger,
 )
 from .optimizer_store import utc_now
 from .research_contract import stable_hash
@@ -90,9 +88,12 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
     if side_effects["status"] != "PASS":
         raise RuntimeError("R02_PREVIOUS_SIDE_EFFECT_REGRESSION")
 
-    frozen = get_r02_discovery_block(research_id, path=path)
-    if frozen is not None:
-        terminal = get_r02_terminal(research_id, path=path)
+    ledger = get_r02_outcome_ledger(research_id, path=path)
+    if ledger is not None:
+        if ledger.get("integrity_status") != "VERIFIED":
+            raise RuntimeError("R02_LEDGER_INTEGRITY_VERIFICATION_REQUIRED")
+        frozen = ledger["block"]
+        terminal = ledger["terminal"]
         if terminal is not None:
             return {
                 "schema": R02_SCHEMA,
@@ -214,21 +215,16 @@ def authorize_r02_discovery(
         "FROZEN_WAITING_EXECUTION",
         "COMPLETE_WAITING_OWNER",
     }:
-        existing = get_r02_discovery_block(research_id, path=path)
-        if existing is None:
+        ledger = get_r02_outcome_ledger(research_id, path=path)
+        if ledger is None or ledger.get("integrity_status") != "VERIFIED":
             raise RuntimeError("R02_FROZEN_BLOCK_MISSING")
+        existing = ledger["block"]
         if str(existing["plan_sha256"]) != str(plan["plan_sha256"]):
             raise RuntimeError("R02_DISCOVERY_BLOCK_ALREADY_FROZEN")
-        authorization = get_r02_authorization(
-            str(existing["authorization_id"]),
-            path=path,
-        )
-        if authorization is None:
-            raise RuntimeError("R02_FROZEN_AUTHORIZATION_MISSING")
         return {
             "status": str(preflight["status"]),
             "idempotent": True,
-            "authorization": authorization,
+            "authorization": ledger["authorization"],
             "block": existing,
             "execution_available": False,
             "scientific_result": False,

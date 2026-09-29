@@ -671,42 +671,56 @@
     {
       "action": "connect",
       "evidence": "STATIC",
-      "from": "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
+      "from": "backend/max_backend/research_r02_store.py::get_r02_authorization",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
     },
     {
-      "action": "build_terminal_manifest",
+      "action": "_read_validated_r02_ledger",
       "evidence": "STATIC",
-      "from": "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
+      "from": "backend/max_backend/research_r02_store.py::get_r02_authorization",
       "resolver": "python_ast",
-      "to": "backend/max_backend/research_r02_outcome.py::build_terminal_manifest"
-    },
-    {
-      "action": "get_r02_outcome_ledger",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger"
+      "to": "backend/max_backend/research_r02_store.py::_read_validated_r02_ledger"
     },
     {
       "action": "migrate_current",
       "evidence": "STATIC",
-      "from": "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
+      "from": "backend/max_backend/research_r02_store.py::get_r02_authorization",
       "resolver": "python_ast",
       "to": "backend/max_backend/workflow_store.py::migrate_current"
     },
     {
       "action": "conn.execute",
       "evidence": "STATIC",
-      "from": "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
+      "from": "backend/max_backend/research_r02_store.py::get_r02_authorization",
       "resolver": "python_ast",
       "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     },
     {
       "action": "_read_r02_ledger_snapshot",
       "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::get_r02_discovery_block",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_store.py::_read_r02_ledger_snapshot"
+    },
+    {
+      "action": "_read_r02_ledger_snapshot",
+      "evidence": "STATIC",
       "from": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_store.py::_read_r02_ledger_snapshot"
+    },
+    {
+      "action": "_read_r02_ledger_snapshot",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::get_r02_terminal",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/research_r02_store.py::_read_r02_ledger_snapshot"
+    },
+    {
+      "action": "_read_r02_ledger_snapshot",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/research_r02_store.py::validate_r02_outcome_ledger_integrity",
       "resolver": "python_ast",
       "to": "backend/max_backend/research_r02_store.py::_read_r02_ledger_snapshot"
     },
@@ -1083,7 +1097,11 @@
     }
   ],
   "entries": [
-    "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
+    "backend/max_backend/research_r02_store.py::get_r02_authorization",
+    "backend/max_backend/research_r02_store.py::get_r02_discovery_block",
+    "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger",
+    "backend/max_backend/research_r02_store.py::get_r02_terminal",
+    "backend/max_backend/research_r02_store.py::validate_r02_outcome_ledger_integrity",
     "backend/max_backend/research_r02_service.py::r02_preflight"
   ],
   "generated": true,
@@ -1495,13 +1513,22 @@
       "locator": "backend/max_backend/research_r02_store.py::_validated_freeze_identity"
     },
     {
-      "id": "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
+      "id": "backend/max_backend/research_r02_store.py::get_r02_authorization",
       "kind": "function",
-      "label": "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
+      "label": "backend/max_backend/research_r02_store.py::get_r02_authorization",
       "language": "Python",
-      "line_end": 948,
-      "line_start": 834,
-      "locator": "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes"
+      "line_end": 89,
+      "line_start": 55,
+      "locator": "backend/max_backend/research_r02_store.py::get_r02_authorization"
+    },
+    {
+      "id": "backend/max_backend/research_r02_store.py::get_r02_discovery_block",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_store.py::get_r02_discovery_block",
+      "language": "Python",
+      "line_end": 184,
+      "line_start": 178,
+      "locator": "backend/max_backend/research_r02_store.py::get_r02_discovery_block"
     },
     {
       "id": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger",
@@ -1511,6 +1538,24 @@
       "line_end": 831,
       "line_start": 826,
       "locator": "backend/max_backend/research_r02_store.py::get_r02_outcome_ledger"
+    },
+    {
+      "id": "backend/max_backend/research_r02_store.py::get_r02_terminal",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_store.py::get_r02_terminal",
+      "language": "Python",
+      "line_end": 823,
+      "line_start": 817,
+      "locator": "backend/max_backend/research_r02_store.py::get_r02_terminal"
+    },
+    {
+      "id": "backend/max_backend/research_r02_store.py::validate_r02_outcome_ledger_integrity",
+      "kind": "function",
+      "label": "backend/max_backend/research_r02_store.py::validate_r02_outcome_ledger_integrity",
+      "language": "Python",
+      "line_end": 584,
+      "line_start": 579,
+      "locator": "backend/max_backend/research_r02_store.py::validate_r02_outcome_ledger_integrity"
     },
     {
       "id": "backend/max_backend/research_service.py::_artifact_count",

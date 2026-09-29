@@ -1,5 +1,5 @@
 {
-  "evidence_boundary": "R02 Cheap Screen outcome-ledger source phase pre-closeout after numeric-overflow hardening. Exact branch Windows CI run 36413020299 passed at a178b4be591c42e88bb6a5ea3bcec1d113987dcb: backend 581 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, lint/build and npm dependency tree PASS. Targeted overflow run 36412664127 separately passed 84 R02 tests and proves huge integers fail closed as validation errors rather than escaping as OverflowError/HTTP 500. No trainer/executor or outcome-submit API exists; real model fitting/outcome, R03 qualification, ONNX, Research Challenger, Champion mutation, MT5 runtime and Owner-PC/browser E2E remain NOT_PROVEN.",
+  "evidence_boundary": "Previous phase R02_CHEAP_SCREEN_OUTCOME_LEDGER was accepted at main c913c47a45ca54d805470caf40bb54bf655b45c6; main Windows CI run 36424489731 passed with backend 581, frontend 53 tests across 10 files, source-only policy, Skill Workflow provenance, STRICT_SELFTEST, governance, pip check, lint, build and npm dependency tree. Current phase R02_OUTCOME_READBACK_INTEGRITY remains IN_PROGRESS from that accepted base. Local final source gates pass: targeted R02 147 tests, backend 644 tests, frontend 53 tests across 10 files, pip check, lint, build, npm dependency tree, Project Docs, human comprehension, cross-document and 12-session sequence validation. The exact candidate-tree secret scan, branch/PR CI, squash merge and exact merged-main CI remain pending. Supplied New-PC evidence reports symlink probe PASS, M08 path-safety PASS, and baseline 581 passed, 0 skipped, 0 failed. Skill Workflow authority remains pinned at 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720. No trainer/executor or outcome-submit API is introduced; real model fitting/outcome, R03 qualification, ONNX, Research Challenger, Champion mutation, MT5 runtime and Owner-PC/browser E2E remain NOT_PROVEN.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
     "How does important data flow through the system?": "PASS",
@@ -87,17 +87,53 @@
       "id": "R02OL-12",
       "requirement": "Full backend/frontend/source-only/security/dependency regression remains green.",
       "status": "PASS"
+    },
+    {
+      "evidence": "research_r02_store.py + R02 readback-integrity tests",
+      "id": "R02RI-01",
+      "requirement": "Persisted authorization identity, confirmation, canonical payload hash and R02/research/plan/R01 bindings are revalidated from the same read snapshot.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": "research_r02_store.py + R02 readback-integrity tests",
+      "id": "R02RI-02",
+      "requirement": "Frozen block identity, state, bindings, compute budget and exact ordered candidate-spec universe are reconstructed and verified.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": "build_candidate_outcome + R02 readback-integrity tests",
+      "id": "R02RI-03",
+      "requirement": "Every persisted candidate outcome is rebuilt canonically; duplicate, missing, extra, unknown or row/JSON-mismatched outcomes fail closed.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": "build_terminal_manifest + R02 readback-integrity tests",
+      "id": "R02RI-04",
+      "requirement": "Terminal identity, state, manifest hash, counts and compute totals are reconstructed only after the frozen universe and every outcome verify; Cheap Screen grants no scientific or Qualified Pool authority.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": "r02_preflight + public R02 getters + R02 readback-integrity tests",
+      "id": "R02RI-05",
+      "requirement": "Public R02 reads use one SQLite snapshot and fail closed with deterministic integrity errors; COMPLETE_WAITING_OWNER is returned only for a verified terminal ledger.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": "backend/tests/test_r02_readback_integrity.py",
+      "id": "R02RI-06",
+      "requirement": "Synthetic test-database corruption cases cover persisted authorization, block, candidates, outcomes, terminal, malformed JSON and partial ledgers without weakening production immutability triggers.",
+      "status": "PASS_LOCAL"
     }
   ],
   "results": {
     "hosted_ci": {
-      "run_id": 36413020299,
-      "status": "PASS_PRE_CLOSEOUT",
-      "tested_sha": "a178b4be591c42e88bb6a5ea3bcec1d113987dcb"
+      "run_id": 36424489731,
+      "status": "PASS",
+      "tested_sha": "c913c47a45ca54d805470caf40bb54bf655b45c6"
     },
     "regression": {
-      "backend": 581,
-      "backend_floor": 558,
+      "backend": 644,
+      "backend_floor": 581,
       "backend_status": "PASS",
       "build": "PASS",
       "frontend_files": 10,
@@ -129,10 +165,9 @@
     },
     "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720",
     "targeted": {
-      "run_id": 36412664127,
-      "status": "PASS_OVERFLOW_HARDENED",
-      "tested_sha": "02644bb471c8c605a27413b4a1f8677a1f30dffd",
-      "tests": 84
+      "status": "PASS_LOCAL",
+      "tested_worktree_base": "c913c47a45ca54d805470caf40bb54bf655b45c6",
+      "tests": 147
     }
   },
   "runtime_checks": [
@@ -145,16 +180,16 @@
   "runtime_status": "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED",
   "schema_version": 1,
   "sequence_mode": "DURING",
-  "sequence_session": "docs/sequence/sessions/ (11 current DURING sessions after R02 outcome-ledger flow)",
+  "sequence_session": "docs/sequence/sessions/FLOW-R02-OUTCOME-READBACK-INTEGRITY.json (12 current DURING sessions)",
   "sequence_sync_status": "PASS",
   "test_commands": [
-    "python -m pytest backend/tests/test_r02_discovery_contract.py backend/tests/test_r02_preflight.py backend/tests/test_r02_authorization_store.py backend/tests/test_r02_authorization_service.py backend/tests/test_r02_outcome_contract.py -q -o addopts=",
+    ".venv/Scripts/python.exe -m pytest backend/tests/test_r02_discovery_contract.py backend/tests/test_r02_preflight.py backend/tests/test_r02_authorization_store.py backend/tests/test_r02_authorization_service.py backend/tests/test_r02_outcome_contract.py backend/tests/test_r02_readback_integrity.py -q -o addopts= --basetemp D:/max/.venv/pytest-artifacts/targeted-final",
     "python .workflow/tools/validate_project_docs.py",
     "python .workflow/tools/validate_sequence_sessions.py",
     "python .workflow/tools/validate_handoff.py",
     "python .workflow/tools/validate_human_comprehension.py --require-pass",
     "python .workflow/tools/validate_project_truth.py",
-    "python -m pytest backend/tests -q -o addopts=",
+    ".venv/Scripts/python.exe -m pytest backend/tests -q -o addopts= --basetemp D:/max/.venv/pytest-artifacts/full-regression-final",
     "npm test -- --run (workdir: frontend)",
     "npm run lint (workdir: frontend)",
     "npm run build (workdir: frontend)",
@@ -162,23 +197,23 @@
     "python -m pip check"
   ],
   "truth_gates": {
-    "BEHAVIORAL_SYNC": "PASS",
+    "BEHAVIORAL_SYNC": "NOT_PROVEN",
     "CROSS_DOCUMENT_CONSISTENCY": "PASS",
     "DOC_LAYOUT": "PASS",
     "DOC_READABILITY": "PASS",
-    "DOC_SOURCE_TRACEABILITY": "PASS",
-    "DOC_TEST_TRACEABILITY": "PASS",
+    "DOC_SOURCE_TRACEABILITY": "NOT_PROVEN",
+    "DOC_TEST_TRACEABILITY": "NOT_PROVEN",
     "HUMAN_COMPREHENSION": "PASS",
     "PROJECT_DOCS_NORMALIZED": "PASS",
     "PROJECT_DOCS_SYNC": "PASS",
     "PROJECT_STATE_SYNC": "NOT_PROVEN",
-    "PROVENANCE_SYNC": "PASS",
-    "REFERENCE_SYNC": "PASS",
+    "PROVENANCE_SYNC": "NOT_PROVEN",
+    "REFERENCE_SYNC": "NOT_PROVEN",
     "RUNTIME_E2E": "NOT_PROVEN",
-    "SEMANTIC_SYNC": "PASS",
+    "SEMANTIC_SYNC": "NOT_PROVEN",
     "SEQUENCE_SYNC": "PASS",
     "SOURCE_TESTS": "PASS",
-    "STRUCTURAL_SYNC": "PASS",
+    "STRUCTURAL_SYNC": "NOT_PROVEN",
     "TEST_RUNTIME_TRACEABILITY": "NOT_PROVEN"
   }
 }

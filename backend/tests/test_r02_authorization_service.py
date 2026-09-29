@@ -169,18 +169,20 @@ def test_exact_replay_is_idempotent_but_different_plan_is_rejected(
             "r01_output_manifest_sha256": plan["r01_output_manifest_sha256"],
         },
     )
-    monkeypatch.setattr(
-        r02,
-        "get_r02_discovery_block",
-        lambda research_id, **_kwargs: deepcopy(frozen),
-    )
-    monkeypatch.setattr(
-        r02,
-        "get_r02_authorization",
-        lambda authorization_id, **_kwargs: {
-            "authorization_id": authorization_id,
+    ledger = {
+        "integrity_status": "VERIFIED",
+        "authorization": {
+            "authorization_id": frozen["authorization_id"],
             "research_id": plan["research_id"],
         },
+        "block": frozen,
+        "outcomes": [],
+        "terminal": None,
+    }
+    monkeypatch.setattr(
+        r02,
+        "get_r02_outcome_ledger",
+        lambda research_id, **_kwargs: deepcopy(ledger),
     )
 
     result = r02.authorize_r02_discovery(_request(), path=Path("unused.db"))

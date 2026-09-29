@@ -4,10 +4,10 @@
 
 ## Evidence boundary
 
-R02 Cheap Screen outcome-ledger source phase pre-closeout after numeric-overflow hardening. Exact branch Windows CI run 36413020299 passed at a178b4be591c42e88bb6a5ea3bcec1d113987dcb: backend 581 PASS, frontend 53/53 across 10 files, source-only/security, Skill Workflow provenance/STRICT, Project Truth/sequence governance, pip check, lint/build and npm dependency tree PASS. Targeted overflow run 36412664127 separately passed 84 R02 tests and proves huge integers fail closed as validation errors rather than escaping as OverflowError/HTTP 500. No trainer/executor or outcome-submit API exists; real model fitting/outcome, R03 qualification, ONNX, Research Challenger, Champion mutation, MT5 runtime and Owner-PC/browser E2E remain NOT_PROVEN.
+Previous phase R02_CHEAP_SCREEN_OUTCOME_LEDGER was accepted at main c913c47a45ca54d805470caf40bb54bf655b45c6; main Windows CI run 36424489731 passed with backend 581, frontend 53 tests across 10 files, source-only policy, Skill Workflow provenance, STRICT_SELFTEST, governance, pip check, lint, build and npm dependency tree. Current phase R02_OUTCOME_READBACK_INTEGRITY remains IN_PROGRESS from that accepted base. Local final source gates pass: targeted R02 147 tests, backend 644 tests, frontend 53 tests across 10 files, pip check, lint, build, npm dependency tree, Project Docs, human comprehension, cross-document and 12-session sequence validation. The exact candidate-tree secret scan, branch/PR CI, squash merge and exact merged-main CI remain pending. Supplied New-PC evidence reports symlink probe PASS, M08 path-safety PASS, and baseline 581 passed, 0 skipped, 0 failed. Skill Workflow authority remains pinned at 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720. No trainer/executor or outcome-submit API is introduced; real model fitting/outcome, R03 qualification, ONNX, Research Challenger, Champion mutation, MT5 runtime and Owner-PC/browser E2E remain NOT_PROVEN.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68
+Current source digest: 79e949b09cc369109e717fa3b495ad9bb16d89b67ba0feead151ced8df9ea119
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
@@ -23,16 +23,22 @@ Current source digest: 6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111
 | R02OL-10 | Scientist knowledge manifest hashes R02 outcome contract/store/service source so advisory context cannot drift. | scientist_knowledge.py + regenerated source_manifest.json | PASS |
 | R02OL-11 | Skill Workflow provenance/STRICT, Project Truth, cross-document consistency and sequence contracts remain synchronized. | Windows CI governance gates | PASS |
 | R02OL-12 | Full backend/frontend/source-only/security/dependency regression remains green. | Windows CI | PASS |
+| R02RI-01 | Persisted authorization identity, confirmation, canonical payload hash and R02/research/plan/R01 bindings are revalidated from the same read snapshot. | research_r02_store.py + R02 readback-integrity tests | PASS_LOCAL |
+| R02RI-02 | Frozen block identity, state, bindings, compute budget and exact ordered candidate-spec universe are reconstructed and verified. | research_r02_store.py + R02 readback-integrity tests | PASS_LOCAL |
+| R02RI-03 | Every persisted candidate outcome is rebuilt canonically; duplicate, missing, extra, unknown or row/JSON-mismatched outcomes fail closed. | build_candidate_outcome + R02 readback-integrity tests | PASS_LOCAL |
+| R02RI-04 | Terminal identity, state, manifest hash, counts and compute totals are reconstructed only after the frozen universe and every outcome verify; Cheap Screen grants no scientific or Qualified Pool authority. | build_terminal_manifest + R02 readback-integrity tests | PASS_LOCAL |
+| R02RI-05 | Public R02 reads use one SQLite snapshot and fail closed with deterministic integrity errors; COMPLETE_WAITING_OWNER is returned only for a verified terminal ledger. | r02_preflight + public R02 getters + R02 readback-integrity tests | PASS_LOCAL |
+| R02RI-06 | Synthetic test-database corruption cases cover persisted authorization, block, candidates, outcomes, terminal, malformed JSON and partial ledgers without weakening production immutability triggers. | backend/tests/test_r02_readback_integrity.py | PASS_LOCAL |
 
 ## Test commands
 
-- python -m pytest backend/tests/test_r02_discovery_contract.py backend/tests/test_r02_preflight.py backend/tests/test_r02_authorization_store.py backend/tests/test_r02_authorization_service.py backend/tests/test_r02_outcome_contract.py -q -o addopts=
+- .venv/Scripts/python.exe -m pytest backend/tests/test_r02_discovery_contract.py backend/tests/test_r02_preflight.py backend/tests/test_r02_authorization_store.py backend/tests/test_r02_authorization_service.py backend/tests/test_r02_outcome_contract.py backend/tests/test_r02_readback_integrity.py -q -o addopts= --basetemp D:/max/.venv/pytest-artifacts/targeted-final
 - python .workflow/tools/validate_project_docs.py
 - python .workflow/tools/validate_sequence_sessions.py
 - python .workflow/tools/validate_handoff.py
 - python .workflow/tools/validate_human_comprehension.py --require-pass
 - python .workflow/tools/validate_project_truth.py
-- python -m pytest backend/tests -q -o addopts=
+- .venv/Scripts/python.exe -m pytest backend/tests -q -o addopts= --basetemp D:/max/.venv/pytest-artifacts/full-regression-final
 - npm test -- --run (workdir: frontend)
 - npm run lint (workdir: frontend)
 - npm run build (workdir: frontend)
@@ -50,7 +56,7 @@ Current source digest: 6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111
 ## Sequence contract evidence
 
 Sequence mode for this phase/session: DURING
-Sequence session contract: docs/sequence/sessions/ (11 current DURING sessions after R02 outcome-ledger flow)
+Sequence session contract: docs/sequence/sessions/FLOW-R02-OUTCOME-READBACK-INTEGRITY.json (12 current DURING sessions)
 SEQUENCE_SYNC: PASS
 
 ## Project Truth Compiler evidence
