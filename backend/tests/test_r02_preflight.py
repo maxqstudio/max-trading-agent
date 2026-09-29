@@ -43,8 +43,7 @@ def _install(
     monkeypatch.setattr(r02, "get_r01_run", lambda *_args, **_kwargs: deepcopy(current_run))
     monkeypatch.setattr(r02, "validate_r01_integrity", lambda **_kwargs: deepcopy(current_integrity))
     monkeypatch.setattr(r02, "verify_no_training_side_effects", lambda *_args, **_kwargs: deepcopy(current_side_effects))
-    monkeypatch.setattr(r02, "get_r02_discovery_block", lambda *_args, **_kwargs: None)
-    monkeypatch.setattr(r02, "get_r02_terminal", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(r02, "get_r02_outcome_ledger", lambda *_args, **_kwargs: None)
 
 
 def test_fresh_epoch_without_research_is_blocked(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -156,18 +155,23 @@ def test_frozen_discovery_block_prevents_second_authorization_surface(
     _install(monkeypatch)
     monkeypatch.setattr(
         r02,
-        "get_r02_discovery_block",
+        "get_r02_outcome_ledger",
         lambda research_id, **_kwargs: {
+            "integrity_status": "VERIFIED",
             "block_id": "RDISC-TEST",
-            "authorization_id": "RAUTH-R02-TEST",
-            "plan_id": "RPLAN-TEST",
-            "plan_sha256": "b" * 64,
-            "candidate_count": 3,
-            "compute_budget": {
-                "value": 120,
-                "unit": "FIT_SECONDS",
-                "execution_semantics": "FROZEN_ONLY_NOT_EXECUTED",
+            "block": {
+                "block_id": "RDISC-TEST",
+                "authorization_id": "RAUTH-R02-TEST",
+                "plan_id": "RPLAN-TEST",
+                "plan_sha256": "b" * 64,
+                "candidate_count": 3,
+                "compute_budget": {
+                    "value": 120,
+                    "unit": "FIT_SECONDS",
+                    "execution_semantics": "FROZEN_ONLY_NOT_EXECUTED",
+                },
             },
+            "terminal": None,
         },
     )
     result = r02.r02_preflight(path=Path("unused.db"))
@@ -185,30 +189,29 @@ def test_terminal_outcome_ledger_reports_complete_without_qualification(
     _install(monkeypatch)
     monkeypatch.setattr(
         r02,
-        "get_r02_discovery_block",
+        "get_r02_outcome_ledger",
         lambda research_id, **_kwargs: {
-            "block_id": "RDISC-COMPLETE",
-            "authorization_id": "RAUTH-R02-COMPLETE",
-            "plan_id": "RPLAN-COMPLETE",
-            "plan_sha256": "b" * 64,
-            "candidate_count": 3,
-            "compute_budget": {
-                "value": 120,
-                "unit": "FIT_SECONDS",
-                "execution_semantics": "FROZEN_ONLY_NOT_EXECUTED",
+            "integrity_status": "VERIFIED",
+            "block": {
+                "block_id": "RDISC-COMPLETE",
+                "authorization_id": "RAUTH-R02-COMPLETE",
+                "plan_id": "RPLAN-COMPLETE",
+                "plan_sha256": "b" * 64,
+                "candidate_count": 3,
+                "compute_budget": {
+                    "value": 120,
+                    "unit": "FIT_SECONDS",
+                    "execution_semantics": "FROZEN_ONLY_NOT_EXECUTED",
+                },
             },
-        },
-    )
-    monkeypatch.setattr(
-        r02,
-        "get_r02_terminal",
-        lambda research_id, **_kwargs: {
-            "terminal_id": "RTERM-COMPLETE",
-            "outcome_manifest_sha256": "c" * 64,
-            "screen_pass_count": 1,
-            "screen_fail_count": 1,
-            "execution_error_count": 1,
-            "compute_consumed": {"value": 60.0, "unit": "FIT_SECONDS"},
+            "terminal": {
+                "terminal_id": "RTERM-COMPLETE",
+                "outcome_manifest_sha256": "c" * 64,
+                "screen_pass_count": 1,
+                "screen_fail_count": 1,
+                "execution_error_count": 1,
+                "compute_consumed": {"value": 60.0, "unit": "FIT_SECONDS"},
+            },
         },
     )
     result = r02.r02_preflight(path=Path("unused.db"))
@@ -217,3 +220,20 @@ def test_terminal_outcome_ledger_reports_complete_without_qualification(
     assert result["qualified_pool_admission_authority"] == "R03_FULL_WFA_ONLY"
     assert result["r02_executable"] is False
     assert result["model_training"] == 0
+
+
+def test_terminal_preflight_requires_verified_readback(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _install(monkeypatch)
+    monkeypatch.setattr(
+        r02,
+        "get_r02_outcome_ledger",
+        lambda *_args, **_kwargs: {
+            "integrity_status": "FAILED",
+            "block": {"block_id": "RDISC-CORRUPT"},
+            "terminal": {"state": "COMPLETE_WAITING_OWNER"},
+        },
+    )
+    with pytest.raises(RuntimeError, match="R02_LEDGER_INTEGRITY_VERIFICATION_REQUIRED"):
+        r02.r02_preflight(path=Path("unused.db"))

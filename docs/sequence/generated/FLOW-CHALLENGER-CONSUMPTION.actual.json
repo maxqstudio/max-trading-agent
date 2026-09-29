@@ -256,6 +256,20 @@
       "to": "backend/max_backend/challenger_operations_store.py::retire_registry_row"
     },
     {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
+    },
+    {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
+    },
+    {
       "action": "_backtest_schema_ready",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema",
@@ -263,11 +277,25 @@
       "to": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready"
     },
     {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
+    },
+    {
       "action": "_challenger_schema_ready",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry",
       "resolver": "python_ast",
       "to": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready"
+    },
+    {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     },
     {
       "action": "_decode_backtest",
@@ -291,6 +319,13 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::list_backtests",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
+    },
+    {
       "action": "_decode_retirement",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_operations_store.py::list_retirements",
@@ -310,6 +345,13 @@
       "from": "backend/max_backend/challenger_operations_store.py::list_retirements",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::list_retirements",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     },
     {
       "action": "_create_m06_tables",
@@ -347,6 +389,13 @@
       "to": "backend/max_backend/scientist_store.py::migrate_m05"
     },
     {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
+    },
+    {
       "action": "_compact_row",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_operations_store.py::retire_registry_row",
@@ -375,6 +424,13 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::retire_registry_row",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
+    },
+    {
       "action": "migrate_m03",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_store.py::consumed_source_identities",
@@ -387,6 +443,13 @@
       "from": "backend/max_backend/challenger_store.py::consumed_source_identities",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_store.py::consumed_source_identities",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     },
     {
       "action": "connect",
@@ -403,6 +466,27 @@
       "to": "backend/max_backend/optimizer_store.py::migrate_m02"
     },
     {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_store.py::migrate_m03",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
+    },
+    {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
+    },
+    {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::_create_champion_tenure_table",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
+    },
+    {
       "action": "_challenger_table_supports_promoted",
       "evidence": "STATIC",
       "from": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint",
@@ -415,6 +499,13 @@
       "from": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
       "resolver": "python_ast",
       "to": "backend/max_backend/champion_store.py::_create_champion_tenure_table"
+    },
+    {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     },
     {
       "action": "migrate_m03",
@@ -443,6 +534,20 @@
       "from": "backend/max_backend/champion_store.py::migrate_m04",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
+    },
+    {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::connect",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     },
     {
       "action": "load_manifest",
@@ -487,6 +592,13 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
+    },
+    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_store.py::migrate_m02",
@@ -501,6 +613,13 @@
       "to": "backend/max_backend/optimizer_store.py::migrate_m01"
     },
     {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
+    },
+    {
       "action": "migrate_m04",
       "evidence": "STATIC",
       "from": "backend/max_backend/scientist_store.py::migrate_m05",
@@ -513,6 +632,13 @@
       "from": "backend/max_backend/scientist_store.py::migrate_m05",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "conn.execute",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_store.py::migrate_m05",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     }
   ],
   "entries": [
@@ -962,9 +1088,18 @@
       "line_end": 92,
       "line_start": 28,
       "locator": "backend/max_backend/scientist_store.py::migrate_m05"
+    },
+    {
+      "id": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute",
+      "kind": "method",
+      "label": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute",
+      "language": "Python",
+      "line_end": 665,
+      "line_start": 664,
+      "locator": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     }
   ],
-  "observed_head": "50f3f5f77632d81c7f9f1f794508723127e32e1f",
+  "observed_head": "c913c47a45ca54d805470caf40bb54bf655b45c6",
   "schema_version": 1,
-  "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68"
+  "source_digest": "79e949b09cc369109e717fa3b495ad9bb16d89b67ba0feead151ced8df9ea119"
 }

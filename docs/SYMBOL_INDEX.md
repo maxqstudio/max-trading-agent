@@ -3,7 +3,7 @@
 # SYMBOL INDEX
 
 Authority SHA: external final acceptance evidence
-Source digest: 6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68
+Source digest: 79e949b09cc369109e717fa3b495ad9bb16d89b67ba0feead151ced8df9ea119
 Status: CURRENT
 
 | File | Symbol | Kind | Lines@SHA | Responsibility | Reads/Writes | Called By | Tests |
@@ -608,22 +608,27 @@ Status: CURRENT
 | backend/max_backend/research_r02_outcome.py | _canonical_compute_consumed | function | 44-62 | Observed Python symbol | | | |
 | backend/max_backend/research_r02_outcome.py | build_candidate_outcome | function | 65-132 | Observed Python symbol | | | |
 | backend/max_backend/research_r02_outcome.py | build_terminal_manifest | function | 135-229 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_service.py | _blocked | function | 27-46 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_service.py | r02_preflight | function | 49-182 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_service.py | authorize_r02_discovery | function | 189-285 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_store.py | _decode_authorization | function | 16-20 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_store.py | get_r02_authorization | function | 23-34 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_store.py | _validate_authorization_record | function | 37-68 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_store.py | create_r02_authorization | function | 71-120 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_store.py | get_r02_discovery_block | function | 123-151 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_store.py | _validate_plan_integrity | function | 154-184 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_store.py | _validated_freeze_identity | function | 187-227 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_store.py | _freeze_r02_discovery_block_in_connection | function | 230-335 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_store.py | freeze_r02_discovery_block | function | 338-365 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_store.py | authorize_and_freeze_r02_discovery | function | 369-442 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_store.py | get_r02_terminal | function | 446-469 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_store.py | get_r02_outcome_ledger | function | 472-502 | Observed Python symbol | | | |
-| backend/max_backend/research_r02_store.py | commit_r02_terminal_outcomes | function | 505-619 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_service.py | _blocked | function | 25-44 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_service.py | r02_preflight | function | 47-183 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_service.py | authorize_r02_discovery | function | 190-281 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | _reject_json_constant | function | 17-18 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | _load_persisted_json | function | 21-37 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | _decode_authorization | function | 40-52 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | get_r02_authorization | function | 55-89 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | _validate_authorization_record | function | 92-123 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | create_r02_authorization | function | 126-175 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | get_r02_discovery_block | function | 178-184 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | _validate_plan_integrity | function | 187-217 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | _validated_freeze_identity | function | 220-260 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | _read_validated_r02_ledger | function | 263-576 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | validate_r02_outcome_ledger_integrity | function | 579-584 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | _read_r02_ledger_snapshot | function | 587-602 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | _freeze_r02_discovery_block_in_connection | function | 605-710 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | freeze_r02_discovery_block | function | 713-740 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | authorize_and_freeze_r02_discovery | function | 744-813 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | get_r02_terminal | function | 817-823 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | get_r02_outcome_ledger | function | 826-831 | Observed Python symbol | | | |
+| backend/max_backend/research_r02_store.py | commit_r02_terminal_outcomes | function | 834-948 | Observed Python symbol | | | |
 | backend/max_backend/research_service.py | _manifest_hash | function | 78-81 | Observed Python symbol | | | |
 | backend/max_backend/research_service.py | _seal | function | 84-87 | Observed Python symbol | | | |
 | backend/max_backend/research_service.py | _verify_sealed | function | 90-92 | Observed Python symbol | | | |
@@ -1441,8 +1446,8 @@ Status: CURRENT
 | backend/tests/test_r02_authorization_service.py | test_authorization_freezes_plan_without_execution.fake_create | method | 108-110 | Observed Python symbol | | | |
 | backend/tests/test_r02_authorization_service.py | test_authorization_freezes_plan_without_execution.fake_freeze | method | 112-124 | Observed Python symbol | | | |
 | backend/tests/test_r02_authorization_service.py | test_authorization_freezes_plan_without_execution.fake_atomic | method | 126-129 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_service.py | test_exact_replay_is_idempotent_but_different_plan_is_rejected | function | 147-192 | Observed Python symbol | | | |
-| backend/tests/test_r02_authorization_service.py | test_authorize_api_surface_exists_but_start_surface_does_not | function | 195-206 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_service.py | test_exact_replay_is_idempotent_but_different_plan_is_rejected | function | 147-194 | Observed Python symbol | | | |
+| backend/tests/test_r02_authorization_service.py | test_authorize_api_surface_exists_but_start_surface_does_not | function | 197-208 | Observed Python symbol | | | |
 | backend/tests/test_r02_authorization_store.py | _database | function | 31-124 | Observed Python symbol | | | |
 | backend/tests/test_r02_authorization_store.py | _plan | function | 127-164 | Observed Python symbol | | | |
 | backend/tests/test_r02_authorization_store.py | _authorization | function | 167-193 | Observed Python symbol | | | |
@@ -1496,18 +1501,49 @@ Status: CURRENT
 | backend/tests/test_r02_outcome_contract.py | test_terminal_manifest_requires_every_candidate_exactly_once | function | 151-159 | Observed Python symbol | | | |
 | backend/tests/test_r02_outcome_contract.py | test_terminal_manifest_enforces_budget_and_unit | function | 162-183 | Observed Python symbol | | | |
 | backend/tests/test_r02_preflight.py | _run | function | 12-18 | Observed Python symbol | | | |
-| backend/tests/test_r02_preflight.py | _install | function | 21-47 | Observed Python symbol | | | |
-| backend/tests/test_r02_preflight.py | test_fresh_epoch_without_research_is_blocked | function | 50-57 | Observed Python symbol | | | |
-| backend/tests/test_r02_preflight.py | test_missing_r01_run_is_blocked | function | 60-66 | Observed Python symbol | | | |
-| backend/tests/test_r02_preflight.py | test_nonpassing_r01_is_blocked | function | 70-75 | Observed Python symbol | | | |
-| backend/tests/test_r02_preflight.py | test_r01_pass_without_output_authority_fails_closed | function | 78-83 | Observed Python symbol | | | |
-| backend/tests/test_r02_preflight.py | test_r01_pass_with_malformed_output_authority_fails_closed | function | 87-92 | Observed Python symbol | | | |
-| backend/tests/test_r02_preflight.py | test_r01_integrity_or_identity_mismatch_fails_closed | function | 102-108 | Observed Python symbol | | | |
-| backend/tests/test_r02_preflight.py | test_prior_training_or_promotion_side_effect_fails_closed | function | 111-123 | Observed Python symbol | | | |
-| backend/tests/test_r02_preflight.py | test_valid_r01_pass_is_ready_but_cannot_start_r02 | function | 126-142 | Observed Python symbol | | | |
-| backend/tests/test_r02_preflight.py | test_api_preflight_maps_contract_without_start_endpoint | function | 145-149 | Observed Python symbol | | | |
-| backend/tests/test_r02_preflight.py | test_frozen_discovery_block_prevents_second_authorization_surface | function | 153-178 | Observed Python symbol | | | |
-| backend/tests/test_r02_preflight.py | test_terminal_outcome_ledger_reports_complete_without_qualification | function | 182-219 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | _install | function | 21-46 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_fresh_epoch_without_research_is_blocked | function | 49-56 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_missing_r01_run_is_blocked | function | 59-65 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_nonpassing_r01_is_blocked | function | 69-74 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_r01_pass_without_output_authority_fails_closed | function | 77-82 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_r01_pass_with_malformed_output_authority_fails_closed | function | 86-91 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_r01_integrity_or_identity_mismatch_fails_closed | function | 101-107 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_prior_training_or_promotion_side_effect_fails_closed | function | 110-122 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_valid_r01_pass_is_ready_but_cannot_start_r02 | function | 125-141 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_api_preflight_maps_contract_without_start_endpoint | function | 144-148 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_frozen_discovery_block_prevents_second_authorization_surface | function | 152-182 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_terminal_outcome_ledger_reports_complete_without_qualification | function | 186-222 | Observed Python symbol | | | |
+| backend/tests/test_r02_preflight.py | test_terminal_preflight_requires_verified_readback | function | 225-239 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | _drop_test_triggers | function | 48-53 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | _tamper | function | 56-61 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | _readback | function | 64-70 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | _fail_closed | function | 73-85 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | _complete_ledger | function | 88-94 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_complete_ledger_is_verified_and_replay_is_identical | function | 97-114 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | _install_valid_preflight | function | 117-149 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_preflight_reports_complete_only_after_verified_readback | function | 152-164 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_preflight_fails_closed_for_corrupt_terminal | function | 167-177 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_authorization_readback_corruption_fails_closed | function | 205-221 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_resealed_authorization_payload_semantics_fail_closed | function | 235-254 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_frozen_block_readback_corruption_fails_closed | function | 275-283 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_candidate_spec_readback_corruption_fails_closed | function | 326-343 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_missing_candidate_fails_closed | function | 346-353 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_extra_candidate_fails_closed | function | 356-386 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_outcome_readback_corruption_fails_closed | function | 429-449 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_missing_outcome_fails_closed | function | 452-459 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_extra_outcome_fails_closed | function | 462-483 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_terminal_readback_corruption_fails_closed | function | 504-518 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_partial_outcome_ledger_fails_closed | function | 521-531 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_partial_authorization_block_chain_fails_closed | function | 542-548 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_orphaned_child_rows_without_authorization_or_block_fail_closed | function | 551-567 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_outcome_with_missing_semantic_fields_fails_closed | function | 570-577 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_malformed_persisted_json_is_integrity_error | function | 603-626 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_all_authoritative_getters_reject_tampered_terminal | function | 629-646 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_public_read_paths_wrap_database_errors | function | 650-692 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_public_read_paths_wrap_database_errors.BrokenConnection | class | 657-665 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_public_read_paths_wrap_database_errors.BrokenConnection.__enter__ | method | 658-659 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_public_read_paths_wrap_database_errors.BrokenConnection.__exit__ | method | 661-662 | Observed Python symbol | | | |
+| backend/tests/test_r02_readback_integrity.py | test_public_read_paths_wrap_database_errors.BrokenConnection.execute | method | 664-665 | Observed Python symbol | | | |
 | scripts/build_m05_final_evidence.py | write_json | function | 61-66 | Observed Python symbol | | | |
 | scripts/build_m05_final_evidence.py | parse_json | function | 69-70 | Observed Python symbol | | | |
 | scripts/build_m05_final_evidence.py | git_text | function | 73-86 | Observed Python symbol | | | |

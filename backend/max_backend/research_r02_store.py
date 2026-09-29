@@ -9,14 +9,46 @@ from .config import DATABASE_PATH
 from .db import connect
 from .optimizer_store import utc_now
 from .research_contract import candidate_id as derive_candidate_id, stable_hash
-from .research_r02_outcome import build_terminal_manifest
+from .research_r02_contract import build_discovery_plan
+from .research_r02_outcome import build_candidate_outcome, build_terminal_manifest
 from .workflow_store import migrate_current
+
+
+def _reject_json_constant(_value: str) -> None:
+    raise ValueError("non-finite JSON number")
+
+
+def _load_persisted_json(raw: Any, *, component: str) -> Any:
+    prefix = "R02_LEDGER_INTEGRITY_" + component
+    if not isinstance(raw, str):
+        raise RuntimeError(prefix + "_JSON_INVALID")
+    try:
+        value = json.loads(raw, parse_constant=_reject_json_constant)
+        encoded = json.dumps(
+            value,
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        )
+    except (json.JSONDecodeError, TypeError, ValueError, OverflowError) as exc:
+        raise RuntimeError(prefix + "_JSON_INVALID") from exc
+    if encoded != raw:
+        raise RuntimeError(prefix + "_JSON_NOT_CANONICAL")
+    return value
 
 
 def _decode_authorization(row: Any) -> dict[str, Any]:
     result = dict(row)
-    result["confirmed"] = bool(result["confirmed"])
-    result["payload"] = json.loads(result.pop("payload_json"))
+    if result["confirmed"] != 1:
+        raise RuntimeError("R02_LEDGER_INTEGRITY_AUTHORIZATION_CONFIRMATION_INVALID")
+    result["confirmed"] = True
+    payload = _load_persisted_json(
+        result.pop("payload_json"),
+        component="AUTHORIZATION",
+    )
+    if not isinstance(payload, dict):
+        raise RuntimeError("R02_LEDGER_INTEGRITY_AUTHORIZATION_PAYLOAD_INVALID")
+    result["payload"] = payload
     return result
 
 
@@ -25,13 +57,36 @@ def get_r02_authorization(
     *,
     path: Path = DATABASE_PATH,
 ) -> dict[str, Any] | None:
-    migrate_current(path)
-    with connect(path) as conn:
-        row = conn.execute(
-            "SELECT * FROM research_r02_authorizations WHERE authorization_id=?",
-            (str(authorization_id),),
-        ).fetchone()
-    return _decode_authorization(row) if row is not None else None
+    try:
+        migrate_current(path)
+        with connect(path) as conn:
+            conn.execute("BEGIN")
+            row = conn.execute(
+                "SELECT * FROM research_r02_authorizations WHERE authorization_id=?",
+                (str(authorization_id),),
+            ).fetchone()
+            if row is None:
+                block = conn.execute(
+                    "SELECT research_id FROM research_r02_discovery_blocks "
+                    "WHERE authorization_id=?",
+                    (str(authorization_id),),
+                ).fetchone()
+                if block is None:
+                    return None
+                _read_validated_r02_ledger(conn, str(block["research_id"]))
+                raise RuntimeError("R02_LEDGER_INTEGRITY_AUTHORIZATION_MISSING")
+            ledger = _read_validated_r02_ledger(conn, str(row["research_id"]))
+    except RuntimeError as exc:
+        if str(exc).startswith("R02_LEDGER_INTEGRITY_"):
+            raise
+        raise RuntimeError("R02_LEDGER_INTEGRITY_READ_FAILED") from exc
+    except Exception as exc:
+        raise RuntimeError("R02_LEDGER_INTEGRITY_READ_FAILED") from exc
+    if ledger is None or ledger["authorization"]["authorization_id"] != str(
+        authorization_id
+    ):
+        raise RuntimeError("R02_LEDGER_INTEGRITY_AUTHORIZATION_IDENTITY_MISMATCH")
+    return ledger["authorization"]
 
 
 def _validate_authorization_record(
@@ -83,6 +138,7 @@ def create_r02_authorization(
         ).fetchone()
         if existing_id is not None:
             decoded = _decode_authorization(existing_id)
+            _validate_authorization_record(decoded)
             if (
                 str(decoded["research_id"]) != str(record["research_id"])
                 or str(decoded["payload_sha256"]) != str(record["payload_sha256"])
@@ -112,11 +168,10 @@ def create_r02_authorization(
                 str(record["payload_sha256"]),
                 encoded,
                 str(record["authorized_utc"]),
-            ),
+            )
         )
-    created = get_r02_authorization(str(record["authorization_id"]), path=path)
-    if created is None:
-        raise RuntimeError("R02_AUTHORIZATION_CREATE_FAILED")
+    created = deepcopy(record)
+    created["payload"] = payload
     return created
 
 
@@ -125,30 +180,8 @@ def get_r02_discovery_block(
     *,
     path: Path = DATABASE_PATH,
 ) -> dict[str, Any] | None:
-    migrate_current(path)
-    with connect(path) as conn:
-        block = conn.execute(
-            "SELECT * FROM research_r02_discovery_blocks WHERE research_id=?",
-            (str(research_id),),
-        ).fetchone()
-        if block is None:
-            return None
-        candidates = conn.execute(
-            """
-            SELECT * FROM research_r02_candidate_specs
-            WHERE block_id=?
-            ORDER BY ordinal,candidate_id
-            """,
-            (str(block["block_id"]),),
-        ).fetchall()
-    result = dict(block)
-    result["compute_budget"] = json.loads(result.pop("compute_budget_json"))
-    result["candidates"] = []
-    for row in candidates:
-        item = dict(row)
-        item["spec"] = json.loads(item.pop("spec_json"))
-        result["candidates"].append(item)
-    return result
+    ledger = _read_r02_ledger_snapshot(research_id, path=path)
+    return ledger["block"] if ledger is not None else None
 
 
 def _validate_plan_integrity(plan: dict[str, Any]) -> None:
@@ -225,6 +258,348 @@ def _validated_freeze_identity(
     if len(candidates) != int(plan.get("candidate_count") or 0):
         raise RuntimeError("R02_PLAN_CANDIDATE_COUNT_MISMATCH")
     return research_id, block_id, candidates
+
+
+def _read_validated_r02_ledger(
+    conn: Any,
+    research_id: str,
+) -> dict[str, Any] | None:
+    authorization_row = conn.execute(
+        "SELECT * FROM research_r02_authorizations WHERE research_id=?",
+        (research_id,),
+    ).fetchone()
+    block_row = conn.execute(
+        "SELECT * FROM research_r02_discovery_blocks WHERE research_id=?",
+        (research_id,),
+    ).fetchone()
+    if authorization_row is None and block_row is None:
+        orphaned_rows = conn.execute(
+            """
+            SELECT
+                EXISTS(
+                    SELECT 1
+                    FROM research_r02_candidate_specs AS candidate
+                    LEFT JOIN research_r02_discovery_blocks AS block
+                      ON block.block_id=candidate.block_id
+                    WHERE block.block_id IS NULL
+                )
+                OR EXISTS(
+                    SELECT 1
+                    FROM research_r02_candidate_outcomes AS outcome
+                    LEFT JOIN research_r02_discovery_blocks AS block
+                      ON block.block_id=outcome.block_id
+                    WHERE block.block_id IS NULL
+                )
+                OR EXISTS(
+                    SELECT 1
+                    FROM research_r02_block_terminals AS terminal
+                    LEFT JOIN research_r02_discovery_blocks AS block
+                      ON block.block_id=terminal.block_id
+                    WHERE block.block_id IS NULL
+                )
+            """
+        ).fetchone()
+        if orphaned_rows is not None and orphaned_rows[0]:
+            raise RuntimeError("R02_LEDGER_INTEGRITY_ORPHANED_ROWS")
+        return None
+    if authorization_row is None:
+        raise RuntimeError("R02_LEDGER_INTEGRITY_AUTHORIZATION_MISSING")
+    if block_row is None:
+        raise RuntimeError("R02_LEDGER_INTEGRITY_FROZEN_BLOCK_MISSING")
+
+    try:
+        authorization = _decode_authorization(authorization_row)
+        payload, _encoded_payload = _validate_authorization_record(authorization)
+    except (KeyError, TypeError, OverflowError, ValueError, RuntimeError) as exc:
+        raise RuntimeError("R02_LEDGER_INTEGRITY_AUTHORIZATION_INVALID") from exc
+
+    block = dict(block_row)
+    if (
+        str(authorization["research_id"]) != research_id
+        or str(block.get("research_id") or "") != research_id
+        or str(block.get("authorization_id") or "")
+        != str(authorization["authorization_id"])
+        or block.get("state") != "FROZEN_WAITING_EXECUTION"
+    ):
+        raise RuntimeError("R02_LEDGER_INTEGRITY_BLOCK_BINDING_MISMATCH")
+
+    try:
+        candidate_count = block["candidate_count"]
+        if type(candidate_count) is not int or candidate_count <= 0:
+            raise ValueError("candidate_count")
+        payload_count = payload.get("candidate_count")
+        payload_candidate_ids = payload.get("candidate_ids")
+        if (
+            type(payload_count) is not int
+            or payload_count != candidate_count
+            or not isinstance(payload_candidate_ids, list)
+            or len(payload_candidate_ids) != candidate_count
+            or any(not isinstance(item, str) or not item for item in payload_candidate_ids)
+            or len(set(payload_candidate_ids)) != candidate_count
+        ):
+            raise ValueError("authorized candidate universe")
+
+        compute_budget = _load_persisted_json(
+            block["compute_budget_json"],
+            component="BLOCK_COMPUTE_BUDGET",
+        )
+        if not isinstance(compute_budget, dict):
+            raise ValueError("compute budget")
+
+        persisted_block_id = str(block["block_id"])
+        block_r01_output_sha = str(block["r01_output_manifest_sha256"])
+        block_plan_id = str(block["plan_id"])
+        block_plan_sha = str(block["plan_sha256"])
+        if not persisted_block_id:
+            raise ValueError("block id")
+
+        candidate_rows = conn.execute(
+            """
+            SELECT * FROM research_r02_candidate_specs
+            WHERE block_id=?
+            ORDER BY ordinal,candidate_id
+            """,
+            (persisted_block_id,),
+        ).fetchall()
+        if len(candidate_rows) != candidate_count:
+            raise ValueError("candidate count")
+
+        candidates: list[dict[str, Any]] = []
+        for row in candidate_rows:
+            item = dict(row)
+            spec = _load_persisted_json(
+                item["spec_json"],
+                component="CANDIDATE_SPEC",
+            )
+            if not isinstance(spec, dict):
+                raise ValueError("candidate spec")
+            if str(item["block_id"]) != persisted_block_id:
+                raise ValueError("candidate block binding")
+            if stable_hash(spec) != str(item["spec_sha256"]):
+                raise ValueError("candidate spec hash")
+            if derive_candidate_id(spec) != str(item["candidate_id"]):
+                raise ValueError("candidate identity")
+            if (
+                not isinstance(spec.get("model_family"), str)
+                or item["model_family"] != spec["model_family"]
+                or type(spec.get("seed")) is not int
+                or type(item["seed"]) is not int
+                or item["seed"] != spec["seed"]
+                or type(item["ordinal"]) is not int
+            ):
+                raise ValueError("candidate row binding")
+            candidates.append(
+                {
+                    "row": item,
+                    "spec": spec,
+                }
+            )
+
+        ordinals = [item["row"]["ordinal"] for item in candidates]
+        if ordinals != list(range(candidate_count)):
+            raise ValueError("candidate ordinal order")
+        candidate_ids = [str(item["row"]["candidate_id"]) for item in candidates]
+        if len(set(candidate_ids)) != candidate_count:
+            raise ValueError("duplicate candidate id")
+
+        first_spec = candidates[0]["spec"]
+        plan_request = {
+            "research_id": research_id,
+            "r01_output_manifest_sha256": block_r01_output_sha,
+            "feature_contract": first_spec.get("feature_contract"),
+            "label_contract": first_spec.get("label_contract"),
+            "parent_lineage": first_spec.get("parent_lineage"),
+            "candidate_count": candidate_count,
+            "compute_budget": {
+                "value": compute_budget.get("value"),
+                "unit": compute_budget.get("unit"),
+            },
+            "candidates": [item["spec"] for item in candidates],
+        }
+        plan = build_discovery_plan(plan_request)
+        identity_research_id, expected_block_id, _frozen_candidates = (
+            _validated_freeze_identity(
+                authorization=authorization,
+                plan=plan,
+            )
+        )
+        if (
+            identity_research_id != research_id
+            or expected_block_id != persisted_block_id
+            or plan["plan_id"] != block_plan_id
+            or plan["plan_sha256"] != block_plan_sha
+            or plan["candidate_ids"] != candidate_ids
+            or payload_candidate_ids != plan["candidate_ids"]
+            or payload["compute_budget"] != plan["compute_budget"]
+            or compute_budget != plan["compute_budget"]
+        ):
+            raise ValueError("reconstructed plan mismatch")
+
+        outcome_rows = conn.execute(
+            """
+            SELECT * FROM research_r02_candidate_outcomes
+            WHERE block_id=?
+            ORDER BY candidate_id,outcome_id
+            """,
+            (expected_block_id,),
+        ).fetchall()
+        terminal_rows = conn.execute(
+            "SELECT * FROM research_r02_block_terminals WHERE block_id=?",
+            (expected_block_id,),
+        ).fetchall()
+        if len(terminal_rows) > 1:
+            raise ValueError("duplicate terminal")
+        if outcome_rows and len(outcome_rows) != candidate_count:
+            raise ValueError("partial outcome rows")
+        if not terminal_rows and outcome_rows:
+            raise ValueError("outcomes without terminal")
+        if terminal_rows and len(outcome_rows) != candidate_count:
+            raise ValueError("terminal without exact outcomes")
+
+        outcome_by_candidate: dict[str, dict[str, Any]] = {}
+        outcome_requests: list[dict[str, Any]] = []
+        for row in outcome_rows:
+            item = dict(row)
+            outcome = _load_persisted_json(
+                item["outcome_json"],
+                component="OUTCOME",
+            )
+            if not isinstance(outcome, dict):
+                raise ValueError("outcome object")
+            candidate_id = str(item["candidate_id"])
+            if (
+                candidate_id not in candidate_ids
+                or candidate_id in outcome_by_candidate
+                or str(item["block_id"]) != expected_block_id
+            ):
+                raise ValueError("outcome identity binding")
+            request = {
+                "candidate_id": outcome["candidate_id"],
+                "status": outcome["status"],
+                "metrics": outcome["metrics"],
+                "compute_consumed": outcome["compute_consumed"],
+                "failure_code": outcome["failure_code"],
+            }
+            expected_outcome = build_candidate_outcome(
+                request,
+                block_id=expected_block_id,
+                candidate_ids=candidate_ids,
+                budget_unit=str(plan["compute_budget"]["unit"]),
+            )
+            if (
+                outcome != expected_outcome
+                or str(item["outcome_id"]) != expected_outcome["outcome_id"]
+                or str(item["outcome_sha256"])
+                != expected_outcome["outcome_sha256"]
+                or str(item["status"]) != expected_outcome["status"]
+                or str(outcome.get("block_id") or "") != expected_block_id
+                or candidate_id != expected_outcome["candidate_id"]
+            ):
+                raise ValueError("outcome reconstruction mismatch")
+            item.pop("outcome_json")
+            item["outcome"] = expected_outcome
+            outcome_by_candidate[candidate_id] = item
+            outcome_requests.append(request)
+
+        if outcome_by_candidate and set(outcome_by_candidate) != set(candidate_ids):
+            raise ValueError("outcome candidate universe")
+        outcomes = [outcome_by_candidate[item] for item in candidate_ids] if outcome_by_candidate else []
+
+        terminal: dict[str, Any] | None = None
+        if terminal_rows:
+            manifest = build_terminal_manifest(
+                block_id=expected_block_id,
+                candidate_ids=candidate_ids,
+                compute_budget=plan["compute_budget"],
+                outcome_requests=outcome_requests,
+            )
+            terminal_candidates = conn.execute(
+                """
+                SELECT * FROM research_r02_block_terminals
+                WHERE block_id=? OR terminal_id=?
+                """,
+                (expected_block_id, manifest["terminal_id"]),
+            ).fetchall()
+            if len(terminal_candidates) != 1:
+                raise ValueError("terminal identity")
+            item = dict(terminal_candidates[0])
+            compute_consumed = _load_persisted_json(
+                item["compute_consumed_json"],
+                component="TERMINAL_COMPUTE_CONSUMED",
+            )
+            if (
+                not isinstance(compute_consumed, dict)
+                or str(item["terminal_id"]) != manifest["terminal_id"]
+                or str(item["block_id"]) != expected_block_id
+                or str(item["state"]) != manifest["state"]
+                or str(item["outcome_manifest_sha256"])
+                != manifest["outcome_manifest_sha256"]
+                or type(item["candidate_count"]) is not int
+                or item["candidate_count"] != manifest["candidate_count"]
+                or type(item["screen_pass_count"]) is not int
+                or item["screen_pass_count"] != manifest["screen_pass_count"]
+                or type(item["screen_fail_count"]) is not int
+                or item["screen_fail_count"] != manifest["screen_fail_count"]
+                or type(item["execution_error_count"]) is not int
+                or item["execution_error_count"]
+                != manifest["execution_error_count"]
+                or compute_consumed != manifest["compute_consumed"]
+            ):
+                raise ValueError("terminal reconstruction mismatch")
+            item.pop("compute_consumed_json")
+            item["compute_consumed"] = compute_consumed
+            terminal = item
+
+    except RuntimeError as exc:
+        if str(exc).startswith("R02_LEDGER_INTEGRITY_"):
+            raise
+        raise RuntimeError("R02_LEDGER_INTEGRITY_RECONSTRUCTION_FAILED") from exc
+    except (KeyError, TypeError, OverflowError, ValueError) as exc:
+        raise RuntimeError("R02_LEDGER_INTEGRITY_RECONSTRUCTION_FAILED") from exc
+
+    authorization["payload"] = payload
+    block_result = dict(block)
+    block_result.pop("compute_budget_json")
+    block_result["compute_budget"] = compute_budget
+    block_result["candidates"] = []
+    for candidate in candidates:
+        row = dict(candidate["row"])
+        row.pop("spec_json")
+        row["spec"] = candidate["spec"]
+        block_result["candidates"].append(row)
+    return {
+        "integrity_status": "VERIFIED",
+        "authorization": authorization,
+        "block": block_result,
+        "outcomes": outcomes,
+        "terminal": terminal,
+    }
+
+
+def validate_r02_outcome_ledger_integrity(
+    research_id: str,
+    *,
+    path: Path = DATABASE_PATH,
+) -> dict[str, Any] | None:
+    return _read_r02_ledger_snapshot(research_id, path=path)
+
+
+def _read_r02_ledger_snapshot(
+    research_id: str,
+    *,
+    path: Path,
+) -> dict[str, Any] | None:
+    try:
+        migrate_current(path)
+        with connect(path) as conn:
+            conn.execute("BEGIN")
+            return _read_validated_r02_ledger(conn, str(research_id))
+    except RuntimeError as exc:
+        if str(exc).startswith("R02_LEDGER_INTEGRITY_"):
+            raise
+        raise RuntimeError("R02_LEDGER_INTEGRITY_READ_FAILED") from exc
+    except Exception as exc:
+        raise RuntimeError("R02_LEDGER_INTEGRITY_READ_FAILED") from exc
 
 
 def _freeze_r02_discovery_block_in_connection(
@@ -430,16 +805,12 @@ def authorize_and_freeze_r02_discovery(
             candidates=candidates,
         )
 
-    persisted_authorization = get_r02_authorization(
-        str(authorization["authorization_id"]),
-        path=path,
-    )
-    block = get_r02_discovery_block(research_id, path=path)
-    if persisted_authorization is None or block is None:
+    ledger = get_r02_outcome_ledger(research_id, path=path)
+    if ledger is None:
         raise RuntimeError("R02_ATOMIC_FREEZE_PERSISTENCE_MISSING")
-    if len(block["candidates"]) != int(plan["candidate_count"]):
+    if len(ledger["block"]["candidates"]) != int(plan["candidate_count"]):
         raise RuntimeError("R02_DISCOVERY_BLOCK_CANDIDATE_PERSISTENCE_MISMATCH")
-    return persisted_authorization, block
+    return ledger["authorization"], ledger["block"]
 
 
 
@@ -448,25 +819,8 @@ def get_r02_terminal(
     *,
     path: Path = DATABASE_PATH,
 ) -> dict[str, Any] | None:
-    migrate_current(path)
-    with connect(path) as conn:
-        row = conn.execute(
-            """
-            SELECT terminal.*
-            FROM research_r02_block_terminals AS terminal
-            JOIN research_r02_discovery_blocks AS block
-              ON block.block_id=terminal.block_id
-            WHERE block.research_id=?
-            """,
-            (str(research_id),),
-        ).fetchone()
-    if row is None:
-        return None
-    result = dict(row)
-    result["compute_consumed"] = json.loads(
-        result.pop("compute_consumed_json")
-    )
-    return result
+    ledger = _read_r02_ledger_snapshot(research_id, path=path)
+    return ledger["terminal"] if ledger is not None else None
 
 
 def get_r02_outcome_ledger(
@@ -474,32 +828,7 @@ def get_r02_outcome_ledger(
     *,
     path: Path = DATABASE_PATH,
 ) -> dict[str, Any] | None:
-    migrate_current(path)
-    block = get_r02_discovery_block(research_id, path=path)
-    if block is None:
-        return None
-    with connect(path) as conn:
-        rows = conn.execute(
-            """
-            SELECT outcome.*
-            FROM research_r02_candidate_outcomes AS outcome
-            JOIN research_r02_candidate_specs AS spec
-              ON spec.candidate_id=outcome.candidate_id
-            WHERE outcome.block_id=?
-            ORDER BY spec.ordinal,spec.candidate_id
-            """,
-            (str(block["block_id"]),),
-        ).fetchall()
-    outcomes = []
-    for row in rows:
-        item = dict(row)
-        item["outcome"] = json.loads(item.pop("outcome_json"))
-        outcomes.append(item)
-    return {
-        "block": block,
-        "outcomes": outcomes,
-        "terminal": get_r02_terminal(research_id, path=path),
-    }
+    return _read_r02_ledger_snapshot(research_id, path=path)
 
 
 def commit_r02_terminal_outcomes(

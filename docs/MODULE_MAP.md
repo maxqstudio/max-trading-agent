@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68
+Source digest: 79e949b09cc369109e717fa3b495ad9bb16d89b67ba0feead151ced8df9ea119
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -52,8 +52,8 @@ Generated/refreshed: current compiler run
 | backend/max_backend/research_r01_store.py | Python | 502 | backend/max_backend | NO |
 | backend/max_backend/research_r02_contract.py | Python | 274 | backend/max_backend | NO |
 | backend/max_backend/research_r02_outcome.py | Python | 229 | backend/max_backend | NO |
-| backend/max_backend/research_r02_service.py | Python | 285 | backend/max_backend | NO |
-| backend/max_backend/research_r02_store.py | Python | 619 | backend/max_backend | NO |
+| backend/max_backend/research_r02_service.py | Python | 281 | backend/max_backend | NO |
+| backend/max_backend/research_r02_store.py | Python | 948 | backend/max_backend | NO |
 | backend/max_backend/research_service.py | Python | 1423 | backend/max_backend | NO |
 | backend/max_backend/research_settings.py | Python | 73 | backend/max_backend | NO |
 | backend/max_backend/research_source.py | Python | 900 | backend/max_backend | NO |
@@ -97,11 +97,12 @@ Generated/refreshed: current compiler run
 | backend/tests/test_r01_dataset.py | Python | 932 | backend/tests | YES |
 | backend/tests/test_r01_research.py | Python | 1077 | backend/tests | YES |
 | backend/tests/test_r01_source.py | Python | 471 | backend/tests | YES |
-| backend/tests/test_r02_authorization_service.py | Python | 206 | backend/tests | YES |
+| backend/tests/test_r02_authorization_service.py | Python | 208 | backend/tests | YES |
 | backend/tests/test_r02_authorization_store.py | Python | 679 | backend/tests | YES |
 | backend/tests/test_r02_discovery_contract.py | Python | 198 | backend/tests | YES |
 | backend/tests/test_r02_outcome_contract.py | Python | 183 | backend/tests | YES |
-| backend/tests/test_r02_preflight.py | Python | 219 | backend/tests | YES |
+| backend/tests/test_r02_preflight.py | Python | 239 | backend/tests | YES |
+| backend/tests/test_r02_readback_integrity.py | Python | 692 | backend/tests | YES |
 | frontend/src/App.test.tsx | TypeScript/React | 241 | frontend/src | YES |
 | frontend/src/App.tsx | TypeScript/React | 290 | frontend/src | NO |
 | frontend/src/ArtifactsPage.test.tsx | TypeScript/React | 252 | frontend/src | YES |

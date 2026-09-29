@@ -48,6 +48,8 @@ Governance model:
 - `docs/*.md` = generated Project Truth Compiler projections where marked generated.
 - `docs/sequence/sessions/` = current DURING sequence contracts.
 - `docs/sequence/generated/` = generated static sequence evidence.
+- [Canonical project manifest](docs/PROJECT_MANIFEST.md).
+- [Current state](docs/CURRENT_STATE.md) and [system overview](docs/SYSTEM_OVERVIEW.md).
 
 Do not manually patch generated canonical Markdown. Repair source/`.workflow` authority and regenerate.
 
