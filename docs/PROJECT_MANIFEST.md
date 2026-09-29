@@ -10,7 +10,7 @@ Governance profile: strict
 
 ## Repositories
 Repository: maxqstudio/max-trading-agent
-Active branch: work/r02-outcome-readback-integrity
+Active branch: main
 Current authoritative SHA: external final acceptance evidence
 Last accepted SHA: c913c47a45ca54d805470caf40bb54bf655b45c6
 Current source digest: 79e949b09cc369109e717fa3b495ad9bb16d89b67ba0feead151ced8df9ea119

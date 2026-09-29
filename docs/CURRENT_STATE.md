@@ -8,11 +8,11 @@ Governance profile: strict
 
 ## Current phase
 Phase: R02_OUTCOME_READBACK_INTEGRITY
-Status: IN_PROGRESS
+Status: SOURCE_PHASE_COMPLETE_AWAITING_EXTERNAL_ACCEPTANCE
 
 ## Source
 Repository: maxqstudio/max-trading-agent
-Branch: work/r02-outcome-readback-integrity
+Branch: main
 Authoritative SHA: external final acceptance evidence
 Last accepted SHA: c913c47a45ca54d805470caf40bb54bf655b45c6
 Current candidate SHA: external final acceptance evidence
@@ -41,18 +41,17 @@ SEQUENCE_SYNC: PASS
 - R01 current-lineage source repair remains accepted on main.
 - R02 Discovery source foundation remains accepted on main.
 - R02_CHEAP_SCREEN_OUTCOME_LEDGER is accepted at main c913c47a45ca54d805470caf40bb54bf655b45c6; Windows CI run 36424489731 passed with backend 581, frontend 53 tests across 10 files, source-only policy, Skill Workflow provenance, STRICT_SELFTEST, governance, pip check, lint, build and npm dependency tree.
+- R02_OUTCOME_READBACK_INTEGRITY implementation and tracked governance are complete; candidate-tree scan, branch CI, PR-head CI, squash merge and exact merged-main CI passed. Exact final SHA and CI identity are recorded externally per D-012.
 - The supplied New-PC baseline evidence reports the Windows symlink probe PASS, M08 path-safety test PASS, and the exact full backend baseline 581 passed, 0 skipped, 0 failed.
 - Skill Workflow authority remains pinned at 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720; the newer main delta was inspected and not silently adopted.
 - Local R02 integrity gates pass: targeted 147 tests, full backend 644 tests, frontend 53 tests across 10 files, pip check, lint, build, npm dependency tree, Project Docs, handoff, human comprehension, cross-document and sequence validation.
 
 ## Not proven
-- New-phase exact candidate-tree scan, branch CI, PR-head CI, squash merge and exact merged-main CI.
 - Any real current-epoch R00/R01 scientific result or real R02 authorization/execution.
 - Any actual model training, Cheap Screen runtime outcome, Qualified Pool, ONNX or Research Challenger.
 - Any real Owner-PC runtime/bootstrap/MT5/browser behavior.
 
 ## Known blockers
-- R02_OUTCOME_READBACK_INTEGRITY remains IN_PROGRESS pending exact candidate-tree scan, branch/PR CI, squash merge and exact merged-main CI.
 - No accepted current-epoch R00/R01 scientific result exists, so real R02 remains BLOCKED / NOT STARTED.
 - No trainer/executor is implemented or authorized; this source phase uses synthetic persisted outcomes only.
 - Real MetaTrader 5 runtime and final Owner-PC acceptance remain NOT_PROVEN and deferred.
@@ -61,10 +60,7 @@ SEQUENCE_SYNC: PASS
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Run the exact candidate-tree source-only/secret scan, then commit and push the semantic work branch.
-- Wait for Windows branch CI and repair evidence-backed failures; then open the authorized PR.
-- Wait for PR-head CI to pass, squash merge, then revalidate exact main CI before closing governance state.
-- Revalidate exact merged main CI, then close this phase semantically without a post-CI tracked commit.
+- Control Room determines and authorizes the next GitHub source phase under the roadmap.
 
 ## Explicitly blocked
 - Owner-PC testing between ordinary GitHub development phases.
