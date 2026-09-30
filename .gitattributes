@@ -9,6 +9,7 @@
 *.html text eol=lf
 *.cmd text eol=crlf
 *.ps1 text eol=crlf
+/scripts/lightgbm-4.7.0-boost-compute-sha1.patch text eol=lf
 *.mq5 -text
 *.set -text
 
