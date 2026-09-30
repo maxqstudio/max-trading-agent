@@ -30,7 +30,8 @@ def _install(
     current_run = run if run is not None else _run()
     current_integrity = integrity if integrity is not None else {
         "research_id": "RSRCH-R02-TEST",
-        "status": "VERIFIED",
+        "status": "VERIFIED_DISCOVERY_ONLY",
+        "verification_scope": "DISCOVERY_ONLY",
     }
     current_side_effects = side_effects if side_effects is not None else {
         "training_count": 0,
@@ -95,7 +96,16 @@ def test_r01_pass_with_malformed_output_authority_fails_closed(monkeypatch: pyte
     "integrity",
     [
         {"research_id": "RSRCH-R02-TEST", "status": "INTEGRITY_FAIL"},
-        {"research_id": "OTHER", "status": "VERIFIED"},
+        {
+            "research_id": "OTHER",
+            "status": "VERIFIED_DISCOVERY_ONLY",
+            "verification_scope": "DISCOVERY_ONLY",
+        },
+        {
+            "research_id": "RSRCH-R02-TEST",
+            "status": "VERIFIED_DISCOVERY_ONLY",
+            "verification_scope": "FULL",
+        },
     ],
 )
 def test_r01_integrity_or_identity_mismatch_fails_closed(
@@ -128,7 +138,7 @@ def test_valid_r01_pass_is_ready_but_cannot_start_r02(monkeypatch: pytest.Monkey
     assert result["status"] == "READY_FOR_OWNER_AUTHORIZATION"
     assert result["research_id"] == "RSRCH-R02-TEST"
     assert result["r01_state"] == "PASS_WAITING_OWNER"
-    assert result["r01_integrity"] == "VERIFIED"
+    assert result["r01_integrity"] == "VERIFIED_DISCOVERY_ONLY"
     assert result["source_foundation_ready"] is True
     assert result["owner_authorization_required"] is True
     assert result["owner_authorized"] is False
@@ -168,7 +178,7 @@ def test_frozen_discovery_block_prevents_second_authorization_surface(
                 "compute_budget": {
                     "value": 120,
                     "unit": "FIT_SECONDS",
-                    "execution_semantics": "FROZEN_ONLY_NOT_EXECUTED",
+                    "execution_semantics": "EXECUTOR_BOUNDED_FIT_SECONDS_V1",
                 },
             },
             "terminal": None,
@@ -201,7 +211,7 @@ def test_terminal_outcome_ledger_reports_complete_without_qualification(
                 "compute_budget": {
                     "value": 120,
                     "unit": "FIT_SECONDS",
-                    "execution_semantics": "FROZEN_ONLY_NOT_EXECUTED",
+                    "execution_semantics": "EXECUTOR_BOUNDED_FIT_SECONDS_V1",
                 },
             },
             "terminal": {

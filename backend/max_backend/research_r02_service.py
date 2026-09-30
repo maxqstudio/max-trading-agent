@@ -5,7 +5,10 @@ from pathlib import Path
 from typing import Any
 
 from .config import DATABASE_PATH
-from .research_r01_service import validate_r01_integrity
+from .research_r01_service import (
+    R01_DISCOVERY_SCOPE_VERIFIED,
+    validate_r01_integrity,
+)
 from .research_r01_store import get_r01_run
 from .research_service import verify_no_training_side_effects
 from .research_store import latest_research
@@ -77,10 +80,12 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
     ):
         raise RuntimeError("R02_R01_OUTPUT_AUTHORITY_INVALID")
 
-    integrity = validate_r01_integrity(path=path)
+    integrity = validate_r01_integrity(path=path, discovery_only=True)
     if (
         str(integrity.get("research_id") or "") != research_id
-        or str(integrity.get("status") or "") != "VERIFIED"
+        or str(integrity.get("status") or "")
+        != R01_DISCOVERY_SCOPE_VERIFIED
+        or str(integrity.get("verification_scope") or "") != "DISCOVERY_ONLY"
     ):
         raise RuntimeError("R02_R01_INTEGRITY_REQUIRED")
 
@@ -103,7 +108,7 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
                 "research_id": research_id,
                 "r01_state": r01_state,
                 "r01_output_manifest_sha256": output_sha,
-                "r01_integrity": "VERIFIED",
+                "r01_integrity": R01_DISCOVERY_SCOPE_VERIFIED,
                 "source_foundation_ready": True,
                 "owner_authorization_required": False,
                 "owner_authorized": True,
@@ -142,7 +147,7 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
             "research_id": research_id,
             "r01_state": r01_state,
             "r01_output_manifest_sha256": output_sha,
-            "r01_integrity": "VERIFIED",
+            "r01_integrity": R01_DISCOVERY_SCOPE_VERIFIED,
             "source_foundation_ready": True,
             "owner_authorization_required": False,
             "owner_authorized": True,
@@ -169,7 +174,7 @@ def r02_preflight(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
         "research_id": research_id,
         "r01_state": r01_state,
         "r01_output_manifest_sha256": output_sha,
-        "r01_integrity": "VERIFIED",
+        "r01_integrity": R01_DISCOVERY_SCOPE_VERIFIED,
         "source_foundation_ready": True,
         "owner_authorization_required": True,
         "owner_authorized": False,

@@ -7,7 +7,7 @@
       "backend/max_backend/research_service.py::r00_preflight"
     ],
     "graph": "docs/sequence/generated/FLOW-R00-INITIALIZATION.actual.json",
-    "source_digest": "79e949b09cc369109e717fa3b495ad9bb16d89b67ba0feead151ced8df9ea119"
+    "source_digest": "d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8883a543"
   },
   "critical": true,
   "implementation_base_sha": "eb6192873eb518b9fe4c7f15d03600ca4ac1e73d",

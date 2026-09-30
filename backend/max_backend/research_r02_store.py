@@ -263,6 +263,8 @@ def _validated_freeze_identity(
 def _read_validated_r02_ledger(
     conn: Any,
     research_id: str,
+    *,
+    allow_incomplete_execution_attempt: bool = False,
 ) -> dict[str, Any] | None:
     authorization_row = conn.execute(
         "SELECT * FROM research_r02_authorizations WHERE research_id=?",
@@ -297,9 +299,20 @@ def _read_validated_r02_ledger(
                       ON block.block_id=terminal.block_id
                     WHERE block.block_id IS NULL
                 )
+                OR EXISTS(
+                    SELECT 1
+                    FROM research_r02_execution_attempts AS attempt
+                    LEFT JOIN research_r02_discovery_blocks AS block
+                      ON block.block_id=attempt.block_id
+                    WHERE block.block_id IS NULL
+                )
             """
         ).fetchone()
-        if orphaned_rows is not None and orphaned_rows[0]:
+        research_attempt = conn.execute(
+            "SELECT 1 FROM research_r02_execution_attempts WHERE research_id=?",
+            (research_id,),
+        ).fetchone()
+        if (orphaned_rows is not None and orphaned_rows[0]) or research_attempt:
             raise RuntimeError("R02_LEDGER_INTEGRITY_ORPHANED_ROWS")
         return None
     if authorization_row is None:
@@ -447,6 +460,32 @@ def _read_validated_r02_ledger(
             "SELECT * FROM research_r02_block_terminals WHERE block_id=?",
             (expected_block_id,),
         ).fetchall()
+        attempt_rows = conn.execute(
+            """
+            SELECT * FROM research_r02_execution_attempts
+            WHERE research_id=? OR block_id=?
+            """,
+            (research_id, expected_block_id),
+        ).fetchall()
+        if len(attempt_rows) > 1:
+            raise ValueError("duplicate execution attempt")
+        execution_attempt: dict[str, Any] | None = None
+        if attempt_rows:
+            attempt = dict(attempt_rows[0])
+            expected_attempt_id = "R2ATT-" + stable_hash({
+                "research_id": research_id,
+                "block_id": expected_block_id,
+                "plan_sha256": block_plan_sha,
+                "r01_output_manifest_sha256": block_r01_output_sha,
+            })[:24]
+            if (
+                str(attempt.get("research_id") or "") != research_id
+                or str(attempt.get("block_id") or "") != expected_block_id
+                or str(attempt.get("attempt_id") or "") != expected_attempt_id
+                or not str(attempt.get("started_utc") or "").strip()
+            ):
+                raise ValueError("execution attempt binding")
+            execution_attempt = attempt
         if len(terminal_rows) > 1:
             raise ValueError("duplicate terminal")
         if outcome_rows and len(outcome_rows) != candidate_count:
@@ -548,7 +587,19 @@ def _read_validated_r02_ledger(
                 raise ValueError("terminal reconstruction mismatch")
             item.pop("compute_consumed_json")
             item["compute_consumed"] = compute_consumed
+            item["cheap_screen_qualification_authority"] = False
+            item["qualified_pool_admission_authority"] = "R03_FULL_WFA_ONLY"
+            item["scientific_qualification"] = False
             terminal = item
+
+        if (
+            execution_attempt is not None
+            and terminal is None
+            and not allow_incomplete_execution_attempt
+        ):
+            raise RuntimeError(
+                "R02_LEDGER_INTEGRITY_EXECUTION_ATTEMPT_UNCERTAIN"
+            )
 
     except RuntimeError as exc:
         if str(exc).startswith("R02_LEDGER_INTEGRITY_"):
@@ -573,6 +624,7 @@ def _read_validated_r02_ledger(
         "block": block_result,
         "outcomes": outcomes,
         "terminal": terminal,
+        "execution_attempt": execution_attempt,
     }
 
 
@@ -844,105 +896,236 @@ def commit_r02_terminal_outcomes(
 
     with connect(path) as conn:
         conn.execute("BEGIN IMMEDIATE")
-        block = conn.execute(
-            "SELECT * FROM research_r02_discovery_blocks WHERE research_id=?",
+        active_attempt = conn.execute(
+            "SELECT 1 FROM research_r02_execution_attempts WHERE research_id=?",
             (research_id,),
         ).fetchone()
-        if block is None:
-            raise RuntimeError("R02_FROZEN_BLOCK_REQUIRED")
-
-        candidates = conn.execute(
-            """
-            SELECT candidate_id
-            FROM research_r02_candidate_specs
-            WHERE block_id=?
-            ORDER BY ordinal,candidate_id
-            """,
-            (str(block["block_id"]),),
-        ).fetchall()
-        candidate_ids = [str(row["candidate_id"]) for row in candidates]
-        if len(candidate_ids) != int(block["candidate_count"]):
-            raise RuntimeError("R02_FROZEN_CANDIDATE_AUTHORITY_INCOMPLETE")
-
-        manifest = build_terminal_manifest(
-            block_id=str(block["block_id"]),
-            candidate_ids=candidate_ids,
-            compute_budget=json.loads(str(block["compute_budget_json"])),
+        if active_attempt is not None:
+            raise RuntimeError("R02_EXECUTOR_OWNS_OUTCOME_COMMIT")
+        ledger = _commit_r02_terminal_outcomes_in_connection(
+            conn,
+            research_id=research_id,
             outcome_requests=outcome_requests,
+            execution_attempt_id=None,
         )
 
-        existing_terminal = conn.execute(
-            "SELECT * FROM research_r02_block_terminals WHERE block_id=?",
-            (str(block["block_id"]),),
-        ).fetchone()
-        if existing_terminal is not None:
-            if str(existing_terminal["outcome_manifest_sha256"]) != str(
-                manifest["outcome_manifest_sha256"]
-            ):
-                raise RuntimeError("R02_TERMINAL_ALREADY_COMMITTED")
-        else:
-            existing_outcomes = conn.execute(
-                """
-                SELECT COUNT(*) AS n
-                FROM research_r02_candidate_outcomes
-                WHERE block_id=?
-                """,
-                (str(block["block_id"]),),
-            ).fetchone()
-            if int(existing_outcomes["n"]) != 0:
-                raise RuntimeError("R02_OUTCOME_PARTIAL_STATE_DETECTED")
-
-            now = utc_now()
-            for outcome in manifest["candidate_outcomes"]:
-                conn.execute(
-                    """
-                    INSERT INTO research_r02_candidate_outcomes(
-                        outcome_id,block_id,candidate_id,status,
-                        outcome_sha256,outcome_json,created_utc
-                    ) VALUES(?,?,?,?,?,?,?)
-                    """,
-                    (
-                        str(outcome["outcome_id"]),
-                        str(block["block_id"]),
-                        str(outcome["candidate_id"]),
-                        str(outcome["status"]),
-                        str(outcome["outcome_sha256"]),
-                        json.dumps(
-                            outcome,
-                            sort_keys=True,
-                            separators=(",", ":"),
-                        ),
-                        now,
-                    ),
-                )
-            conn.execute(
-                """
-                INSERT INTO research_r02_block_terminals(
-                    terminal_id,block_id,state,outcome_manifest_sha256,
-                    candidate_count,screen_pass_count,screen_fail_count,
-                    execution_error_count,compute_consumed_json,created_utc
-                ) VALUES(?,?,'COMPLETE_WAITING_OWNER',?,?,?,?,?,?,?)
-                """,
-                (
-                    str(manifest["terminal_id"]),
-                    str(block["block_id"]),
-                    str(manifest["outcome_manifest_sha256"]),
-                    int(manifest["candidate_count"]),
-                    int(manifest["screen_pass_count"]),
-                    int(manifest["screen_fail_count"]),
-                    int(manifest["execution_error_count"]),
-                    json.dumps(
-                        manifest["compute_consumed"],
-                        sort_keys=True,
-                        separators=(",", ":"),
-                    ),
-                    now,
-                ),
-            )
-
-    ledger = get_r02_outcome_ledger(research_id, path=path)
     if ledger is None or ledger["terminal"] is None:
         raise RuntimeError("R02_TERMINAL_PERSISTENCE_MISSING")
     if len(ledger["outcomes"]) != int(ledger["block"]["candidate_count"]):
         raise RuntimeError("R02_OUTCOME_LEDGER_INCOMPLETE")
     return ledger
+
+
+def _commit_r02_terminal_outcomes_in_connection(
+    conn: Any,
+    *,
+    research_id: str,
+    outcome_requests: list[dict[str, Any]],
+    execution_attempt_id: str | None,
+) -> dict[str, Any]:
+    ledger = _read_validated_r02_ledger(
+        conn,
+        research_id,
+        allow_incomplete_execution_attempt=True,
+    )
+    if ledger is None:
+        raise RuntimeError("R02_FROZEN_BLOCK_REQUIRED")
+    attempt = ledger.get("execution_attempt")
+    if attempt is not None and str(attempt["attempt_id"]) != str(
+        execution_attempt_id or ""
+    ):
+        raise RuntimeError("R02_EXECUTOR_OWNS_OUTCOME_COMMIT")
+    if attempt is None and execution_attempt_id is not None:
+        raise RuntimeError("R02_EXECUTION_ATTEMPT_BINDING_INVALID")
+
+    block = ledger["block"]
+    candidate_ids = [
+        str(item["candidate_id"])
+        for item in block["candidates"]
+    ]
+    manifest = build_terminal_manifest(
+        block_id=str(block["block_id"]),
+        candidate_ids=candidate_ids,
+        compute_budget=block["compute_budget"],
+        outcome_requests=outcome_requests,
+    )
+    if ledger["terminal"] is not None:
+        if str(ledger["terminal"]["outcome_manifest_sha256"]) != str(
+            manifest["outcome_manifest_sha256"]
+        ):
+            raise RuntimeError("R02_TERMINAL_ALREADY_COMMITTED")
+        return ledger
+    if ledger["outcomes"]:
+        raise RuntimeError("R02_OUTCOME_PARTIAL_STATE_DETECTED")
+
+    now = utc_now()
+    for outcome in manifest["candidate_outcomes"]:
+        conn.execute(
+            """
+            INSERT INTO research_r02_candidate_outcomes(
+                outcome_id,block_id,candidate_id,status,
+                outcome_sha256,outcome_json,created_utc
+            ) VALUES(?,?,?,?,?,?,?)
+            """,
+            (
+                str(outcome["outcome_id"]),
+                str(block["block_id"]),
+                str(outcome["candidate_id"]),
+                str(outcome["status"]),
+                str(outcome["outcome_sha256"]),
+                json.dumps(outcome, sort_keys=True, separators=(",", ":")),
+                now,
+            ),
+        )
+    conn.execute(
+        """
+        INSERT INTO research_r02_block_terminals(
+            terminal_id,block_id,state,outcome_manifest_sha256,
+            candidate_count,screen_pass_count,screen_fail_count,
+            execution_error_count,compute_consumed_json,created_utc
+        ) VALUES(?,?,'COMPLETE_WAITING_OWNER',?,?,?,?,?,?,?)
+        """,
+        (
+            str(manifest["terminal_id"]),
+            str(block["block_id"]),
+            str(manifest["outcome_manifest_sha256"]),
+            int(manifest["candidate_count"]),
+            int(manifest["screen_pass_count"]),
+            int(manifest["screen_fail_count"]),
+            int(manifest["execution_error_count"]),
+            json.dumps(
+                manifest["compute_consumed"],
+                sort_keys=True,
+                separators=(",", ":"),
+            ),
+            now,
+        ),
+    )
+    completed = _read_validated_r02_ledger(conn, research_id)
+    if completed is None or completed["terminal"] is None:
+        raise RuntimeError("R02_TERMINAL_PERSISTENCE_MISSING")
+    return completed
+
+
+def begin_r02_execution_attempt(
+    research_id: str,
+    *,
+    path: Path = DATABASE_PATH,
+) -> dict[str, Any]:
+    migrate_current(path)
+    research_id = str(research_id or "").strip()
+    if not research_id:
+        raise ValueError("R02_EXECUTION_RESEARCH_ID_REQUIRED")
+    try:
+        with connect(path) as conn:
+            conn.execute("BEGIN IMMEDIATE")
+            latest = conn.execute(
+                """
+                SELECT research_id FROM research_projects
+                ORDER BY created_utc DESC,research_id DESC LIMIT 1
+                """
+            ).fetchone()
+            if latest is None or str(latest["research_id"]) != research_id:
+                raise RuntimeError("R02_EXECUTION_CURRENT_RESEARCH_MISMATCH")
+            ledger = _read_validated_r02_ledger(conn, research_id)
+            if ledger is None:
+                raise RuntimeError("R02_FROZEN_BLOCK_REQUIRED")
+            if ledger["terminal"] is not None:
+                return {"completed": True, "ledger": ledger}
+
+            block = ledger["block"]
+            attempt_id = "R2ATT-" + stable_hash({
+                "research_id": research_id,
+                "block_id": block["block_id"],
+                "plan_sha256": block["plan_sha256"],
+                "r01_output_manifest_sha256": block[
+                    "r01_output_manifest_sha256"
+                ],
+            })[:24]
+            started_utc = utc_now()
+            conn.execute(
+                """
+                INSERT INTO research_r02_execution_attempts(
+                    attempt_id,research_id,block_id,started_utc
+                ) VALUES(?,?,?,?)
+                """,
+                (attempt_id, research_id, block["block_id"], started_utc),
+            )
+            return {
+                "completed": False,
+                "attempt_id": attempt_id,
+                "research_id": research_id,
+                "block_id": block["block_id"],
+                "started_utc": started_utc,
+            }
+    except RuntimeError:
+        raise
+    except Exception as exc:
+        raise RuntimeError("R02_EXECUTION_ATTEMPT_PERSISTENCE_FAILED") from exc
+
+
+def _execute_r02_attempt_and_commit(
+    research_id: str,
+    attempt_id: str,
+    outcome_requests: list[dict[str, Any]],
+    *,
+    expected_block_id: str,
+    expected_plan_sha256: str,
+    expected_candidate_ids: list[str],
+    path: Path = DATABASE_PATH,
+) -> dict[str, Any]:
+    migrate_current(path)
+    research_id = str(research_id or "").strip()
+    attempt_id = str(attempt_id or "").strip()
+    if (
+        not research_id
+        or not attempt_id
+        or not isinstance(outcome_requests, list)
+        or not expected_block_id
+        or not expected_plan_sha256
+        or not isinstance(expected_candidate_ids, list)
+    ):
+        raise ValueError("R02_EXECUTION_ATTEMPT_INPUT_INVALID")
+    try:
+        with connect(path) as conn:
+            conn.execute("BEGIN IMMEDIATE")
+            latest = conn.execute(
+                """
+                SELECT research_id FROM research_projects
+                ORDER BY created_utc DESC,research_id DESC LIMIT 1
+                """
+            ).fetchone()
+            if latest is None or str(latest["research_id"]) != research_id:
+                raise RuntimeError("R02_EXECUTION_CURRENT_RESEARCH_MISMATCH")
+            ledger = _read_validated_r02_ledger(
+                conn,
+                research_id,
+                allow_incomplete_execution_attempt=True,
+            )
+            if ledger is None:
+                raise RuntimeError("R02_FROZEN_BLOCK_REQUIRED")
+            if ledger["terminal"] is not None:
+                return ledger
+            attempt = ledger.get("execution_attempt")
+            if attempt is None or str(attempt["attempt_id"]) != attempt_id:
+                raise RuntimeError("R02_EXECUTION_ATTEMPT_BINDING_INVALID")
+            if (
+                ledger["block"]["block_id"] != expected_block_id
+                or ledger["block"]["plan_sha256"] != expected_plan_sha256
+                or [
+                    item["candidate_id"]
+                    for item in ledger["block"]["candidates"]
+                ]
+                != expected_candidate_ids
+            ):
+                raise RuntimeError("R02_EXECUTOR_FROZEN_AUTHORITY_CHANGED")
+            return _commit_r02_terminal_outcomes_in_connection(
+                conn,
+                research_id=research_id,
+                outcome_requests=outcome_requests,
+                execution_attempt_id=attempt_id,
+            )
+    except RuntimeError:
+        raise
+    except Exception as exc:
+        raise RuntimeError("R02_EXECUTION_TERMINAL_COMMIT_FAILED") from exc

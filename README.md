@@ -24,8 +24,8 @@ Historical MAX REBUILD evidence remains provenance only. It is not current sourc
 - Previous-epoch R00 acceptance: historical only.
 - Current-epoch R00: not executed during hosted development.
 - Current-epoch R01: blocked/not started; no scientific result is proven.
-- R02: BLOCKED / NOT STARTED.
-- Model training: 0.
+- R02 real scientific execution: BLOCKED / NOT STARTED. The authorized executor source phase uses synthetic test data only.
+- Real Research model training: 0; local/CI fitting so far is synthetic verification only.
 - ONNX: 0.
 - Research Challenger: 0.
 - H0 and ordinary hosted phases must not mutate Strategy Champion authority or start real Research execution.
@@ -37,7 +37,7 @@ R01 implementation/runtime readiness is not R01 scientific PASS.
 MAX uses Skill Workflow exact authority:
 
 ```text
-1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720
+c1d7e58a0fcadc606c8cf75c6283a17278f99259
 ```
 
 Governance model:
@@ -50,6 +50,7 @@ Governance model:
 - `docs/sequence/generated/` = generated static sequence evidence.
 - [Canonical project manifest](docs/PROJECT_MANIFEST.md).
 - [Current state](docs/CURRENT_STATE.md) and [system overview](docs/SYSTEM_OVERVIEW.md).
+- [Current source roadmap](docs/ROADMAP.md).
 
 Do not manually patch generated canonical Markdown. Repair source/`.workflow` authority and regenerate.
 

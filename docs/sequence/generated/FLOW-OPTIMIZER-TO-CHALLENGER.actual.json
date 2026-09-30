@@ -18,6 +18,20 @@
   },
   "edges": [
     {
+      "action": "POST route",
+      "evidence": "STATIC",
+      "from": "HTTP /jobs/{job_id}/challengers",
+      "resolver": "python_route_decorator",
+      "to": "backend/max_backend/optimizer_api.py::promote_qualified_candidates"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /jobs/{job_id}/qualified-candidates",
+      "resolver": "python_route_decorator",
+      "to": "backend/max_backend/optimizer_api.py::get_qualified_candidates"
+    },
+    {
       "action": "_bundle_manifest",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_bundle.py::_build_bundle",
@@ -387,6 +401,13 @@
       "from": "backend/max_backend/challenger_bundle.py::write_challenger_set",
       "resolver": "python_ast",
       "to": "backend/max_backend/optimizer_core.py::parse_set_optimizer_entries"
+    },
+    {
+      "action": "join",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::write_challenger_set",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_executor.py::test_bounded_fit_predict_stops_timed_out_worker.FakeProcess.join"
     },
     {
       "action": "conn.execute",
@@ -1544,6 +1565,13 @@
       "to": "backend/max_backend/workflow_store.py::migrate_current"
     },
     {
+      "action": "join",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::update_batch",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_executor.py::test_bounded_fit_predict_stops_timed_out_worker.FakeProcess.join"
+    },
+    {
       "action": "conn.execute",
       "evidence": "STATIC",
       "from": "backend/max_backend/workflow_store.py::update_batch",
@@ -1572,6 +1600,20 @@
   "generated": true,
   "generated_by": "generate_sequence_actual.py",
   "nodes": [
+    {
+      "id": "HTTP /jobs/{job_id}/challengers",
+      "kind": "external",
+      "label": "HTTP /jobs/{job_id}/challengers",
+      "language": "HTTP",
+      "locator": "HTTP /jobs/{job_id}/challengers"
+    },
+    {
+      "id": "HTTP /jobs/{job_id}/qualified-candidates",
+      "kind": "external",
+      "label": "HTTP /jobs/{job_id}/qualified-candidates",
+      "language": "HTTP",
+      "locator": "HTTP /jobs/{job_id}/qualified-candidates"
+    },
     {
       "id": "backend/max_backend/challenger_bundle.py::_build_bundle",
       "kind": "function",
@@ -2531,8 +2573,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::get_batch",
       "language": "Python",
-      "line_end": 661,
-      "line_start": 638,
+      "line_end": 681,
+      "line_start": 658,
       "locator": "backend/max_backend/workflow_store.py::get_batch"
     },
     {
@@ -2540,8 +2582,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::insert_challenger_batch_rows",
       "language": "Python",
-      "line_end": 870,
-      "line_start": 756,
+      "line_end": 890,
+      "line_start": 776,
       "locator": "backend/max_backend/workflow_store.py::insert_challenger_batch_rows"
     },
     {
@@ -2549,7 +2591,7 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::migrate_current",
       "language": "Python",
-      "line_end": 635,
+      "line_end": 655,
       "line_start": 137,
       "locator": "backend/max_backend/workflow_store.py::migrate_current"
     },
@@ -2558,8 +2600,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::prepare_batch",
       "language": "Python",
-      "line_end": 713,
-      "line_start": 664,
+      "line_end": 733,
+      "line_start": 684,
       "locator": "backend/max_backend/workflow_store.py::prepare_batch"
     },
     {
@@ -2567,8 +2609,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::update_batch",
       "language": "Python",
-      "line_end": 753,
-      "line_start": 716,
+      "line_end": 773,
+      "line_start": 736,
       "locator": "backend/max_backend/workflow_store.py::update_batch"
     },
     {
@@ -2590,16 +2632,25 @@
       "locator": "backend/tests/test_m01_recovery.py::good_pass"
     },
     {
+      "id": "backend/tests/test_r02_executor.py::test_bounded_fit_predict_stops_timed_out_worker.FakeProcess.join",
+      "kind": "method",
+      "label": "backend/tests/test_r02_executor.py::test_bounded_fit_predict_stops_timed_out_worker.FakeProcess.join",
+      "language": "Python",
+      "line_end": 452,
+      "line_start": 451,
+      "locator": "backend/tests/test_r02_executor.py::test_bounded_fit_predict_stops_timed_out_worker.FakeProcess.join"
+    },
+    {
       "id": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute",
       "kind": "method",
       "label": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute",
       "language": "Python",
-      "line_end": 665,
-      "line_start": 664,
+      "line_end": 669,
+      "line_start": 668,
       "locator": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     }
   ],
-  "observed_head": "c913c47a45ca54d805470caf40bb54bf655b45c6",
+  "observed_head": "90538f289df9492e35c0308baebc94f1e58abd20",
   "schema_version": 1,
-  "source_digest": "79e949b09cc369109e717fa3b495ad9bb16d89b67ba0feead151ced8df9ea119"
+  "source_digest": "d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8883a543"
 }

@@ -1094,12 +1094,12 @@
       "kind": "method",
       "label": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute",
       "language": "Python",
-      "line_end": 665,
-      "line_start": 664,
+      "line_end": 669,
+      "line_start": 668,
       "locator": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     }
   ],
-  "observed_head": "c913c47a45ca54d805470caf40bb54bf655b45c6",
+  "observed_head": "90538f289df9492e35c0308baebc94f1e58abd20",
   "schema_version": 1,
-  "source_digest": "79e949b09cc369109e717fa3b495ad9bb16d89b67ba0feead151ced8df9ea119"
+  "source_digest": "d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8883a543"
 }

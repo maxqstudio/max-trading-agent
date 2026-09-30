@@ -202,7 +202,7 @@
       ]
     },
     {
-      "claim": "R02 source may freeze one Owner-authorized bounded Discovery block after an accepted current R01 authority, but this accepted freeze authority is not scientific execution: no trainer, model fitting, R03 qualification, ONNX, Challenger or Champion authority is opened.",
+      "claim": "The R02 executor source may fit deterministic synthetic fixtures only; real current-epoch R00/R01/R02 execution remains blocked/not started, and executor source capability does not itself grant real runtime authorization or scientific proof.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
@@ -216,11 +216,12 @@
         "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
         "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery"
       ],
-      "status": "PASS",
+      "status": "NOT_PROVEN",
       "tests": [
         "backend/tests/test_r02_preflight.py",
         "backend/tests/test_r02_authorization_service.py",
-        "backend/tests/test_r02_authorization_store.py"
+        "backend/tests/test_r02_authorization_store.py",
+        "backend/tests/test_r02_executor.py"
       ]
     },
     {
@@ -242,7 +243,7 @@
     },
     {
       "id": "TRUTH-R02-FREEZE-001",
-      "claim": "R02 authorization/frozen Discovery authority is deterministic, immutable and atomic: exact Owner confirmation, current Research/R01 output lineage, plan hash/id, candidate identities, one-block cardinality and explicit compute budget are frozen all-or-nothing before any future executor may exist.",
+      "claim": "R02 authorization/frozen Discovery authority is deterministic, immutable and atomic: exact Owner confirmation, current Research/R01 output lineage, plan hash/id, candidate identities, one-block cardinality and explicit compute budget are frozen all-or-nothing before the internal executor may consume it.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
@@ -284,6 +285,31 @@
         "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
       ],
       "status": "PASS"
+    },
+    {
+      "id": "TRUTH-R02-EXECUTOR-001",
+      "claim": "The bounded R02 executor verifies current Research, accepted R01 output and the immutable frozen candidate universe, consumes only the R01 Discovery-only training artifact, supports LightGBM OpenCL GPU and XGBoost CUDA GPU adapters plus a Random Forest CPU control, and creates outcomes internally through the immutable ledger. CI fits synthetic fixtures on CPU; synthetic GPU smoke is not scientific evidence, and real R02 remains blocked.",
+      "documents": [
+        "PROJECT_TRUTH_SYNC.md"
+      ],
+      "source_owners": [
+        "backend/max_backend/research_r01_service.py::read_r01_discovery_training_dataset",
+        "backend/max_backend/research_r02_executor.py::execute_r02_discovery_block",
+        "backend/max_backend/research_r02_executor.py::build_discovery_split",
+        "backend/max_backend/research_r02_models.py::fit_predict_candidate",
+        "backend/max_backend/research_r02_store.py::begin_r02_execution_attempt",
+        "backend/max_backend/research_r02_store.py::_execute_r02_attempt_and_commit",
+        "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes"
+      ],
+      "tests": [
+        "backend/tests/test_r01_research.py",
+        "backend/tests/test_r02_executor.py"
+      ],
+      "runtime_evidence": [
+        "SYNTHETIC_TESTS_ONLY",
+        "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
+      ],
+      "status": "NOT_PROVEN"
     }
   ],
   "relations": [
@@ -304,12 +330,6 @@
       "notes": "R02 remains blocked while no accepted R01 scientific result exists.",
       "other_claim_id": "TRUTH-R01-STATE-001",
       "relation": "REQUIRES"
-    },
-    {
-      "claim_id": "TRUTH-R02-FREEZE-001",
-      "other_claim_id": "TRUTH-R02-BLOCK-001",
-      "relation": "REQUIRES",
-      "notes": "Frozen authorization preserves the execution block; authorization is not scientific execution."
     }
   ],
   "schema_version": 1

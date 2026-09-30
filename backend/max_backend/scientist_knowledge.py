@@ -70,6 +70,8 @@ SOURCE_ALLOWLIST = (
     "backend/max_backend/research_r02_outcome.py",
     "backend/max_backend/research_r02_service.py",
     "backend/max_backend/research_r02_store.py",
+    "backend/max_backend/research_r02_models.py",
+    "backend/max_backend/research_r02_executor.py",
     "backend/max_backend/scientist_knowledge.py",
     "backend/max_backend/scientist_context.py",
     "backend/max_backend/scientist_store.py",

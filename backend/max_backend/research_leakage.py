@@ -1133,6 +1133,14 @@ def run_adversarial_suite(
         and protected_manifest.get("fresh_forward", {}).get("training_access") is False
         and protected_manifest.get("fresh_forward", {}).get("scientist_access") is False
     )
+    discovery_access = protected_manifest.get("discovery", {})
+    protected_discovery = (
+        discovery_access.get("adaptive_access") is True
+        and discovery_access.get("training_access") is True
+        and discovery_access.get("training_access_scope") == "DISCOVERY_ONLY"
+        and discovery_access.get("training_authorization_required")
+        == "VALIDATED_OWNER_AUTHORIZED_R02_FROZEN_BLOCK"
+    )
     base = int(dependency["full_base_dependency_main_bars"])
     label_horizon = int(dependency["label_dependency_main_bars"])
     purge = int(dependency["minimum_legal_purge_main_bars"])
@@ -1386,6 +1394,17 @@ def run_adversarial_suite(
             and locked_target_boundary_attack["passed"],
             locked_target_boundary_attack,
         ),
+        _gate(
+            "24_DISCOVERY_TRAINING_OWNER_SCOPE",
+            protected_discovery,
+            {
+                "training_access": discovery_access.get("training_access"),
+                "training_access_scope": discovery_access.get("training_access_scope"),
+                "training_authorization_required": discovery_access.get(
+                    "training_authorization_required"
+                ),
+            },
+        ),
     ]
 
     from .research_dataset import validate_causal_feature_invariance
@@ -1472,7 +1491,11 @@ def protected_partition_manifest(
         "discovery": {
             "from": parsed["discovery"][0], "to": parsed["discovery"][1],
             "adaptive_access": True,
-            "training_access": False,
+            "training_access": True,
+            "training_access_scope": "DISCOVERY_ONLY",
+            "training_authorization_required": (
+                "VALIDATED_OWNER_AUTHORIZED_R02_FROZEN_BLOCK"
+            ),
             "scientist_access": True,
         },
         "locked_oos": {

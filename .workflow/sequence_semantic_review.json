@@ -6,8 +6,8 @@
         "backend/max_backend/challenger_store.py::consumed_source_identities"
       ],
       "flow_id": "FLOW-CHALLENGER-CONSUMPTION",
-      "generated_edges": 71,
-      "generated_nodes": 49,
+      "generated_edges": 89,
+      "generated_nodes": 50,
       "mode": "DURING",
       "non_python_structured_source_owners": [
         "frontend/src/ChallengersPage.tsx::ChallengersPage"
@@ -38,8 +38,8 @@
         "backend/max_backend/challenger_operations.py::challenger_registry_page"
       ],
       "flow_id": "FLOW-CHALLENGER-DETAIL",
-      "generated_edges": 63,
-      "generated_nodes": 44,
+      "generated_edges": 79,
+      "generated_nodes": 46,
       "mode": "DURING",
       "non_python_structured_source_owners": [
         "frontend/src/ChallengersPage.tsx::ChallengersPage"
@@ -67,8 +67,8 @@
         "backend/max_backend/promotion_service.py::promote_strategy_challenger"
       ],
       "flow_id": "FLOW-CHALLENGER-TO-CHAMPION",
-      "generated_edges": 232,
-      "generated_nodes": 122,
+      "generated_edges": 251,
+      "generated_nodes": 124,
       "mode": "DURING",
       "non_python_structured_source_owners": [
         "frontend/src/ChampionPage.tsx::ChampionPage",
@@ -99,8 +99,8 @@
         "backend/max_backend/optimizer_api.py::promote_qualified_candidates"
       ],
       "flow_id": "FLOW-OPTIMIZER-TO-CHALLENGER",
-      "generated_edges": 196,
-      "generated_nodes": 113,
+      "generated_edges": 225,
+      "generated_nodes": 117,
       "mode": "DURING",
       "non_python_structured_source_owners": [
         "frontend/src/OptimizerPage.tsx::OptimizerPage"
@@ -132,8 +132,8 @@
         "backend/max_backend/research_service.py::r00_preflight"
       ],
       "flow_id": "FLOW-R00-INITIALIZATION",
-      "generated_edges": 325,
-      "generated_nodes": 178,
+      "generated_edges": 367,
+      "generated_nodes": 180,
       "mode": "DURING",
       "non_python_structured_source_owners": [
         "frontend/src/ResearchPage.tsx::ResearchPage"
@@ -164,8 +164,8 @@
         "backend/max_backend/research_r01_service.py::prepare_r01_verified_source"
       ],
       "flow_id": "FLOW-R01-SOURCE-PIPELINE",
-      "generated_edges": 410,
-      "generated_nodes": 213,
+      "generated_edges": 471,
+      "generated_nodes": 218,
       "mode": "DURING",
       "non_python_structured_source_owners": [
         "frontend/src/DataPage.tsx::DataPage"
@@ -205,8 +205,8 @@
         "backend/max_backend/research_r01_service.py::start_r01"
       ],
       "flow_id": "FLOW-RESEARCH-CONFIG-SNAPSHOT",
-      "generated_edges": 576,
-      "generated_nodes": 300,
+      "generated_edges": 645,
+      "generated_nodes": 305,
       "mode": "DURING",
       "non_python_structured_source_owners": [
         "frontend/src/ResearchPage.tsx::ResearchPage"
@@ -237,8 +237,8 @@
         "backend/max_backend/scientist_api.py::get_status"
       ],
       "flow_id": "FLOW-SCIENTIST-KNOWLEDGE",
-      "generated_edges": 74,
-      "generated_nodes": 47,
+      "generated_edges": 85,
+      "generated_nodes": 49,
       "mode": "DURING",
       "non_python_structured_source_owners": [
         "frontend/src/ScientistPage.tsx::ScientistPage"
@@ -278,8 +278,8 @@
       ],
       "python_source_owners_outside_static_reachable_graph": [],
       "non_python_structured_source_owners": [],
-      "generated_nodes": 57,
-      "generated_edges": 97,
+      "generated_nodes": 78,
+      "generated_edges": 159,
       "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
       "semantic_review": "PASS",
       "outside_graph_classification": "NONE",
@@ -309,8 +309,8 @@
       ],
       "python_source_owners_outside_static_reachable_graph": [],
       "non_python_structured_source_owners": [],
-      "generated_nodes": 66,
-      "generated_edges": 124,
+      "generated_nodes": 83,
+      "generated_edges": 181,
       "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
       "semantic_review": "PASS",
       "outside_graph_classification": "NONE",
@@ -340,8 +340,8 @@
       ],
       "python_source_owners_outside_static_reachable_graph": [],
       "non_python_structured_source_owners": [],
-      "generated_nodes": 57,
-      "generated_edges": 103,
+      "generated_nodes": 78,
+      "generated_edges": 164,
       "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
       "semantic_review": "PASS",
       "outside_graph_classification": "NONE",
@@ -372,7 +372,7 @@
   "runtime_trace_required": false,
   "schema_version": 1,
   "scope": "CURRENT",
-  "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720",
+  "skill_authority_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
   "unresolved_critical_sequence_bindings": 0,
   "hosted_governance_rebase": {
     "repository": "maxqstudio/max-trading-agent",

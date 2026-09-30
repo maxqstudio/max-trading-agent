@@ -3,20 +3,22 @@
 # CURRENT STATE
 
 Last updated: generated from current specs
-Authority verified at SHA: c913c47a45ca54d805470caf40bb54bf655b45c6
+Authority verified at SHA: 35f237f25a898b60b2a5123d6246ebc34fcbec8d
 Governance profile: strict
 
 ## Current phase
-Phase: R02_OUTCOME_READBACK_INTEGRITY
+Phase: R02_CHEAP_SCREEN_TRAINER_EXECUTOR_SOURCE
 Status: SOURCE_PHASE_COMPLETE_AWAITING_EXTERNAL_ACCEPTANCE
+Roadmap phase: R02_CHEAP_SCREEN_TRAINER_EXECUTOR_SOURCE
+ROADMAP_SYNC: PASS
 
 ## Source
 Repository: maxqstudio/max-trading-agent
-Branch: main
+Branch: work/r02-cheap-screen-executor
 Authoritative SHA: external final acceptance evidence
-Last accepted SHA: c913c47a45ca54d805470caf40bb54bf655b45c6
+Last accepted SHA: 35f237f25a898b60b2a5123d6246ebc34fcbec8d
 Current candidate SHA: external final acceptance evidence
-Current source digest: 79e949b09cc369109e717fa3b495ad9bb16d89b67ba0feead151ced8df9ea119
+Current source digest: d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8883a543
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
@@ -33,7 +35,7 @@ PROJECT_DOCS_SYNC: PASS
 ## Sequence governance
 Sequence policy: REQUIRED
 Current sequence mode: DURING
-Current sequence session: docs/sequence/sessions/FLOW-R02-OUTCOME-READBACK-INTEGRITY.json (12 current DURING sessions)
+Current sequence session: docs/sequence/sessions/FLOW-R02-CHEAP-SCREEN-EXECUTOR.json (13 current DURING sessions)
 SEQUENCE_SYNC: PASS
 
 ## Proven
@@ -43,35 +45,33 @@ SEQUENCE_SYNC: PASS
 - R02_CHEAP_SCREEN_OUTCOME_LEDGER is accepted at main c913c47a45ca54d805470caf40bb54bf655b45c6; Windows CI run 36424489731 passed with backend 581, frontend 53 tests across 10 files, source-only policy, Skill Workflow provenance, STRICT_SELFTEST, governance, pip check, lint, build and npm dependency tree.
 - R02_OUTCOME_READBACK_INTEGRITY implementation and tracked governance are complete; candidate-tree scan, branch CI, PR-head CI, squash merge and exact merged-main CI passed. Exact final SHA and CI identity are recorded externally per D-012.
 - The supplied New-PC baseline evidence reports the Windows symlink probe PASS, M08 path-safety test PASS, and the exact full backend baseline 581 passed, 0 skipped, 0 failed.
-- Skill Workflow authority remains pinned at 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720; the newer main delta was inspected and not silently adopted.
+- Skill Workflow current upstream authority is 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8; its reviewed delta adds class-method symbol resolution, HTTP route predecessor reachability, and STRICT regressions for both; vendored tools and CI pin match this authority.
 - Local R02 integrity gates pass: targeted 147 tests, full backend 644 tests, frontend 53 tests across 10 files, pip check, lint, build, npm dependency tree, Project Docs, handoff, human comprehension, cross-document and sequence validation.
+- Current R02 trainer/executor source has local synthetic verification: targeted R02/R01 set 257 passed, full backend 706 passed, frontend 53 tests across 10 files, pip check, lint, build and npm dependency tree passed; R02 Discovery verification reads/hash-checks only its allowlisted safe artifacts and leaves dataset.csv, data_quality_report.json and leakage_report.json contents unread; local LightGBM OpenCL and XGBoost CUDA smoke used synthetic data only.
 
 ## Not proven
 - Any real current-epoch R00/R01 scientific result or real R02 authorization/execution.
-- Any actual model training, Cheap Screen runtime outcome, Qualified Pool, ONNX or Research Challenger.
-- Any real Owner-PC runtime/bootstrap/MT5/browser behavior.
+- Any real model training, Cheap Screen runtime outcome, Qualified Pool, ONNX or Research Challenger.
+- Any real Owner-PC, browser, MetaEditor, broker or MT5 runtime behavior.
 
 ## Known blockers
-- No accepted current-epoch R00/R01 scientific result exists, so real R02 remains BLOCKED / NOT STARTED.
-- No trainer/executor is implemented or authorized; this source phase uses synthetic persisted outcomes only.
-- Real MetaTrader 5 runtime and final Owner-PC acceptance remain NOT_PROVEN and deferred.
+- No accepted current-epoch R00/R01 scientific result or real R02 Owner authorization exists; real R02 remains BLOCKED / NOT STARTED by design.
+- Real MetaTrader 5 runtime and final Owner-PC acceptance remain NOT_PROVEN and deferred until the hosted source roadmap is complete.
 
 ## Known defects
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Control Room determines and authorizes the next GitHub source phase under the roadmap.
+- Exact final main SHA and hosted CI identity are external acceptance evidence per D-012; do not write a self-referential final SHA into tracked state.
+- Control Room reviews external acceptance evidence and determines the next authorized GitHub source phase; real scientific execution remains blocked.
 
 ## Explicitly blocked
-- Owner-PC testing between ordinary GitHub development phases.
-- Any real current-epoch R00, R01 or R02 scientific execution.
-- Any model fitting/training or Cheap Screen executor.
+- Owner-PC final runtime acceptance before all hosted source-roadmap phases are complete.
+- Any real current-epoch R00, R01 or R02 scientific execution during this synthetic-only source phase.
+- Real market-data model fitting or training; synthetic deterministic fitting is authorized only inside local tests and CI.
 - Any API or UI action that submits fabricated Cheap Screen outcomes.
 - Automatic second Discovery block creation.
-- Cheap Screen scientific qualification or Qualified Pool admission.
-- ONNX generation.
-- Research Challenger creation.
-- Strategy Champion mutation.
-- Live trading.
-- Adding heavy ML runtime dependencies before an executing R02 slice requires them.
+- Cheap Screen scientific qualification or Qualified Pool admission; R03 Full WFA remains the sole future admission authority.
+- Locked OOS or Fresh/Forward target-outcome access by R02 training.
+- ONNX production, Research Challenger creation, Champion mutation or live trading in this phase.
 - Unrelated Strategy, optimizer, EA or UI refactors.

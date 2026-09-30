@@ -304,6 +304,24 @@ def filter_reachable(nodes: list[dict], edges: list[dict], entries: list[str], d
                 keep.add(nxt)
                 q.append((nxt, d + 1))
 
+    # Server-side HTTP route nodes are predecessors of handler entrypoints.
+    # Preserve those external predecessors after forward reachability so a
+    # frozen route plan can prove HTTP /path -> handler without declaring
+    # external route nodes as implementation entrypoints.
+    changed = True
+    while changed:
+        changed = False
+        for edge in edges:
+            source = str(edge.get("from", ""))
+            target = str(edge.get("to", ""))
+            if (
+                target in keep
+                and source.startswith("HTTP ")
+                and source not in keep
+            ):
+                keep.add(source)
+                changed = True
+
     return (
         [n for n in nodes if n["id"] in keep],
         [e for e in edges if e["from"] in keep and e["to"] in keep],
@@ -380,7 +398,7 @@ def main() -> int:
         + render_graph_mermaid(graph)
     )
     output_mermaid.parent.mkdir(parents=True, exist_ok=True)
-    output_mermaid.write_text(mermaid, encoding="utf-8")
+    output_mermaid.write_text(mermaid, encoding="utf-8", newline="\n")
 
     print(f"OBSERVED_HEAD={head}")
     print(f"SOURCE_DIGEST={source_digest}")

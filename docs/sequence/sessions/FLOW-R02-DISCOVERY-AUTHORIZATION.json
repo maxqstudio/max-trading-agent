@@ -29,7 +29,7 @@
     ],
     "graph": "docs/sequence/generated/FLOW-R02-DISCOVERY-AUTHORIZATION.actual.json",
     "diagram": "docs/sequence/generated/FLOW-R02-DISCOVERY-AUTHORIZATION.actual.mmd",
-    "source_digest": "79e949b09cc369109e717fa3b495ad9bb16d89b67ba0feead151ced8df9ea119"
+    "source_digest": "d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8883a543"
   },
   "runtime_trace": {
     "required": false,

@@ -344,6 +344,16 @@ def migrate_current(path: Path = DATABASE_PATH) -> None:
             CREATE INDEX IF NOT EXISTS ix_research_r02_blocks_created
             ON research_r02_discovery_blocks(created_utc DESC, block_id DESC);
 
+            CREATE TABLE IF NOT EXISTS research_r02_execution_attempts (
+                attempt_id TEXT PRIMARY KEY,
+                research_id TEXT NOT NULL UNIQUE,
+                block_id TEXT NOT NULL UNIQUE,
+                started_utc TEXT NOT NULL,
+                FOREIGN KEY(research_id) REFERENCES research_projects(research_id),
+                FOREIGN KEY(block_id)
+                    REFERENCES research_r02_discovery_blocks(block_id)
+            );
+
             CREATE TABLE IF NOT EXISTS research_r02_candidate_specs (
                 candidate_id TEXT PRIMARY KEY,
                 block_id TEXT NOT NULL,
@@ -433,6 +443,16 @@ def migrate_current(path: Path = DATABASE_PATH) -> None:
             BEFORE DELETE ON research_r02_discovery_blocks
             BEGIN
                 SELECT RAISE(ABORT, 'R02_DISCOVERY_BLOCK_APPEND_ONLY');
+            END;
+            CREATE TRIGGER IF NOT EXISTS research_r02_execution_attempt_no_update
+            BEFORE UPDATE ON research_r02_execution_attempts
+            BEGIN
+                SELECT RAISE(ABORT, 'R02_EXECUTION_ATTEMPT_IMMUTABLE');
+            END;
+            CREATE TRIGGER IF NOT EXISTS research_r02_execution_attempt_no_delete
+            BEFORE DELETE ON research_r02_execution_attempts
+            BEGIN
+                SELECT RAISE(ABORT, 'R02_EXECUTION_ATTEMPT_APPEND_ONLY');
             END;
             CREATE TRIGGER IF NOT EXISTS research_r02_candidate_no_update
             BEFORE UPDATE ON research_r02_candidate_specs

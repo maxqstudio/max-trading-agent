@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from copy import deepcopy
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -10,6 +10,7 @@ import pytest
 import max_backend.research_r01_service as r01
 import max_backend.research_r01_store as r01_store
 import max_backend.research_service as r00
+import max_backend.research_r02_executor as r02_executor
 import max_backend.scientist_context as scientist_context
 from max_backend.artifact_control import register_artifact
 from max_backend.db import connect, ensure_baseline_registered, initialize_database
@@ -18,6 +19,15 @@ from max_backend.research_contract import (
     OWNER_CUMULATIVE_E2E_AUTHORITY,
     stable_hash,
 )
+from max_backend.research_cp32 import FEATURE_NAMES
+from max_backend.research_r02_contract import build_discovery_plan
+from max_backend.research_r02_service import OWNER_R02_CONFIRMATION
+from max_backend.research_r02_service import r02_preflight
+from max_backend.research_r02_store import (
+    authorize_and_freeze_r02_discovery,
+    begin_r02_execution_attempt,
+)
+from max_backend.research_r02_executor import execute_r02_discovery_block
 from max_backend.research_r01_store import (
     create_r01_run,
     get_r01_run,
@@ -242,6 +252,8 @@ def _fake_dataset() -> dict:
         return {
             "source_row_id": source_row_id,
             "signal_time": signal_time,
+            "decision_time": signal_time,
+            **{name: float(source_row_id) for name in FEATURE_NAMES},
             "label": label,
             "long_r": long_r,
             "short_r": short_r,
@@ -308,7 +320,7 @@ def _pass_leakage(*_args, **_kwargs) -> dict:
         "status": "PASS",
         "legal_pipeline": "PASS",
         "deliberately_leaky_pipeline": "DETECTED_FAIL",
-        "gate_count": 24,
+        "gate_count": 25,
         "gates": [],
         "model_training_performed": False,
         "onnx_export_performed": False,
@@ -318,6 +330,101 @@ def _pass_leakage(*_args, **_kwargs) -> dict:
 def _install_success_stubs(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(r01, "build_dataset", lambda *_args, **_kwargs: deepcopy(_fake_dataset()))
     monkeypatch.setattr(r01, "run_adversarial_suite", _pass_leakage)
+
+
+def _freeze_synthetic_r02_block(
+    *,
+    db: Path,
+    parent: dict,
+    dataset_id: str,
+    output_sha: str,
+) -> dict:
+    parent_lineage = {
+        "research_parent_id": parent["research_parent_id"],
+        "parent_strategy_id": parent["parent_strategy_id"],
+        "dataset_id": dataset_id,
+        "r01_output_manifest_sha256": output_sha,
+    }
+    candidates = []
+    model_specs = (
+        ("lightgbm", 11, {
+            "n_estimators": 8,
+            "max_depth": 3,
+            "num_leaves": 7,
+            "learning_rate": 0.1,
+        }),
+        ("xgboost", 42, {
+            "n_estimators": 8,
+            "max_depth": 3,
+            "learning_rate": 0.1,
+            "subsample": 1.0,
+            "colsample_bytree": 1.0,
+        }),
+        ("random_forest", 7, {
+            "n_estimators": 8,
+            "max_depth": 3,
+            "min_samples_leaf": 1,
+        }),
+    )
+    for family, seed, topology in model_specs:
+        candidates.append({
+            "research_id": parent["research_id"],
+            "model_family": family,
+            "topology_spec": topology,
+            "feature_contract": FEATURE_CONTRACT,
+            "label_contract": r01.LABEL_CONTRACT_ID,
+            "seed": seed,
+            "preprocessing": {"scaling": "NONE"},
+            "training_configuration": {
+                "objective": "MULTICLASS",
+                "class_weighting": "BALANCED",
+                "accelerator": "CPU",
+                "device_id": None,
+                "platform_id": None,
+            },
+            "parent_lineage": deepcopy(parent_lineage),
+        })
+    plan = build_discovery_plan({
+        "research_id": parent["research_id"],
+        "r01_output_manifest_sha256": output_sha,
+        "feature_contract": FEATURE_CONTRACT,
+        "label_contract": r01.LABEL_CONTRACT_ID,
+        "parent_lineage": parent_lineage,
+        "candidate_count": len(candidates),
+        "compute_budget": {"value": 120, "unit": "FIT_SECONDS"},
+        "candidates": candidates,
+    })
+    payload = {
+        "schema": "MAX_RESEARCH_OWNER_AUTHORIZATION_R02_V1",
+        "gate": "R02",
+        "action": "AUTHORIZE_DISCOVERY",
+        "confirmed": True,
+        "owner_confirmation": OWNER_R02_CONFIRMATION,
+        "research_id": parent["research_id"],
+        "r01_output_manifest_sha256": output_sha,
+        "plan_id": plan["plan_id"],
+        "plan_sha256": plan["plan_sha256"],
+        "candidate_count": plan["candidate_count"],
+        "candidate_ids": plan["candidate_ids"],
+        "compute_budget": plan["compute_budget"],
+        "cheap_screen_qualification_authority": False,
+        "automatic_second_discovery_block": False,
+        "execution_available": False,
+    }
+    payload_sha = stable_hash(payload)
+    authorization, block = authorize_and_freeze_r02_discovery(
+        authorization_record={
+            "authorization_id": "RAUTH-R02-" + payload_sha[:24],
+            "research_id": parent["research_id"],
+            "confirmed": True,
+            "payload_sha256": payload_sha,
+            "payload": payload,
+            "authorized_utc": "2026-09-30T00:00:00+00:00",
+        },
+        plan=plan,
+        path=db,
+    )
+    return {"authorization": authorization, "block": block}
     monkeypatch.setattr(
         r01,
         "write_dataset_csv",
@@ -688,6 +795,40 @@ def test_r01_success_is_atomic_terminal_and_idempotent(
     assert first["research_challenger"] == 0
     assert first["champion_mutation"] == "NONE"
     assert first["r02_executable"] is False
+    artifact_paths = r01._paths(
+        parent["research_id"],
+        first["run"]["run_id"],
+        first["run"]["dataset_id"],
+    )
+    discovery_path = artifact_paths["discovery_training_dataset"]
+    discovery_manifest_path = artifact_paths["discovery_training_manifest"]
+    assert discovery_path.is_file()
+    assert discovery_manifest_path.is_file()
+    discovery_manifest = json.loads(discovery_manifest_path.read_text(encoding="utf-8"))
+    assert discovery_manifest["scope"] == "DISCOVERY_ONLY"
+    assert discovery_manifest["research_id"] == parent["research_id"]
+    assert discovery_manifest["dataset_id"] == first["run"]["dataset_id"]
+    assert discovery_manifest["row_count"] == 1
+    assert discovery_manifest["feature_order"] == list(FEATURE_NAMES)
+    assert discovery_manifest["source_row_ids_sha256"]
+    assert first["integrity"]["checks"]["discovery_training_artifact"] is True
+    discovery_csv = discovery_path.read_text(encoding="utf-8")
+    assert "source_row_id,signal_time," in discovery_csv
+    assert "\n0," in discovery_csv
+    assert "\n2," not in discovery_csv
+    assert "404.125" not in discovery_csv
+    assert "808.25" not in discovery_csv
+    assert "909.5" not in discovery_csv
+    assert discovery_manifest["training_authorization_required"] == (
+        "VALIDATED_OWNER_AUTHORIZED_R02_FROZEN_BLOCK"
+    )
+    protected_manifest = json.loads(
+        artifact_paths["protected"].read_text(encoding="utf-8")
+    )
+    assert protected_manifest["discovery"]["training_access"] is True
+    assert protected_manifest["discovery"]["training_access_scope"] == "DISCOVERY_ONLY"
+    assert protected_manifest["locked_oos"]["training_access"] is False
+    assert protected_manifest["fresh_forward"]["training_access"] is False
     current_stage = r00.canonical_research_stage(parent["research_id"], path=db)
     assert current_stage["stage"] == "DATA_FOUNDATION"
     assert current_stage["internal_gate"] == "R01"
@@ -758,6 +899,314 @@ def test_r01_success_is_atomic_terminal_and_idempotent(
         for item in list_memory_events(parent["research_id"], path=db)
         if item["stage"] == "R01"
     ]) == 1
+
+
+def test_r01_discovery_training_artifact_tampering_fails_integrity(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    db, parent = _setup(tmp_path, monkeypatch)
+    _install_success_stubs(monkeypatch)
+    result = r01.start_r01(_request(tmp_path, parent), path=db)
+    assert result["integrity"]["status"] == "VERIFIED"
+
+    artifacts = r01._paths(
+        parent["research_id"], result["run"]["run_id"], result["run"]["dataset_id"]
+    )
+    original = artifacts["discovery_training_dataset"].read_text(encoding="utf-8")
+    artifacts["discovery_training_dataset"].write_text(
+        original.replace("signal_time", "signal_time_tampered", 1),
+        encoding="utf-8",
+        newline="",
+    )
+
+    integrity = r01.validate_r01_integrity(path=db)
+
+    assert integrity["status"] == "INTEGRITY_FAIL"
+    assert integrity["checks"]["discovery_training_artifact"] is False
+    assert "artifact_file_hashes" in integrity["failures"]
+
+
+def test_r01_discovery_training_reader_requires_frozen_r02_owner_authority(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    db, parent = _setup(tmp_path, monkeypatch)
+    _install_success_stubs(monkeypatch)
+    result = r01.start_r01(_request(tmp_path, parent), path=db)
+
+    with pytest.raises(
+        RuntimeError,
+        match="R01_DISCOVERY_TRAINING_FROZEN_BLOCK_REQUIRED",
+    ):
+        r01.read_r01_discovery_training_dataset(
+            research_id=parent["research_id"],
+            dataset_id=result["run"]["dataset_id"],
+            r01_output_manifest_sha256=result["run"]["output_manifest_sha"],
+            block_id="RDISC-NOT-AUTHORIZED",
+            path=db,
+        )
+
+
+def test_r01_discovery_training_reader_returns_only_frozen_discovery_rows(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    db, parent = _setup(tmp_path, monkeypatch)
+    _install_success_stubs(monkeypatch)
+    result = r01.start_r01(_request(tmp_path, parent), path=db)
+    frozen = _freeze_synthetic_r02_block(
+        db=db,
+        parent=parent,
+        dataset_id=result["run"]["dataset_id"],
+        output_sha=result["run"]["output_manifest_sha"],
+    )
+
+    dataset = r01.read_r01_discovery_training_dataset(
+        research_id=parent["research_id"],
+        dataset_id=result["run"]["dataset_id"],
+        r01_output_manifest_sha256=result["run"]["output_manifest_sha"],
+        block_id=frozen["block"]["block_id"],
+        path=db,
+    )
+
+    assert dataset["feature_order"] == list(FEATURE_NAMES)
+    assert dataset["label_contract"] == r01.LABEL_CONTRACT_ID
+    assert [row["source_row_id"] for row in dataset["rows"]] == [0]
+    assert {row["label"] for row in dataset["rows"]} == {0}
+    assert "long_r" not in dataset["rows"][0]
+    assert "short_r" not in dataset["rows"][0]
+    with pytest.raises(
+        RuntimeError,
+        match="R01_DISCOVERY_TRAINING_FROZEN_BLOCK_BINDING_INVALID",
+    ):
+        r01.read_r01_discovery_training_dataset(
+            research_id=parent["research_id"],
+            dataset_id=result["run"]["dataset_id"],
+            r01_output_manifest_sha256=result["run"]["output_manifest_sha"],
+            block_id="RDISC-WRONG-BLOCK",
+            path=db,
+        )
+
+
+def test_r02_discovery_paths_do_not_hash_full_r01_dataset(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    db, parent = _setup(tmp_path, monkeypatch)
+    _install_success_stubs(monkeypatch)
+    result = r01.start_r01(_request(tmp_path, parent), path=db)
+    frozen = _freeze_synthetic_r02_block(
+        db=db,
+        parent=parent,
+        dataset_id=result["run"]["dataset_id"],
+        output_sha=result["run"]["output_manifest_sha"],
+    )
+    hashed_artifacts: list[str] = []
+    json_artifacts_read: list[str] = []
+    original_sha256_file = r01.sha256_file
+    original_read_json = r01._read_json
+
+    def record_artifact_hash(file_path: Path) -> str:
+        hashed_artifacts.append(Path(file_path).name)
+        return original_sha256_file(file_path)
+
+    def record_json_read(file_path: Path) -> dict:
+        json_artifacts_read.append(Path(file_path).name)
+        return original_read_json(file_path)
+
+    monkeypatch.setattr(r01, "sha256_file", record_artifact_hash)
+    monkeypatch.setattr(r01, "_read_json", record_json_read)
+
+    dataset = r01.read_r01_discovery_training_dataset(
+        research_id=parent["research_id"],
+        dataset_id=result["run"]["dataset_id"],
+        r01_output_manifest_sha256=result["run"]["output_manifest_sha"],
+        block_id=frozen["block"]["block_id"],
+        path=db,
+    )
+    integrity = r01.validate_r01_integrity(path=db, discovery_only=True)
+    preflight = r02_preflight(path=db)
+
+    assert dataset["rows"]
+    assert preflight["r01_integrity"] == r01.R01_DISCOVERY_SCOPE_VERIFIED
+    assert integrity["status"] == r01.R01_DISCOVERY_SCOPE_VERIFIED
+    assert set(integrity["deferred_artifact_contents"]) == (
+        r01.R01_DISCOVERY_DEFERRED_ARTIFACTS
+    )
+    assert not r01.R01_DISCOVERY_DEFERRED_ARTIFACTS.intersection(hashed_artifacts)
+    assert not r01.R01_DISCOVERY_DEFERRED_ARTIFACTS.intersection(json_artifacts_read)
+
+
+def test_full_r01_integrity_still_hashes_protected_dataset(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    db, parent = _setup(tmp_path, monkeypatch)
+    _install_success_stubs(monkeypatch)
+    r01.start_r01(_request(tmp_path, parent), path=db)
+
+    hashed_artifacts: list[str] = []
+    original_sha256_file = r01.sha256_file
+
+    def record_artifact_hash(file_path: Path) -> str:
+        hashed_artifacts.append(Path(file_path).name)
+        return original_sha256_file(file_path)
+
+    monkeypatch.setattr(r01, "sha256_file", record_artifact_hash)
+    integrity = r01.validate_r01_integrity(path=db)
+
+    assert integrity["status"] == "VERIFIED"
+    assert integrity["verification_scope"] == "FULL"
+    assert r01.R01_DISCOVERY_DEFERRED_ARTIFACTS.issubset(set(hashed_artifacts))
+
+
+def test_r02_executor_fits_synthetic_families_and_stops_idempotently(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    db, parent = _setup(tmp_path, monkeypatch)
+    _install_success_stubs(monkeypatch)
+    result = r01.start_r01(_request(tmp_path, parent), path=db)
+    frozen = _freeze_synthetic_r02_block(
+        db=db,
+        parent=parent,
+        dataset_id=result["run"]["dataset_id"],
+        output_sha=result["run"]["output_manifest_sha"],
+    )
+    with connect(db) as conn:
+        conn.execute("CREATE TABLE r02_fit_lock_probe(value INTEGER NOT NULL)")
+    original_fit_predict = r02_executor._bounded_fit_predict
+
+    def write_probe_then_fit(*args, **kwargs):
+        with connect(db) as conn:
+            conn.execute("PRAGMA busy_timeout=0")
+            conn.execute("INSERT INTO r02_fit_lock_probe(value) VALUES(1)")
+        return original_fit_predict(*args, **kwargs)
+
+    monkeypatch.setattr(r02_executor, "_bounded_fit_predict", write_probe_then_fit)
+    lineage = {
+        "research_parent_id": parent["research_parent_id"],
+        "parent_strategy_id": parent["parent_strategy_id"],
+        "dataset_id": result["run"]["dataset_id"],
+        "r01_output_manifest_sha256": result["run"]["output_manifest_sha"],
+    }
+    start = datetime(2026, 1, 1, tzinfo=timezone.utc)
+    rows = []
+    for row_id in range(120):
+        label = row_id % 3
+        rows.append({
+            "source_row_id": row_id,
+            "signal_time": start + timedelta(hours=row_id),
+            **{
+                feature: float((row_id * (index + 1) + label) % 113)
+                for index, feature in enumerate(FEATURE_NAMES)
+            },
+            "label": label,
+        })
+    dataset = {
+        "research_id": parent["research_id"],
+        "dataset_id": result["run"]["dataset_id"],
+        "r01_output_manifest_sha256": result["run"]["output_manifest_sha"],
+        "feature_contract": FEATURE_CONTRACT,
+        "feature_order": list(FEATURE_NAMES),
+        "label_contract": r01.LABEL_CONTRACT_ID,
+        "minimum_legal_purge_main_bars": 1,
+        "parent_lineage": lineage,
+        "discovery_manifest_sha256": "9" * 64,
+        "rows": rows,
+    }
+    monkeypatch.setattr(
+        r01,
+        "read_r01_discovery_training_dataset",
+        lambda **_kwargs: deepcopy(dataset),
+    )
+
+    ledger = execute_r02_discovery_block(path=db)
+
+    expected_ids = [item["candidate_id"] for item in frozen["block"]["candidates"]]
+    assert ledger["integrity_status"] == "VERIFIED"
+    assert ledger["terminal"]["state"] == "COMPLETE_WAITING_OWNER"
+    assert [item["candidate_id"] for item in ledger["outcomes"]] == expected_ids
+    assert all(
+        item["outcome"]["status"] in {"SCREEN_PASS", "SCREEN_FAIL"}
+        for item in ledger["outcomes"]
+    )
+    assert all(
+        item["outcome"]["cheap_screen_qualification_authority"] is False
+        and item["outcome"]["qualified_pool_admission_authority"]
+        == "R03_FULL_WFA_ONLY"
+        for item in ledger["outcomes"]
+    )
+    assert ledger["terminal"]["cheap_screen_qualification_authority"] is False
+    with connect(db) as conn:
+        probe_count = conn.execute(
+            "SELECT COUNT(*) AS count FROM r02_fit_lock_probe"
+        ).fetchone()["count"]
+    assert int(probe_count) == frozen["block"]["candidate_count"]
+
+    monkeypatch.setattr(
+        r01,
+        "read_r01_discovery_training_dataset",
+        lambda **_kwargs: pytest.fail("completed block must not be retrained"),
+    )
+    replay = execute_r02_discovery_block(path=db)
+    assert replay["terminal"]["terminal_id"] == ledger["terminal"]["terminal_id"]
+
+
+def test_r02_executor_retains_untrainable_candidate_failures_and_preflight_stops(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    db, parent = _setup(tmp_path, monkeypatch)
+    _install_success_stubs(monkeypatch)
+    result = r01.start_r01(_request(tmp_path, parent), path=db)
+    frozen = _freeze_synthetic_r02_block(
+        db=db,
+        parent=parent,
+        dataset_id=result["run"]["dataset_id"],
+        output_sha=result["run"]["output_manifest_sha"],
+    )
+
+    ledger = execute_r02_discovery_block(path=db)
+
+    assert len(ledger["outcomes"]) == frozen["block"]["candidate_count"]
+    assert all(
+        item["outcome"]["status"] == "EXECUTION_ERROR"
+        and item["outcome"]["failure_code"] == "DISCOVERY_DATASET_UNTRAINABLE"
+        for item in ledger["outcomes"]
+    )
+    assert ledger["terminal"]["execution_error_count"] == len(
+        frozen["block"]["candidates"]
+    )
+    assert ledger["terminal"]["state"] == "COMPLETE_WAITING_OWNER"
+    preflight = r02_preflight(path=db)
+    assert preflight["status"] == "COMPLETE_WAITING_OWNER"
+    assert preflight["cheap_screen_qualification_authority"] is False
+    assert preflight["qualified_pool_admission_authority"] == "R03_FULL_WFA_ONLY"
+    assert preflight["r02_executable"] is False
+
+
+def test_r02_preflight_fails_closed_after_uncertain_execution_attempt(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    db, parent = _setup(tmp_path, monkeypatch)
+    _install_success_stubs(monkeypatch)
+    result = r01.start_r01(_request(tmp_path, parent), path=db)
+    _freeze_synthetic_r02_block(
+        db=db,
+        parent=parent,
+        dataset_id=result["run"]["dataset_id"],
+        output_sha=result["run"]["output_manifest_sha"],
+    )
+    begin_r02_execution_attempt(parent["research_id"], path=db)
+
+    with pytest.raises(
+        RuntimeError,
+        match="R02_LEDGER_INTEGRITY_EXECUTION_ATTEMPT_UNCERTAIN",
+    ):
+        r02_preflight(path=db)
 
 
 @pytest.mark.parametrize(

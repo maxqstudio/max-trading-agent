@@ -655,6 +655,13 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "join",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::update_promotion",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_executor.py::test_bounded_fit_predict_stops_timed_out_worker.FakeProcess.join"
+    },
+    {
       "action": "conn.execute",
       "evidence": "STATIC",
       "from": "backend/max_backend/champion_store.py::update_promotion",
@@ -1367,6 +1374,13 @@
       "from": "backend/max_backend/promotion_service.py::_restore_before_state",
       "resolver": "python_ast",
       "to": "backend/max_backend/promotion_service.py::_restore_file"
+    },
+    {
+      "action": "join",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/promotion_service.py::_restore_before_state",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_executor.py::test_bounded_fit_predict_stops_timed_out_worker.FakeProcess.join"
     },
     {
       "action": "_atomic_copy",
@@ -2866,16 +2880,25 @@
       "locator": "backend/tests/test_r01_source.py::_capture.run"
     },
     {
+      "id": "backend/tests/test_r02_executor.py::test_bounded_fit_predict_stops_timed_out_worker.FakeProcess.join",
+      "kind": "method",
+      "label": "backend/tests/test_r02_executor.py::test_bounded_fit_predict_stops_timed_out_worker.FakeProcess.join",
+      "language": "Python",
+      "line_end": 452,
+      "line_start": 451,
+      "locator": "backend/tests/test_r02_executor.py::test_bounded_fit_predict_stops_timed_out_worker.FakeProcess.join"
+    },
+    {
       "id": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute",
       "kind": "method",
       "label": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute",
       "language": "Python",
-      "line_end": 665,
-      "line_start": 664,
+      "line_end": 669,
+      "line_start": 668,
       "locator": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     }
   ],
-  "observed_head": "c913c47a45ca54d805470caf40bb54bf655b45c6",
+  "observed_head": "90538f289df9492e35c0308baebc94f1e58abd20",
   "schema_version": 1,
-  "source_digest": "79e949b09cc369109e717fa3b495ad9bb16d89b67ba0feead151ced8df9ea119"
+  "source_digest": "d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8883a543"
 }

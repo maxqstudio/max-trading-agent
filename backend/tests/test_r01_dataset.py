@@ -684,9 +684,9 @@ def test_r01_dependency_and_adversarial_suite(tmp_path: Path) -> None:
     assert report["status"] == "PASS"
     assert report["legal_pipeline"] == "PASS"
     assert report["deliberately_leaky_pipeline"] == "DETECTED_FAIL"
-    assert report["gate_count"] == 24
-    assert all(item["status"] == "PASS" for item in report["gates"][:23])
-    assert report["gates"][23]["status"] == "DETECTED"
+    assert report["gate_count"] == 25
+    assert all(item["status"] == "PASS" for item in report["gates"][:24])
+    assert report["gates"][24]["status"] == "DETECTED"
 
     by_attack = {item["attack"]: item for item in report["gates"]}
     future = by_attack["1_FUTURE_PERTURBATION_EVERY_FEATURE_FAMILY"]["evidence"]
@@ -816,6 +816,13 @@ def test_protected_partition_exact_boundary_ownership() -> None:
         fresh_forward_from="2026-03-01T00:00:00+00:00",
         fresh_forward_to="2026-04-01T00:00:00+00:00",
     )
+    assert manifest["discovery"]["training_access"] is True
+    assert manifest["discovery"]["training_access_scope"] == "DISCOVERY_ONLY"
+    assert manifest["discovery"]["training_authorization_required"] == (
+        "VALIDATED_OWNER_AUTHORIZED_R02_FROZEN_BLOCK"
+    )
+    assert manifest["locked_oos"]["training_access"] is False
+    assert manifest["fresh_forward"]["training_access"] is False
     rows = [
         {"source_row_id": 0, "signal_time": datetime(2026, 1, 1, tzinfo=timezone.utc)},
         {"source_row_id": 1, "signal_time": datetime(2026, 1, 31, tzinfo=timezone.utc)},
@@ -841,6 +848,50 @@ def test_protected_partition_exact_boundary_ownership() -> None:
     bound = bind_protected_partition_rows(rows, manifest)
     assert bound["overlap_count"] == 0
     assert bound["unassigned_count"] == 0
+
+
+def test_r01_discovery_training_access_requires_scoped_owner_authority(
+    tmp_path: Path,
+) -> None:
+    bundle, parent = _bundle(tmp_path)
+    dataset = build_dataset(bundle, parent=parent)
+    rows = dataset["rows"]
+    start = dataset["data_quality_report"]["dataset_start"]
+    end = dataset["data_quality_report"]["dataset_end"]
+    first_boundary = rows[13]["signal_time"].isoformat()
+    second_boundary = rows[27]["signal_time"].isoformat()
+    protected = protected_partition_manifest(
+        discovery_from=start,
+        discovery_to=first_boundary,
+        locked_oos_from=first_boundary,
+        locked_oos_to=second_boundary,
+        fresh_forward_from=second_boundary,
+        fresh_forward_to=end,
+    )
+    protected = bind_protected_partition_rows(rows, protected)
+    protected = bind_protected_target_dependency_authority(
+        rows,
+        protected,
+        dataset["dependency_report"],
+    )
+    protected["discovery"]["training_access"] = False
+    memory_path = tmp_path / "memory.db"
+    initialize_database(memory_path)
+
+    report = run_adversarial_suite(
+        dataset,
+        protected_manifest=protected,
+        research_id=parent["research_id"],
+        memory_path=memory_path,
+    )
+
+    assert report["status"] == "FAIL"
+    assert report["legal_pipeline"] == "FAIL"
+    scope_gate = next(
+        item for item in report["gates"]
+        if item["attack"] == "24_DISCOVERY_TRAINING_OWNER_SCOPE"
+    )
+    assert scope_gate["status"] == "FAIL"
 
 
 def test_protected_target_boundary_uses_original_row_identity_and_exact_old_semantics() -> None:
