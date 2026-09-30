@@ -4,7 +4,6 @@ import ArtifactsPage from './ArtifactsPage'
 import ChallengersPage from './ChallengersPage'
 import ChampionPage from './ChampionPage'
 import OptimizerPage from './OptimizerPage'
-import ResearchPage from './ResearchPage'
 import ScientistPage from './ScientistPage'
 import SettingsPage from './SettingsPage'
 import type { ProviderSettings } from './SettingsPage'
@@ -37,6 +36,96 @@ type Overview = {
     data_root?: string
     reason?: string
   }
+}
+
+type RecoveryState = {
+  status: string
+  reason: string
+  reset_confirmation?: string
+  data_loss_boundary?: string[]
+}
+
+function RecoveryRequiredPage({
+  state,
+  onRecovered,
+}: {
+  state: RecoveryState
+  onRecovered: (result: Record<string, unknown>) => void
+}) {
+  const [confirmation, setConfirmation] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const [progress, setProgress] = useState('')
+
+  async function backupAndReset() {
+    if (!state.reset_confirmation || confirmation !== state.reset_confirmation || busy) return
+    setBusy(true)
+    setError('')
+    setProgress('Preserving the damaged database before rebuilding current schema…')
+    try {
+      const response = await fetch('/api/recovery/reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ confirmation }),
+      })
+      const body = await response.json().catch(() => ({}))
+      if (!response.ok) throw new Error(body.detail ?? 'Recovery could not be completed.')
+      onRecovered(body as Record<string, unknown>)
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : String(reason))
+      setProgress('Recovery did not complete. The existing database was not reported as reset.')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const canReset = state.status === 'RECOVERY_REQUIRED'
+    && Boolean(state.reset_confirmation)
+    && confirmation === state.reset_confirmation
+    && !busy
+
+  return (
+    <main className="recovery-screen" aria-labelledby="recovery-title">
+      <p className="eyebrow">MAX · Safe startup recovery</p>
+      <h1 id="recovery-title">Application state needs recovery</h1>
+      <p role="alert" className="error">
+        Normal Strategy actions are disabled. Reason: {state.reason || 'Recovery status could not be verified.'}
+      </p>
+      <section aria-labelledby="recovery-effects">
+        <h2 id="recovery-effects">What the explicit recovery will do</h2>
+        <ul>
+          {(state.data_loss_boundary ?? [
+            'The corrupt operational database is preserved in local quarantine.',
+            'A new current-schema database is created with the accepted EA baseline.',
+            'Generated Strategy and Research state is not restored.',
+            'External Scientist provider settings are left untouched.',
+          ]).map((item) => <li key={item}>{item}</li>)}
+        </ul>
+      </section>
+      {state.status === 'RECOVERY_REQUIRED' ? (
+        <section aria-labelledby="recovery-confirmation">
+          <h2 id="recovery-confirmation">Confirm backup and reset</h2>
+          <label htmlFor="recovery-confirmation-input">
+            Type <code>{state.reset_confirmation}</code> to enable recovery.
+          </label>
+          <input
+            id="recovery-confirmation-input"
+            value={confirmation}
+            onChange={(event) => setConfirmation(event.target.value)}
+            disabled={busy}
+          />
+          <button type="button" disabled={!canReset} onClick={backupAndReset}>
+            {busy ? 'Backing up and rebuilding…' : 'Backup and Reset Operational State'}
+          </button>
+          {!canReset && !busy && <p role="status">Recovery is blocked until the exact confirmation is entered.</p>}
+        </section>
+      ) : (
+        <p role="status">Recovery status is unavailable; destructive recovery is disabled.</p>
+      )}
+      {progress && <p role="status">{progress}</p>}
+      {error && <p role="alert" className="error">{error}</p>}
+    </main>
+  )
 }
 
 function Value({ children }: { children: React.ReactNode }) {
@@ -126,7 +215,7 @@ function OverviewPage() {
 }
 
 export default function App() {
-  const [workspace, setWorkspace] = useState<'strategy' | 'research' | 'artifacts' | 'settings'>('strategy')
+  const [workspace, setWorkspace] = useState<'strategy' | 'artifacts' | 'settings'>('strategy')
   const [page, setPage] = useState<'overview' | 'optimizer' | 'challengers' | 'champion'>('overview')
   const [leftOpen, setLeftOpen] = useState(true)
   const [scientistOpen, setScientistOpen] = useState(true)
@@ -138,14 +227,46 @@ export default function App() {
     provider: string
     model: string
   } | undefined>(undefined)
+  const [recoveryState, setRecoveryState] = useState<RecoveryState | null>(null)
+  const [recoveryChecked, setRecoveryChecked] = useState(false)
+  const [startupError, setStartupError] = useState('')
+  const [uiStatus, setUiStatus] = useState('')
 
   useEffect(() => {
+    let active = true
+    fetch('/api/recovery/status')
+      .then((response) => {
+        if (!response.ok) throw new Error('Recovery status HTTP ' + response.status)
+        return response.json() as Promise<RecoveryState>
+      })
+      .then((state) => {
+        if (!state || !['READY', 'RECOVERY_REQUIRED'].includes(state.status)) {
+          throw new Error('Recovery status response was invalid.')
+        }
+        if (active) setRecoveryState(state)
+      })
+      .catch((reason: Error) => {
+        if (active) {
+          setRecoveryState({ status: 'RECOVERY_STATUS_UNAVAILABLE', reason: reason.message })
+          setStartupError('Recovery status could not be verified; workspace actions remain disabled.')
+        }
+      })
+      .finally(() => {
+        if (active) setRecoveryChecked(true)
+      })
+    return () => { active = false }
+  }, [])
+
+  useEffect(() => {
+    if (!recoveryChecked || recoveryState?.status !== 'READY') return
+    let active = true
     fetch('/api/scientist/provider-settings')
       .then((response) => {
-        if (!response.ok) throw new Error('HTTP ' + response.status)
+        if (!response.ok) throw new Error('Provider settings HTTP ' + response.status)
         return response.json() as Promise<ProviderSettings>
       })
       .then((settings) => {
+        if (!active) return
         setModels(settings.models ?? [])
         setChatModel(
           settings.ui_state?.scientist_chat_model
@@ -156,15 +277,24 @@ export default function App() {
         setLeftOpen(settings.ui_state?.left_nav_open ?? true)
         setScientistOpen(settings.ui_state?.scientist_drawer_open ?? true)
       })
-      .catch(() => undefined)
-  }, [])
+      .catch((reason: Error) => {
+        if (active) setStartupError('Saved workspace preferences could not be loaded: ' + reason.message)
+      })
+    return () => { active = false }
+  }, [recoveryChecked, recoveryState?.status])
 
   function persistUi(patch: Record<string, unknown>) {
     fetch('/api/scientist/ui-settings', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(patch),
-    }).catch(() => undefined)
+    })
+      .then(async (response) => {
+        const body = await response.json().catch(() => ({}))
+        if (!response.ok) throw new Error(body.detail ?? 'Preference update was rejected.')
+        setUiStatus('Preference saved.')
+      })
+      .catch((reason: Error) => setUiStatus('Preference was not saved: ' + reason.message))
   }
 
   function changeLeft(open: boolean) {
@@ -200,6 +330,26 @@ export default function App() {
     })
   }
 
+  if (!recoveryChecked) {
+    return <main className="recovery-screen"><p role="status">Checking whether workspace actions are safe…</p></main>
+  }
+  if (recoveryState?.status === 'RECOVERY_REQUIRED'
+    || recoveryState?.status === 'RECOVERY_STATUS_UNAVAILABLE') {
+    return (
+      <RecoveryRequiredPage
+        state={recoveryState}
+        onRecovered={(result) => {
+          setRecoveryState({ status: 'READY', reason: 'Operational state rebuilt.' })
+          setUiStatus('Recovery completed. Preserved database: ' + String(
+            (result.backup as { path?: string } | undefined)?.path
+            ?? result.quarantine
+            ?? 'local quarantine',
+          ))
+        }}
+      />
+    )
+  }
+
   return (
     <div className={'app-shell ' + (!leftOpen ? 'left-collapsed ' : '') + (!scientistOpen ? 'scientist-collapsed' : '')}>
       <aside className={'left-nav ' + (leftOpen ? 'left-nav-open' : 'left-nav-closed')} aria-label="MAX workspace navigation">
@@ -212,12 +362,6 @@ export default function App() {
           onClick={() => setWorkspace('strategy')}
         >
           Strategy
-        </button>
-        <button
-          className={workspace === 'research' ? 'left-nav-active' : ''}
-          onClick={() => setWorkspace('research')}
-        >
-          Research
         </button>
         <button
           className={workspace === 'artifacts' ? 'left-nav-active' : ''}
@@ -246,6 +390,8 @@ export default function App() {
       )}
 
       <main className="shell main-workspace">
+        {startupError && <p role="alert" className="error">{startupError}</p>}
+        {uiStatus && <p role="status" className="notice">{uiStatus}</p>}
         {workspace === 'strategy' && (
           <>
             <nav className="nav" aria-label="MAX navigation">
@@ -260,7 +406,6 @@ export default function App() {
             {page === 'champion' && <ChampionPage />}
           </>
         )}
-        {workspace === 'research' && <ResearchPage />}
         {workspace === 'artifacts' && <ArtifactsPage />}
         {workspace === 'settings' && <SettingsPage chatModel={chatModel} onSaved={providerSaved} />}
       </main>

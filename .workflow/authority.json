@@ -55,24 +55,6 @@
       "mutable": true
     },
     {
-      "authority": "backend/max_backend/research_settings.py with SQLite schema_meta",
-      "concern": "research_current_configuration",
-      "meaning": "Owner-editable current Research sample configuration applies to future execution authorization only.",
-      "mutable": true
-    },
-    {
-      "authority": "R00/R01 immutable authorization and input manifests",
-      "concern": "research_execution_snapshot",
-      "meaning": "Each execution freezes the exact current configuration and parent/source authority; later edits cannot alter that snapshot.",
-      "mutable": false
-    },
-    {
-      "authority": "Managed verified Research source bundle and sealed R01 artifacts",
-      "concern": "research_dataset_source",
-      "meaning": "Source identity, dataset rows, partitions, labels and leakage evidence bind to explicit verified lineage.",
-      "mutable": false
-    },
-    {
       "authority": "MetaTrader 5 Strategy Tester and MetaEditor",
       "concern": "mt5_execution",
       "meaning": "MT5/MetaEditor own simulation, optimization and compile execution truth; Python owns legality/orchestration/evidence verification.",
@@ -103,6 +85,18 @@
       "mutable": false
     },
     {
+      "authority": "backend/max_backend/artifact_control.py::artifact_page and backend/max_backend/strategy_reset.py",
+      "concern": "generated_artifact_read_and_reset",
+      "meaning": "Ordinary inventory reads are database-backed and non-mutating; cleanup and reset require separate explicit preflight/action flows, and reset is bounded to MAX-owned paths after a verified backup.",
+      "mutable": true
+    },
+    {
+      "authority": "backend/max_backend/main.py Recovery Required gate plus backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database",
+      "concern": "corrupt_database_recovery",
+      "meaning": "An unopenable or integrity-failed database disables ordinary APIs; only explicit confirmed backup/quarantine and current-schema bootstrap may restore service.",
+      "mutable": true
+    },
+    {
       "authority": ".workflow semantic specs + Project Truth Compiler at Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
       "concern": "documentation",
       "meaning": "Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden.",
@@ -129,9 +123,9 @@
     "Historical retained Challenger evidence remains exact legacy 16D while current V6 is exact 17D including InpRiskPct; mixed/missing/extra universes fail closed.",
     "Durable optimizer consumption survives Challenger promotion, retirement and later permitted physical deletion while registry or COMMITTED batch authority remains.",
     "Former Champion tenure does not recreate active Challenger eligibility.",
-    "Current Research configuration and immutable execution snapshots are distinct domains.",
-    "Protected Locked OOS/Fresh outcomes are not adaptive tuning feedback.",
-    "R01 implementation/runtime readiness does not equal R01 scientific PASS and cannot open R02.",
+    "Fresh Research R00-R11 is inactive planned work until the Owner declares a real MT5 sample READY and Control Room separately authorizes the phase.",
+    "Strategy Artifact inventory GETs do not reconcile runtime state; destructive controls require fresh preflight and explicit confirmation.",
+    "Corrupt operational state fails closed and normal application actions remain disabled until explicit recovery is completed.",
     "Generated canonical docs/ Markdown is repaired through source/.workflow authority and regeneration, never manual patching."
   ],
   "schema_version": 1

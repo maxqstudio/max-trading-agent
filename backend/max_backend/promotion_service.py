@@ -897,7 +897,7 @@ def promote_strategy_challenger(
                 "FORMER" if actual_current_id else None
             ),
             "previous_challenger_final_status": (
-                "CHALLENGER" if actual_current_id else None
+                "PROMOTED" if actual_current_id else None
             ),
             "promotion_status": "COMMITTED",
             "deployment": deployment,

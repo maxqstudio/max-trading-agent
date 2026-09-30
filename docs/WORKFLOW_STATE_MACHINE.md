@@ -2,6 +2,57 @@
 
 # WORKFLOW STATE MACHINE
 
+## FLOW-ARTIFACT-CONTROL — Explicit artifact inventory, cleanup and Strategy workspace reset
+
+Purpose: Give the Owner an accurate inventory and explicit, explainable, safety-gated controls for generated artifacts and Strategy workspace reset.
+Critical: TRUE
+Entry condition: Owner opens Artifacts to inspect the inventory or explicitly requests reconciliation, cleanup, deletion, or workspace reset.
+Authority: Artifact API plus ownership/path/dependency checks in artifact_control; UI is presentation only.
+
+### States
+
+- INVENTORY_LOADING
+- INVENTORY_READY
+- RECONCILIATION_RUNNING
+- ACTION_PREFLIGHT
+- ACTION_BLOCKED
+- WAITING_EXPLICIT_CONFIRMATION
+- ACTION_RUNNING
+- ACTION_COMPLETED
+- ACTION_FAILED
+
+### Legal transitions
+
+| From | To | Action | Authority | Side effects |
+|---|---|---|---|---|
+| INVENTORY_LOADING | INVENTORY_READY | Load inventory from the current read authority without implicit reconciliation. | Artifact API plus ownership/path/dependency checks in artifact_control; UI is presentation only. |  |
+| INVENTORY_READY | RECONCILIATION_RUNNING | Owner explicitly starts reconciliation; show progress and terminal result/error. | Artifact API plus ownership/path/dependency checks in artifact_control; UI is presentation only. | known generated-artifact inventory refresh |
+| INVENTORY_READY | ACTION_PREFLIGHT | Preflight the selected cleanup/delete/reset action against current backend authority. | Artifact API plus ownership/path/dependency checks in artifact_control; UI is presentation only. |  |
+| ACTION_PREFLIGHT | ACTION_BLOCKED | Show blocker and keep the control disabled; callbacks reject stale or blocked state without mutation. | Artifact API plus ownership/path/dependency checks in artifact_control; UI is presentation only. |  |
+| ACTION_PREFLIGHT | WAITING_EXPLICIT_CONFIRMATION | For a legal destructive operation, display exact scope and require explicit confirmation. | Artifact API plus ownership/path/dependency checks in artifact_control; UI is presentation only. |  |
+| WAITING_EXPLICIT_CONFIRMATION | ACTION_RUNNING | Execute only after confirmation and current server-side revalidation; display progress and result. | Artifact API plus ownership/path/dependency checks in artifact_control; UI is presentation only. | backend-authorized artifact action or backed-up workspace reset |
+
+### Invariants
+
+- Listing is read-only; reconciliation is explicit.
+- Artifact deletion and cleanup are backend-authorized and dependency-safe.
+- Destructive Strategy reset is separate from Clean Generated Data and requires exact confirmation plus a verified database backup.
+- The UI disables blocked actions with an explanation and callbacks independently fail closed.
+
+### Failure behavior
+
+- Inventory reads do not trigger reconciliation or mutate MT5/runtime state.
+- Missing, stale, protected, active-use, ownership, path, or dependency preflight blocks mutation and displays the reason.
+- Every asynchronous action reports progress and then a completed, blocked, or failed result.
+
+### Restart behavior
+
+- A new page load re-reads authoritative inventory/preflight; no stale local approval is treated as authority.
+
+### Rollback behavior
+
+- Cleanup/deletion follows backend recovery and ownership policy; workspace reset retains a verified pre-reset SQLite backup.
+
 ## FLOW-CHALLENGER-CONSUMPTION — Challenger retirement/deletion with durable optimizer consumption
 
 Purpose: Allow legal retirement/controlled deletion without ever making a durably consumed optimizer source active-selectable again.
@@ -177,327 +228,6 @@ Authority: MT5 optimizer evidence + Python canonical qualification/revalidation 
 
 - Pre-commit failure leaves no eligible phantom Challenger; immutable accepted prior evidence is not rewritten.
 
-## FLOW-R00-INITIALIZATION — R00 initialization to immutable Research parent
-
-Purpose: Freeze accepted Strategy parent, feature/hardware/policy/current sample config and explicit Owner authorization into immutable R00 Research authority without training.
-Critical: TRUE
-Entry condition: Accepted Strategy authority and R00 prerequisites exist and Owner explicitly authorizes R00.
-Authority: research_service R00 preflight/start + exact Strategy/Champion parent + Owner authorization.
-
-### States
-
-- R00_PREFLIGHT
-- R00_AUTHORIZED
-- R00_MATERIALIZING
-- PASS_WAITING_OWNER
-
-### Legal transitions
-
-| From | To | Action | Authority | Side effects |
-|---|---|---|---|---|
-| R00_PREFLIGHT | R00_AUTHORIZED | Verify parent Strategy/Champion, config, feature/hardware policy and Owner confirmation. | research_service R00 preflight/start + exact Strategy/Champion parent + Owner authorization. |  |
-| R00_AUTHORIZED | R00_MATERIALIZING | Write immutable parent/hardware/input authority. | research_service R00 preflight/start + exact Strategy/Champion parent + Owner authorization. | parent_manifest, hardware_snapshot, r00_input_manifest |
-| R00_MATERIALIZING | PASS_WAITING_OWNER | Publish immutable output/registry/events after invariant checks. | research_service R00 preflight/start + exact Strategy/Champion parent + Owner authorization. | r00_output_manifest, Research registry/events/memory |
-
-### Invariants
-
-- R00 does not train a model or create ONNX/Research Challenger/Champion mutation.
-- R00 success does not automatically authorize or start R01.
-- Historical accepted R00 4 trades/month snapshot is immutable.
-
-### Failure behavior
-
-- Missing parent/config/authorization/hash/invariant prevents terminal PASS.
-
-### Restart behavior
-
-- Recovery validates existing immutable authority and does not silently create a different Research parent.
-
-### Rollback behavior
-
-- Partial pre-terminal materialization cannot rewrite an already accepted historical R00 authority.
-
-## FLOW-R01-SOURCE-PIPELINE — R01 source, dataset, labels, leakage and terminal evidence
-
-Purpose: Prepare a verified managed market source and, only on explicit Owner R01 authorization, build causal dataset/labels/protected boundaries/leakage evidence into atomic terminal authority.
-Critical: TRUE
-Entry condition: Accepted R00 parent exists; managed R01 source can be verified; explicit partitions/source/config and separate Owner R01 authorization exist for execution.
-Authority: research_r01_service + research_source/dataset/leakage/store + immutable R00 parent + explicit Owner authorization.
-
-### States
-
-- SOURCE_NOT_READY
-- SOURCE_VERIFIED
-- R01_PREFLIGHT_READY
-- STARTING
-- DATASET_SEALED
-- LEAKAGE_VALIDATED
-- PASS_WAITING_OWNER
-- FAIL_WAITING_OWNER
-
-### Legal transitions
-
-| From | To | Action | Authority | Side effects |
-|---|---|---|---|---|
-| SOURCE_NOT_READY | SOURCE_VERIFIED | Prepare/verify MAX-managed MT5 source authority. | research_r01_service + research_source/dataset/leakage/store + immutable R00 parent + explicit Owner authorization. | managed R01 source evidence |
-| SOURCE_VERIFIED | R01_PREFLIGHT_READY | Verify R00/config/source/partition/run blockers without execution. | research_r01_service + research_source/dataset/leakage/store + immutable R00 parent + explicit Owner authorization. |  |
-| R01_PREFLIGHT_READY | STARTING | Owner explicitly authorizes one R01 execution and immutable snapshot. | research_r01_service + research_source/dataset/leakage/store + immutable R00 parent + explicit Owner authorization. | R01 authorization/run STARTING |
-| STARTING | DATASET_SEALED | Build deterministic rows/features/labels/partition/dependency authority. | research_r01_service + research_source/dataset/leakage/store + immutable R00 parent + explicit Owner authorization. | dataset/label/dependency artifacts |
-| DATASET_SEALED | LEAKAGE_VALIDATED | Execute adversarial leakage and quality gates. | research_r01_service + research_source/dataset/leakage/store + immutable R00 parent + explicit Owner authorization. | leakage reports |
-| LEAKAGE_VALIDATED | PASS_WAITING_OWNER | Atomically commit artifact registry/run/gate/non-adaptive memory terminal authority. | research_r01_service + research_source/dataset/leakage/store + immutable R00 parent + explicit Owner authorization. | R01 terminal artifacts/events/memory |
-| STARTING | FAIL_WAITING_OWNER | Fail closed on source/data/label/leakage/invariant error. | research_r01_service + research_source/dataset/leakage/store + immutable R00 parent + explicit Owner authorization. | terminal failure evidence where defined |
-
-### Invariants
-
-- Protected Locked OOS/Fresh outcomes are not adaptive tuning feedback.
-- Source preparation/readiness is not R01 scientific PASS.
-- Governance repair must not execute this start flow.
-- R02 cannot open automatically from R01 implementation readiness.
-
-### Failure behavior
-
-- Incomplete materialization is discarded/recovered fail-closed; protected-data/leakage failure cannot become PASS.
-
-### Restart behavior
-
-- STARTING recovery resolves persisted authority without blindly repeating ambiguous external/source side effects.
-
-### Rollback behavior
-
-- Pre-terminal partial artifacts are cleaned or rejected; accepted parent/history remains immutable.
-
-## FLOW-R02-CHEAP-SCREEN-EXECUTOR — R02 bounded Cheap Screen executor
-
-Purpose: Consume only validated R01 Discovery training rows and the immutable frozen R02 candidate universe, execute bounded family adapters (LightGBM OpenCL GPU, XGBoost CUDA GPU, Random Forest CPU), and atomically publish diagnostic outcomes before stopping for Owner.
-Critical: TRUE
-Entry condition: Synthetic source tests only in this phase. Runtime path requires exact current Research, accepted and integrity-verified R01, exact dataset/output binding, and one verified frozen candidate universe; no public start endpoint is exposed.
-Authority: Exact current Research + accepted R01 output manifest + confirmed immutable R02 authorization + readback-verified FROZEN_WAITING_EXECUTION block/candidates + sealed R01 Discovery-only training artifact.
-
-### States
-
-- CURRENT_R01_AND_R02_AUTHORITY_VERIFIED
-- DISCOVERY_ONLY_DATASET_VALIDATED
-- EXECUTION_ATTEMPT_DURABLE
-- CANDIDATES_EXECUTED_WITHIN_FROZEN_BUDGET
-- COMPLETE_WAITING_OWNER
-- EXECUTION_UNCERTAIN_FAIL_CLOSED
-
-### Legal transitions
-
-| From | To | Action | Authority | Side effects |
-|---|---|---|---|---|
-| CURRENT_R01_AND_R02_AUTHORITY_VERIFIED | DISCOVERY_ONLY_DATASET_VALIDATED | Read the sealed R01 Discovery training artifact and bind its Research, dataset, manifest, feature/label contracts and parent lineage to every frozen candidate. | Exact current Research + accepted R01 output manifest + confirmed immutable R02 authorization + readback-verified FROZEN_WAITING_EXECUTION block/candidates + sealed R01 Discovery-only training artifact. |  |
-| DISCOVERY_ONLY_DATASET_VALIDATED | EXECUTION_ATTEMPT_DURABLE | Persist the immutable one-shot attempt marker before any model worker starts. | Exact current Research + accepted R01 output manifest + confirmed immutable R02 authorization + readback-verified FROZEN_WAITING_EXECUTION block/candidates + sealed R01 Discovery-only training artifact. | R02_EXECUTION_ATTEMPT |
-| EXECUTION_ATTEMPT_DURABLE | CANDIDATES_EXECUTED_WITHIN_FROZEN_BUDGET | Apply the frozen chronological purged Discovery split and execute the exact candidate accelerator (LightGBM OpenCL GPU or CPU, XGBoost CUDA GPU or CPU, Random Forest CPU) with one thread, explicit seeds, no retry and bounded FIT_SECONDS accounting. Hosted CI fitting uses CPU-only synthetic fixtures. | Exact current Research + accepted R01 output manifest + confirmed immutable R02 authorization + readback-verified FROZEN_WAITING_EXECUTION block/candidates + sealed R01 Discovery-only training artifact. | SYNTHETIC_TEST_MODEL_FIT_ONLY |
-| CANDIDATES_EXECUTED_WITHIN_FROZEN_BUDGET | COMPLETE_WAITING_OWNER | Generate one canonical outcome for every frozen candidate and atomically append all outcomes plus one verified terminal manifest. | Exact current Research + accepted R01 output manifest + confirmed immutable R02 authorization + readback-verified FROZEN_WAITING_EXECUTION block/candidates + sealed R01 Discovery-only training artifact. | R02_CANDIDATE_OUTCOMES, R02_BLOCK_TERMINAL |
-
-### Invariants
-
-- The fit reads only the sealed hash-bound R01 Discovery training artifact. R02 Discovery-scope integrity readback binds the registry/output manifest hashes for dataset.csv, data_quality_report.json and leakage_report.json without opening their contents; Locked OOS and Fresh/Forward target outcomes never enter fitting, preprocessing or metric inputs.
-- The candidate set, candidate identities, family, seed, topology, preprocessing and training configuration are reconstructed from the verified frozen block; no candidate substitution or undocumented defaults are allowed.
-- Cheap Screen uses a frozen chronological 80/20 holdout, no shuffle, R01 minimum legal training-target purge, at least 24 training rows, at least 12 validation rows, and all three classes in training.
-- STANDARD preprocessing is fitted on training rows only and is candidate-local.
-- LightGBM supports Windows OpenCL GPU or explicit CPU; XGBoost supports CUDA GPU or explicit CPU; Random Forest is CPU-only. Hosted CI fitting uses CPU synthetic fixtures, every worker uses one thread and an explicit candidate seed, retries are disabled, and the frozen FIT_SECONDS budget is enforced.
-- Every candidate receives exactly one SCREEN_PASS, SCREEN_FAIL or EXECUTION_ERROR record; no failed candidate is dropped.
-- All outcomes and the COMPLETE_WAITING_OWNER terminal are committed through the existing atomic immutable ledger.
-- A completed verified terminal is returned without retraining; a durable attempt without a verified terminal fails closed and cannot be retried.
-- SCREEN_PASS is not scientific PASS; Cheap Screen qualification authority is false and Qualified Pool admission is R03_FULL_WFA_ONLY.
-- No second Discovery block, public execution/outcome-submit API, R03, ONNX, Research Challenger, Champion mutation or live trading is opened.
-
-### Failure behavior
-
-- Stale/cross-epoch Research, unaccepted R01, changed dataset/manifest/lineage, invalid candidate authority, protected-data fields, malformed/nonfinite data or corrupt artifact fail closed before an execution attempt is persisted.
-- Insufficient or single-class Discovery training data produces retained deterministic EXECUTION_ERROR outcomes for every frozen candidate without model fitting.
-- A candidate fit/predict exception or timeout produces a deterministic EXECUTION_ERROR; timeout consumes the remaining bounded compute budget and no retry is attempted.
-- A persistence failure rolls back all outcomes and the terminal; the previously committed attempt marker remains and all future reads fail closed as execution-uncertain.
-
-### Restart behavior
-
-- A terminal already present and readback-verified is returned exactly without re-reading training data or fitting again.
-- A durable attempt without a complete verified terminal is uncertain, blocks preflight/getters, and is never silently retried.
-
-### Rollback behavior
-
-- The one-shot attempt marker commits before model work and is intentionally not rolled back after an interruption.
-- Every candidate outcome and the single block terminal share one SQLite transaction; partial terminal publication is forbidden.
-
-## FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER — R02 Cheap Screen immutable outcome ledger
-
-Purpose: Define deterministic append-only all-candidate outcome and terminal authority for a future executor without performing model fitting or granting qualification.
-Critical: TRUE
-Entry condition: A frozen R02 Discovery block exists. Hosted tests may pass synthetic outcome requests directly to the store; no public outcome-submit runtime surface exists.
-Authority: Immutable frozen R02 Discovery block/candidate specs + deterministic outcome contract/store; no trainer or qualification authority.
-
-### States
-
-- FROZEN_WAITING_EXECUTION
-- OUTCOME_SET_VALIDATED
-- COMPLETE_WAITING_OWNER
-
-### Legal transitions
-
-| From | To | Action | Authority | Side effects |
-|---|---|---|---|---|
-| FROZEN_WAITING_EXECUTION | OUTCOME_SET_VALIDATED | Validate exact frozen candidate set, deterministic outcome identities, explicit failure retention and frozen compute budget. | Immutable frozen R02 Discovery block/candidate specs + deterministic outcome contract/store; no trainer or qualification authority. |  |
-| OUTCOME_SET_VALIDATED | COMPLETE_WAITING_OWNER | Atomically append every candidate outcome and one immutable terminal authority. | Immutable frozen R02 Discovery block/candidate specs + deterministic outcome contract/store; no trainer or qualification authority. | R02_CANDIDATE_OUTCOMES, R02_BLOCK_TERMINAL |
-
-### Invariants
-
-- Every frozen candidate must appear exactly once before terminal commit.
-- SCREEN_FAIL and EXECUTION_ERROR are retained as outcomes rather than discarded.
-- Non-finite metrics and compute values fail closed.
-- Total compute consumption cannot exceed the frozen block budget and units must match.
-- Outcome plus terminal persistence is all-or-nothing.
-- Outcome and terminal rows are immutable and append-only.
-- COMPLETE_WAITING_OWNER is block completeness only, not scientific qualification.
-- Cheap Screen has zero Qualified Pool authority; future R03 Full WFA owns admission.
-- No trainer, model fitting, ONNX, Research Challenger or Champion mutation occurs in this flow.
-
-### Failure behavior
-
-- Missing/duplicate/unknown candidates, malformed metrics, wrong compute units, budget excess or different terminal replay fail closed before/without terminal authority.
-- A mid-batch persistence fault rolls back all newly inserted outcome and terminal rows.
-
-### Restart behavior
-
-- Exact same complete outcome set is idempotent; a different second terminal manifest is rejected.
-
-### Rollback behavior
-
-- One SQLite transaction covers all new candidate outcome rows and the block terminal row.
-
-## FLOW-R02-DISCOVERY-AUTHORIZATION — R02 Owner authorization and immutable Discovery freeze
-
-Purpose: Validate explicit Owner authorization against current accepted R01 output, then persist one immutable non-executing Discovery block and candidate set.
-Critical: TRUE
-Entry condition: R02 preflight is READY_FOR_OWNER_AUTHORIZATION and caller submits the exact canonical plan plus OWNER_EXPLICIT_R02_DISCOVERY_AUTHORIZE.
-Authority: Owner explicit confirmation + deterministic R02 planner/store + accepted current R01 immutable output authority.
-
-### States
-
-- READY_FOR_OWNER_AUTHORIZATION
-- AUTHORIZATION_VALIDATED
-- FROZEN_WAITING_EXECUTION
-
-### Legal transitions
-
-| From | To | Action | Authority | Side effects |
-|---|---|---|---|---|
-| READY_FOR_OWNER_AUTHORIZATION | AUTHORIZATION_VALIDATED | Validate exact Owner confirmation, Research identity, accepted R01 output and canonical plan authority. | Owner explicit confirmation + deterministic R02 planner/store + accepted current R01 immutable output authority. |  |
-| AUTHORIZATION_VALIDATED | FROZEN_WAITING_EXECUTION | Atomically persist immutable authorization, one bounded Discovery block and immutable candidate specs in one SQLite transaction. | Owner explicit confirmation + deterministic R02 planner/store + accepted current R01 immutable output authority. | R02_AUTHORIZATION_ROW, R02_DISCOVERY_BLOCK, R02_CANDIDATE_SPECS |
-
-### Invariants
-
-- Authorization is not scientific execution and creates no training or Cheap Screen result.
-- Exactly one different Discovery block per Research identity is permitted; exact replay is idempotent.
-- Authorization, plan and candidate identities are recomputed at persistence boundary.
-- Production authorization+block+candidate freeze is atomic: either all rows commit or none of the new authority rows persist.
-- Frozen rows are update-immutable and append-only.
-- Candidate count and compute budget are explicit and frozen.
-- Cheap Screen has zero qualification authority and R03 owns future Qualified Pool admission.
-- No ONNX, Research Challenger or Champion mutation occurs.
-
-### Failure behavior
-
-- Missing/wrong Owner confirmation, stale Research/R01 output, tampered hashes/IDs, prior scientific side effects or a different second block fail closed.
-- Any persistence fault while creating a new authorization/block/candidate set rolls back the entire new R02 authority transaction; no orphan immutable authorization is permitted.
-
-### Restart behavior
-
-- Exact same authorization/plan replay is idempotent; a different plan for the same Research identity is rejected.
-
-### Rollback behavior
-
-- Production authorize-and-freeze uses one SQLite transaction. Candidate/block failure rolls back newly inserted authorization, block and candidate rows together.
-
-## FLOW-R02-DISCOVERY-PREFLIGHT — R02 Discovery source preflight and deterministic plan contract
-
-Purpose: Expose fail-closed R02 source readiness and deterministic bounded Discovery planning while distinguishing READY_FOR_OWNER_AUTHORIZATION from a separately frozen non-executing block.
-Critical: TRUE
-Entry condition: Caller inspects R02 readiness or constructs a source-level Discovery plan; no scientific start authority is granted by this flow.
-Authority: research_r02_service + research_r02_contract + accepted immutable R01 authority; Owner authorization may freeze one block but execution remains separately unavailable.
-
-### States
-
-- CHECK_R01_AUTHORITY
-- BLOCKED
-- READY_FOR_OWNER_AUTHORIZATION
-- PLAN_INPUT
-- PLAN_VALIDATED
-- FROZEN_WAITING_EXECUTION
-
-### Legal transitions
-
-| From | To | Action | Authority | Side effects |
-|---|---|---|---|---|
-| CHECK_R01_AUTHORITY | BLOCKED | Return semantic blocker when current accepted R01 authority is absent. | research_r02_service + research_r02_contract + accepted immutable R01 authority; Owner authorization may freeze one block but execution remains separately unavailable. |  |
-| CHECK_R01_AUTHORITY | READY_FOR_OWNER_AUTHORIZATION | Verify terminal R01 PASS, immutable integrity/output authority and zero prior scientific side effects. | research_r02_service + research_r02_contract + accepted immutable R01 authority; Owner authorization may freeze one block but execution remains separately unavailable. |  |
-| PLAN_INPUT | PLAN_VALIDATED | Canonicalize exact candidate identities, explicit candidate count and explicit compute budget into deterministic source plan. | research_r02_service + research_r02_contract + accepted immutable R01 authority; Owner authorization may freeze one block but execution remains separately unavailable. |  |
-
-### Invariants
-
-- Source readiness is not Owner authorization and is not R02 scientific PASS.
-- Candidate count and compute budget have no hidden defaults.
-- Cheap Screen has no scientific qualification authority; future R03 Full WFA owns Qualified Pool admission.
-- Temporal model families remain unopened until separate sequence/causality/resource/runtime proof.
-- No model training, ONNX, Research Challenger or Champion mutation occurs in this flow.
-- No R02 scientific execution/start endpoint exists; authorization may only freeze immutable future-execution inputs.
-
-### Failure behavior
-
-- Absent/unaccepted R01 returns BLOCKED; malformed/tampered R01 output authority or prior scientific side-effect regression fails closed.
-- Invalid/duplicate/mismatched candidate plan inputs are rejected before any scientific execution surface exists.
-
-### Restart behavior
-
-- No scientific mutable state is created by this source-foundation flow, so retry re-evaluates current authority deterministically.
-
-### Rollback behavior
-
-- No scientific rollback is required because the flow does not mutate R02 execution state.
-
-## FLOW-RESEARCH-CONFIG-SNAPSHOT — Editable Research configuration to immutable execution snapshot
-
-Purpose: Keep Owner-editable current sample configuration distinct from immutable per-execution R00/R01 authority.
-Critical: TRUE
-Entry condition: Current positive Research sample configuration exists or Owner edits it for future executions.
-Authority: research_settings current SQLite value; R00/R01 authorization/input manifest for execution snapshots.
-
-### States
-
-- CURRENT_CONFIG
-- CONFIG_UPDATED
-- EXECUTION_AUTHORIZED
-- IMMUTABLE_SNAPSHOT
-- HISTORICAL_EXECUTION
-
-### Legal transitions
-
-| From | To | Action | Authority | Side effects |
-|---|---|---|---|---|
-| CURRENT_CONFIG | CONFIG_UPDATED | Owner updates positive future-execution sample requirement. | research_settings current SQLite value; R00/R01 authorization/input manifest for execution snapshots. | schema_meta current value |
-| CONFIG_UPDATED | EXECUTION_AUTHORIZED | A separately legal R00/R01 start reads the current exact setting. | research_settings current SQLite value; R00/R01 authorization/input manifest for execution snapshots. |  |
-| EXECUTION_AUTHORIZED | IMMUTABLE_SNAPSHOT | Persist exact execution authorization/input snapshot. | research_settings current SQLite value; R00/R01 authorization/input manifest for execution snapshots. | immutable execution authority |
-| IMMUTABLE_SNAPSHOT | HISTORICAL_EXECUTION | Retain frozen value independent of later current-config edits. | research_settings current SQLite value; R00/R01 authorization/input manifest for execution snapshots. |  |
-
-### Invariants
-
-- Initialization does not permanently freeze current config.
-- No hidden 4/8 trades/month fallback.
-- Historical accepted R00 4 trades/month remains historical evidence, not permanent current setting.
-
-### Failure behavior
-
-- Missing/invalid config blocks execution authorization rather than substituting a fallback.
-
-### Restart behavior
-
-- Running/recovered execution retains its captured snapshot and does not re-read later current config as authority.
-
-### Rollback behavior
-
-- Config edits affect only current/future state; historical snapshots are never rolled back/re-written.
-
 ## FLOW-SCIENTIST-KNOWLEDGE — Hash-verified Scientist knowledge to advisory context
 
 Purpose: Load source-hash-verified static knowledge, combine only bounded committed runtime context and produce advisory chat without scientific or promotion mutation authority.
@@ -539,3 +269,56 @@ Authority: scientist_knowledge hash manifest + bounded Scientist context/store; 
 ### Rollback behavior
 
 - Clear/rotate chat may change conversational context only; Strategy/Research authority is untouched.
+
+## FLOW-STRATEGY-RESET-RECOVERY — Owner-confirmed Strategy reset and fail-closed database recovery
+
+Purpose: Prevent silent or unsafe loss of Strategy state and provide a fail-closed, explicit path to recover corrupt operational state.
+Critical: TRUE
+Entry condition: Owner requests a current Strategy workspace reset, or application startup detects an unopenable/corrupt operational database.
+Authority: SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate.
+
+### States
+
+- DATABASE_READY
+- STRATEGY_RESET_PREFLIGHT
+- STRATEGY_RESET_BLOCKED
+- WAITING_EXACT_RESET_CONFIRMATION
+- BACKUP_AND_RESET_RUNNING
+- RECOVERY_REQUIRED
+- WAITING_EXACT_RECOVERY_CONFIRMATION
+- DATABASE_QUARANTINED
+- DATABASE_REBUILT
+- RECOVERY_FAILED
+
+### Legal transitions
+
+| From | To | Action | Authority | Side effects |
+|---|---|---|---|---|
+| DATABASE_READY | STRATEGY_RESET_PREFLIGHT | Preflight exact active work, Champion authority, generated state, database integrity, and protected baseline. | SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. |  |
+| STRATEGY_RESET_PREFLIGHT | STRATEGY_RESET_BLOCKED | Show blockers and do not mutate when any reset precondition is false. | SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. |  |
+| STRATEGY_RESET_PREFLIGHT | WAITING_EXACT_RESET_CONFIRMATION | Show deletion/preservation plan and require exact current confirmation. | SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. |  |
+| WAITING_EXACT_RESET_CONFIRMATION | BACKUP_AND_RESET_RUNNING | Create and verify SQLite backup, revalidate inside the write transaction, clear only owned generated Strategy state, then verify result. | SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. | verified database backup, owned Strategy generated state reset |
+| DATABASE_READY | RECOVERY_REQUIRED | On corrupt/unopenable state, block ordinary routes and expose only recovery status/reset until readiness is restored. | SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. |  |
+| RECOVERY_REQUIRED | WAITING_EXACT_RECOVERY_CONFIRMATION | Require exact explicit recovery confirmation; create/verify backup before quarantining the corrupt database. | SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. | verified recovery backup |
+| WAITING_EXACT_RECOVERY_CONFIRMATION | DATABASE_QUARANTINED | Quarantine original, initialize schema and Strategy baseline, then verify state before reporting completion. | SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. | corrupt database quarantine, current schema bootstrap |
+
+### Invariants
+
+- No Owner operational database is read or changed during source tests; tests use synthetic temporary databases.
+- Only owned Strategy-generated state is reset; EA baseline and provider settings are preserved.
+- The original corrupt database is retained in quarantine after a verified backup.
+- Recovery reports READY only after rebuilding and revalidating the current schema.
+
+### Failure behavior
+
+- Active work, current Champion, invalid state, stale preflight, or incorrect confirmation blocks reset before mutation.
+- If database backup cannot be verified, reset/recovery does not proceed.
+- While recovery is required or status is unavailable, ordinary API/UI operations remain blocked and the UI explains why.
+
+### Restart behavior
+
+- Startup rechecks database recovery state before enabling normal application routes.
+
+### Rollback behavior
+
+- A verified backup and quarantined original remain available; recovery failures do not claim reset success.

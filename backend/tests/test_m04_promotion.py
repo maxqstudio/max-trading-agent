@@ -801,6 +801,9 @@ def test_later_promotion_service_preserves_former_champion_lineage(
     assert old["replaced_by"] == b
     assert get_challenger(a["strategy_id"], path=env["db"])["status"] == "PROMOTED"
     assert get_challenger(b, path=env["db"])["status"] == "PROMOTED"
+    persisted = get_promotion(second["promotion_id"], path=env["db"])
+    assert persisted is not None
+    assert persisted["post_state"]["previous_challenger_final_status"] == "PROMOTED"
     assert list_challengers(path=env["db"]) == []
 
 

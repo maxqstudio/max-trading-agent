@@ -84,7 +84,7 @@ function baseFetch(messages: Array<Record<string, unknown>> = []) {
 }
 
 describe('Scientist right drawer', () => {
-  it('offers bounded Research evidence context to the Owner', async () => {
+  it('offers only the supported Strategy evidence contexts to the Owner', async () => {
     vi.stubGlobal('fetch', baseFetch([]))
     const onContextChange = vi.fn()
 
@@ -92,11 +92,11 @@ describe('Scientist right drawer', () => {
 
     const contextSelect = await screen.findByLabelText(/context/i)
     expect(contextSelect).toBeInTheDocument()
-    expect(Array.from((contextSelect as HTMLSelectElement).options).map((item) => item.value))
-      .toContain('RESEARCH')
-
-    fireEvent.change(contextSelect, { target: { value: 'RESEARCH' } })
-    expect(onContextChange).toHaveBeenCalledWith('RESEARCH')
+    const values = Array.from((contextSelect as HTMLSelectElement).options).map((item) => item.value)
+    expect(values).toEqual(['AUTO', 'STRATEGY', 'OPTIMIZER', 'CHALLENGERS', 'CHAMPION', 'PROJECT CONTRACT'])
+    expect(values).not.toContain('RESEARCH')
+    fireEvent.change(contextSelect, { target: { value: 'STRATEGY' } })
+    expect(onContextChange).toHaveBeenCalledWith('STRATEGY')
     assertOwnerLanguageClean(document.body.textContent ?? '')
   })
 

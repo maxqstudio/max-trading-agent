@@ -354,6 +354,22 @@ def current_champion(*, path: Path = DATABASE_PATH) -> dict[str, Any] | None:
     return _decode_champion(row)
 
 
+def current_champion_summary(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
+    """Return the persisted current identity without verifying its artifact tree."""
+    migrate_m04(path)
+    with connect(path) as conn:
+        row = conn.execute(
+            "SELECT strategy_id,status FROM strategy_champions WHERE status='CURRENT'"
+        ).fetchone()
+    current = dict(row) if row is not None else None
+    return {
+        "status": "CURRENT_STRATEGY_CHAMPION" if current else "NONE",
+        "current": current,
+        "integrity": {"status": "NOT_CHECKED"},
+        "live_authority": "NONE",
+    }
+
+
 def get_champion(strategy_id: str, *, path: Path = DATABASE_PATH) -> dict[str, Any] | None:
     migrate_m04(path)
     with connect(path) as conn:

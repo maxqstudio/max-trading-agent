@@ -1,0 +1,104 @@
+{
+  "authority": "Artifact API plus ownership/path/dependency checks in artifact_control; UI is presentation only.",
+  "critical": true,
+  "entry_condition": "Owner opens Artifacts to inspect the inventory or explicitly requests reconciliation, cleanup, deletion, or workspace reset.",
+  "failure_behavior": [
+    "Inventory reads do not trigger reconciliation or mutate MT5/runtime state.",
+    "Missing, stale, protected, active-use, ownership, path, or dependency preflight blocks mutation and displays the reason.",
+    "Every asynchronous action reports progress and then a completed, blocked, or failed result."
+  ],
+  "flow_id": "FLOW-ARTIFACT-CONTROL",
+  "invariants": [
+    "Listing is read-only; reconciliation is explicit.",
+    "Artifact deletion and cleanup are backend-authorized and dependency-safe.",
+    "Destructive Strategy reset is separate from Clean Generated Data and requires exact confirmation plus a verified database backup.",
+    "The UI disables blocked actions with an explanation and callbacks independently fail closed."
+  ],
+  "purpose": "Give the Owner an accurate inventory and explicit, explainable, safety-gated controls for generated artifacts and Strategy workspace reset.",
+  "restart_behavior": [
+    "A new page load re-reads authoritative inventory/preflight; no stale local approval is treated as authority."
+  ],
+  "rollback_behavior": [
+    "Cleanup/deletion follows backend recovery and ownership policy; workspace reset retains a verified pre-reset SQLite backup."
+  ],
+  "schema_version": 1,
+  "sequence_session": "docs/sequence/sessions/FLOW-ARTIFACT-CONTROL.json",
+  "source_owners": [
+    "backend/max_backend/artifact_api.py::list_artifacts",
+    "backend/max_backend/artifact_api.py::reconcile",
+    "backend/max_backend/artifact_api.py::preflight",
+    "backend/max_backend/artifact_api.py::act",
+    "backend/max_backend/artifact_api.py::cleanup_preflight",
+    "backend/max_backend/artifact_api.py::cleanup",
+    "backend/max_backend/artifact_api.py::trace",
+    "backend/max_backend/artifact_api.py::strategy_workspace_reset_preflight",
+    "backend/max_backend/artifact_api.py::strategy_workspace_reset",
+    "backend/max_backend/artifact_control.py::artifact_page",
+    "backend/max_backend/artifact_control.py::artifact_trace",
+    "backend/max_backend/artifact_control.py::execute_artifact_action",
+    "backend/max_backend/artifact_control.py::global_cleanup_preflight",
+    "backend/max_backend/artifact_control.py::clean_generated_data",
+    "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
+    "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+    "frontend/src/ArtifactsPage.tsx::ArtifactsPage"
+  ],
+  "states": [
+    "INVENTORY_LOADING",
+    "INVENTORY_READY",
+    "RECONCILIATION_RUNNING",
+    "ACTION_PREFLIGHT",
+    "ACTION_BLOCKED",
+    "WAITING_EXPLICIT_CONFIRMATION",
+    "ACTION_RUNNING",
+    "ACTION_COMPLETED",
+    "ACTION_FAILED"
+  ],
+  "tests": [
+    "backend/tests/test_m08_strategy_results.py",
+    "backend/tests/test_strategy_workspace_reset.py",
+    "frontend/src/ArtifactsPage.test.tsx"
+  ],
+  "title": "Explicit artifact inventory, cleanup and Strategy workspace reset",
+  "transitions": [
+    {
+      "action": "Load inventory from the current read authority without implicit reconciliation.",
+      "from": "INVENTORY_LOADING",
+      "side_effects": [],
+      "to": "INVENTORY_READY"
+    },
+    {
+      "action": "Owner explicitly starts reconciliation; show progress and terminal result/error.",
+      "from": "INVENTORY_READY",
+      "side_effects": [
+        "known generated-artifact inventory refresh"
+      ],
+      "to": "RECONCILIATION_RUNNING"
+    },
+    {
+      "action": "Preflight the selected cleanup/delete/reset action against current backend authority.",
+      "from": "INVENTORY_READY",
+      "side_effects": [],
+      "to": "ACTION_PREFLIGHT"
+    },
+    {
+      "action": "Show blocker and keep the control disabled; callbacks reject stale or blocked state without mutation.",
+      "from": "ACTION_PREFLIGHT",
+      "side_effects": [],
+      "to": "ACTION_BLOCKED"
+    },
+    {
+      "action": "For a legal destructive operation, display exact scope and require explicit confirmation.",
+      "from": "ACTION_PREFLIGHT",
+      "side_effects": [],
+      "to": "WAITING_EXPLICIT_CONFIRMATION"
+    },
+    {
+      "action": "Execute only after confirmation and current server-side revalidation; display progress and result.",
+      "from": "WAITING_EXPLICIT_CONFIRMATION",
+      "side_effects": [
+        "backend-authorized artifact action or backed-up workspace reset"
+      ],
+      "to": "ACTION_RUNNING"
+    }
+  ]
+}

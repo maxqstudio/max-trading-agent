@@ -8,9 +8,8 @@
 | Strategy / Optimizer | Optimizer job/config/result/qualified selection | preview, start, stop, resume, explicit qualified selection | Optimizer APIs and canonical backend qualification | FLOW-OPTIMIZER-TO-CHALLENGER |
 | Strategy / Challengers | Active/archive/detail/backtest/lifecycle/promotion surface | detail, backtest, retire, legal deletion preflight/action, promote confirmation | Challenger/Champion APIs | FLOW-CHALLENGER-DETAIL |
 | Strategy / Champion | Current Champion and promotion history | inspect | Champion store/API | FLOW-CHALLENGER-TO-CHAMPION |
-| Research | Research lifecycle/current config/R00 authority | edit current sample config, legal R00 action | Research APIs/services | FLOW-RESEARCH-CONFIG-SNAPSHOT |
-| Research / Data | Embedded R01 source/readiness/execution inspector | source prepare, explicit R01 start only when separately authorized | R01 APIs/services | FLOW-R01-SOURCE-PIPELINE |
-| Artifacts | Governed generated-data inventory/control | preflight, legal cleanup actions | Artifact control APIs | FLOW-CHALLENGER-CONSUMPTION |
+| Artifacts | Read-only inventory plus explicit, explained, safety-gated generated-data actions | read artifact inventory without implicit reconciliation, explicit reconciliation with progress/result, cleanup/delete preflight with visible blockers, exact-confirmation Strategy workspace reset, visible action progress/completed/blocked/error state | Artifact control and strategy reset APIs; current ownership/dependency/path safety are backend-enforced | FLOW-ARTIFACT-CONTROL |
+| Startup recovery | Fail-closed recovery UI for unavailable/corrupt operational state | show recovery reason and consequences, require exact confirmation, show backup/recovery progress and result/error | Recovery status/reset APIs; ordinary Strategy operations stay blocked until the backend reports READY | FLOW-STRATEGY-RESET-RECOVERY |
 | Settings | Scientist provider/model/UI configuration | save/connect settings | Scientist settings APIs only | FLOW-SCIENTIST-KNOWLEDGE |
 | Scientist drawer | Advisory chat over bounded evidence | chat, clear, model/context UI choice | Scientist status/chat/context; no scientific mutation | FLOW-SCIENTIST-KNOWLEDGE |
 

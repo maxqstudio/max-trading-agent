@@ -1,383 +1,182 @@
 {
+  "schema_version": 1,
+  "mode": "DURING",
+  "scope": "CURRENT",
+  "result": "PASS",
+  "skill_authority_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
+  "generation_anchor_policy": {
+    "meaning": "The observed head is a pre-commit generation anchor. Final hosted source SHA and CI identity remain external acceptance evidence; real MT5 and Owner-PC runtime remain deferred.",
+    "observed_head": "93a96a2613695009d7787f066db863c4c1e0e226",
+    "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126"
+  },
   "flows": [
     {
-      "declared_entries": [
-        "backend/max_backend/challenger_operations.py::retire_challenger",
-        "backend/max_backend/challenger_store.py::consumed_source_identities"
-      ],
-      "flow_id": "FLOW-CHALLENGER-CONSUMPTION",
-      "generated_edges": 89,
-      "generated_nodes": 50,
+      "flow_id": "FLOW-ARTIFACT-CONTROL",
       "mode": "DURING",
-      "non_python_structured_source_owners": [
-        "frontend/src/ChallengersPage.tsx::ChallengersPage"
-      ],
-      "outside_graph_classification": "GENERATOR_DEFECT_OR_ENTRY_SURFACE_LIMITATION",
-      "outside_graph_resolution": "Exact locator exists and mapped tests/semantic workflow retain authority; no product source change is justified.",
-      "python_source_owners_declared": 3,
-      "python_source_owners_in_static_graph": [
-        "backend/max_backend/challenger_operations.py::retire_challenger",
-        "backend/max_backend/challenger_store.py::consumed_source_identities"
-      ],
-      "python_source_owners_outside_static_reachable_graph": [
-        "backend/max_backend/challenger_operations.py::run_challenger_backtest"
-      ],
-      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
+      "purpose": "Inventory is read-only; reconciliation and destructive operations are explicit, preflighted, and report progress plus a terminal result.",
+      "declared_entries": [
+        "frontend/src/ArtifactsPage.tsx::<module>",
+        "backend/max_backend/artifact_api.py::list_artifacts",
+        "backend/max_backend/artifact_api.py::reconcile",
+        "backend/max_backend/artifact_api.py::preflight",
+        "backend/max_backend/artifact_api.py::act",
+        "backend/max_backend/artifact_api.py::cleanup_preflight",
+        "backend/max_backend/artifact_api.py::cleanup",
+        "backend/max_backend/artifact_api.py::trace",
+        "backend/max_backend/artifact_api.py::strategy_workspace_reset_preflight",
+        "backend/max_backend/artifact_api.py::strategy_workspace_reset",
+        "backend/max_backend/artifact_control.py::clean_generated_data"
+      ],
+      "generated_nodes": 118,
+      "generated_edges": 216,
+      "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126",
+      "tests": [
+        "backend/tests/test_m08_strategy_results.py",
+        "backend/tests/test_strategy_workspace_reset.py",
+        "frontend/src/ArtifactsPage.test.tsx"
+      ],
+      "unresolved_bindings": [],
+      "runtime_evidence_boundary": "Browser checks used mocked API responses. No Owner database, MT5, broker, or real operational artifact was accessed."
+    },
+    {
+      "flow_id": "FLOW-CHALLENGER-CONSUMPTION",
+      "mode": "DURING",
+      "scope": "CURRENT",
+      "semantic_review": "PASS",
+      "purpose": "Retiring or deleting a Challenger does not make a durably consumed Optimizer source selectable again.",
+      "declared_entries": [
+        "backend/max_backend/challenger_operations.py::retire_challenger",
+        "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+        "backend/max_backend/challenger_store.py::consumed_source_identities"
+      ],
+      "generated_nodes": 80,
+      "generated_edges": 117,
+      "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126",
       "tests": [
         "backend/tests/test_m06_challenger_operations.py",
         "backend/tests/test_m08_strategy_results.py"
       ],
-      "unresolved_bindings": []
+      "unresolved_bindings": [],
+      "runtime_evidence_boundary": "Static sequence and synthetic tests only; real Strategy Tester and Owner-PC behavior remain deferred."
     },
     {
+      "flow_id": "FLOW-CHALLENGER-DETAIL",
+      "mode": "DURING",
+      "scope": "CURRENT",
+      "semantic_review": "PASS",
+      "purpose": "Challenger detail is reconstructed from its retained request epoch and exact parameter universe.",
       "declared_entries": [
         "backend/max_backend/challenger_registry.py::challenger_detail",
         "backend/max_backend/challenger_operations.py::challenger_registry_page"
       ],
-      "flow_id": "FLOW-CHALLENGER-DETAIL",
-      "generated_edges": 79,
-      "generated_nodes": 46,
-      "mode": "DURING",
-      "non_python_structured_source_owners": [
-        "frontend/src/ChallengersPage.tsx::ChallengersPage"
-      ],
-      "outside_graph_classification": "NONE",
-      "outside_graph_resolution": "NOT_APPLICABLE",
-      "python_source_owners_declared": 2,
-      "python_source_owners_in_static_graph": [
-        "backend/max_backend/challenger_registry.py::challenger_detail",
-        "backend/max_backend/challenger_operations.py::challenger_registry_page"
-      ],
-      "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
-      "scope": "CURRENT",
-      "semantic_review": "PASS",
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
+      "generated_nodes": 44,
+      "generated_edges": 62,
+      "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126",
       "tests": [
         "backend/tests/test_m03_challenger.py",
         "backend/tests/test_m06_challenger_operations.py"
       ],
-      "unresolved_bindings": []
+      "unresolved_bindings": [],
+      "runtime_evidence_boundary": "Static sequence and synthetic tests only; real Strategy Tester and Owner-PC behavior remain deferred."
     },
     {
+      "flow_id": "FLOW-CHALLENGER-TO-CHAMPION",
+      "mode": "DURING",
+      "scope": "CURRENT",
+      "semantic_review": "PASS",
+      "purpose": "Only explicit Owner authorization and verified deployment/parity allow an atomic Champion promotion.",
       "declared_entries": [
         "backend/max_backend/promotion_service.py::promote_strategy_challenger"
       ],
-      "flow_id": "FLOW-CHALLENGER-TO-CHAMPION",
-      "generated_edges": 251,
-      "generated_nodes": 124,
-      "mode": "DURING",
-      "non_python_structured_source_owners": [
-        "frontend/src/ChampionPage.tsx::ChampionPage",
-        "frontend/src/ChallengersPage.tsx::ChallengersPage"
-      ],
-      "outside_graph_classification": "NONE",
-      "outside_graph_resolution": "NOT_APPLICABLE",
-      "python_source_owners_declared": 3,
-      "python_source_owners_in_static_graph": [
-        "backend/max_backend/promotion_service.py::promote_strategy_challenger",
-        "backend/max_backend/champion_store.py::commit_promotion_authority",
-        "backend/max_backend/promotion_service.py::verify_current_strategy_champion"
-      ],
-      "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
-      "scope": "CURRENT",
-      "semantic_review": "PASS",
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
+      "generated_nodes": 130,
+      "generated_edges": 268,
+      "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126",
       "tests": [
         "backend/tests/test_m04_promotion.py",
         "backend/tests/test_m04_store.py"
       ],
-      "unresolved_bindings": []
+      "unresolved_bindings": [],
+      "runtime_evidence_boundary": "Promotion authority is covered by local synthetic tests; no real deployment or Champion mutation was performed."
     },
     {
+      "flow_id": "FLOW-OPTIMIZER-TO-CHALLENGER",
+      "mode": "DURING",
+      "scope": "CURRENT",
+      "semantic_review": "PASS",
+      "purpose": "Only qualified, unconsumed Optimizer rows can be selected by the Owner and registered as Challengers.",
       "declared_entries": [
         "backend/max_backend/optimizer_api.py::get_qualified_candidates",
         "backend/max_backend/optimizer_api.py::promote_qualified_candidates"
       ],
-      "flow_id": "FLOW-OPTIMIZER-TO-CHALLENGER",
-      "generated_edges": 225,
-      "generated_nodes": 117,
-      "mode": "DURING",
-      "non_python_structured_source_owners": [
-        "frontend/src/OptimizerPage.tsx::OptimizerPage"
-      ],
-      "outside_graph_classification": "NONE",
-      "outside_graph_resolution": "NOT_APPLICABLE",
-      "python_source_owners_declared": 5,
-      "python_source_owners_in_static_graph": [
-        "backend/max_backend/optimizer_api.py::get_qualified_candidates",
-        "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
-        "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
-        "backend/max_backend/challenger_selection.py::create_selected_challengers",
-        "backend/max_backend/challenger_store.py::consumed_source_identities"
-      ],
-      "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
-      "scope": "CURRENT",
-      "semantic_review": "PASS",
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
+      "generated_nodes": 116,
+      "generated_edges": 199,
+      "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_m03_challenger.py"
       ],
-      "unresolved_bindings": []
+      "unresolved_bindings": [],
+      "runtime_evidence_boundary": "Static sequence and synthetic tests only; real MT5 optimization evidence is not produced in this phase."
     },
     {
-      "declared_entries": [
-        "backend/max_backend/research_service.py::start_r00",
-        "backend/max_backend/research_service.py::r00_preflight"
-      ],
-      "flow_id": "FLOW-R00-INITIALIZATION",
-      "generated_edges": 367,
-      "generated_nodes": 180,
-      "mode": "DURING",
-      "non_python_structured_source_owners": [
-        "frontend/src/ResearchPage.tsx::ResearchPage"
-      ],
-      "outside_graph_classification": "NONE",
-      "outside_graph_resolution": "NOT_APPLICABLE",
-      "python_source_owners_declared": 3,
-      "python_source_owners_in_static_graph": [
-        "backend/max_backend/research_service.py::r00_preflight",
-        "backend/max_backend/research_service.py::start_r00",
-        "backend/max_backend/research_service.py::canonical_research_stage"
-      ],
-      "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
-      "scope": "CURRENT",
-      "semantic_review": "PASS",
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
-      "tests": [
-        "backend/tests/test_r00_research.py"
-      ],
-      "unresolved_bindings": []
-    },
-    {
-      "declared_entries": [
-        "backend/max_backend/research_r01_service.py::start_r01",
-        "backend/max_backend/research_source.py::prepare_r01_source",
-        "backend/max_backend/research_r01_service.py::r01_preflight",
-        "backend/max_backend/research_r01_service.py::prepare_r01_verified_source"
-      ],
-      "flow_id": "FLOW-R01-SOURCE-PIPELINE",
-      "generated_edges": 471,
-      "generated_nodes": 218,
-      "mode": "DURING",
-      "non_python_structured_source_owners": [
-        "frontend/src/DataPage.tsx::DataPage"
-      ],
-      "outside_graph_classification": "NONE",
-      "outside_graph_resolution": "NOT_APPLICABLE",
-      "python_source_owners_declared": 11,
-      "python_source_owners_in_static_graph": [
-        "backend/max_backend/research_source.py::prepare_r01_source",
-        "backend/max_backend/research_dataset.py::build_labels",
-        "backend/max_backend/research_dataset.py::build_dataset",
-        "backend/max_backend/research_leakage.py::bind_protected_partition_rows",
-        "backend/max_backend/research_leakage.py::bind_protected_target_dependency_authority",
-        "backend/max_backend/research_leakage.py::run_adversarial_suite",
-        "backend/max_backend/research_r01_store.py::commit_r01_terminal_authority",
-        "backend/max_backend/research_r01_service.py::r01_preflight",
-        "backend/max_backend/research_r01_service.py::prepare_r01_verified_source",
-        "backend/max_backend/research_r01_service.py::start_r01",
-        "backend/max_backend/research_r01_service.py::r01_detail"
-      ],
-      "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
-      "scope": "CURRENT",
-      "semantic_review": "PASS",
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
-      "tests": [
-        "backend/tests/test_r01_source.py",
-        "backend/tests/test_r01_dataset.py",
-        "backend/tests/test_r01_research.py"
-      ],
-      "unresolved_bindings": []
-    },
-    {
-      "declared_entries": [
-        "backend/max_backend/research_settings.py::set_research_sample_configuration",
-        "backend/max_backend/research_service.py::start_r00",
-        "backend/max_backend/research_r01_service.py::start_r01"
-      ],
-      "flow_id": "FLOW-RESEARCH-CONFIG-SNAPSHOT",
-      "generated_edges": 645,
-      "generated_nodes": 305,
-      "mode": "DURING",
-      "non_python_structured_source_owners": [
-        "frontend/src/ResearchPage.tsx::ResearchPage"
-      ],
-      "outside_graph_classification": "NONE",
-      "outside_graph_resolution": "NOT_APPLICABLE",
-      "python_source_owners_declared": 4,
-      "python_source_owners_in_static_graph": [
-        "backend/max_backend/research_settings.py::get_research_sample_configuration",
-        "backend/max_backend/research_settings.py::set_research_sample_configuration",
-        "backend/max_backend/research_service.py::start_r00",
-        "backend/max_backend/research_r01_service.py::start_r01"
-      ],
-      "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
-      "scope": "CURRENT",
-      "semantic_review": "PASS",
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
-      "tests": [
-        "backend/tests/test_r00_research.py",
-        "backend/tests/test_r01_research.py"
-      ],
-      "unresolved_bindings": []
-    },
-    {
-      "declared_entries": [
-        "backend/max_backend/scientist_knowledge.py::load_knowledge",
-        "backend/max_backend/scientist_api.py::get_status"
-      ],
       "flow_id": "FLOW-SCIENTIST-KNOWLEDGE",
-      "generated_edges": 85,
-      "generated_nodes": 49,
       "mode": "DURING",
-      "non_python_structured_source_owners": [
-        "frontend/src/ScientistPage.tsx::ScientistPage"
-      ],
-      "outside_graph_classification": "NONE",
-      "outside_graph_resolution": "NOT_APPLICABLE",
-      "python_source_owners_declared": 2,
-      "python_source_owners_in_static_graph": [
+      "scope": "CURRENT",
+      "semantic_review": "PASS",
+      "purpose": "Scientist consumes rebuilt, source-hash-verified advisory knowledge and has no Strategy or Research authority.",
+      "declared_entries": [
         "backend/max_backend/scientist_knowledge.py::load_knowledge",
         "backend/max_backend/scientist_api.py::get_status"
       ],
-      "python_source_owners_outside_static_reachable_graph": [],
-      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real MT5, MetaEditor, broker/filesystem and Owner browser runtime remain deferred to final Owner-PC acceptance.",
-      "scope": "CURRENT",
-      "semantic_review": "PASS",
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
+      "generated_nodes": 48,
+      "generated_edges": 75,
+      "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126",
       "tests": [
         "backend/tests/test_m05_scientist.py",
         "backend/tests/test_m05_final_evidence_contract.py",
         "frontend/src/ScientistPage.test.tsx"
       ],
-      "unresolved_bindings": []
+      "unresolved_bindings": [],
+      "runtime_evidence_boundary": "Synthetic and static checks only; no real model, Owner runtime, MT5, or market-data execution is claimed."
     },
     {
-      "flow_id": "FLOW-R02-DISCOVERY-PREFLIGHT",
+      "flow_id": "FLOW-STRATEGY-RESET-RECOVERY",
       "mode": "DURING",
       "scope": "CURRENT",
-      "declared_entries": [
-        "backend/max_backend/research_api.py::get_r02_preflight",
-        "backend/max_backend/research_r02_contract.py::build_discovery_plan"
-      ],
-      "python_source_owners_declared": 3,
-      "python_source_owners_in_static_graph": [
-        "backend/max_backend/research_api.py::get_r02_preflight",
-        "backend/max_backend/research_r02_service.py::r02_preflight",
-        "backend/max_backend/research_r02_contract.py::build_discovery_plan"
-      ],
-      "python_source_owners_outside_static_reachable_graph": [],
-      "non_python_structured_source_owners": [],
-      "generated_nodes": 78,
-      "generated_edges": 159,
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
       "semantic_review": "PASS",
-      "outside_graph_classification": "NONE",
-      "outside_graph_resolution": "NOT_APPLICABLE",
-      "unresolved_bindings": [],
-      "tests": [
-        "backend/tests/test_r02_discovery_contract.py",
-        "backend/tests/test_r02_preflight.py"
-      ],
-      "runtime_evidence_boundary": "GitHub Actions Windows CI validates hosted source/synthetic behavior only; real R02 execution/training and Owner MT5/browser runtime remain deferred."
-    },
-    {
-      "flow_id": "FLOW-R02-DISCOVERY-AUTHORIZATION",
-      "mode": "DURING",
-      "scope": "CURRENT",
+      "purpose": "Unsafe or unavailable reset/recovery is blocked with a visible reason; allowed recovery requires exact confirmation and a verified backup before mutation.",
       "declared_entries": [
-        "backend/max_backend/research_api.py::authorize_research_r02",
-        "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
-        "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block"
+        "frontend/src/App.tsx::<module>",
+        "frontend/src/ArtifactsPage.tsx::<module>",
+        "backend/max_backend/main.py::recovery_required_gate",
+        "backend/max_backend/main.py::recovery_status",
+        "backend/max_backend/main.py::reset_corrupt_state",
+        "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
+        "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+        "backend/max_backend/strategy_reset.py::database_recovery_status",
+        "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
       ],
-      "python_source_owners_declared": 4,
-      "python_source_owners_in_static_graph": [
-        "backend/max_backend/research_api.py::authorize_research_r02",
-        "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
-        "backend/max_backend/research_r02_store.py::create_r02_authorization",
-        "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block"
-      ],
-      "python_source_owners_outside_static_reachable_graph": [],
-      "non_python_structured_source_owners": [],
-      "generated_nodes": 83,
-      "generated_edges": 181,
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
-      "semantic_review": "PASS",
-      "outside_graph_classification": "NONE",
-      "outside_graph_resolution": "NOT_APPLICABLE",
-      "unresolved_bindings": [],
+      "generated_nodes": 79,
+      "generated_edges": 113,
+      "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126",
       "tests": [
-        "backend/tests/test_r02_authorization_service.py",
-        "backend/tests/test_r02_authorization_store.py",
-        "backend/tests/test_r02_preflight.py"
+        "backend/tests/test_strategy_workspace_reset.py",
+        "backend/tests/test_retired_subsystem_migration.py",
+        "frontend/src/App.test.tsx",
+        "frontend/src/ArtifactsPage.test.tsx"
       ],
-      "runtime_evidence_boundary": "GitHub Actions Windows CI validates synthetic SQLite/API contracts only; real R02 authorization/execution and Owner MT5/browser runtime remain deferred."
-    },
-    {
-      "flow_id": "FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER",
-      "mode": "DURING",
-      "scope": "CURRENT",
-      "declared_entries": [
-        "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
-        "backend/max_backend/research_r02_service.py::r02_preflight"
-      ],
-      "python_source_owners_declared": 4,
-      "python_source_owners_in_static_graph": [
-        "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
-        "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
-        "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes",
-        "backend/max_backend/research_r02_service.py::r02_preflight"
-      ],
-      "python_source_owners_outside_static_reachable_graph": [],
-      "non_python_structured_source_owners": [],
-      "generated_nodes": 78,
-      "generated_edges": 164,
-      "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68",
-      "semantic_review": "PASS",
-      "outside_graph_classification": "NONE",
-      "outside_graph_resolution": "NOT_APPLICABLE",
       "unresolved_bindings": [],
-      "tests": [
-        "backend/tests/test_r02_outcome_contract.py",
-        "backend/tests/test_r02_authorization_store.py",
-        "backend/tests/test_r02_preflight.py"
-      ],
-      "runtime_evidence_boundary": "Hosted Windows CI validates synthetic outcome/SQLite contracts only. No real model fitting, Cheap Screen runtime result, R03 qualification or Owner MT5/browser runtime is proven."
+      "runtime_evidence_boundary": "UI checks used mocked API responses; reset/recovery behavior was tested only with synthetic temporary SQLite databases."
     }
   ],
-  "generation_anchor_policy": {
-    "meaning": "Pre-commit generation anchor only; final hosted provenance is the exact GitHub candidate SHA and final real-runtime provenance is the final main SHA accepted on Owner PC. Structural sequence binding remains deterministic product source_digest.",
-    "observed_head": "50f3f5f77632d81c7f9f1f794508723127e32e1f",
-    "source_digest": "6d0650b6b107d0a18f14b45636642dfef42e3fecf82e45518a205d111a451a68"
-  },
-  "mode": "DURING",
   "parse_failure_boundary": {
-    "classification": "GENERATOR_DEFECT",
-    "file": "backend/max_backend/champion_bundle.py",
-    "product_source_change": "NONE",
-    "reason": "File is valid UTF-8-with-BOM Python; current generic extractor reports one SyntaxError when parsing raw utf-8 text. Existing Python runtime/tests exercise the module; no product-source mutation is authorized."
+    "classification": "NONE",
+    "python_parse_failures": 0,
+    "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126"
   },
-  "result": "PASS",
   "retrospective_plan_artifacts": 0,
   "runtime_trace_required": false,
-  "schema_version": 1,
-  "scope": "CURRENT",
-  "skill_authority_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
-  "unresolved_critical_sequence_bindings": 0,
-  "hosted_governance_rebase": {
-    "repository": "maxqstudio/max-trading-agent",
-    "windows_ci_authority": ".github/workflows/windows-ci.yml",
-    "real_runtime": "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED",
-    "product_source_change": "NONE"
-  }
+  "unresolved_critical_sequence_bindings": 0
 }

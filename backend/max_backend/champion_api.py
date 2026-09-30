@@ -9,6 +9,7 @@ from .promotion_service import (
     promotion_detail,
     promotion_history,
 )
+from .champion_store import current_champion_summary
 
 
 class PromotionConfirmation(BaseModel):
@@ -31,6 +32,11 @@ def get_current_champion() -> dict:
             "reason": str(exc),
             "live_authority": "NONE",
         }
+
+
+@router.get("/api/champion/summary")
+def get_champion_summary() -> dict:
+    return current_champion_summary()
 
 
 @router.get("/api/promotions")

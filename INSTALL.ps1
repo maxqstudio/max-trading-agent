@@ -41,11 +41,6 @@ if ($LASTEXITCODE -ne 0) {
     throw "Python dependency installation failed."
 }
 
-& "$PSScriptRoot\scripts\install_r02_gpu_native_deps.ps1"
-if ($LASTEXITCODE -ne 0) {
-    throw "R02 GPU native dependency installation failed."
-}
-
 if (-not $SkipFrontend) {
     if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
         throw "npm was not found. Install Node.js for Windows, then rerun INSTALL.ps1."

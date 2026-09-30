@@ -1,6 +1,9 @@
 from contextlib import asynccontextmanager
+import logging
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
 
 from .artifact_api import router as artifact_router
 from .challenger_api import router as challenger_router
@@ -18,28 +21,50 @@ from .workflow_store import migrate_current
 from .optimizer_api import router as optimizer_router
 from .optimizer_store import latest_job
 from .promotion_service import recover_incomplete_promotions
-from .research_api import router as research_router
-from .research_store import recover_incomplete_research, research_database_status, latest_research
 from .scientist_api import router as scientist_router
 from .scientist_store import (
     migrate_m05,
     recover_unconfirmed_requests,
     scientist_database_status,
 )
+from .strategy_reset import (
+    RECOVERY_RESET_CONFIRMATION,
+    StrategyResetError,
+    backup_and_reset_corrupt_database,
+    database_recovery_status,
+)
+
+logger = logging.getLogger(__name__)
+RECOVERY_REQUIRED = False
+RECOVERY_REASON: str | None = None
+
+
+class CorruptStateResetConfirmation(BaseModel):
+    confirmation: str = Field(min_length=1, max_length=80)
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    initialize_database()
-    ensure_baseline_registered()
-    migrate_m04()
-    recover_incomplete_promotions()
-    migrate_m05()
-    recover_unconfirmed_requests()
-    migrate_m06()
-    recover_incomplete_backtests()
-    migrate_current()
-    recover_incomplete_research()
+    global RECOVERY_REQUIRED, RECOVERY_REASON
+    RECOVERY_REQUIRED = False
+    RECOVERY_REASON = None
+    try:
+        initialize_database()
+        ensure_baseline_registered()
+        migrate_m04()
+        recover_incomplete_promotions()
+        migrate_m05()
+        recover_unconfirmed_requests()
+        migrate_m06()
+        recover_incomplete_backtests()
+        migrate_current()
+    except Exception:
+        recovery = database_recovery_status()
+        if recovery["status"] != "RECOVERY_REQUIRED":
+            raise
+        RECOVERY_REQUIRED = True
+        RECOVERY_REASON = str(recovery["reason"])
+        logger.exception("MAX startup entered explicit Recovery Required mode")
     yield
 
 
@@ -49,7 +74,55 @@ app.include_router(optimizer_router)
 app.include_router(challenger_router)
 app.include_router(champion_router)
 app.include_router(scientist_router)
-app.include_router(research_router)
+
+
+@app.middleware("http")
+async def recovery_required_gate(request, call_next):
+    if RECOVERY_REQUIRED and request.url.path not in {
+        "/api/health",
+        "/api/recovery/status",
+        "/api/recovery/reset",
+    }:
+        return JSONResponse(
+            status_code=503,
+            content={
+                "detail": "RECOVERY_REQUIRED: application operations are disabled",
+                "reason": RECOVERY_REASON,
+            },
+        )
+    return await call_next(request)
+
+
+@app.get("/api/recovery/status")
+def recovery_status() -> dict:
+    status = database_recovery_status()
+    return {
+        "status": "RECOVERY_REQUIRED" if RECOVERY_REQUIRED else status["status"],
+        "reason": RECOVERY_REASON if RECOVERY_REQUIRED else status["reason"],
+        "reset_confirmation": RECOVERY_RESET_CONFIRMATION,
+        "data_loss_boundary": [
+            "Corrupt operational database is preserved in local quarantine",
+            "A new current-schema database is created with the accepted EA baseline",
+            "Generated Strategy and Research operational state is not restored",
+            "External Scientist provider settings are left untouched",
+        ],
+    }
+
+
+@app.post("/api/recovery/reset")
+def reset_corrupt_state(payload: CorruptStateResetConfirmation) -> dict:
+    global RECOVERY_REQUIRED, RECOVERY_REASON
+    if not RECOVERY_REQUIRED:
+        raise HTTPException(status_code=409, detail="RECOVERY_REQUIRED_MODE_NOT_ACTIVE")
+    try:
+        result = backup_and_reset_corrupt_database(
+            confirmed=payload.confirmation
+        )
+    except (StrategyResetError, OSError) as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    RECOVERY_REQUIRED = False
+    RECOVERY_REASON = None
+    return result
 
 
 def _foundation_state() -> dict:
@@ -68,28 +141,9 @@ def _foundation_state() -> dict:
             "terminal_result": current_optimizer["terminal_result"],
             "first_blocker": current_optimizer["first_blocker"],
         }
-    research_status = research_database_status() if database["status"] == "READY" else {
-        "status": "FAIL",
-        "reason": "DATABASE_NOT_READY",
-    }
-    current_research = latest_research() if research_status["status"] == "READY" else None
-    research_summary = None
-    if current_research is not None:
-        research_summary = {
-            "research_id": current_research["research_id"],
-            "parent_strategy_id": current_research["parent_strategy_id"],
-            "current_gate": current_research["current_gate"],
-            "gate_state": current_research["gate_state"],
-            "training_count": current_research["training_count"],
-            "onnx_count": current_research["onnx_count"],
-            "research_challenger_count": current_research["research_challenger_count"],
-            "champion_mutation": current_research["champion_mutation"],
-        }
     return {
         "backend": {"status": "READY"},
         "database": database,
-        "research_database": research_status,
-        "research": research_summary,
         "ea_baseline": baseline,
         "current_strategy_champion": (
             {"strategy_id": champion["strategy_id"], "status": champion["status"]}
@@ -103,6 +157,14 @@ def _foundation_state() -> dict:
 
 @app.get("/api/health")
 def health() -> dict:
+    if RECOVERY_REQUIRED:
+        return {
+            "status": "RECOVERY_REQUIRED",
+            "project": PROJECT_NAME,
+            "phase": PROJECT_PHASE,
+            "milestone": MILESTONE,
+            "database": {"status": "RECOVERY_REQUIRED", "reason": RECOVERY_REASON},
+        }
     state = _foundation_state()
     return {
         "status": state["backend"]["status"],

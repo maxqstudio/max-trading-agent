@@ -118,17 +118,8 @@ def challenger_registry_page(
         page_size=page_size,
         path=path,
     )
-    allow_retired = result["view"] == "retired"
     for item in result["items"]:
-        try:
-            integrity = verify_challenger_bundle(
-                item["challenger_id"],
-                allow_retired=allow_retired,
-                path=path,
-            )
-            item["integrity"] = integrity["status"]
-        except Exception:
-            item["integrity"] = "INTEGRITY_FAIL"
+        item["integrity"] = "NOT_CHECKED"
     return result
 
 

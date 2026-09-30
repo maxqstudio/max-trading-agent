@@ -52,6 +52,19 @@ type Preflight = {
   items: (Artifact & { blocked_reason?: string | null })[]
 }
 
+type StrategyResetPreflight = {
+  status: 'READY' | 'BLOCKED'
+  blockers: Record<string, number>
+  confirmation_required: string
+  current_champion_count: number
+  table_counts: Record<string, number>
+  generated_artifact_rows: number
+  generated_artifact_bytes: number
+  roots: Record<string, { status?: string; objects: number; bytes: number }>
+  deletion_plan: string[]
+  preserved: string[]
+}
+
 function formatBytes(value: number) {
   if (!Number.isFinite(value) || value <= 0) return '0 B'
   const units = ['B', 'KB', 'MB', 'GB', 'TB']
@@ -85,10 +98,14 @@ export default function ArtifactsPage() {
   const [pendingAction, setPendingAction] = useState<'clean' | 'delete' | null>(null)
   const [pendingIds, setPendingIds] = useState<string[]>([])
   const [globalPreflight, setGlobalPreflight] = useState<any>(null)
+  const [resetPreflight, setResetPreflight] = useState<StrategyResetPreflight | null>(null)
+  const [resetConfirmation, setResetConfirmation] = useState('')
+  const [operationBusy, setOperationBusy] = useState('')
   const [trace, setTrace] = useState<any>(null)
   const [message, setMessage] = useState('')
 
   useEffect(() => {
+    const controller = new AbortController()
     const params = new URLSearchParams({
       q: query,
       type,
@@ -102,7 +119,8 @@ export default function ArtifactsPage() {
       page: String(page),
       page_size: String(pageSize),
     })
-    fetch('/api/artifacts?' + params.toString())
+    setLoading(true)
+    fetch('/api/artifacts?' + params.toString(), { signal: controller.signal })
       .then(async (response) => {
         const body = await response.json()
         if (!response.ok) throw new Error(body.detail ?? 'Artifact inventory unavailable')
@@ -112,8 +130,13 @@ export default function ArtifactsPage() {
         setData(body)
         if (body.page !== page) setPage(body.page)
       })
-      .catch((reason: Error) => setError(reason.message))
-      .finally(() => setLoading(false))
+      .catch((reason: Error) => {
+        if (!controller.signal.aborted) setError(reason.message)
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false)
+      })
+    return () => controller.abort()
   }, [query, type, producer, retention, status, inUse, storage, sort, order, page, pageSize, refresh])
 
   const allPageSelected = useMemo(
@@ -150,26 +173,64 @@ export default function ArtifactsPage() {
   }
 
   async function prepare(action: 'clean' | 'delete', ids: string[]) {
-    setError('')
-    setMessage('')
-    const response = await fetch('/api/artifacts/preflight', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ artifact_ids: ids }),
-    })
-    const body = await response.json()
-    if (!response.ok) {
-      setError(body.detail ?? 'Artifact preflight failed')
+    const uniqueIds = Array.from(new Set(ids)).sort()
+    if (!uniqueIds.length) {
+      setMessage('Action blocked: select at least one artifact; nothing was submitted.')
       return
     }
-    setPreflight(body)
-    setPendingAction(action)
-    setPendingIds(ids)
+    if (loading || operationBusy) {
+      setMessage('Action blocked: wait for the current inventory operation to finish.')
+      return
+    }
+    setError('')
+    setMessage('')
+    setOperationBusy('preflight')
+    setMessage('Checking artifact safety and dependencies…')
+    try {
+      const response = await fetch('/api/artifacts/preflight', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ artifact_ids: uniqueIds }),
+      })
+      const body = await response.json()
+      if (!response.ok) throw new Error(body.detail ?? 'Artifact preflight failed')
+      setPreflight(body)
+      setPendingAction(action)
+      setPendingIds(uniqueIds)
+      setMessage('')
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : String(reason))
+      setMessage('')
+    } finally {
+      setOperationBusy('')
+    }
   }
 
   async function executePending() {
-    if (!pendingAction || !pendingIds.length) return
+    if (!pendingAction || !pendingIds.length) {
+      setMessage('Action blocked: the selected action or artifact list is missing; nothing was changed.')
+      return
+    }
+    if (!preflight || preflight.blocked > 0) {
+      const reason = preflight?.items.find((item) => item.blocked_reason)?.blocked_reason
+      setMessage('Action blocked by the safety check' + (reason ? ': ' + reason : '.') + ' No artifacts were changed.')
+      return
+    }
+    const preflightIds = preflight.items.map((item) => item.artifact_id).sort()
+    const expectedIds = [...pendingIds].sort()
+    if (preflightIds.length !== expectedIds.length
+      || preflightIds.some((id, index) => id !== expectedIds[index])) {
+      setMessage('Action blocked: the selected artifacts differ from the safety check. Run preflight again; nothing was changed.')
+      return
+    }
+    if (loading || operationBusy) {
+      setMessage('Action blocked: another inventory operation is in progress.')
+      return
+    }
     setLoading(true)
+    setMessage(pendingAction === 'clean'
+      ? 'Cleaning selected generated runtime…'
+      : 'Deleting selected generated artifacts…')
     try {
       const response = await fetch('/api/artifacts/action', {
         method: 'POST',
@@ -194,24 +255,137 @@ export default function ArtifactsPage() {
       setRefresh((value) => value + 1)
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : String(reason))
+      setMessage('The selected artifact action was blocked or failed.')
     } finally {
       setLoading(false)
     }
   }
 
   async function prepareGlobalCleanup() {
-    setError('')
-    const response = await fetch('/api/artifacts/cleanup/preflight')
-    const body = await response.json()
-    if (!response.ok) {
-      setError(body.detail ?? 'Global cleanup preflight failed')
+    if (loading || operationBusy) {
+      setMessage('Cleanup preflight blocked: wait for the current inventory operation to finish.')
       return
     }
-    setGlobalPreflight(body)
+    setError('')
+    setMessage('Checking whether generated data cleanup is safe…')
+    setOperationBusy('cleanup-preflight')
+    try {
+      const response = await fetch('/api/artifacts/cleanup/preflight')
+      const body = await response.json()
+      if (!response.ok) throw new Error(body.detail ?? 'Global cleanup preflight failed')
+      setGlobalPreflight(body)
+      setMessage('')
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : String(reason))
+      setMessage('')
+    } finally {
+      setOperationBusy('')
+    }
+  }
+
+  async function prepareStrategyReset() {
+    if (loading || operationBusy) {
+      setMessage('Reset preflight blocked: wait for the current inventory operation to finish.')
+      return
+    }
+    setError('')
+    setMessage('Checking reset scope, active work, and protected baseline…')
+    setOperationBusy('reset-preflight')
+    try {
+      const response = await fetch('/api/artifacts/strategy-reset/preflight')
+      const body = await response.json()
+      if (!response.ok) throw new Error(body.detail ?? 'Strategy reset preflight failed')
+      setResetPreflight(body as StrategyResetPreflight)
+      setResetConfirmation('')
+      setMessage('')
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : String(reason))
+      setMessage('')
+    } finally {
+      setOperationBusy('')
+    }
+  }
+
+  async function executeStrategyReset() {
+    if (!resetPreflight) {
+      setMessage('Reset blocked: no current reset safety check exists; nothing was changed.')
+      return
+    }
+    if (resetPreflight.status !== 'READY') {
+      setMessage('Reset blocked: preflight found a safety issue; nothing was changed.')
+      return
+    }
+    if (resetConfirmation !== resetPreflight.confirmation_required) {
+      setMessage('Reset blocked: enter the exact confirmation text before proceeding; nothing was changed.')
+      return
+    }
+    if (operationBusy || loading) {
+      setMessage('Reset blocked: another inventory operation is in progress.')
+      return
+    }
+    setError('')
+    setMessage('Backing up operational state, then clearing generated Strategy state…')
+    setOperationBusy('strategy-reset')
+    try {
+      const response = await fetch('/api/artifacts/strategy-reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ confirmation: resetConfirmation }),
+      })
+      const body = await response.json()
+      if (!response.ok) throw new Error(body.detail ?? 'Strategy workspace reset failed')
+      setMessage('Strategy workspace reset completed. Database backup: ' + body.backup.path)
+      setResetPreflight(null)
+      setResetConfirmation('')
+      setSelection(new Set())
+      setRefresh((value) => value + 1)
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : String(reason))
+      setMessage('Reset did not complete. Review the blocker before retrying.')
+    } finally {
+      setOperationBusy('')
+    }
+  }
+
+  async function reconcileInventory() {
+    if (operationBusy || loading) {
+      setMessage('Reconciliation blocked: another inventory operation is still running.')
+      return
+    }
+    setOperationBusy('reconcile')
+    setLoading(true)
+    setError('')
+    setMessage('Checking runtime paths and reconciling the artifact inventory…')
+    try {
+      const response = await fetch('/api/artifacts/reconcile', { method: 'POST' })
+      const body = await response.json()
+      if (!response.ok) throw new Error(body.detail ?? 'Artifact reconciliation failed')
+      setData((current) => current
+        ? { ...current, runtime: body.runtime }
+        : current)
+      setMessage('Artifact inventory reconciled.')
+      setRefresh((value) => value + 1)
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : String(reason))
+      setMessage('Inventory reconciliation did not complete.')
+    } finally {
+      setLoading(false)
+      setOperationBusy('')
+    }
   }
 
   async function executeGlobalCleanup() {
+    if (!globalPreflight || globalPreflight.status !== 'READY') {
+      setMessage('Cleanup blocked: there is no READY global cleanup safety check. Nothing was changed.')
+      return
+    }
+    if (operationBusy || loading) {
+      setMessage('Cleanup blocked: another inventory operation is in progress.')
+      return
+    }
+    setOperationBusy('global-cleanup')
     setLoading(true)
+    setMessage('Cleaning generated Strategy data…')
     try {
       const response = await fetch('/api/artifacts/cleanup', {
         method: 'POST',
@@ -226,20 +400,33 @@ export default function ArtifactsPage() {
       setRefresh((value) => value + 1)
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : String(reason))
+      setMessage('Generated data cleanup was blocked or failed.')
     } finally {
       setLoading(false)
+      setOperationBusy('')
     }
   }
 
   async function openTrace(item: Artifact) {
-    setError('')
-    const response = await fetch('/api/artifacts/' + item.artifact_id + '/trace')
-    const body = await response.json()
-    if (!response.ok) {
-      setError(body.detail ?? 'Artifact trace unavailable')
+    if (operationBusy || loading) {
+      setMessage('Trace blocked: wait for the current inventory operation to finish.')
       return
     }
-    setTrace(body)
+    setError('')
+    setOperationBusy('trace')
+    setMessage('Loading artifact lineage…')
+    try {
+      const response = await fetch('/api/artifacts/' + item.artifact_id + '/trace')
+      const body = await response.json()
+      if (!response.ok) throw new Error(body.detail ?? 'Artifact trace unavailable')
+      setTrace(body)
+      setMessage('')
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : String(reason))
+      setMessage('')
+    } finally {
+      setOperationBusy('')
+    }
   }
 
   return (
@@ -249,12 +436,22 @@ export default function ArtifactsPage() {
           <p className="eyebrow">Generated-data control plane</p>
           <h1>Artifacts</h1>
         </div>
-        <button type="button" onClick={prepareGlobalCleanup}>Clean Generated Data</button>
+          <div className="button-row">
+            <button type="button" onClick={reconcileInventory} disabled={loading || Boolean(operationBusy)}>
+              {operationBusy === 'reconcile' ? 'Reconciling…' : 'Reconcile Inventory'}
+            </button>
+            <button type="button" onClick={prepareGlobalCleanup} disabled={loading || Boolean(operationBusy)}>
+              {operationBusy === 'cleanup-preflight' ? 'Checking cleanup safety…' : 'Clean Generated Data'}
+            </button>
+            <button type="button" onClick={prepareStrategyReset} disabled={loading || Boolean(operationBusy)}>
+              {operationBusy === 'reset-preflight' ? 'Checking reset safety…' : 'Reset Strategy Workspace'}
+            </button>
+          </div>
       </header>
 
       {error && <p role="alert" className="error">{error}</p>}
       {message && <p role="status" className="success">{message}</p>}
-      {loading && <p role="status" className="loading">Reconciling MAX artifacts…</p>}
+      {loading && <p role="status" className="loading">Loading artifact inventory…</p>}
 
       {data && (
         <>
@@ -324,12 +521,13 @@ export default function ArtifactsPage() {
                 value={status}
                 onChange={(event) => { setStatus(event.target.value); setPage(1) }}
               />
-              <button type="button" onClick={togglePage}>{allPageSelected ? 'Clear current page' : 'Select current page'}</button>
-              <button type="button" disabled={!selection.size} onClick={() => setSelection(new Set())}>Clear selection</button>
+              <button type="button" onClick={togglePage} disabled={loading || Boolean(operationBusy)}>{allPageSelected ? 'Clear current page' : 'Select current page'}</button>
+              <button type="button" disabled={!selection.size || loading || Boolean(operationBusy)} onClick={() => setSelection(new Set())}>Clear selection</button>
               <span>{selection.size} selected</span>
-              <button type="button" disabled={!selection.size} onClick={() => prepare('clean', Array.from(selection))}>Clean Selected Runtime</button>
-              <button type="button" disabled={!selection.size} onClick={() => prepare('delete', Array.from(selection))}>Delete Selected</button>
+              <button type="button" disabled={!selection.size || loading || Boolean(operationBusy)} onClick={() => prepare('clean', Array.from(selection))}>Clean Selected Runtime</button>
+              <button type="button" disabled={!selection.size || loading || Boolean(operationBusy)} onClick={() => prepare('delete', Array.from(selection))}>Delete Selected</button>
             </div>
+            {selection.size === 0 && <p className="subtle">Select one or more artifact rows to enable selected cleanup or deletion.</p>}
 
             {!loading && data.items.length === 0 && <p className="empty-state">No artifacts match the current filter.</p>}
             {data.items.length > 0 && (
@@ -389,9 +587,9 @@ export default function ArtifactsPage() {
                           <td>{item.in_use ? 'YES' : 'NO'}</td>
                           <td>
                             <div className="row-actions">
-                              <button type="button" onClick={() => openTrace(item)}>Trace</button>
-                              {item.cleanable && <button type="button" onClick={() => prepare('clean', [item.artifact_id])}>Clean</button>}
-                              {item.deletable && <button type="button" onClick={() => prepare('delete', [item.artifact_id])}>Delete</button>}
+                              <button type="button" disabled={Boolean(operationBusy) || loading} onClick={() => openTrace(item)}>Trace</button>
+                              {item.cleanable && <button type="button" disabled={Boolean(operationBusy) || loading} onClick={() => prepare('clean', [item.artifact_id])}>Clean</button>}
+                              {item.deletable && <button type="button" disabled={Boolean(operationBusy) || loading} onClick={() => prepare('delete', [item.artifact_id])}>Delete</button>}
                             </div>
                             {item.dependencies.length > 0 && <div className="error-text">{item.dependencies.join(', ')}</div>}
                           </td>
@@ -433,9 +631,9 @@ export default function ArtifactsPage() {
               </ul>
             )}
             <div className="actions">
-              <button type="button" onClick={() => { setPreflight(null); setPendingAction(null); setPendingIds([]) }}>Cancel</button>
-              <button type="button" disabled={preflight.blocked > 0} onClick={executePending}>
-                CONFIRM {pendingAction.toUpperCase()}
+              <button type="button" disabled={loading} onClick={() => { setPreflight(null); setPendingAction(null); setPendingIds([]) }}>Cancel</button>
+              <button type="button" disabled={preflight.blocked > 0 || loading} onClick={executePending}>
+                {loading ? 'Working…' : 'CONFIRM ' + pendingAction.toUpperCase()}
               </button>
             </div>
           </div>
@@ -456,8 +654,62 @@ export default function ArtifactsPage() {
               <p className="error">Blocked: {globalPreflight.blockers.join(', ')}</p>
             )}
             <div className="actions">
-              <button type="button" onClick={() => setGlobalPreflight(null)}>Cancel</button>
-              <button type="button" disabled={globalPreflight.status !== 'READY'} onClick={executeGlobalCleanup}>CONFIRM CLEAN GENERATED DATA</button>
+              <button type="button" disabled={loading} onClick={() => setGlobalPreflight(null)}>Cancel</button>
+              <button type="button" disabled={globalPreflight.status !== 'READY' || loading} onClick={executeGlobalCleanup}>
+                {loading ? 'Cleaning…' : 'CONFIRM CLEAN GENERATED DATA'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {resetPreflight && (
+        <div className="modal-backdrop" role="presentation">
+          <div className="modal" role="dialog" aria-modal="true" aria-labelledby="strategy-reset-title">
+            <h2 id="strategy-reset-title">Reset Strategy Workspace</h2>
+            <p>This is a destructive reset, separate from Clean Generated Data. A verified local database backup is created first.</p>
+            <dl className="facts compact">
+              <div><dt>Preflight</dt><dd>{resetPreflight.status}</dd></div>
+              <div><dt>Current Champion</dt><dd>{resetPreflight.current_champion_count}</dd></div>
+              <div><dt>Generated artifact rows</dt><dd>{resetPreflight.generated_artifact_rows}</dd></div>
+              <div><dt>Generated artifact bytes</dt><dd>{formatBytes(resetPreflight.generated_artifact_bytes)}</dd></div>
+              <div><dt>Database integrity</dt><dd>Checked before reset</dd></div>
+            </dl>
+            {Object.keys(resetPreflight.blockers).length > 0 && (
+              <p role="alert" className="error">
+                Reset is blocked: {Object.entries(resetPreflight.blockers).map(([key, value]) => key + ' (' + value + ')').join(', ')}
+              </p>
+            )}
+            <h3>Will be removed</h3>
+            <ul>{resetPreflight.deletion_plan.map((item) => <li key={item}>{item}</li>)}</ul>
+            <h3>Will be preserved</h3>
+            <ul>{resetPreflight.preserved.map((item) => <li key={item}>{item}</li>)}</ul>
+            <label htmlFor="strategy-reset-confirmation">
+              Type <code>{resetPreflight.confirmation_required}</code> to enable reset.
+            </label>
+            <input
+              id="strategy-reset-confirmation"
+              value={resetConfirmation}
+              onChange={(event) => setResetConfirmation(event.target.value)}
+              disabled={Boolean(operationBusy)}
+            />
+            {resetPreflight.status !== 'READY' && (
+              <p role="status">Reset is disabled because preflight found a safety blocker.</p>
+            )}
+            {resetPreflight.status === 'READY' && resetConfirmation !== resetPreflight.confirmation_required && (
+              <p role="status">Reset is disabled until the exact confirmation is entered.</p>
+            )}
+            <div className="actions">
+              <button type="button" disabled={Boolean(operationBusy)} onClick={() => setResetPreflight(null)}>Cancel</button>
+              <button
+                type="button"
+                disabled={resetPreflight.status !== 'READY'
+                  || resetConfirmation !== resetPreflight.confirmation_required
+                  || Boolean(operationBusy)}
+                onClick={executeStrategyReset}
+              >
+                {operationBusy === 'strategy-reset' ? 'Backing up and resetting…' : 'CONFIRM RESET STRATEGY WORKSPACE'}
+              </button>
             </div>
           </div>
         </div>

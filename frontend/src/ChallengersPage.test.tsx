@@ -156,7 +156,8 @@ describe('M06 Strategy Challenger operations UI', () => {
     const fetchMock = vi.fn((input: RequestInfo | URL) => {
       const url = String(input)
       if (url.includes('/api/challengers/registry?')) return ok(registry())
-      if (url.endsWith('/api/champion')) return ok(championNone)
+      if (url.endsWith('/api/champion/summary')) return ok(championNone)
+      if (url.startsWith('/api/challengers/backtests?')) return Promise.resolve({ ok: false, status: 404, json: async () => ({ detail: 'Not found' }) } as Response)
       if (url.endsWith('/api/challengers/' + challengerId + '/backtests')) return ok([])
       if (url.endsWith('/api/challengers/' + challengerId)) return ok(detail)
       throw new Error('unexpected fetch ' + url)
@@ -215,7 +216,8 @@ describe('M06 Strategy Challenger operations UI', () => {
       if (url.includes('/api/challengers/registry?')) {
         return ok(registry([{ ...listItem, integrity: 'INTEGRITY_FAIL' }]))
       }
-      if (url.endsWith('/api/champion')) return ok(championNone)
+      if (url.endsWith('/api/champion/summary')) return ok(championNone)
+      if (url.startsWith('/api/challengers/backtests?')) return Promise.resolve({ ok: false, status: 404, json: async () => ({ detail: 'Not found' }) } as Response)
       if (url.endsWith('/api/challengers/' + challengerId + '/backtests')) return ok([])
       if (url.endsWith('/api/challengers/' + challengerId)) return ok(badDetail)
       throw new Error('unexpected fetch ' + url)
@@ -238,7 +240,7 @@ describe('M06 Strategy Challenger operations UI', () => {
       if (url.includes('/api/challengers/registry?') && !init?.method) {
         return ok(registry(promoted ? [] : [listItem]))
       }
-      if (url.endsWith('/api/champion')) {
+      if (url.endsWith('/api/champion/summary')) {
         return ok({
           current: promoted ? {
             strategy_id: challengerId,
@@ -249,6 +251,7 @@ describe('M06 Strategy Challenger operations UI', () => {
           status: promoted ? 'CURRENT_STRATEGY_CHAMPION' : 'NONE',
         })
       }
+      if (url.startsWith('/api/challengers/backtests?')) return Promise.resolve({ ok: false, status: 404, json: async () => ({ detail: 'Not found' }) } as Response)
       if (url.endsWith('/api/challengers/' + challengerId + '/backtests')) return ok([])
       if (url.endsWith('/api/challengers/' + challengerId) && !init?.method) return ok(detail)
       if (url.endsWith('/api/challengers/' + challengerId + '/promote') && init?.method === 'POST') {
@@ -297,7 +300,8 @@ describe('M06 Strategy Challenger operations UI', () => {
       if (url.includes('/api/challengers/registry?') && !init?.method) {
         return ok(registry(retired ? [] : [listItem]))
       }
-      if (url.endsWith('/api/champion')) return ok(championNone)
+      if (url.endsWith('/api/champion/summary')) return ok(championNone)
+      if (url.startsWith('/api/challengers/backtests?')) return Promise.resolve({ ok: false, status: 404, json: async () => ({ detail: 'Not found' }) } as Response)
       if (url.endsWith('/api/challengers/' + challengerId + '/backtests')) return ok([])
       if (url.endsWith('/api/challengers/' + challengerId) && !init?.method) return ok(detail)
       if (url.endsWith('/api/challengers/' + challengerId + '/retire') && init?.method === 'POST') {
@@ -356,8 +360,9 @@ describe('M06 Strategy Challenger operations UI', () => {
     const fetchMock = vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
       const url = String(input)
       if (url.includes('/api/challengers/registry?')) return ok(registry())
-      if (url.endsWith('/api/champion')) return ok(championNone)
+      if (url.endsWith('/api/champion/summary')) return ok(championNone)
       if (url.endsWith('/api/challengers/' + challengerId) && !init?.method) return ok(detail)
+      if (url.startsWith('/api/challengers/backtests?')) return Promise.resolve({ ok: false, status: 404, json: async () => ({ detail: 'Not found' }) } as Response)
       if (url.endsWith('/api/challengers/' + challengerId + '/backtests') && !init?.method) {
         return ok(completed ? [history] : [])
       }
@@ -380,7 +385,7 @@ describe('M06 Strategy Challenger operations UI', () => {
     render(<ChallengersPage />)
     fireEvent.click(await screen.findByRole('button', { name: 'Run Backtest' }))
 
-    expect(await screen.findByText(/Backtest Completed/)).toBeInTheDocument()
+    expect(await screen.findByText(/Backtest request returned status: Completed/)).toBeInTheDocument()
     await waitFor(() => {
       expect(screen.getByText('Retained test')).toBeInTheDocument()
     })
@@ -404,7 +409,8 @@ describe('M06 Strategy Challenger operations UI', () => {
       if (url.includes('/api/challengers/registry?')) {
         return ok(url.includes('view=retired') ? registry([retiredItem], 'retired') : registry([]))
       }
-      if (url.endsWith('/api/champion')) return ok(championNone)
+      if (url.endsWith('/api/champion/summary')) return ok(championNone)
+      if (url.startsWith('/api/challengers/backtests?')) return Promise.resolve({ ok: false, status: 404, json: async () => ({ detail: 'Not found' }) } as Response)
       if (url.endsWith('/api/challengers/' + challengerId + '/backtests')) return ok([])
       if (url.endsWith('/api/challengers/' + challengerId)) return ok(retiredDetail)
       throw new Error('unexpected fetch ' + url)
@@ -438,6 +444,7 @@ describe('M08 Backtest result control UI', () => {
     const backtestId = 'BT-20260924-081500-deadbeef'
     let deleted = false
     let cleaned = false
+    const detailGate = deferred<Response>()
     const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null)
 
     const metrics = {
@@ -527,7 +534,7 @@ describe('M08 Backtest result control UI', () => {
       const url = String(input)
       const method = init?.method ?? 'GET'
       if (url.includes('/api/challengers/registry?')) return ok(registry())
-      if (url.endsWith('/api/champion')) return ok(championNone)
+      if (url.endsWith('/api/champion/summary')) return ok(championNone)
       if (url.endsWith('/api/challengers/' + challengerId + '/delete-preflight')) {
         return ok({
           challenger_id: challengerId,
@@ -559,15 +566,7 @@ describe('M08 Backtest result control UI', () => {
         })
       }
       if (url.endsWith('/api/challengers/backtests/' + backtestId) && method === 'GET') {
-        return ok({
-          ...backtest,
-          runtime_status: cleaned ? 'CLEANED' : 'PRESENT',
-          runtime_inventory: {
-            ...backtest.runtime_inventory,
-            runtime_status: cleaned ? 'CLEANED' : 'PRESENT',
-            items: cleaned ? [] : backtest.runtime_inventory.items,
-          },
-        })
+        return detailGate.promise
       }
       if (url.endsWith('/api/challengers/backtests/' + backtestId + '/clean-runtime') && method === 'POST') {
         cleaned = true
@@ -591,6 +590,20 @@ describe('M08 Backtest result control UI', () => {
     expect(screen.getByText('0.81%')).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'View Details' }))
+    expect(screen.getByRole('status')).toHaveTextContent('Loading retained Backtest details…')
+    expect(screen.getByRole('button', { name: 'Loading details…' })).toBeDisabled()
+    detailGate.resolve({
+      ok: true,
+      json: async () => ({
+        ...backtest,
+        runtime_status: cleaned ? 'CLEANED' : 'PRESENT',
+        runtime_inventory: {
+          ...backtest.runtime_inventory,
+          runtime_status: cleaned ? 'CLEANED' : 'PRESENT',
+          items: cleaned ? [] : backtest.runtime_inventory.items,
+        },
+      }),
+    } as Response)
     const detailsDialog = await screen.findByRole('dialog', { name: 'Backtest details' })
     expect(detailsDialog).toHaveTextContent('MT5 report retained')
     expect(detailsDialog).toHaveTextContent('Strategy Challenger')
@@ -605,6 +618,7 @@ describe('M08 Backtest result control UI', () => {
       '_blank',
       'noopener,noreferrer',
     )
+    expect(screen.getByRole('status')).toHaveTextContent(/Report opened in a new tab if allowed by the browser/)
 
     fireEvent.click(screen.getByRole('button', { name: 'Clean Runtime' }))
     expect(await screen.findByText(/Runtime cleaned · removed/)).toBeInTheDocument()
@@ -649,7 +663,7 @@ describe('M08 Backtest result control UI', () => {
       const url = String(input)
       const method = init?.method ?? 'GET'
       if (url.includes('/api/challengers/registry?')) return ok(registry())
-      if (url.endsWith('/api/champion')) return ok(championNone)
+      if (url.endsWith('/api/champion/summary')) return ok(championNone)
       if (url.endsWith('/api/challengers/' + challengerId + '/delete-preflight')) {
         return ok({
           challenger_id: challengerId,
@@ -733,7 +747,7 @@ describe('M08 Backtest result control UI', () => {
       const url = String(input)
       const method = init?.method ?? 'GET'
       if (url.includes('/api/challengers/registry?')) return ok(registry())
-      if (url.endsWith('/api/champion')) return ok(championNone)
+      if (url.endsWith('/api/champion/summary')) return ok(championNone)
       if (url.endsWith('/api/challengers/' + challengerId + '/delete-preflight')) {
         return ok({
           challenger_id: challengerId,

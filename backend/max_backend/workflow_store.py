@@ -134,6 +134,52 @@ def _ensure_backtest_runtime_status(conn: sqlite3.Connection) -> None:
         )
 
 
+def _purge_research_authority(conn: sqlite3.Connection) -> None:
+    """Remove the rejected Research subsystem from an upgraded local database."""
+    conn.commit()
+    conn.execute("PRAGMA foreign_keys = OFF")
+    try:
+        conn.execute("BEGIN IMMEDIATE")
+        conn.execute(
+            """
+            DELETE FROM artifact_registry
+            WHERE upper(owner_type) LIKE 'RESEARCH%'
+               OR upper(source_type) LIKE 'RESEARCH%'
+               OR upper(artifact_type) LIKE 'RESEARCH%'
+               OR upper(producer) LIKE 'RESEARCH%'
+            """
+        )
+        conn.execute(
+            "DELETE FROM schema_meta WHERE substr(lower(key),1,9)='research_'"
+        )
+        objects = conn.execute(
+            """
+            SELECT type,name FROM sqlite_master
+            WHERE substr(lower(name),1,9)='research_'
+              AND type IN ('trigger','index','view','table')
+            ORDER BY CASE type
+                WHEN 'trigger' THEN 1
+                WHEN 'index' THEN 2
+                WHEN 'view' THEN 3
+                WHEN 'table' THEN 4
+                ELSE 5
+            END, name
+            """
+        ).fetchall()
+        for item in objects:
+            kind = str(item["type"]).upper()
+            name = '"' + str(item["name"]).replace('"', '""') + '"'
+            conn.execute(f"DROP {kind} IF EXISTS {name}")
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.execute("PRAGMA foreign_keys = ON")
+    if conn.execute("PRAGMA foreign_key_check").fetchall():
+        raise RuntimeError("RESEARCH_PURGE_FOREIGN_KEY_INTEGRITY_FAILURE")
+
+
 def migrate_current(path: Path = DATABASE_PATH) -> None:
     migrate_m06(path)
     with connect(path) as conn:
@@ -171,451 +217,6 @@ def migrate_current(path: Path = DATABASE_PATH) -> None:
             CREATE INDEX IF NOT EXISTS ix_challenger_batches_job
             ON strategy_challenger_batches(job_id, created_utc DESC);
 
-            CREATE TABLE IF NOT EXISTS research_authorizations (
-                authorization_id TEXT PRIMARY KEY,
-                gate TEXT NOT NULL CHECK (
-                    gate IN ('R00','R01','R02','R03','R04','R05','R06','R07','R08','R09','R10')
-                ),
-                action TEXT NOT NULL,
-                confirmed INTEGER NOT NULL CHECK(confirmed IN (0,1)),
-                expected_parent_strategy_id TEXT NOT NULL,
-                expected_parent_authority_sha256 TEXT NOT NULL,
-                cumulative_strategy_e2e_authority TEXT NOT NULL,
-                h1_minimum_trades_per_month INTEGER NOT NULL
-                    CHECK(h1_minimum_trades_per_month > 0),
-                payload_sha256 TEXT NOT NULL,
-                authorized_utc TEXT NOT NULL
-            );
-
-            CREATE TABLE IF NOT EXISTS research_projects (
-                research_id TEXT PRIMARY KEY,
-                research_parent_id TEXT NOT NULL,
-                parent_strategy_id TEXT NOT NULL,
-                parent_authority_sha256 TEXT NOT NULL,
-                parent_manifest_path TEXT NOT NULL,
-                parent_manifest_sha256 TEXT NOT NULL,
-                feature_contract TEXT NOT NULL,
-                current_gate TEXT NOT NULL CHECK (
-                    current_gate IN ('R00','R01','R02','R03','R04','R05','R06','R07','R08','R09','R10')
-                ),
-                gate_state TEXT NOT NULL CHECK (
-                    gate_state IN (
-                        'STARTING',
-                        'PASS_WAITING_OWNER',
-                        'FAIL_WAITING_OWNER',
-                        'ERROR_WAITING_OWNER'
-                    )
-                ),
-                gate_input_manifest_sha TEXT,
-                gate_output_manifest_sha TEXT,
-                owner_authorization_id TEXT NOT NULL,
-                authorized_utc TEXT NOT NULL,
-                hardware_snapshot_path TEXT NOT NULL,
-                hardware_snapshot_sha256 TEXT NOT NULL,
-                label_authority_json TEXT NOT NULL,
-                candidate_identity_contract_json TEXT NOT NULL,
-                artifact_lineage_contract_json TEXT NOT NULL,
-                research_policy_json TEXT NOT NULL,
-                unresolved_authority_json TEXT NOT NULL,
-                candidate_ids_json TEXT NOT NULL DEFAULT '[]',
-                qualification_states_json TEXT NOT NULL DEFAULT '{}',
-                system_recommendation_json TEXT,
-                owner_selected_ids_json TEXT NOT NULL DEFAULT '[]',
-                training_count INTEGER NOT NULL DEFAULT 0 CHECK(training_count >= 0),
-                onnx_count INTEGER NOT NULL DEFAULT 0 CHECK(onnx_count >= 0),
-                research_challenger_count INTEGER NOT NULL DEFAULT 0 CHECK(research_challenger_count >= 0),
-                champion_mutation TEXT NOT NULL DEFAULT 'NONE'
-                    CHECK(champion_mutation = 'NONE'),
-                created_utc TEXT NOT NULL,
-                updated_utc TEXT NOT NULL,
-                FOREIGN KEY(owner_authorization_id)
-                    REFERENCES research_authorizations(authorization_id)
-            );
-            CREATE INDEX IF NOT EXISTS ix_research_projects_updated
-            ON research_projects(updated_utc DESC, research_id DESC);
-            CREATE INDEX IF NOT EXISTS ix_research_projects_parent
-            ON research_projects(parent_strategy_id, created_utc DESC);
-
-            CREATE TABLE IF NOT EXISTS research_gate_events (
-                event_id TEXT PRIMARY KEY,
-                research_id TEXT NOT NULL,
-                gate TEXT NOT NULL,
-                from_state TEXT,
-                to_state TEXT NOT NULL,
-                authority TEXT NOT NULL,
-                owner_authorization_id TEXT,
-                input_manifest_sha TEXT,
-                output_manifest_sha TEXT,
-                created_utc TEXT NOT NULL,
-                FOREIGN KEY(research_id)
-                    REFERENCES research_projects(research_id)
-            );
-            CREATE INDEX IF NOT EXISTS ix_research_gate_events_research
-            ON research_gate_events(research_id, created_utc, event_id);
-
-            CREATE TABLE IF NOT EXISTS research_memory_events (
-                event_id TEXT PRIMARY KEY,
-                research_id TEXT NOT NULL,
-                event_type TEXT NOT NULL,
-                stage TEXT NOT NULL,
-                status TEXT NOT NULL,
-                learning_zone TEXT NOT NULL CHECK (
-                    learning_zone IN (
-                        'FOUNDATION','ADAPTIVE','VALIDATION','PROTECTED','UNKNOWN'
-                    )
-                ),
-                adaptive_eligible INTEGER NOT NULL CHECK(adaptive_eligible IN (0,1)),
-                source_manifest_sha256 TEXT,
-                payload_json TEXT NOT NULL,
-                created_utc TEXT NOT NULL,
-                FOREIGN KEY(research_id)
-                    REFERENCES research_projects(research_id)
-            );
-            CREATE INDEX IF NOT EXISTS ix_research_memory_research
-            ON research_memory_events(research_id, created_utc, event_id);
-
-            CREATE TABLE IF NOT EXISTS research_gate_authorizations_v2 (
-                authorization_id TEXT PRIMARY KEY,
-                research_id TEXT NOT NULL,
-                gate TEXT NOT NULL CHECK(gate='R01'),
-                action TEXT NOT NULL CHECK(action='START'),
-                confirmed INTEGER NOT NULL CHECK(confirmed IN (0,1)),
-                payload_sha256 TEXT NOT NULL,
-                payload_json TEXT NOT NULL,
-                authorized_utc TEXT NOT NULL,
-                FOREIGN KEY(research_id) REFERENCES research_projects(research_id)
-            );
-            CREATE INDEX IF NOT EXISTS ix_research_gate_authorizations_v2_research
-            ON research_gate_authorizations_v2(research_id, authorized_utc, authorization_id);
-
-            CREATE TABLE IF NOT EXISTS research_r01_runs (
-                run_id TEXT PRIMARY KEY,
-                research_id TEXT NOT NULL UNIQUE,
-                authorization_id TEXT NOT NULL UNIQUE,
-                state TEXT NOT NULL CHECK(
-                    state IN (
-                        'STARTING',
-                        'PASS_WAITING_OWNER',
-                        'FAIL_WAITING_OWNER',
-                        'ERROR_WAITING_OWNER'
-                    )
-                ),
-                dataset_id TEXT,
-                input_manifest_sha TEXT,
-                output_manifest_sha TEXT,
-                artifact_ids_json TEXT NOT NULL DEFAULT '[]',
-                error TEXT,
-                created_utc TEXT NOT NULL,
-                updated_utc TEXT NOT NULL,
-                FOREIGN KEY(research_id) REFERENCES research_projects(research_id),
-                FOREIGN KEY(authorization_id)
-                    REFERENCES research_gate_authorizations_v2(authorization_id)
-            );
-            CREATE INDEX IF NOT EXISTS ix_research_r01_runs_state
-            ON research_r01_runs(state, updated_utc DESC, run_id DESC);
-
-            CREATE TABLE IF NOT EXISTS research_r02_authorizations (
-                authorization_id TEXT PRIMARY KEY,
-                research_id TEXT NOT NULL UNIQUE,
-                confirmed INTEGER NOT NULL CHECK(confirmed IN (0,1)),
-                payload_sha256 TEXT NOT NULL UNIQUE,
-                payload_json TEXT NOT NULL,
-                authorized_utc TEXT NOT NULL,
-                FOREIGN KEY(research_id) REFERENCES research_projects(research_id)
-            );
-            CREATE INDEX IF NOT EXISTS ix_research_r02_authorizations_research
-            ON research_r02_authorizations(research_id, authorized_utc, authorization_id);
-
-            CREATE TABLE IF NOT EXISTS research_r02_discovery_blocks (
-                block_id TEXT PRIMARY KEY,
-                research_id TEXT NOT NULL UNIQUE,
-                authorization_id TEXT NOT NULL UNIQUE,
-                state TEXT NOT NULL CHECK(state='FROZEN_WAITING_EXECUTION'),
-                r01_output_manifest_sha256 TEXT NOT NULL,
-                plan_id TEXT NOT NULL UNIQUE,
-                plan_sha256 TEXT NOT NULL UNIQUE,
-                candidate_count INTEGER NOT NULL CHECK(candidate_count > 0),
-                compute_budget_json TEXT NOT NULL,
-                created_utc TEXT NOT NULL,
-                FOREIGN KEY(research_id) REFERENCES research_projects(research_id),
-                FOREIGN KEY(authorization_id)
-                    REFERENCES research_r02_authorizations(authorization_id)
-            );
-            CREATE INDEX IF NOT EXISTS ix_research_r02_blocks_created
-            ON research_r02_discovery_blocks(created_utc DESC, block_id DESC);
-
-            CREATE TABLE IF NOT EXISTS research_r02_execution_attempts (
-                attempt_id TEXT PRIMARY KEY,
-                research_id TEXT NOT NULL UNIQUE,
-                block_id TEXT NOT NULL UNIQUE,
-                started_utc TEXT NOT NULL,
-                FOREIGN KEY(research_id) REFERENCES research_projects(research_id),
-                FOREIGN KEY(block_id)
-                    REFERENCES research_r02_discovery_blocks(block_id)
-            );
-
-            CREATE TABLE IF NOT EXISTS research_r02_candidate_specs (
-                candidate_id TEXT PRIMARY KEY,
-                block_id TEXT NOT NULL,
-                ordinal INTEGER NOT NULL CHECK(ordinal >= 0),
-                model_family TEXT NOT NULL,
-                seed INTEGER NOT NULL CHECK(seed >= 0),
-                spec_sha256 TEXT NOT NULL UNIQUE,
-                spec_json TEXT NOT NULL,
-                created_utc TEXT NOT NULL,
-                UNIQUE(block_id, ordinal),
-                FOREIGN KEY(block_id)
-                    REFERENCES research_r02_discovery_blocks(block_id)
-            );
-            CREATE INDEX IF NOT EXISTS ix_research_r02_candidates_block
-            ON research_r02_candidate_specs(block_id, ordinal, candidate_id);
-
-            CREATE TABLE IF NOT EXISTS research_r02_candidate_outcomes (
-                outcome_id TEXT PRIMARY KEY,
-                block_id TEXT NOT NULL,
-                candidate_id TEXT NOT NULL UNIQUE,
-                status TEXT NOT NULL CHECK(
-                    status IN ('SCREEN_PASS','SCREEN_FAIL','EXECUTION_ERROR')
-                ),
-                outcome_sha256 TEXT NOT NULL UNIQUE,
-                outcome_json TEXT NOT NULL,
-                created_utc TEXT NOT NULL,
-                FOREIGN KEY(block_id)
-                    REFERENCES research_r02_discovery_blocks(block_id),
-                FOREIGN KEY(candidate_id)
-                    REFERENCES research_r02_candidate_specs(candidate_id)
-            );
-            CREATE INDEX IF NOT EXISTS ix_research_r02_outcomes_block
-            ON research_r02_candidate_outcomes(block_id, candidate_id);
-
-            CREATE TABLE IF NOT EXISTS research_r02_block_terminals (
-                terminal_id TEXT PRIMARY KEY,
-                block_id TEXT NOT NULL UNIQUE,
-                state TEXT NOT NULL CHECK(state='COMPLETE_WAITING_OWNER'),
-                outcome_manifest_sha256 TEXT NOT NULL UNIQUE,
-                candidate_count INTEGER NOT NULL CHECK(candidate_count > 0),
-                screen_pass_count INTEGER NOT NULL CHECK(screen_pass_count >= 0),
-                screen_fail_count INTEGER NOT NULL CHECK(screen_fail_count >= 0),
-                execution_error_count INTEGER NOT NULL CHECK(execution_error_count >= 0),
-                compute_consumed_json TEXT NOT NULL,
-                created_utc TEXT NOT NULL,
-                FOREIGN KEY(block_id)
-                    REFERENCES research_r02_discovery_blocks(block_id)
-            );
-
-            CREATE TRIGGER IF NOT EXISTS research_r02_outcome_no_update
-            BEFORE UPDATE ON research_r02_candidate_outcomes
-            BEGIN
-                SELECT RAISE(ABORT, 'R02_OUTCOME_IMMUTABLE');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r02_outcome_no_delete
-            BEFORE DELETE ON research_r02_candidate_outcomes
-            BEGIN
-                SELECT RAISE(ABORT, 'R02_OUTCOME_APPEND_ONLY');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r02_terminal_no_update
-            BEFORE UPDATE ON research_r02_block_terminals
-            BEGIN
-                SELECT RAISE(ABORT, 'R02_TERMINAL_IMMUTABLE');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r02_terminal_no_delete
-            BEFORE DELETE ON research_r02_block_terminals
-            BEGIN
-                SELECT RAISE(ABORT, 'R02_TERMINAL_APPEND_ONLY');
-            END;
-
-            CREATE TRIGGER IF NOT EXISTS research_r02_authorization_no_update
-            BEFORE UPDATE ON research_r02_authorizations
-            BEGIN
-                SELECT RAISE(ABORT, 'R02_AUTHORIZATION_IMMUTABLE');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r02_authorization_no_delete
-            BEFORE DELETE ON research_r02_authorizations
-            BEGIN
-                SELECT RAISE(ABORT, 'R02_AUTHORIZATION_APPEND_ONLY');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r02_block_no_update
-            BEFORE UPDATE ON research_r02_discovery_blocks
-            BEGIN
-                SELECT RAISE(ABORT, 'R02_DISCOVERY_BLOCK_IMMUTABLE');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r02_block_no_delete
-            BEFORE DELETE ON research_r02_discovery_blocks
-            BEGIN
-                SELECT RAISE(ABORT, 'R02_DISCOVERY_BLOCK_APPEND_ONLY');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r02_execution_attempt_no_update
-            BEFORE UPDATE ON research_r02_execution_attempts
-            BEGIN
-                SELECT RAISE(ABORT, 'R02_EXECUTION_ATTEMPT_IMMUTABLE');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r02_execution_attempt_no_delete
-            BEFORE DELETE ON research_r02_execution_attempts
-            BEGIN
-                SELECT RAISE(ABORT, 'R02_EXECUTION_ATTEMPT_APPEND_ONLY');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r02_candidate_no_update
-            BEFORE UPDATE ON research_r02_candidate_specs
-            BEGIN
-                SELECT RAISE(ABORT, 'R02_CANDIDATE_SPEC_IMMUTABLE');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r02_candidate_no_delete
-            BEFORE DELETE ON research_r02_candidate_specs
-            BEGIN
-                SELECT RAISE(ABORT, 'R02_CANDIDATE_SPEC_APPEND_ONLY');
-            END;
-
-            CREATE TABLE IF NOT EXISTS research_r01_sources (
-                source_id TEXT PRIMARY KEY,
-                research_id TEXT NOT NULL,
-                parent_strategy_id TEXT NOT NULL,
-                parent_authority_sha256 TEXT NOT NULL,
-                status TEXT NOT NULL CHECK(status='READY'),
-                bundle_path TEXT NOT NULL UNIQUE,
-                bundle_sha256 TEXT NOT NULL UNIQUE,
-                source_identity_sha256 TEXT NOT NULL,
-                broker TEXT NOT NULL,
-                feed TEXT NOT NULL,
-                source_timezone TEXT NOT NULL,
-                main_symbol TEXT NOT NULL,
-                relative_symbol TEXT NOT NULL,
-                data_start_utc TEXT NOT NULL,
-                data_end_utc TEXT NOT NULL,
-                row_coverage_json TEXT NOT NULL,
-                provenance_json TEXT NOT NULL,
-                created_utc TEXT NOT NULL,
-                FOREIGN KEY(research_id) REFERENCES research_projects(research_id)
-            );
-            CREATE INDEX IF NOT EXISTS ix_research_r01_sources_research
-            ON research_r01_sources(research_id, created_utc DESC, source_id DESC);
-
-            CREATE TRIGGER IF NOT EXISTS research_r01_source_no_update
-            BEFORE UPDATE ON research_r01_sources
-            BEGIN
-                SELECT RAISE(ABORT, 'R01_SOURCE_IMMUTABLE');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r01_source_no_delete
-            BEFORE DELETE ON research_r01_sources
-            BEGIN
-                SELECT RAISE(ABORT, 'R01_SOURCE_IMMUTABLE');
-            END;
-
-            CREATE TRIGGER IF NOT EXISTS research_r01_authorization_no_update
-            BEFORE UPDATE ON research_gate_authorizations_v2
-            BEGIN
-                SELECT RAISE(ABORT, 'R01_AUTHORIZATION_IMMUTABLE');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r01_authorization_no_delete
-            BEFORE DELETE ON research_gate_authorizations_v2
-            BEGIN
-                SELECT RAISE(ABORT, 'R01_AUTHORIZATION_APPEND_ONLY');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r01_run_no_delete
-            BEFORE DELETE ON research_r01_runs
-            BEGIN
-                SELECT RAISE(ABORT, 'R01_RUN_APPEND_ONLY');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r01_terminal_immutable
-            BEFORE UPDATE ON research_r01_runs
-            WHEN OLD.state IN (
-                'PASS_WAITING_OWNER',
-                'FAIL_WAITING_OWNER',
-                'ERROR_WAITING_OWNER'
-            )
-            BEGIN
-                SELECT RAISE(ABORT, 'R01_TERMINAL_IMMUTABLE');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r01_state_transition_guard
-            BEFORE UPDATE OF state ON research_r01_runs
-            WHEN NOT (
-                OLD.state='STARTING'
-                AND NEW.state IN (
-                    'PASS_WAITING_OWNER',
-                    'FAIL_WAITING_OWNER',
-                    'ERROR_WAITING_OWNER'
-                )
-            )
-            BEGIN
-                SELECT RAISE(ABORT, 'R01_STATE_TRANSITION_INVALID');
-            END;
-
-            CREATE TRIGGER IF NOT EXISTS research_authorizations_no_update
-            BEFORE UPDATE ON research_authorizations
-            BEGIN
-                SELECT RAISE(ABORT, 'RESEARCH_AUTHORIZATION_IMMUTABLE');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_authorizations_no_delete
-            BEFORE DELETE ON research_authorizations
-            BEGIN
-                SELECT RAISE(ABORT, 'RESEARCH_AUTHORIZATION_APPEND_ONLY');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_memory_no_update
-            BEFORE UPDATE ON research_memory_events
-            BEGIN
-                SELECT RAISE(ABORT, 'RESEARCH_MEMORY_APPEND_ONLY');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_memory_no_delete
-            BEFORE DELETE ON research_memory_events
-            BEGIN
-                SELECT RAISE(ABORT, 'RESEARCH_MEMORY_APPEND_ONLY');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_parent_authority_immutable
-            BEFORE UPDATE OF
-                research_parent_id,
-                parent_strategy_id,
-                parent_authority_sha256,
-                parent_manifest_path,
-                parent_manifest_sha256,
-                feature_contract,
-                owner_authorization_id,
-                authorized_utc,
-                hardware_snapshot_path,
-                hardware_snapshot_sha256
-            ON research_projects
-            BEGIN
-                SELECT RAISE(ABORT, 'RESEARCH_PARENT_AUTHORITY_IMMUTABLE');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r00_initial_state_guard
-            BEFORE INSERT ON research_projects
-            WHEN NEW.current_gate='R00' AND NEW.gate_state<>'STARTING'
-            BEGIN
-                SELECT RAISE(ABORT, 'R00_INITIAL_STATE_MUST_BE_STARTING');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r00_current_gate_guard
-            BEFORE UPDATE OF current_gate ON research_projects
-            WHEN OLD.current_gate='R00' AND NEW.current_gate<>'R00'
-            BEGIN
-                SELECT RAISE(ABORT, 'R00_CURRENT_GATE_IMMUTABLE');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r00_gate_state_guard
-            BEFORE UPDATE OF gate_state ON research_projects
-            WHEN OLD.current_gate='R00'
-              AND NEW.current_gate='R00'
-              AND NOT (
-                  OLD.gate_state='STARTING'
-                  AND NEW.gate_state IN (
-                      'PASS_WAITING_OWNER',
-                      'FAIL_WAITING_OWNER',
-                      'ERROR_WAITING_OWNER'
-                  )
-              )
-            BEGIN
-                SELECT RAISE(ABORT, 'R00_GATE_STATE_TRANSITION_INVALID');
-            END;
-            CREATE TRIGGER IF NOT EXISTS research_r00_terminal_manifest_guard
-            BEFORE UPDATE OF gate_input_manifest_sha,gate_output_manifest_sha
-            ON research_projects
-            WHEN OLD.current_gate='R00'
-              AND NEW.current_gate='R00'
-              AND OLD.gate_state IN (
-                  'PASS_WAITING_OWNER',
-                  'FAIL_WAITING_OWNER',
-                  'ERROR_WAITING_OWNER'
-              )
-            BEGIN
-                SELECT RAISE(ABORT, 'R00_TERMINAL_AUTHORITY_IMMUTABLE');
-            END;
-
             CREATE TABLE IF NOT EXISTS artifact_registry (
                 artifact_id TEXT PRIMARY KEY,
                 artifact_type TEXT NOT NULL,
@@ -649,6 +250,11 @@ def migrate_current(path: Path = DATABASE_PATH) -> None:
             ON artifact_registry(retention_class, in_use);
             """
         )
+        conn.execute(
+            "INSERT OR REPLACE INTO schema_meta(key,value) VALUES('schema_version',?)",
+            (str(CURRENT_SCHEMA_VERSION),),
+        )
+        _purge_research_authority(conn)
         conn.execute(
             "INSERT OR REPLACE INTO schema_meta(key,value) VALUES('schema_version',?)",
             (str(CURRENT_SCHEMA_VERSION),),

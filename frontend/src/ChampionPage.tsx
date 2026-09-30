@@ -124,7 +124,7 @@ export default function ChampionPage() {
           </section>
 
           <section aria-labelledby="champion-kpi">
-            <h2 id="champion-kpi">Retained research evidence</h2>
+            <h2 id="champion-kpi">Retained Strategy performance evidence</h2>
             <dl className="facts compact">
               <div><dt>Profit Factor</dt><dd>{n(data.current.kpi.profit_factor)}</dd></div>
               <div><dt>Recovery Factor</dt><dd>{n(data.current.kpi.recovery_factor)}</dd></div>

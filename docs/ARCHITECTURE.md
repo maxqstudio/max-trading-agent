@@ -2,20 +2,20 @@
 
 # ARCHITECTURE
 
-Current source digest: d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8883a543
+Current source digest: 9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126
 
 ## Components
 
 | ID | Component | Purpose | Owns | Depends On |
 |---|---|---|---|---|
-| owner-ui | Owner React Control Surface | Present semantic Strategy, Research, Artifacts and Settings state and explicit Owner actions without manufacturing authority. | frontend/src/App.tsx::App, frontend/src/OptimizerPage.tsx::OptimizerPage, frontend/src/ChallengersPage.tsx::ChallengersPage, frontend/src/ChampionPage.tsx::ChampionPage, frontend/src/ResearchPage.tsx::ResearchPage, frontend/src/DataPage.tsx::DataPage, frontend/src/ScientistPage.tsx::ScientistPage | FastAPI semantic APIs |
+| owner-ui | Owner React Control Surface | Present semantic Strategy, Artifact and Settings state with explicit feedback for blocked, running and completed Owner actions. | frontend/src/App.tsx::App, frontend/src/OptimizerPage.tsx::OptimizerPage, frontend/src/ChallengersPage.tsx::ChallengersPage, frontend/src/ChampionPage.tsx::ChampionPage, frontend/src/ScientistPage.tsx::ScientistPage | FastAPI semantic APIs |
 | strategy-domain | Strategy lifecycle domain | Own optimizer qualification, Challenger registration/lifecycle and Champion promotion/tenure semantics. | backend/max_backend/optimizer_candidates.py::qualified_candidates_page, backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration, backend/max_backend/challenger_selection.py::create_selected_challengers, backend/max_backend/challenger_store.py::consumed_source_identities, backend/max_backend/challenger_registry.py::challenger_detail, backend/max_backend/challenger_operations.py::retire_challenger, backend/max_backend/champion_store.py::commit_promotion_authority, backend/max_backend/promotion_service.py::promote_strategy_challenger | SQLite, immutable Challenger/optimizer evidence, MT5/MetaEditor |
-| research-domain | Research authority through R02 immutable outcome ledger | Own Research authority and the bounded R02 Discovery-only executor source; synthetic fitting is test-only, real execution remains separately blocked, outcomes publish atomically, and Cheap Screen cannot manufacture scientific qualification. | backend/max_backend/research_settings.py::get_research_sample_configuration, backend/max_backend/research_settings.py::set_research_sample_configuration, backend/max_backend/research_service.py::r00_preflight, backend/max_backend/research_service.py::start_r00, backend/max_backend/research_service.py::canonical_research_stage, backend/max_backend/research_source.py::prepare_r01_source, backend/max_backend/research_dataset.py::build_labels, backend/max_backend/research_dataset.py::build_dataset, backend/max_backend/research_leakage.py::bind_protected_partition_rows, backend/max_backend/research_leakage.py::bind_protected_target_dependency_authority, backend/max_backend/research_leakage.py::run_adversarial_suite, backend/max_backend/research_r01_store.py::commit_r01_terminal_authority, backend/max_backend/research_r01_service.py::r01_preflight, backend/max_backend/research_r01_service.py::prepare_r01_verified_source, backend/max_backend/research_r01_service.py::start_r01, backend/max_backend/research_r01_service.py::r01_detail, backend/max_backend/research_r02_contract.py::build_discovery_plan, backend/max_backend/research_r02_service.py::r02_preflight, backend/max_backend/research_r02_service.py::authorize_r02_discovery, backend/max_backend/research_r02_store.py::create_r02_authorization, backend/max_backend/research_r02_store.py::freeze_r02_discovery_block, backend/max_backend/research_r02_outcome.py::build_candidate_outcome, backend/max_backend/research_r02_outcome.py::build_terminal_manifest, backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes, backend/max_backend/research_r02_store.py::get_r02_outcome_ledger, backend/max_backend/research_r02_store.py::begin_r02_execution_attempt, backend/max_backend/research_r02_executor.py::execute_r02_discovery_block, backend/max_backend/research_r02_executor.py::build_discovery_split, backend/max_backend/research_r02_executor.py::evaluate_cheap_screen, backend/max_backend/research_r02_models.py::fit_predict_candidate | Strategy parent authority, SQLite, immutable Research artifacts, MT5 source capture, accepted R01 scientific authority for future R02 execution, R01 hash-bound Discovery-only training artifact, frozen R02 Cheap Screen policy and candidate authority, Windows LightGBM OpenCL GPU, XGBoost CUDA GPU, and CPU synthetic-test runtimes with scikit-learn |
 | scientist | Scientist advisory subsystem | Expose hash-verified static knowledge and bounded committed runtime context to an advisory LLM/chat workflow. | backend/max_backend/scientist_knowledge.py::load_knowledge, backend/max_backend/scientist_api.py::get_status, frontend/src/ScientistPage.tsx::ScientistPage | scientist/knowledge/source_manifest.json, Scientist store/provider settings |
 | backend-runtime | FastAPI runtime | Start migrations/recovery, route semantic APIs and expose overview/readiness. | backend/max_backend/main.py::lifespan, backend/max_backend/main.py::overview, backend/max_backend/main.py::app | domain services, SQLite, MT5 detection |
 | launcher | Windows launcher/readiness | Verify or start canonical backend/frontend instances, reject invalid occupied ports and emit MAX_READY only after authority/readiness checks. | RUN_MAX.cmd, scripts/run_max.ps1 | backend /api/overview, frontend proxy/root, Scientist status, ports 8000/5173 |
 | mt5 | MT5/MetaEditor execution boundary | Provide Strategy Tester simulation/optimization and MQL5 compile/execution truth. | ea/baseline/Max_MTF.mq5 | MetaTrader 5 terminal, MetaEditor |
-| operational-state | SQLite operational state | Persist mutable Strategy/Research/Scientist operational state through owning stores and transactions. | state/max.db | backend store modules |
+| operational-state | SQLite operational state | Persist mutable Strategy/Scientist operational state through owning stores and transactions. | state/max.db | backend store modules |
+| artifact-control-recovery | Artifact control and safe state recovery | Keep ordinary artifact reads non-mutating and separate cleanup/reset/recovery into explicit, preflighted, ownership-bounded flows with visible UI state. | backend/max_backend/artifact_control.py::artifact_page, backend/max_backend/artifact_control.py::reconcile_artifacts, backend/max_backend/strategy_reset.py::strategy_reset_preflight, backend/max_backend/strategy_reset.py::reset_strategy_workspace, backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database, frontend/src/ArtifactsPage.tsx::ArtifactsPage, frontend/src/App.tsx::RecoveryRequiredPage | SQLite operational state, owned artifact paths, FastAPI artifact/recovery routes |
 | immutable-evidence | Immutable evidence/artifact layer | Represent runtime scientific/execution lineage owned by domain contracts; evidence/ and artifacts/ are runtime-only and intentionally absent from the public source repository. | artifacts/, evidence/, docs/audits/ | domain services and artifact registry |
 | governance | Current project governance | Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth for the GitHub-hosted workflow. | PROJECT_PROFILE.yaml, .workflow/*.json, .workflow/workflows/*.json, .workflow/tools/*.py, docs/sequence/sessions/*.json, docs/sequence/generated/*.actual.json, docs/sequence/generated/*.actual.mmd | Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8, GitHub Actions windows-latest hosted validation |
 
@@ -24,8 +24,7 @@ Current source digest: d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8
 - Owner React Control Surface -> FastAPI runtime: Owner events become semantic API requests; UI itself creates no domain authority.
 - FastAPI runtime -> Strategy lifecycle domain: Strategy actions are domain-validated before any SQLite/artifact/MT5 mutation.
 - Strategy lifecycle domain -> MT5/MetaEditor execution boundary: MT5/MetaEditor execute simulation/optimization/compile while Python verifies legality and evidence.
-- Strategy lifecycle domain -> Research authority and R00/R01 domain: Exact accepted Strategy parent authority seeds Research; Research cannot retroactively redefine Strategy history.
-- Research authority and R00/R01 domain -> Immutable evidence/artifact layer: R00/R01 authorization, dataset, leakage and terminal evidence are sealed by lineage.
+- Strategy lifecycle domain -> Immutable evidence/artifact layer: Strategy evidence and lifecycle changes are governed through the owning domain and retained artifact lineage.
 - Scientist advisory subsystem -> Owner React Control Surface: Scientist returns bounded advisory context only; no scientific/promotion authority.
 - Current project governance -> Generated canonical docs/ governance Markdown: Project Truth Compiler projects source facts plus explicit semantic authority deterministically into canonical docs/ Markdown.
 
@@ -36,13 +35,13 @@ Current source digest: d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8
 - Owner PC: Final runtime/E2E authority only after GitHub development closure; real MT5, MetaEditor, broker data, terminal data root, deployment and browser E2E remain deferred.
 - MetaTrader 5: Simulation and optimization execution truth only; Python validates workflow legality and evidence.
 - MetaEditor: MQL5 compile truth used by promotion/deployment checks.
-- Scientist provider: Untrusted/advisory provider output is bounded and cannot mutate Strategy/Research authority.
+- Scientist provider: Untrusted/advisory provider output is bounded and cannot mutate Strategy authority.
 
 ## Observed implementation inventory
 
-Source files: 143
-Source lines: 69546
-Languages: PowerShell=3, Python=116, TypeScript=3, TypeScript/React=21
+Source files: 109
+Source lines: 48099
+Languages: PowerShell=2, Python=87, TypeScript=3, TypeScript/React=17
 
 Structural facts come from the code extractor. Component meaning comes from
 .workflow/architecture.json.

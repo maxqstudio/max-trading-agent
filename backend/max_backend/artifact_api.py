@@ -12,6 +12,11 @@ from .artifact_control import (
     clean_generated_data,
     execute_artifact_action,
     global_cleanup_preflight,
+    reconcile_artifacts,
+)
+from .strategy_reset import (
+    reset_strategy_workspace,
+    strategy_reset_preflight,
 )
 
 
@@ -29,6 +34,18 @@ class ArtifactAction(ArtifactSelection):
 
 class GlobalCleanupConfirmation(BaseModel):
     confirmed: bool
+
+
+class StrategyWorkspaceResetConfirmation(BaseModel):
+    confirmation: str = Field(min_length=1, max_length=80)
+
+
+@router.post("/reconcile")
+def reconcile() -> dict:
+    try:
+        return reconcile_artifacts()
+    except (ValueError, RuntimeError) as exc:
+        raise _error(exc) from exc
 
 
 def _error(exc: Exception) -> HTTPException:
@@ -107,6 +124,22 @@ def cleanup(payload: GlobalCleanupConfirmation) -> dict:
     try:
         return clean_generated_data(confirmed=payload.confirmed)
     except RuntimeError as exc:
+        raise _error(exc) from exc
+
+
+@router.get("/strategy-reset/preflight")
+def strategy_workspace_reset_preflight() -> dict:
+    try:
+        return strategy_reset_preflight()
+    except (ValueError, RuntimeError) as exc:
+        raise _error(exc) from exc
+
+
+@router.post("/strategy-reset")
+def strategy_workspace_reset(payload: StrategyWorkspaceResetConfirmation) -> dict:
+    try:
+        return reset_strategy_workspace(confirmed=payload.confirmation)
+    except (ValueError, RuntimeError, OSError) as exc:
         raise _error(exc) from exc
 
 

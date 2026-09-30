@@ -1176,6 +1176,7 @@ def test_artifact_reconciliation_indexes_generated_files_without_double_counting
         lambda: {"status": "UNAVAILABLE", "reason": "FIXTURE_NO_MT5"},
     )
 
+    artifact_control.reconcile_artifacts(path=db)
     result = artifact_control.artifact_page(
         page=1,
         page_size=100,
@@ -1216,6 +1217,7 @@ def test_artifact_reconciliation_indexes_generated_files_without_double_counting
     assert all(str(row["sha256"] or "") for row in child_rows)
 
     compile_log.unlink()
+    artifact_control.reconcile_artifacts(path=db)
     artifact_control.artifact_page(page=1, page_size=100, path=db)
     with connect(db) as conn:
         stale_log_count = int(conn.execute(
@@ -1228,6 +1230,75 @@ def test_artifact_reconciliation_indexes_generated_files_without_double_counting
             (job["job_id"],),
         ).fetchone()["n"])
     assert stale_log_count == 0
+
+
+def test_artifact_inventory_read_does_not_reconcile_or_probe_mt5(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    db, _job, _request, _root = build_optimizer_fixture(
+        tmp_path,
+        monkeypatch,
+        [pass_row(1, mean_r=0.31, weighted_r=0.11)],
+    )
+    artifact = tmp_path / "artifacts" / "inventory-only.txt"
+    artifact.parent.mkdir(parents=True, exist_ok=True)
+    artifact.write_text("synthetic", encoding="utf-8")
+    artifact_control.register_artifact(
+        artifact_type="TEST_ARTIFACT",
+        producer="TEST",
+        owner_type="TEST_OWNER",
+        owner_id="synthetic-owner",
+        canonical_path=artifact,
+        path=db,
+    )
+
+    def forbidden(**_kwargs):
+        raise AssertionError("ordinary inventory read performed reconciliation")
+
+    monkeypatch.setattr(artifact_control, "reconcile_artifacts", forbidden)
+    monkeypatch.setattr(
+        artifact_control,
+        "detect_mt5",
+        lambda: (_ for _ in ()).throw(AssertionError("ordinary read probed MT5")),
+    )
+    page = artifact_control.artifact_page(
+        query="SYNTHETIC-OWNER",
+        artifact_type="TEST_ARTIFACT",
+        page=1,
+        page_size=25,
+        path=db,
+    )
+
+    assert page["total"] == 1
+    assert page["items"][0]["owner_id"] == "synthetic-owner"
+    assert page["runtime"] == {
+        "status": "NOT_CHECKED",
+        "reason": "EXPLICIT_RECONCILE_REQUIRED",
+        "data_root": None,
+    }
+
+
+def test_challenger_registry_list_does_not_verify_each_bundle(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    db, _job, challenger, _root = create_one_challenger_fixture(tmp_path, monkeypatch)
+
+    def forbidden(*_args, **_kwargs):
+        raise AssertionError("registry read performed bundle verification")
+
+    monkeypatch.setattr(challenger_operations, "verify_challenger_bundle", forbidden)
+    page = challenger_operations.challenger_registry_page(
+        view="active",
+        page=1,
+        page_size=25,
+        path=db,
+    )
+
+    assert page["total"] == 1
+    assert page["items"][0]["challenger_id"] == challenger["challenger_id"]
+    assert page["items"][0]["integrity"] == "NOT_CHECKED"
 
 
 def test_backtest_bulk_preflight_blocks_before_mutation_and_clean_is_confirmed(
@@ -1651,6 +1722,7 @@ def test_global_clean_complex_state_and_artifact_producer_coverage(
     _patch_global_cleanup_roots(tmp_path, monkeypatch)
     _insert_complex_generated_state(db, tmp_path=tmp_path, challenger=challenger)
 
+    artifact_control.reconcile_artifacts(path=db)
     page = artifact_control.artifact_page(page=1, page_size=100, path=db)
     owner_types = {item["owner_type"] for item in page["items"]}
     required = {
@@ -1764,6 +1836,7 @@ def test_global_clean_preserves_protected_baseline_history(
     disposable.mkdir(parents=True, exist_ok=True)
     (disposable / "history.json").write_text("{}", encoding="utf-8")
 
+    artifact_control.reconcile_artifacts(path=db)
     page = artifact_control.artifact_page(page=1, page_size=100, path=db)
     protected_rows = [
         item

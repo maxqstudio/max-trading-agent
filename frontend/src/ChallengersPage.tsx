@@ -1,4 +1,4 @@
-import { type FormEvent, useEffect, useState } from 'react'
+import { type FormEvent, useEffect, useRef, useState } from 'react'
 import { Pagination, SortHeader } from './DataTable'
 import { compactNumber } from './tableFormat'
 
@@ -197,6 +197,7 @@ type ChallengerDeletePreflight = {
 type PendingBacktestDelete = {
   backtest_id: string
   challenger_id: string
+  state: string
 }
 
 type View = 'active' | 'retired'
@@ -294,6 +295,7 @@ async function fetchRegistry(
   order: 'asc' | 'desc',
   page: number,
   pageSize: number,
+  signal?: AbortSignal,
 ) {
   const params = new URLSearchParams({
     view,
@@ -303,19 +305,20 @@ async function fetchRegistry(
     page: String(page),
     page_size: String(pageSize),
   })
-  const response = await fetch('/api/challengers/registry?' + params.toString())
+  const response = await fetch('/api/challengers/registry?' + params.toString(), { signal })
   return await jsonOrError(response) as RegistryPage
 }
 
-async function fetchChampion() {
-  const response = await fetch('/api/champion')
+async function fetchChampion(signal?: AbortSignal) {
+  const response = await fetch('/api/champion/summary', { signal })
   return await jsonOrError(response) as ChampionAuthority
 }
 
-async function fetchDeletePreflight(challengerId: string) {
+async function fetchDeletePreflight(challengerId: string, signal?: AbortSignal) {
   try {
     const response = await fetch(
       '/api/challengers/' + encodeURIComponent(challengerId) + '/delete-preflight',
+      { signal },
     )
     return await jsonOrError(response) as ChallengerDeletePreflight
   } catch {
@@ -329,8 +332,8 @@ async function fetchDeletePreflight(challengerId: string) {
   }
 }
 
-async function fetchDetail(challengerId: string) {
-  const response = await fetch('/api/challengers/' + encodeURIComponent(challengerId))
+async function fetchDetail(challengerId: string, signal?: AbortSignal) {
+  const response = await fetch('/api/challengers/' + encodeURIComponent(challengerId), { signal })
   return await jsonOrError(response) as ChallengerDetail
 }
 
@@ -342,6 +345,7 @@ async function fetchBacktests(
   order: 'asc' | 'desc',
   page: number,
   pageSize: number,
+  signal?: AbortSignal,
 ) {
   const params = new URLSearchParams({
     challenger_id: challengerId,
@@ -352,12 +356,11 @@ async function fetchBacktests(
     page: String(page),
     page_size: String(pageSize),
   })
-  try {
-    const response = await fetch('/api/challengers/backtests?' + params.toString())
-    return await jsonOrError(response) as BacktestPage
-  } catch {
+  const response = await fetch('/api/challengers/backtests?' + params.toString(), { signal })
+  if (response.status === 404) {
     const legacy = await fetch(
       '/api/challengers/' + encodeURIComponent(challengerId) + '/backtests',
+      { signal },
     )
     const items = await jsonOrError(legacy) as BacktestRecord[]
     return {
@@ -368,6 +371,7 @@ async function fetchBacktests(
       items,
     } as BacktestPage
   }
+  return await jsonOrError(response) as BacktestPage
 }
 
 export default function ChallengersPage() {
@@ -399,6 +403,10 @@ export default function ChallengersPage() {
   const [operationResult, setOperationResult] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
+  const [detailLoading, setDetailLoading] = useState(false)
+  const [backtestsLoading, setBacktestsLoading] = useState(false)
+  const [backtestDetailLoadingId, setBacktestDetailLoadingId] = useState('')
+  const detailController = useRef<AbortController | null>(null)
   const [backtestForm, setBacktestForm] = useState({
     symbol: '',
     relative_symbol: '',
@@ -420,13 +428,28 @@ export default function ChallengersPage() {
     }
   }
 
-  const loadDetail = async (challengerId: string) => {
+  const detailVerified = detail?.artifact_integrity.status === 'VERIFIED'
+
+  const blockAction = (reason: string) => {
+    setOperationResult('Action blocked: ' + reason)
+  }
+
+  const loadDetail = async (challengerId: string, requestedController?: AbortController) => {
+    detailController.current?.abort()
+    const controller = requestedController ?? new AbortController()
+    detailController.current = controller
+    setDetailLoading(true)
+    setOperationResult('Loading selected Challenger and safety checks…')
     setError('')
+    applyDetail(null)
+    setDeletePreflight(null)
+    setBacktests(null)
     try {
       const [nextDetail, preflight] = await Promise.all([
-        fetchDetail(challengerId),
-        fetchDeletePreflight(challengerId),
+        fetchDetail(challengerId, controller.signal),
+        fetchDeletePreflight(challengerId, controller.signal),
       ])
+      if (controller.signal.aborted) return
       applyDetail(nextDetail)
       setDeletePreflight(preflight)
       setBacktestSelection(new Set())
@@ -434,8 +457,31 @@ export default function ChallengersPage() {
       setBacktestBulkAction(null)
       setBacktestPage(1)
     } catch (reason) {
-      setError((reason as Error).message)
+      if (!controller.signal.aborted) setError((reason as Error).message)
+    } finally {
+      if (!controller.signal.aborted) {
+        setOperationResult('')
+        setDetailLoading(false)
+        if (detailController.current === controller) detailController.current = null
+      }
     }
+  }
+
+  const invalidateSelectedDetail = () => {
+    detailController.current?.abort()
+    detailController.current = null
+    setDetailLoading(false)
+    setBacktestsLoading(false)
+    applyDetail(null)
+    setDeletePreflight(null)
+    setBacktests(null)
+    setBacktestSelection(new Set())
+    setBacktestBulkPreflight(null)
+    setBacktestBulkAction(null)
+    setBacktestDetail(null)
+    setPendingBacktestDelete(null)
+    setDialogMode(null)
+    setOperationResult('')
   }
 
   const refreshBacktests = async (challengerId: string) => {
@@ -452,32 +498,45 @@ export default function ChallengersPage() {
     if (next.page !== backtestPage) setBacktestPage(next.page)
   }
 
-  const refresh = async (preferredId?: string) => {
-    const [nextRegistry, nextChampion] = await Promise.all([
-      fetchRegistry(view, query, sort, order, page, pageSize),
-      fetchChampion(),
-    ])
-    setRegistry(nextRegistry)
-    setChampion(nextChampion)
-    const selectedId = preferredId && nextRegistry.items.some(
-      (item) => item.challenger_id === preferredId,
-    )
-      ? preferredId
-      : nextRegistry.items[0]?.challenger_id
-    if (!selectedId) {
-      applyDetail(null)
-      setDeletePreflight(null)
-      setBacktests(null)
-      return
+  const refresh = async (preferredId?: string, completedMessage?: string) => {
+    invalidateSelectedDetail()
+    setLoading(true)
+    setError('')
+    setOperationResult(completedMessage
+      ? completedMessage + ' Refreshing Challenger and Champion authority…'
+      : 'Refreshing Challenger and Champion authority…')
+    try {
+      const [nextRegistry, nextChampion] = await Promise.all([
+        fetchRegistry(view, query, sort, order, page, pageSize),
+        fetchChampion(),
+      ])
+      setRegistry(nextRegistry)
+      setChampion(nextChampion)
+      const selectedId = preferredId && nextRegistry.items.some(
+        (item) => item.challenger_id === preferredId,
+      )
+        ? preferredId
+        : nextRegistry.items[0]?.challenger_id
+      if (!selectedId) {
+        setOperationResult(completedMessage ?? 'Authority refreshed. No Challenger is available in this view.')
+        return
+      }
+      await loadDetail(selectedId)
+      if (completedMessage) setOperationResult(completedMessage)
+    } catch (reason) {
+      setOperationResult('Authority refresh did not complete; actions remain blocked until it succeeds.')
+      throw reason
+    } finally {
+      setLoading(false)
     }
-    await loadDetail(selectedId)
   }
 
   useEffect(() => {
     let active = true
+    const controller = new AbortController()
     Promise.all([
-      fetchRegistry(view, query, sort, order, page, pageSize),
-      fetchChampion(),
+      fetchRegistry(view, query, sort, order, page, pageSize, controller.signal),
+      fetchChampion(controller.signal),
     ])
       .then(async ([nextRegistry, nextChampion]) => {
         if (!active) return
@@ -487,34 +546,36 @@ export default function ChallengersPage() {
           applyDetail(null)
           setDeletePreflight(null)
           setBacktests(null)
+          setDetailLoading(false)
+          setBacktestsLoading(false)
+          setOperationResult('')
           return
         }
         const selectedId = nextRegistry.items[0].challenger_id
-        const [nextDetail, preflight] = await Promise.all([
-          fetchDetail(selectedId),
-          fetchDeletePreflight(selectedId),
-        ])
         if (!active) return
-        applyDetail(nextDetail)
-        setDeletePreflight(preflight)
-        setBacktestPage(1)
+        await loadDetail(selectedId, controller)
       })
       .catch((reason: Error) => {
-        if (active) setError(reason.message)
+        if (active && !controller.signal.aborted) setError(reason.message)
       })
       .finally(() => {
         if (active) setLoading(false)
       })
     return () => {
       active = false
+      controller.abort()
+      if (detailController.current === controller) detailController.current = null
     }
   }, [view, query, sort, order, page, pageSize])
 
   useEffect(() => {
     if (!detail?.challenger_id) {
+      setBacktestsLoading(false)
       return
     }
     let active = true
+    const controller = new AbortController()
+    setBacktestsLoading(true)
     fetchBacktests(
       detail.challenger_id,
       backtestQuery,
@@ -523,6 +584,7 @@ export default function ChallengersPage() {
       backtestOrder,
       backtestPage,
       backtestPageSize,
+      controller.signal,
     )
       .then((next) => {
         if (!active) return
@@ -530,9 +592,12 @@ export default function ChallengersPage() {
         if (next.page !== backtestPage) setBacktestPage(next.page)
       })
       .catch((reason: Error) => {
-        if (active) setError(reason.message)
+        if (active && !controller.signal.aborted) setError(reason.message)
       })
-    return () => { active = false }
+      .finally(() => {
+        if (active && !controller.signal.aborted) setBacktestsLoading(false)
+      })
+    return () => { active = false; controller.abort() }
   }, [
     detail?.challenger_id,
     backtestQuery,
@@ -545,6 +610,7 @@ export default function ChallengersPage() {
 
   const searchRegistry = (event: FormEvent) => {
     event.preventDefault()
+    invalidateSelectedDetail()
     setLoading(true)
     setError('')
     setPage(1)
@@ -552,6 +618,7 @@ export default function ChallengersPage() {
   }
 
   const switchView = (next: View) => {
+    invalidateSelectedDetail()
     setDialogMode(null)
     setOperationResult('')
     setError('')
@@ -561,9 +628,13 @@ export default function ChallengersPage() {
   }
 
   const confirmPromotion = async () => {
-    if (!detail || busy !== '') return
+    if (!detail) return blockAction('select and load a Challenger before promoting.')
+    if (!detailVerified) return blockAction('Challenger evidence is not verified; no promotion was submitted.')
+    if (detail.status !== 'CHALLENGER') return blockAction('only an active Challenger can be promoted.')
+    if (busy !== '' || detailLoading || loading) return blockAction('another authority operation is in progress; wait for it to finish.')
     setBusy('promotion')
     setError('')
+    setOperationResult('Submitting Champion promotion and verifying the resulting authority…')
     try {
       const response = await fetch(
         '/api/challengers/' + encodeURIComponent(detail.challenger_id) + '/promote',
@@ -580,7 +651,7 @@ export default function ChallengersPage() {
       await jsonOrError(response)
       setOperationResult('Promotion completed.')
       setDialogMode(null)
-      await refresh(detail.challenger_id)
+      await refresh(detail.challenger_id, 'Promotion completed.')
     } catch (reason) {
       setError((reason as Error).message)
     } finally {
@@ -589,9 +660,13 @@ export default function ChallengersPage() {
   }
 
   const confirmRetirement = async () => {
-    if (!detail || busy !== '') return
+    if (!detail) return blockAction('select and load a Challenger before retiring it.')
+    if (!detailVerified) return blockAction('Challenger evidence is not verified; no retirement was submitted.')
+    if (detail.status !== 'CHALLENGER') return blockAction('only an active Challenger can be retired.')
+    if (busy !== '' || detailLoading || loading) return blockAction('another authority operation is in progress; wait for it to finish.')
     setBusy('retirement')
     setError('')
+    setOperationResult('Submitting non-destructive retirement and refreshing Challenger authority…')
     try {
       const response = await fetch(
         '/api/challengers/' + encodeURIComponent(detail.challenger_id) + '/retire',
@@ -605,13 +680,12 @@ export default function ChallengersPage() {
         },
       )
       const result = await jsonOrError(response)
-      setOperationResult(
-        result.backtest_history_preserved
-          ? 'Challenger retired non-destructively. Retained backtest history was preserved.'
-          : 'Challenger retired non-destructively.',
-      )
+      const completion = result.backtest_history_preserved
+        ? 'Challenger retired non-destructively. Retained backtest history was preserved.'
+        : 'Challenger retired non-destructively.'
+      setOperationResult(completion)
       setDialogMode(null)
-      await refresh()
+      await refresh(undefined, completion)
     } catch (reason) {
       setError((reason as Error).message)
     } finally {
@@ -620,9 +694,12 @@ export default function ChallengersPage() {
   }
 
   const runBacktest = async () => {
-    if (!detail || busy !== '') return
+    if (!detail) return blockAction('select and load a Challenger before starting a Backtest.')
+    if (!detailVerified) return blockAction('Challenger evidence is not verified; no Backtest was submitted.')
+    if (busy !== '' || detailLoading || backtestsLoading || loading) return blockAction('Challenger or Backtest authority is still loading, or another action is running.')
     setBusy('backtest')
     setError('')
+    setOperationResult('Submitting the request to MT5 Strategy Tester…')
     try {
       const response = await fetch(
         '/api/challengers/' + encodeURIComponent(detail.challenger_id) + '/backtest',
@@ -634,7 +711,7 @@ export default function ChallengersPage() {
       )
       const result = await jsonOrError(response) as BacktestRecord
       setOperationResult(
-        'Backtest ' + ownerOperationalStatus(result.state) + '. MT5 Strategy Tester evidence retained.',
+        'Backtest request returned status: ' + ownerOperationalStatus(result.state) + '. Refreshing retained history…',
       )
       setBacktestPage(1)
       await refreshBacktests(detail.challenger_id)
@@ -647,6 +724,7 @@ export default function ChallengersPage() {
   }
 
   function changeRegistrySort(field: string, nextOrder: 'asc' | 'desc') {
+    invalidateSelectedDetail()
     setSort(field)
     setOrder(nextOrder)
     setPage(1)
@@ -660,30 +738,48 @@ export default function ChallengersPage() {
   }
 
   async function viewBacktest(backtestId: string) {
+    if (busy !== '' || backtestsLoading) {
+      return blockAction('Backtest history is loading or another action is in progress.')
+    }
+    setBacktestDetail(null)
+    setBacktestDetailLoadingId(backtestId)
+    setOperationResult('Loading retained Backtest details…')
     setError('')
     try {
       const response = await fetch(
         '/api/challengers/backtests/' + encodeURIComponent(backtestId),
       )
       setBacktestDetail(await jsonOrError(response) as BacktestRecord)
+      setOperationResult('Backtest details loaded.')
     } catch (reason) {
       setError((reason as Error).message)
+      setOperationResult('Backtest details could not be loaded; no data was changed.')
+    } finally {
+      setBacktestDetailLoadingId('')
     }
   }
 
-  function openBacktestReport(backtestId: string) {
+  function openBacktestReport(backtestId: string, reportAvailable: boolean) {
+    if (!reportAvailable) {
+      return blockAction('no retained report exists for this Backtest.')
+    }
     window.open(
       '/api/challengers/backtests/' + encodeURIComponent(backtestId) + '/report',
       '_blank',
       'noopener,noreferrer',
     )
+    setOperationResult('Report opened in a new tab if allowed by the browser. If no tab appeared, allow pop-ups for this site.')
   }
 
   async function cleanBacktestRuntime(record: BacktestRecord) {
-    if (busy !== '') return
+    if (busy !== '') return blockAction('another action is in progress; no runtime files were changed.')
+    if (['PREPARED', 'RUNNING'].includes(record.state)) {
+      return blockAction('runtime cleanup is blocked while this Backtest is active; no files were changed.')
+    }
     const busyKey = 'clean-backtest:' + record.backtest_id
     setBusy(busyKey)
     setError('')
+    setOperationResult('Cleaning registered runtime files for the selected Backtest…')
     try {
       const response = await fetch(
         '/api/challengers/backtests/' + encodeURIComponent(record.backtest_id) + '/clean-runtime',
@@ -705,11 +801,19 @@ export default function ChallengersPage() {
   }
 
   async function confirmBacktestDelete() {
-    if (!pendingBacktestDelete || busy !== '') return
+    if (!pendingBacktestDelete) return blockAction('no Backtest is selected for deletion.')
+    if (busy !== '') return blockAction('another action is in progress; no Backtest was deleted.')
+    if (['PREPARED', 'RUNNING'].includes(pendingBacktestDelete.state)) {
+      return blockAction('deletion is blocked while this Backtest is active; no data was deleted.')
+    }
+    if (pendingBacktestDelete.challenger_id !== detail?.challenger_id) {
+      return blockAction('the selected Challenger changed; refresh history and run the safety check again.')
+    }
     const pending = pendingBacktestDelete
     const busyKey = 'delete-backtest:' + pending.backtest_id
     setBusy(busyKey)
     setError('')
+    setOperationResult('Deleting the explicitly selected retained Backtest…')
     try {
       const response = await fetch(
         '/api/challengers/backtests/' + encodeURIComponent(pending.backtest_id),
@@ -761,9 +865,11 @@ export default function ChallengersPage() {
   }
 
   async function prepareBacktestBulk(action: 'clean' | 'delete') {
-    if (!backtestSelection.size || busy !== '') return
+    if (!backtestSelection.size) return blockAction('select one or more retained Backtests first.')
+    if (busy !== '' || backtestsLoading || loading) return blockAction('wait for the current history or authority operation to finish.')
     setBusy('bulk-preflight-' + action)
     setError('')
+    setOperationResult('Checking safety and dependencies for the selected Backtests…')
     try {
       const response = await fetch('/api/challengers/backtests/preflight', {
         method: 'POST',
@@ -786,9 +892,21 @@ export default function ChallengersPage() {
   }
 
   async function confirmBacktestBulk() {
-    if (!detail || !backtestBulkAction || !backtestSelection.size || busy !== '') return
+    if (!detail || !backtestBulkAction || !backtestSelection.size) {
+      return blockAction('the Backtest selection or safety check is missing; no bulk action was submitted.')
+    }
+    const selectedIds = Array.from(backtestSelection).sort()
+    const preflightIds = backtestBulkPreflight?.items.map((item) => item.backtest_id).sort() ?? []
+    if (!backtestBulkPreflight || backtestBulkPreflight.action !== backtestBulkAction
+      || backtestBulkPreflight.blocked > 0
+      || preflightIds.length !== selectedIds.length
+      || preflightIds.some((id, index) => id !== selectedIds[index])) {
+      return blockAction('the current selection is blocked or differs from its safety check; rerun preflight. No items were changed.')
+    }
+    if (busy !== '' || backtestsLoading || loading) return blockAction('wait for the current history or authority operation to finish.')
     setBusy('bulk-' + backtestBulkAction)
     setError('')
+    setOperationResult('Applying the preflighted Backtest action…')
     try {
       const response = await fetch('/api/challengers/backtests/action', {
         method: 'POST',
@@ -819,9 +937,14 @@ export default function ChallengersPage() {
   }
 
   async function confirmChallengerDelete() {
-    if (!detail || busy !== '') return
+    if (!detail) return blockAction('select and load a Challenger before deleting it.')
+    if (deletePreflight?.challenger_id !== detail.challenger_id || !deletePreflight.deletable) {
+      return blockAction('Challenger deletion is not cleared by the current safety check; no deletion was submitted.')
+    }
+    if (busy !== '' || detailLoading || loading) return blockAction('another authority operation is in progress; wait for it to finish.')
     setBusy('delete-challenger')
     setError('')
+    setOperationResult('Deleting the preflighted generated Challenger record and bundle…')
     try {
       const response = await fetch(
         '/api/challengers/' + encodeURIComponent(detail.challenger_id),
@@ -834,7 +957,7 @@ export default function ChallengersPage() {
       await jsonOrError(response)
       setOperationResult('Challenger deleted.')
       setDialogMode(null)
-      await refresh()
+      await refresh(undefined, 'Challenger deleted.')
     } catch (reason) {
       setError((reason as Error).message)
     } finally {
@@ -843,8 +966,6 @@ export default function ChallengersPage() {
   }
 
   const isActive = detail?.status === 'CHALLENGER'
-  const detailVerified = detail?.artifact_integrity.status === 'VERIFIED'
-
   return (
     <>
       <header className="page-head">
@@ -895,6 +1016,7 @@ export default function ChallengersPage() {
           <label>
             Sort
             <select value={sort} onChange={(event) => {
+              invalidateSelectedDetail()
               setLoading(true)
               setPage(1)
               setSort(event.target.value)
@@ -914,6 +1036,7 @@ export default function ChallengersPage() {
             <select
               value={order}
               onChange={(event) => {
+                invalidateSelectedDetail()
                 setLoading(true)
                 setPage(1)
                 setOrder(event.target.value as 'asc' | 'desc')
@@ -928,6 +1051,7 @@ export default function ChallengersPage() {
             <button
               type="button"
               onClick={() => {
+                invalidateSelectedDetail()
                 setLoading(true)
                 setQueryDraft('')
                 setQuery('')
@@ -982,6 +1106,8 @@ export default function ChallengersPage() {
                         <button
                           className="text-button mono"
                           onClick={() => loadDetail(item.challenger_id)}
+                          disabled={loading || detailLoading || busy !== ''}
+                          title={busy !== '' ? 'Wait for the current action to finish before changing the selected Challenger.' : undefined}
                         >
                           Round {item.source_round} · Pass {item.source_pass}
                         </button>
@@ -1008,8 +1134,8 @@ export default function ChallengersPage() {
               pages={registry.pages}
               pageSize={registry.page_size}
               total={registry.total}
-              onPage={(next) => { setLoading(true); setPage(next) }}
-              onPageSize={(size) => { setPageSize(size); setPage(1); setLoading(true) }}
+              onPage={(next) => { invalidateSelectedDetail(); setLoading(true); setPage(next) }}
+              onPageSize={(size) => { invalidateSelectedDetail(); setPageSize(size); setPage(1); setLoading(true) }}
             />
           </>
         )}
@@ -1025,21 +1151,21 @@ export default function ChallengersPage() {
                   <button
                     type="button"
                     onClick={() => setDialogMode('promotion')}
-                    disabled={!detailVerified || busy !== ''}
+                    disabled={!detailVerified || busy !== '' || detailLoading}
                   >
                     Promote to Champion
                   </button>
                   <button
                     type="button"
                     onClick={() => setDialogMode('retirement')}
-                    disabled={!detailVerified || busy !== ''}
+                    disabled={!detailVerified || busy !== '' || detailLoading}
                   >
                     Retire / Archive
                   </button>
                   <button
                     type="button"
                     onClick={() => setDialogMode('delete-challenger')}
-                    disabled={!deletePreflight?.deletable || busy !== ''}
+                    disabled={!deletePreflight?.deletable || busy !== '' || detailLoading}
                     title={deletePreflight?.blockers.length ? 'Deletion is protected by current authority' : 'Delete generated Challenger'}
                   >
                     Delete Challenger
@@ -1048,7 +1174,16 @@ export default function ChallengersPage() {
               )}
             </div>
             {isActive && deletePreflight && deletePreflight.blockers.length > 0 && (
-              <p className="error-text">Deletion is not allowed while this Challenger is protected by current authority or retained dependencies.</p>
+              <p className="error-text">
+                {deletePreflight.blockers.includes('DELETE_PREFLIGHT_UNAVAILABLE')
+                  ? 'Deletion is blocked because its safety check could not be completed. Retry the check before deleting; no deletion was submitted.'
+                  : 'Deletion is not allowed while this Challenger is protected by current authority or retained dependencies.'}
+              </p>
+            )}
+            {!detailVerified && (
+              <p role="alert" className="error-text">
+                Promotion, retirement, and backtest actions are blocked until Challenger evidence passes integrity verification.
+              </p>
             )}
             <dl className="facts compact">
               <div><dt>Candidate</dt><dd>Optimizer round {detail.source_round} · pass {detail.source_pass}</dd></div>
@@ -1103,7 +1238,8 @@ export default function ChallengersPage() {
                   <button
                     type="button"
                     onClick={runBacktest}
-                    disabled={!detailVerified || busy !== ''}
+                    disabled={!detailVerified || busy !== '' || detailLoading || backtestsLoading}
+                    title={!detailVerified ? 'Backtest is blocked until Challenger evidence is verified.' : backtestsLoading ? 'Backtest history is still loading.' : busy !== '' ? 'Wait for the current operation to finish.' : undefined}
                   >
                     <ActionProgress
                       active={busy === 'backtest'}
@@ -1152,6 +1288,7 @@ export default function ChallengersPage() {
 
           <section aria-labelledby="backtest-history">
             <h2 id="backtest-history">Backtest history</h2>
+            {backtestsLoading && <p role="status" className="loading">Loading Backtest history; cleanup and bulk actions are temporarily disabled…</p>}
             <div className="table-toolbar">
               <input
                 aria-label="Search Backtests"
@@ -1180,14 +1317,14 @@ export default function ChallengersPage() {
               <button
                 type="button"
                 onClick={toggleBacktestPageSelection}
-                disabled={!backtests?.items.length || busy !== ''}
+                disabled={!backtests?.items.length || busy !== '' || backtestsLoading}
               >
                 Select current page
               </button>
               <button
                 type="button"
                 onClick={() => setBacktestSelection(new Set())}
-                disabled={!backtestSelection.size || busy !== ''}
+                disabled={!backtestSelection.size || busy !== '' || backtestsLoading}
               >
                 Clear selection
               </button>
@@ -1195,26 +1332,29 @@ export default function ChallengersPage() {
               <button
                 type="button"
                 onClick={() => prepareBacktestBulk('clean')}
-                disabled={!backtestSelection.size || busy !== ''}
+                disabled={!backtestSelection.size || busy !== '' || backtestsLoading}
               >
                 <ActionProgress
                   active={busy === 'bulk-preflight-clean'}
                   idle="Clean Selected Runtime"
-                  pending="Cleaning..."
+                  pending="Checking safety..."
                 />
               </button>
               <button
                 type="button"
                 onClick={() => prepareBacktestBulk('delete')}
-                disabled={!backtestSelection.size || busy !== ''}
+                disabled={!backtestSelection.size || busy !== '' || backtestsLoading}
               >
                 <ActionProgress
                   active={busy === 'bulk-preflight-delete'}
                   idle="Delete Selected"
-                  pending="Deleting..."
+                  pending="Checking safety..."
                 />
               </button>
             </div>
+            {!backtestsLoading && backtestSelection.size === 0 && backtests?.items.length !== 0 && (
+              <p className="subtle">Select one or more retained Backtests to enable bulk cleanup or deletion.</p>
+            )}
             {backtests && (
               <>
                 {backtests.items.length === 0 && (
@@ -1253,7 +1393,7 @@ export default function ChallengersPage() {
                                 aria-label={'Select retained Backtest created ' + record.created_utc}
                                 type="checkbox"
                                 checked={backtestSelection.has(record.backtest_id)}
-                                disabled={busy !== ''}
+                                disabled={busy !== '' || backtestsLoading}
                                 onChange={() => toggleBacktestSelection(record.backtest_id)}
                               />
                             </td>
@@ -1273,11 +1413,25 @@ export default function ChallengersPage() {
                             <td>{ownerOperationalStatus(record.runtime_status)}</td>
                             <td>
                               <div className="row-actions">
-                                <button type="button" onClick={() => viewBacktest(record.backtest_id)}>View Details</button>
-                                <button type="button" disabled={!record.report_sha256} onClick={() => openBacktestReport(record.backtest_id)}>Open Report</button>
                                 <button
                                   type="button"
-                                  disabled={busy !== '' || ['PREPARED', 'RUNNING'].includes(record.state)}
+                                  disabled={busy !== '' || backtestsLoading || backtestDetailLoadingId !== ''}
+                                  onClick={() => viewBacktest(record.backtest_id)}
+                                >
+                                  {backtestDetailLoadingId === record.backtest_id ? 'Loading details…' : 'View Details'}
+                                </button>
+                                <button
+                                  type="button"
+                                  disabled={!record.report_sha256 || busy !== '' || backtestsLoading}
+                                  title={!record.report_sha256 ? 'No retained report is available for this Backtest.' : undefined}
+                                  onClick={() => openBacktestReport(record.backtest_id, Boolean(record.report_sha256))}
+                                >
+                                  Open Report
+                                </button>
+                                <button
+                                  type="button"
+                                  disabled={busy !== '' || backtestsLoading || ['PREPARED', 'RUNNING'].includes(record.state)}
+                                  title={['PREPARED', 'RUNNING'].includes(record.state) ? 'Runtime cleanup is blocked while the Backtest is active.' : undefined}
                                   onClick={() => cleanBacktestRuntime(record)}
                                 >
                                   <ActionProgress
@@ -1288,17 +1442,24 @@ export default function ChallengersPage() {
                                 </button>
                                 <button
                                   type="button"
-                                  disabled={busy !== '' || ['PREPARED', 'RUNNING'].includes(record.state)}
+                                  disabled={busy !== '' || backtestsLoading || ['PREPARED', 'RUNNING'].includes(record.state)}
+                                  title={['PREPARED', 'RUNNING'].includes(record.state) ? 'Deletion is blocked while the Backtest is active.' : undefined}
                                   onClick={() => {
+                                    if (['PREPARED', 'RUNNING'].includes(record.state)) {
+                                      blockAction('deletion is blocked while this Backtest is active; no data was deleted.')
+                                      return
+                                    }
                                     setPendingBacktestDelete({
                                       backtest_id: record.backtest_id,
                                       challenger_id: record.challenger_id,
+                                      state: record.state,
                                     })
                                     setDialogMode('delete-backtest')
                                   }}
                                 >
                                   Delete Backtest
                                 </button>
+                                {['PREPARED', 'RUNNING'].includes(record.state) && <small role="note">Actions blocked while Backtest is active.</small>}
                               </div>
                             </td>
                           </tr>
@@ -1363,7 +1524,13 @@ export default function ChallengersPage() {
                 </dl>
                 <p className="subtle">Strategy geometry, parameter lineage and runtime-file details remain available through retained evidence in Artifacts.</p>
                 <div className="actions">
-                  <button type="button" disabled={!backtestDetail.report_sha256} onClick={() => openBacktestReport(backtestDetail.backtest_id)}>Open Report</button>
+                  <button
+                    type="button"
+                    disabled={!backtestDetail.report_sha256}
+                    title={!backtestDetail.report_sha256 ? 'No retained report is available for this Backtest.' : undefined}
+                    onClick={() => openBacktestReport(backtestDetail.backtest_id, Boolean(backtestDetail.report_sha256))}
+                  >Open Report</button>
+                  {!backtestDetail.report_sha256 && <small role="note">No retained report exists; opening a report is unavailable.</small>}
                   <button type="button" onClick={() => setBacktestDetail(null)}>Close</button>
                 </div>
               </div>
@@ -1389,6 +1556,11 @@ export default function ChallengersPage() {
                     <li key={item.backtest_id}>A selected Backtest is protected by current authority or retained dependencies.</li>
                   ))}
                 </ul>
+              )}
+              {backtestBulkPreflight.blocked > 0 && (
+                <p role="status" className="error-text">
+                  This action is blocked: {backtestBulkPreflight.blocked} selected Backtest(s) failed the safety check. No items will be changed.
+                </p>
               )}
               <div className="actions">
                 <button
@@ -1431,8 +1603,9 @@ export default function ChallengersPage() {
                 <div><dt>Current Champion</dt><dd>{champion?.current ? 'Selected' : 'Not selected'}</dd></div>
                 <div><dt>After promotion</dt><dd>Selected Challenger becomes the Strategy Champion</dd></div>
               </dl>
+              {!detailVerified && <p role="alert" className="error-text">Promotion is blocked until Challenger evidence is verified. No change has been submitted.</p>}
               <div className="actions">
-                <button type="button" onClick={confirmPromotion} disabled={busy !== ''}>
+                <button type="button" onClick={confirmPromotion} disabled={!detailVerified || busy !== '' || detailLoading || loading}>
                   <ActionProgress
                     active={busy === 'promotion'}
                     idle="CONFIRM PROMOTION"
@@ -1455,6 +1628,9 @@ export default function ChallengersPage() {
                 <div><dt>Deletion</dt><dd>{deletePreflight?.deletable ? 'Allowed' : 'Not allowed'}</dd></div>
                 <div><dt>Dependency state</dt><dd>{blockerSummary(deletePreflight?.blockers)}</dd></div>
               </dl>
+              {deletePreflight?.blockers.includes('DELETE_PREFLIGHT_UNAVAILABLE') && (
+                <p role="alert" className="error-text">Deletion is blocked because its safety check is unavailable. Retry after the check succeeds; no deletion was submitted.</p>
+              )}
               <div className="actions">
                 <button type="button" disabled={!deletePreflight?.deletable || busy !== ''} onClick={confirmChallengerDelete}>
                   <ActionProgress
@@ -1501,8 +1677,9 @@ export default function ChallengersPage() {
                 <div><dt>Existing backtests</dt><dd>{backtests?.total ?? 0}</dd></div>
                 <div><dt>Delete files</dt><dd><strong>No</strong></dd></div>
               </dl>
+              {!detailVerified && <p role="alert" className="error-text">Retirement is blocked until Challenger evidence is verified. No change has been submitted.</p>}
               <div className="actions">
-                <button type="button" onClick={confirmRetirement} disabled={busy !== ''}>
+                <button type="button" onClick={confirmRetirement} disabled={!detailVerified || busy !== '' || detailLoading || loading}>
                   <ActionProgress
                     active={busy === 'retirement'}
                     idle="CONFIRM RETIRE / ARCHIVE"

@@ -91,142 +91,8 @@
       ]
     },
     {
-      "claim": "Research sample requirement is editable current configuration.",
-      "documents": [
-        "PROJECT_TRUTH_SYNC.md"
-      ],
-      "id": "TRUTH-RESEARCH-CONFIG-001",
-      "runtime_evidence": [
-        "RESEARCH_UI_NON_MUTATING_VIEW"
-      ],
-      "source_owners": [
-        "backend/max_backend/research_settings.py::set_research_sample_configuration"
-      ],
-      "status": "PASS",
-      "tests": [
-        "backend/tests/test_r00_research.py",
-        "backend/tests/test_r01_research.py"
-      ]
-    },
-    {
-      "claim": "Each Research execution freezes its own immutable sample snapshot.",
-      "documents": [
-        "PROJECT_TRUTH_SYNC.md"
-      ],
-      "id": "TRUTH-RESEARCH-SNAPSHOT-001",
-      "runtime_evidence": [
-        "HISTORICAL_R00_RUNTIME_EVIDENCE"
-      ],
-      "source_owners": [
-        "backend/max_backend/research_service.py::start_r00",
-        "backend/max_backend/research_r01_service.py::start_r01"
-      ],
-      "status": "PASS",
-      "tests": [
-        "backend/tests/test_r00_research.py",
-        "backend/tests/test_r01_research.py"
-      ]
-    },
-    {
-      "claim": "Previous-epoch accepted R00 is immutable historical evidence only; it is not current Research authority for the fresh MAX Trading Agent epoch.",
-      "documents": [
-        "PROJECT_TRUTH_SYNC.md"
-      ],
-      "id": "TRUTH-R00-HISTORY-001",
-      "runtime_evidence": [
-        "HISTORICAL_R00_EVIDENCE",
-        "CURRENT_SOURCE_GOVERNANCE_R00_NOT_STARTED"
-      ],
-      "source_owners": [
-        "backend/max_backend/research_service.py::start_r00"
-      ],
-      "status": "PASS",
-      "tests": [
-        "backend/tests/test_r00_research.py"
-      ]
-    },
-    {
-      "claim": "Protected Locked OOS and Fresh outcomes are not adaptive tuning feedback under their protected authority.",
-      "documents": [
-        "PROJECT_TRUTH_SYNC.md"
-      ],
-      "id": "TRUTH-PROTECTED-DATA-001",
-      "runtime_evidence": [
-        "REAL_R01_NOT_RUN_PROTECTION_REGRESSION"
-      ],
-      "source_owners": [
-        "backend/max_backend/research_r01_store.py::commit_r01_terminal_authority",
-        "backend/max_backend/research_contract.py::memory_learning_zone"
-      ],
-      "status": "PASS",
-      "tests": [
-        "backend/tests/test_r01_research.py",
-        "backend/tests/test_r01_dataset.py"
-      ]
-    },
-    {
-      "claim": "R01 source resolves the latest current Research R00 authority dynamically and verifies immutable Research ID, Research parent ID, Strategy parent, parent authority hash, accepted R00 terminal state, frozen integrity, Owner authorization/sample authority, and no-training side effects; real current-epoch R01 execution remains blocked/not started.",
-      "documents": [
-        "PROJECT_TRUTH_SYNC.md"
-      ],
-      "id": "TRUTH-R01-STATE-001",
-      "runtime_evidence": [
-        "HOSTED_SOURCE_REPAIR_RUN_36369408053",
-        "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
-      ],
-      "source_owners": [
-        "backend/max_backend/research_r01_service.py::_normalized_r00_parent"
-      ],
-      "status": "PASS",
-      "tests": [
-        "backend/tests/test_r01_current_lineage.py",
-        "backend/tests/test_r01_research.py"
-      ]
-    },
-    {
-      "claim": "The current source-governed fresh epoch declares no current Research project or gate; Research initialization remains a separate Owner-authorized action and real runtime state is deferred to final acceptance.",
-      "documents": [
-        "PROJECT_TRUTH_SYNC.md"
-      ],
-      "id": "TRUTH-FRESH-EPOCH-001",
-      "runtime_evidence": [
-        "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
-      ],
-      "source_owners": [
-        "backend/max_backend/research_service.py::current_research",
-        "backend/max_backend/research_r01_service.py::r01_preflight"
-      ],
-      "status": "NOT_PROVEN",
-      "tests": [
-        "backend/tests/test_fresh_runtime.py"
-      ]
-    },
-    {
-      "claim": "The R02 executor source may fit deterministic synthetic fixtures only; real current-epoch R00/R01/R02 execution remains blocked/not started, and executor source capability does not itself grant real runtime authorization or scientific proof.",
-      "documents": [
-        "PROJECT_TRUTH_SYNC.md"
-      ],
-      "id": "TRUTH-R02-BLOCK-001",
-      "runtime_evidence": [
-        "HOSTED_MAIN_REVALIDATION_RUN_36409834797",
-        "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
-      ],
-      "source_owners": [
-        "backend/max_backend/research_r02_service.py::r02_preflight",
-        "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
-        "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery"
-      ],
-      "status": "NOT_PROVEN",
-      "tests": [
-        "backend/tests/test_r02_preflight.py",
-        "backend/tests/test_r02_authorization_service.py",
-        "backend/tests/test_r02_authorization_store.py",
-        "backend/tests/test_r02_executor.py"
-      ]
-    },
-    {
       "id": "TRUTH-PUBLIC-SOURCE-001",
-      "claim": "The public GitHub repository is source-only: runtime databases, evidence, artifacts, Research datasets, Owner terminal state and real credentials are prohibited from tracked source; tests use synthetic fixtures.",
+      "claim": "The public GitHub repository is source-only: runtime databases, evidence, artifacts, datasets, Owner terminal state and real credentials are prohibited from tracked source; tests use synthetic fixtures.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
@@ -242,74 +108,86 @@
       ]
     },
     {
-      "id": "TRUTH-R02-FREEZE-001",
-      "claim": "R02 authorization/frozen Discovery authority is deterministic, immutable and atomic: exact Owner confirmation, current Research/R01 output lineage, plan hash/id, candidate identities, one-block cardinality and explicit compute budget are frozen all-or-nothing before the internal executor may consume it.",
+      "id": "TRUTH-STRATEGY-RESET-001",
+      "claim": "Strategy workspace reset is destructive only after current preflight, exact confirmation, verified database backup, and transactional revalidation; accepted EA baseline and unrelated provider settings remain protected.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
       "source_owners": [
-        "backend/max_backend/research_r02_service.py::authorize_r02_discovery",
-        "backend/max_backend/research_r02_store.py::authorize_and_freeze_r02_discovery",
-        "backend/max_backend/research_r02_store.py::freeze_r02_discovery_block"
+        "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
+        "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+        "backend/max_backend/strategy_reset.py::_make_database_backup"
       ],
+      "status": "PASS",
       "tests": [
-        "backend/tests/test_r02_authorization_service.py",
-        "backend/tests/test_r02_authorization_store.py"
+        "backend/tests/test_strategy_workspace_reset.py"
       ],
       "runtime_evidence": [
-        "HOSTED_ATOMIC_TARGETED_RUN_36380098875",
-        "HOSTED_FULL_PRE_CLOSEOUT_RUN_36380453938",
+        "SYNTHETIC_DATABASES_ONLY",
         "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
-      ],
-      "status": "PASS"
+      ]
     },
     {
-      "id": "TRUTH-R02-OUTCOME-001",
-      "claim": "R02 Cheap Screen outcome authority is append-only and block-complete: every frozen candidate must have exactly one deterministic SCREEN_PASS, SCREEN_FAIL or EXECUTION_ERROR record; terminalization is atomic, bounded by the frozen compute budget, and has zero scientific qualification authority.",
+      "id": "TRUTH-RECOVERY-001",
+      "claim": "Unopenable or corrupt operational state is quarantined from ordinary operations; recovery requires explicit confirmation and a verified backup before rebuilding the Strategy workspace.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
       "source_owners": [
-        "backend/max_backend/research_r02_outcome.py::build_candidate_outcome",
-        "backend/max_backend/research_r02_outcome.py::build_terminal_manifest",
-        "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes"
+        "backend/max_backend/main.py::recovery_required_gate",
+        "backend/max_backend/strategy_reset.py::database_recovery_status",
+        "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
       ],
+      "status": "PASS",
       "tests": [
-        "backend/tests/test_r02_outcome_contract.py",
-        "backend/tests/test_r02_authorization_store.py",
-        "backend/tests/test_r02_preflight.py"
+        "backend/tests/test_strategy_workspace_reset.py",
+        "frontend/src/App.test.tsx"
       ],
       "runtime_evidence": [
-        "HOSTED_TARGETED_RUN_36412664127",
-        "HOSTED_FULL_PRE_CLOSEOUT_RUN_36413020299",
+        "SYNTHETIC_DATABASES_ONLY",
         "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
-      ],
-      "status": "PASS"
+      ]
     },
     {
-      "id": "TRUTH-R02-EXECUTOR-001",
-      "claim": "The bounded R02 executor verifies current Research, accepted R01 output and the immutable frozen candidate universe, consumes only the R01 Discovery-only training artifact, supports LightGBM OpenCL GPU and XGBoost CUDA GPU adapters plus a Random Forest CPU control, and creates outcomes internally through the immutable ledger. CI fits synthetic fixtures on CPU; synthetic GPU smoke is not scientific evidence, and real R02 remains blocked.",
+      "id": "TRUTH-CONTROL-FEEDBACK-001",
+      "claim": "Safety-blocked Strategy and artifact controls explain why an action is unavailable; asynchronous operations expose progress and a completed, blocked, or failed result rather than leaving a silent click.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
       "source_owners": [
-        "backend/max_backend/research_r01_service.py::read_r01_discovery_training_dataset",
-        "backend/max_backend/research_r02_executor.py::execute_r02_discovery_block",
-        "backend/max_backend/research_r02_executor.py::build_discovery_split",
-        "backend/max_backend/research_r02_models.py::fit_predict_candidate",
-        "backend/max_backend/research_r02_store.py::begin_r02_execution_attempt",
-        "backend/max_backend/research_r02_store.py::_execute_r02_attempt_and_commit",
-        "backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes"
+        "frontend/src/ArtifactsPage.tsx::ArtifactsPage",
+        "frontend/src/ChallengersPage.tsx::ChallengersPage"
       ],
+      "status": "PASS",
       "tests": [
-        "backend/tests/test_r01_research.py",
-        "backend/tests/test_r02_executor.py"
+        "frontend/src/ArtifactsPage.test.tsx",
+        "frontend/src/ChallengersPage.test.tsx"
       ],
       "runtime_evidence": [
-        "SYNTHETIC_TESTS_ONLY",
+        "SYNTHETIC_FRONTEND_TESTS_ONLY",
         "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
+      ]
+    },
+    {
+      "id": "TRUTH-RESEARCH-PURGE-001",
+      "claim": "The rejected active Research subsystem is absent from the registered API routes and application UI; Research-prefixed persisted runtime tables and metadata are removed during the current database migration. Future R00-R11 work remains planned and blocked until real MT5 sample readiness and separate authorization.",
+      "documents": [
+        "PROJECT_TRUTH_SYNC.md"
       ],
-      "status": "NOT_PROVEN"
+      "source_owners": [
+        "backend/max_backend/workflow_store.py::_purge_research_authority",
+        "backend/max_backend/workflow_store.py::migrate_current",
+        "backend/max_backend/main.py::app",
+        "frontend/src/App.tsx::App"
+      ],
+      "status": "PASS",
+      "tests": [
+        "backend/tests/test_retired_subsystem_migration.py"
+      ],
+      "runtime_evidence": [
+        "SYNTHETIC_DATABASES_ONLY",
+        "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
+      ]
     }
   ],
   "relations": [
@@ -320,15 +198,9 @@
       "relation": "REQUIRES"
     },
     {
-      "claim_id": "TRUTH-RESEARCH-SNAPSHOT-001",
-      "notes": "Execution snapshot is captured from current configuration.",
-      "other_claim_id": "TRUTH-RESEARCH-CONFIG-001",
-      "relation": "REQUIRES"
-    },
-    {
-      "claim_id": "TRUTH-R02-BLOCK-001",
-      "notes": "R02 remains blocked while no accepted R01 scientific result exists.",
-      "other_claim_id": "TRUTH-R01-STATE-001",
+      "claim_id": "TRUTH-STRATEGY-RESET-001",
+      "notes": "A destructive Strategy control must explain its preconditions and result rather than silently ignoring user action.",
+      "other_claim_id": "TRUTH-CONTROL-FEEDBACK-001",
       "relation": "REQUIRES"
     }
   ],
