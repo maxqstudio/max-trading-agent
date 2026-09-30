@@ -7,7 +7,7 @@
       "backend/max_backend/optimizer_api.py::promote_qualified_candidates"
     ],
     "graph": "docs/sequence/generated/FLOW-OPTIMIZER-TO-CHALLENGER.actual.json",
-    "source_digest": "443b922b7050377aedb0931e91789d0825fc86c9db64ae7e318361204ac65cf4"
+    "source_digest": "d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8883a543"
   },
   "critical": true,
   "implementation_base_sha": "eb6192873eb518b9fe4c7f15d03600ca4ac1e73d",

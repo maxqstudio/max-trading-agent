@@ -4215,7 +4215,7 @@
       "locator": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     }
   ],
-  "observed_head": "35f237f25a898b60b2a5123d6246ebc34fcbec8d",
+  "observed_head": "90538f289df9492e35c0308baebc94f1e58abd20",
   "schema_version": 1,
-  "source_digest": "443b922b7050377aedb0931e91789d0825fc86c9db64ae7e318361204ac65cf4"
+  "source_digest": "d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8883a543"
 }

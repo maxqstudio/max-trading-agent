@@ -166,7 +166,7 @@
     },
     {
       "depends_on": [
-        "Skill Workflow c1d7e58a0fcadc606c8cf75c6283a17278f99259",
+        "Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
         "GitHub Actions windows-latest hosted validation"
       ],
       "id": "governance",

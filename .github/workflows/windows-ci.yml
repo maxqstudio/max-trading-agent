@@ -68,7 +68,7 @@ jobs:
       - name: Verify Skill Workflow tool provenance
         shell: pwsh
         run: |
-          $skillSha = "c1d7e58a0fcadc606c8cf75c6283a17278f99259"
+          $skillSha = "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8"
           $skillDir = Join-Path $env:RUNNER_TEMP "Skill_Workflow"
           if (Test-Path $skillDir) { Remove-Item -Recurse -Force $skillDir }
           git clone --quiet https://github.com/maxqstudio/Skill_Workflow.git $skillDir

@@ -41,7 +41,7 @@ Observed source inventory: 143 files, 4 language categories.
 | MT5/MetaEditor execution boundary | Provide Strategy Tester simulation/optimization and MQL5 compile/execution truth. | ea/baseline/Max_MTF.mq5 | MetaTrader 5 terminal, MetaEditor |
 | SQLite operational state | Persist mutable Strategy/Research/Scientist operational state through owning stores and transactions. | state/max.db | backend store modules |
 | Immutable evidence/artifact layer | Represent runtime scientific/execution lineage owned by domain contracts; evidence/ and artifacts/ are runtime-only and intentionally absent from the public source repository. | artifacts/, evidence/, docs/audits/ | domain services and artifact registry |
-| Current project governance | Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth for the GitHub-hosted workflow. | PROJECT_PROFILE.yaml, .workflow/*.json, .workflow/workflows/*.json, .workflow/tools/*.py, docs/sequence/sessions/*.json, docs/sequence/generated/*.actual.json, docs/sequence/generated/*.actual.mmd | Skill Workflow c1d7e58a0fcadc606c8cf75c6283a17278f99259, GitHub Actions windows-latest hosted validation |
+| Current project governance | Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth for the GitHub-hosted workflow. | PROJECT_PROFILE.yaml, .workflow/*.json, .workflow/workflows/*.json, .workflow/tools/*.py, docs/sequence/sessions/*.json, docs/sequence/generated/*.actual.json, docs/sequence/generated/*.actual.mmd | Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8, GitHub Actions windows-latest hosted validation |
 
 ## Main data flow
 
@@ -214,9 +214,9 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 | frontend | Semantic backend API representation | React presents authority; UI labels/local state do not create domain eligibility, gate completion or scientific PASS. |
 | tests | GitHub Actions windows-latest at the exact tested commit | A hosted test PASS is evidence only for source, synthetic/mocked behavior, dependencies and build layers actually executed; it does not prove real MT5 or Owner runtime. |
 | historical_evidence | Retained docs/audits/acceptance and immutable artifacts | Historical evidence remains historically truthful and is not rewritten to mimic current terminology or configuration. |
-| documentation | .workflow semantic specs + Project Truth Compiler at Skill Workflow c1d7e58a0fcadc606c8cf75c6283a17278f99259 | Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden. |
+| documentation | .workflow semantic specs + Project Truth Compiler at Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 | Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden. |
 | sequence | DURING-mode generated actual sequence graphs plus source/test/runtime semantic review | Existing implementation is reconstructed from current source; retrospective BEFORE plans are forbidden. |
-| governance_tools | .workflow/tools vendored byte-identically from Skill Workflow c1d7e58a0fcadc606c8cf75c6283a17278f99259 | Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed. |
+| governance_tools | .workflow/tools vendored byte-identically from Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 | Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed. |
 
 ## Mutable vs immutable
 
@@ -304,7 +304,7 @@ Known blockers:
 - R02_CHEAP_SCREEN_OUTCOME_LEDGER is accepted at main c913c47a45ca54d805470caf40bb54bf655b45c6; Windows CI run 36424489731 passed with backend 581, frontend 53 tests across 10 files, source-only policy, Skill Workflow provenance, STRICT_SELFTEST, governance, pip check, lint, build and npm dependency tree.
 - R02_OUTCOME_READBACK_INTEGRITY implementation and tracked governance are complete; candidate-tree scan, branch CI, PR-head CI, squash merge and exact merged-main CI passed. Exact final SHA and CI identity are recorded externally per D-012.
 - The supplied New-PC baseline evidence reports the Windows symlink probe PASS, M08 path-safety test PASS, and the exact full backend baseline 581 passed, 0 skipped, 0 failed.
-- Skill Workflow current upstream authority is c1d7e58a0fcadc606c8cf75c6283a17278f99259; its exact delta from the prior pin is adopted with roadmap authority and updated upstream compiler/self-tests.
+- Skill Workflow current upstream authority is 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8; its reviewed delta adds class-method symbol resolution, HTTP route predecessor reachability, and STRICT regressions for both; vendored tools and CI pin match this authority.
 - Local R02 integrity gates pass: targeted 147 tests, full backend 644 tests, frontend 53 tests across 10 files, pip check, lint, build, npm dependency tree, Project Docs, handoff, human comprehension, cross-document and sequence validation.
 - Current R02 trainer/executor source has local synthetic verification: targeted R02/R01 set 257 passed, full backend 706 passed, frontend 53 tests across 10 files, pip check, lint, build and npm dependency tree passed; R02 Discovery verification reads/hash-checks only its allowlisted safe artifacts and leaves dataset.csv, data_quality_report.json and leakage_report.json contents unread; local LightGBM OpenCL and XGBoost CUDA smoke used synthetic data only.
 

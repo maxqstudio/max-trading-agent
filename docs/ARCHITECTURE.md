@@ -2,7 +2,7 @@
 
 # ARCHITECTURE
 
-Current source digest: 443b922b7050377aedb0931e91789d0825fc86c9db64ae7e318361204ac65cf4
+Current source digest: d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8883a543
 
 ## Components
 
@@ -17,7 +17,7 @@ Current source digest: 443b922b7050377aedb0931e91789d0825fc86c9db64ae7e318361204
 | mt5 | MT5/MetaEditor execution boundary | Provide Strategy Tester simulation/optimization and MQL5 compile/execution truth. | ea/baseline/Max_MTF.mq5 | MetaTrader 5 terminal, MetaEditor |
 | operational-state | SQLite operational state | Persist mutable Strategy/Research/Scientist operational state through owning stores and transactions. | state/max.db | backend store modules |
 | immutable-evidence | Immutable evidence/artifact layer | Represent runtime scientific/execution lineage owned by domain contracts; evidence/ and artifacts/ are runtime-only and intentionally absent from the public source repository. | artifacts/, evidence/, docs/audits/ | domain services and artifact registry |
-| governance | Current project governance | Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth for the GitHub-hosted workflow. | PROJECT_PROFILE.yaml, .workflow/*.json, .workflow/workflows/*.json, .workflow/tools/*.py, docs/sequence/sessions/*.json, docs/sequence/generated/*.actual.json, docs/sequence/generated/*.actual.mmd | Skill Workflow c1d7e58a0fcadc606c8cf75c6283a17278f99259, GitHub Actions windows-latest hosted validation |
+| governance | Current project governance | Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth for the GitHub-hosted workflow. | PROJECT_PROFILE.yaml, .workflow/*.json, .workflow/workflows/*.json, .workflow/tools/*.py, docs/sequence/sessions/*.json, docs/sequence/generated/*.actual.json, docs/sequence/generated/*.actual.mmd | Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8, GitHub Actions windows-latest hosted validation |
 
 ## Data flow
 

@@ -236,7 +236,7 @@ Rationale: Append-only R02 outcome/terminal authority is a persistent schema cha
 
 ## D-030 — Adopt current Skill Workflow roadmap authority
 
-Status: CURRENT
+Status: SUPERSEDED
 
 MAX adopts Skill Workflow c1d7e58a0fcadc606c8cf75c6283a17278f99259, including mandatory .workflow/roadmap.json, state/roadmap phase synchronization, generated docs/ROADMAP.md, ROADMAP_SYNC and the upstream Project Truth Compiler self-test.
 
@@ -265,3 +265,11 @@ Status: CURRENT
 Advance cumulative SQLite schema from 12 to 13 for one immutable execution-attempt marker per frozen R02 block. Persist the marker before fitting; if a process stops before atomic outcome/terminal publication, readback fails closed and retry is forbidden. Schema-12 authority migrates forward without rewriting prior authorization, block, candidate, outcome or terminal records.
 
 Rationale: Without durable attempt state, a crash after fitting but before terminal publication leaves no distinction between never executed and execution uncertain, allowing silent second scientific fitting. The marker makes restart behavior deterministic while preserving the atomic outcome/terminal transaction.
+
+## D-034 — Adopt current Skill Workflow sequence and symbol-resolution repairs
+
+Status: CURRENT
+
+MAX adopts Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 and vendors its governance tools byte-identically. Relative to c1d7e58a0fcadc606c8cf75c6283a17278f99259, this update adds Python class-method path::symbol resolution, preserves HTTP route predecessor nodes in generated actual sequence graphs, and adds STRICT regressions for both. Windows CI verifies this exact upstream commit; no product behavior or database schema changes are introduced by the Skill update.
+
+Rationale: The Owner requested the latest Skill Workflow; adopting its small inspected delta closes governance graph/reference blind spots without MAX-local patches or changes to the scientific/runtime boundary.

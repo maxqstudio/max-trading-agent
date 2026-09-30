@@ -4,10 +4,10 @@
 
 ## Evidence boundary
 
-Starting authority 35f237f25a898b60b2a5123d6246ebc34fcbec8d contains the externally accepted R02_OUTCOME_READBACK_INTEGRITY phase. Current phase R02_CHEAP_SCREEN_TRAINER_EXECUTOR_SOURCE is source-complete and awaits external exact-SHA acceptance. The exact final main SHA and hosted CI identity are external evidence per D-012; this tracked record does not claim hosted CI PASS or embed a self-referential final SHA. Skill Workflow c1d7e58a0fcadc606c8cf75c6283a17278f99259 is adopted with roadmap.json, regenerated ROADMAP.md, ROADMAP_SYNC and upstream compiler self-tests. Hosted CI fitting uses CPU-only synthetic fixtures; local LightGBM OpenCL and XGBoost CUDA smoke also uses synthetic data only. No real R00/R01/R02 execution, market-data training, scientific outcome, R03, ONNX, Challenger or Champion mutation is authorized or proven. Schema 13 adds only a durable one-shot R02 execution-attempt marker so interrupted execution fails closed; schema-12 databases migrate forward. Owner-PC and real MT5 runtime remain NOT_PROVEN and deferred until the hosted source roadmap is complete.
+Starting authority 35f237f25a898b60b2a5123d6246ebc34fcbec8d contains the externally accepted R02_OUTCOME_READBACK_INTEGRITY phase. Current phase R02_CHEAP_SCREEN_TRAINER_EXECUTOR_SOURCE is source-complete and awaits external exact-SHA acceptance. The exact final main SHA and hosted CI identity are external evidence per D-012; this tracked record does not claim hosted CI PASS or embed a self-referential final SHA. Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 is adopted; its reviewed delta adds Python class-method symbol resolution, HTTP route predecessor reachability in actual sequence graphs, and STRICT regression coverage for both. Hosted CI fitting uses CPU-only synthetic fixtures; local LightGBM OpenCL and XGBoost CUDA smoke also uses synthetic data only. No real R00/R01/R02 execution, market-data training, scientific outcome, R03, ONNX, Challenger or Champion mutation is authorized or proven. Schema 13 adds only a durable one-shot R02 execution-attempt marker so interrupted execution fails closed; schema-12 databases migrate forward. Owner-PC and real MT5 runtime remain NOT_PROVEN and deferred until the hosted source roadmap is complete.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 443b922b7050377aedb0931e91789d0825fc86c9db64ae7e318361204ac65cf4
+Current source digest: d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8883a543
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
@@ -50,8 +50,8 @@ Current source digest: 443b922b7050377aedb0931e91789d0825fc86c9db64ae7e318361204
 - .venv/Scripts/python.exe .workflow/tools/validate_human_comprehension.py --require-pass
 - .venv/Scripts/python.exe .workflow/tools/validate_cross_document_consistency.py --allow-dirty
 - .venv/Scripts/python.exe .workflow/tools/validate_project_truth.py --allow-dirty
-- python $env:SKILL_WORKFLOW_DIR/scripts/selftest_project_truth_compiler.py (SKILL_WORKFLOW_DIR checked out at c1d7e58a0fcadc606c8cf75c6283a17278f99259)
-- python $env:SKILL_WORKFLOW_DIR/scripts/selftest_strict_project_workflow.py (SKILL_WORKFLOW_DIR checked out at c1d7e58a0fcadc606c8cf75c6283a17278f99259)
+- python $env:SKILL_WORKFLOW_DIR/scripts/selftest_project_truth_compiler.py (SKILL_WORKFLOW_DIR checked out at 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8)
+- python $env:SKILL_WORKFLOW_DIR/scripts/selftest_strict_project_workflow.py (SKILL_WORKFLOW_DIR checked out at 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8)
 - .venv/Scripts/python.exe -m pytest backend/tests -q -o addopts= --basetemp D:/max/.venv/pytest-backend-20260930-final
 - npm test -- --run (workdir: frontend)
 - npm run lint (workdir: frontend)

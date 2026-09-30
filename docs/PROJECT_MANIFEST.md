@@ -13,7 +13,7 @@ Repository: maxqstudio/max-trading-agent
 Active branch: work/r02-cheap-screen-executor
 Current authoritative SHA: external final acceptance evidence
 Last accepted SHA: 35f237f25a898b60b2a5123d6246ebc34fcbec8d
-Current source digest: 443b922b7050377aedb0931e91789d0825fc86c9db64ae7e318361204ac65cf4
+Current source digest: d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8883a543
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.
@@ -73,4 +73,4 @@ Generated from PROJECT_PROFILE.yaml.
 - R01 source/runtime readiness is not R01 scientific PASS.
 - R02 executor source may fit only deterministic synthetic fixtures in tests/CI; any future real execution requires exact current accepted R01 Discovery authority, one immutable Owner-authorized block and explicit runtime gates, and remains NOT_PROVEN until actual Owner-PC acceptance.
 - Protected Locked OOS/Fresh outcomes must not silently become adaptive tuning feedback.
-- Current governance method is Skill Workflow exact SHA c1d7e58a0fcadc606c8cf75c6283a17278f99259 with roadmap authority, generated documentation and DURING sequence evidence.
+- Current governance method is Skill Workflow exact SHA 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 with roadmap authority, generated documentation and DURING sequence evidence.

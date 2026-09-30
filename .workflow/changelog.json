@@ -155,6 +155,17 @@
         "Advance SQLite schema from 12 to 13 for a durable one-shot execution-attempt marker; interrupted attempts without terminal authority fail closed and cannot be silently retried.",
         "Synthetic tests verify model fitting only; no real Research execution or scientific outcome is authorized or proven."
       ]
+    },
+    {
+      "date": "2026-09-30",
+      "title": "Adopt current Skill Workflow sequence and symbol-resolution repairs",
+      "type": "governance",
+      "changes": [
+        "Advance the pinned Skill Workflow authority from c1d7e58a0fcadc606c8cf75c6283a17278f99259 to 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 after inspecting the exact upstream delta.",
+        "Vendor the updated sequence generator, cross-document validator and STRICT selftest byte-identically; no local validator patch is introduced.",
+        "Preserve HTTP route predecessors in actual graphs and resolve Python class-method path::symbol references.",
+        "Regenerate governed sequence/Project Truth projections; no product behavior, schema, scientific authority or runtime boundary changes."
+      ]
     }
   ],
   "schema_version": 1

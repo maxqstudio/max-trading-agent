@@ -9,7 +9,7 @@
     "R01 source/runtime readiness is not R01 scientific PASS.",
     "R02 executor source may fit only deterministic synthetic fixtures in tests/CI; any future real execution requires exact current accepted R01 Discovery authority, one immutable Owner-authorized block and explicit runtime gates, and remains NOT_PROVEN until actual Owner-PC acceptance.",
     "Protected Locked OOS/Fresh outcomes must not silently become adaptive tuning feedback.",
-    "Current governance method is Skill Workflow exact SHA c1d7e58a0fcadc606c8cf75c6283a17278f99259 with roadmap authority, generated documentation and DURING sequence evidence."
+    "Current governance method is Skill Workflow exact SHA 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 with roadmap authority, generated documentation and DURING sequence evidence."
   ],
   "entry_points": [
     {
