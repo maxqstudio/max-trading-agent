@@ -16,18 +16,13 @@ Status: CURRENT
 
 | Flow | Mode | Critical | Sequence session | Status |
 |---|---|---|---|---|
-| FLOW-CHALLENGER-CONSUMPTION | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-CONSUMPTION.json | PASS |
-| FLOW-CHALLENGER-DETAIL | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-DETAIL.json | PASS |
-| FLOW-CHALLENGER-TO-CHAMPION | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-TO-CHAMPION.json | PASS |
-| FLOW-OPTIMIZER-TO-CHALLENGER | DURING | YES | docs/sequence/sessions/FLOW-OPTIMIZER-TO-CHALLENGER.json | PASS |
-| FLOW-R00-INITIALIZATION | DURING | YES | docs/sequence/sessions/FLOW-R00-INITIALIZATION.json | PASS |
-| FLOW-R01-SOURCE-PIPELINE | DURING | YES | docs/sequence/sessions/FLOW-R01-SOURCE-PIPELINE.json | PASS |
-| FLOW-R02-CHEAP-SCREEN-EXECUTOR | DURING | YES | docs/sequence/sessions/FLOW-R02-CHEAP-SCREEN-EXECUTOR.json | PASS |
-| FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER | DURING | YES | docs/sequence/sessions/FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER.json | PASS |
-| FLOW-R02-DISCOVERY-AUTHORIZATION | DURING | YES | docs/sequence/sessions/FLOW-R02-DISCOVERY-AUTHORIZATION.json | PASS |
-| FLOW-R02-DISCOVERY-PREFLIGHT | DURING | YES | docs/sequence/sessions/FLOW-R02-DISCOVERY-PREFLIGHT.json | PASS |
-| FLOW-RESEARCH-CONFIG-SNAPSHOT | DURING | YES | docs/sequence/sessions/FLOW-RESEARCH-CONFIG-SNAPSHOT.json | PASS |
-| FLOW-SCIENTIST-KNOWLEDGE | DURING | YES | docs/sequence/sessions/FLOW-SCIENTIST-KNOWLEDGE.json | PASS |
+| FLOW-ARTIFACT-CONTROL | DURING | YES | docs/sequence/sessions/FLOW-ARTIFACT-CONTROL.json | PASS_LOCAL: 7 DURING/CURRENT sessions, 0 failed, 0 Python parse failures |
+| FLOW-CHALLENGER-CONSUMPTION | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-CONSUMPTION.json | PASS_LOCAL: 7 DURING/CURRENT sessions, 0 failed, 0 Python parse failures |
+| FLOW-CHALLENGER-DETAIL | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-DETAIL.json | PASS_LOCAL: 7 DURING/CURRENT sessions, 0 failed, 0 Python parse failures |
+| FLOW-CHALLENGER-TO-CHAMPION | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-TO-CHAMPION.json | PASS_LOCAL: 7 DURING/CURRENT sessions, 0 failed, 0 Python parse failures |
+| FLOW-OPTIMIZER-TO-CHALLENGER | DURING | YES | docs/sequence/sessions/FLOW-OPTIMIZER-TO-CHALLENGER.json | PASS_LOCAL: 7 DURING/CURRENT sessions, 0 failed, 0 Python parse failures |
+| FLOW-SCIENTIST-KNOWLEDGE | DURING | YES | docs/sequence/sessions/FLOW-SCIENTIST-KNOWLEDGE.json | PASS_LOCAL: 7 DURING/CURRENT sessions, 0 failed, 0 Python parse failures |
+| FLOW-STRATEGY-RESET-RECOVERY | DURING | YES | docs/sequence/sessions/FLOW-STRATEGY-RESET-RECOVERY.json | PASS_LOCAL: 7 DURING/CURRENT sessions, 0 failed, 0 Python parse failures |
 
 ## Mismatch handling
 

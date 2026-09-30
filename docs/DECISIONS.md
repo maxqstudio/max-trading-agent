@@ -60,7 +60,7 @@ Rationale: Prevent recycling already-consumed optimization evidence.
 
 ## D-008 — Current Research config versus immutable execution snapshot
 
-Status: CURRENT
+Status: SUPERSEDED
 
 Research sample config remains Owner-editable; each execution snapshots the exact value into immutable authority.
 
@@ -188,7 +188,7 @@ Rationale: Current-main governance authority must be adopted without MAX-local c
 
 ## D-022 — R01 binds to latest accepted current R00
 
-Status: CURRENT
+Status: SUPERSEDED
 
 R01 derives its parent from the latest Research project in current runtime authority and fails closed unless that R00 is terminal PASS_WAITING_OWNER with verified frozen integrity and exact Research/Strategy/parent-authority bindings. Retired previous-epoch IDs are not product constants.
 
@@ -204,7 +204,7 @@ Rationale: Build and test the control contract early without confusing source re
 
 ## D-026 — Freeze R02 authorization before execution
 
-Status: CURRENT
+Status: SUPERSEDED
 
 R02 Owner authorization persists one immutable FROZEN_WAITING_EXECUTION Discovery block and immutable candidate specs. Authorization is intentionally separated from any future trainer/executor and cannot create scientific results, qualification, ONNX, Research Challenger or Champion authority.
 
@@ -212,7 +212,7 @@ Rationale: Separate what is authorized from what is executed so retries, cross-e
 
 ## D-027 — Advance cumulative SQLite schema to 11
 
-Status: CURRENT
+Status: SUPERSEDED
 
 The durable R02 authorization, Discovery-block and candidate-spec tables advance CURRENT_SCHEMA_VERSION from 10 to 11.
 
@@ -244,7 +244,7 @@ Rationale: The Owner requested the latest Skill Workflow; current governance too
 
 ## D-031 — Inherit scientific concepts selectively from max_research_agent
 
-Status: CURRENT
+Status: SUPERSEDED
 
 The read-only reference authority is maxqstudio/max_research_agent at 883ebeb1ca2e70f6255e0889358ba7c822ac52f5. MAX independently implements the reference's explicit model construction, Cheap Screen policy, classification diagnostics and synthetic self-tests in MAX-owned R02 contracts; no reference runtime, paths, persisted state or authority are imported.
 
@@ -252,7 +252,7 @@ Rationale: Preserve the reference's deterministic family construction, bounded s
 
 ## D-032 — Authorize synthetic-only R02 executor source
 
-Status: CURRENT
+Status: SUPERSEDED
 
 The R02_CHEAP_SCREEN_TRAINER_EXECUTOR_SOURCE phase supports Windows LightGBM GPU through OpenCL and XGBoost GPU through CUDA, plus the Random Forest CPU control. Deterministic CI fitting uses synthetic data with explicit CPU settings; local GPU smoke fitting is synthetic only. Exact replay is scoped to the same data, spec, seed, software build and device; cross-device identity is not claimed. LightGBM deterministic and force_col_wise parameters are applied only on CPU because upstream documents them as CPU-only. Runtime code may consume only validated, hash-bound R01 Discovery training rows after exact current Research, accepted R01, immutable Owner authorization, and frozen-candidate verification; real current-epoch execution, scientific results, R03 qualification and protected target reads remain blocked.
 
@@ -260,7 +260,7 @@ Rationale: Implement the explicitly authorized source capability without conflat
 
 ## D-033 — Persist one-shot R02 execution-attempt authority
 
-Status: CURRENT
+Status: SUPERSEDED
 
 Advance cumulative SQLite schema from 12 to 13 for one immutable execution-attempt marker per frozen R02 block. Persist the marker before fitting; if a process stops before atomic outcome/terminal publication, readback fails closed and retry is forbidden. Schema-12 authority migrates forward without rewriting prior authorization, block, candidate, outcome or terminal records.
 
@@ -273,3 +273,19 @@ Status: CURRENT
 MAX adopts Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 and vendors its governance tools byte-identically. Relative to c1d7e58a0fcadc606c8cf75c6283a17278f99259, this update adds Python class-method path::symbol resolution, preserves HTTP route predecessor nodes in generated actual sequence graphs, and adds STRICT regressions for both. Windows CI verifies this exact upstream commit; no product behavior or database schema changes are introduced by the Skill update.
 
 Rationale: The Owner requested the latest Skill Workflow; adopting its small inspected delta closes governance graph/reference blind spots without MAX-local patches or changes to the scientific/runtime boundary.
+
+## D-035 — Strategy stabilization and rejected Research subsystem purge
+
+Status: CURRENT
+
+The current PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE phase stabilizes the existing Strategy lifecycle and removes the rejected active Research implementation. Fresh R00-R11 phases remain planned and blocked until the Owner declares a real MT5 backtest/sample dataset READY and Control Room separately authorizes the next source phase. This phase does not run real MT5/Research execution or prove Owner runtime.
+
+Rationale: Remove the rejected implementation without treating old R00-R02 source/runtime assertions as current authority or automatically opening new Research work.
+
+## D-036 — Visible feedback for blocked and in-flight Owner actions
+
+Status: CURRENT
+
+A safety-blocked or in-flight Owner action must not appear inert: disable the unsafe/duplicate action and visibly explain the blocker or show progress; report success or failure after completion. No click may silently do nothing when a visible explanation is required.
+
+Rationale: Make data-protection controls understandable and prevent silent failures or misleading no-op interactions.

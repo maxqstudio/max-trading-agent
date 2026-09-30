@@ -1,0 +1,108 @@
+{
+  "authority": "SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate.",
+  "critical": true,
+  "entry_condition": "Owner requests a current Strategy workspace reset, or application startup detects an unopenable/corrupt operational database.",
+  "failure_behavior": [
+    "Active work, current Champion, invalid state, stale preflight, or incorrect confirmation blocks reset before mutation.",
+    "If database backup cannot be verified, reset/recovery does not proceed.",
+    "While recovery is required or status is unavailable, ordinary API/UI operations remain blocked and the UI explains why."
+  ],
+  "flow_id": "FLOW-STRATEGY-RESET-RECOVERY",
+  "invariants": [
+    "No Owner operational database is read or changed during source tests; tests use synthetic temporary databases.",
+    "Only owned Strategy-generated state is reset; EA baseline and provider settings are preserved.",
+    "The original corrupt database is retained in quarantine after a verified backup.",
+    "Recovery reports READY only after rebuilding and revalidating the current schema."
+  ],
+  "purpose": "Prevent silent or unsafe loss of Strategy state and provide a fail-closed, explicit path to recover corrupt operational state.",
+  "restart_behavior": [
+    "Startup rechecks database recovery state before enabling normal application routes."
+  ],
+  "rollback_behavior": [
+    "A verified backup and quarantined original remain available; recovery failures do not claim reset success."
+  ],
+  "schema_version": 1,
+  "sequence_session": "docs/sequence/sessions/FLOW-STRATEGY-RESET-RECOVERY.json",
+  "source_owners": [
+    "backend/max_backend/main.py::recovery_required_gate",
+    "backend/max_backend/main.py::recovery_status",
+    "backend/max_backend/main.py::reset_corrupt_state",
+    "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
+    "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+    "backend/max_backend/strategy_reset.py::database_recovery_status",
+    "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database",
+    "frontend/src/App.tsx::RecoveryRequiredPage",
+    "frontend/src/ArtifactsPage.tsx::ArtifactsPage"
+  ],
+  "states": [
+    "DATABASE_READY",
+    "STRATEGY_RESET_PREFLIGHT",
+    "STRATEGY_RESET_BLOCKED",
+    "WAITING_EXACT_RESET_CONFIRMATION",
+    "BACKUP_AND_RESET_RUNNING",
+    "RECOVERY_REQUIRED",
+    "WAITING_EXACT_RECOVERY_CONFIRMATION",
+    "DATABASE_QUARANTINED",
+    "DATABASE_REBUILT",
+    "RECOVERY_FAILED"
+  ],
+  "tests": [
+    "backend/tests/test_strategy_workspace_reset.py",
+    "backend/tests/test_retired_subsystem_migration.py",
+    "frontend/src/App.test.tsx",
+    "frontend/src/ArtifactsPage.test.tsx"
+  ],
+  "title": "Owner-confirmed Strategy reset and fail-closed database recovery",
+  "transitions": [
+    {
+      "action": "Preflight exact active work, Champion authority, generated state, database integrity, and protected baseline.",
+      "from": "DATABASE_READY",
+      "side_effects": [],
+      "to": "STRATEGY_RESET_PREFLIGHT"
+    },
+    {
+      "action": "Show blockers and do not mutate when any reset precondition is false.",
+      "from": "STRATEGY_RESET_PREFLIGHT",
+      "side_effects": [],
+      "to": "STRATEGY_RESET_BLOCKED"
+    },
+    {
+      "action": "Show deletion/preservation plan and require exact current confirmation.",
+      "from": "STRATEGY_RESET_PREFLIGHT",
+      "side_effects": [],
+      "to": "WAITING_EXACT_RESET_CONFIRMATION"
+    },
+    {
+      "action": "Create and verify SQLite backup, revalidate inside the write transaction, clear only owned generated Strategy state, then verify result.",
+      "from": "WAITING_EXACT_RESET_CONFIRMATION",
+      "side_effects": [
+        "verified database backup",
+        "owned Strategy generated state reset"
+      ],
+      "to": "BACKUP_AND_RESET_RUNNING"
+    },
+    {
+      "action": "On corrupt/unopenable state, block ordinary routes and expose only recovery status/reset until readiness is restored.",
+      "from": "DATABASE_READY",
+      "side_effects": [],
+      "to": "RECOVERY_REQUIRED"
+    },
+    {
+      "action": "Require exact explicit recovery confirmation; create/verify backup before quarantining the corrupt database.",
+      "from": "RECOVERY_REQUIRED",
+      "side_effects": [
+        "verified recovery backup"
+      ],
+      "to": "WAITING_EXACT_RECOVERY_CONFIRMATION"
+    },
+    {
+      "action": "Quarantine original, initialize schema and Strategy baseline, then verify state before reporting completion.",
+      "from": "WAITING_EXACT_RECOVERY_CONFIRMATION",
+      "side_effects": [
+        "corrupt database quarantine",
+        "current schema bootstrap"
+      ],
+      "to": "DATABASE_QUARANTINED"
+    }
+  ]
+}

@@ -9,13 +9,14 @@ Human comprehension status: PASS
 
 Project: MAX Trading Agent
 
-Purpose: Windows-only GitHub-first control plane for deterministic Strategy optimization, Challenger and Champion governance plus a separately gated scientific Research pipeline whose real execution boundary is MetaTrader 5.
+Purpose: Windows-only GitHub-first control plane for deterministic Strategy optimization, Challenger/Champion governance, and MetaTrader 5 execution evidence; fresh Research work is roadmap-gated and not active runtime.
 
 Primary users: Owner, authorized Builder, Control Room auditor
 
 Expected outcomes:
 - Preserve deterministic Strategy lifecycle authority from optimizer evidence through Challenger and Champion tenure.
-- Run Research only through explicit Owner-gated stages with immutable execution snapshots and protected-data boundaries.
+- Stabilize the Strategy lifecycle, generated artifact controls, explicit reset/recovery behavior, and fail-closed Owner-facing actions.
+- Remove the rejected active Research subsystem and keep fresh R00-R11 work planned and blocked until the Owner declares a real MT5 sample READY.
 - Keep public-source development reproducible from GitHub with Windows CI as hosted build/test authority while deferring real MT5/runtime acceptance to the final Owner-PC phase.
 
 ## System at a glance
@@ -26,20 +27,20 @@ Users / External Systems
     -> State / Evidence Authorities
     -> External Runtime / Outputs
 
-Observed source inventory: 143 files, 4 language categories.
+Observed source inventory: 109 files, 4 language categories.
 
 ## Major components
 
 | Component | Purpose | Owns / Decides | Depends On |
 |---|---|---|---|
-| Owner React Control Surface | Present semantic Strategy, Research, Artifacts and Settings state and explicit Owner actions without manufacturing authority. | frontend/src/App.tsx::App, frontend/src/OptimizerPage.tsx::OptimizerPage, frontend/src/ChallengersPage.tsx::ChallengersPage, frontend/src/ChampionPage.tsx::ChampionPage, frontend/src/ResearchPage.tsx::ResearchPage, frontend/src/DataPage.tsx::DataPage, frontend/src/ScientistPage.tsx::ScientistPage | FastAPI semantic APIs |
+| Owner React Control Surface | Present semantic Strategy, Artifact and Settings state with explicit feedback for blocked, running and completed Owner actions. | frontend/src/App.tsx::App, frontend/src/OptimizerPage.tsx::OptimizerPage, frontend/src/ChallengersPage.tsx::ChallengersPage, frontend/src/ChampionPage.tsx::ChampionPage, frontend/src/ScientistPage.tsx::ScientistPage | FastAPI semantic APIs |
 | Strategy lifecycle domain | Own optimizer qualification, Challenger registration/lifecycle and Champion promotion/tenure semantics. | backend/max_backend/optimizer_candidates.py::qualified_candidates_page, backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration, backend/max_backend/challenger_selection.py::create_selected_challengers, backend/max_backend/challenger_store.py::consumed_source_identities, backend/max_backend/challenger_registry.py::challenger_detail, backend/max_backend/challenger_operations.py::retire_challenger, backend/max_backend/champion_store.py::commit_promotion_authority, backend/max_backend/promotion_service.py::promote_strategy_challenger | SQLite, immutable Challenger/optimizer evidence, MT5/MetaEditor |
-| Research authority through R02 immutable outcome ledger | Own Research authority and the bounded R02 Discovery-only executor source; synthetic fitting is test-only, real execution remains separately blocked, outcomes publish atomically, and Cheap Screen cannot manufacture scientific qualification. | backend/max_backend/research_settings.py::get_research_sample_configuration, backend/max_backend/research_settings.py::set_research_sample_configuration, backend/max_backend/research_service.py::r00_preflight, backend/max_backend/research_service.py::start_r00, backend/max_backend/research_service.py::canonical_research_stage, backend/max_backend/research_source.py::prepare_r01_source, backend/max_backend/research_dataset.py::build_labels, backend/max_backend/research_dataset.py::build_dataset, backend/max_backend/research_leakage.py::bind_protected_partition_rows, backend/max_backend/research_leakage.py::bind_protected_target_dependency_authority, backend/max_backend/research_leakage.py::run_adversarial_suite, backend/max_backend/research_r01_store.py::commit_r01_terminal_authority, backend/max_backend/research_r01_service.py::r01_preflight, backend/max_backend/research_r01_service.py::prepare_r01_verified_source, backend/max_backend/research_r01_service.py::start_r01, backend/max_backend/research_r01_service.py::r01_detail, backend/max_backend/research_r02_contract.py::build_discovery_plan, backend/max_backend/research_r02_service.py::r02_preflight, backend/max_backend/research_r02_service.py::authorize_r02_discovery, backend/max_backend/research_r02_store.py::create_r02_authorization, backend/max_backend/research_r02_store.py::freeze_r02_discovery_block, backend/max_backend/research_r02_outcome.py::build_candidate_outcome, backend/max_backend/research_r02_outcome.py::build_terminal_manifest, backend/max_backend/research_r02_store.py::commit_r02_terminal_outcomes, backend/max_backend/research_r02_store.py::get_r02_outcome_ledger, backend/max_backend/research_r02_store.py::begin_r02_execution_attempt, backend/max_backend/research_r02_executor.py::execute_r02_discovery_block, backend/max_backend/research_r02_executor.py::build_discovery_split, backend/max_backend/research_r02_executor.py::evaluate_cheap_screen, backend/max_backend/research_r02_models.py::fit_predict_candidate | Strategy parent authority, SQLite, immutable Research artifacts, MT5 source capture, accepted R01 scientific authority for future R02 execution, R01 hash-bound Discovery-only training artifact, frozen R02 Cheap Screen policy and candidate authority, Windows LightGBM OpenCL GPU, XGBoost CUDA GPU, and CPU synthetic-test runtimes with scikit-learn |
 | Scientist advisory subsystem | Expose hash-verified static knowledge and bounded committed runtime context to an advisory LLM/chat workflow. | backend/max_backend/scientist_knowledge.py::load_knowledge, backend/max_backend/scientist_api.py::get_status, frontend/src/ScientistPage.tsx::ScientistPage | scientist/knowledge/source_manifest.json, Scientist store/provider settings |
 | FastAPI runtime | Start migrations/recovery, route semantic APIs and expose overview/readiness. | backend/max_backend/main.py::lifespan, backend/max_backend/main.py::overview, backend/max_backend/main.py::app | domain services, SQLite, MT5 detection |
 | Windows launcher/readiness | Verify or start canonical backend/frontend instances, reject invalid occupied ports and emit MAX_READY only after authority/readiness checks. | RUN_MAX.cmd, scripts/run_max.ps1 | backend /api/overview, frontend proxy/root, Scientist status, ports 8000/5173 |
 | MT5/MetaEditor execution boundary | Provide Strategy Tester simulation/optimization and MQL5 compile/execution truth. | ea/baseline/Max_MTF.mq5 | MetaTrader 5 terminal, MetaEditor |
-| SQLite operational state | Persist mutable Strategy/Research/Scientist operational state through owning stores and transactions. | state/max.db | backend store modules |
+| SQLite operational state | Persist mutable Strategy/Scientist operational state through owning stores and transactions. | state/max.db | backend store modules |
+| Artifact control and safe state recovery | Keep ordinary artifact reads non-mutating and separate cleanup/reset/recovery into explicit, preflighted, ownership-bounded flows with visible UI state. | backend/max_backend/artifact_control.py::artifact_page, backend/max_backend/artifact_control.py::reconcile_artifacts, backend/max_backend/strategy_reset.py::strategy_reset_preflight, backend/max_backend/strategy_reset.py::reset_strategy_workspace, backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database, frontend/src/ArtifactsPage.tsx::ArtifactsPage, frontend/src/App.tsx::RecoveryRequiredPage | SQLite operational state, owned artifact paths, FastAPI artifact/recovery routes |
 | Immutable evidence/artifact layer | Represent runtime scientific/execution lineage owned by domain contracts; evidence/ and artifacts/ are runtime-only and intentionally absent from the public source repository. | artifacts/, evidence/, docs/audits/ | domain services and artifact registry |
 | Current project governance | Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth for the GitHub-hosted workflow. | PROJECT_PROFILE.yaml, .workflow/*.json, .workflow/workflows/*.json, .workflow/tools/*.py, docs/sequence/sessions/*.json, docs/sequence/generated/*.actual.json, docs/sequence/generated/*.actual.mmd | Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8, GitHub Actions windows-latest hosted validation |
 
@@ -48,12 +49,24 @@ Observed source inventory: 143 files, 4 language categories.
 - Owner React Control Surface -> FastAPI runtime: Owner events become semantic API requests; UI itself creates no domain authority.
 - FastAPI runtime -> Strategy lifecycle domain: Strategy actions are domain-validated before any SQLite/artifact/MT5 mutation.
 - Strategy lifecycle domain -> MT5/MetaEditor execution boundary: MT5/MetaEditor execute simulation/optimization/compile while Python verifies legality and evidence.
-- Strategy lifecycle domain -> Research authority and R00/R01 domain: Exact accepted Strategy parent authority seeds Research; Research cannot retroactively redefine Strategy history.
-- Research authority and R00/R01 domain -> Immutable evidence/artifact layer: R00/R01 authorization, dataset, leakage and terminal evidence are sealed by lineage.
+- Strategy lifecycle domain -> Immutable evidence/artifact layer: Strategy evidence and lifecycle changes are governed through the owning domain and retained artifact lineage.
 - Scientist advisory subsystem -> Owner React Control Surface: Scientist returns bounded advisory context only; no scientific/promotion authority.
 - Current project governance -> Generated canonical docs/ governance Markdown: Project Truth Compiler projects source facts plus explicit semantic authority deterministically into canonical docs/ Markdown.
 
 ## Main user workflows
+
+### FLOW-ARTIFACT-CONTROL — Explicit artifact inventory, cleanup and Strategy workspace reset
+
+Give the Owner an accurate inventory and explicit, explainable, safety-gated controls for generated artifacts and Strategy workspace reset.
+
+Authority: Artifact API plus ownership/path/dependency checks in artifact_control; UI is presentation only.
+
+- INVENTORY_LOADING -> INVENTORY_READY : Load inventory from the current read authority without implicit reconciliation.
+- INVENTORY_READY -> RECONCILIATION_RUNNING : Owner explicitly starts reconciliation; show progress and terminal result/error.
+- INVENTORY_READY -> ACTION_PREFLIGHT : Preflight the selected cleanup/delete/reset action against current backend authority.
+- ACTION_PREFLIGHT -> ACTION_BLOCKED : Show blocker and keep the control disabled; callbacks reject stale or blocked state without mutation.
+- ACTION_PREFLIGHT -> WAITING_EXPLICIT_CONFIRMATION : For a legal destructive operation, display exact scope and require explicit confirmation.
+- WAITING_EXPLICIT_CONFIRMATION -> ACTION_RUNNING : Execute only after confirmation and current server-side revalidation; display progress and result.
 
 ### FLOW-CHALLENGER-CONSUMPTION — Challenger retirement/deletion with durable optimizer consumption
 
@@ -100,80 +113,6 @@ Authority: MT5 optimizer evidence + Python canonical qualification/revalidation 
 - OWNER_SELECTION -> BATCH_PREPARED : Revalidate every candidate against retained report/sidecar/request/baseline/hard gates.
 - BATCH_PREPARED -> BATCH_COMMITTED : Validate/stage immutable Challenger bundles then atomically commit batch and registry.
 
-### FLOW-R00-INITIALIZATION — R00 initialization to immutable Research parent
-
-Freeze accepted Strategy parent, feature/hardware/policy/current sample config and explicit Owner authorization into immutable R00 Research authority without training.
-
-Authority: research_service R00 preflight/start + exact Strategy/Champion parent + Owner authorization.
-
-- R00_PREFLIGHT -> R00_AUTHORIZED : Verify parent Strategy/Champion, config, feature/hardware policy and Owner confirmation.
-- R00_AUTHORIZED -> R00_MATERIALIZING : Write immutable parent/hardware/input authority.
-- R00_MATERIALIZING -> PASS_WAITING_OWNER : Publish immutable output/registry/events after invariant checks.
-
-### FLOW-R01-SOURCE-PIPELINE — R01 source, dataset, labels, leakage and terminal evidence
-
-Prepare a verified managed market source and, only on explicit Owner R01 authorization, build causal dataset/labels/protected boundaries/leakage evidence into atomic terminal authority.
-
-Authority: research_r01_service + research_source/dataset/leakage/store + immutable R00 parent + explicit Owner authorization.
-
-- SOURCE_NOT_READY -> SOURCE_VERIFIED : Prepare/verify MAX-managed MT5 source authority.
-- SOURCE_VERIFIED -> R01_PREFLIGHT_READY : Verify R00/config/source/partition/run blockers without execution.
-- R01_PREFLIGHT_READY -> STARTING : Owner explicitly authorizes one R01 execution and immutable snapshot.
-- STARTING -> DATASET_SEALED : Build deterministic rows/features/labels/partition/dependency authority.
-- DATASET_SEALED -> LEAKAGE_VALIDATED : Execute adversarial leakage and quality gates.
-- LEAKAGE_VALIDATED -> PASS_WAITING_OWNER : Atomically commit artifact registry/run/gate/non-adaptive memory terminal authority.
-- STARTING -> FAIL_WAITING_OWNER : Fail closed on source/data/label/leakage/invariant error.
-
-### FLOW-R02-CHEAP-SCREEN-EXECUTOR — R02 bounded Cheap Screen executor
-
-Consume only validated R01 Discovery training rows and the immutable frozen R02 candidate universe, execute bounded family adapters (LightGBM OpenCL GPU, XGBoost CUDA GPU, Random Forest CPU), and atomically publish diagnostic outcomes before stopping for Owner.
-
-Authority: Exact current Research + accepted R01 output manifest + confirmed immutable R02 authorization + readback-verified FROZEN_WAITING_EXECUTION block/candidates + sealed R01 Discovery-only training artifact.
-
-- CURRENT_R01_AND_R02_AUTHORITY_VERIFIED -> DISCOVERY_ONLY_DATASET_VALIDATED : Read the sealed R01 Discovery training artifact and bind its Research, dataset, manifest, feature/label contracts and parent lineage to every frozen candidate.
-- DISCOVERY_ONLY_DATASET_VALIDATED -> EXECUTION_ATTEMPT_DURABLE : Persist the immutable one-shot attempt marker before any model worker starts.
-- EXECUTION_ATTEMPT_DURABLE -> CANDIDATES_EXECUTED_WITHIN_FROZEN_BUDGET : Apply the frozen chronological purged Discovery split and execute the exact candidate accelerator (LightGBM OpenCL GPU or CPU, XGBoost CUDA GPU or CPU, Random Forest CPU) with one thread, explicit seeds, no retry and bounded FIT_SECONDS accounting. Hosted CI fitting uses CPU-only synthetic fixtures.
-- CANDIDATES_EXECUTED_WITHIN_FROZEN_BUDGET -> COMPLETE_WAITING_OWNER : Generate one canonical outcome for every frozen candidate and atomically append all outcomes plus one verified terminal manifest.
-
-### FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER — R02 Cheap Screen immutable outcome ledger
-
-Define deterministic append-only all-candidate outcome and terminal authority for a future executor without performing model fitting or granting qualification.
-
-Authority: Immutable frozen R02 Discovery block/candidate specs + deterministic outcome contract/store; no trainer or qualification authority.
-
-- FROZEN_WAITING_EXECUTION -> OUTCOME_SET_VALIDATED : Validate exact frozen candidate set, deterministic outcome identities, explicit failure retention and frozen compute budget.
-- OUTCOME_SET_VALIDATED -> COMPLETE_WAITING_OWNER : Atomically append every candidate outcome and one immutable terminal authority.
-
-### FLOW-R02-DISCOVERY-AUTHORIZATION — R02 Owner authorization and immutable Discovery freeze
-
-Validate explicit Owner authorization against current accepted R01 output, then persist one immutable non-executing Discovery block and candidate set.
-
-Authority: Owner explicit confirmation + deterministic R02 planner/store + accepted current R01 immutable output authority.
-
-- READY_FOR_OWNER_AUTHORIZATION -> AUTHORIZATION_VALIDATED : Validate exact Owner confirmation, Research identity, accepted R01 output and canonical plan authority.
-- AUTHORIZATION_VALIDATED -> FROZEN_WAITING_EXECUTION : Atomically persist immutable authorization, one bounded Discovery block and immutable candidate specs in one SQLite transaction.
-
-### FLOW-R02-DISCOVERY-PREFLIGHT — R02 Discovery source preflight and deterministic plan contract
-
-Expose fail-closed R02 source readiness and deterministic bounded Discovery planning while distinguishing READY_FOR_OWNER_AUTHORIZATION from a separately frozen non-executing block.
-
-Authority: research_r02_service + research_r02_contract + accepted immutable R01 authority; Owner authorization may freeze one block but execution remains separately unavailable.
-
-- CHECK_R01_AUTHORITY -> BLOCKED : Return semantic blocker when current accepted R01 authority is absent.
-- CHECK_R01_AUTHORITY -> READY_FOR_OWNER_AUTHORIZATION : Verify terminal R01 PASS, immutable integrity/output authority and zero prior scientific side effects.
-- PLAN_INPUT -> PLAN_VALIDATED : Canonicalize exact candidate identities, explicit candidate count and explicit compute budget into deterministic source plan.
-
-### FLOW-RESEARCH-CONFIG-SNAPSHOT — Editable Research configuration to immutable execution snapshot
-
-Keep Owner-editable current sample configuration distinct from immutable per-execution R00/R01 authority.
-
-Authority: research_settings current SQLite value; R00/R01 authorization/input manifest for execution snapshots.
-
-- CURRENT_CONFIG -> CONFIG_UPDATED : Owner updates positive future-execution sample requirement.
-- CONFIG_UPDATED -> EXECUTION_AUTHORIZED : A separately legal R00/R01 start reads the current exact setting.
-- EXECUTION_AUTHORIZED -> IMMUTABLE_SNAPSHOT : Persist exact execution authorization/input snapshot.
-- IMMUTABLE_SNAPSHOT -> HISTORICAL_EXECUTION : Retain frozen value independent of later current-config edits.
-
 ### FLOW-SCIENTIST-KNOWLEDGE — Hash-verified Scientist knowledge to advisory context
 
 Load source-hash-verified static knowledge, combine only bounded committed runtime context and produce advisory chat without scientific or promotion mutation authority.
@@ -185,11 +124,25 @@ Authority: scientist_knowledge hash manifest + bounded Scientist context/store; 
 - CONTEXT_BOUND -> ADVISORY_REQUEST : Build bounded provider request with provenance.
 - ADVISORY_REQUEST -> ADVISORY_RESPONSE : Validate provider output/evidence/classification before returning chat result.
 
+### FLOW-STRATEGY-RESET-RECOVERY — Owner-confirmed Strategy reset and fail-closed database recovery
+
+Prevent silent or unsafe loss of Strategy state and provide a fail-closed, explicit path to recover corrupt operational state.
+
+Authority: SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate.
+
+- DATABASE_READY -> STRATEGY_RESET_PREFLIGHT : Preflight exact active work, Champion authority, generated state, database integrity, and protected baseline.
+- STRATEGY_RESET_PREFLIGHT -> STRATEGY_RESET_BLOCKED : Show blockers and do not mutate when any reset precondition is false.
+- STRATEGY_RESET_PREFLIGHT -> WAITING_EXACT_RESET_CONFIRMATION : Show deletion/preservation plan and require exact current confirmation.
+- WAITING_EXACT_RESET_CONFIRMATION -> BACKUP_AND_RESET_RUNNING : Create and verify SQLite backup, revalidate inside the write transaction, clear only owned generated Strategy state, then verify result.
+- DATABASE_READY -> RECOVERY_REQUIRED : On corrupt/unopenable state, block ordinary routes and expose only recovery status/reset until readiness is restored.
+- RECOVERY_REQUIRED -> WAITING_EXACT_RECOVERY_CONFIRMATION : Require exact explicit recovery confirmation; create/verify backup before quarantining the corrupt database.
+- WAITING_EXACT_RECOVERY_CONFIRMATION -> DATABASE_QUARANTINED : Quarantine original, initialize schema and Strategy baseline, then verify state before reporting completion.
+
 ## Lifecycle and state
 
-Current phase: R02_CHEAP_SCREEN_TRAINER_EXECUTOR_SOURCE
+Current phase: PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE
 
-Current status: SOURCE_PHASE_COMPLETE_AWAITING_EXTERNAL_ACCEPTANCE
+Current status: IN_PROGRESS
 
 See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 
@@ -206,14 +159,13 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 | strategy_champion | backend/max_backend/champion_store.py::commit_promotion_authority plus explicit Owner promotion | Current Champion tenure changes only through verified promotion authority; prior tenure becomes FORMER history. |
 | strategy_challenger | backend/max_backend/challenger_store.py plus retained immutable Challenger bundle | Active eligibility and historical PROMOTED/RETIRED identity are distinct; retained request epoch defines exact parameter universe. |
 | optimizer | MT5 optimizer reports/sidecars plus Python canonical revalidation | MT5 executes optimization; Python verifies identity, hashes, hard gates, request epoch and durable consumed-source eligibility. |
-| research_current_configuration | backend/max_backend/research_settings.py with SQLite schema_meta | Owner-editable current Research sample configuration applies to future execution authorization only. |
-| research_execution_snapshot | R00/R01 immutable authorization and input manifests | Each execution freezes the exact current configuration and parent/source authority; later edits cannot alter that snapshot. |
-| research_dataset_source | Managed verified Research source bundle and sealed R01 artifacts | Source identity, dataset rows, partitions, labels and leakage evidence bind to explicit verified lineage. |
 | mt5_execution | MetaTrader 5 Strategy Tester and MetaEditor | MT5/MetaEditor own simulation, optimization and compile execution truth; Python owns legality/orchestration/evidence verification. |
 | scientist | Hash-verified static knowledge plus bounded committed runtime context | Scientist output is advisory only and cannot mutate Strategy/Research scientific authority. |
 | frontend | Semantic backend API representation | React presents authority; UI labels/local state do not create domain eligibility, gate completion or scientific PASS. |
 | tests | GitHub Actions windows-latest at the exact tested commit | A hosted test PASS is evidence only for source, synthetic/mocked behavior, dependencies and build layers actually executed; it does not prove real MT5 or Owner runtime. |
 | historical_evidence | Retained docs/audits/acceptance and immutable artifacts | Historical evidence remains historically truthful and is not rewritten to mimic current terminology or configuration. |
+| generated_artifact_read_and_reset | backend/max_backend/artifact_control.py::artifact_page and backend/max_backend/strategy_reset.py | Ordinary inventory reads are database-backed and non-mutating; cleanup and reset require separate explicit preflight/action flows, and reset is bounded to MAX-owned paths after a verified backup. |
+| corrupt_database_recovery | backend/max_backend/main.py Recovery Required gate plus backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database | An unopenable or integrity-failed database disables ordinary APIs; only explicit confirmed backup/quarantine and current-schema bootstrap may restore service. |
 | documentation | .workflow semantic specs + Project Truth Compiler at Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 | Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden. |
 | sequence | DURING-mode generated actual sequence graphs plus source/test/runtime semantic review | Existing implementation is reconstructed from current source; retrospective BEFORE plans are forbidden. |
 | governance_tools | .workflow/tools vendored byte-identically from Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 | Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed. |
@@ -230,19 +182,18 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 - strategy_champion: Current Champion tenure changes only through verified promotion authority; prior tenure becomes FORMER history.
 - strategy_challenger: Active eligibility and historical PROMOTED/RETIRED identity are distinct; retained request epoch defines exact parameter universe.
 - optimizer: MT5 executes optimization; Python verifies identity, hashes, hard gates, request epoch and durable consumed-source eligibility.
-- research_current_configuration: Owner-editable current Research sample configuration applies to future execution authorization only.
 - mt5_execution: MT5/MetaEditor own simulation, optimization and compile execution truth; Python owns legality/orchestration/evidence verification.
 - scientist: Scientist output is advisory only and cannot mutate Strategy/Research scientific authority.
 - frontend: React presents authority; UI labels/local state do not create domain eligibility, gate completion or scientific PASS.
 - tests: A hosted test PASS is evidence only for source, synthetic/mocked behavior, dependencies and build layers actually executed; it does not prove real MT5 or Owner runtime.
+- generated_artifact_read_and_reset: Ordinary inventory reads are database-backed and non-mutating; cleanup and reset require separate explicit preflight/action flows, and reset is bounded to MAX-owned paths after a verified backup.
+- corrupt_database_recovery: An unopenable or integrity-failed database disables ordinary APIs; only explicit confirmed backup/quarantine and current-schema bootstrap may restore service.
 - documentation: Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden.
 - sequence: Existing implementation is reconstructed from current source; retrospective BEFORE plans are forbidden.
 
 ### Immutable history / evidence
 
 - immutable_scientific_evidence: Scientific/execution history is immutable when its owning runtime contract marks it immutable; runtime evidence/artifacts are intentionally not tracked in the public source repository.
-- research_execution_snapshot: Each execution freezes the exact current configuration and parent/source authority; later edits cannot alter that snapshot.
-- research_dataset_source: Source identity, dataset rows, partitions, labels and leakage evidence bind to explicit verified lineage.
 - historical_evidence: Historical evidence remains historically truthful and is not rewritten to mimic current terminology or configuration.
 - governance_tools: Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed.
 
@@ -253,66 +204,53 @@ compiler does not infer them from implementation names.
 
 ## Failure and recovery
 
+- FLOW-ARTIFACT-CONTROL: Inventory reads do not trigger reconciliation or mutate MT5/runtime state.
+- FLOW-ARTIFACT-CONTROL: Missing, stale, protected, active-use, ownership, path, or dependency preflight blocks mutation and displays the reason.
+- FLOW-ARTIFACT-CONTROL: Every asynchronous action reports progress and then a completed, blocked, or failed result.
 - FLOW-CHALLENGER-CONSUMPTION: Preflight failure leaves state unchanged and reports blockers; no best-effort destructive cleanup.
 - FLOW-CHALLENGER-DETAIL: Tampered/missing bundle, identity mismatch or illegal parameter universe returns domain failure rather than partial detail.
 - FLOW-CHALLENGER-TO-CHAMPION: Compile/parity/stale/authority failure blocks commit and preserves prior Champion/source authority.
 - FLOW-OPTIMIZER-TO-CHALLENGER: Stale/rejected/consumed/mismatched candidate aborts before legal registry mutation.
 - FLOW-OPTIMIZER-TO-CHALLENGER: Partial post-directory state becomes recovery-required rather than invented success.
-- FLOW-R00-INITIALIZATION: Missing parent/config/authorization/hash/invariant prevents terminal PASS.
-- FLOW-R01-SOURCE-PIPELINE: Incomplete materialization is discarded/recovered fail-closed; protected-data/leakage failure cannot become PASS.
-- FLOW-R02-CHEAP-SCREEN-EXECUTOR: Stale/cross-epoch Research, unaccepted R01, changed dataset/manifest/lineage, invalid candidate authority, protected-data fields, malformed/nonfinite data or corrupt artifact fail closed before an execution attempt is persisted.
-- FLOW-R02-CHEAP-SCREEN-EXECUTOR: Insufficient or single-class Discovery training data produces retained deterministic EXECUTION_ERROR outcomes for every frozen candidate without model fitting.
-- FLOW-R02-CHEAP-SCREEN-EXECUTOR: A candidate fit/predict exception or timeout produces a deterministic EXECUTION_ERROR; timeout consumes the remaining bounded compute budget and no retry is attempted.
-- FLOW-R02-CHEAP-SCREEN-EXECUTOR: A persistence failure rolls back all outcomes and the terminal; the previously committed attempt marker remains and all future reads fail closed as execution-uncertain.
-- FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER: Missing/duplicate/unknown candidates, malformed metrics, wrong compute units, budget excess or different terminal replay fail closed before/without terminal authority.
-- FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER: A mid-batch persistence fault rolls back all newly inserted outcome and terminal rows.
-- FLOW-R02-DISCOVERY-AUTHORIZATION: Missing/wrong Owner confirmation, stale Research/R01 output, tampered hashes/IDs, prior scientific side effects or a different second block fail closed.
-- FLOW-R02-DISCOVERY-AUTHORIZATION: Any persistence fault while creating a new authorization/block/candidate set rolls back the entire new R02 authority transaction; no orphan immutable authorization is permitted.
-- FLOW-R02-DISCOVERY-PREFLIGHT: Absent/unaccepted R01 returns BLOCKED; malformed/tampered R01 output authority or prior scientific side-effect regression fails closed.
-- FLOW-R02-DISCOVERY-PREFLIGHT: Invalid/duplicate/mismatched candidate plan inputs are rejected before any scientific execution surface exists.
-- FLOW-RESEARCH-CONFIG-SNAPSHOT: Missing/invalid config blocks execution authorization rather than substituting a fallback.
 - FLOW-SCIENTIST-KNOWLEDGE: Stale knowledge, invalid provider response/evidence or uncertain in-flight request blocks authoritative completion/retry.
+- FLOW-STRATEGY-RESET-RECOVERY: Active work, current Champion, invalid state, stale preflight, or incorrect confirmation blocks reset before mutation.
+- FLOW-STRATEGY-RESET-RECOVERY: If database backup cannot be verified, reset/recovery does not proceed.
+- FLOW-STRATEGY-RESET-RECOVERY: While recovery is required or status is unavailable, ordinary API/UI operations remain blocked and the UI explains why.
 
 ## Current project state
 
 Next authorized actions:
-- Exact final main SHA and hosted CI identity are external acceptance evidence per D-012; do not write a self-referential final SHA into tracked state.
-- Control Room reviews external acceptance evidence and determines the next authorized GitHub source phase; real scientific execution remains blocked.
+- Complete only PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE and validate it through Windows GitHub Actions, PR, merge and exact-main CI.
+- After successful closeout, Owner manually performs Strategy Optimizer → Challenger selection → Champion promotion → real MT5 backtest/sample preparation.
+- Control Room may authorize a fresh R00 source phase only after REAL_MT5_BACKTEST_SAMPLE_READY is explicitly declared.
 
 Blocked actions:
-- Owner-PC final runtime acceptance before all hosted source-roadmap phases are complete.
-- Any real current-epoch R00, R01 or R02 scientific execution during this synthetic-only source phase.
-- Real market-data model fitting or training; synthetic deterministic fitting is authorized only inside local tests and CI.
-- Any API or UI action that submits fabricated Cheap Screen outcomes.
-- Automatic second Discovery block creation.
-- Cheap Screen scientific qualification or Qualified Pool admission; R03 Full WFA remains the sole future admission authority.
-- Locked OOS or Fresh/Forward target-outcome access by R02 training.
-- ONNX production, Research Challenger creation, Champion mutation or live trading in this phase.
-- Unrelated Strategy, optimizer, EA or UI refactors.
+- Real current-epoch R00-R11 Research execution, model training, dataset execution, ONNX, or Research Challenger creation; the rejected Research implementation is being removed.
+- Starting fresh R00 before the Owner declares a real MT5 backtest/sample dataset READY and Control Room authorizes that future source phase.
+- Broker login, Strategy Tester, real MT5 scientific execution, or Owner-PC runtime acceptance during this source repair.
+- Automatic transition from this repair phase into R00; after closure the next gate is Owner Strategy Champion and real MT5 sample preparation.
+- Any unrelated roadmap expansion or reuse of the deleted R00/R01/R02 implementation.
 
 Known blockers:
-- No accepted current-epoch R00/R01 scientific result or real R02 Owner authorization exists; real R02 remains BLOCKED / NOT STARTED by design.
-- Real MetaTrader 5 runtime and final Owner-PC acceptance remain NOT_PROVEN and deferred until the hosted source roadmap is complete.
+- The Owner-declared real MT5 backtest/sample dataset is not yet READY; fresh R00-R11 remain blocked after this Strategy stabilization phase.
 
 ## Proven vs not proven
 
 ### Proven
 
-- H0 governance rebase remains accepted on main.
-- R01 current-lineage source repair remains accepted on main.
-- R02 Discovery source foundation remains accepted on main.
-- R02_CHEAP_SCREEN_OUTCOME_LEDGER is accepted at main c913c47a45ca54d805470caf40bb54bf655b45c6; Windows CI run 36424489731 passed with backend 581, frontend 53 tests across 10 files, source-only policy, Skill Workflow provenance, STRICT_SELFTEST, governance, pip check, lint, build and npm dependency tree.
-- R02_OUTCOME_READBACK_INTEGRITY implementation and tracked governance are complete; candidate-tree scan, branch CI, PR-head CI, squash merge and exact merged-main CI passed. Exact final SHA and CI identity are recorded externally per D-012.
-- The supplied New-PC baseline evidence reports the Windows symlink probe PASS, M08 path-safety test PASS, and the exact full backend baseline 581 passed, 0 skipped, 0 failed.
-- Skill Workflow current upstream authority is 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8; its reviewed delta adds class-method symbol resolution, HTTP route predecessor reachability, and STRICT regressions for both; vendored tools and CI pin match this authority.
-- Local R02 integrity gates pass: targeted 147 tests, full backend 644 tests, frontend 53 tests across 10 files, pip check, lint, build, npm dependency tree, Project Docs, handoff, human comprehension, cross-document and sequence validation.
-- Current R02 trainer/executor source has local synthetic verification: targeted R02/R01 set 257 passed, full backend 706 passed, frontend 53 tests across 10 files, pip check, lint, build and npm dependency tree passed; R02 Discovery verification reads/hash-checks only its allowlisted safe artifacts and leaves dataset.csv, data_quality_report.json and leakage_report.json contents unread; local LightGBM OpenCL and XGBoost CUDA smoke used synthetic data only.
+- Starting source authority is maxqstudio/max-trading-agent main e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d; the authorized working branch is work/strategy-stabilization-research-purge.
+- At the authorized baseline, backend regression completed with 706 passed and frontend completed with 53 passed across 10 files; schema version was 13.
+- Skill Workflow upstream main was checked and matches the pinned authority 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8; the pin is preserved.
+- The prior R02 phases were historically accepted in their respective source revisions, but the Owner has rejected the active Research subsystem; those implementations are not current runtime or compatibility authority.
+- Local candidate backend regression completed with 410 passed, 0 skipped and 0 failed; frontend completed with 46 passed across 8 files. pip check, npm dependency tree, frontend build and sequence validation passed; lint passed with two warnings.
+- Critical browser smoke exercised recovery progress/success and visible blocked artifact/reset controls with all API responses mocked; no Owner database, live backend or MT5 runtime was used.
 
 ### Not proven
 
-- Any real current-epoch R00/R01 scientific result or real R02 authorization/execution.
-- Any real model training, Cheap Screen runtime outcome, Qualified Pool, ONNX or Research Challenger.
-- Any real Owner-PC, browser, MetaEditor, broker or MT5 runtime behavior.
+- Exact hosted PR/main CI acceptance of the Strategy lifecycle, artifact and reset/recovery candidate; local tests do not substitute for hosted acceptance.
+- Exact source-only/secret scan, final governance validation, PR CI, merged-main CI and external exact-SHA acceptance for this phase.
+- Actual local Owner-state backup/reset and fresh Optimizer start verification.
+- Owner declaration that a real MT5 backtest/sample dataset is READY.
 
 ## Important limitations
 

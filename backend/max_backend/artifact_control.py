@@ -1017,7 +1017,6 @@ def artifact_page(
     page_size: int = 25,
     path: Path = DATABASE_PATH,
 ) -> dict[str, Any]:
-    reconcile = reconcile_artifacts(path=path)
     if sort not in SORTS:
         raise ValueError("unsupported artifact sort")
     direction = str(order).lower()
@@ -1026,118 +1025,115 @@ def artifact_page(
     size = int(page_size)
     if size not in PAGE_SIZES:
         raise ValueError("page_size must be 25, 50, or 100")
-    with connect(path) as conn:
-        rows = [_decode(row) for row in conn.execute(
-            "SELECT * FROM artifact_registry"
-        ).fetchall()]
     needle = str(query or "").strip().casefold()
-    items = []
-    for item in rows:
-        if artifact_type and item["artifact_type"] != artifact_type:
-            continue
-        if producer and item["producer"] != producer:
-            continue
-        if status and item["status"] != status:
-            continue
-        if retention and item["retention_class"] != retention:
-            continue
-        if in_use and str(item["in_use"]).lower() != str(in_use).lower():
-            continue
-        if storage and item["storage"] != storage:
-            continue
-        haystack = " ".join(
-            str(item.get(key) or "")
-            for key in (
-                "artifact_id",
-                "artifact_type",
-                "owner_id",
-                "source_id",
-                "canonical_path",
-            )
-        ).casefold()
-        if needle and needle not in haystack:
-            continue
-        items.append(item)
-
-    key_map = {
-        "created": lambda row: str(row["created_utc"]),
-        "size": lambda row: int(row["size_bytes"]),
-        "type": lambda row: str(row["artifact_type"]),
-        "owner": lambda row: str(row["owner_id"]),
-        "status": lambda row: str(row["status"]),
-        "retention": lambda row: str(row["retention_class"]),
-        "storage": lambda row: str(row["storage"]),
+    where: list[str] = []
+    params: list[Any] = []
+    for column, value in (
+        ("artifact_type", artifact_type),
+        ("producer", producer),
+        ("status", status),
+        ("retention_class", retention),
+    ):
+        if value:
+            where.append(f"{column}=?")
+            params.append(value)
+    if in_use:
+        normalized_in_use = str(in_use).strip().lower()
+        if normalized_in_use not in {"true", "false"}:
+            raise ValueError("in_use must be true or false")
+        where.append("in_use=?")
+        params.append(1 if normalized_in_use == "true" else 0)
+    if storage:
+        if storage not in {"PROJECT", "MT5_RUNTIME", "DATABASE"}:
+            raise ValueError("unsupported artifact storage filter")
+        where.append("artifact_storage(canonical_path)=?")
+        params.append(storage)
+    if needle:
+        where.append(
+            "artifact_casefold(artifact_id || ' ' || artifact_type || ' ' "
+            "|| owner_id || ' ' || COALESCE(source_id,'') || ' ' "
+            "|| canonical_path) LIKE ? ESCAPE '\\'"
+        )
+        escaped = needle.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        params.append(f"%{escaped}%")
+    where_sql = " AND ".join(where) if where else "1=1"
+    sort_columns = {
+        "created": "created_utc",
+        "size": "size_bytes",
+        "type": "artifact_type",
+        "owner": "owner_id",
+        "status": "status",
+        "retention": "retention_class",
+        "storage": "artifact_storage(canonical_path)",
     }
-    items.sort(key=key_map[sort], reverse=direction == "desc")
-    total = len(items)
-    pages = max(1, math.ceil(total / size)) if total else 1
-    bounded_page = min(max(1, int(page)), pages)
-    offset = (bounded_page - 1) * size
-    page_items = items[offset : offset + size]
-
-    generated = [
-        item for item in rows
-        if item["retention_class"] != "ACTIVE_AUTHORITY"
-    ]
-    deletable_sources = {
-        "OPTIMIZER_FILE": {
-            str(item["owner_id"])
-            for item in rows
-            if item["owner_type"] == "OPTIMIZER_JOB" and item["deletable"]
-        },
-        "CHALLENGER_FILE": {
-            str(item["owner_id"])
-            for item in rows
-            if item["owner_type"] == "CHALLENGER" and item["deletable"]
-        },
-        "BACKTEST_FILE": {
-            str(item["owner_id"])
-            for item in rows
-            if item["owner_type"] == "BACKTEST" and item["deletable"]
-        },
-    }
-    safe_cleanup_bytes = 0
-    for item in generated:
-        owner_type = str(item["owner_type"])
-        source_id = str(item.get("source_id") or "")
-        if owner_type in deletable_sources and source_id in deletable_sources[owner_type]:
-            safe_cleanup_bytes += int(item["size_bytes"])
-        elif owner_type in {"BACKTEST_RUNTIME", "ORPHAN_RUNTIME"} and item["cleanable"]:
-            safe_cleanup_bytes += int(item["size_bytes"])
-
-    summary = {
-        "total_generated_storage": sum(
-            int(item["size_bytes"]) for item in generated
-        ),
-        "optimizer_storage": sum(
-            int(item["size_bytes"])
-            for item in generated if item["owner_type"] == "OPTIMIZER_FILE"
-        ),
-        "challenger_storage": sum(
-            int(item["size_bytes"])
-            for item in generated if item["owner_type"] == "CHALLENGER_FILE"
-        ),
-        "backtest_storage": sum(
-            int(item["size_bytes"])
-            for item in generated if item["owner_type"] == "BACKTEST_FILE"
-        ),
-        "runtime_storage": sum(
-            int(item["size_bytes"])
-            for item in generated
-            if item["owner_type"] in {"BACKTEST_RUNTIME", "ORPHAN_RUNTIME"}
-        ),
-        "safe_cleanup_bytes": safe_cleanup_bytes,
-        "active_in_use_bytes": sum(
-            int(item["size_bytes"])
-            for item in generated if item["in_use"]
-        ),
-        "protected_bytes": sum(
-            int(item["size_bytes"])
-            for item in rows if item["retention_class"] == "ACTIVE_AUTHORITY"
-        ),
-    }
+    sort_column = sort_columns[sort]
+    sort_direction = direction.upper()
+    with connect(path) as conn:
+        conn.create_function("artifact_casefold", 1, lambda value: str(value or "").casefold())
+        conn.create_function("artifact_storage", 1, _storage)
+        total = int(conn.execute(
+            f"SELECT COUNT(*) AS n FROM artifact_registry WHERE {where_sql}",
+            tuple(params),
+        ).fetchone()["n"])
+        pages = max(1, math.ceil(total / size)) if total else 1
+        bounded_page = min(max(1, int(page)), pages)
+        offset = (bounded_page - 1) * size
+        rows = conn.execute(
+            f"""
+            SELECT * FROM artifact_registry
+            WHERE {where_sql}
+            ORDER BY {sort_column} {sort_direction}, artifact_id {sort_direction}
+            LIMIT ? OFFSET ?
+            """,
+            tuple(params + [size, offset]),
+        ).fetchall()
+        summary_row = conn.execute(
+            """
+            SELECT
+                COALESCE(SUM(CASE WHEN retention_class!='ACTIVE_AUTHORITY'
+                    THEN size_bytes ELSE 0 END),0) AS total_generated_storage,
+                COALESCE(SUM(CASE WHEN retention_class!='ACTIVE_AUTHORITY'
+                    AND owner_type='OPTIMIZER_FILE' THEN size_bytes ELSE 0 END),0)
+                    AS optimizer_storage,
+                COALESCE(SUM(CASE WHEN retention_class!='ACTIVE_AUTHORITY'
+                    AND owner_type='CHALLENGER_FILE' THEN size_bytes ELSE 0 END),0)
+                    AS challenger_storage,
+                COALESCE(SUM(CASE WHEN retention_class!='ACTIVE_AUTHORITY'
+                    AND owner_type='BACKTEST_FILE' THEN size_bytes ELSE 0 END),0)
+                    AS backtest_storage,
+                COALESCE(SUM(CASE WHEN retention_class!='ACTIVE_AUTHORITY'
+                    AND owner_type IN ('BACKTEST_RUNTIME','ORPHAN_RUNTIME')
+                    THEN size_bytes ELSE 0 END),0) AS runtime_storage,
+                COALESCE(SUM(CASE WHEN retention_class!='ACTIVE_AUTHORITY' AND (
+                    (owner_type='OPTIMIZER_FILE' AND EXISTS(
+                        SELECT 1 FROM artifact_registry src
+                        WHERE src.owner_type='OPTIMIZER_JOB'
+                          AND src.owner_id=artifact_registry.source_id AND src.deletable=1))
+                    OR (owner_type='CHALLENGER_FILE' AND EXISTS(
+                        SELECT 1 FROM artifact_registry src
+                        WHERE src.owner_type='CHALLENGER'
+                          AND src.owner_id=artifact_registry.source_id AND src.deletable=1))
+                    OR (owner_type='BACKTEST_FILE' AND EXISTS(
+                        SELECT 1 FROM artifact_registry src
+                        WHERE src.owner_type='BACKTEST'
+                          AND src.owner_id=artifact_registry.source_id AND src.deletable=1))
+                    OR (owner_type IN ('BACKTEST_RUNTIME','ORPHAN_RUNTIME') AND cleanable=1)
+                    ) THEN size_bytes ELSE 0 END),0) AS safe_cleanup_bytes,
+                COALESCE(SUM(CASE WHEN retention_class!='ACTIVE_AUTHORITY' AND in_use=1
+                    THEN size_bytes ELSE 0 END),0) AS active_in_use_bytes,
+                COALESCE(SUM(CASE WHEN retention_class='ACTIVE_AUTHORITY'
+                    THEN size_bytes ELSE 0 END),0) AS protected_bytes
+            FROM artifact_registry
+            """
+        ).fetchone()
+    page_items = [_decode(row) for row in rows]
+    summary = {key: int(summary_row[key]) for key in summary_row.keys()}
     return {
-        "runtime": reconcile["runtime"],
+        "runtime": {
+            "status": "NOT_CHECKED",
+            "reason": "EXPLICIT_RECONCILE_REQUIRED",
+            "data_root": None,
+        },
         "summary": summary,
         "page": bounded_page,
         "page_size": size,
@@ -1152,7 +1148,6 @@ def artifact_trace(
     *,
     path: Path = DATABASE_PATH,
 ) -> dict[str, Any]:
-    reconcile_artifacts(path=path)
     item = get_artifact(aid, path=path)
     if item is None:
         raise FileNotFoundError(aid)

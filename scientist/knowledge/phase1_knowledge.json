@@ -146,7 +146,7 @@
     {
       "classification": "EXISTING",
       "facts": [
-        "M08 is accepted and merged; optimizer Fitness V2 and the Owner-PC Backtest-delete/Champion-promotion repair are part of the accepted R00 source parent.",
+        "M08 is accepted and merged; optimizer Fitness V2 and the Owner-PC Backtest-delete/Champion-promotion repair are part of the accepted Strategy source lineage.",
         "New optimizer jobs expose a server-side qualified-only pool with raw/rejected passes retained as forensic evidence.",
         "Owner multi-selection creates independent Challengers with OWNER_SELECTED_QUALIFIED_CANDIDATE provenance; no automatic Challenger or Champion is authorized.",
         "Committed Challenger-batch source identity is durable consumption authority, so a previously used pass does not re-enter the active qualified pool after Challenger lifecycle changes or dependency-safe physical deletion.",
@@ -158,88 +158,19 @@
       "title": "M08 Strategy results and Artifact control"
     },
     {
-      "classification": "EXISTING",
-      "facts": [
-        "Previous-epoch R00 is accepted historical evidence; the current fresh epoch has no Research project and current-epoch R00 has not started.",
-        "Previous-epoch R01 source/runtime repair has historical targeted re-audit PASS; current source resolves R01 from the latest accepted current R00 immutable lineage without retired epoch IDs, while real current-epoch R01 remains blocked/not started until a new R00 exists and Owner authorizes execution. Control Room has authorized bounded R02 executor source and synthetic-only CI fitting; real current-epoch R02 execution remains blocked and unproven.",
-        "The system owns deterministic scientific PASS/FAIL and may recommend; the Owner selects which qualified candidates advance.",
-        "No Research gate automatically opens the next gate, creates a Strategy Challenger, or mutates Champion authority."
-      ],
-      "ref": "contract:research-roadmap",
-      "title": "Gated model research governance"
-    },
-    {
-      "classification": "EXISTING",
-      "facts": [
-        "The historical previous-epoch R00 acceptance froze one immutable verified Strategy Champion parent into one deterministic Research identity; current-epoch R00 has not started.",
-        "R00 feature authority is CP32_TRUE_MTF_V1; Python Research does not own or silently redefine feature semantics.",
-        "Research H1 minimum trades/month is a persistent Owner configuration with no Strategy Optimizer inheritance; each Research execution snapshots the exact configured value into immutable evidence, so later configuration edits do not rewrite historical or running execution authority.",
-        "R00 freezes Research KPI hard-gate dimensions while numeric thresholds remain gate-scoped Owner authority before first scientific qualification.",
-        "Executable capacity is MIN(LEGAL, RESOURCE, SCIENTIFIC) and R00 defines no arbitrary global model parameter-count ceiling.",
-        "Research Memory is append-only and protected Locked OOS/Fresh/Champion evidence is never adaptive tuning feedback.",
-        "Scientist Research authority is advisory only; no unrestricted Python sandbox is implemented in R00.",
-        "R00 has zero model training, zero ONNX output, zero Research Challengers and no Champion mutation. R01 implementation/runtime repair has targeted re-audit PASS, but no real R01 scientific execution or R02 transition is authorized by R00 acceptance."
-      ],
-      "ref": "contract:r00-research-authority",
-      "title": "R00 Research Authority Foundation"
-    },
-    {
-      "classification": "EXTENSION",
-      "facts": [
-        "R01 source/runtime repair has Control Room targeted re-audit PASS; no real R01 scientific run has been executed and no R01 scientific result is proven.",
-        "Production R01 source authority is prepared by MAX under the managed Research data root from the retained immutable R00 parent Challenger EA plus its fixed SET and actual MT5 terminal/account/symbol evidence; Owner-authored bundle paths, broker strings, feed strings and guessed timezones are not production authority.",
-        "The sealed source identity binds Research/parent/Strategy identities, parent authority SHA, EA hash/version, Strategy/feature/resolver contracts, exact true-MTF geometry, symbols, broker/feed, UTC source authority, point size, exact source-file hashes and time coverage; volatile creation provenance is retained as evidence but excluded from content identity. Changed source creates a new identity and sealed bundles are not overwritten.",
-        "R01 reproduces CP32_TRUE_MTF_V1 independently in Python and requires deterministic parity against EA-emitted feature evidence before a dataset may seal.",
-        "R01 labels are SELL/SKIP/BUY using frozen parent SL, TP, MaxHold, bid/ask and spread execution semantics with no inherited arbitrary edge or margin threshold; label horizon is runtime-derived from the frozen parent max-hold value.",
-        "Ambiguous same-bar TP/SL and incomplete target horizons remain physical context rows but are target-invalid and excluded from supervised use.",
-        "Purge and embargo are derived from the full feature, MTF, relative-symbol and label dependency horizon; future temporal candidates must extend that horizon when needed.",
-        "Discovery and Locked OOS use [from,to) row ownership while Fresh/Forward uses [from,to]; timezone-naive direct API boundaries are rejected and sealed evidence records row counts, first/last owned rows, zero overlap and zero unassigned rows.",
-        "Full labels may be deterministically materialized and sealed internally for immutable dataset lineage, but ordinary Owner and Scientist outcome-derived label evidence before protected-stage authorization is restricted to MAX_RESEARCH_DISCOVERY_LABEL_SUMMARY_R01_V1 with scope DISCOVERY_ONLY and zero protected outcome rows.",
-        "Locked OOS and Fresh/Forward class balance, target-resolution, ambiguity and long/short outcome aggregates remain unavailable to Owner UI, Scientist context and Research Memory until their separately authorized stages; R01 Research Memory retains no full-dataset label hash or protected target aggregate.",
-        "R01 inherits MAX MTF Old temporal target-purge semantics from maxqstudio/max_research_agent@3e969efcdeb4ca6a2ae63acbd80592e378d2a446: physical partition/context rows remain intact, while supervised/evaluation eligibility uses original source-row chronology and the strict rule that the latest legal upstream target end is before the first downstream protected row.",
-        "The sealed MAX_RESEARCH_PROTECTED_TARGET_DEPENDENCY_R01_V1 authority derives applied boundary purge from existing label-horizon/minimum-purge dependency authority and binds both Discovery-to-Locked-OOS and Locked-OOS-to-Fresh separation without changing internal labels.",
-        "The adversarial suite executes production attacks for future perturbation, direct/indirect target contamination, compressed-index fake adjacency, protected-memory feedback and explicit Discovery-to-Locked/Locked-to-Fresh target-dependency injection, in addition to dependency/alignment/label attacks and a deliberately leaky negative control that must be detected.",
-        "Current Research stage is derived from immutable R00 history plus the persisted R01 run; R00 evidence is not rewritten after R01 begins.",
-        "R01 terminal publication atomically binds run state, immutable artifacts, gate events and non-adaptive Research Memory, then stops waiting for Owner.",
-        "R01 performs zero model training, zero ONNX export, zero Research Challenger creation, no Champion mutation and cannot execute R02.",
-        "R02 frozen Discovery authorization is immutable and one-block-per-Research. The current source candidate adds a bounded LightGBM/XGBoost/Random Forest executor and an append-only all-candidate Cheap Screen outcome ledger ending COMPLETE_WAITING_OWNER; only synthetic test/CI fitting is permitted in this source phase, no real Research execution is proven, and no outcome has R03 qualification authority."
-      ],
-      "ref": "contract:r01-data-foundation",
-      "title": "R01 Dataset + Label + Leakage Foundation"
-    },
-    {
-      "classification": "EXTENSION",
-      "facts": [
-        "Execution authority is bound to the accepted R01 Research, dataset identity, output-manifest SHA, feature/label contracts, parent lineage, Discovery partition, frozen R02 authorization, candidate identity/spec/seed and exact frozen candidate universe; the executor does not accept arbitrary outcome payloads.",
-        "Training reads only the sealed R01 Discovery training artifact; Locked OOS and Fresh/Forward target outcomes are not readable by this path. The deterministic screen is chronological 80/20 with no shuffle and purges training targets using the R01 minimum legal purge-bar authority.",
-        "The split requires at least 24 training rows, 12 validation rows and all three target classes in training. Preprocessing is candidate-local and fitted on training rows only.",
-        "Only explicit CPU, one-thread LightGBM, XGBoost and Random Forest adapters are supported; family topology, preprocessing, training configuration and seed come from the frozen candidate spec, with no silent defaults or retries.",
-        "Cheap Screen reports balanced accuracy, macro-F1, log loss and multiclass Brier score. Its frozen pass policy is balanced accuracy >= 0.4 and log loss <= 1.5; these are screening diagnostics, not scientific qualification thresholds.",
-        "Compute is bounded in the frozen block's FIT_SECONDS unit; one durable attempt marker is written before fitting, timeout/failure is retained as an outcome, and uncertain partial execution fails closed rather than retraining.",
-        "Every frozen candidate is represented in the terminal ledger as SCREEN_PASS, SCREEN_FAIL or EXECUTION_ERROR. COMPLETE_WAITING_OWNER is not scientific PASS; Cheap Screen qualification authority is false and Qualified Pool admission is R03_FULL_WFA_ONLY.",
-        "This phase authorizes synthetic deterministic fitting in tests/CI only. Real current-epoch R00/R01/R02 execution, real Research training and scientific outcomes remain blocked/not proven; no R03, ONNX, Challenger or Champion mutation is authorized."
-      ],
-      "ref": "contract:r02-cheap-screen-executor",
-      "title": "R02 Discovery-only Cheap Screen executor"
-    },
-    {
       "classification": "OUTSIDE_CURRENT_CONTRACT",
       "facts": [
-        "Real Research model training/execution, GRU, LSTM, Transformer, PatchTST, TFT, TCN, MoE, iTransformer, WFA/CPCV model lifecycle, Tournament, Monte Carlo and Fresh model validation are outside the current source phase; synthetic fitting of the three bounded R02 families is test/CI verification only.",
-        "ONNX, Shadow, Live, portfolio execution, news/sentiment, web research and autonomous Scientist coding are outside current Phase-1 contract."
+        "Real MT5 Strategy runtime acceptance remains an Owner-PC gate and is not proven by hosted source tests.",
+        "Automatic Champion selection, live trading, portfolio execution, news/sentiment and autonomous Scientist coding are outside the current Strategy contract."
       ],
       "ref": "contract:deferred-capabilities",
       "title": "Explicit deferred capabilities"
     }
   ],
   "explicit_deferred_capabilities": [
-    "real Research model training/execution",
-    "GRU/LSTM/Transformer/PatchTST/TFT/TCN/MoE/iTransformer research lifecycle",
-    "WFA/CPCV model lifecycle",
-    "Tournament/Monte Carlo/Fresh model validation",
-    "ONNX lifecycle",
+    "Research development and scientific execution until the Owner-declared real MT5 backtest sample is READY",
     "Shadow/Live/portfolio execution",
-    "news/sentiment/web research",
+    "news and sentiment workflows",
     "Scientist Python sandbox or coding tools"
   ],
   "implemented_capabilities": [
@@ -252,25 +183,21 @@
     "M06 retained-contract Challenger Backtest and Retirement / Archive",
     "M07 accepted causal true-MTF Strategy epoch",
     "M08 accepted qualified pool, multi-Challenger selection, Backtest results and Artifact control plane",
-    "Historical previous-epoch R00 Research Authority Foundation accepted; current fresh Research epoch has no current Research project and R00 has not started",
-    "Historical previous-epoch R01 Dataset + Label + Leakage Foundation implementation/runtime repair has targeted re-audit PASS; current source binds R01 to the latest accepted current R00 immutable lineage without retired epoch IDs; real current-epoch R01 remains blocked/not started",
-    "R02 bounded Discovery-only Cheap Screen executor source candidate for LightGBM, XGBoost and Random Forest; synthetic test/CI fitting only, no real Research execution or qualification authority",
     "V6 Strategy Optimizer source candidate with 17 dimensions including an exact Owner-grid InpRiskPct 0.5%..5.0% step 0.5% that refinement cannot shift off-grid, plus fixed 5.0% daily-loss authority for new jobs"
   ],
   "planned_capabilities": [
-    "Current-epoch R00 initialization and acceptance under the fresh epoch before any real R01 execution",
-    "R01 current-lineage source binding is merged/revalidated; real current-epoch R00/R01 execution remains deferred to final Owner runtime",
-    "R02 source phase hosted validation and governance closeout; real current-epoch execution remains blocked and only future authorized R03 Full WFA can create Qualified Pool authority"
+    "Owner Strategy Champion and real MT5 sample preparation before future Research source work is authorized",
+    "Fresh future R00-R11 research roadmap remains blocked until the Owner declares the real MT5 backtest sample READY"
   ],
   "project": {
     "name": "MAX Trading Agent",
-    "phase": "GitHub-hosted development / fresh Research epoch"
+    "phase": "GitHub-hosted Strategy stabilization"
   },
   "schema": "MAX_REBUILD_PHASE1_SCIENTIST_KNOWLEDGE_V1",
   "source_manifest": [
     {
       "path": "pyproject.toml",
-      "sha256": "bde36149ffe3a7eeeddbeeb6bcc1384f466f9a40a5b88352fd964ed6a2a80ff3"
+      "sha256": "c8499938b4ed0a21d5af93037b4011d09abe564700d8907c5ab57155257f4bdc"
     },
     {
       "path": "docs/PRD.md",
@@ -278,19 +205,7 @@
     },
     {
       "path": "docs/ROADMAP.md",
-      "sha256": "72f82aa53843a90818a4cfde3507a3eaa338f985e74ef9207eb6106873d4c369"
-    },
-    {
-      "path": "docs/RESEARCH_MODEL_ROADMAP.md",
-      "sha256": "b3b425188f7688260600bec263718cd11c51aabf255b28a284fdc214ade88a9d"
-    },
-    {
-      "path": "docs/audits/R00_OLD_MAX_SOURCE_AUDIT.md",
-      "sha256": "a3215ef58f5d02fb18700535b5018965f07c2e09284480444df06ab7486b689e"
-    },
-    {
-      "path": "docs/audits/R01_OLD_MAX_SOURCE_AUDIT.md",
-      "sha256": "01c2c0f4d368ffeef9a763101a79de85a1bde665423d543d228c8b271fa2dc8f"
+      "sha256": "98edef924d9e020ef1cb6de542180931a529a31a410d36b3b7755b1141fb4563"
     },
     {
       "path": "docs/ARCHITECTURE_PHASE1.md",
@@ -306,11 +221,11 @@
     },
     {
       "path": "backend/max_backend/config.py",
-      "sha256": "ce8fd6aac073a1fdc469e182a9ceccd7223cb2b840c3fb6d7274475a3365aa9b"
+      "sha256": "b3cbaa943867e99ff3155bd6af58f55f503b0fb7c1dbee1da63eda1160f130d0"
     },
     {
       "path": "backend/max_backend/schema.py",
-      "sha256": "d4c1bdfe8f065d2c224c2174fac86cc6f782f59f0dbb7543faea63dce4e54f91"
+      "sha256": "5849eafe43622dd50d9b940cf75609c275a206d32b41c0224a8c41c2bea8c328"
     },
     {
       "path": "backend/max_backend/workflow_contract.py",
@@ -318,7 +233,7 @@
     },
     {
       "path": "backend/max_backend/workflow_store.py",
-      "sha256": "36ea7cd8a24892db377aeb0d912ecb8a8a9c20782488be7f8d04fc9422019284"
+      "sha256": "171813ff03566a890ce5f1f4da7f522e26731bffcd799fc97abdf765d2b7a776"
     },
     {
       "path": "backend/max_backend/mtf_geometry.py",
@@ -370,7 +285,7 @@
     },
     {
       "path": "backend/max_backend/challenger_operations.py",
-      "sha256": "5c66f91ae7ea80d715ed5244ecd8d455ebb9b88350dea4864ea62f0c82a5dbe1"
+      "sha256": "26235ca7e5491b4fe18e73559ee053d9fc4ea1e0f6497bf139ea83e5ab673bed"
     },
     {
       "path": "backend/max_backend/challenger_api.py",
@@ -390,107 +305,35 @@
     },
     {
       "path": "backend/max_backend/artifact_control.py",
-      "sha256": "14fa439726f2cee9a78ccfd773a65b3492b3f5daa1a70582d8c0e0dec3a975d3"
+      "sha256": "106f93fc201bb3e0eb9711701099da3377c097997079b884f3ea155eeb4c7771"
     },
     {
       "path": "backend/max_backend/artifact_api.py",
-      "sha256": "3297f1a2bfb8c52c8d87a9255054c0cf6cd4d44e0f469f3cb5ce86df4165e8a4"
+      "sha256": "7586744ebdcd6f4f23b495d253ff8b2d35b71c62bb803093bf37c0af3c41f68e"
     },
     {
       "path": "backend/max_backend/champion_store.py",
-      "sha256": "0ea247ea0524224da903712d6d66717163e8bb8ee8b76583e379a488067f1c7e"
+      "sha256": "df86b6dc6132bd98834970de0c91ce42054342fbb1fda2547040f4a8aa829308"
     },
     {
       "path": "backend/max_backend/champion_bundle.py",
-      "sha256": "9261fe26f9d8c29fc95e447616d26b6704e31a22be1fb31f1371e638699528f6"
+      "sha256": "d492f5e75c288678648cf5d275d959b9e85fdef0bc4dfaa2a12456681aa19e1d"
     },
     {
       "path": "backend/max_backend/promotion_service.py",
-      "sha256": "c85493eb9868bb07f8e6769f160251513a3a3a53a93e93b453e5f862889e4a82"
+      "sha256": "56294ea60ec092257ca37797077f41e4ae048e6a92cc60d6199409caa874676f"
     },
     {
       "path": "backend/max_backend/main.py",
-      "sha256": "9839b0fee4a99f181e0e339bf3ade4d3cf7b2fd49a816600191f57208614e09c"
-    },
-    {
-      "path": "backend/max_backend/research_contract.py",
-      "sha256": "8110c89eabf31907ecdb3e85e3dc8c7b4415b1dce368a9ae4efd7645c2b74218"
-    },
-    {
-      "path": "backend/max_backend/research_hardware.py",
-      "sha256": "1b378be7a4a0deb7a84e3c04d8d650d85c3350e86717ce418a550a4f18602e78"
-    },
-    {
-      "path": "backend/max_backend/research_store.py",
-      "sha256": "c9f76da68919a3a4edd842b85c881e46487750175d9b56f2be464e733072837c"
-    },
-    {
-      "path": "backend/max_backend/research_service.py",
-      "sha256": "6a7f2efef4966aa60a0a8e53be3b097b1e2415690f033a26ada3b9e7f3990fc6"
-    },
-    {
-      "path": "backend/max_backend/research_settings.py",
-      "sha256": "6d578ca82283676128f2cd4b47085d31ac0dc1c28d4275cc7be19205c2dd543d"
-    },
-    {
-      "path": "backend/max_backend/research_api.py",
-      "sha256": "749965105cb9f7aa00fe56c8be82b53840aa22dcebed7b1bfcea5c31cb8006f0"
-    },
-    {
-      "path": "backend/max_backend/research_cp32.py",
-      "sha256": "7243020f7a0d38ddbc062d4489321e7c726838265efb2d0d2aa78d8f5a248558"
-    },
-    {
-      "path": "backend/max_backend/research_dataset.py",
-      "sha256": "0270b2928ee8bc2222cbe3a27a510e4442c8b26628801793cea9bc13793fba72"
-    },
-    {
-      "path": "backend/max_backend/research_source.py",
-      "sha256": "3b3ec20658da2aab1093d5b35b7d483cbcb73f511519afbd455b46071fa13fd6"
-    },
-    {
-      "path": "backend/max_backend/research_leakage.py",
-      "sha256": "a245661ade901c9c73469303cb4a103221c190e421a172d2592f16502371bed5"
-    },
-    {
-      "path": "backend/max_backend/research_r01_store.py",
-      "sha256": "06e734e40701846cb969df2550c306c425d71f5d5af7a225131693c1ce617462"
-    },
-    {
-      "path": "backend/max_backend/research_r01_service.py",
-      "sha256": "c6511c39fcf45fe658bdd166cd08ae7bc33228d6675c16eee97e4b50d3aabf81"
-    },
-    {
-      "path": "backend/max_backend/research_r02_contract.py",
-      "sha256": "5855abe30eb5ca55f68e77dd1e9fa10ef3540aebda8ce298c7feeab267a7ae4d"
-    },
-    {
-      "path": "backend/max_backend/research_r02_outcome.py",
-      "sha256": "4ba39ba297fd293abe74c7eb76e0ba8e5bd0dcd1747735fd120b314720454238"
-    },
-    {
-      "path": "backend/max_backend/research_r02_service.py",
-      "sha256": "ae18c03eb961459aedb9b6b6faac5ced00334668b67e1af38334e157857e78c2"
-    },
-    {
-      "path": "backend/max_backend/research_r02_store.py",
-      "sha256": "399a0cc501b1e383f462c96e7fb4463d66c791764f1a3b4e65c2b635c17680f6"
-    },
-    {
-      "path": "backend/max_backend/research_r02_models.py",
-      "sha256": "21b79b2ea51d02df6c708990a85c201db0f301f2ca9d1bb86fdadd89e6dc0d74"
-    },
-    {
-      "path": "backend/max_backend/research_r02_executor.py",
-      "sha256": "75f2090b32d62f2107277dcb7cbba68ea6b3451109248eb34d79fb9fb7041611"
+      "sha256": "131fbc1dc86bf218e0562dfc1770851c2523da2a2c515d09174f0d175b185212"
     },
     {
       "path": "backend/max_backend/scientist_knowledge.py",
-      "sha256": "ac6a55740ca00e80b445c4d1e71b9cde5ffd77d6a37a569fbf4ea4a866e29435"
+      "sha256": "3b938e8ac029d7f0a224e77aa3dc9dc9fe6ea55968910838967d502fed651bd0"
     },
     {
       "path": "backend/max_backend/scientist_context.py",
-      "sha256": "a348de87931cfb36dc65e0f214b623a9c72612ad346c78b0a348b31587f93508"
+      "sha256": "2d6abb41a97de386b52ea81a847ec459ec51021ff3f94c5251b6ce0ef0612418"
     },
     {
       "path": "backend/max_backend/scientist_store.py",

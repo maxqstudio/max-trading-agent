@@ -3,22 +3,22 @@
 # CURRENT STATE
 
 Last updated: generated from current specs
-Authority verified at SHA: 35f237f25a898b60b2a5123d6246ebc34fcbec8d
+Authority verified at SHA: e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d
 Governance profile: strict
 
 ## Current phase
-Phase: R02_CHEAP_SCREEN_TRAINER_EXECUTOR_SOURCE
-Status: SOURCE_PHASE_COMPLETE_AWAITING_EXTERNAL_ACCEPTANCE
-Roadmap phase: R02_CHEAP_SCREEN_TRAINER_EXECUTOR_SOURCE
+Phase: PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE
+Status: IN_PROGRESS
+Roadmap phase: PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE
 ROADMAP_SYNC: PASS
 
 ## Source
 Repository: maxqstudio/max-trading-agent
-Branch: work/r02-cheap-screen-executor
+Branch: work/strategy-stabilization-research-purge
 Authoritative SHA: external final acceptance evidence
-Last accepted SHA: 35f237f25a898b60b2a5123d6246ebc34fcbec8d
+Last accepted SHA: e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d
 Current candidate SHA: external final acceptance evidence
-Current source digest: d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8883a543
+Current source digest: 28cd691444d9631bb1d8cc398bd009626563d3e15984bea36f7c8c63aef02ddb
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
@@ -35,43 +35,37 @@ PROJECT_DOCS_SYNC: PASS
 ## Sequence governance
 Sequence policy: REQUIRED
 Current sequence mode: DURING
-Current sequence session: docs/sequence/sessions/FLOW-R02-CHEAP-SCREEN-EXECUTOR.json (13 current DURING sessions)
-SEQUENCE_SYNC: PASS
+Current sequence session: FLOW-ARTIFACT-CONTROL and FLOW-STRATEGY-RESET-RECOVERY
+SEQUENCE_SYNC: PASS_LOCAL: 7 DURING/CURRENT sessions, 0 failed, 0 Python parse failures
 
 ## Proven
-- H0 governance rebase remains accepted on main.
-- R01 current-lineage source repair remains accepted on main.
-- R02 Discovery source foundation remains accepted on main.
-- R02_CHEAP_SCREEN_OUTCOME_LEDGER is accepted at main c913c47a45ca54d805470caf40bb54bf655b45c6; Windows CI run 36424489731 passed with backend 581, frontend 53 tests across 10 files, source-only policy, Skill Workflow provenance, STRICT_SELFTEST, governance, pip check, lint, build and npm dependency tree.
-- R02_OUTCOME_READBACK_INTEGRITY implementation and tracked governance are complete; candidate-tree scan, branch CI, PR-head CI, squash merge and exact merged-main CI passed. Exact final SHA and CI identity are recorded externally per D-012.
-- The supplied New-PC baseline evidence reports the Windows symlink probe PASS, M08 path-safety test PASS, and the exact full backend baseline 581 passed, 0 skipped, 0 failed.
-- Skill Workflow current upstream authority is 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8; its reviewed delta adds class-method symbol resolution, HTTP route predecessor reachability, and STRICT regressions for both; vendored tools and CI pin match this authority.
-- Local R02 integrity gates pass: targeted 147 tests, full backend 644 tests, frontend 53 tests across 10 files, pip check, lint, build, npm dependency tree, Project Docs, handoff, human comprehension, cross-document and sequence validation.
-- Current R02 trainer/executor source has local synthetic verification: targeted R02/R01 set 257 passed, full backend 706 passed, frontend 53 tests across 10 files, pip check, lint, build and npm dependency tree passed; R02 Discovery verification reads/hash-checks only its allowlisted safe artifacts and leaves dataset.csv, data_quality_report.json and leakage_report.json contents unread; local LightGBM OpenCL and XGBoost CUDA smoke used synthetic data only.
+- Starting source authority is maxqstudio/max-trading-agent main e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d; the authorized working branch is work/strategy-stabilization-research-purge.
+- At the authorized baseline, backend regression completed with 706 passed and frontend completed with 53 passed across 10 files; schema version was 13.
+- Skill Workflow upstream main was checked and matches the pinned authority 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8; the pin is preserved.
+- The prior R02 phases were historically accepted in their respective source revisions, but the Owner has rejected the active Research subsystem; those implementations are not current runtime or compatibility authority.
+- Local candidate backend regression completed with 410 passed, 0 skipped and 0 failed; frontend completed with 46 passed across 8 files. pip check, npm dependency tree, frontend build and sequence validation passed; lint passed with two warnings.
+- Critical browser smoke exercised recovery progress/success and visible blocked artifact/reset controls with all API responses mocked; no Owner database, live backend or MT5 runtime was used.
 
 ## Not proven
-- Any real current-epoch R00/R01 scientific result or real R02 authorization/execution.
-- Any real model training, Cheap Screen runtime outcome, Qualified Pool, ONNX or Research Challenger.
-- Any real Owner-PC, browser, MetaEditor, broker or MT5 runtime behavior.
+- Exact hosted PR/main CI acceptance of the Strategy lifecycle, artifact and reset/recovery candidate; local tests do not substitute for hosted acceptance.
+- Exact source-only/secret scan, final governance validation, PR CI, merged-main CI and external exact-SHA acceptance for this phase.
+- Actual local Owner-state backup/reset and fresh Optimizer start verification.
+- Owner declaration that a real MT5 backtest/sample dataset is READY.
 
 ## Known blockers
-- No accepted current-epoch R00/R01 scientific result or real R02 Owner authorization exists; real R02 remains BLOCKED / NOT STARTED by design.
-- Real MetaTrader 5 runtime and final Owner-PC acceptance remain NOT_PROVEN and deferred until the hosted source roadmap is complete.
+- The Owner-declared real MT5 backtest/sample dataset is not yet READY; fresh R00-R11 remain blocked after this Strategy stabilization phase.
 
 ## Known defects
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Exact final main SHA and hosted CI identity are external acceptance evidence per D-012; do not write a self-referential final SHA into tracked state.
-- Control Room reviews external acceptance evidence and determines the next authorized GitHub source phase; real scientific execution remains blocked.
+- Complete only PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE and validate it through Windows GitHub Actions, PR, merge and exact-main CI.
+- After successful closeout, Owner manually performs Strategy Optimizer → Challenger selection → Champion promotion → real MT5 backtest/sample preparation.
+- Control Room may authorize a fresh R00 source phase only after REAL_MT5_BACKTEST_SAMPLE_READY is explicitly declared.
 
 ## Explicitly blocked
-- Owner-PC final runtime acceptance before all hosted source-roadmap phases are complete.
-- Any real current-epoch R00, R01 or R02 scientific execution during this synthetic-only source phase.
-- Real market-data model fitting or training; synthetic deterministic fitting is authorized only inside local tests and CI.
-- Any API or UI action that submits fabricated Cheap Screen outcomes.
-- Automatic second Discovery block creation.
-- Cheap Screen scientific qualification or Qualified Pool admission; R03 Full WFA remains the sole future admission authority.
-- Locked OOS or Fresh/Forward target-outcome access by R02 training.
-- ONNX production, Research Challenger creation, Champion mutation or live trading in this phase.
-- Unrelated Strategy, optimizer, EA or UI refactors.
+- Real current-epoch R00-R11 Research execution, model training, dataset execution, ONNX, or Research Challenger creation; the rejected Research implementation is being removed.
+- Starting fresh R00 before the Owner declares a real MT5 backtest/sample dataset READY and Control Room authorizes that future source phase.
+- Broker login, Strategy Tester, real MT5 scientific execution, or Owner-PC runtime acceptance during this source repair.
+- Automatic transition from this repair phase into R00; after closure the next gate is Owner Strategy Champion and real MT5 sample preparation.
+- Any unrelated roadmap expansion or reuse of the deleted R00/R01/R02 implementation.

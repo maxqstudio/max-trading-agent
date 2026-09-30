@@ -61,10 +61,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.lock.txt
-      - name: Build GPU-enabled LightGBM for Windows OpenCL
-        shell: pwsh
-        run: |
-          .\scripts\install_r02_gpu_native_deps.ps1 -ToolRoot (Join-Path $env:RUNNER_TEMP "max-r02-gpu-native")
       - name: Verify Skill Workflow tool provenance
         shell: pwsh
         run: |

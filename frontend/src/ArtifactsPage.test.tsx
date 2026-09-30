@@ -249,4 +249,94 @@ describe('M08 Artifacts workspace', () => {
     expect(global).toHaveTextContent('ACTIVE_OPTIMIZER:JOB-X')
     expect(screen.getByRole('button', { name: 'CONFIRM CLEAN GENERATED DATA' })).toBeDisabled()
   })
+
+  it('explains reset blockers and keeps destructive confirmation disabled', async () => {
+    vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
+      const url = String(input)
+      if (url.startsWith('/api/artifacts?')) {
+        return Promise.resolve({ ok: true, json: async () => page([]) } as Response)
+      }
+      if (url === '/api/artifacts/strategy-reset/preflight') {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            status: 'BLOCKED',
+            blockers: { optimizer_jobs: 1 },
+            confirmation_required: 'RESET_MAX_STRATEGY_WORKSPACE',
+            current_champion_count: 1,
+            table_counts: {},
+            generated_artifact_rows: 4,
+            generated_artifact_bytes: 8192,
+            roots: {},
+            deletion_plan: ['Champion and Strategy history'],
+            preserved: ['EA baseline'],
+          }),
+        } as Response)
+      }
+      throw new Error('unexpected fetch ' + url)
+    }))
+
+    render(<ArtifactsPage />)
+    const openReset = await screen.findByRole('button', { name: 'Reset Strategy Workspace' })
+    await waitFor(() => expect(openReset).toBeEnabled())
+    fireEvent.click(openReset)
+    const dialog = await screen.findByRole('dialog', { name: 'Reset Strategy Workspace' })
+    expect(dialog).toHaveTextContent('Reset is blocked: optimizer_jobs (1)')
+    expect(dialog).toHaveTextContent('Will be removed')
+    expect(dialog).toHaveTextContent('Will be preserved')
+    expect(screen.getByRole('button', { name: 'CONFIRM RESET STRATEGY WORKSPACE' })).toBeDisabled()
+    expect(screen.getByRole('status')).toHaveTextContent('Reset is disabled because preflight found a safety blocker.')
+  })
+
+  it('requires exact reset confirmation, shows progress, and reports the backup on success', async () => {
+    let resetRequest: unknown = null
+    const resetPreflight = {
+      status: 'READY',
+      blockers: {},
+      confirmation_required: 'RESET_MAX_STRATEGY_WORKSPACE',
+      current_champion_count: 1,
+      table_counts: { optimizer_jobs: 2, strategy_champions: 1 },
+      generated_artifact_rows: 3,
+      generated_artifact_bytes: 4096,
+      roots: {},
+      deletion_plan: ['Champion and Strategy history'],
+      preserved: ['EA baseline'],
+    }
+    vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input)
+      if (url.startsWith('/api/artifacts?')) {
+        return Promise.resolve({ ok: true, json: async () => page([]) } as Response)
+      }
+      if (url === '/api/artifacts/strategy-reset/preflight') {
+        return Promise.resolve({ ok: true, json: async () => resetPreflight } as Response)
+      }
+      if (url === '/api/artifacts/strategy-reset' && init?.method === 'POST') {
+        resetRequest = JSON.parse(String(init.body))
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            status: 'RESET',
+            backup: { path: 'D:/max/state/reset_backups/workspace.sqlite' },
+          }),
+        } as Response)
+      }
+      throw new Error('unexpected fetch ' + url)
+    }))
+
+    render(<ArtifactsPage />)
+    const openReset = await screen.findByRole('button', { name: 'Reset Strategy Workspace' })
+    await waitFor(() => expect(openReset).toBeEnabled())
+    fireEvent.click(openReset)
+    const dialog = await screen.findByRole('dialog', { name: 'Reset Strategy Workspace' })
+    const confirm = screen.getByRole('button', { name: 'CONFIRM RESET STRATEGY WORKSPACE' })
+    expect(confirm).toBeDisabled()
+    fireEvent.change(screen.getByLabelText(/Type RESET_MAX_STRATEGY_WORKSPACE/), {
+      target: { value: 'RESET_MAX_STRATEGY_WORKSPACE' },
+    })
+    expect(confirm).toBeEnabled()
+    fireEvent.click(confirm)
+    expect(await screen.findByText('Strategy workspace reset completed. Database backup: D:/max/state/reset_backups/workspace.sqlite')).toBeInTheDocument()
+    expect(resetRequest).toEqual({ confirmation: 'RESET_MAX_STRATEGY_WORKSPACE' })
+    expect(dialog).not.toBeInTheDocument()
+  })
 })

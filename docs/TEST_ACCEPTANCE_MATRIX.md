@@ -4,44 +4,32 @@
 
 ## Evidence boundary
 
-Starting authority 35f237f25a898b60b2a5123d6246ebc34fcbec8d contains the externally accepted R02_OUTCOME_READBACK_INTEGRITY phase. Current phase R02_CHEAP_SCREEN_TRAINER_EXECUTOR_SOURCE is source-complete and awaits external exact-SHA acceptance. The exact final main SHA and hosted CI identity are external evidence per D-012; this tracked record does not claim hosted CI PASS or embed a self-referential final SHA. Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 is adopted; its reviewed delta adds Python class-method symbol resolution, HTTP route predecessor reachability in actual sequence graphs, and STRICT regression coverage for both. Hosted CI fitting uses CPU-only synthetic fixtures; local LightGBM OpenCL and XGBoost CUDA smoke also uses synthetic data only. No real R00/R01/R02 execution, market-data training, scientific outcome, R03, ONNX, Challenger or Champion mutation is authorized or proven. Schema 13 adds only a durable one-shot R02 execution-attempt marker so interrupted execution fails closed; schema-12 databases migrate forward. Owner-PC and real MT5 runtime remain NOT_PROVEN and deferred until the hosted source roadmap is complete.
+Starting authority e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d is the source baseline for PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE. The current candidate is local and IN_PROGRESS. Only synthetic/test databases and fixtures are used. The retired active Research implementation is being removed; fresh R00-R11 remain planned and blocked until the Owner declares a real MT5 sample READY and Control Room separately authorizes a source phase. The exact final GitHub main SHA and hosted CI identity remain external acceptance evidence per D-012. No real MT5, broker, or scientific execution is performed in this source phase.
 
 Final tested source: external final acceptance evidence.
-Current source digest: d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8883a543
+Current source digest: 28cd691444d9631bb1d8cc398bd009626563d3e15984bea36f7c8c63aef02ddb
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
-| R02OL-01 | Every frozen candidate must have exactly one deterministic outcome before terminalization; missing, duplicate and unknown candidate outcomes fail closed. | research_r02_outcome.py + test_r02_outcome_contract.py + test_r02_authorization_store.py | PASS |
-| R02OL-02 | Outcome status is canonical SCREEN_PASS, SCREEN_FAIL or EXECUTION_ERROR; non-pass records retain an explicit failure code and all failures are persisted rather than filtered out. | research_r02_outcome.py + targeted tests | PASS |
-| R02OL-03 | Outcome metrics and compute accounting reject non-finite or unrepresentable numeric values; compute unit must match the frozen block and total consumption cannot exceed the frozen budget. | research_r02_contract.py + research_r02_outcome.py + targeted overflow regressions | PASS |
-| R02OL-04 | All candidate outcomes plus one COMPLETE_WAITING_OWNER terminal authority commit atomically; a mid-batch persistence fault leaves zero new outcome/terminal rows. | commit_r02_terminal_outcomes + fault-injection regression | PASS |
-| R02OL-05 | Exact terminal replay is idempotent while a different second terminal manifest is rejected. | test_r02_authorization_store.py | PASS |
-| R02OL-06 | Outcome and terminal rows are immutable/append-only and do not mutate model-training, ONNX, Research-Challenger or Champion counters. | SQLite triggers + test_r02_authorization_store.py | PASS |
-| R02OL-07 | Cheap Screen outcome and COMPLETE_WAITING_OWNER have zero scientific qualification authority; R03 Full WFA remains the only future Qualified Pool admission authority. | research_r02_outcome.py + r02_preflight + tests | PASS |
-| R02OL-08 | No trainer/model-fit implementation, outcome-submit API/UI, heavy ML dependency, ONNX, Challenger or Champion mutation is introduced in this slice. | source review + source-only/security CI | PASS |
-| R02OL-09 | Durable outcome/terminal persistence advances cumulative SQLite schema authority from 11 to 12. | schema.py + workflow_store.py + test_r02_authorization_store.py | PASS |
-| R02OL-10 | Scientist knowledge manifest hashes R02 outcome contract/store/service source so advisory context cannot drift. | scientist_knowledge.py + regenerated source_manifest.json | PASS |
-| R02OL-11 | Skill Workflow provenance/STRICT, Project Truth, cross-document consistency and sequence contracts remain synchronized. | Windows CI governance gates | PASS |
-| R02OL-12 | Full backend/frontend/source-only/security/dependency regression remains green. | Windows CI | PASS |
-| R02RI-01 | Persisted authorization identity, confirmation, canonical payload hash and R02/research/plan/R01 bindings are revalidated from the same read snapshot. | research_r02_store.py + R02 readback-integrity tests | PASS |
-| R02RI-02 | Frozen block identity, state, bindings, compute budget and exact ordered candidate-spec universe are reconstructed and verified. | research_r02_store.py + R02 readback-integrity tests | PASS |
-| R02RI-03 | Every persisted candidate outcome is rebuilt canonically; duplicate, missing, extra, unknown or row/JSON-mismatched outcomes fail closed. | build_candidate_outcome + R02 readback-integrity tests | PASS |
-| R02RI-04 | Terminal identity, state, manifest hash, counts and compute totals are reconstructed only after the frozen universe and every outcome verify; Cheap Screen grants no scientific or Qualified Pool authority. | build_terminal_manifest + R02 readback-integrity tests | PASS |
-| R02RI-05 | Public R02 reads use one SQLite snapshot and fail closed with deterministic integrity errors; COMPLETE_WAITING_OWNER is returned only for a verified terminal ledger. | r02_preflight + public R02 getters + R02 readback-integrity tests | PASS |
-| R02RI-06 | Synthetic test-database corruption cases cover persisted authorization, block, candidates, outcomes, terminal, malformed JSON and partial ledgers without weakening production immutability triggers. | backend/tests/test_r02_readback_integrity.py | PASS |
-| R02EX-01 | The fit input is the hash-bound R01 Discovery-only training artifact; Discovery-scope readback binds registry/output hashes while never opening dataset.csv, data_quality_report.json or leakage_report.json, so Locked OOS and Fresh/Forward target outcomes are not read or exposed to fitting. | research_r01_service.py + R01 synthetic artifact tests + test_r02_discovery_paths_do_not_hash_full_r01_dataset | PASS_LOCAL |
-| R02EX-02 | Frozen LightGBM, XGBoost and Random Forest specs are strict, reject missing or unsupported topology, preprocessing and training configuration, and scope exact replay to the same data, spec, seed, software build and device. | research_r02_contract.py + candidate adapter tests | PASS_LOCAL |
-| R02EX-03 | Cheap Screen uses a deterministic chronological Discovery holdout with R01-derived purge and train-only preprocessing; split and metric policy are explicit and frozen. | research_r02_executor.py + chronological split tests | PASS_LOCAL |
-| R02EX-04 | All three adapters fit and predict deterministically on synthetic CPU fixtures for CI; LightGBM OpenCL GPU and XGBoost CUDA GPU modes are explicit and have synthetic Windows hardware-smoke evidence. | research_r02_executor.py + synthetic family tests | PASS_LOCAL |
-| R02EX-05 | Invalid identity, stale authority, protected-data access, malformed/nonfinite/empty/single-class data, model errors, timeout and budget exhaustion fail deterministically. | research_r02_executor.py + executor adversarial tests | PASS_LOCAL |
-| R02EX-06 | The internal executor owns outcome creation, retains every frozen candidate outcome, and publishes only through the existing atomic immutable ledger; verified terminal replay never retrains. | research_r02_executor.py + research_r02_store.py + ledger integration tests | PASS_LOCAL |
-| R02EX-07 | COMPLETE_WAITING_OWNER remains distinct from scientific PASS; Cheap Screen qualification authority is false and Qualified Pool admission remains R03_FULL_WFA_ONLY. | R02 outcome/preflight contracts + synthetic positive tests | PASS_LOCAL |
-| R02EX-08 | The pinned Skill Workflow provenance, Project Truth roadmap synchronization, source-only policy and local backend/frontend/dependency/build regression are verified; exact final main SHA and hosted CI identity remain external acceptance evidence per D-012. | Local governance/source regression + upstream Skill Workflow STRICT/compiler selftests; exact hosted SHA/CI acceptance remains external per D-012 | PASS_LOCAL |
-| R02EX-09 | Schema 13 durably records one immutable execution attempt per frozen block; schema-12 migration preserves prior authority, and an attempt without a verified terminal fails closed on public reads and cannot be retried or externally outcome-submitted. | schema.py + workflow_store.py + R02 execution-attempt migration/readback tests | PASS_LOCAL |
+| STRAT-RESET-01 | Strategy workspace reset requires current safety preflight, exact Owner confirmation, a verified SQLite backup before mutation, and revalidation inside the mutation transaction. | backend/max_backend/strategy_reset.py::strategy_reset_preflight; backend/max_backend/strategy_reset.py::reset_strategy_workspace; backend/tests/test_strategy_workspace_reset.py | PASS_LOCAL |
+| STRAT-RESET-02 | The reset removes only owned generated Strategy state and preserves the accepted EA baseline, schema, generic settings, and Scientist provider settings. | backend/max_backend/strategy_reset.py; backend/tests/test_strategy_workspace_reset.py | PASS_LOCAL |
+| STRAT-RECOVERY-01 | Unopenable or corrupt operational state enters RECOVERY_REQUIRED, blocks ordinary API operations, and can be rebuilt only after explicit backup/reset confirmation. | backend/max_backend/main.py::recovery_required_gate; backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database; frontend/src/App.test.tsx | PASS_LOCAL |
+| STRAT-ARTIFACT-01 | Artifact list/detail/trace reads do not reconcile or probe MT5; reconciliation is an explicit action, and Challenger/Champion summaries avoid per-row bundle/tree scans. | backend/max_backend/artifact_control.py::artifact_page; backend/max_backend/artifact_control.py::artifact_trace; backend/max_backend/artifact_api.py::reconcile; backend/tests/test_m08_strategy_results.py | PASS_LOCAL |
+| STRAT-UI-FEEDBACK-01 | Safety-blocked controls are disabled with a visible reason; callbacks also fail closed, and asynchronous actions display progress and a result/error. | frontend/src/ArtifactsPage.tsx; frontend/src/ChallengersPage.tsx; frontend/src/App.tsx; frontend/src/ArtifactsPage.test.tsx; frontend/src/ChallengersPage.test.tsx | PASS_LOCAL |
+| RESEARCH-PURGE-01 | The rejected active Research APIs, backend modules, pages, active sequence sessions, persistence tables, metadata keys, and runtime dependencies are removed; the schema migration preserves Strategy authority. | backend/max_backend/schema.py; backend/max_backend/workflow_store.py; backend/tests/test_retired_subsystem_migration.py | PASS_LOCAL |
+| RESEARCH-GATE-01 | Fresh R00-R11 remain planned and blocked until the Owner declares REAL_MT5_BACKTEST_SAMPLE_READY and Control Room issues separate authorization. | .workflow/roadmap.json; .workflow/state.json | PASS_LOCAL |
+| REGRESSION-01 | Full current backend/frontend regressions, dependency checks, build, governance validators, and exact-tree source-only scan pass without unexplained skips or failures. | Current candidate test and validator reports; exact hosted evidence remains external. | NOT_PROVEN |
+| HOSTED-01 | Windows GitHub Actions passes on the exact PR head and exact merged main before phase closure. | External GitHub Actions run bound to exact candidate SHA. | NOT_PROVEN |
+| OWNER-RUNTIME-01 | Owner-PC database reset and fresh Optimizer verification are deferred until source/hosted gates pass; real MT5 runtime remains Owner evidence. | Owner-PC final acceptance remains deferred. | NOT_PROVEN |
 
 ## Test commands
 
-- .venv/Scripts/python.exe -m pytest backend/tests/test_r02_discovery_contract.py backend/tests/test_r02_preflight.py backend/tests/test_r02_authorization_store.py backend/tests/test_r02_authorization_service.py backend/tests/test_r02_outcome_contract.py backend/tests/test_r02_readback_integrity.py backend/tests/test_r02_executor.py backend/tests/test_r01_dataset.py backend/tests/test_r01_research.py -q -o addopts= --basetemp D:/max/.venv/pytest-r02-targeted-20260930-rerun
+- .venv/Scripts/python.exe -m pytest backend/tests/test_m08_strategy_results.py backend/tests/test_strategy_workspace_reset.py backend/tests/test_retired_subsystem_migration.py -q -o addopts=
+- .venv/Scripts/python.exe -m pytest backend/tests -q -o addopts= --basetemp .venv/pytest-full-revalidation
+- cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all
+- .venv/Scripts/python.exe -m pip check
+- .venv/Scripts/python.exe scripts/scan_m05_candidate_tree.py --candidate-sha HEAD
+- .venv/Scripts/python.exe scripts/build_scientist_knowledge.py
 - .venv/Scripts/python.exe .workflow/tools/sync_project_truth.py
 - .venv/Scripts/python.exe .workflow/tools/validate_project_docs.py
 - .venv/Scripts/python.exe .workflow/tools/validate_doc_quality.py
@@ -50,22 +38,13 @@ Current source digest: d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8
 - .venv/Scripts/python.exe .workflow/tools/validate_human_comprehension.py --require-pass
 - .venv/Scripts/python.exe .workflow/tools/validate_cross_document_consistency.py --allow-dirty
 - .venv/Scripts/python.exe .workflow/tools/validate_project_truth.py --allow-dirty
-- python $env:SKILL_WORKFLOW_DIR/scripts/selftest_project_truth_compiler.py (SKILL_WORKFLOW_DIR checked out at 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8)
-- python $env:SKILL_WORKFLOW_DIR/scripts/selftest_strict_project_workflow.py (SKILL_WORKFLOW_DIR checked out at 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8)
-- .venv/Scripts/python.exe -m pytest backend/tests -q -o addopts= --basetemp D:/max/.venv/pytest-backend-20260930-final
-- npm test -- --run (workdir: frontend)
-- npm run lint (workdir: frontend)
-- npm run build (workdir: frontend)
-- npm ls --all (workdir: frontend)
-- .venv/Scripts/python.exe -m pip check
 
 ## Runtime checks
 
-- NOT_RUN: real Owner-PC database/bootstrap.
-- NOT_RUN: real MT5/MetaEditor/broker/data-root/filesystem/browser runtime.
-- NOT_RUN: real R00/R01 scientific execution or real R02 authorization.
-- NOT_RUN: real current-epoch model fitting/training or real Cheap Screen execution/outcome.
-- NOT_RUN: R03 qualification, ONNX, Research Challenger or Champion mutation.
+- NOT_RUN: Owner runtime database backup/reset and fresh Optimizer verification; deferred until all hosted source gates pass.
+- NOT_RUN: real MT5/MetaEditor/broker/data-root/Strategy Tester runtime.
+- NOT_RUN: real R00/R01/R02 execution, model fitting/training, or Cheap Screen outcomes.
+- NOT_RUN: R03 qualification, ONNX, Research Challenger creation, or Champion mutation.
 
 ## Roadmap synchronization evidence
 
@@ -75,8 +54,8 @@ ROADMAP_SYNC: PASS
 ## Sequence contract evidence
 
 Sequence mode for this phase/session: DURING
-Sequence session contract: docs/sequence/sessions/FLOW-R02-CHEAP-SCREEN-EXECUTOR.json (13 current DURING sessions)
-SEQUENCE_SYNC: PASS
+Sequence session contract: FLOW-ARTIFACT-CONTROL and FLOW-STRATEGY-RESET-RECOVERY
+SEQUENCE_SYNC: PASS_LOCAL: 7 DURING/CURRENT sessions, 0 failed, 0 Python parse failures
 
 ## Project Truth Compiler evidence
 

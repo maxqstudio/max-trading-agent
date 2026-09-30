@@ -555,11 +555,6 @@ def challenger_detail(challenger_id: str) -> dict[str, Any]:
 def list_challengers() -> list[dict[str, Any]]:
     result = []
     for row in list_registry_rows():
-        try:
-            integrity = verify_challenger_bundle(row["challenger_id"])
-            integrity_status = integrity["status"]
-        except Exception:
-            integrity_status = "INTEGRITY_FAIL"
         result.append(
             {
                 "challenger_id": row["challenger_id"],
@@ -570,7 +565,7 @@ def list_challengers() -> list[dict[str, Any]]:
                 "source_round": row["source_round"],
                 "source_pass": row["source_pass"],
                 "kpi": row["kpi"],
-                "integrity": integrity_status,
+                "integrity": "NOT_CHECKED",
             }
         )
     return result

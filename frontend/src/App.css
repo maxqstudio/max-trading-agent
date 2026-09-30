@@ -1455,7 +1455,6 @@ td input[type="checkbox"] {
   }
 }
 
-/* Research/Data recovery: extend the accepted MAX Rebuild component language. */
 .page-subtitle {
   margin: 5px 0 0;
   color: #68717c;
@@ -1463,38 +1462,6 @@ td input[type="checkbox"] {
   line-height: 1.4;
 }
 
-.research-nav {
-  gap: 0;
-  overflow-x: auto;
-  scrollbar-width: thin;
-  padding-bottom: 0;
-}
-
-.research-nav button {
-  flex: 0 0 auto;
-  display: grid;
-  gap: 1px;
-  min-width: 92px;
-  padding: 8px 10px 7px;
-  text-align: left;
-}
-
-.research-nav button small {
-  color: #8a929c;
-  font-size: 10px;
-  font-weight: 600;
-}
-
-.research-nav button.nav-active small {
-  color: #59616b;
-}
-
-.research-stage-view {
-  padding-top: 22px;
-}
-
-.research-stage-heading,
-.research-view-head,
 .section-head {
   display: flex;
   align-items: flex-start;
@@ -1502,19 +1469,6 @@ td input[type="checkbox"] {
   gap: 20px;
 }
 
-.research-stage-heading,
-.research-view-head {
-  padding: 22px 0 10px;
-  border-bottom: 1px solid #d7dbe0;
-}
-
-.research-stage-heading h2,
-.research-view-head h2 {
-  margin: 0;
-  font-size: 18px;
-}
-
-.research-lock-state,
 .status-pill,
 .phase-badge {
   display: inline-flex;
@@ -1672,8 +1626,6 @@ td input[type="checkbox"] {
 }
 
 @media (max-width: 640px) {
-  .research-stage-heading,
-  .research-view-head,
   .section-head {
     align-items: flex-start;
     flex-direction: column;

@@ -1,6 +1,6 @@
 # MAX Trading Agent
 
-MAX Trading Agent is a Windows-only, GitHub-first control plane for deterministic Strategy optimization, Challenger/Champion governance, and a separately gated scientific Research pipeline around MetaTrader 5 execution evidence.
+MAX Trading Agent is a Windows-only, GitHub-first control plane for deterministic Strategy optimization, Challenger/Champion governance, and MetaTrader 5 execution evidence.
 
 ## Current authority
 
@@ -19,25 +19,16 @@ Real MetaTrader 5, MetaEditor, broker/data-root, filesystem deployment, fresh-da
 
 Historical MAX REBUILD evidence remains provenance only. It is not current source or runtime authority.
 
-## Current scientific boundary
+## Future Research gate
 
-- Previous-epoch R00 acceptance: historical only.
-- Current-epoch R00: not executed during hosted development.
-- Current-epoch R01: blocked/not started; no scientific result is proven.
-- R02 real scientific execution: BLOCKED / NOT STARTED. The authorized executor source phase uses synthetic test data only.
-- Real Research model training: 0; local/CI fitting so far is synthetic verification only.
-- ONNX: 0.
-- Research Challenger: 0.
-- H0 and ordinary hosted phases must not mutate Strategy Champion authority or start real Research execution.
-
-R01 implementation/runtime readiness is not R01 scientific PASS.
+The previously implemented Research subsystem was rejected and removed. Fresh R00–R11 work is future planned work, blocked until the Owner declares a real MT5 backtest/sample dataset READY. This source phase does not run research, fit scientific models, or mutate Strategy Champion authority.
 
 ## Governance
 
 MAX uses Skill Workflow exact authority:
 
 ```text
-c1d7e58a0fcadc606c8cf75c6283a17278f99259
+024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8
 ```
 
 Governance model:
@@ -62,7 +53,7 @@ This repository intentionally excludes private/runtime state, including:
 
 - real `.env` files, API keys, tokens, passwords, private keys, and certificates;
 - SQLite runtime databases;
-- `evidence/`, `artifacts/`, optimizer/Challenger/Champion/Research runtime outputs, backtests, and datasets;
+- `evidence/`, `artifacts/`, optimizer/Challenger/Champion runtime outputs, backtests, and datasets;
 - MT5 terminal/account/data-root files and broker credentials;
 - `.venv/`, `node_modules/`, Vite caches, frontend build output, and local runtime logs.
 

@@ -1,149 +1,176 @@
 {
   "schema_version": 1,
-  "current_phase": "R02_CHEAP_SCREEN_TRAINER_EXECUTOR_SOURCE",
+  "current_phase": "PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE",
   "phases": [
     {
       "id": "R02_CHEAP_SCREEN_OUTCOME_LEDGER",
-      "title": "R02 Cheap Screen outcome ledger",
-      "status": "COMPLETE",
-      "objective": "Persist one immutable outcome per frozen candidate and a bounded terminal manifest.",
+      "title": "Historical R02 outcome-ledger implementation",
+      "status": "SUPERSEDED",
+      "objective": "Historical source phase; the Owner has rejected the current Research subsystem and this implementation is removed from active MAX.",
       "exit_criteria": [
-        "Schema-12 outcome and terminal authority is immutable and atomic.",
-        "Cheap Screen and COMPLETE_WAITING_OWNER carry no scientific or Qualified Pool authority."
+        "Retained only as Git history; not a current runtime or compatibility authority."
       ]
     },
     {
       "id": "R02_OUTCOME_READBACK_INTEGRITY",
-      "title": "R02 outcome readback integrity",
-      "status": "COMPLETE",
-      "objective": "Reconstruct and verify authorization, frozen candidates, outcomes and terminal from one persisted read snapshot.",
+      "title": "Historical R02 readback-integrity implementation",
+      "status": "SUPERSEDED",
+      "objective": "Historical source phase; the Owner has rejected the current Research subsystem and this implementation is removed from active MAX.",
       "exit_criteria": [
-        "Corrupted or partial ledgers fail closed.",
-        "Exact final SHA and hosted CI remain external acceptance evidence per D-012."
+        "Retained only as Git history; not a current runtime or compatibility authority."
       ]
     },
     {
       "id": "R02_CHEAP_SCREEN_TRAINER_EXECUTOR_SOURCE",
-      "title": "R02 Cheap Screen trainer/executor source",
+      "title": "Historical R02 trainer/executor implementation",
+      "status": "SUPERSEDED",
+      "objective": "Rejected Research implementation; do not reuse or continue hardening.",
+      "exit_criteria": [
+        "All active R00/R01/R02 implementation, API, UI, database authority and model dependencies are removed."
+      ]
+    },
+    {
+      "id": "PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE",
+      "title": "Strategy stabilization and Research subsystem purge",
       "status": "CURRENT",
-      "objective": "Implement a bounded deterministic Discovery-only executor for the frozen LightGBM, XGBoost and Random Forest candidate universe; verify only with synthetic data.",
+      "objective": "Stabilize Strategy lifecycle, artifact controls, reset/recovery paths, frontend/backend read behavior, and remove the rejected Research subsystem before any fresh Research work.",
       "exit_criteria": [
-        "R01 exposes a hash-bound Discovery-only training artifact; Locked OOS and Fresh/Forward target outcomes remain unread by the executor.",
-        "Candidate adapters, chronological purged split, metric policy and compute-budget enforcement are explicit and bound to frozen authority.",
-        "All candidate outcomes are generated internally and committed through the existing atomic ledger; no public outcome-submit API or automatic next block exists.",
-        "A durable one-shot execution-attempt marker makes crash/interruption without terminal fail closed; schema-12 databases migrate to schema 13 without losing prior R02 authority.",
-        "Synthetic deterministic, negative, backend/frontend, governance, source-only and exact-main Windows CI gates pass.",
-        "Real R00/R01/R02 execution, scientific evidence and Owner-PC runtime remain NOT_PROVEN."
+        "Strategy artifact reads are DB-backed and do not globally reconcile or probe MT5.",
+        "Safe cleanup remains distinct from explicit Strategy Workspace Reset; reset preserves baseline, schema, generic settings and Scientist provider configuration.",
+        "Corrupt generated rows can be reset through controlled ownership boundaries; SQLite corruption enters RECOVERY_REQUIRED and requires explicit backup/reset confirmation.",
+        "Champion replacement and active Challenger lifecycle are correct and covered by focused tests.",
+        "Active Research APIs/modules/pages/tables/runtime dependencies and current R00-R02 sequence authority are removed; future R00-R11 phases are PLANNED and blocked until the Owner declares a real MT5 sample READY.",
+        "Backend/frontend regressions, governance, source-only scan and Windows GitHub Actions pass; no real research or broker/MT5 scientific execution occurs."
       ]
     },
     {
-      "id": "R02_EXECUTOR_HARDENING",
-      "title": "R02 executor hardening",
-      "status": "PLANNED",
-      "objective": "Harden bounded executor recovery, interruption, resource limits and audit surfaces without creating scientific evidence.",
+      "id": "OWNER_STRATEGY_CHAMPION_AND_MT5_SAMPLE_PREPARATION",
+      "title": "Owner Strategy Champion and real MT5 sample preparation",
+      "status": "BLOCKED_BY_OWNER_ACTION",
+      "objective": "Owner manually runs the stabilized Strategy lifecycle, selects and promotes a Strategy Champion, then runs a real MT5 backtest to produce the sample dataset required for future Research.",
       "exit_criteria": [
-        "Restart, timeout and duplicate execution behavior are deterministic and fail closed.",
-        "All testing remains synthetic and no real research execution occurs."
+        "Owner verifies Strategy Optimizer → Challenger selection → Champion promotion → real MT5 backtest/sample.",
+        "Owner explicitly declares REAL_MT5_BACKTEST_SAMPLE_READY before Control Room can authorize fresh R00."
       ]
     },
     {
-      "id": "R03_FULL_WFA",
-      "title": "R03 Full Walk-Forward Analysis source",
+      "id": "R00_RESEARCH_CONTROL_PLANE",
+      "title": "Fresh R00 Research Control Plane",
       "status": "PLANNED",
-      "objective": "Implement the separately authorized Full WFA evidence source and the only Qualified Pool admission authority.",
+      "blocked_by": "BLOCKED_BY_REAL_MT5_BACKTEST_SAMPLE_READY",
+      "objective": "Fresh Research identity, Strategy Champion parent binding, Research Settings, sample/KPI/risk/model/compute configuration, budget and immutable execution snapshot; mandatory Settings → Research and Research Overview UI.",
       "exit_criteria": [
-        "WFA folds, purge/embargo, metrics and persistence are explicit and tested with synthetic data.",
-        "R03 source does not consume Locked OOS or Fresh/Forward outcomes."
+        "Begins only after the real MT5 sample is declared READY and Control Room authorizes the source phase."
       ]
     },
     {
-      "id": "R04_OWNER_SELECTION_CPCV",
-      "title": "R04 Owner selection and CPCV",
+      "id": "R01_DATA_MTF_FEATURE_LABEL_AUTHORITY",
+      "title": "Fresh R01 Data / MTF / Feature / Label Authority",
       "status": "PLANNED",
-      "objective": "Implement explicit Owner candidate selection and CPCV evidence under frozen seed and partition authority.",
+      "blocked_by": "BLOCKED_BY_REAL_MT5_BACKTEST_SAMPLE_READY",
+      "objective": "Fresh donor-audited data, dynamic MTF, CP32, labels, temporal index, purge/embargo, partition authority and leakage defenses; mandatory Research Data UI.",
       "exit_criteria": [
-        "Owner-only selection and deterministic CPCV lineage are enforced.",
-        "No CPCV result is represented as Owner acceptance without Owner action."
+        "Begins only after the real MT5 sample is declared READY and Control Room authorizes the source phase."
       ]
     },
     {
-      "id": "R05_TOURNAMENT",
-      "title": "R05 tournament source",
+      "id": "R02_COMPLETE_MODEL_FACTORY",
+      "title": "Fresh R02 Complete Model Factory",
       "status": "PLANNED",
-      "objective": "Implement bounded tournament comparisons over only eligible upstream candidates.",
+      "blocked_by": "BLOCKED_BY_REAL_MT5_BACKTEST_SAMPLE_READY",
+      "objective": "Fresh model registry and CandidateSpec for tabular LightGBM/XGBoost/Random Forest, temporal GRU/LSTM/TCN/Transformer/MoE/PatchTST/iTransformer/TFT, and hybrid temporal purged-OOF policy models; capacity governor for legal, resource and scientific limits.",
       "exit_criteria": [
-        "Tournament lineage, deterministic ranking and hard-failure preservation are tested synthetically.",
-        "No tournament outcome directly mutates Champion authority."
+        "Begins only after the real MT5 sample is declared READY and Control Room authorizes the source phase."
       ]
     },
     {
-      "id": "R06_MONTE_CARLO",
-      "title": "R06 Monte Carlo source",
+      "id": "R03_CHEAP_SCREEN_FIDELITY_LADDER",
+      "title": "Fresh R03 Cheap Screen Fidelity Ladder",
       "status": "PLANNED",
-      "objective": "Implement deterministic Monte Carlo robustness evidence with explicit resampling authority.",
+      "blocked_by": "BLOCKED_BY_REAL_MT5_BACKTEST_SAMPLE_READY",
+      "objective": "Fresh donor-derived reduced-resource, same-architecture fidelity ladder that screens candidates while retaining the original CandidateSpec for Full WFA; zero final scientific qualification authority.",
       "exit_criteria": [
-        "Resampling, seeds, metrics and evidence retention are explicit and tested synthetically.",
-        "Monte Carlo remains evidence, not Owner promotion."
+        "Begins only after the real MT5 sample is declared READY and Control Room authorizes the source phase."
       ]
     },
     {
-      "id": "R07_LOCKED_OOS",
-      "title": "R07 Locked OOS source",
+      "id": "R04_FULL_WFA_QUALIFIED_POOL",
+      "title": "Fresh R04 Full WFA and Qualified Pool",
       "status": "PLANNED",
-      "objective": "Implement single-purpose Locked OOS access under explicit Owner-gated, non-adaptive authority.",
+      "blocked_by": "BLOCKED_BY_REAL_MT5_BACKTEST_SAMPLE_READY",
+      "objective": "Fresh chronological Full WFA, KPI/risk/stress/stability/failure-topology evidence and scientific Qualified Pool admission.",
       "exit_criteria": [
-        "Protected outcomes cannot flow into training or adaptive feedback.",
-        "Repeat access, stale authority and cross-epoch access fail closed."
+        "Begins only after the real MT5 sample is declared READY and Control Room authorizes the source phase."
       ]
     },
     {
-      "id": "R08_FRESH_FORWARD",
-      "title": "R08 Fresh/Forward source",
+      "id": "R05_OWNER_SELECTION_CPCV",
+      "title": "Fresh R05 Owner Selection and CPCV",
       "status": "PLANNED",
-      "objective": "Implement distinct Fresh/Forward validation authority without adaptive leakage.",
+      "blocked_by": "BLOCKED_BY_REAL_MT5_BACKTEST_SAMPLE_READY",
+      "objective": "Owner-only selection from Qualified Pool and donor-derived CPCV (six groups, two test groups, fifteen combinations), with PBO only where justified.",
       "exit_criteria": [
-        "Fresh/Forward evidence is chronologically and lineage-bound.",
-        "Forward outcomes cannot tune candidates or rewrite prior authority."
+        "Begins only after the real MT5 sample is declared READY and Control Room authorizes the source phase."
       ]
     },
     {
-      "id": "R09_FINAL_FIT",
-      "title": "R09 final fit source",
+      "id": "R06_TOURNAMENT",
+      "title": "Fresh R06 Tournament",
       "status": "PLANNED",
-      "objective": "Implement final fit only after explicit upstream scientific and Owner gates.",
+      "blocked_by": "BLOCKED_BY_REAL_MT5_BACKTEST_SAMPLE_READY",
+      "objective": "Fresh donor-derived deterministic tournament over CPCV survivors only.",
       "exit_criteria": [
-        "Final-fit data scope, candidate identity and runtime authority are explicit.",
-        "No real training or scientific result is claimed by source/CI tests."
+        "Begins only after the real MT5 sample is declared READY and Control Room authorizes the source phase."
       ]
     },
     {
-      "id": "R09_ONNX",
-      "title": "R09 ONNX source",
+      "id": "R07_MONTE_CARLO",
+      "title": "Fresh R07 Monte Carlo",
       "status": "PLANNED",
-      "objective": "Implement gated ONNX export and parity verification only after final-fit authority.",
+      "blocked_by": "BLOCKED_BY_REAL_MT5_BACKTEST_SAMPLE_READY",
+      "objective": "Fresh donor-derived robustness simulation with explicit resampling authority.",
       "exit_criteria": [
-        "Export policy, model compatibility and deterministic parity tests are explicit.",
-        "No production ONNX artifact is created by synthetic CI."
+        "Begins only after the real MT5 sample is declared READY and Control Room authorizes the source phase."
       ]
     },
     {
-      "id": "R10_RESEARCH_MODEL_PACKAGE",
-      "title": "R10 Research Model Package",
+      "id": "R08_PROTECTED_VALIDATION",
+      "title": "Fresh R08 Protected Validation",
       "status": "PLANNED",
-      "objective": "Implement immutable Research model package construction and verification.",
+      "blocked_by": "BLOCKED_BY_REAL_MT5_BACKTEST_SAMPLE_READY",
+      "objective": "Freshly audit donor Forward/protected-data behavior and map it to the MAX protected validation contract without inventing stage semantics.",
       "exit_criteria": [
-        "Package contents bind to exact scientific lineage and accepted artifact hashes.",
-        "Synthetic packaging tests do not create a real Research package."
+        "Begins only after the real MT5 sample is declared READY and Control Room authorizes the source phase."
       ]
     },
     {
-      "id": "R10_STRATEGY_CHALLENGER_CREATION",
-      "title": "R10 Strategy Challenger creation",
+      "id": "R09_FINAL_MODEL_FIT",
+      "title": "Fresh R09 Final Model Fit",
       "status": "PLANNED",
-      "objective": "Implement Owner-gated conversion from a fully accepted Research package to a Strategy Challenger.",
+      "blocked_by": "BLOCKED_BY_REAL_MT5_BACKTEST_SAMPLE_READY",
+      "objective": "Frozen-candidate final fit after explicit upstream gates, with no retuning and donor-required temporal/hybrid fit semantics.",
       "exit_criteria": [
-        "Research evidence cannot bypass existing Strategy Challenger and Champion authorities.",
-        "No real Challenger or Champion mutation occurs in source/CI validation."
+        "Begins only after the real MT5 sample is declared READY and Control Room authorizes the source phase."
+      ]
+    },
+    {
+      "id": "R10_ONNX_RESEARCH_MODEL_PACKAGE",
+      "title": "Fresh R10 ONNX and Research Model Package",
+      "status": "PLANNED",
+      "blocked_by": "BLOCKED_BY_REAL_MT5_BACKTEST_SAMPLE_READY",
+      "objective": "Native/ONNX parity, SELL/SKIP/BUY and temporal/hybrid shape contracts, and immutable package lineage.",
+      "exit_criteria": [
+        "Begins only after the real MT5 sample is declared READY and Control Room authorizes the source phase."
+      ]
+    },
+    {
+      "id": "R11_STRATEGY_CHALLENGER_INTEGRATION",
+      "title": "Fresh R11 Strategy Challenger Integration",
+      "status": "PLANNED",
+      "blocked_by": "BLOCKED_BY_REAL_MT5_BACKTEST_SAMPLE_READY",
+      "objective": "Owner-gated integration from a fresh Research Model Package into the existing Strategy Challenger lifecycle; no automatic Champion promotion.",
+      "exit_criteria": [
+        "Begins only after the real MT5 sample is declared READY and Control Room authorizes the source phase."
       ]
     }
   ]

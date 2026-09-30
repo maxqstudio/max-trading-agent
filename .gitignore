@@ -2,11 +2,14 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.pytest-*/
 *.egg-info/
 frontend/node_modules/
 frontend/dist/
 state/*.db
 state/*.db-*
+state/reset_backups/
+state/recovery_quarantine/
 state/promotion_recovery/
 evidence/runtime/
 *.log

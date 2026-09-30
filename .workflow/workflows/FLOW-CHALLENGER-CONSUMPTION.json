@@ -22,6 +22,7 @@
   "sequence_session": "docs/sequence/sessions/FLOW-CHALLENGER-CONSUMPTION.json",
   "source_owners": [
     "backend/max_backend/challenger_operations.py::retire_challenger",
+    "backend/max_backend/challenger_operations.py::run_challenger_backtest",
     "backend/max_backend/challenger_store.py::consumed_source_identities",
     "backend/max_backend/challenger_operations.py::run_challenger_backtest",
     "frontend/src/ChallengersPage.tsx::ChallengersPage"

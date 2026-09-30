@@ -1,0 +1,2577 @@
+{
+  "coverage": {
+    "js_ts_http_module_scan": true,
+    "limitations": [
+      "dynamic dispatch",
+      "dependency injection",
+      "reflection",
+      "callbacks/events",
+      "framework magic not visible statically",
+      "JS/TS function-level call ownership is not fully resolved"
+    ],
+    "python_ast": true,
+    "python_parse_failures": [],
+    "python_route_decorators": true,
+    "runtime_trace": false
+  },
+  "edges": [
+    {
+      "action": "POST route",
+      "evidence": "STATIC",
+      "from": "HTTP /action",
+      "resolver": "python_route_decorator",
+      "to": "backend/max_backend/artifact_api.py::act"
+    },
+    {
+      "action": "POST route",
+      "evidence": "STATIC",
+      "from": "HTTP /cleanup",
+      "resolver": "python_route_decorator",
+      "to": "backend/max_backend/artifact_api.py::cleanup"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /cleanup/preflight",
+      "resolver": "python_route_decorator",
+      "to": "backend/max_backend/artifact_api.py::cleanup_preflight"
+    },
+    {
+      "action": "POST route",
+      "evidence": "STATIC",
+      "from": "HTTP /preflight",
+      "resolver": "python_route_decorator",
+      "to": "backend/max_backend/artifact_api.py::preflight"
+    },
+    {
+      "action": "POST route",
+      "evidence": "STATIC",
+      "from": "HTTP /reconcile",
+      "resolver": "python_route_decorator",
+      "to": "backend/max_backend/artifact_api.py::reconcile"
+    },
+    {
+      "action": "POST route",
+      "evidence": "STATIC",
+      "from": "HTTP /strategy-reset",
+      "resolver": "python_route_decorator",
+      "to": "backend/max_backend/artifact_api.py::strategy_workspace_reset"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /strategy-reset/preflight",
+      "resolver": "python_route_decorator",
+      "to": "backend/max_backend/artifact_api.py::strategy_workspace_reset_preflight"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /{artifact_id}/trace",
+      "resolver": "python_route_decorator",
+      "to": "backend/max_backend/artifact_api.py::trace"
+    },
+    {
+      "action": "_error",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::act",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_api.py::_error"
+    },
+    {
+      "action": "execute_artifact_action",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::act",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::execute_artifact_action"
+    },
+    {
+      "action": "_error",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::cleanup",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_api.py::_error"
+    },
+    {
+      "action": "clean_generated_data",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::cleanup",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::clean_generated_data"
+    },
+    {
+      "action": "_error",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::cleanup_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_api.py::_error"
+    },
+    {
+      "action": "global_cleanup_preflight",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::cleanup_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::global_cleanup_preflight"
+    },
+    {
+      "action": "_error",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::list_artifacts",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_api.py::_error"
+    },
+    {
+      "action": "artifact_page",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::list_artifacts",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::artifact_page"
+    },
+    {
+      "action": "_error",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_api.py::_error"
+    },
+    {
+      "action": "artifact_preflight",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::artifact_preflight"
+    },
+    {
+      "action": "_error",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::reconcile",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_api.py::_error"
+    },
+    {
+      "action": "reconcile_artifacts",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::reconcile",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::reconcile_artifacts"
+    },
+    {
+      "action": "_error",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::strategy_workspace_reset",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_api.py::_error"
+    },
+    {
+      "action": "reset_strategy_workspace",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::strategy_workspace_reset",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::reset_strategy_workspace"
+    },
+    {
+      "action": "_error",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::strategy_workspace_reset_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_api.py::_error"
+    },
+    {
+      "action": "strategy_reset_preflight",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::strategy_workspace_reset_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::strategy_reset_preflight"
+    },
+    {
+      "action": "_error",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::trace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_api.py::_error"
+    },
+    {
+      "action": "artifact_trace",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::trace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::artifact_trace"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_baseline_authority_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_count_generated_strategy_history_objects",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_cleanup_final_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_count_generated_strategy_history_objects"
+    },
+    {
+      "action": "_count_root_objects",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_cleanup_final_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_count_root_objects"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_cleanup_final_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_is_protected_strategy_history_entry",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_clear_generated_strategy_history_root",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_is_protected_strategy_history_entry"
+    },
+    {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_clear_generated_strategy_history_root",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_clear_owned_root",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
+      "action": "_is_protected_strategy_history_entry",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_count_generated_strategy_history_objects",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_is_protected_strategy_history_entry"
+    },
+    {
+      "action": "_storage",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_decode",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_storage"
+    },
+    {
+      "action": "_extract_backtest_id",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_orphan_delete",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_extract_backtest_id"
+    },
+    {
+      "action": "_runtime_roots",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_orphan_delete",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_runtime_roots"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_orphan_delete",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "detect_mt5",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_orphan_delete",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::detect_mt5"
+    },
+    {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_orphan_delete",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_provider_settings_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_register_db_object",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_db_objects",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_register_db_object"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_db_objects",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_current_champion_id",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_current_champion_id"
+    },
+    {
+      "action": "_file_artifact_type",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_file_artifact_type"
+    },
+    {
+      "action": "_is_protected_strategy_history_entry",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_is_protected_strategy_history_entry"
+    },
+    {
+      "action": "_register_backtest_runtime_items",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_register_backtest_runtime_items"
+    },
+    {
+      "action": "_register_tree_files",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_register_tree_files"
+    },
+    {
+      "action": "register_artifact",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::register_artifact"
+    },
+    {
+      "action": "challenger_delete_preflight",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::challenger_delete_preflight"
+    },
+    {
+      "action": "runtime_inventory",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::runtime_inventory"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_extract_backtest_id",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_extract_backtest_id"
+    },
+    {
+      "action": "_runtime_roots",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_runtime_roots"
+    },
+    {
+      "action": "register_artifact",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::register_artifact"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "detect_mt5",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::detect_mt5"
+    },
+    {
+      "action": "assert_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::assert_owned_path"
+    },
+    {
+      "action": "register_artifact",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_register_backtest_runtime_items",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::register_artifact"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_register_backtest_runtime_items",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "register_artifact",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_register_db_object",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::register_artifact"
+    },
+    {
+      "action": "_file_artifact_type",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_register_tree_files",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_file_artifact_type"
+    },
+    {
+      "action": "register_artifact",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_register_tree_files",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::register_artifact"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_register_tree_files",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_decode",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::artifact_page",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_decode"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::artifact_page",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "get_artifact",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::artifact_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::get_artifact"
+    },
+    {
+      "action": "reconcile_artifacts",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::artifact_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::reconcile_artifacts"
+    },
+    {
+      "action": "get_artifact",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::artifact_trace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::get_artifact"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::artifact_trace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_baseline_authority_snapshot",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_baseline_authority_snapshot"
+    },
+    {
+      "action": "_cleanup_final_state",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_cleanup_final_state"
+    },
+    {
+      "action": "_clear_generated_strategy_history_root",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_clear_generated_strategy_history_root"
+    },
+    {
+      "action": "_clear_owned_root",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_clear_owned_root"
+    },
+    {
+      "action": "_decode",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_decode"
+    },
+    {
+      "action": "_orphan_delete",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_orphan_delete"
+    },
+    {
+      "action": "_provider_settings_snapshot",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_provider_settings_snapshot"
+    },
+    {
+      "action": "_resolved_project_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_resolved_project_path"
+    },
+    {
+      "action": "delete_optimizer_job",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::delete_optimizer_job"
+    },
+    {
+      "action": "global_cleanup_preflight",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::global_cleanup_preflight"
+    },
+    {
+      "action": "reconcile_artifacts",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::reconcile_artifacts"
+    },
+    {
+      "action": "delete_backtest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::delete_backtest"
+    },
+    {
+      "action": "delete_challenger",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::delete_challenger"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
+      "action": "purge_chat",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_store.py::purge_chat"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::delete_optimizer_job",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::delete_optimizer_job",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::delete_optimizer_job",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "action": "_orphan_delete",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::execute_artifact_action",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_orphan_delete"
+    },
+    {
+      "action": "artifact_preflight",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::execute_artifact_action",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::artifact_preflight"
+    },
+    {
+      "action": "delete_optimizer_job",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::execute_artifact_action",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::delete_optimizer_job"
+    },
+    {
+      "action": "clean_backtest_runtime",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::execute_artifact_action",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::clean_backtest_runtime"
+    },
+    {
+      "action": "delete_backtest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::execute_artifact_action",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::delete_backtest"
+    },
+    {
+      "action": "delete_challenger",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::execute_artifact_action",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::delete_challenger"
+    },
+    {
+      "action": "_decode",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::get_artifact",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_decode"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::get_artifact",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::get_artifact",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "action": "_current_champion_id",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::global_cleanup_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_current_champion_id"
+    },
+    {
+      "action": "_decode",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::global_cleanup_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_decode"
+    },
+    {
+      "action": "_resolved_project_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::global_cleanup_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_resolved_project_path"
+    },
+    {
+      "action": "reconcile_artifacts",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::global_cleanup_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::reconcile_artifacts"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::global_cleanup_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::global_cleanup_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "action": "_reconcile_db_objects",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::reconcile_artifacts",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_reconcile_db_objects"
+    },
+    {
+      "action": "_reconcile_project_objects",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::reconcile_artifacts",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_reconcile_project_objects"
+    },
+    {
+      "action": "_reconcile_runtime",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::reconcile_artifacts",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_reconcile_runtime"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::reconcile_artifacts",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "action": "artifact_id",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::register_artifact",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::artifact_id"
+    },
+    {
+      "action": "get_artifact",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::register_artifact",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::get_artifact"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::register_artifact",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "file_size_tree",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::register_artifact",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::file_size_tree"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::register_artifact",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "action": "_project_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::challenger_delete_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::_project_path"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::challenger_delete_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "file_size_tree",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::challenger_delete_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::file_size_tree"
+    },
+    {
+      "action": "_runtime_paths",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::_runtime_paths"
+    },
+    {
+      "action": "runtime_inventory",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::runtime_inventory"
+    },
+    {
+      "action": "verified_retained_report",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::verified_retained_report"
+    },
+    {
+      "action": "get_backtest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::get_backtest"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
+      "action": "set_backtest_runtime_status",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::set_backtest_runtime_status"
+    },
+    {
+      "action": "_project_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::_project_path"
+    },
+    {
+      "action": "clean_backtest_runtime",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::clean_backtest_runtime"
+    },
+    {
+      "action": "get_backtest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::get_backtest"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
+      "action": "delete_backtest_row",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::delete_backtest_row"
+    },
+    {
+      "action": "challenger_delete_preflight",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::challenger_delete_preflight"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
+      "action": "delete_challenger_row",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::delete_challenger_row"
+    },
+    {
+      "action": "_runtime_paths",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::runtime_inventory",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::_runtime_paths"
+    },
+    {
+      "action": "get_backtest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::runtime_inventory",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::get_backtest"
+    },
+    {
+      "action": "assert_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::runtime_inventory",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::assert_owned_path"
+    },
+    {
+      "action": "file_size_tree",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::runtime_inventory",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::file_size_tree"
+    },
+    {
+      "action": "_project_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::verified_retained_report",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::_project_path"
+    },
+    {
+      "action": "get_backtest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::verified_retained_report",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::get_backtest"
+    },
+    {
+      "action": "_backtest_schema_ready",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready"
+    },
+    {
+      "action": "_challenger_schema_ready",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready"
+    },
+    {
+      "action": "_decode_backtest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::get_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::_decode_backtest"
+    },
+    {
+      "action": "migrate_m06",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::get_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::migrate_m06"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::get_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_create_m06_tables",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::_create_m06_tables"
+    },
+    {
+      "action": "_upgrade_backtest_schema",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema"
+    },
+    {
+      "action": "_upgrade_challenger_registry",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_m05",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_store.py::migrate_m05"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_store.py::migrate_m03",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_m02",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_store.py::migrate_m03",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_store.py::migrate_m02"
+    },
+    {
+      "action": "_challenger_table_supports_promoted",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted"
+    },
+    {
+      "action": "_create_champion_tenure_table",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_create_champion_tenure_table"
+    },
+    {
+      "action": "migrate_m03",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_store.py::migrate_m03"
+    },
+    {
+      "action": "_upgrade_challenger_status_constraint",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint"
+    },
+    {
+      "action": "_upgrade_champion_tenure_schema",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_auto_terminal_candidates",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/mt5.py::detect_mt5",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::_auto_terminal_candidates"
+    },
+    {
+      "action": "_data_roots",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/mt5.py::detect_mt5",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::_data_roots"
+    },
+    {
+      "action": "_read_origin",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/mt5.py::detect_mt5",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::_read_origin"
+    },
+    {
+      "action": "_unavailable",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/mt5.py::detect_mt5",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::_unavailable"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_m01",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_store.py::migrate_m01"
+    },
+    {
+      "action": "_is_reparse",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/path_safety.py::assert_owned_path",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::_is_reparse"
+    },
+    {
+      "action": "assert_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/path_safety.py::remove_owned_path",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::assert_owned_path"
+    },
+    {
+      "action": "migrate_m04",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_store.py::migrate_m05",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::migrate_m04"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_store.py::migrate_m05",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_store.py::purge_chat",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_m05",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_store.py::purge_chat",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_store.py::migrate_m05"
+    },
+    {
+      "action": "sqlite3.connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::_connect",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "sqlite3.connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::_make_database_backup",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "StrategyResetError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::_make_database_backup",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::StrategyResetError"
+    },
+    {
+      "action": "_hash_file",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::_make_database_backup",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::_hash_file"
+    },
+    {
+      "action": "detect_mt5",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::_owned_paths",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::detect_mt5"
+    },
+    {
+      "action": "file_size_tree",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::_owned_paths",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::file_size_tree"
+    },
+    {
+      "action": "_runtime_paths",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::_owned_paths",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::_runtime_paths"
+    },
+    {
+      "action": "assert_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::_read_counts",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::assert_owned_path"
+    },
+    {
+      "action": "StrategyResetError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::_read_counts",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::StrategyResetError"
+    },
+    {
+      "action": "_connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::_read_counts",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::_connect"
+    },
+    {
+      "action": "_count",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::_read_counts",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::_count"
+    },
+    {
+      "action": "_hash_file",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::_read_counts",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::_hash_file"
+    },
+    {
+      "action": "_owned_paths",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::_read_counts",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::_owned_paths"
+    },
+    {
+      "action": "_tables",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::_read_counts",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::_tables"
+    },
+    {
+      "action": "_hash_file",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::_settings_fingerprint",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::_hash_file"
+    },
+    {
+      "action": "assert_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::assert_owned_path"
+    },
+    {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
+      "action": "StrategyResetError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::StrategyResetError"
+    },
+    {
+      "action": "_connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::_connect"
+    },
+    {
+      "action": "_delete_rows",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::_delete_rows"
+    },
+    {
+      "action": "_hash_file",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::_hash_file"
+    },
+    {
+      "action": "_make_database_backup",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::_make_database_backup"
+    },
+    {
+      "action": "_read_counts",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::_read_counts"
+    },
+    {
+      "action": "_settings_fingerprint",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::_settings_fingerprint"
+    },
+    {
+      "action": "_read_counts",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::_read_counts"
+    },
+    {
+      "action": "_challenger_role_schema_ready",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::_challenger_role_schema_ready"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::delete_backtest_row",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::delete_backtest_row",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::delete_challenger_row",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::delete_challenger_row",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "action": "migrate_m06",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::migrate_current",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::migrate_m06"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::migrate_current",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_ensure_backtest_runtime_status",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::migrate_current",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::_ensure_backtest_runtime_status"
+    },
+    {
+      "action": "_purge_research_authority",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::migrate_current",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::_purge_research_authority"
+    },
+    {
+      "action": "_upgrade_challenger_roles",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::migrate_current",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::set_backtest_runtime_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::set_backtest_runtime_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "action": "FETCH request",
+      "evidence": "STATIC",
+      "from": "frontend/src/ArtifactsPage.tsx::<module>",
+      "resolver": "js_http_scan",
+      "to": "HTTP /api/artifacts"
+    },
+    {
+      "action": "FETCH request",
+      "evidence": "STATIC",
+      "from": "frontend/src/ArtifactsPage.tsx::<module>",
+      "resolver": "js_http_scan",
+      "to": "HTTP /api/artifacts/"
+    },
+    {
+      "action": "FETCH request",
+      "evidence": "STATIC",
+      "from": "frontend/src/ArtifactsPage.tsx::<module>",
+      "resolver": "js_http_scan",
+      "to": "HTTP /api/artifacts/action"
+    },
+    {
+      "action": "FETCH request",
+      "evidence": "STATIC",
+      "from": "frontend/src/ArtifactsPage.tsx::<module>",
+      "resolver": "js_http_scan",
+      "to": "HTTP /api/artifacts/cleanup"
+    },
+    {
+      "action": "FETCH request",
+      "evidence": "STATIC",
+      "from": "frontend/src/ArtifactsPage.tsx::<module>",
+      "resolver": "js_http_scan",
+      "to": "HTTP /api/artifacts/cleanup/preflight"
+    },
+    {
+      "action": "FETCH request",
+      "evidence": "STATIC",
+      "from": "frontend/src/ArtifactsPage.tsx::<module>",
+      "resolver": "js_http_scan",
+      "to": "HTTP /api/artifacts/preflight"
+    },
+    {
+      "action": "FETCH request",
+      "evidence": "STATIC",
+      "from": "frontend/src/ArtifactsPage.tsx::<module>",
+      "resolver": "js_http_scan",
+      "to": "HTTP /api/artifacts/reconcile"
+    },
+    {
+      "action": "FETCH request",
+      "evidence": "STATIC",
+      "from": "frontend/src/ArtifactsPage.tsx::<module>",
+      "resolver": "js_http_scan",
+      "to": "HTTP /api/artifacts/strategy-reset"
+    },
+    {
+      "action": "FETCH request",
+      "evidence": "STATIC",
+      "from": "frontend/src/ArtifactsPage.tsx::<module>",
+      "resolver": "js_http_scan",
+      "to": "HTTP /api/artifacts/strategy-reset/preflight"
+    }
+  ],
+  "entries": [
+    "frontend/src/ArtifactsPage.tsx::<module>",
+    "backend/max_backend/artifact_api.py::list_artifacts",
+    "backend/max_backend/artifact_api.py::reconcile",
+    "backend/max_backend/artifact_api.py::preflight",
+    "backend/max_backend/artifact_api.py::act",
+    "backend/max_backend/artifact_api.py::cleanup_preflight",
+    "backend/max_backend/artifact_api.py::cleanup",
+    "backend/max_backend/artifact_api.py::trace",
+    "backend/max_backend/artifact_api.py::strategy_workspace_reset_preflight",
+    "backend/max_backend/artifact_api.py::strategy_workspace_reset",
+    "backend/max_backend/artifact_control.py::clean_generated_data"
+  ],
+  "generated": true,
+  "generated_by": "generate_sequence_actual.py",
+  "nodes": [
+    {
+      "id": "HTTP /action",
+      "kind": "external",
+      "label": "HTTP /action",
+      "language": "HTTP",
+      "locator": "HTTP /action"
+    },
+    {
+      "id": "HTTP /api/artifacts",
+      "kind": "external",
+      "label": "HTTP /api/artifacts",
+      "language": "HTTP",
+      "locator": "HTTP /api/artifacts"
+    },
+    {
+      "id": "HTTP /api/artifacts/",
+      "kind": "external",
+      "label": "HTTP /api/artifacts/",
+      "language": "HTTP",
+      "locator": "HTTP /api/artifacts/"
+    },
+    {
+      "id": "HTTP /api/artifacts/action",
+      "kind": "external",
+      "label": "HTTP /api/artifacts/action",
+      "language": "HTTP",
+      "locator": "HTTP /api/artifacts/action"
+    },
+    {
+      "id": "HTTP /api/artifacts/cleanup",
+      "kind": "external",
+      "label": "HTTP /api/artifacts/cleanup",
+      "language": "HTTP",
+      "locator": "HTTP /api/artifacts/cleanup"
+    },
+    {
+      "id": "HTTP /api/artifacts/cleanup/preflight",
+      "kind": "external",
+      "label": "HTTP /api/artifacts/cleanup/preflight",
+      "language": "HTTP",
+      "locator": "HTTP /api/artifacts/cleanup/preflight"
+    },
+    {
+      "id": "HTTP /api/artifacts/preflight",
+      "kind": "external",
+      "label": "HTTP /api/artifacts/preflight",
+      "language": "HTTP",
+      "locator": "HTTP /api/artifacts/preflight"
+    },
+    {
+      "id": "HTTP /api/artifacts/reconcile",
+      "kind": "external",
+      "label": "HTTP /api/artifacts/reconcile",
+      "language": "HTTP",
+      "locator": "HTTP /api/artifacts/reconcile"
+    },
+    {
+      "id": "HTTP /api/artifacts/strategy-reset",
+      "kind": "external",
+      "label": "HTTP /api/artifacts/strategy-reset",
+      "language": "HTTP",
+      "locator": "HTTP /api/artifacts/strategy-reset"
+    },
+    {
+      "id": "HTTP /api/artifacts/strategy-reset/preflight",
+      "kind": "external",
+      "label": "HTTP /api/artifacts/strategy-reset/preflight",
+      "language": "HTTP",
+      "locator": "HTTP /api/artifacts/strategy-reset/preflight"
+    },
+    {
+      "id": "HTTP /cleanup",
+      "kind": "external",
+      "label": "HTTP /cleanup",
+      "language": "HTTP",
+      "locator": "HTTP /cleanup"
+    },
+    {
+      "id": "HTTP /cleanup/preflight",
+      "kind": "external",
+      "label": "HTTP /cleanup/preflight",
+      "language": "HTTP",
+      "locator": "HTTP /cleanup/preflight"
+    },
+    {
+      "id": "HTTP /preflight",
+      "kind": "external",
+      "label": "HTTP /preflight",
+      "language": "HTTP",
+      "locator": "HTTP /preflight"
+    },
+    {
+      "id": "HTTP /reconcile",
+      "kind": "external",
+      "label": "HTTP /reconcile",
+      "language": "HTTP",
+      "locator": "HTTP /reconcile"
+    },
+    {
+      "id": "HTTP /strategy-reset",
+      "kind": "external",
+      "label": "HTTP /strategy-reset",
+      "language": "HTTP",
+      "locator": "HTTP /strategy-reset"
+    },
+    {
+      "id": "HTTP /strategy-reset/preflight",
+      "kind": "external",
+      "label": "HTTP /strategy-reset/preflight",
+      "language": "HTTP",
+      "locator": "HTTP /strategy-reset/preflight"
+    },
+    {
+      "id": "HTTP /{artifact_id}/trace",
+      "kind": "external",
+      "label": "HTTP /{artifact_id}/trace",
+      "language": "HTTP",
+      "locator": "HTTP /{artifact_id}/trace"
+    },
+    {
+      "id": "backend/max_backend/artifact_api.py::_error",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_api.py::_error",
+      "language": "Python",
+      "line_end": 59,
+      "line_start": 51,
+      "locator": "backend/max_backend/artifact_api.py::_error"
+    },
+    {
+      "id": "backend/max_backend/artifact_api.py::act",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_api.py::act",
+      "language": "Python",
+      "line_end": 111,
+      "line_start": 103,
+      "locator": "backend/max_backend/artifact_api.py::act"
+    },
+    {
+      "id": "backend/max_backend/artifact_api.py::cleanup",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_api.py::cleanup",
+      "language": "Python",
+      "line_end": 127,
+      "line_start": 123,
+      "locator": "backend/max_backend/artifact_api.py::cleanup"
+    },
+    {
+      "id": "backend/max_backend/artifact_api.py::cleanup_preflight",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_api.py::cleanup_preflight",
+      "language": "Python",
+      "line_end": 119,
+      "line_start": 115,
+      "locator": "backend/max_backend/artifact_api.py::cleanup_preflight"
+    },
+    {
+      "id": "backend/max_backend/artifact_api.py::list_artifacts",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_api.py::list_artifacts",
+      "language": "Python",
+      "line_end": 91,
+      "line_start": 63,
+      "locator": "backend/max_backend/artifact_api.py::list_artifacts"
+    },
+    {
+      "id": "backend/max_backend/artifact_api.py::preflight",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_api.py::preflight",
+      "language": "Python",
+      "line_end": 99,
+      "line_start": 95,
+      "locator": "backend/max_backend/artifact_api.py::preflight"
+    },
+    {
+      "id": "backend/max_backend/artifact_api.py::reconcile",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_api.py::reconcile",
+      "language": "Python",
+      "line_end": 48,
+      "line_start": 44,
+      "locator": "backend/max_backend/artifact_api.py::reconcile"
+    },
+    {
+      "id": "backend/max_backend/artifact_api.py::strategy_workspace_reset",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_api.py::strategy_workspace_reset",
+      "language": "Python",
+      "line_end": 143,
+      "line_start": 139,
+      "locator": "backend/max_backend/artifact_api.py::strategy_workspace_reset"
+    },
+    {
+      "id": "backend/max_backend/artifact_api.py::strategy_workspace_reset_preflight",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_api.py::strategy_workspace_reset_preflight",
+      "language": "Python",
+      "line_end": 135,
+      "line_start": 131,
+      "locator": "backend/max_backend/artifact_api.py::strategy_workspace_reset_preflight"
+    },
+    {
+      "id": "backend/max_backend/artifact_api.py::trace",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_api.py::trace",
+      "language": "Python",
+      "line_end": 151,
+      "line_start": 147,
+      "locator": "backend/max_backend/artifact_api.py::trace"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_baseline_authority_snapshot",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_baseline_authority_snapshot",
+      "language": "Python",
+      "line_end": 1483,
+      "line_start": 1477,
+      "locator": "backend/max_backend/artifact_control.py::_baseline_authority_snapshot"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_cleanup_final_state",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_cleanup_final_state",
+      "language": "Python",
+      "line_end": 1582,
+      "line_start": 1507,
+      "locator": "backend/max_backend/artifact_control.py::_cleanup_final_state"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_clear_generated_strategy_history_root",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_clear_generated_strategy_history_root",
+      "language": "Python",
+      "line_end": 1474,
+      "line_start": 1460,
+      "locator": "backend/max_backend/artifact_control.py::_clear_generated_strategy_history_root"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_clear_owned_root",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_clear_owned_root",
+      "language": "Python",
+      "line_end": 1457,
+      "line_start": 1451,
+      "locator": "backend/max_backend/artifact_control.py::_clear_owned_root"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_count_generated_strategy_history_objects",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_count_generated_strategy_history_objects",
+      "language": "Python",
+      "line_end": 1448,
+      "line_start": 1441,
+      "locator": "backend/max_backend/artifact_control.py::_count_generated_strategy_history_objects"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_count_root_objects",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_count_root_objects",
+      "language": "Python",
+      "line_end": 1438,
+      "line_start": 1435,
+      "locator": "backend/max_backend/artifact_control.py::_count_root_objects"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_current_champion_id",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_current_champion_id",
+      "language": "Python",
+      "line_end": 191,
+      "line_start": 187,
+      "locator": "backend/max_backend/artifact_control.py::_current_champion_id"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_decode",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_decode",
+      "language": "Python",
+      "line_end": 170,
+      "line_start": 162,
+      "locator": "backend/max_backend/artifact_control.py::_decode"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_extract_backtest_id",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_extract_backtest_id",
+      "language": "Python",
+      "line_end": 900,
+      "line_start": 887,
+      "locator": "backend/max_backend/artifact_control.py::_extract_backtest_id"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_file_artifact_type",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_file_artifact_type",
+      "language": "Python",
+      "line_end": 217,
+      "line_start": 194,
+      "locator": "backend/max_backend/artifact_control.py::_file_artifact_type"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_is_protected_strategy_history_entry",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_is_protected_strategy_history_entry",
+      "language": "Python",
+      "line_end": 569,
+      "line_start": 558,
+      "locator": "backend/max_backend/artifact_control.py::_is_protected_strategy_history_entry"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_orphan_delete",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_orphan_delete",
+      "language": "Python",
+      "line_end": 1244,
+      "line_start": 1215,
+      "locator": "backend/max_backend/artifact_control.py::_orphan_delete"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_provider_settings_snapshot",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_provider_settings_snapshot",
+      "language": "Python",
+      "line_end": 1504,
+      "line_start": 1486,
+      "locator": "backend/max_backend/artifact_control.py::_provider_settings_snapshot"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_reconcile_db_objects",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_reconcile_db_objects",
+      "language": "Python",
+      "line_end": 555,
+      "line_start": 348,
+      "locator": "backend/max_backend/artifact_control.py::_reconcile_db_objects"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
+      "language": "Python",
+      "line_end": 876,
+      "line_start": 572,
+      "locator": "backend/max_backend/artifact_control.py::_reconcile_project_objects"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_reconcile_runtime",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_reconcile_runtime",
+      "language": "Python",
+      "line_end": 994,
+      "line_start": 903,
+      "locator": "backend/max_backend/artifact_control.py::_reconcile_runtime"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_register_backtest_runtime_items",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_register_backtest_runtime_items",
+      "language": "Python",
+      "line_end": 309,
+      "line_start": 269,
+      "locator": "backend/max_backend/artifact_control.py::_register_backtest_runtime_items"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_register_db_object",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_register_db_object",
+      "language": "Python",
+      "line_end": 345,
+      "line_start": 312,
+      "locator": "backend/max_backend/artifact_control.py::_register_db_object"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_register_tree_files",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_register_tree_files",
+      "language": "Python",
+      "line_end": 266,
+      "line_start": 220,
+      "locator": "backend/max_backend/artifact_control.py::_register_tree_files"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_resolved_project_path",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_resolved_project_path",
+      "language": "Python",
+      "line_end": 1432,
+      "line_start": 1430,
+      "locator": "backend/max_backend/artifact_control.py::_resolved_project_path"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_runtime_roots",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_runtime_roots",
+      "language": "Python",
+      "line_end": 884,
+      "line_start": 879,
+      "locator": "backend/max_backend/artifact_control.py::_runtime_roots"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::_storage",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::_storage",
+      "language": "Python",
+      "line_end": 73,
+      "line_start": 68,
+      "locator": "backend/max_backend/artifact_control.py::_storage"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::artifact_id",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::artifact_id",
+      "language": "Python",
+      "line_end": 65,
+      "line_start": 56,
+      "locator": "backend/max_backend/artifact_control.py::artifact_id"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::artifact_page",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::artifact_page",
+      "language": "Python",
+      "line_end": 1143,
+      "line_start": 1005,
+      "locator": "backend/max_backend/artifact_control.py::artifact_page"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::artifact_preflight",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::artifact_preflight",
+      "language": "Python",
+      "line_end": 1346,
+      "line_start": 1312,
+      "locator": "backend/max_backend/artifact_control.py::artifact_preflight"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::artifact_trace",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::artifact_trace",
+      "language": "Python",
+      "line_end": 1212,
+      "line_start": 1146,
+      "locator": "backend/max_backend/artifact_control.py::artifact_trace"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "language": "Python",
+      "line_end": 1948,
+      "line_start": 1753,
+      "locator": "backend/max_backend/artifact_control.py::clean_generated_data"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::delete_optimizer_job",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::delete_optimizer_job",
+      "language": "Python",
+      "line_end": 1309,
+      "line_start": 1247,
+      "locator": "backend/max_backend/artifact_control.py::delete_optimizer_job"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::execute_artifact_action",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::execute_artifact_action",
+      "language": "Python",
+      "line_end": 1427,
+      "line_start": 1349,
+      "locator": "backend/max_backend/artifact_control.py::execute_artifact_action"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::get_artifact",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::get_artifact",
+      "language": "Python",
+      "line_end": 184,
+      "line_start": 173,
+      "locator": "backend/max_backend/artifact_control.py::get_artifact"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::global_cleanup_preflight",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::global_cleanup_preflight",
+      "language": "Python",
+      "line_end": 1750,
+      "line_start": 1585,
+      "locator": "backend/max_backend/artifact_control.py::global_cleanup_preflight"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::reconcile_artifacts",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::reconcile_artifacts",
+      "language": "Python",
+      "line_end": 1002,
+      "line_start": 997,
+      "locator": "backend/max_backend/artifact_control.py::reconcile_artifacts"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::register_artifact",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::register_artifact",
+      "language": "Python",
+      "line_end": 159,
+      "line_start": 76,
+      "locator": "backend/max_backend/artifact_control.py::register_artifact"
+    },
+    {
+      "id": "backend/max_backend/backtest_control.py::_project_path",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_control.py::_project_path",
+      "language": "Python",
+      "line_end": 28,
+      "line_start": 26,
+      "locator": "backend/max_backend/backtest_control.py::_project_path"
+    },
+    {
+      "id": "backend/max_backend/backtest_control.py::_runtime_paths",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_control.py::_runtime_paths",
+      "language": "Python",
+      "line_end": 114,
+      "line_start": 57,
+      "locator": "backend/max_backend/backtest_control.py::_runtime_paths"
+    },
+    {
+      "id": "backend/max_backend/backtest_control.py::challenger_delete_preflight",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_control.py::challenger_delete_preflight",
+      "language": "Python",
+      "line_end": 314,
+      "line_start": 235,
+      "locator": "backend/max_backend/backtest_control.py::challenger_delete_preflight"
+    },
+    {
+      "id": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "language": "Python",
+      "line_end": 187,
+      "line_start": 154,
+      "locator": "backend/max_backend/backtest_control.py::clean_backtest_runtime"
+    },
+    {
+      "id": "backend/max_backend/backtest_control.py::delete_backtest",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_control.py::delete_backtest",
+      "language": "Python",
+      "line_end": 232,
+      "line_start": 190,
+      "locator": "backend/max_backend/backtest_control.py::delete_backtest"
+    },
+    {
+      "id": "backend/max_backend/backtest_control.py::delete_challenger",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_control.py::delete_challenger",
+      "language": "Python",
+      "line_end": 348,
+      "line_start": 317,
+      "locator": "backend/max_backend/backtest_control.py::delete_challenger"
+    },
+    {
+      "id": "backend/max_backend/backtest_control.py::runtime_inventory",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_control.py::runtime_inventory",
+      "language": "Python",
+      "line_end": 151,
+      "line_start": 117,
+      "locator": "backend/max_backend/backtest_control.py::runtime_inventory"
+    },
+    {
+      "id": "backend/max_backend/backtest_control.py::verified_retained_report",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_control.py::verified_retained_report",
+      "language": "Python",
+      "line_end": 54,
+      "line_start": 31,
+      "locator": "backend/max_backend/backtest_control.py::verified_retained_report"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready",
+      "language": "Python",
+      "line_end": 162,
+      "line_start": 155,
+      "locator": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready",
+      "language": "Python",
+      "line_end": 46,
+      "line_start": 37,
+      "locator": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations_store.py::_create_m06_tables",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::_create_m06_tables",
+      "language": "Python",
+      "line_end": 295,
+      "line_start": 223,
+      "locator": "backend/max_backend/challenger_operations_store.py::_create_m06_tables"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations_store.py::_decode_backtest",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::_decode_backtest",
+      "language": "Python",
+      "line_end": 857,
+      "line_start": 850,
+      "locator": "backend/max_backend/challenger_operations_store.py::_decode_backtest"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema",
+      "language": "Python",
+      "line_end": 220,
+      "line_start": 165,
+      "locator": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry",
+      "language": "Python",
+      "line_end": 152,
+      "line_start": 49,
+      "locator": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations_store.py::get_backtest",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::get_backtest",
+      "language": "Python",
+      "line_end": 871,
+      "line_start": 860,
+      "locator": "backend/max_backend/challenger_operations_store.py::get_backtest"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "language": "Python",
+      "line_end": 316,
+      "line_start": 298,
+      "locator": "backend/max_backend/challenger_operations_store.py::migrate_m06"
+    },
+    {
+      "id": "backend/max_backend/challenger_store.py::migrate_m03",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_store.py::migrate_m03",
+      "language": "Python",
+      "line_end": 75,
+      "line_start": 18,
+      "locator": "backend/max_backend/challenger_store.py::migrate_m03"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted",
+      "language": "Python",
+      "line_end": 38,
+      "line_start": 34,
+      "locator": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_create_champion_tenure_table",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_create_champion_tenure_table",
+      "language": "Python",
+      "line_end": 153,
+      "line_start": 99,
+      "locator": "backend/max_backend/champion_store.py::_create_champion_tenure_table"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint",
+      "language": "Python",
+      "line_end": 95,
+      "line_start": 41,
+      "locator": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
+      "language": "Python",
+      "line_end": 198,
+      "line_start": 156,
+      "locator": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::migrate_m04",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::migrate_m04",
+      "language": "Python",
+      "line_end": 261,
+      "line_start": 200,
+      "locator": "backend/max_backend/champion_store.py::migrate_m04"
+    },
+    {
+      "id": "backend/max_backend/db.py::connect",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::connect",
+      "language": "Python",
+      "line_end": 20,
+      "line_start": 14,
+      "locator": "backend/max_backend/db.py::connect"
+    },
+    {
+      "id": "backend/max_backend/mt5.py::_auto_terminal_candidates",
+      "kind": "function",
+      "label": "backend/max_backend/mt5.py::_auto_terminal_candidates",
+      "language": "Python",
+      "line_end": 28,
+      "line_start": 22,
+      "locator": "backend/max_backend/mt5.py::_auto_terminal_candidates"
+    },
+    {
+      "id": "backend/max_backend/mt5.py::_data_roots",
+      "kind": "function",
+      "label": "backend/max_backend/mt5.py::_data_roots",
+      "language": "Python",
+      "line_end": 38,
+      "line_start": 31,
+      "locator": "backend/max_backend/mt5.py::_data_roots"
+    },
+    {
+      "id": "backend/max_backend/mt5.py::_read_origin",
+      "kind": "function",
+      "label": "backend/max_backend/mt5.py::_read_origin",
+      "language": "Python",
+      "line_end": 19,
+      "line_start": 8,
+      "locator": "backend/max_backend/mt5.py::_read_origin"
+    },
+    {
+      "id": "backend/max_backend/mt5.py::_unavailable",
+      "kind": "function",
+      "label": "backend/max_backend/mt5.py::_unavailable",
+      "language": "Python",
+      "line_end": 42,
+      "line_start": 41,
+      "locator": "backend/max_backend/mt5.py::_unavailable"
+    },
+    {
+      "id": "backend/max_backend/mt5.py::detect_mt5",
+      "kind": "function",
+      "label": "backend/max_backend/mt5.py::detect_mt5",
+      "language": "Python",
+      "line_end": 104,
+      "line_start": 45,
+      "locator": "backend/max_backend/mt5.py::detect_mt5"
+    },
+    {
+      "id": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "language": "Python",
+      "line_end": 98,
+      "line_start": 45,
+      "locator": "backend/max_backend/optimizer_store.py::migrate_m01"
+    },
+    {
+      "id": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "language": "Python",
+      "line_end": 121,
+      "line_start": 101,
+      "locator": "backend/max_backend/optimizer_store.py::migrate_m02"
+    },
+    {
+      "id": "backend/max_backend/path_safety.py::_is_reparse",
+      "kind": "function",
+      "label": "backend/max_backend/path_safety.py::_is_reparse",
+      "language": "Python",
+      "line_end": 19,
+      "line_start": 11,
+      "locator": "backend/max_backend/path_safety.py::_is_reparse"
+    },
+    {
+      "id": "backend/max_backend/path_safety.py::assert_owned_path",
+      "kind": "function",
+      "label": "backend/max_backend/path_safety.py::assert_owned_path",
+      "language": "Python",
+      "line_end": 62,
+      "line_start": 22,
+      "locator": "backend/max_backend/path_safety.py::assert_owned_path"
+    },
+    {
+      "id": "backend/max_backend/path_safety.py::file_size_tree",
+      "kind": "function",
+      "label": "backend/max_backend/path_safety.py::file_size_tree",
+      "language": "Python",
+      "line_end": 98,
+      "line_start": 88,
+      "locator": "backend/max_backend/path_safety.py::file_size_tree"
+    },
+    {
+      "id": "backend/max_backend/path_safety.py::remove_owned_path",
+      "kind": "function",
+      "label": "backend/max_backend/path_safety.py::remove_owned_path",
+      "language": "Python",
+      "line_end": 85,
+      "line_start": 65,
+      "locator": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
+      "id": "backend/max_backend/scientist_store.py::migrate_m05",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_store.py::migrate_m05",
+      "language": "Python",
+      "line_end": 92,
+      "line_start": 28,
+      "locator": "backend/max_backend/scientist_store.py::migrate_m05"
+    },
+    {
+      "id": "backend/max_backend/scientist_store.py::purge_chat",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_store.py::purge_chat",
+      "language": "Python",
+      "line_end": 594,
+      "line_start": 561,
+      "locator": "backend/max_backend/scientist_store.py::purge_chat"
+    },
+    {
+      "id": "backend/max_backend/strategy_reset.py::StrategyResetError",
+      "kind": "class",
+      "label": "backend/max_backend/strategy_reset.py::StrategyResetError",
+      "language": "Python",
+      "line_end": 67,
+      "line_start": 66,
+      "locator": "backend/max_backend/strategy_reset.py::StrategyResetError"
+    },
+    {
+      "id": "backend/max_backend/strategy_reset.py::_connect",
+      "kind": "function",
+      "label": "backend/max_backend/strategy_reset.py::_connect",
+      "language": "Python",
+      "line_end": 100,
+      "line_start": 95,
+      "locator": "backend/max_backend/strategy_reset.py::_connect"
+    },
+    {
+      "id": "backend/max_backend/strategy_reset.py::_count",
+      "kind": "function",
+      "label": "backend/max_backend/strategy_reset.py::_count",
+      "language": "Python",
+      "line_end": 114,
+      "line_start": 112,
+      "locator": "backend/max_backend/strategy_reset.py::_count"
+    },
+    {
+      "id": "backend/max_backend/strategy_reset.py::_delete_rows",
+      "kind": "function",
+      "label": "backend/max_backend/strategy_reset.py::_delete_rows",
+      "language": "Python",
+      "line_end": 343,
+      "line_start": 323,
+      "locator": "backend/max_backend/strategy_reset.py::_delete_rows"
+    },
+    {
+      "id": "backend/max_backend/strategy_reset.py::_hash_file",
+      "kind": "function",
+      "label": "backend/max_backend/strategy_reset.py::_hash_file",
+      "language": "Python",
+      "line_end": 75,
+      "line_start": 70,
+      "locator": "backend/max_backend/strategy_reset.py::_hash_file"
+    },
+    {
+      "id": "backend/max_backend/strategy_reset.py::_make_database_backup",
+      "kind": "function",
+      "label": "backend/max_backend/strategy_reset.py::_make_database_backup",
+      "language": "Python",
+      "line_end": 320,
+      "line_start": 297,
+      "locator": "backend/max_backend/strategy_reset.py::_make_database_backup"
+    },
+    {
+      "id": "backend/max_backend/strategy_reset.py::_owned_paths",
+      "kind": "function",
+      "label": "backend/max_backend/strategy_reset.py::_owned_paths",
+      "language": "Python",
+      "line_end": 173,
+      "line_start": 144,
+      "locator": "backend/max_backend/strategy_reset.py::_owned_paths"
+    },
+    {
+      "id": "backend/max_backend/strategy_reset.py::_read_counts",
+      "kind": "function",
+      "label": "backend/max_backend/strategy_reset.py::_read_counts",
+      "language": "Python",
+      "line_end": 285,
+      "line_start": 176,
+      "locator": "backend/max_backend/strategy_reset.py::_read_counts"
+    },
+    {
+      "id": "backend/max_backend/strategy_reset.py::_runtime_paths",
+      "kind": "function",
+      "label": "backend/max_backend/strategy_reset.py::_runtime_paths",
+      "language": "Python",
+      "line_end": 141,
+      "line_start": 117,
+      "locator": "backend/max_backend/strategy_reset.py::_runtime_paths"
+    },
+    {
+      "id": "backend/max_backend/strategy_reset.py::_settings_fingerprint",
+      "kind": "function",
+      "label": "backend/max_backend/strategy_reset.py::_settings_fingerprint",
+      "language": "Python",
+      "line_end": 92,
+      "line_start": 78,
+      "locator": "backend/max_backend/strategy_reset.py::_settings_fingerprint"
+    },
+    {
+      "id": "backend/max_backend/strategy_reset.py::_tables",
+      "kind": "function",
+      "label": "backend/max_backend/strategy_reset.py::_tables",
+      "language": "Python",
+      "line_end": 109,
+      "line_start": 103,
+      "locator": "backend/max_backend/strategy_reset.py::_tables"
+    },
+    {
+      "id": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+      "kind": "function",
+      "label": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+      "language": "Python",
+      "line_end": 418,
+      "line_start": 346,
+      "locator": "backend/max_backend/strategy_reset.py::reset_strategy_workspace"
+    },
+    {
+      "id": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
+      "kind": "function",
+      "label": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
+      "language": "Python",
+      "line_end": 294,
+      "line_start": 288,
+      "locator": "backend/max_backend/strategy_reset.py::strategy_reset_preflight"
+    },
+    {
+      "id": "backend/max_backend/workflow_store.py::_challenger_role_schema_ready",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_store.py::_challenger_role_schema_ready",
+      "language": "Python",
+      "line_end": 28,
+      "line_start": 24,
+      "locator": "backend/max_backend/workflow_store.py::_challenger_role_schema_ready"
+    },
+    {
+      "id": "backend/max_backend/workflow_store.py::_ensure_backtest_runtime_status",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_store.py::_ensure_backtest_runtime_status",
+      "language": "Python",
+      "line_end": 134,
+      "line_start": 124,
+      "locator": "backend/max_backend/workflow_store.py::_ensure_backtest_runtime_status"
+    },
+    {
+      "id": "backend/max_backend/workflow_store.py::_purge_research_authority",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_store.py::_purge_research_authority",
+      "language": "Python",
+      "line_end": 180,
+      "line_start": 137,
+      "locator": "backend/max_backend/workflow_store.py::_purge_research_authority"
+    },
+    {
+      "id": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles",
+      "language": "Python",
+      "line_end": 121,
+      "line_start": 31,
+      "locator": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles"
+    },
+    {
+      "id": "backend/max_backend/workflow_store.py::delete_backtest_row",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_store.py::delete_backtest_row",
+      "language": "Python",
+      "line_end": 526,
+      "line_start": 517,
+      "locator": "backend/max_backend/workflow_store.py::delete_backtest_row"
+    },
+    {
+      "id": "backend/max_backend/workflow_store.py::delete_challenger_row",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_store.py::delete_challenger_row",
+      "language": "Python",
+      "line_end": 538,
+      "line_start": 529,
+      "locator": "backend/max_backend/workflow_store.py::delete_challenger_row"
+    },
+    {
+      "id": "backend/max_backend/workflow_store.py::migrate_current",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_store.py::migrate_current",
+      "language": "Python",
+      "line_end": 261,
+      "line_start": 183,
+      "locator": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "id": "backend/max_backend/workflow_store.py::set_backtest_runtime_status",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_store.py::set_backtest_runtime_status",
+      "language": "Python",
+      "line_end": 514,
+      "line_start": 499,
+      "locator": "backend/max_backend/workflow_store.py::set_backtest_runtime_status"
+    },
+    {
+      "id": "frontend/src/ArtifactsPage.tsx::<module>",
+      "kind": "module",
+      "label": "frontend/src/ArtifactsPage.tsx::<module>",
+      "language": "JavaScript/TypeScript",
+      "locator": "frontend/src/ArtifactsPage.tsx::<module>"
+    }
+  ],
+  "observed_head": "2ecd1d855c12d6426b83f751c512c145ef397691",
+  "schema_version": 1,
+  "source_digest": "28cd691444d9631bb1d8cc398bd009626563d3e15984bea36f7c8c63aef02ddb"
+}

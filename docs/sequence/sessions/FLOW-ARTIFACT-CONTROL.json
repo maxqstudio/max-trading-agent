@@ -1,0 +1,47 @@
+{
+  "acceptance_report": "artifacts/sequence/FLOW-ARTIFACT-CONTROL.acceptance.json",
+  "actual": {
+    "diagram": "docs/sequence/generated/FLOW-ARTIFACT-CONTROL.actual.mmd",
+    "entries": [
+      "frontend/src/ArtifactsPage.tsx::<module>",
+      "backend/max_backend/artifact_api.py::list_artifacts",
+      "backend/max_backend/artifact_api.py::reconcile",
+      "backend/max_backend/artifact_api.py::preflight",
+      "backend/max_backend/artifact_api.py::act",
+      "backend/max_backend/artifact_api.py::cleanup_preflight",
+      "backend/max_backend/artifact_api.py::cleanup",
+      "backend/max_backend/artifact_api.py::trace",
+      "backend/max_backend/artifact_api.py::strategy_workspace_reset_preflight",
+      "backend/max_backend/artifact_api.py::strategy_workspace_reset",
+      "backend/max_backend/artifact_control.py::clean_generated_data"
+    ],
+    "graph": "docs/sequence/generated/FLOW-ARTIFACT-CONTROL.actual.json",
+    "source_digest": "28cd691444d9631bb1d8cc398bd009626563d3e15984bea36f7c8c63aef02ddb"
+  },
+  "critical": true,
+  "implementation_base_sha": "e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d",
+  "mode": "DURING",
+  "phase": "PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE",
+  "plan": {
+    "contract": "",
+    "diagram": "",
+    "frozen": false,
+    "frozen_commit": "",
+    "required": false,
+    "sha256": ""
+  },
+  "runtime_trace": {
+    "graph": "",
+    "required": false
+  },
+  "schema_version": 1,
+  "scope": "CURRENT",
+  "session_id": "FLOW-ARTIFACT-CONTROL",
+  "status": "CURRENT",
+  "test_traceability_required": true,
+  "tests": [
+    "backend/tests/test_m08_strategy_results.py",
+    "backend/tests/test_strategy_workspace_reset.py",
+    "frontend/src/ArtifactsPage.test.tsx"
+  ]
+}

@@ -67,7 +67,6 @@ const CONTEXTS = [
   { value: 'OPTIMIZER', label: 'Optimizer' },
   { value: 'CHALLENGERS', label: 'Strategy Challengers' },
   { value: 'CHAMPION', label: 'Strategy Champion' },
-  { value: 'RESEARCH', label: 'Research' },
   { value: 'PROJECT CONTRACT', label: 'Project authority' },
 ]
 

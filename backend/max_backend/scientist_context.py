@@ -20,12 +20,10 @@ from .config import (
     DATABASE_PATH,
     EA_BASELINE,
     EA_MANIFEST,
-    RESEARCH_ARTIFACT_ROOT,
     ROOT,
 )
 from .db import connect, read_baseline
 from .optimizer_store import get_job, get_rounds, latest_job
-from .research_service import canonical_research_stage
 from .scientist_knowledge import (
     knowledge_sha256,
     load_knowledge,
@@ -220,245 +218,6 @@ def _recent_promotions(path: Path) -> list[dict[str, Any]]:
     return [dict(row) for row in rows]
 
 
-def _table_exists(conn: Any, name: str) -> bool:
-    row = conn.execute(
-        "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",
-        (str(name),),
-    ).fetchone()
-    return row is not None
-
-
-def _read_bound_research_json(
-    canonical_path: str,
-    expected_sha256: str | None,
-) -> dict[str, Any]:
-    candidate = Path(str(canonical_path)).resolve()
-    root = RESEARCH_ARTIFACT_ROOT.resolve()
-    if not candidate.is_relative_to(root):
-        raise RuntimeError("SCIENTIST_RESEARCH_EVIDENCE_PATH_OUTSIDE_AUTHORITY")
-    if not candidate.is_file():
-        raise RuntimeError("SCIENTIST_RESEARCH_EVIDENCE_MISSING")
-    actual = hashlib.sha256(candidate.read_bytes()).hexdigest()
-    if not expected_sha256 or actual != str(expected_sha256):
-        raise RuntimeError("SCIENTIST_RESEARCH_EVIDENCE_HASH_MISMATCH")
-    try:
-        payload = json.loads(candidate.read_text(encoding="utf-8"))
-    except Exception as exc:
-        raise RuntimeError("SCIENTIST_RESEARCH_EVIDENCE_INVALID") from exc
-    if not isinstance(payload, dict):
-        raise RuntimeError("SCIENTIST_RESEARCH_EVIDENCE_INVALID")
-    return payload
-
-
-def _research_evidence(path: Path) -> tuple[str | None, dict[str, Any] | None]:
-    with connect(path) as conn:
-        if not _table_exists(conn, "research_projects"):
-            return None, None
-        project = conn.execute(
-            """
-            SELECT research_id,parent_strategy_id,current_gate,gate_state,
-                   training_count,onnx_count,research_challenger_count,
-                   champion_mutation,created_utc
-            FROM research_projects
-            ORDER BY created_utc DESC,research_id DESC
-            LIMIT 1
-            """
-        ).fetchone()
-        if project is None:
-            return None, None
-        project_row = dict(project)
-        research_id = str(project_row["research_id"])
-
-        run = None
-        if _table_exists(conn, "research_r01_runs"):
-            row = conn.execute(
-                """
-                SELECT run_id,research_id,state,dataset_id,output_manifest_sha,
-                       artifact_ids_json,error,created_utc,updated_utc
-                FROM research_r01_runs
-                WHERE research_id=?
-                ORDER BY created_utc DESC,run_id DESC
-                LIMIT 1
-                """,
-                (research_id,),
-            ).fetchone()
-            run = dict(row) if row is not None else None
-
-        artifact_rows: list[dict[str, Any]] = []
-        if (
-            run is not None
-            and str(run["state"]) in {
-                "PASS_WAITING_OWNER",
-                "FAIL_WAITING_OWNER",
-                "ERROR_WAITING_OWNER",
-            }
-            and _table_exists(conn, "artifact_registry")
-        ):
-            artifact_rows = [
-                dict(row)
-                for row in conn.execute(
-                    """
-                    SELECT artifact_type,canonical_path,sha256,status
-                    FROM artifact_registry
-                    WHERE owner_type='RESEARCH_R01'
-                      AND owner_id=?
-                      AND source_type='RESEARCH_R01_RUN'
-                      AND source_id=?
-                    ORDER BY artifact_id
-                    """,
-                    (research_id, str(run["run_id"])),
-                ).fetchall()
-            ]
-
-    current_stage = canonical_research_stage(research_id, path=path)
-    facts: dict[str, Any] = {
-        "research_id": research_id,
-        "parent_strategy_id": project_row["parent_strategy_id"],
-        "current_stage": current_stage,
-        "historical_r00": {
-            "internal_gate": project_row["current_gate"],
-            "state": project_row["gate_state"],
-        },
-        "training_count": int(project_row["training_count"]),
-        "onnx_count": int(project_row["onnx_count"]),
-        "research_challenger_count": int(project_row["research_challenger_count"]),
-        "champion_mutation": project_row["champion_mutation"],
-        "r01": None,
-    }
-    if run is not None:
-        r01_summary: dict[str, Any] = {
-            "state": run["state"],
-            "error": run["error"],
-            "created_utc": run["created_utc"],
-            "updated_utc": run["updated_utc"],
-            "evidence": {},
-        }
-        allowed_reports = {
-            "data_quality_report.json": "data_quality",
-            "discovery_label_summary.json": "discovery_label_summary",
-            "feature_parity_report.json": "feature_parity",
-            "label_manifest.json": "label",
-            "dependency_report.json": "dependency",
-            "leakage_report.json": "leakage",
-            "protected_data_manifest.json": "protected_data",
-        }
-        by_name = {Path(str(row["canonical_path"])).name: row for row in artifact_rows}
-        for filename, key in allowed_reports.items():
-            row = by_name.get(filename)
-            if row is None or str(row["status"]) != str(run["state"]):
-                continue
-            payload = _read_bound_research_json(
-                str(row["canonical_path"]),
-                str(row["sha256"] or ""),
-            )
-            if key == "data_quality":
-                r01_summary["evidence"][key] = {
-                    "status": payload.get("status"),
-                    "physical_rows": payload.get("physical_rows"),
-                    "dataset_start": payload.get("dataset_start"),
-                    "dataset_end": payload.get("dataset_end"),
-                    "duplicate_timestamps": payload.get("duplicate_timestamps"),
-                    "monotonicity": payload.get("monotonicity"),
-                    "invalid_ohlc": payload.get("invalid_ohlc"),
-                    "non_finite_values": payload.get("non_finite_values"),
-                    "missing_source_data": payload.get("missing_source_data"),
-                    "mtf_alignment_status": payload.get("mtf_alignment_status"),
-                    "relative_symbol_alignment_status": payload.get(
-                        "relative_symbol_alignment_status"
-                    ),
-                    "cp32_completeness": payload.get("cp32_completeness"),
-                }
-            elif key == "discovery_label_summary":
-                r01_summary["evidence"][key] = {
-                    "scope": payload.get("scope"),
-                    "protected_outcome_rows_included": payload.get(
-                        "protected_outcome_rows_included"
-                    ),
-                    "discovery_from": payload.get("discovery_from"),
-                    "discovery_to": payload.get("discovery_to"),
-                    "physical_rows": payload.get("physical_rows"),
-                    "boundary_safe_physical_rows": payload.get(
-                        "boundary_safe_physical_rows"
-                    ),
-                    "boundary_excluded_from_supervision_rows": payload.get(
-                        "boundary_excluded_from_supervision_rows"
-                    ),
-                    "supervised_rows": payload.get("supervised_rows"),
-                    "context_only_rows": payload.get("context_only_rows"),
-                    "target_invalid_rows": payload.get("target_invalid_rows"),
-                    "ambiguous_rows": payload.get("ambiguous_rows"),
-                    "incomplete_horizon_rows": payload.get("incomplete_horizon_rows"),
-                    "sell": payload.get("sell"),
-                    "skip": payload.get("skip"),
-                    "buy": payload.get("buy"),
-                    "sell_ratio": payload.get("sell_ratio"),
-                    "skip_ratio": payload.get("skip_ratio"),
-                    "buy_ratio": payload.get("buy_ratio"),
-                    "label_horizon_main_bars": payload.get("label_horizon_main_bars"),
-                    "effective_boundary_purge_main_bars": payload.get(
-                        "effective_boundary_purge_main_bars"
-                    ),
-                    "last_eligible_discovery_source_row_id": payload.get(
-                        "last_eligible_discovery_source_row_id"
-                    ),
-                    "latest_eligible_discovery_target_end_source_row_id": payload.get(
-                        "latest_eligible_discovery_target_end_source_row_id"
-                    ),
-                    "locked_oos_first_source_row_id": payload.get(
-                        "locked_oos_first_source_row_id"
-                    ),
-                    "target_overlap_check": payload.get("target_overlap_check"),
-                }
-            elif key == "feature_parity":
-                r01_summary["evidence"][key] = {
-                    "status": payload.get("status"),
-                    "feature_count": payload.get("feature_count"),
-                    "compared_rows": payload.get("compared_rows"),
-                    "absolute_tolerance": payload.get("absolute_tolerance"),
-                    "max_abs_error": payload.get("max_abs_error"),
-                }
-            elif key == "label":
-                r01_summary["evidence"][key] = {
-                    "contract_id": payload.get("contract_id"),
-                    "classes": payload.get("classes"),
-                    "thresholds": payload.get("thresholds"),
-                    "ambiguous_same_bar_policy": payload.get("ambiguous_same_bar_policy"),
-                    "incomplete_horizon_policy": payload.get("incomplete_horizon_policy"),
-                }
-            elif key == "dependency":
-                r01_summary["evidence"][key] = {
-                    "label_dependency_main_bars": payload.get("label_dependency_main_bars"),
-                    "full_base_dependency_main_bars": payload.get("full_base_dependency_main_bars"),
-                    "minimum_legal_purge_main_bars": payload.get("minimum_legal_purge_main_bars"),
-                    "minimum_legal_embargo_main_bars": payload.get("minimum_legal_embargo_main_bars"),
-                    "future_candidate_rule": payload.get("future_candidate_rule"),
-                }
-            elif key == "leakage":
-                r01_summary["evidence"][key] = {
-                    "status": payload.get("status"),
-                    "legal_pipeline": payload.get("legal_pipeline"),
-                    "deliberately_leaky_pipeline": payload.get("deliberately_leaky_pipeline"),
-                    "gate_count": payload.get("gate_count"),
-                }
-            elif key == "protected_data":
-                r01_summary["evidence"][key] = {
-                    "authority": payload.get("authority"),
-                    "partition_identity": payload.get("partition_identity"),
-                    "locked_oos_access": payload.get("locked_oos"),
-                    "fresh_forward_access": payload.get("fresh_forward"),
-                    "research_memory_adaptive_feedback_from_protected": payload.get(
-                        "research_memory_adaptive_feedback_from_protected"
-                    ),
-                }
-        facts["r01"] = r01_summary
-
-    return f"db:research:{research_id}", {
-        "kind": "database",
-        "title": "Current Research authority",
-        "facts": facts,
-    }
-
-
 def _conversation(thread_id: str | None, request_id: str | None, path: Path) -> list[dict[str, str]]:
     if not thread_id:
         return []
@@ -569,10 +328,6 @@ def build_scientist_context(
             "retirement": "NON_DESTRUCTIVE",
         },
     }
-
-    research_ref, research_item = _research_evidence(path)
-    if research_ref is not None and research_item is not None:
-        evidence[research_ref] = research_item
 
     promotions = _recent_promotions(path)
     evidence["db:promotions:recent"] = {
@@ -728,7 +483,6 @@ def build_scientist_context(
         "OPTIMIZER",
         "CHALLENGERS",
         "CHAMPION",
-        "RESEARCH",
         "PROJECT CONTRACT",
     }
     if selected_scope not in allowed_scopes:
@@ -753,7 +507,6 @@ def build_scientist_context(
                 "db:champion:",
             ),
             "CHAMPION": ("db:champion:", "db:promotion:", "db:promotions:", "db:challenger:"),
-            "RESEARCH": ("db:research:",),
             "PROJECT CONTRACT": (),
         }[selected_scope]
         evidence = {
@@ -796,13 +549,6 @@ PROTECTED_TABLES = (
     "strategy_champions",
     "strategy_promotions",
     "artifact_registry",
-    "research_authorizations",
-    "research_projects",
-    "research_gate_events",
-    "research_memory_events",
-    "research_gate_authorizations_v2",
-    "research_r01_runs",
-    "research_r01_sources",
 )
 
 

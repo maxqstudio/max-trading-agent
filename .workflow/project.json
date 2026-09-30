@@ -4,11 +4,11 @@
     "GitHub Actions on windows-latest is the hosted build/test authority for ordinary development phases.",
     "Owner PC plus real MetaTrader 5 is final runtime/E2E authority only after the GitHub development roadmap is complete.",
     "The public repository is source-only: runtime databases, evidence, artifacts, datasets, credentials and Owner terminal state are not source authority and must not be tracked.",
-    "Owner explicitly authorizes Strategy promotion and Research advancement where required.",
+    "The Owner explicitly authorizes Strategy promotion. Fresh Research work remains blocked until the Owner declares a real MT5 backtest/sample dataset READY and Control Room authorizes a source phase.",
     "Scientist is advisory only and cannot create scientific, promotion, risk or execution authority.",
-    "R01 source/runtime readiness is not R01 scientific PASS.",
-    "R02 executor source may fit only deterministic synthetic fixtures in tests/CI; any future real execution requires exact current accepted R01 Discovery authority, one immutable Owner-authorized block and explicit runtime gates, and remains NOT_PROVEN until actual Owner-PC acceptance.",
-    "Protected Locked OOS/Fresh outcomes must not silently become adaptive tuning feedback.",
+    "The previously implemented Research subsystem is rejected and removed from active MAX source, API, UI, schema authority and runtime dependencies.",
+    "No Research runtime, model fitting, or scientific outcome is proven or authorized by the current Strategy source phase.",
+    "Destructive Strategy reset requires explicit confirmation, verified backup and ownership-scoped cleanup; ordinary cleanup remains a distinct action.",
     "Current governance method is Skill Workflow exact SHA 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 with roadmap authority, generated documentation and DURING sequence evidence."
   ],
   "entry_points": [
@@ -30,7 +30,7 @@
     {
       "name": "Frontend",
       "path": "frontend/src/App.tsx::App",
-      "purpose": "Owner-facing Strategy/Research/Artifacts/Settings shell and Scientist drawer."
+      "purpose": "Owner-facing Strategy/Artifacts/Settings shell and Scientist drawer; recovery-required mode blocks ordinary operations."
     },
     {
       "name": "EA baseline",
@@ -41,7 +41,8 @@
   "project": {
     "expected_outcomes": [
       "Preserve deterministic Strategy lifecycle authority from optimizer evidence through Challenger and Champion tenure.",
-      "Run Research only through explicit Owner-gated stages with immutable execution snapshots and protected-data boundaries.",
+      "Stabilize the Strategy lifecycle, generated artifact controls, explicit reset/recovery behavior, and fail-closed Owner-facing actions.",
+      "Remove the rejected active Research subsystem and keep fresh R00-R11 work planned and blocked until the Owner declares a real MT5 sample READY.",
       "Keep public-source development reproducible from GitHub with Windows CI as hosted build/test authority while deferring real MT5/runtime acceptance to the final Owner-PC phase."
     ],
     "name": "MAX Trading Agent",
@@ -50,7 +51,7 @@
       "authorized Builder",
       "Control Room auditor"
     ],
-    "purpose": "Windows-only GitHub-first control plane for deterministic Strategy optimization, Challenger and Champion governance plus a separately gated scientific Research pipeline whose real execution boundary is MetaTrader 5.",
+    "purpose": "Windows-only GitHub-first control plane for deterministic Strategy optimization, Challenger/Champion governance, and MetaTrader 5 execution evidence; fresh Research work is roadmap-gated and not active runtime.",
     "repository": "maxqstudio/max-trading-agent"
   },
   "schema_version": 1,

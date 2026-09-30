@@ -4,16 +4,16 @@
 
 ## Project
 Name: MAX Trading Agent
-Purpose: Windows-only GitHub-first control plane for deterministic Strategy optimization, Challenger and Champion governance plus a separately gated scientific Research pipeline whose real execution boundary is MetaTrader 5.
+Purpose: Windows-only GitHub-first control plane for deterministic Strategy optimization, Challenger/Champion governance, and MetaTrader 5 execution evidence; fresh Research work is roadmap-gated and not active runtime.
 Primary users: Owner, authorized Builder, Control Room auditor
 Governance profile: strict
 
 ## Repositories
 Repository: maxqstudio/max-trading-agent
-Active branch: work/r02-cheap-screen-executor
+Active branch: work/strategy-stabilization-research-purge
 Current authoritative SHA: external final acceptance evidence
-Last accepted SHA: 35f237f25a898b60b2a5123d6246ebc34fcbec8d
-Current source digest: d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8883a543
+Last accepted SHA: e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d
+Current source digest: 28cd691444d9631bb1d8cc398bd009626563d3e15984bea36f7c8c63aef02ddb
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.
@@ -36,7 +36,7 @@ External systems: MetaTrader 5 Strategy Tester, MetaEditor, GitHub source author
 | Owner launcher | RUN_MAX.cmd | Canonical Owner startup wrapper; --no-pause supported for acceptance. |
 | Launcher implementation | scripts/run_max.ps1 | Verify or start exact MAX backend/frontend, authority and readiness before MAX_READY. |
 | Backend | backend/max_backend/main.py::app | FastAPI control-plane application. |
-| Frontend | frontend/src/App.tsx::App | Owner-facing Strategy/Research/Artifacts/Settings shell and Scientist drawer. |
+| Frontend | frontend/src/App.tsx::App | Owner-facing Strategy/Artifacts/Settings shell and Scientist drawer; recovery-required mode blocks ordinary operations. |
 | EA baseline | ea/baseline/Max_MTF.mq5 | Current v2.11 Strategy baseline source; BASELINE_NOT_CHAMPION and MT5 execution input authority. |
 
 ## Critical directories
@@ -68,9 +68,9 @@ Generated from PROJECT_PROFILE.yaml.
 - GitHub Actions on windows-latest is the hosted build/test authority for ordinary development phases.
 - Owner PC plus real MetaTrader 5 is final runtime/E2E authority only after the GitHub development roadmap is complete.
 - The public repository is source-only: runtime databases, evidence, artifacts, datasets, credentials and Owner terminal state are not source authority and must not be tracked.
-- Owner explicitly authorizes Strategy promotion and Research advancement where required.
+- The Owner explicitly authorizes Strategy promotion. Fresh Research work remains blocked until the Owner declares a real MT5 backtest/sample dataset READY and Control Room authorizes a source phase.
 - Scientist is advisory only and cannot create scientific, promotion, risk or execution authority.
-- R01 source/runtime readiness is not R01 scientific PASS.
-- R02 executor source may fit only deterministic synthetic fixtures in tests/CI; any future real execution requires exact current accepted R01 Discovery authority, one immutable Owner-authorized block and explicit runtime gates, and remains NOT_PROVEN until actual Owner-PC acceptance.
-- Protected Locked OOS/Fresh outcomes must not silently become adaptive tuning feedback.
+- The previously implemented Research subsystem is rejected and removed from active MAX source, API, UI, schema authority and runtime dependencies.
+- No Research runtime, model fitting, or scientific outcome is proven or authorized by the current Strategy source phase.
+- Destructive Strategy reset requires explicit confirmation, verified backup and ownership-scoped cleanup; ordinary cleanup remains a distinct action.
 - Current governance method is Skill Workflow exact SHA 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 with roadmap authority, generated documentation and DURING sequence evidence.

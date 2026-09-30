@@ -6,6 +6,8 @@
 |---|---|---|---|---|---|
 | GET | /api/health | Backend/database readiness | backend/max_backend/main.py | none | Read-only; backend failure surfaces. |
 | GET | /api/overview | Canonical runtime overview | backend/max_backend/main.py::overview | none | Read-only semantic authority projection. |
+| GET | /api/recovery/status | Report operational database recovery state and required explicit confirmation | backend/max_backend/main.py::recovery_status | none | Read-only status; reports RECOVERY_REQUIRED without opening ordinary state operations. |
+| POST | /api/recovery/reset | Explicitly recover an unopenable or corrupt operational database | backend/max_backend/main.py::reset_corrupt_state | backup/quarantine corrupt database and rebuild fresh Strategy workspace | Requires RECOVERY_REQUIRED and exact confirmation; creates and verifies backup before quarantine/bootstrap; failure remains fail-closed. |
 | GET | /api/mt5/preflight | MT5 executable/data-root readiness | MT5 detector | none | Read-only; missing/invalid runtime fails closed. |
 | GET | /api/optimizer/contract | Expose current optimizer contract | optimizer domain | none | Read-only. |
 | POST | /api/optimizer/preview | Validate/freeze optimizer preview | optimizer domain | none | Invalid request fails; no job mutation. |
@@ -22,23 +24,17 @@
 | GET | /api/champion | Verified current Champion | champion store/promotion service | none | Read-only; no implicit reactivation. |
 | POST | /api/challengers/{challenger_id}/promote | Explicit Owner Challenger to Champion promotion | backend/max_backend/promotion_service.py::promote_strategy_challenger | deployment/history/Champion tenure/source PROMOTED | Stale/parity/compile failure rolls back; no automatic promotion. |
 | GET | /api/promotions | Promotion history | champion store | none | Read-only historical projection. |
-| GET | /api/research/sample-config | Read editable current Research sample config | research_settings.py | none | No hidden 4/8 fallback. |
-| PUT | /api/research/sample-config | Update future-execution Research sample config | backend/max_backend/research_settings.py::set_research_sample_configuration | SQLite current config | Cannot rewrite historical/running snapshots. |
-| GET | /api/research/r00/preflight | R00 prerequisite/readiness | backend/max_backend/research_service.py::r00_preflight | none | Read-only blockers/authority. |
-| POST | /api/research/r00/start | Explicit Owner R00 initialization | backend/max_backend/research_service.py::start_r00 | Research registry/events + immutable R00 manifests | Missing parent/config/authorization/hash blocks; no automatic R01. |
-| GET | /api/research/current | Canonical Research stage | backend/max_backend/research_service.py::canonical_research_stage | none | Read-only; readiness is not scientific PASS. |
-| GET | /api/research/r01/source | Managed R01 source status | R01 source service | none | Read-only. |
-| POST | /api/research/r01/source/prepare | Prepare verified managed source before R01 start | backend/max_backend/research_source.py::prepare_r01_source | managed source evidence | Fails closed and is not R01 scientific result. |
-| GET | /api/research/r01/preflight | R01 readiness | backend/max_backend/research_r01_service.py::r01_preflight | none | Read-only blockers/config/source/run state. |
-| GET | /api/research/r01/detail | R01 detail and config/snapshot distinction | backend/max_backend/research_r01_service.py::r01_detail | none | Read-only. |
-| POST | /api/research/r01/start | Explicit Owner R01 scientific execution | backend/max_backend/research_r01_service.py::start_r01 | dataset/labels/leakage/artifacts/events | Governance repair must not call; protected/leakage failure cannot become PASS. |
 | GET | /api/scientist/status | Scientist/provider/knowledge readiness | backend/max_backend/scientist_api.py::get_status | none | Read-only. |
 | GET | /api/scientist/knowledge | Hash-verified static knowledge projection | backend/max_backend/scientist_knowledge.py::load_knowledge | none | Stale manifest blocks. |
 | POST | /api/scientist/threads/{thread_id}/messages | Advisory Scientist message | Scientist chat/context/provider validation | chat/provider accounting only | No Strategy/Research scientific authority mutation. |
-| GET | /api/artifacts | Governed artifact inventory | artifact control | controlled reconciliation only | No scientific/promotion authority. |
+| GET | /api/artifacts | Governed artifact inventory | artifact control | none; list/detail reads do not reconcile | No scientific/promotion authority. |
 | POST | /api/artifacts/preflight | Artifact action legality | artifact control | none | Path/dependency/ownership blockers fail closed. |
 | POST | /api/artifacts/action | Governed artifact action | artifact control | legal controlled cleanup/delete | Protected/current authority cannot be silently deleted. |
-| GET | /api/research/r02/preflight | Read R02 readiness, frozen Discovery authority, or immutable outcome-terminal summary without starting/executing R02 | backend/max_backend/research_r02_service.py::r02_preflight | none scientific; ordinary store migration/read compatibility only | Absent/unaccepted R01 returns BLOCKED; contradictory authority fails closed; frozen blocks return FROZEN_WAITING_EXECUTION; an existing ledger terminal returns COMPLETE_WAITING_OWNER with zero qualification authority. |
-| POST | /api/research/r02/authorize | Freeze one exact Owner-authorized bounded R02 Discovery plan without starting training | backend/max_backend/research_r02_service.py::authorize_r02_discovery | Creates immutable R02 authorization, one FROZEN_WAITING_EXECUTION block and immutable candidate specs only; no scientific counters or outcomes mutate. | Missing confirmation, stale Research/R01 authority, tampered plan/candidate identity, replay collision or second different block fail closed with 4xx. |
+| GET | /api/artifacts/cleanup/preflight | Show global generated-data cleanup scope and blockers | backend/max_backend/artifact_api.py::cleanup_preflight | none | Read-only; active work, protected history, path, ownership, or dependency blockers prevent cleanup. |
+| POST | /api/artifacts/cleanup | Explicitly clean generated data after Owner confirmation | backend/max_backend/artifact_api.py::cleanup | remove only authorized generated data and preserve protected authority | Requires exact current confirmation and backend revalidation; reports cleanup result or failure. |
+| GET | /api/artifacts/{artifact_id}/trace | Read artifact lineage and owning Strategy references | backend/max_backend/artifact_api.py::trace | none | Read-only; unknown or stale artifact identity returns a controlled domain error. |
+| POST | /api/artifacts/reconcile | Explicitly refresh generated-artifact inventory | backend/max_backend/artifact_api.py::reconcile | reconcile known generated Strategy objects and runtime artifacts | Explicit request only; reports reconciliation outcome or a visible failure. |
+| GET | /api/artifacts/strategy-reset/preflight | Show exact Strategy reset scope, protected state and current blockers | backend/max_backend/artifact_api.py::strategy_workspace_reset_preflight | none | Read-only; active-work, Champion, database-integrity and path-safety blockers prevent reset. |
+| POST | /api/artifacts/strategy-reset | Explicit Owner-confirmed reset of the Strategy workspace | backend/max_backend/artifact_api.py::strategy_workspace_reset | backup database and clear only owned generated Strategy workspace state | Requires exact preflight confirmation and revalidates under transaction; verifies a database backup before owned-state removal. |
 
 Declared in .workflow/contracts.json. Observed routes are listed in FLOW_INDEX.

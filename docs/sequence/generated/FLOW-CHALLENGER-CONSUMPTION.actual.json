@@ -10,13 +10,116 @@
       "JS/TS function-level call ownership is not fully resolved"
     ],
     "python_ast": true,
-    "python_parse_failures": [
-      "backend/max_backend/champion_bundle.py:SyntaxError"
-    ],
+    "python_parse_failures": [],
     "python_route_decorators": true,
     "runtime_trace": false
   },
   "edges": [
+    {
+      "action": "_number_tokens",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_report.py::_amount_pct",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_report.py::_number_tokens"
+    },
+    {
+      "action": "_parse_number_token",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_report.py::_amount_pct",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_report.py::_parse_number_token"
+    },
+    {
+      "action": "_number_tokens",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_report.py::_count_pct",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_report.py::_number_tokens"
+    },
+    {
+      "action": "_parse_number_token",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_report.py::_count_pct",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_report.py::_parse_number_token"
+    },
+    {
+      "action": "_number",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_report.py::_integer",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_report.py::_number"
+    },
+    {
+      "action": "_label",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_report.py::_metric_pairs",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_report.py::_label"
+    },
+    {
+      "action": "_number_tokens",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_report.py::_number",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_report.py::_number_tokens"
+    },
+    {
+      "action": "_parse_number_token",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_report.py::_number",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_report.py::_parse_number_token"
+    },
+    {
+      "action": "_CellParser",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_report.py::parse_mt5_backtest_report",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_report.py::_CellParser"
+    },
+    {
+      "action": "_amount_pct",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_report.py::parse_mt5_backtest_report",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_report.py::_amount_pct"
+    },
+    {
+      "action": "_count_pct",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_report.py::parse_mt5_backtest_report",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_report.py::_count_pct"
+    },
+    {
+      "action": "_integer",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_report.py::parse_mt5_backtest_report",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_report.py::_integer"
+    },
+    {
+      "action": "_metric_pairs",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_report.py::parse_mt5_backtest_report",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_report.py::_metric_pairs"
+    },
+    {
+      "action": "_number",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_report.py::parse_mt5_backtest_report",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_report.py::_number"
+    },
+    {
+      "action": "_read_report",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_report.py::parse_mt5_backtest_report",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_report.py::_read_report"
+    },
     {
       "action": "_same_number",
       "evidence": "STATIC",
@@ -221,6 +324,76 @@
       "to": "backend/max_backend/optimizer_core.py::read_ea_optimizer_defaults"
     },
     {
+      "action": "_read_text_flexible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_compile_retained_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations.py::_read_text_flexible"
+    },
+    {
+      "action": "compile_summary",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_compile_retained_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_runtime.py::compile_summary"
+    },
+    {
+      "action": "verify_geometry_set",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_runtime_set_text",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_bundle.py::verify_geometry_set"
+    },
+    {
+      "action": "_format_set_value",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_runtime_set_text",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations.py::_format_set_value"
+    },
+    {
+      "action": "optimizer_fixed_execution_authority",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_runtime_set_text",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::optimizer_fixed_execution_authority"
+    },
+    {
+      "action": "optimizer_parameter_bounds_for_schema",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_runtime_set_text",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_schema"
+    },
+    {
+      "action": "parse_set_optimizer_entries",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_runtime_set_text",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_core.py::parse_set_optimizer_entries"
+    },
+    {
+      "action": "_parse_date",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::freeze_backtest_request",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations.py::_parse_date"
+    },
+    {
+      "action": "detect_mt5",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::freeze_backtest_request",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::detect_mt5"
+    },
+    {
+      "action": "assert_geometry_matches_main",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::freeze_backtest_request",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mtf_geometry.py::assert_geometry_matches_main"
+    },
+    {
       "action": "verify_challenger_bundle",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_operations.py::retire_challenger",
@@ -256,18 +429,81 @@
       "to": "backend/max_backend/challenger_operations_store.py::retire_registry_row"
     },
     {
-      "action": "conn.execute",
+      "action": "parse_mt5_backtest_report",
       "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready",
+      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
       "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
+      "to": "backend/max_backend/backtest_report.py::parse_mt5_backtest_report"
     },
     {
-      "action": "conn.execute",
+      "action": "verify_challenger_bundle",
       "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready",
+      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
       "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
+      "to": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle"
+    },
+    {
+      "action": "_build_backtest_ini",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations.py::_build_backtest_ini"
+    },
+    {
+      "action": "_bundle_paths",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations.py::_bundle_paths"
+    },
+    {
+      "action": "_compile_retained_challenger",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations.py::_compile_retained_challenger"
+    },
+    {
+      "action": "_runtime_set_text",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations.py::_runtime_set_text"
+    },
+    {
+      "action": "_wait_for_report",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations.py::_wait_for_report"
+    },
+    {
+      "action": "_write_json",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations.py::_write_json"
+    },
+    {
+      "action": "freeze_backtest_request",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations.py::freeze_backtest_request"
+    },
+    {
+      "action": "create_backtest_record",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::create_backtest_record"
+    },
+    {
+      "action": "update_backtest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::update_backtest"
     },
     {
       "action": "_backtest_schema_ready",
@@ -277,13 +513,6 @@
       "to": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready"
     },
     {
-      "action": "conn.execute",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema",
-      "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
-    },
-    {
       "action": "_challenger_schema_ready",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry",
@@ -291,11 +520,25 @@
       "to": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready"
     },
     {
-      "action": "conn.execute",
+      "action": "_decode_backtest",
       "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry",
+      "from": "backend/max_backend/challenger_operations_store.py::create_backtest_record",
       "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
+      "to": "backend/max_backend/challenger_operations_store.py::_decode_backtest"
+    },
+    {
+      "action": "migrate_m06",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::create_backtest_record",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::migrate_m06"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::create_backtest_record",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
     },
     {
       "action": "_decode_backtest",
@@ -319,13 +562,6 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
-      "action": "conn.execute",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::list_backtests",
-      "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
-    },
-    {
       "action": "_decode_retirement",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_operations_store.py::list_retirements",
@@ -345,13 +581,6 @@
       "from": "backend/max_backend/challenger_operations_store.py::list_retirements",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
-    },
-    {
-      "action": "conn.execute",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::list_retirements",
-      "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     },
     {
       "action": "_create_m06_tables",
@@ -389,13 +618,6 @@
       "to": "backend/max_backend/scientist_store.py::migrate_m05"
     },
     {
-      "action": "conn.execute",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
-      "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
-    },
-    {
       "action": "_compact_row",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_operations_store.py::retire_registry_row",
@@ -424,11 +646,25 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
-      "action": "conn.execute",
+      "action": "_decode_backtest",
       "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::retire_registry_row",
+      "from": "backend/max_backend/challenger_operations_store.py::update_backtest",
       "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
+      "to": "backend/max_backend/challenger_operations_store.py::_decode_backtest"
+    },
+    {
+      "action": "migrate_m06",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::update_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::migrate_m06"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::update_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
     },
     {
       "action": "migrate_m03",
@@ -445,13 +681,6 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
-      "action": "conn.execute",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_store.py::consumed_source_identities",
-      "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
-    },
-    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_store.py::migrate_m03",
@@ -466,27 +695,6 @@
       "to": "backend/max_backend/optimizer_store.py::migrate_m02"
     },
     {
-      "action": "conn.execute",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_store.py::migrate_m03",
-      "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
-    },
-    {
-      "action": "conn.execute",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted",
-      "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
-    },
-    {
-      "action": "conn.execute",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_store.py::_create_champion_tenure_table",
-      "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
-    },
-    {
       "action": "_challenger_table_supports_promoted",
       "evidence": "STATIC",
       "from": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint",
@@ -499,13 +707,6 @@
       "from": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
       "resolver": "python_ast",
       "to": "backend/max_backend/champion_store.py::_create_champion_tenure_table"
-    },
-    {
-      "action": "conn.execute",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
-      "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     },
     {
       "action": "migrate_m03",
@@ -536,20 +737,6 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
-      "action": "conn.execute",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_store.py::migrate_m04",
-      "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
-    },
-    {
-      "action": "conn.execute",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/db.py::connect",
-      "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
-    },
-    {
       "action": "load_manifest",
       "evidence": "STATIC",
       "from": "backend/max_backend/ea.py::verify_baseline_snapshot",
@@ -562,6 +749,34 @@
       "from": "backend/max_backend/ea.py::verify_baseline_snapshot",
       "resolver": "python_ast",
       "to": "backend/max_backend/ea.py::sha256_file"
+    },
+    {
+      "action": "_auto_terminal_candidates",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/mt5.py::detect_mt5",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::_auto_terminal_candidates"
+    },
+    {
+      "action": "_data_roots",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/mt5.py::detect_mt5",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::_data_roots"
+    },
+    {
+      "action": "_read_origin",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/mt5.py::detect_mt5",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::_read_origin"
+    },
+    {
+      "action": "_unavailable",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/mt5.py::detect_mt5",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::_unavailable"
     },
     {
       "action": "resolve_strategy_geometry",
@@ -592,13 +807,6 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
-      "action": "conn.execute",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/optimizer_store.py::migrate_m01",
-      "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
-    },
-    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_store.py::migrate_m02",
@@ -613,13 +821,6 @@
       "to": "backend/max_backend/optimizer_store.py::migrate_m01"
     },
     {
-      "action": "conn.execute",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
-      "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
-    },
-    {
       "action": "migrate_m04",
       "evidence": "STATIC",
       "from": "backend/max_backend/scientist_store.py::migrate_m05",
@@ -632,22 +833,115 @@
       "from": "backend/max_backend/scientist_store.py::migrate_m05",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
-    },
-    {
-      "action": "conn.execute",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/scientist_store.py::migrate_m05",
-      "resolver": "python_ast",
-      "to": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     }
   ],
   "entries": [
     "backend/max_backend/challenger_operations.py::retire_challenger",
+    "backend/max_backend/challenger_operations.py::run_challenger_backtest",
     "backend/max_backend/challenger_store.py::consumed_source_identities"
   ],
   "generated": true,
   "generated_by": "generate_sequence_actual.py",
   "nodes": [
+    {
+      "id": "backend/max_backend/backtest_report.py::_CellParser",
+      "kind": "class",
+      "label": "backend/max_backend/backtest_report.py::_CellParser",
+      "language": "Python",
+      "line_end": 33,
+      "line_start": 12,
+      "locator": "backend/max_backend/backtest_report.py::_CellParser"
+    },
+    {
+      "id": "backend/max_backend/backtest_report.py::_amount_pct",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_report.py::_amount_pct",
+      "language": "Python",
+      "line_end": 142,
+      "line_start": 127,
+      "locator": "backend/max_backend/backtest_report.py::_amount_pct"
+    },
+    {
+      "id": "backend/max_backend/backtest_report.py::_count_pct",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_report.py::_count_pct",
+      "language": "Python",
+      "line_end": 124,
+      "line_start": 115,
+      "locator": "backend/max_backend/backtest_report.py::_count_pct"
+    },
+    {
+      "id": "backend/max_backend/backtest_report.py::_integer",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_report.py::_integer",
+      "language": "Python",
+      "line_end": 112,
+      "line_start": 107,
+      "locator": "backend/max_backend/backtest_report.py::_integer"
+    },
+    {
+      "id": "backend/max_backend/backtest_report.py::_label",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_report.py::_label",
+      "language": "Python",
+      "line_end": 74,
+      "line_start": 73,
+      "locator": "backend/max_backend/backtest_report.py::_label"
+    },
+    {
+      "id": "backend/max_backend/backtest_report.py::_metric_pairs",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_report.py::_metric_pairs",
+      "language": "Python",
+      "line_end": 162,
+      "line_start": 145,
+      "locator": "backend/max_backend/backtest_report.py::_metric_pairs"
+    },
+    {
+      "id": "backend/max_backend/backtest_report.py::_number",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_report.py::_number",
+      "language": "Python",
+      "line_end": 104,
+      "line_start": 100,
+      "locator": "backend/max_backend/backtest_report.py::_number"
+    },
+    {
+      "id": "backend/max_backend/backtest_report.py::_number_tokens",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_report.py::_number_tokens",
+      "language": "Python",
+      "line_end": 79,
+      "line_start": 77,
+      "locator": "backend/max_backend/backtest_report.py::_number_tokens"
+    },
+    {
+      "id": "backend/max_backend/backtest_report.py::_parse_number_token",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_report.py::_parse_number_token",
+      "language": "Python",
+      "line_end": 97,
+      "line_start": 82,
+      "locator": "backend/max_backend/backtest_report.py::_parse_number_token"
+    },
+    {
+      "id": "backend/max_backend/backtest_report.py::_read_report",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_report.py::_read_report",
+      "language": "Python",
+      "line_end": 70,
+      "line_start": 56,
+      "locator": "backend/max_backend/backtest_report.py::_read_report"
+    },
+    {
+      "id": "backend/max_backend/backtest_report.py::parse_mt5_backtest_report",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_report.py::parse_mt5_backtest_report",
+      "language": "Python",
+      "line_end": 244,
+      "line_start": 165,
+      "locator": "backend/max_backend/backtest_report.py::parse_mt5_backtest_report"
+    },
     {
       "id": "backend/max_backend/challenger_bundle.py::_ea_input_number",
       "kind": "function",
@@ -775,6 +1069,78 @@
       "locator": "backend/max_backend/challenger_bundle.py::verify_parameter_parity"
     },
     {
+      "id": "backend/max_backend/challenger_operations.py::_build_backtest_ini",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations.py::_build_backtest_ini",
+      "language": "Python",
+      "line_end": 456,
+      "line_start": 428,
+      "locator": "backend/max_backend/challenger_operations.py::_build_backtest_ini"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations.py::_bundle_paths",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations.py::_bundle_paths",
+      "language": "Python",
+      "line_end": 99,
+      "line_start": 86,
+      "locator": "backend/max_backend/challenger_operations.py::_bundle_paths"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations.py::_compile_retained_challenger",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations.py::_compile_retained_challenger",
+      "language": "Python",
+      "line_end": 539,
+      "line_start": 459,
+      "locator": "backend/max_backend/challenger_operations.py::_compile_retained_challenger"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations.py::_format_set_value",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations.py::_format_set_value",
+      "language": "Python",
+      "line_end": 371,
+      "line_start": 366,
+      "locator": "backend/max_backend/challenger_operations.py::_format_set_value"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations.py::_parse_date",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations.py::_parse_date",
+      "language": "Python",
+      "line_end": 260,
+      "line_start": 255,
+      "locator": "backend/max_backend/challenger_operations.py::_parse_date"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations.py::_read_text_flexible",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations.py::_read_text_flexible",
+      "language": "Python",
+      "line_end": 83,
+      "line_start": 69,
+      "locator": "backend/max_backend/challenger_operations.py::_read_text_flexible"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations.py::_runtime_set_text",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations.py::_runtime_set_text",
+      "language": "Python",
+      "line_end": 425,
+      "line_start": 374,
+      "locator": "backend/max_backend/challenger_operations.py::_runtime_set_text"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations.py::_wait_for_report",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations.py::_wait_for_report",
+      "language": "Python",
+      "line_end": 563,
+      "line_start": 542,
+      "locator": "backend/max_backend/challenger_operations.py::_wait_for_report"
+    },
+    {
       "id": "backend/max_backend/challenger_operations.py::_write_json",
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::_write_json",
@@ -784,13 +1150,31 @@
       "locator": "backend/max_backend/challenger_operations.py::_write_json"
     },
     {
+      "id": "backend/max_backend/challenger_operations.py::freeze_backtest_request",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations.py::freeze_backtest_request",
+      "language": "Python",
+      "line_end": 363,
+      "line_start": 263,
+      "locator": "backend/max_backend/challenger_operations.py::freeze_backtest_request"
+    },
+    {
       "id": "backend/max_backend/challenger_operations.py::retire_challenger",
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::retire_challenger",
       "language": "Python",
-      "line_end": 261,
-      "line_start": 135,
+      "line_end": 252,
+      "line_start": 126,
       "locator": "backend/max_backend/challenger_operations.py::retire_challenger"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "language": "Python",
+      "line_end": 748,
+      "line_start": 566,
+      "locator": "backend/max_backend/challenger_operations.py::run_challenger_backtest"
     },
     {
       "id": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready",
@@ -865,6 +1249,15 @@
       "locator": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry"
     },
     {
+      "id": "backend/max_backend/challenger_operations_store.py::create_backtest_record",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::create_backtest_record",
+      "language": "Python",
+      "line_end": 770,
+      "line_start": 702,
+      "locator": "backend/max_backend/challenger_operations_store.py::create_backtest_record"
+    },
+    {
       "id": "backend/max_backend/challenger_operations_store.py::list_backtests",
       "kind": "function",
       "label": "backend/max_backend/challenger_operations_store.py::list_backtests",
@@ -899,6 +1292,15 @@
       "line_end": 699,
       "line_start": 537,
       "locator": "backend/max_backend/challenger_operations_store.py::retire_registry_row"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations_store.py::update_backtest",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::update_backtest",
+      "language": "Python",
+      "line_end": 847,
+      "line_start": 773,
+      "locator": "backend/max_backend/challenger_operations_store.py::update_backtest"
     },
     {
       "id": "backend/max_backend/challenger_store.py::consumed_source_identities",
@@ -1000,6 +1402,51 @@
       "locator": "backend/max_backend/ea.py::verify_baseline_snapshot"
     },
     {
+      "id": "backend/max_backend/mt5.py::_auto_terminal_candidates",
+      "kind": "function",
+      "label": "backend/max_backend/mt5.py::_auto_terminal_candidates",
+      "language": "Python",
+      "line_end": 28,
+      "line_start": 22,
+      "locator": "backend/max_backend/mt5.py::_auto_terminal_candidates"
+    },
+    {
+      "id": "backend/max_backend/mt5.py::_data_roots",
+      "kind": "function",
+      "label": "backend/max_backend/mt5.py::_data_roots",
+      "language": "Python",
+      "line_end": 38,
+      "line_start": 31,
+      "locator": "backend/max_backend/mt5.py::_data_roots"
+    },
+    {
+      "id": "backend/max_backend/mt5.py::_read_origin",
+      "kind": "function",
+      "label": "backend/max_backend/mt5.py::_read_origin",
+      "language": "Python",
+      "line_end": 19,
+      "line_start": 8,
+      "locator": "backend/max_backend/mt5.py::_read_origin"
+    },
+    {
+      "id": "backend/max_backend/mt5.py::_unavailable",
+      "kind": "function",
+      "label": "backend/max_backend/mt5.py::_unavailable",
+      "language": "Python",
+      "line_end": 42,
+      "line_start": 41,
+      "locator": "backend/max_backend/mt5.py::_unavailable"
+    },
+    {
+      "id": "backend/max_backend/mt5.py::detect_mt5",
+      "kind": "function",
+      "label": "backend/max_backend/mt5.py::detect_mt5",
+      "language": "Python",
+      "line_end": 104,
+      "line_start": 45,
+      "locator": "backend/max_backend/mt5.py::detect_mt5"
+    },
+    {
       "id": "backend/max_backend/mtf_geometry.py::_closest_supported",
       "kind": "function",
       "label": "backend/max_backend/mtf_geometry.py::_closest_supported",
@@ -1036,6 +1483,15 @@
       "locator": "backend/max_backend/mtf_geometry.py::resolve_strategy_geometry"
     },
     {
+      "id": "backend/max_backend/optimizer_core.py::optimizer_fixed_execution_authority",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::optimizer_fixed_execution_authority",
+      "language": "Python",
+      "line_end": 132,
+      "line_start": 115,
+      "locator": "backend/max_backend/optimizer_core.py::optimizer_fixed_execution_authority"
+    },
+    {
       "id": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys",
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys",
@@ -1043,6 +1499,15 @@
       "line_end": 113,
       "line_start": 101,
       "locator": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys"
+    },
+    {
+      "id": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_schema",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_schema",
+      "language": "Python",
+      "line_end": 99,
+      "line_start": 91,
+      "locator": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_schema"
     },
     {
       "id": "backend/max_backend/optimizer_core.py::parse_set_optimizer_entries",
@@ -1061,6 +1526,15 @@
       "line_end": 417,
       "line_start": 400,
       "locator": "backend/max_backend/optimizer_core.py::read_ea_optimizer_defaults"
+    },
+    {
+      "id": "backend/max_backend/optimizer_runtime.py::compile_summary",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_runtime.py::compile_summary",
+      "language": "Python",
+      "line_end": 102,
+      "line_start": 86,
+      "locator": "backend/max_backend/optimizer_runtime.py::compile_summary"
     },
     {
       "id": "backend/max_backend/optimizer_store.py::migrate_m01",
@@ -1088,18 +1562,9 @@
       "line_end": 92,
       "line_start": 28,
       "locator": "backend/max_backend/scientist_store.py::migrate_m05"
-    },
-    {
-      "id": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute",
-      "kind": "method",
-      "label": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute",
-      "language": "Python",
-      "line_end": 669,
-      "line_start": 668,
-      "locator": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     }
   ],
-  "observed_head": "90538f289df9492e35c0308baebc94f1e58abd20",
+  "observed_head": "2ecd1d855c12d6426b83f751c512c145ef397691",
   "schema_version": 1,
-  "source_digest": "d3c9344231f4bc90a6b4fb0b59e9eedd19855e9b7d6794436f85bfbd8883a543"
+  "source_digest": "28cd691444d9631bb1d8cc398bd009626563d3e15984bea36f7c8c63aef02ddb"
 }
