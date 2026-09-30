@@ -1,7 +1,7 @@
 diff --git a/external_libs/compute/include/boost/compute/detail/sha1.hpp b/external_libs/compute/include/boost/compute/detail/sha1.hpp
 --- a/external_libs/compute/include/boost/compute/detail/sha1.hpp
 +++ b/external_libs/compute/include/boost/compute/detail/sha1.hpp
-@@ -34,9 +34,16 @@ class sha1 {
+@@ -39,9 +39,16 @@ class sha1 {
          operator std::string() {
 -            unsigned int digest[5];
 -            h.get_digest(digest);
@@ -21,5 +21,6 @@ diff --git a/external_libs/compute/include/boost/compute/detail/sha1.hpp b/exter
 +            for(int i = 0; i < 5; ++i)
 +                buf << std::hex << std::setfill('0') << std::setw(8) << digest[i];
 +#endif
-
+-
++
              return buf.str();
