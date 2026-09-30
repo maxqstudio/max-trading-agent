@@ -2457,7 +2457,7 @@
       "locator": "backend/tests/test_m01_recovery.py::good_pass"
     }
   ],
-  "observed_head": "2ecd1d855c12d6426b83f751c512c145ef397691",
+  "observed_head": "93a96a2613695009d7787f066db863c4c1e0e226",
   "schema_version": 1,
-  "source_digest": "28cd691444d9631bb1d8cc398bd009626563d3e15984bea36f7c8c63aef02ddb"
+  "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126"
 }

@@ -7,7 +7,7 @@
 Starting authority e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d is the source baseline for PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE. The current candidate is local and IN_PROGRESS. Only synthetic/test databases and fixtures are used. The retired active Research implementation is being removed; fresh R00-R11 remain planned and blocked until the Owner declares a real MT5 sample READY and Control Room separately authorizes a source phase. The exact final GitHub main SHA and hosted CI identity remain external acceptance evidence per D-012. No real MT5, broker, or scientific execution is performed in this source phase.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 28cd691444d9631bb1d8cc398bd009626563d3e15984bea36f7c8c63aef02ddb
+Current source digest: 9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|

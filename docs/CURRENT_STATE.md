@@ -18,7 +18,7 @@ Branch: work/strategy-stabilization-research-purge
 Authoritative SHA: external final acceptance evidence
 Last accepted SHA: e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d
 Current candidate SHA: external final acceptance evidence
-Current source digest: 28cd691444d9631bb1d8cc398bd009626563d3e15984bea36f7c8c63aef02ddb
+Current source digest: 9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
