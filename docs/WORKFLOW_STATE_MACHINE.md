@@ -266,6 +266,61 @@ Authority: research_r01_service + research_source/dataset/leakage/store + immuta
 
 - Pre-terminal partial artifacts are cleaned or rejected; accepted parent/history remains immutable.
 
+## FLOW-R02-CHEAP-SCREEN-EXECUTOR — R02 bounded Cheap Screen executor
+
+Purpose: Consume only validated R01 Discovery training rows and the immutable frozen R02 candidate universe, execute bounded family adapters (LightGBM OpenCL GPU, XGBoost CUDA GPU, Random Forest CPU), and atomically publish diagnostic outcomes before stopping for Owner.
+Critical: TRUE
+Entry condition: Synthetic source tests only in this phase. Runtime path requires exact current Research, accepted and integrity-verified R01, exact dataset/output binding, and one verified frozen candidate universe; no public start endpoint is exposed.
+Authority: Exact current Research + accepted R01 output manifest + confirmed immutable R02 authorization + readback-verified FROZEN_WAITING_EXECUTION block/candidates + sealed R01 Discovery-only training artifact.
+
+### States
+
+- CURRENT_R01_AND_R02_AUTHORITY_VERIFIED
+- DISCOVERY_ONLY_DATASET_VALIDATED
+- EXECUTION_ATTEMPT_DURABLE
+- CANDIDATES_EXECUTED_WITHIN_FROZEN_BUDGET
+- COMPLETE_WAITING_OWNER
+- EXECUTION_UNCERTAIN_FAIL_CLOSED
+
+### Legal transitions
+
+| From | To | Action | Authority | Side effects |
+|---|---|---|---|---|
+| CURRENT_R01_AND_R02_AUTHORITY_VERIFIED | DISCOVERY_ONLY_DATASET_VALIDATED | Read the sealed R01 Discovery training artifact and bind its Research, dataset, manifest, feature/label contracts and parent lineage to every frozen candidate. | Exact current Research + accepted R01 output manifest + confirmed immutable R02 authorization + readback-verified FROZEN_WAITING_EXECUTION block/candidates + sealed R01 Discovery-only training artifact. |  |
+| DISCOVERY_ONLY_DATASET_VALIDATED | EXECUTION_ATTEMPT_DURABLE | Persist the immutable one-shot attempt marker before any model worker starts. | Exact current Research + accepted R01 output manifest + confirmed immutable R02 authorization + readback-verified FROZEN_WAITING_EXECUTION block/candidates + sealed R01 Discovery-only training artifact. | R02_EXECUTION_ATTEMPT |
+| EXECUTION_ATTEMPT_DURABLE | CANDIDATES_EXECUTED_WITHIN_FROZEN_BUDGET | Apply the frozen chronological purged Discovery split and execute the exact candidate accelerator (LightGBM OpenCL GPU or CPU, XGBoost CUDA GPU or CPU, Random Forest CPU) with one thread, explicit seeds, no retry and bounded FIT_SECONDS accounting. Hosted CI fitting uses CPU-only synthetic fixtures. | Exact current Research + accepted R01 output manifest + confirmed immutable R02 authorization + readback-verified FROZEN_WAITING_EXECUTION block/candidates + sealed R01 Discovery-only training artifact. | SYNTHETIC_TEST_MODEL_FIT_ONLY |
+| CANDIDATES_EXECUTED_WITHIN_FROZEN_BUDGET | COMPLETE_WAITING_OWNER | Generate one canonical outcome for every frozen candidate and atomically append all outcomes plus one verified terminal manifest. | Exact current Research + accepted R01 output manifest + confirmed immutable R02 authorization + readback-verified FROZEN_WAITING_EXECUTION block/candidates + sealed R01 Discovery-only training artifact. | R02_CANDIDATE_OUTCOMES, R02_BLOCK_TERMINAL |
+
+### Invariants
+
+- The fit reads only the sealed hash-bound R01 Discovery training artifact. R02 Discovery-scope integrity readback binds the registry/output manifest hashes for dataset.csv, data_quality_report.json and leakage_report.json without opening their contents; Locked OOS and Fresh/Forward target outcomes never enter fitting, preprocessing or metric inputs.
+- The candidate set, candidate identities, family, seed, topology, preprocessing and training configuration are reconstructed from the verified frozen block; no candidate substitution or undocumented defaults are allowed.
+- Cheap Screen uses a frozen chronological 80/20 holdout, no shuffle, R01 minimum legal training-target purge, at least 24 training rows, at least 12 validation rows, and all three classes in training.
+- STANDARD preprocessing is fitted on training rows only and is candidate-local.
+- LightGBM supports Windows OpenCL GPU or explicit CPU; XGBoost supports CUDA GPU or explicit CPU; Random Forest is CPU-only. Hosted CI fitting uses CPU synthetic fixtures, every worker uses one thread and an explicit candidate seed, retries are disabled, and the frozen FIT_SECONDS budget is enforced.
+- Every candidate receives exactly one SCREEN_PASS, SCREEN_FAIL or EXECUTION_ERROR record; no failed candidate is dropped.
+- All outcomes and the COMPLETE_WAITING_OWNER terminal are committed through the existing atomic immutable ledger.
+- A completed verified terminal is returned without retraining; a durable attempt without a verified terminal fails closed and cannot be retried.
+- SCREEN_PASS is not scientific PASS; Cheap Screen qualification authority is false and Qualified Pool admission is R03_FULL_WFA_ONLY.
+- No second Discovery block, public execution/outcome-submit API, R03, ONNX, Research Challenger, Champion mutation or live trading is opened.
+
+### Failure behavior
+
+- Stale/cross-epoch Research, unaccepted R01, changed dataset/manifest/lineage, invalid candidate authority, protected-data fields, malformed/nonfinite data or corrupt artifact fail closed before an execution attempt is persisted.
+- Insufficient or single-class Discovery training data produces retained deterministic EXECUTION_ERROR outcomes for every frozen candidate without model fitting.
+- A candidate fit/predict exception or timeout produces a deterministic EXECUTION_ERROR; timeout consumes the remaining bounded compute budget and no retry is attempted.
+- A persistence failure rolls back all outcomes and the terminal; the previously committed attempt marker remains and all future reads fail closed as execution-uncertain.
+
+### Restart behavior
+
+- A terminal already present and readback-verified is returned exactly without re-reading training data or fitting again.
+- A durable attempt without a complete verified terminal is uncertain, blocks preflight/getters, and is never silently retried.
+
+### Rollback behavior
+
+- The one-shot attempt marker commits before model work and is intentionally not rolled back after an interruption.
+- Every candidate outcome and the single block terminal share one SQLite transaction; partial terminal publication is forbidden.
+
 ## FLOW-R02-CHEAP-SCREEN-OUTCOME-LEDGER — R02 Cheap Screen immutable outcome ledger
 
 Purpose: Define deterministic append-only all-candidate outcome and terminal authority for a future executor without performing model fitting or granting qualification.

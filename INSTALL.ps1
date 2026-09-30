@@ -33,7 +33,18 @@ if (-not (Test-Path ".venv\Scripts\python.exe")) {
 }
 
 & ".\.venv\Scripts\python.exe" -m pip install --upgrade pip
+if ($LASTEXITCODE -ne 0) {
+    throw "pip upgrade failed."
+}
 & ".\.venv\Scripts\python.exe" -m pip install -r requirements.lock.txt
+if ($LASTEXITCODE -ne 0) {
+    throw "Python dependency installation failed."
+}
+
+& "$PSScriptRoot\scripts\install_r02_gpu_native_deps.ps1"
+if ($LASTEXITCODE -ne 0) {
+    throw "R02 GPU native dependency installation failed."
+}
 
 if (-not $SkipFrontend) {
     if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {

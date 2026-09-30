@@ -180,7 +180,7 @@ Rationale: The production execution boundary is MetaTrader 5 on Windows; hosted 
 
 ## D-021 — Adopt deterministic-LF Skill Workflow authority
 
-Status: CURRENT
+Status: SUPERSEDED
 
 MAX adopts Skill Workflow 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720; the upstream delta from 9e22feddb8f94e8c0f1af6a33e14b64de5068f8f enforces byte-exact LF writes for acceptance.json and validates that contract in STRICT selftest.
 
@@ -196,7 +196,7 @@ Rationale: This preserves immutable R00 lineage while allowing future fresh epoc
 
 ## D-025 — R02 source foundation is non-executing
 
-Status: CURRENT
+Status: SUPERSEDED
 
 Hosted R02 source work may define deterministic candidate identity/planning contracts and read-only preflight before a real R01 result exists, but it must not expose a start endpoint, persist scientific candidate outcomes, train models, qualify candidates, or bypass the later explicit Owner R02 authorization.
 
@@ -220,7 +220,7 @@ Rationale: Persistent schema additions require a distinct launcher/database auth
 
 ## D-028 — Cheap Screen outcome ledger is not an executor
 
-Status: CURRENT
+Status: SUPERSEDED
 
 R02 source may persist deterministic synthetic-tested candidate outcomes and one COMPLETE_WAITING_OWNER terminal authority before a real trainer/executor exists. No API accepts outcome submissions in this phase, and ledger presence does not prove model fitting or scientific qualification.
 
@@ -228,8 +228,40 @@ Rationale: Define immutable all-candidate outcome/terminal semantics independent
 
 ## D-029 — Advance cumulative SQLite schema to 12
 
-Status: CURRENT
+Status: SUPERSEDED
 
 The durable R02 candidate-outcome and block-terminal tables advance CURRENT_SCHEMA_VERSION from 11 to 12.
 
 Rationale: Append-only R02 outcome/terminal authority is a persistent schema change and must be distinguishable from the authorization-only schema epoch.
+
+## D-030 — Adopt current Skill Workflow roadmap authority
+
+Status: CURRENT
+
+MAX adopts Skill Workflow c1d7e58a0fcadc606c8cf75c6283a17278f99259, including mandatory .workflow/roadmap.json, state/roadmap phase synchronization, generated docs/ROADMAP.md, ROADMAP_SYNC and the upstream Project Truth Compiler self-test.
+
+Rationale: The Owner requested the latest Skill Workflow; current governance tooling and Windows CI must match that exact upstream authority without local validator patches.
+
+## D-031 — Inherit scientific concepts selectively from max_research_agent
+
+Status: CURRENT
+
+The read-only reference authority is maxqstudio/max_research_agent at 883ebeb1ca2e70f6255e0889358ba7c822ac52f5. MAX independently implements the reference's explicit model construction, Cheap Screen policy, classification diagnostics and synthetic self-tests in MAX-owned R02 contracts; no reference runtime, paths, persisted state or authority are imported.
+
+Rationale: Preserve the reference's deterministic family construction, bounded screen-resource reduction and diagnostic-only semantics while keeping current MAX R01 data, Owner gates, immutable ledger and Windows architecture authoritative.
+
+## D-032 — Authorize synthetic-only R02 executor source
+
+Status: CURRENT
+
+The R02_CHEAP_SCREEN_TRAINER_EXECUTOR_SOURCE phase supports Windows LightGBM GPU through OpenCL and XGBoost GPU through CUDA, plus the Random Forest CPU control. Deterministic CI fitting uses synthetic data with explicit CPU settings; local GPU smoke fitting is synthetic only. Exact replay is scoped to the same data, spec, seed, software build and device; cross-device identity is not claimed. LightGBM deterministic and force_col_wise parameters are applied only on CPU because upstream documents them as CPU-only. Runtime code may consume only validated, hash-bound R01 Discovery training rows after exact current Research, accepted R01, immutable Owner authorization, and frozen-candidate verification; real current-epoch execution, scientific results, R03 qualification and protected target reads remain blocked.
+
+Rationale: Implement the explicitly authorized source capability without conflating synthetic test fitting with real Research training or scientific evidence.
+
+## D-033 — Persist one-shot R02 execution-attempt authority
+
+Status: CURRENT
+
+Advance cumulative SQLite schema from 12 to 13 for one immutable execution-attempt marker per frozen R02 block. Persist the marker before fitting; if a process stops before atomic outcome/terminal publication, readback fails closed and retry is forbidden. Schema-12 authority migrates forward without rewriting prior authorization, block, candidate, outcome or terminal records.
+
+Rationale: Without durable attempt state, a crash after fitting but before terminal publication leaves no distinction between never executed and execution uncertain, allowing silent second scientific fitting. The marker makes restart behavior deterministic while preserving the atomic outcome/terminal transaction.

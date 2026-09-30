@@ -23,9 +23,9 @@ Canonical authority is declared in .workflow/authority.json.
 | frontend | Semantic backend API representation | React presents authority; UI labels/local state do not create domain eligibility, gate completion or scientific PASS. | YES |
 | tests | GitHub Actions windows-latest at the exact tested commit | A hosted test PASS is evidence only for source, synthetic/mocked behavior, dependencies and build layers actually executed; it does not prove real MT5 or Owner runtime. | YES |
 | historical_evidence | Retained docs/audits/acceptance and immutable artifacts | Historical evidence remains historically truthful and is not rewritten to mimic current terminology or configuration. | NO |
-| documentation | .workflow semantic specs + Project Truth Compiler at Skill Workflow 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 | Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden. | YES |
+| documentation | .workflow semantic specs + Project Truth Compiler at Skill Workflow c1d7e58a0fcadc606c8cf75c6283a17278f99259 | Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden. | YES |
 | sequence | DURING-mode generated actual sequence graphs plus source/test/runtime semantic review | Existing implementation is reconstructed from current source; retrospective BEFORE plans are forbidden. | YES |
-| governance_tools | .workflow/tools vendored byte-identically from Skill Workflow 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 | Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed. | NO |
+| governance_tools | .workflow/tools vendored byte-identically from Skill Workflow c1d7e58a0fcadc606c8cf75c6283a17278f99259 | Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed. | NO |
 
 ## Invariants
 

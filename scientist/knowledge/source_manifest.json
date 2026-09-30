@@ -1,15 +1,15 @@
 [
   {
     "path": "pyproject.toml",
-    "sha256": "c28fd7813620ed4409ef489da1cacd6ee7915098dbb5d33b530f895d98fa0f09"
+    "sha256": "bde36149ffe3a7eeeddbeeb6bcc1384f466f9a40a5b88352fd964ed6a2a80ff3"
   },
   {
     "path": "docs/PRD.md",
-    "sha256": "9ecde9a38146770c3e854027f7ea7ba277f54d0260a468f088f18619ce7c8f1c"
+    "sha256": "199e05bc5600d0e28ae57ffe03b8a38197ad6a1a2382d96453453d38823c0780"
   },
   {
     "path": "docs/ROADMAP.md",
-    "sha256": "4cea04bd2c9e81b137728d5722acf939bb8c8294a5101ca5e164a44098a2b4f2"
+    "sha256": "72f82aa53843a90818a4cfde3507a3eaa338f985e74ef9207eb6106873d4c369"
   },
   {
     "path": "docs/RESEARCH_MODEL_ROADMAP.md",
@@ -41,7 +41,7 @@
   },
   {
     "path": "backend/max_backend/schema.py",
-    "sha256": "fb026c5cae33d9eb08422dcfc6f767a2383ad9b22ccaca166f6564624d190a7a"
+    "sha256": "d4c1bdfe8f065d2c224c2174fac86cc6f782f59f0dbb7543faea63dce4e54f91"
   },
   {
     "path": "backend/max_backend/workflow_contract.py",
@@ -49,7 +49,7 @@
   },
   {
     "path": "backend/max_backend/workflow_store.py",
-    "sha256": "e09ea91ee12c2298f00cc8d0eafe402292abdbc07ac5db3111bbe96dc0b7fa3e"
+    "sha256": "36ea7cd8a24892db377aeb0d912ecb8a8a9c20782488be7f8d04fc9422019284"
   },
   {
     "path": "backend/max_backend/mtf_geometry.py",
@@ -181,7 +181,7 @@
   },
   {
     "path": "backend/max_backend/research_leakage.py",
-    "sha256": "5563409139525c9ca61ec6828f95dc5ff483d9bcf2ae7e126e62084bb116487e"
+    "sha256": "a245661ade901c9c73469303cb4a103221c190e421a172d2592f16502371bed5"
   },
   {
     "path": "backend/max_backend/research_r01_store.py",
@@ -189,11 +189,11 @@
   },
   {
     "path": "backend/max_backend/research_r01_service.py",
-    "sha256": "38ac4afd360918e27912795e2cd7c1946048ca3642d230273e11a7fc97e1a5a1"
+    "sha256": "c6511c39fcf45fe658bdd166cd08ae7bc33228d6675c16eee97e4b50d3aabf81"
   },
   {
     "path": "backend/max_backend/research_r02_contract.py",
-    "sha256": "f4993030f60bbc51916bced52db8f65b29508a9b057fb076a6d4b606aa4af7e7"
+    "sha256": "5855abe30eb5ca55f68e77dd1e9fa10ef3540aebda8ce298c7feeab267a7ae4d"
   },
   {
     "path": "backend/max_backend/research_r02_outcome.py",
@@ -201,15 +201,23 @@
   },
   {
     "path": "backend/max_backend/research_r02_service.py",
-    "sha256": "551b5546d5802f51be07af4153ec28d134fd7b0b467443fcb3349ed8789601ec"
+    "sha256": "ae18c03eb961459aedb9b6b6faac5ced00334668b67e1af38334e157857e78c2"
   },
   {
     "path": "backend/max_backend/research_r02_store.py",
-    "sha256": "4ae05468ed7d5146807137866f68f2003dc96bf600f3496fa0903a516a432e0a"
+    "sha256": "399a0cc501b1e383f462c96e7fb4463d66c791764f1a3b4e65c2b635c17680f6"
+  },
+  {
+    "path": "backend/max_backend/research_r02_models.py",
+    "sha256": "21b79b2ea51d02df6c708990a85c201db0f301f2ca9d1bb86fdadd89e6dc0d74"
+  },
+  {
+    "path": "backend/max_backend/research_r02_executor.py",
+    "sha256": "75f2090b32d62f2107277dcb7cbba68ea6b3451109248eb34d79fb9fb7041611"
   },
   {
     "path": "backend/max_backend/scientist_knowledge.py",
-    "sha256": "4f17c7a9d9c937faecdd68add46f9ad3c8e0c33ffd3abcec296d20e4f9dc7220"
+    "sha256": "ac6a55740ca00e80b445c4d1e71b9cde5ffd77d6a37a569fbf4ea4a866e29435"
   },
   {
     "path": "backend/max_backend/scientist_context.py",

@@ -120,3 +120,13 @@ Type: repair
 - Discovery compute-budget and outcome/terminal compute validation now map unrepresentable numeric input to deterministic validation errors instead of allowing OverflowError to escape.
 - Add huge-integer regressions for Owner authorization budget and outcome/terminal budget paths.
 - Windows targeted run 36412664127 passed 84 R02 tests at 02644bb471c8c605a27413b4a1f8677a1f30dffd.
+
+## 2026-09-30 — R02 Cheap Screen trainer/executor source
+
+Type: source_foundation
+
+- Add LightGBM OpenCL GPU and XGBoost CUDA GPU adapters, a Random Forest CPU control, explicit candidate configuration, and deterministic synthetic CPU CI fitting.
+- Add a frozen chronological 80/20 Discovery-only screen, R01-authorized target purge, explicit metrics/thresholds, and bounded FIT_SECONDS execution with no retries.
+- Generate all outcomes inside the executor and persist only through the immutable R02 ledger; no public start/outcome-submit API or R03 admission is added.
+- Advance SQLite schema from 12 to 13 for a durable one-shot execution-attempt marker; interrupted attempts without terminal authority fail closed and cannot be silently retried.
+- Synthetic tests verify model fitting only; no real Research execution or scientific outcome is authorized or proven.

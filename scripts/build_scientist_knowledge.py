@@ -162,7 +162,7 @@ def main() -> int:
             "classification": "EXISTING",
             "facts": [
                 "Previous-epoch R00 is accepted historical evidence; the current fresh epoch has no Research project and current-epoch R00 has not started.",
-                "Previous-epoch R01 source/runtime repair has historical targeted re-audit PASS; current source resolves R01 from the latest accepted current R00 immutable lineage without retired epoch IDs, while real current-epoch R01 remains blocked/not started until a new R00 exists and Owner authorizes execution; R02 remains blocked.",
+                "Previous-epoch R01 source/runtime repair has historical targeted re-audit PASS; current source resolves R01 from the latest accepted current R00 immutable lineage without retired epoch IDs, while real current-epoch R01 remains blocked/not started until a new R00 exists and Owner authorizes execution. Control Room has authorized bounded R02 executor source and synthetic-only CI fitting; real current-epoch R02 execution remains blocked and unproven.",
                 "The system owns deterministic scientific PASS/FAIL and may recommend; the Owner selects which qualified candidates advance.",
                 "No Research gate automatically opens the next gate, creates a Strategy Challenger, or mutates Champion authority.",
             ],
@@ -203,7 +203,22 @@ def main() -> int:
                 "Current Research stage is derived from immutable R00 history plus the persisted R01 run; R00 evidence is not rewritten after R01 begins.",
                 "R01 terminal publication atomically binds run state, immutable artifacts, gate events and non-adaptive Research Memory, then stops waiting for Owner.",
                 "R01 performs zero model training, zero ONNX export, zero Research Challenger creation, no Champion mutation and cannot execute R02.",
-                "R02 frozen Discovery authorization is immutable and one-block-per-Research; source also defines an append-only all-candidate Cheap Screen outcome ledger/COMPLETE_WAITING_OWNER terminal contract, but no trainer executes it and no outcome has R03 qualification authority.",
+                "R02 frozen Discovery authorization is immutable and one-block-per-Research. The current source candidate adds a bounded LightGBM/XGBoost/Random Forest executor and an append-only all-candidate Cheap Screen outcome ledger ending COMPLETE_WAITING_OWNER; only synthetic test/CI fitting is permitted in this source phase, no real Research execution is proven, and no outcome has R03 qualification authority.",
+            ],
+        },
+        {
+            "ref": "contract:r02-cheap-screen-executor",
+            "title": "R02 Discovery-only Cheap Screen executor",
+            "classification": "EXTENSION",
+            "facts": [
+                "Execution authority is bound to the accepted R01 Research, dataset identity, output-manifest SHA, feature/label contracts, parent lineage, Discovery partition, frozen R02 authorization, candidate identity/spec/seed and exact frozen candidate universe; the executor does not accept arbitrary outcome payloads.",
+                "Training reads only the sealed R01 Discovery training artifact; Locked OOS and Fresh/Forward target outcomes are not readable by this path. The deterministic screen is chronological 80/20 with no shuffle and purges training targets using the R01 minimum legal purge-bar authority.",
+                "The split requires at least 24 training rows, 12 validation rows and all three target classes in training. Preprocessing is candidate-local and fitted on training rows only.",
+                "Only explicit CPU, one-thread LightGBM, XGBoost and Random Forest adapters are supported; family topology, preprocessing, training configuration and seed come from the frozen candidate spec, with no silent defaults or retries.",
+                "Cheap Screen reports balanced accuracy, macro-F1, log loss and multiclass Brier score. Its frozen pass policy is balanced accuracy >= 0.4 and log loss <= 1.5; these are screening diagnostics, not scientific qualification thresholds.",
+                "Compute is bounded in the frozen block's FIT_SECONDS unit; one durable attempt marker is written before fitting, timeout/failure is retained as an outcome, and uncertain partial execution fails closed rather than retraining.",
+                "Every frozen candidate is represented in the terminal ledger as SCREEN_PASS, SCREEN_FAIL or EXECUTION_ERROR. COMPLETE_WAITING_OWNER is not scientific PASS; Cheap Screen qualification authority is false and Qualified Pool admission is R03_FULL_WFA_ONLY.",
+                "This phase authorizes synthetic deterministic fitting in tests/CI only. Real current-epoch R00/R01/R02 execution, real Research training and scientific outcomes remain blocked/not proven; no R03, ONNX, Challenger or Champion mutation is authorized.",
             ],
         },
         {
@@ -211,7 +226,7 @@ def main() -> int:
             "title": "Explicit deferred capabilities",
             "classification": "OUTSIDE_CURRENT_CONTRACT",
             "facts": [
-                "Model training, LightGBM, GRU, Transformer, PatchTST, TFT, MoE, WFA/CPCV model lifecycle, Tournament, Monte Carlo and Fresh model validation are outside current Phase-1 contract.",
+                "Real Research model training/execution, GRU, LSTM, Transformer, PatchTST, TFT, TCN, MoE, iTransformer, WFA/CPCV model lifecycle, Tournament, Monte Carlo and Fresh model validation are outside the current source phase; synthetic fitting of the three bounded R02 families is test/CI verification only.",
                 "ONNX, Shadow, Live, portfolio execution, news/sentiment, web research and autonomous Scientist coding are outside current Phase-1 contract.",
             ],
         },
@@ -250,16 +265,17 @@ def main() -> int:
             "M08 accepted qualified pool, multi-Challenger selection, Backtest results and Artifact control plane",
             "Historical previous-epoch R00 Research Authority Foundation accepted; current fresh Research epoch has no current Research project and R00 has not started",
             "Historical previous-epoch R01 Dataset + Label + Leakage Foundation implementation/runtime repair has targeted re-audit PASS; current source binds R01 to the latest accepted current R00 immutable lineage without retired epoch IDs; real current-epoch R01 remains blocked/not started",
+            "R02 bounded Discovery-only Cheap Screen executor source candidate for LightGBM, XGBoost and Random Forest; synthetic test/CI fitting only, no real Research execution or qualification authority",
             "V6 Strategy Optimizer source candidate with 17 dimensions including an exact Owner-grid InpRiskPct 0.5%..5.0% step 0.5% that refinement cannot shift off-grid, plus fixed 5.0% daily-loss authority for new jobs"
         ],
         "planned_capabilities": [
             "Current-epoch R00 initialization and acceptance under the fresh epoch before any real R01 execution",
             "R01 current-lineage source binding is merged/revalidated; real current-epoch R00/R01 execution remains deferred to final Owner runtime",
-            "R02 source can deterministically plan/freeze one Owner-authorized Discovery block and define an immutable outcome ledger; real model fitting/execution remains separately blocked and only future R03 Full WFA can create Qualified Pool authority",
+            "R02 source phase hosted validation and governance closeout; real current-epoch execution remains blocked and only future authorized R03 Full WFA can create Qualified Pool authority",
         ],
         "explicit_deferred_capabilities": [
-            "model training",
-            "LightGBM/GRU/Transformer/PatchTST/TFT/MoE research lifecycle",
+            "real Research model training/execution",
+            "GRU/LSTM/Transformer/PatchTST/TFT/TCN/MoE/iTransformer research lifecycle",
             "WFA/CPCV model lifecycle",
             "Tournament/Monte Carlo/Fresh model validation",
             "ONNX lifecycle",

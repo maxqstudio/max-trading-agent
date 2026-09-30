@@ -103,7 +103,7 @@
       "mutable": false
     },
     {
-      "authority": ".workflow semantic specs + Project Truth Compiler at Skill Workflow 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720",
+      "authority": ".workflow semantic specs + Project Truth Compiler at Skill Workflow c1d7e58a0fcadc606c8cf75c6283a17278f99259",
       "concern": "documentation",
       "meaning": "Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden.",
       "mutable": true
@@ -115,7 +115,7 @@
       "mutable": true
     },
     {
-      "authority": ".workflow/tools vendored byte-identically from Skill Workflow 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720",
+      "authority": ".workflow/tools vendored byte-identically from Skill Workflow c1d7e58a0fcadc606c8cf75c6283a17278f99259",
       "concern": "governance_tools",
       "meaning": "Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed.",
       "mutable": false

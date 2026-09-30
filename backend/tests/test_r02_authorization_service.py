@@ -23,16 +23,46 @@ def _plan_request() -> dict:
         ("xgboost", 42),
         ("random_forest", 7),
     ):
+        topology = {
+            "lightgbm": {
+                "n_estimators": 8,
+                "max_depth": 3,
+                "num_leaves": 7,
+                "learning_rate": 0.1,
+            },
+            "xgboost": {
+                "n_estimators": 8,
+                "max_depth": 3,
+                "learning_rate": 0.1,
+                "subsample": 1.0,
+                "colsample_bytree": 1.0,
+            },
+            "random_forest": {
+                "n_estimators": 8,
+                "max_depth": 3,
+                "min_samples_leaf": 1,
+            },
+        }[family]
         candidates.append(
             {
                 "research_id": "RSRCH-R02-AUTH",
                 "model_family": family,
-                "topology_spec": {"depth": 3},
+                "topology_spec": topology,
                 "feature_contract": FEATURE_CONTRACT,
                 "label_contract": "MAX_RESEARCH_FIRST_BARRIER_LABEL_R01_V1",
                 "seed": seed,
                 "preprocessing": {"scaling": "NONE"},
-                "training_configuration": {"objective": "MULTICLASS"},
+                "training_configuration": {
+                    "objective": "MULTICLASS",
+                    "class_weighting": "BALANCED",
+                    "accelerator": {
+                        "lightgbm": "GPU_OPENCL",
+                        "xgboost": "GPU_CUDA",
+                        "random_forest": "CPU",
+                    }[family],
+                    "device_id": 0 if family in {"lightgbm", "xgboost"} else None,
+                    "platform_id": 0 if family == "lightgbm" else None,
+                },
                 "parent_lineage": deepcopy(parent),
             }
         )

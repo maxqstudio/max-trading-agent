@@ -762,8 +762,8 @@
       "kind": "function",
       "label": "backend/max_backend/scientist_knowledge.py::_canonical_json",
       "language": "Python",
-      "line_end": 99,
-      "line_start": 92,
+      "line_end": 101,
+      "line_start": 94,
       "locator": "backend/max_backend/scientist_knowledge.py::_canonical_json"
     },
     {
@@ -771,8 +771,8 @@
       "kind": "function",
       "label": "backend/max_backend/scientist_knowledge.py::_sha256_bytes",
       "language": "Python",
-      "line_end": 83,
-      "line_start": 82,
+      "line_end": 85,
+      "line_start": 84,
       "locator": "backend/max_backend/scientist_knowledge.py::_sha256_bytes"
     },
     {
@@ -780,8 +780,8 @@
       "kind": "function",
       "label": "backend/max_backend/scientist_knowledge.py::knowledge_sha256",
       "language": "Python",
-      "line_end": 134,
-      "line_start": 133,
+      "line_end": 136,
+      "line_start": 135,
       "locator": "backend/max_backend/scientist_knowledge.py::knowledge_sha256"
     },
     {
@@ -789,8 +789,8 @@
       "kind": "function",
       "label": "backend/max_backend/scientist_knowledge.py::knowledge_status",
       "language": "Python",
-      "line_end": 155,
-      "line_start": 137,
+      "line_end": 157,
+      "line_start": 139,
       "locator": "backend/max_backend/scientist_knowledge.py::knowledge_status"
     },
     {
@@ -798,8 +798,8 @@
       "kind": "function",
       "label": "backend/max_backend/scientist_knowledge.py::load_knowledge",
       "language": "Python",
-      "line_end": 130,
-      "line_start": 102,
+      "line_end": 132,
+      "line_start": 104,
       "locator": "backend/max_backend/scientist_knowledge.py::load_knowledge"
     },
     {
@@ -807,8 +807,8 @@
       "kind": "function",
       "label": "backend/max_backend/scientist_knowledge.py::source_sha256",
       "language": "Python",
-      "line_end": 89,
-      "line_start": 86,
+      "line_end": 91,
+      "line_start": 88,
       "locator": "backend/max_backend/scientist_knowledge.py::source_sha256"
     },
     {
@@ -1041,12 +1041,12 @@
       "kind": "method",
       "label": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute",
       "language": "Python",
-      "line_end": 665,
-      "line_start": 664,
+      "line_end": 669,
+      "line_start": 668,
       "locator": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     }
   ],
-  "observed_head": "c913c47a45ca54d805470caf40bb54bf655b45c6",
+  "observed_head": "35f237f25a898b60b2a5123d6246ebc34fcbec8d",
   "schema_version": 1,
-  "source_digest": "79e949b09cc369109e717fa3b495ad9bb16d89b67ba0feead151ced8df9ea119"
+  "source_digest": "443b922b7050377aedb0931e91789d0825fc86c9db64ae7e318361204ac65cf4"
 }

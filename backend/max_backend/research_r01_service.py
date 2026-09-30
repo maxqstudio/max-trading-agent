@@ -1,6 +1,10 @@
 from __future__ import annotations
 
 import json
+import csv
+import hashlib
+import io
+import math
 import shutil
 from copy import deepcopy
 from datetime import datetime, timezone
@@ -13,6 +17,7 @@ from .db import connect
 from .optimizer_core import sha256_file
 from .optimizer_store import utc_now
 from .research_contract import (
+    FEATURE_CONTRACT,
     OWNER_R01_CONFIRMATION,
     R01_AUTHORIZATION_SCHEMA,
     R01_INPUT_SCHEMA,
@@ -26,6 +31,7 @@ from .research_dataset import (
     build_dataset,
     write_dataset_csv,
 )
+from .research_cp32 import FEATURE_NAMES
 from .research_leakage import (
     TARGET_DEPENDENCY_SCHEMA,
     bind_protected_partition_rows,
@@ -63,6 +69,13 @@ from .research_store import latest_research
 
 R01_OLD_MAX_AUDIT = "docs/audits/R01_OLD_MAX_SOURCE_AUDIT.md"
 DISCOVERY_LABEL_SUMMARY_SCHEMA = "MAX_RESEARCH_DISCOVERY_LABEL_SUMMARY_R01_V1"
+DISCOVERY_TRAINING_SCHEMA = "MAX_R01_DISCOVERY_TRAINING_DATASET_V1"
+R01_DISCOVERY_SCOPE_VERIFIED = "VERIFIED_DISCOVERY_ONLY"
+R01_DISCOVERY_DEFERRED_ARTIFACTS = frozenset({
+    "dataset.csv",
+    "data_quality_report.json",
+    "leakage_report.json",
+})
 
 
 def _seal(payload: dict[str, Any]) -> dict[str, Any]:
@@ -692,6 +705,8 @@ def _paths(research_id: str, run_id: str, dataset_id: str | None = None) -> dict
         "root": root,
         "input": root / "r01_input_manifest.json",
         "dataset": root / "dataset.csv",
+        "discovery_training_dataset": root / "discovery_training_dataset.csv",
+        "discovery_training_manifest": root / "discovery_training_manifest.json",
         "dataset_manifest": root / "dataset_manifest.json",
         "feature": root / "feature_manifest.json",
         "label": root / "label_manifest.json",
@@ -918,10 +933,13 @@ def _discovery_label_summary(
 
 def _output_manifest(
     *,
+    run_id: str,
     input_manifest: dict[str, Any],
+    parent: dict[str, Any],
     dataset: dict[str, Any],
     protected: dict[str, Any],
     discovery_label_summary: dict[str, Any],
+    discovery_training_manifest: dict[str, Any],
     leakage: dict[str, Any],
     file_hashes: dict[str, str],
     side_effects: dict[str, Any],
@@ -942,6 +960,13 @@ def _output_manifest(
                 "locked_oos": "[from,to)",
                 "fresh_forward": "[from,to]",
             }
+            and protected.get("discovery", {}).get("training_access") is True
+            and protected.get("discovery", {}).get("training_access_scope")
+            == "DISCOVERY_ONLY"
+            and protected.get("discovery", {}).get("training_authorization_required")
+            == "VALIDATED_OWNER_AUTHORIZED_R02_FROZEN_BLOCK"
+            and protected.get("locked_oos", {}).get("training_access") is False
+            and protected.get("fresh_forward", {}).get("training_access") is False
             and (protected.get("target_dependency_authority") or {}).get("schema")
             == TARGET_DEPENDENCY_SCHEMA
             and (protected.get("target_dependency_authority") or {}).get("status")
@@ -970,6 +995,54 @@ def _output_manifest(
             and discovery_label_summary.get("protected_partition_manifest_sha256")
             == stable_hash(protected)
             and _verify_sealed_manifest(discovery_label_summary)
+        ),
+        "DISCOVERY_TRAINING_ARTIFACT_SCOPED": (
+            discovery_training_manifest.get("schema")
+            == DISCOVERY_TRAINING_SCHEMA
+            and discovery_training_manifest.get("scope") == "DISCOVERY_ONLY"
+            and discovery_training_manifest.get("research_id")
+            == input_manifest["research_id"]
+            and discovery_training_manifest.get("run_id")
+            == run_id
+            and discovery_training_manifest.get("dataset_id")
+            == dataset["dataset_id"]
+            and discovery_training_manifest.get("feature_contract")
+            == FEATURE_CONTRACT
+            and discovery_training_manifest.get("feature_order")
+            == list(FEATURE_NAMES)
+            and discovery_training_manifest.get("feature_manifest_sha256")
+            == stable_hash(dataset["feature_manifest"])
+            and discovery_training_manifest.get("label_contract")
+            == dataset["label_manifest"]["contract_id"]
+            and discovery_training_manifest.get("label_manifest_sha256")
+            == stable_hash(dataset["label_manifest"])
+            and discovery_training_manifest.get("dataset_manifest_sha256")
+            == dataset["dataset_manifest"]["manifest_sha256"]
+            and discovery_training_manifest.get("protected_manifest_sha256")
+            == stable_hash(protected)
+            and discovery_training_manifest.get("discovery_label_summary_sha256")
+            == discovery_label_summary["manifest_sha256"]
+            and discovery_training_manifest.get("dependency_report_sha256")
+            == stable_hash(dataset["dependency_report"])
+            and discovery_training_manifest.get("minimum_legal_purge_main_bars")
+            == dataset["dependency_report"]["minimum_legal_purge_main_bars"]
+            and discovery_training_manifest.get("parent_lineage") == {
+                "research_parent_id": parent["research_parent_id"],
+                "parent_strategy_id": parent["parent_strategy_id"],
+                "dataset_id": dataset["dataset_id"],
+            }
+            and discovery_training_manifest.get("discovery_from")
+            == protected["discovery"]["from"]
+            and discovery_training_manifest.get("discovery_to")
+            == protected["discovery"]["to"]
+            and discovery_training_manifest.get("row_count")
+            == discovery_label_summary["supervised_rows"]
+            and discovery_training_manifest.get("excluded_target_partitions")
+            == ["LOCKED_OOS", "FRESH_FORWARD"]
+            and discovery_training_manifest.get("training_authorization_required")
+            == "VALIDATED_OWNER_AUTHORIZED_R02_FROZEN_BLOCK"
+            and _verify_sealed_manifest(discovery_training_manifest)
+            and bool(file_hashes.get("discovery_training_dataset"))
         ),
         "LEAKAGE_SUITE": leakage["status"] == "PASS",
         "DELIBERATE_LEAK_DETECTED": leakage["deliberately_leaky_pipeline"] == "DETECTED_FAIL",
@@ -1043,12 +1116,66 @@ def _materialize_success(
     if side_effects["status"] != "PASS":
         raise RuntimeError("R01_MODEL_SIDE_EFFECT_DETECTED")
 
+    discovery_training_rows = [
+        row
+        for row in boundary_safe_partition_rows(
+            dataset["rows"], protected, partition="discovery"
+        )
+        if partition_supervised_eligible(
+            row, protected, partition="discovery"
+        )
+    ]
+
     paths = _paths(parent["research_id"], run_id, dataset["dataset_id"])
     if paths["root"].exists() and any(paths["root"].iterdir()):
         raise RuntimeError("R01_DATASET_ID_ALREADY_MATERIALIZED")
     paths["root"].mkdir(parents=True, exist_ok=False)
     _write_immutable_json(paths["input"], input_manifest)
     write_dataset_csv(paths["dataset"], dataset["rows"])
+    _write_discovery_training_csv(paths["discovery_training_dataset"], discovery_training_rows)
+    discovery_training_manifest = _seal({
+        "schema": DISCOVERY_TRAINING_SCHEMA,
+        "research_id": parent["research_id"],
+        "run_id": run_id,
+        "dataset_id": dataset["dataset_id"],
+        "scope": "DISCOVERY_ONLY",
+        "feature_contract": FEATURE_CONTRACT,
+        "feature_order": list(FEATURE_NAMES),
+        "feature_manifest_sha256": stable_hash(dataset["feature_manifest"]),
+        "label_contract": dataset["label_manifest"]["contract_id"],
+        "label_manifest_sha256": stable_hash(dataset["label_manifest"]),
+        "dataset_manifest_sha256": dataset["dataset_manifest"]["manifest_sha256"],
+        "protected_manifest_sha256": stable_hash(protected),
+        "discovery_label_summary_sha256": discovery_label_summary["manifest_sha256"],
+        "dependency_report_sha256": stable_hash(dataset["dependency_report"]),
+        "minimum_legal_purge_main_bars": int(
+            dataset["dependency_report"]["minimum_legal_purge_main_bars"]
+        ),
+        "discovery_from": protected["discovery"]["from"],
+        "discovery_to": protected["discovery"]["to"],
+        "parent_lineage": {
+            "research_parent_id": parent["research_parent_id"],
+            "parent_strategy_id": parent["parent_strategy_id"],
+            "dataset_id": dataset["dataset_id"],
+        },
+        "row_count": len(discovery_training_rows),
+        "first_source_row_id": (
+            int(discovery_training_rows[0]["source_row_id"])
+            if discovery_training_rows else None
+        ),
+        "last_source_row_id": (
+            int(discovery_training_rows[-1]["source_row_id"])
+            if discovery_training_rows else None
+        ),
+        "source_row_ids_sha256": stable_hash([
+            int(row["source_row_id"]) for row in discovery_training_rows
+        ]),
+        "training_authorization_required": (
+            "VALIDATED_OWNER_AUTHORIZED_R02_FROZEN_BLOCK"
+        ),
+        "excluded_target_partitions": ["LOCKED_OOS", "FRESH_FORWARD"],
+    })
+    _write_immutable_json(paths["discovery_training_manifest"], discovery_training_manifest)
     _write_immutable_json(paths["dataset_manifest"], dataset["dataset_manifest"])
     _write_immutable_json(paths["feature"], dataset["feature_manifest"])
     _write_immutable_json(paths["label"], dataset["label_manifest"])
@@ -1062,6 +1189,8 @@ def _materialize_success(
 
     hash_names = {
         "input": paths["input"], "dataset": paths["dataset"],
+        "discovery_training_dataset": paths["discovery_training_dataset"],
+        "discovery_training_manifest": paths["discovery_training_manifest"],
         "dataset_manifest": paths["dataset_manifest"], "feature_manifest": paths["feature"],
         "label_manifest": paths["label"], "chronology_report": paths["chronology"],
         "data_quality_report": paths["quality"],
@@ -1072,10 +1201,13 @@ def _materialize_success(
     }
     file_hashes = {name: sha256_file(file_path) for name, file_path in hash_names.items()}
     output = _output_manifest(
+        run_id=run_id,
         input_manifest=input_manifest,
+        parent=parent,
         dataset=dataset,
         protected=protected,
         discovery_label_summary=discovery_label_summary,
+        discovery_training_manifest=discovery_training_manifest,
         leakage=leakage,
         file_hashes=file_hashes,
         side_effects=side_effects,
@@ -1087,6 +1219,8 @@ def _materialize_success(
     type_map = {
         "input": "RESEARCH_AUTHORITY_MANIFEST",
         "dataset": "RESEARCH_DATASET",
+        "discovery_training_dataset": "R02_DISCOVERY_TRAINING_DATASET",
+        "discovery_training_manifest": "R02_DISCOVERY_TRAINING_MANIFEST",
         "dataset_manifest": "RESEARCH_DATASET_MANIFEST",
         "feature_manifest": "FEATURE_MANIFEST",
         "label_manifest": "LABEL_MANIFEST",
@@ -1126,6 +1260,36 @@ def _materialize_success(
         "output": output,
         "paths": {key: str(value) for key, value in paths.items()},
     }, artifact_ids
+
+
+def _write_discovery_training_csv(path: Path, rows: list[dict[str, Any]]) -> None:
+    fields = ("source_row_id", "signal_time", *FEATURE_NAMES, "label")
+    previous_row_id = -1
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
+        writer.writeheader()
+        for row in rows:
+            row_id = row.get("source_row_id")
+            if isinstance(row_id, bool) or not isinstance(row_id, int) or row_id <= previous_row_id:
+                raise RuntimeError("R01_DISCOVERY_TRAINING_ROW_ORDER_INVALID")
+            previous_row_id = row_id
+            try:
+                timestamp = row["signal_time"].isoformat()
+                features = {name: float(row[name]) for name in FEATURE_NAMES}
+                label = row["label"]
+            except (KeyError, TypeError, ValueError, OverflowError) as exc:
+                raise RuntimeError("R01_DISCOVERY_TRAINING_ROW_INVALID") from exc
+            if any(not math.isfinite(value) for value in features.values()):
+                raise RuntimeError("R01_DISCOVERY_TRAINING_FEATURE_NONFINITE")
+            if isinstance(label, bool) or not isinstance(label, int) or label not in {0, 1, 2}:
+                raise RuntimeError("R01_DISCOVERY_TRAINING_LABEL_INVALID")
+            writer.writerow({
+                "source_row_id": row_id,
+                "signal_time": timestamp,
+                **features,
+                "label": label,
+            })
 
 
 def _failure_state(exc: Exception) -> str:
@@ -1244,7 +1408,98 @@ def _verify_sealed_manifest(payload: dict[str, Any]) -> bool:
     return stable_hash(body) == expected
 
 
-def validate_r01_integrity(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
+def _parse_discovery_training_csv(
+    content: str,
+    manifest: dict[str, Any],
+) -> list[dict[str, Any]] | None:
+    expected_fields = ("source_row_id", "signal_time", *FEATURE_NAMES, "label")
+    try:
+        discovery_from = datetime.fromisoformat(
+            str(manifest.get("discovery_from", "")).replace("Z", "+00:00")
+        )
+        discovery_to = datetime.fromisoformat(
+            str(manifest.get("discovery_to", "")).replace("Z", "+00:00")
+        )
+        if (
+            discovery_from.tzinfo is None
+            or discovery_from.utcoffset() is None
+            or discovery_to.tzinfo is None
+            or discovery_to.utcoffset() is None
+            or discovery_from >= discovery_to
+        ):
+            return None
+
+        source_row_ids: list[int] = []
+        rows: list[dict[str, Any]] = []
+        previous_time: datetime | None = None
+        with io.StringIO(content, newline="") as handle:
+            reader = csv.DictReader(handle)
+            if tuple(reader.fieldnames or ()) != expected_fields:
+                return None
+            for row in reader:
+                if None in row or any(value is None for value in row.values()):
+                    return None
+                raw_id = row.get("source_row_id", "")
+                if not raw_id.isdecimal() or str(int(raw_id)) != raw_id:
+                    return None
+                source_row_id = int(raw_id)
+                if source_row_ids and source_row_id <= source_row_ids[-1]:
+                    return None
+
+                signal_time = datetime.fromisoformat(
+                    str(row.get("signal_time", "")).replace("Z", "+00:00")
+                )
+                if signal_time.tzinfo is None or signal_time.utcoffset() is None:
+                    return None
+                if not discovery_from <= signal_time < discovery_to:
+                    return None
+                if previous_time is not None and signal_time <= previous_time:
+                    return None
+                previous_time = signal_time
+
+                features = {name: float(row[name]) for name in FEATURE_NAMES}
+                if any(not math.isfinite(value) for value in features.values()):
+                    return None
+                raw_label = row.get("label", "")
+                if raw_label not in {"0", "1", "2"}:
+                    return None
+                source_row_ids.append(source_row_id)
+                rows.append({
+                    "source_row_id": source_row_id,
+                    "signal_time": signal_time,
+                    **features,
+                    "label": int(raw_label),
+                })
+
+        count = manifest.get("row_count")
+        if isinstance(count, bool) or not isinstance(count, int):
+            return None
+        valid = (
+            count > 0
+            and len(source_row_ids) == count
+            and source_row_ids[0] == manifest.get("first_source_row_id")
+            and source_row_ids[-1] == manifest.get("last_source_row_id")
+            and stable_hash(source_row_ids)
+            == manifest.get("source_row_ids_sha256")
+        )
+        return rows if valid else None
+    except (OSError, UnicodeError, csv.Error, TypeError, ValueError, OverflowError):
+        return None
+
+
+def _validate_discovery_training_csv(path: Path, manifest: dict[str, Any]) -> bool:
+    try:
+        content = path.read_text(encoding="utf-8")
+    except (OSError, UnicodeError):
+        return False
+    return _parse_discovery_training_csv(content, manifest) is not None
+
+
+def validate_r01_integrity(
+    *,
+    path: Path = DATABASE_PATH,
+    discovery_only: bool = False,
+) -> dict[str, Any]:
     parent = _normalized_r00_parent(path=path)
     run = get_r01_run(parent["research_id"], path=path)
     if run is None:
@@ -1260,6 +1515,13 @@ def validate_r01_integrity(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
             "research_id": parent["research_id"],
             "checks": {"terminal_state": False},
             "failures": ["terminal_state"],
+        }
+    if discovery_only and run["state"] != "PASS_WAITING_OWNER":
+        return {
+            "status": "INTEGRITY_FAIL",
+            "research_id": parent["research_id"],
+            "checks": {"discovery_scope_requires_accepted_r01": False},
+            "failures": ["discovery_scope_requires_accepted_r01"],
         }
 
     with connect(path) as conn:
@@ -1302,10 +1564,37 @@ def validate_r01_integrity(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
 
     files_ok = True
     file_hashes_ok = True
+    deferred_artifacts: set[str] = set()
+    expected_paths = (
+        _paths(parent["research_id"], run["run_id"], run["dataset_id"])
+        if discovery_only and run.get("dataset_id")
+        else {}
+    )
+    expected_deferred_paths = {
+        "dataset.csv": "dataset",
+        "data_quality_report.json": "quality",
+        "leakage_report.json": "leakage",
+    }
     for row in artifacts:
         item = Path(str(row["canonical_path"]))
         if not item.is_file():
             files_ok = False
+            continue
+        if discovery_only and item.name in R01_DISCOVERY_DEFERRED_ARTIFACTS:
+            # These files contain protected outcomes or aggregates derived from them.
+            # R02 binds their recorded hashes without opening their contents.
+            expected_path = expected_paths.get(
+                expected_deferred_paths[item.name]
+            )
+            if (
+                expected_path is None
+                or item.is_symlink()
+                or item.resolve() != expected_path.resolve()
+            ):
+                files_ok = False
+                file_hashes_ok = False
+                continue
+            deferred_artifacts.add(item.name)
             continue
         expected = str(row["sha256"] or "")
         if not expected or sha256_file(item) != expected:
@@ -1379,22 +1668,62 @@ def validate_r01_integrity(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
 
     dataset_binding_ok = False
     success_evidence_ok = True
+    discovery_training_ok = run["state"] != "PASS_WAITING_OWNER"
     if run["state"] == "PASS_WAITING_OWNER":
         dataset_manifest_row = by_name.get("dataset_manifest.json")
+        feature_manifest_row = by_name.get("feature_manifest.json")
+        label_manifest_row = by_name.get("label_manifest.json")
+        dependency_row = by_name.get("dependency_report.json")
         quality_row = by_name.get("data_quality_report.json")
         leakage_row = by_name.get("leakage_report.json")
         protected_row = by_name.get("protected_data_manifest.json")
         discovery_summary_row = by_name.get("discovery_label_summary.json")
+        discovery_training_row = by_name.get("discovery_training_dataset.csv")
+        discovery_training_manifest_row = by_name.get(
+            "discovery_training_manifest.json"
+        )
         if all(row is not None for row in (
-            dataset_manifest_row, quality_row, leakage_row, protected_row,
-            discovery_summary_row,
+            dataset_manifest_row, feature_manifest_row, label_manifest_row,
+            dependency_row, quality_row, leakage_row, protected_row,
+            discovery_summary_row, discovery_training_row,
+            discovery_training_manifest_row,
         )):
             dataset_manifest = _read_json(Path(str(dataset_manifest_row["canonical_path"])))
-            quality = _read_json(Path(str(quality_row["canonical_path"])))
-            leakage = _read_json(Path(str(leakage_row["canonical_path"])))
+            feature_manifest = _read_json(Path(str(feature_manifest_row["canonical_path"])))
+            label_manifest = _read_json(Path(str(label_manifest_row["canonical_path"])))
+            dependency_manifest = _read_json(Path(str(dependency_row["canonical_path"])))
+            quality = (
+                None
+                if discovery_only
+                else _read_json(Path(str(quality_row["canonical_path"])))
+            )
+            leakage = (
+                None
+                if discovery_only
+                else _read_json(Path(str(leakage_row["canonical_path"])))
+            )
             protected = _read_json(Path(str(protected_row["canonical_path"])))
             discovery_summary = _read_json(
                 Path(str(discovery_summary_row["canonical_path"]))
+            )
+            discovery_training_manifest = _read_json(
+                Path(str(discovery_training_manifest_row["canonical_path"]))
+            )
+            discovery_training_path = Path(
+                str(discovery_training_row["canonical_path"])
+            )
+            expected_paths = _paths(
+                parent["research_id"], run["run_id"], run["dataset_id"]
+            )
+            artifact_root = expected_paths["root"].resolve()
+            artifact_authority = RESEARCH_ARTIFACT_ROOT.resolve()
+            resolved_training_path = discovery_training_path.resolve()
+            discovery_training_path_scoped = (
+                artifact_root.is_relative_to(artifact_authority)
+                and resolved_training_path.is_relative_to(artifact_root)
+                and resolved_training_path
+                == expected_paths["discovery_training_dataset"].resolve()
+                and not discovery_training_path.is_symlink()
             )
             dataset_binding_ok = bool(
                 output
@@ -1404,16 +1733,41 @@ def validate_r01_integrity(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
                 and _verify_sealed_manifest(dataset_manifest)
                 and output.get("dataset_manifest_sha256")
                 == dataset_manifest.get("manifest_sha256")
-                and quality.get("manifest_hash")
-                == dataset_manifest.get("manifest_sha256")
+                and (
+                    discovery_only
+                    or quality.get("manifest_hash")
+                    == dataset_manifest.get("manifest_sha256")
+                )
+            )
+            output_validators = {
+                str(item.get("validator")): str(item.get("status"))
+                for item in (output or {}).get("validators", [])
+                if isinstance(item, dict)
+            }
+            quality_and_leakage_evidence_ok = (
+                output_validators.get("DATA_QUALITY") == "PASS"
+                and output_validators.get("LEAKAGE_SUITE") == "PASS"
+                and output_validators.get("DELIBERATE_LEAK_DETECTED") == "PASS"
+                if discovery_only
+                else bool(
+                    leakage
+                    and leakage.get("status") == "PASS"
+                    and leakage.get("legal_pipeline") == "PASS"
+                    and leakage.get("deliberately_leaky_pipeline") == "DETECTED_FAIL"
+                )
             )
             success_evidence_ok = bool(
-                leakage.get("status") == "PASS"
-                and leakage.get("legal_pipeline") == "PASS"
-                and leakage.get("deliberately_leaky_pipeline") == "DETECTED_FAIL"
+                quality_and_leakage_evidence_ok
                 and protected.get("hidden_default") is False
+                and protected.get("discovery", {}).get("training_access") is True
+                and protected.get("discovery", {}).get("training_access_scope")
+                == "DISCOVERY_ONLY"
+                and protected.get("discovery", {}).get("training_authorization_required")
+                == "VALIDATED_OWNER_AUTHORIZED_R02_FROZEN_BLOCK"
                 and protected.get("locked_oos", {}).get("adaptive_access") is False
+                and protected.get("locked_oos", {}).get("training_access") is False
                 and protected.get("fresh_forward", {}).get("adaptive_access") is False
+                and protected.get("fresh_forward", {}).get("training_access") is False
                 and int(protected.get("overlap_count", -1)) == 0
                 and int(protected.get("unassigned_count", -1)) == 0
                 and protected.get("boundary_semantics") == {
@@ -1450,10 +1804,67 @@ def validate_r01_integrity(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
                 == stable_hash(protected)
                 and _verify_sealed_manifest(discovery_summary)
             )
+            discovery_training_ok = bool(
+                discovery_training_path_scoped
+                and discovery_training_manifest.get("schema")
+                == DISCOVERY_TRAINING_SCHEMA
+                and discovery_training_manifest.get("scope") == "DISCOVERY_ONLY"
+                and discovery_training_manifest.get("research_id")
+                == parent["research_id"]
+                and discovery_training_manifest.get("run_id") == run["run_id"]
+                and discovery_training_manifest.get("dataset_id") == run["dataset_id"]
+                and discovery_training_manifest.get("feature_contract")
+                == FEATURE_CONTRACT
+                and discovery_training_manifest.get("feature_order")
+                == list(FEATURE_NAMES)
+                and discovery_training_manifest.get("feature_manifest_sha256")
+                == stable_hash(feature_manifest)
+                and discovery_training_manifest.get("label_contract")
+                == label_manifest.get("contract_id")
+                and discovery_training_manifest.get("label_manifest_sha256")
+                == stable_hash(label_manifest)
+                and discovery_training_manifest.get("dataset_manifest_sha256")
+                == dataset_manifest.get("manifest_sha256")
+                and discovery_training_manifest.get("protected_manifest_sha256")
+                == stable_hash(protected)
+                and discovery_training_manifest.get("discovery_label_summary_sha256")
+                == discovery_summary.get("manifest_sha256")
+                and discovery_training_manifest.get("dependency_report_sha256")
+                == stable_hash(dependency_manifest)
+                and discovery_training_manifest.get("minimum_legal_purge_main_bars")
+                == dependency_manifest.get("minimum_legal_purge_main_bars")
+                and discovery_training_manifest.get("parent_lineage") == {
+                    "research_parent_id": parent["research_parent_id"],
+                    "parent_strategy_id": parent["parent_strategy_id"],
+                    "dataset_id": run["dataset_id"],
+                }
+                and discovery_training_manifest.get("discovery_from")
+                == protected.get("discovery", {}).get("from")
+                and discovery_training_manifest.get("discovery_to")
+                == protected.get("discovery", {}).get("to")
+                and discovery_training_manifest.get("row_count")
+                == discovery_summary.get("supervised_rows")
+                and discovery_training_manifest.get("excluded_target_partitions")
+                == ["LOCKED_OOS", "FRESH_FORWARD"]
+                and discovery_training_manifest.get("training_authorization_required")
+                == "VALIDATED_OWNER_AUTHORIZED_R02_FROZEN_BLOCK"
+                and _verify_sealed_manifest(discovery_training_manifest)
+                and _validate_discovery_training_csv(
+                    discovery_training_path, discovery_training_manifest
+                )
+                and any(
+                    isinstance(item, dict)
+                    and item.get("validator") == "DISCOVERY_TRAINING_ARTIFACT_SCOPED"
+                    and item.get("status") == "PASS"
+                    for item in (output or {}).get("validators", [])
+                )
+            )
             if output and isinstance(output.get("file_hashes"), dict):
                 filename_by_key = {
                     "input": "r01_input_manifest.json",
                     "dataset": "dataset.csv",
+                    "discovery_training_dataset": "discovery_training_dataset.csv",
+                    "discovery_training_manifest": "discovery_training_manifest.json",
                     "dataset_manifest": "dataset_manifest.json",
                     "feature_manifest": "feature_manifest.json",
                     "label_manifest": "label_manifest.json",
@@ -1491,7 +1902,6 @@ def validate_r01_integrity(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
         "artifact_terminal_state": artifact_status_ok,
         "artifact_authority": artifact_authority_ok,
         "artifact_files_exist": files_ok,
-        "artifact_file_hashes": file_hashes_ok,
         "output_artifact_hash": gate_output_file_hash_ok,
         "output_dependency_lineage": output_dependencies_ok,
         "input_manifest_sealed": input_sealed_ok,
@@ -1499,21 +1909,172 @@ def validate_r01_integrity(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
         "output_manifest_sealed": output_sealed_ok,
         "db_output_gate_state_binding": output_state_ok,
         "dataset_identity_binding": dataset_binding_ok,
+        "discovery_training_artifact": discovery_training_ok,
         "terminal_gate_event_binding": terminal_event_ok,
         "research_memory_binding": memory_ok,
         "protected_and_leakage_evidence": success_evidence_ok,
         "no_training_onnx_challenger_champion_side_effect": side_effects["status"] == "PASS",
     }
+    if discovery_only:
+        checks["safe_artifact_file_hashes"] = file_hashes_ok
+        checks["protected_artifact_contents_deferred"] = (
+            deferred_artifacts == R01_DISCOVERY_DEFERRED_ARTIFACTS
+        )
+    else:
+        checks["artifact_file_hashes"] = file_hashes_ok
     failures = [name for name, passed in checks.items() if not passed]
     return {
-        "status": "VERIFIED" if not failures else "INTEGRITY_FAIL",
+        "status": (
+            R01_DISCOVERY_SCOPE_VERIFIED
+            if discovery_only and not failures
+            else "VERIFIED" if not failures else "INTEGRITY_FAIL"
+        ),
+        "verification_scope": "DISCOVERY_ONLY" if discovery_only else "FULL",
         "research_id": parent["research_id"],
         "run_id": run["run_id"],
         "gate_state": run["state"],
         "dataset_id": run["dataset_id"],
+        "deferred_artifact_contents": sorted(deferred_artifacts),
         "checks": checks,
         "failures": failures,
         "artifact_count": len(artifacts),
+    }
+
+
+def read_r01_discovery_training_dataset(
+    *,
+    research_id: str,
+    dataset_id: str,
+    r01_output_manifest_sha256: str,
+    block_id: str,
+    path: Path = DATABASE_PATH,
+) -> dict[str, Any]:
+    current_parent = _normalized_r00_parent(path=path)
+    if str(research_id) != str(current_parent["research_id"]):
+        raise RuntimeError("R01_DISCOVERY_TRAINING_RESEARCH_MISMATCH")
+
+    from .research_r02_store import validate_r02_outcome_ledger_integrity
+
+    try:
+        ledger = validate_r02_outcome_ledger_integrity(research_id, path=path)
+    except RuntimeError as exc:
+        raise RuntimeError("R01_DISCOVERY_TRAINING_R02_AUTHORITY_INVALID") from exc
+    if (
+        ledger is None
+        or ledger.get("integrity_status") != "VERIFIED"
+        or ledger.get("terminal") is not None
+    ):
+        raise RuntimeError("R01_DISCOVERY_TRAINING_FROZEN_BLOCK_REQUIRED")
+
+    authorization = ledger["authorization"]
+    auth_payload = authorization["payload"]
+    block = ledger["block"]
+    if (
+        authorization.get("confirmed") is not True
+        or auth_payload.get("schema") != "MAX_RESEARCH_OWNER_AUTHORIZATION_R02_V1"
+        or auth_payload.get("gate") != "R02"
+        or auth_payload.get("action") != "AUTHORIZE_DISCOVERY"
+        or auth_payload.get("owner_confirmation")
+        != "OWNER_EXPLICIT_R02_DISCOVERY_AUTHORIZE"
+        or auth_payload.get("research_id") != research_id
+        or auth_payload.get("execution_available") is not False
+        or auth_payload.get("cheap_screen_qualification_authority") is not False
+        or str(block.get("block_id") or "") != str(block_id)
+        or block.get("state") != "FROZEN_WAITING_EXECUTION"
+        or str(block.get("research_id") or "") != research_id
+        or str(block.get("r01_output_manifest_sha256") or "")
+        != str(r01_output_manifest_sha256)
+        or str(auth_payload.get("r01_output_manifest_sha256") or "")
+        != str(r01_output_manifest_sha256)
+        or str(block.get("plan_id") or "") != str(auth_payload.get("plan_id") or "")
+        or str(block.get("plan_sha256") or "")
+        != str(auth_payload.get("plan_sha256") or "")
+    ):
+        raise RuntimeError("R01_DISCOVERY_TRAINING_FROZEN_BLOCK_BINDING_INVALID")
+
+    parent_lineage = {
+        "research_parent_id": current_parent["research_parent_id"],
+        "parent_strategy_id": current_parent["parent_strategy_id"],
+        "dataset_id": str(dataset_id),
+        "r01_output_manifest_sha256": str(r01_output_manifest_sha256),
+    }
+    if not block["candidates"] or any(
+        candidate["spec"].get("research_id") != research_id
+        or candidate["spec"].get("parent_lineage") != parent_lineage
+        for candidate in block["candidates"]
+    ):
+        raise RuntimeError("R01_DISCOVERY_TRAINING_CANDIDATE_LINEAGE_INVALID")
+
+    run = get_r01_run(research_id, path=path)
+    if (
+        run is None
+        or run.get("state") != "PASS_WAITING_OWNER"
+        or str(run.get("dataset_id") or "") != str(dataset_id)
+        or str(run.get("output_manifest_sha") or "")
+        != str(r01_output_manifest_sha256)
+    ):
+        raise RuntimeError("R01_DISCOVERY_TRAINING_R01_AUTHORITY_MISMATCH")
+    integrity = validate_r01_integrity(path=path, discovery_only=True)
+    if integrity.get("status") != R01_DISCOVERY_SCOPE_VERIFIED:
+        raise RuntimeError("R01_DISCOVERY_TRAINING_R01_INTEGRITY_NOT_VERIFIED")
+
+    expected_paths = _paths(research_id, run["run_id"], dataset_id)
+    artifact_root = expected_paths["root"].resolve()
+    artifact_authority = RESEARCH_ARTIFACT_ROOT.resolve()
+    artifact_path = expected_paths["discovery_training_dataset"]
+    if (
+        not artifact_root.is_relative_to(artifact_authority)
+        or artifact_path.is_symlink()
+        or not artifact_path.resolve().is_relative_to(artifact_root)
+        or not artifact_path.is_file()
+    ):
+        raise RuntimeError("R01_DISCOVERY_TRAINING_ARTIFACT_PATH_INVALID")
+
+    try:
+        output = _read_json(expected_paths["output"])
+        manifest = _read_json(expected_paths["discovery_training_manifest"])
+        content = artifact_path.read_bytes()
+        text = content.decode("utf-8")
+    except (OSError, UnicodeError, RuntimeError) as exc:
+        raise RuntimeError("R01_DISCOVERY_TRAINING_ARTIFACT_READ_FAILED") from exc
+
+    expected_sha = str(
+        (output.get("file_hashes") or {}).get("discovery_training_dataset") or ""
+    )
+    if (
+        not _verify_sealed_manifest(output)
+        or output.get("manifest_sha256") != r01_output_manifest_sha256
+        or output.get("research_id") != research_id
+        or output.get("dataset_id") != dataset_id
+        or not _verify_sealed_manifest(manifest)
+        or hashlib.sha256(content).hexdigest() != expected_sha
+    ):
+        raise RuntimeError("R01_DISCOVERY_TRAINING_ARTIFACT_BINDING_INVALID")
+
+    rows = _parse_discovery_training_csv(text, manifest)
+    if rows is None:
+        raise RuntimeError("R01_DISCOVERY_TRAINING_ARTIFACT_INVALID")
+    for candidate in block["candidates"]:
+        spec = candidate["spec"]
+        if (
+            spec.get("feature_contract") != FEATURE_CONTRACT
+            or spec.get("label_contract") != manifest.get("label_contract")
+        ):
+            raise RuntimeError("R01_DISCOVERY_TRAINING_CANDIDATE_CONTRACT_MISMATCH")
+
+    return {
+        "research_id": research_id,
+        "dataset_id": dataset_id,
+        "r01_output_manifest_sha256": r01_output_manifest_sha256,
+        "feature_contract": manifest["feature_contract"],
+        "feature_order": list(manifest["feature_order"]),
+        "label_contract": manifest["label_contract"],
+        "minimum_legal_purge_main_bars": manifest[
+            "minimum_legal_purge_main_bars"
+        ],
+        "parent_lineage": parent_lineage,
+        "discovery_manifest_sha256": manifest["manifest_sha256"],
+        "rows": rows,
     }
 
 

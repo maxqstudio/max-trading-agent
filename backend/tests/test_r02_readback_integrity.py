@@ -134,7 +134,11 @@ def _install_valid_preflight(monkeypatch: pytest.MonkeyPatch, research_id: str) 
     monkeypatch.setattr(
         service,
         "validate_r01_integrity",
-        lambda **_kwargs: {"research_id": research_id, "status": "VERIFIED"},
+        lambda **_kwargs: {
+            "research_id": research_id,
+            "status": "VERIFIED_DISCOVERY_ONLY",
+            "verification_scope": "DISCOVERY_ONLY",
+        },
     )
     monkeypatch.setattr(
         service,
@@ -268,7 +272,7 @@ def test_resealed_authorization_payload_semantics_fail_closed(
         (
             "compute_budget",
             "UPDATE research_r02_discovery_blocks SET compute_budget_json=?",
-            (json.dumps({"execution_semantics": "FROZEN_ONLY_NOT_EXECUTED", "unit": "FIT_SECONDS", "value": 121}, sort_keys=True, separators=(",", ":")),),
+            (json.dumps({"execution_semantics": "EXECUTOR_BOUNDED_FIT_SECONDS_V1", "unit": "FIT_SECONDS", "value": 121}, sort_keys=True, separators=(",", ":")),),
         ),
     ],
 )

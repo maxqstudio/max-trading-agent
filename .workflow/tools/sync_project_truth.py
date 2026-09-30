@@ -106,6 +106,7 @@ def main() -> int:
     try:
         acceptance = json.loads(acceptance_path.read_text(encoding="utf-8"))
         gates = acceptance.setdefault("truth_gates", {})
+        gates["ROADMAP_SYNC"] = "PASS"
         gates["DOC_LAYOUT"] = "PASS"
         gates["PROJECT_DOCS_NORMALIZED"] = "PASS"
         gates["DOC_READABILITY"] = "PASS"
@@ -143,7 +144,7 @@ def main() -> int:
     print(
         "RECORDED_GATE="
         + gate_ref
-        + "::truth_gates.{DOC_LAYOUT,PROJECT_DOCS_NORMALIZED,DOC_READABILITY,PROJECT_DOCS_SYNC}"
+        + "::truth_gates.{ROADMAP_SYNC,DOC_LAYOUT,PROJECT_DOCS_NORMALIZED,DOC_READABILITY,PROJECT_DOCS_SYNC}"
     )
     return 0
 

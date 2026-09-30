@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "current_phase": "R02_CHEAP_SCREEN_TRAINER_EXECUTOR_SOURCE",
+  "phases": [
+    {
+      "id": "R02_CHEAP_SCREEN_OUTCOME_LEDGER",
+      "title": "R02 Cheap Screen outcome ledger",
+      "status": "COMPLETE",
+      "objective": "Persist one immutable outcome per frozen candidate and a bounded terminal manifest.",
+      "exit_criteria": [
+        "Schema-12 outcome and terminal authority is immutable and atomic.",
+        "Cheap Screen and COMPLETE_WAITING_OWNER carry no scientific or Qualified Pool authority."
+      ]
+    },
+    {
+      "id": "R02_OUTCOME_READBACK_INTEGRITY",
+      "title": "R02 outcome readback integrity",
+      "status": "COMPLETE",
+      "objective": "Reconstruct and verify authorization, frozen candidates, outcomes and terminal from one persisted read snapshot.",
+      "exit_criteria": [
+        "Corrupted or partial ledgers fail closed.",
+        "Exact final SHA and hosted CI remain external acceptance evidence per D-012."
+      ]
+    },
+    {
+      "id": "R02_CHEAP_SCREEN_TRAINER_EXECUTOR_SOURCE",
+      "title": "R02 Cheap Screen trainer/executor source",
+      "status": "CURRENT",
+      "objective": "Implement a bounded deterministic Discovery-only executor for the frozen LightGBM, XGBoost and Random Forest candidate universe; verify only with synthetic data.",
+      "exit_criteria": [
+        "R01 exposes a hash-bound Discovery-only training artifact; Locked OOS and Fresh/Forward target outcomes remain unread by the executor.",
+        "Candidate adapters, chronological purged split, metric policy and compute-budget enforcement are explicit and bound to frozen authority.",
+        "All candidate outcomes are generated internally and committed through the existing atomic ledger; no public outcome-submit API or automatic next block exists.",
+        "A durable one-shot execution-attempt marker makes crash/interruption without terminal fail closed; schema-12 databases migrate to schema 13 without losing prior R02 authority.",
+        "Synthetic deterministic, negative, backend/frontend, governance, source-only and exact-main Windows CI gates pass.",
+        "Real R00/R01/R02 execution, scientific evidence and Owner-PC runtime remain NOT_PROVEN."
+      ]
+    },
+    {
+      "id": "R02_EXECUTOR_HARDENING",
+      "title": "R02 executor hardening",
+      "status": "PLANNED",
+      "objective": "Harden bounded executor recovery, interruption, resource limits and audit surfaces without creating scientific evidence.",
+      "exit_criteria": [
+        "Restart, timeout and duplicate execution behavior are deterministic and fail closed.",
+        "All testing remains synthetic and no real research execution occurs."
+      ]
+    },
+    {
+      "id": "R03_FULL_WFA",
+      "title": "R03 Full Walk-Forward Analysis source",
+      "status": "PLANNED",
+      "objective": "Implement the separately authorized Full WFA evidence source and the only Qualified Pool admission authority.",
+      "exit_criteria": [
+        "WFA folds, purge/embargo, metrics and persistence are explicit and tested with synthetic data.",
+        "R03 source does not consume Locked OOS or Fresh/Forward outcomes."
+      ]
+    },
+    {
+      "id": "R04_OWNER_SELECTION_CPCV",
+      "title": "R04 Owner selection and CPCV",
+      "status": "PLANNED",
+      "objective": "Implement explicit Owner candidate selection and CPCV evidence under frozen seed and partition authority.",
+      "exit_criteria": [
+        "Owner-only selection and deterministic CPCV lineage are enforced.",
+        "No CPCV result is represented as Owner acceptance without Owner action."
+      ]
+    },
+    {
+      "id": "R05_TOURNAMENT",
+      "title": "R05 tournament source",
+      "status": "PLANNED",
+      "objective": "Implement bounded tournament comparisons over only eligible upstream candidates.",
+      "exit_criteria": [
+        "Tournament lineage, deterministic ranking and hard-failure preservation are tested synthetically.",
+        "No tournament outcome directly mutates Champion authority."
+      ]
+    },
+    {
+      "id": "R06_MONTE_CARLO",
+      "title": "R06 Monte Carlo source",
+      "status": "PLANNED",
+      "objective": "Implement deterministic Monte Carlo robustness evidence with explicit resampling authority.",
+      "exit_criteria": [
+        "Resampling, seeds, metrics and evidence retention are explicit and tested synthetically.",
+        "Monte Carlo remains evidence, not Owner promotion."
+      ]
+    },
+    {
+      "id": "R07_LOCKED_OOS",
+      "title": "R07 Locked OOS source",
+      "status": "PLANNED",
+      "objective": "Implement single-purpose Locked OOS access under explicit Owner-gated, non-adaptive authority.",
+      "exit_criteria": [
+        "Protected outcomes cannot flow into training or adaptive feedback.",
+        "Repeat access, stale authority and cross-epoch access fail closed."
+      ]
+    },
+    {
+      "id": "R08_FRESH_FORWARD",
+      "title": "R08 Fresh/Forward source",
+      "status": "PLANNED",
+      "objective": "Implement distinct Fresh/Forward validation authority without adaptive leakage.",
+      "exit_criteria": [
+        "Fresh/Forward evidence is chronologically and lineage-bound.",
+        "Forward outcomes cannot tune candidates or rewrite prior authority."
+      ]
+    },
+    {
+      "id": "R09_FINAL_FIT",
+      "title": "R09 final fit source",
+      "status": "PLANNED",
+      "objective": "Implement final fit only after explicit upstream scientific and Owner gates.",
+      "exit_criteria": [
+        "Final-fit data scope, candidate identity and runtime authority are explicit.",
+        "No real training or scientific result is claimed by source/CI tests."
+      ]
+    },
+    {
+      "id": "R09_ONNX",
+      "title": "R09 ONNX source",
+      "status": "PLANNED",
+      "objective": "Implement gated ONNX export and parity verification only after final-fit authority.",
+      "exit_criteria": [
+        "Export policy, model compatibility and deterministic parity tests are explicit.",
+        "No production ONNX artifact is created by synthetic CI."
+      ]
+    },
+    {
+      "id": "R10_RESEARCH_MODEL_PACKAGE",
+      "title": "R10 Research Model Package",
+      "status": "PLANNED",
+      "objective": "Implement immutable Research model package construction and verification.",
+      "exit_criteria": [
+        "Package contents bind to exact scientific lineage and accepted artifact hashes.",
+        "Synthetic packaging tests do not create a real Research package."
+      ]
+    },
+    {
+      "id": "R10_STRATEGY_CHALLENGER_CREATION",
+      "title": "R10 Strategy Challenger creation",
+      "status": "PLANNED",
+      "objective": "Implement Owner-gated conversion from a fully accepted Research package to a Strategy Challenger.",
+      "exit_criteria": [
+        "Research evidence cannot bypass existing Strategy Challenger and Champion authorities.",
+        "No real Challenger or Champion mutation occurs in source/CI validation."
+      ]
+    }
+  ]
+}

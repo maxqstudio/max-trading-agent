@@ -1,28 +1,24 @@
 {
   "schema_version": 1,
-  "phase": "R02_OUTCOME_READBACK_INTEGRITY",
+  "phase": "R02_CHEAP_SCREEN_TRAINER_EXECUTOR_SOURCE",
   "status": "SOURCE_PHASE_COMPLETE_AWAITING_EXTERNAL_ACCEPTANCE",
-  "working_branch": "main",
+  "working_branch": "work/r02-cheap-screen-executor",
   "last_accepted_branch": "main",
-  "last_accepted_sha": "c913c47a45ca54d805470caf40bb54bf655b45c6",
+  "last_accepted_sha": "35f237f25a898b60b2a5123d6246ebc34fcbec8d",
   "blocked_actions": [
-    "Owner-PC testing between ordinary GitHub development phases.",
-    "Any real current-epoch R00, R01 or R02 scientific execution.",
-    "Any model fitting/training or Cheap Screen executor.",
+    "Owner-PC final runtime acceptance before all hosted source-roadmap phases are complete.",
+    "Any real current-epoch R00, R01 or R02 scientific execution during this synthetic-only source phase.",
+    "Real market-data model fitting or training; synthetic deterministic fitting is authorized only inside local tests and CI.",
     "Any API or UI action that submits fabricated Cheap Screen outcomes.",
     "Automatic second Discovery block creation.",
-    "Cheap Screen scientific qualification or Qualified Pool admission.",
-    "ONNX generation.",
-    "Research Challenger creation.",
-    "Strategy Champion mutation.",
-    "Live trading.",
-    "Adding heavy ML runtime dependencies before an executing R02 slice requires them.",
+    "Cheap Screen scientific qualification or Qualified Pool admission; R03 Full WFA remains the sole future admission authority.",
+    "Locked OOS or Fresh/Forward target-outcome access by R02 training.",
+    "ONNX production, Research Challenger creation, Champion mutation or live trading in this phase.",
     "Unrelated Strategy, optimizer, EA or UI refactors."
   ],
   "blockers": [
-    "No accepted current-epoch R00/R01 scientific result exists, so real R02 remains BLOCKED / NOT STARTED.",
-    "No trainer/executor is implemented or authorized; this source phase uses synthetic persisted outcomes only.",
-    "Real MetaTrader 5 runtime and final Owner-PC acceptance remain NOT_PROVEN and deferred."
+    "No accepted current-epoch R00/R01 scientific result or real R02 Owner authorization exists; real R02 remains BLOCKED / NOT STARTED by design.",
+    "Real MetaTrader 5 runtime and final Owner-PC acceptance remain NOT_PROVEN and deferred until the hosted source roadmap is complete."
   ],
   "proven": [
     "H0 governance rebase remains accepted on main.",
@@ -31,15 +27,17 @@
     "R02_CHEAP_SCREEN_OUTCOME_LEDGER is accepted at main c913c47a45ca54d805470caf40bb54bf655b45c6; Windows CI run 36424489731 passed with backend 581, frontend 53 tests across 10 files, source-only policy, Skill Workflow provenance, STRICT_SELFTEST, governance, pip check, lint, build and npm dependency tree.",
     "R02_OUTCOME_READBACK_INTEGRITY implementation and tracked governance are complete; candidate-tree scan, branch CI, PR-head CI, squash merge and exact merged-main CI passed. Exact final SHA and CI identity are recorded externally per D-012.",
     "The supplied New-PC baseline evidence reports the Windows symlink probe PASS, M08 path-safety test PASS, and the exact full backend baseline 581 passed, 0 skipped, 0 failed.",
-    "Skill Workflow authority remains pinned at 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720; the newer main delta was inspected and not silently adopted.",
-    "Local R02 integrity gates pass: targeted 147 tests, full backend 644 tests, frontend 53 tests across 10 files, pip check, lint, build, npm dependency tree, Project Docs, handoff, human comprehension, cross-document and sequence validation."
+    "Skill Workflow current upstream authority is c1d7e58a0fcadc606c8cf75c6283a17278f99259; its exact delta from the prior pin is adopted with roadmap authority and updated upstream compiler/self-tests.",
+    "Local R02 integrity gates pass: targeted 147 tests, full backend 644 tests, frontend 53 tests across 10 files, pip check, lint, build, npm dependency tree, Project Docs, handoff, human comprehension, cross-document and sequence validation.",
+    "Current R02 trainer/executor source has local synthetic verification: targeted R02/R01 set 257 passed, full backend 706 passed, frontend 53 tests across 10 files, pip check, lint, build and npm dependency tree passed; R02 Discovery verification reads/hash-checks only its allowlisted safe artifacts and leaves dataset.csv, data_quality_report.json and leakage_report.json contents unread; local LightGBM OpenCL and XGBoost CUDA smoke used synthetic data only."
   ],
   "not_proven": [
     "Any real current-epoch R00/R01 scientific result or real R02 authorization/execution.",
-    "Any actual model training, Cheap Screen runtime outcome, Qualified Pool, ONNX or Research Challenger.",
-    "Any real Owner-PC runtime/bootstrap/MT5/browser behavior."
+    "Any real model training, Cheap Screen runtime outcome, Qualified Pool, ONNX or Research Challenger.",
+    "Any real Owner-PC, browser, MetaEditor, broker or MT5 runtime behavior."
   ],
   "next_authorized_actions": [
-    "Control Room determines and authorizes the next GitHub source phase under the roadmap."
+    "Exact final main SHA and hosted CI identity are external acceptance evidence per D-012; do not write a self-referential final SHA into tracked state.",
+    "Control Room reviews external acceptance evidence and determines the next authorized GitHub source phase; real scientific execution remains blocked."
   ]
 }

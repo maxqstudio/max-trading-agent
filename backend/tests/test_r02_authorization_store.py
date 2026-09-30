@@ -15,6 +15,7 @@ from max_backend.research_r01_store import create_r01_authorization, create_r01_
 from max_backend.research_r02_contract import build_discovery_plan
 from max_backend.research_r02_store import (
     authorize_and_freeze_r02_discovery,
+    begin_r02_execution_attempt,
     create_r02_authorization,
     freeze_r02_discovery_block,
     commit_r02_terminal_outcomes,
@@ -137,16 +138,46 @@ def _plan() -> dict:
         ("xgboost", 42),
         ("random_forest", 7),
     ):
+        topology = {
+            "lightgbm": {
+                "n_estimators": 8,
+                "max_depth": 3,
+                "num_leaves": 7,
+                "learning_rate": 0.1,
+            },
+            "xgboost": {
+                "n_estimators": 8,
+                "max_depth": 3,
+                "learning_rate": 0.1,
+                "subsample": 1.0,
+                "colsample_bytree": 1.0,
+            },
+            "random_forest": {
+                "n_estimators": 8,
+                "max_depth": 3,
+                "min_samples_leaf": 1,
+            },
+        }[family]
         candidates.append(
             {
                 "research_id": RESEARCH_ID,
                 "model_family": family,
-                "topology_spec": {"depth": 3},
+                "topology_spec": topology,
                 "feature_contract": FEATURE_CONTRACT,
                 "label_contract": "MAX_RESEARCH_FIRST_BARRIER_LABEL_R01_V1",
                 "seed": seed,
                 "preprocessing": {"scaling": "NONE"},
-                "training_configuration": {"objective": "MULTICLASS"},
+                "training_configuration": {
+                    "objective": "MULTICLASS",
+                    "class_weighting": "BALANCED",
+                    "accelerator": {
+                        "lightgbm": "GPU_OPENCL",
+                        "xgboost": "GPU_CUDA",
+                        "random_forest": "CPU",
+                    }[family],
+                    "device_id": 0 if family in {"lightgbm", "xgboost"} else None,
+                    "platform_id": 0 if family == "lightgbm" else None,
+                },
                 "parent_lineage": deepcopy(parent),
             }
         )
@@ -241,7 +272,7 @@ def test_second_different_discovery_block_is_rejected(tmp_path: Path) -> None:
     other["compute_budget"] = {
         "value": 121,
         "unit": "FIT_SECONDS",
-        "execution_semantics": "FROZEN_ONLY_NOT_EXECUTED",
+        "execution_semantics": "EXECUTOR_BOUNDED_FIT_SECONDS_V1",
     }
     body = {key: value for key, value in other.items() if key not in {"plan_id", "plan_sha256"}}
     other["plan_id"] = "RPLAN-" + stable_hash(body)[:24]
@@ -435,7 +466,7 @@ def test_atomic_authorization_freeze_persists_exact_authority(tmp_path: Path) ->
     assert [item["candidate_id"] for item in block["candidates"]] == plan["candidate_ids"]
 
 
-def test_r02_persistence_advances_cumulative_schema_to_12(tmp_path: Path) -> None:
+def test_r02_persistence_advances_cumulative_schema_to_13(tmp_path: Path) -> None:
     db = _database(tmp_path)
     with connect(db) as conn:
         version = conn.execute(
@@ -448,14 +479,73 @@ def test_r02_persistence_advances_cumulative_schema_to_12(tmp_path: Path) -> Non
             ).fetchall()
         }
     assert version is not None
-    assert int(version["value"]) == 12
+    assert int(version["value"]) == 13
     assert {
         "research_r02_authorizations",
         "research_r02_discovery_blocks",
+        "research_r02_execution_attempts",
         "research_r02_candidate_specs",
         "research_r02_candidate_outcomes",
         "research_r02_block_terminals",
     }.issubset(tables)
+
+
+def test_schema_12_database_migrates_execution_attempt_authority_without_losing_block(
+    tmp_path: Path,
+) -> None:
+    db, frozen = _frozen_block(tmp_path)
+    accepted = commit_r02_terminal_outcomes(
+        RESEARCH_ID,
+        _outcomes(frozen),
+        path=db,
+    )
+    with connect(db) as conn:
+        conn.execute("DROP TABLE research_r02_execution_attempts")
+        conn.execute(
+            "UPDATE schema_meta SET value='12' WHERE key='schema_version'"
+        )
+
+    migrate_current(db)
+
+    ledger = get_r02_outcome_ledger(RESEARCH_ID, path=db)
+    assert ledger is not None
+    assert ledger["block"]["block_id"] == frozen["block_id"]
+    assert ledger["terminal"]["terminal_id"] == accepted["terminal"]["terminal_id"]
+    assert len(ledger["outcomes"]) == len(frozen["candidates"])
+    with connect(db) as conn:
+        version = conn.execute(
+            "SELECT value FROM schema_meta WHERE key='schema_version'"
+        ).fetchone()
+        attempt_table = conn.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' "
+            "AND name='research_r02_execution_attempts'"
+        ).fetchone()
+    assert int(version["value"]) == 13
+    assert attempt_table is not None
+
+
+def test_interrupted_execution_attempt_is_durable_and_readback_fails_closed(
+    tmp_path: Path,
+) -> None:
+    db, frozen = _frozen_block(tmp_path)
+
+    attempt = begin_r02_execution_attempt(RESEARCH_ID, path=db)
+
+    assert attempt["block_id"] == frozen["block_id"]
+    with pytest.raises(
+        RuntimeError,
+        match="R02_EXECUTOR_OWNS_OUTCOME_COMMIT",
+    ):
+        commit_r02_terminal_outcomes(
+            RESEARCH_ID,
+            _outcomes(frozen),
+            path=db,
+        )
+    with pytest.raises(
+        RuntimeError,
+        match="R02_LEDGER_INTEGRITY_EXECUTION_ATTEMPT_UNCERTAIN",
+    ):
+        get_r02_outcome_ledger(RESEARCH_ID, path=db)
 
 
 def test_get_block_returns_none_before_authorization(tmp_path: Path) -> None:

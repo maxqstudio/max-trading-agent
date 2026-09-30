@@ -10,10 +10,10 @@ Governance profile: strict
 
 ## Repositories
 Repository: maxqstudio/max-trading-agent
-Active branch: main
+Active branch: work/r02-cheap-screen-executor
 Current authoritative SHA: external final acceptance evidence
-Last accepted SHA: c913c47a45ca54d805470caf40bb54bf655b45c6
-Current source digest: 79e949b09cc369109e717fa3b495ad9bb16d89b67ba0feead151ced8df9ea119
+Last accepted SHA: 35f237f25a898b60b2a5123d6246ebc34fcbec8d
+Current source digest: 443b922b7050377aedb0931e91789d0825fc86c9db64ae7e318361204ac65cf4
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.
@@ -47,15 +47,16 @@ Generated from code inventory. See MODULE_MAP.md.
 1. ../PROJECT_PROFILE.yaml
 2. SYSTEM_OVERVIEW.md
 3. CURRENT_STATE.md
-4. PROJECT_MANIFEST.md
-5. profile-required authority / architecture / workflow docs
-6. SEQUENCE_CONTRACTS.md when enabled
-7. MODULE_MAP.md
-8. FLOW_INDEX.md
-9. SYMBOL_INDEX.md
-10. TEST_ACCEPTANCE_MATRIX.md
-11. DOC_SYNC_MATRIX.md
-12. PROJECT_TRUTH_SYNC.md when applicable
+4. ROADMAP.md
+5. PROJECT_MANIFEST.md
+6. profile-required authority / architecture / workflow docs
+7. SEQUENCE_CONTRACTS.md when enabled
+8. MODULE_MAP.md
+9. FLOW_INDEX.md
+10. SYMBOL_INDEX.md
+11. TEST_ACCEPTANCE_MATRIX.md
+12. DOC_SYNC_MATRIX.md
+13. PROJECT_TRUTH_SYNC.md when applicable
 
 ## Profile-specific applicability
 
@@ -70,6 +71,6 @@ Generated from PROJECT_PROFILE.yaml.
 - Owner explicitly authorizes Strategy promotion and Research advancement where required.
 - Scientist is advisory only and cannot create scientific, promotion, risk or execution authority.
 - R01 source/runtime readiness is not R01 scientific PASS.
-- R02 source may freeze one explicit Owner-authorized bounded Discovery block only after accepted current R01 authority; real R02 training/Cheap Screen execution and all scientific outcomes remain blocked until a separate executing slice and runtime authorization.
+- R02 executor source may fit only deterministic synthetic fixtures in tests/CI; any future real execution requires exact current accepted R01 Discovery authority, one immutable Owner-authorized block and explicit runtime gates, and remains NOT_PROVEN until actual Owner-PC acceptance.
 - Protected Locked OOS/Fresh outcomes must not silently become adaptive tuning feedback.
-- Current governance method is Skill Workflow exact SHA 1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720 with generated documentation and DURING sequence evidence.
+- Current governance method is Skill Workflow exact SHA c1d7e58a0fcadc606c8cf75c6283a17278f99259 with roadmap authority, generated documentation and DURING sequence evidence.

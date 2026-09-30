@@ -12,15 +12,45 @@ from max_backend.research_r02_contract import (
 
 
 def _candidate(family: str, seed: int) -> dict:
+    topology = {
+        "lightgbm": {
+            "n_estimators": 8,
+            "max_depth": 3,
+            "num_leaves": 7,
+            "learning_rate": 0.1,
+        },
+        "xgboost": {
+            "n_estimators": 8,
+            "max_depth": 3,
+            "learning_rate": 0.1,
+            "subsample": 1.0,
+            "colsample_bytree": 1.0,
+        },
+        "random_forest": {
+            "n_estimators": 8,
+            "max_depth": 3,
+            "min_samples_leaf": 1,
+        },
+    }[family]
     return {
         "research_id": "RSRCH-R02-TEST",
         "model_family": family,
-        "topology_spec": {"depth": 3, "width": 64},
+        "topology_spec": topology,
         "feature_contract": FEATURE_CONTRACT,
         "label_contract": "MAX_RESEARCH_FIRST_BARRIER_LABEL_R01_V1",
         "seed": seed,
         "preprocessing": {"scaling": "NONE"},
-        "training_configuration": {"objective": "MULTICLASS"},
+        "training_configuration": {
+            "objective": "MULTICLASS",
+            "class_weighting": "BALANCED",
+            "accelerator": {
+                "lightgbm": "GPU_OPENCL",
+                "xgboost": "GPU_CUDA",
+                "random_forest": "CPU",
+            }[family],
+            "device_id": 0 if family in {"lightgbm", "xgboost"} else None,
+            "platform_id": 0 if family == "lightgbm" else None,
+        },
         "parent_lineage": {
             "research_parent_id": "RPAR-R02-TEST",
             "parent_strategy_id": "STRAT-R02-TEST",
@@ -59,8 +89,12 @@ def test_discovery_contract_preserves_gate_boundaries() -> None:
     assert contract["automatic_second_discovery_block"] is False
     assert contract["cheap_screen_qualification_authority"] is False
     assert contract["qualified_pool_admission_authority"] == "R03_FULL_WFA_ONLY"
-    assert contract["runtime_execution_implemented"] is False
-    assert contract["model_training_authorized"] is False
+    assert contract["executor_source_implemented"] is True
+    assert contract["synthetic_model_fitting_authorized"] is True
+    assert contract["real_runtime_execution_authorized"] is False
+    assert contract["real_scientific_execution_proven"] is False
+    assert "runtime_execution_implemented" not in contract
+    assert "model_training_authorized" not in contract
     assert contract["onnx_authorized"] is False
 
 
@@ -75,10 +109,30 @@ def test_discovery_plan_is_deterministic_and_order_independent() -> None:
     assert first["candidate_count"] == 3
     assert first["candidate_ids"] == sorted(first["candidate_ids"])
     assert len(set(first["candidate_ids"])) == 3
-    assert first["compute_budget"]["execution_semantics"] == "FROZEN_ONLY_NOT_EXECUTED"
+    assert first["cheap_screen_policy"]["reproducibility_scope"] == (
+        "SAME_DATA_SPEC_SEED_SOFTWARE_BUILD_AND_DEVICE"
+    )
+    assert first["compute_budget"]["execution_semantics"] == "EXECUTOR_BOUNDED_FIT_SECONDS_V1"
+    assert first["cheap_screen_policy"]["policy_id"] == "R02_DISCOVERY_CHRONOLOGICAL_PURGED_80_20_V1"
     assert first["cheap_screen_qualification_authority"] is False
     assert first["model_training_performed"] is False
     assert first["runtime_execution_authorized"] is False
+    executor_policy = first["cheap_screen_policy"]["executor_policy"]
+    assert executor_policy["threads"] == 1
+    assert executor_policy["retry_count"] == 0
+    assert executor_policy["accelerators"] == {
+        "lightgbm": ["CPU", "GPU_OPENCL"],
+        "xgboost": ["CPU", "GPU_CUDA"],
+        "random_forest": ["CPU"],
+    }
+    assert executor_policy["sample_weight_policy"] == (
+        "BALANCED_FROM_TRAIN_LABELS_ONLY"
+    )
+    assert set(executor_policy["family_parameters"]) == {
+        "lightgbm",
+        "xgboost",
+        "random_forest",
+    }
 
 
 @pytest.mark.parametrize("candidate_count", [0, -1, True])
@@ -195,4 +249,78 @@ def test_plan_rejects_unknown_top_level_fields() -> None:
     request = _request()
     request["hidden_default"] = True
     with pytest.raises(ValueError, match="R02_PLAN_FIELDS_INVALID"):
+        build_discovery_plan(request)
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "error"),
+    [
+        ("topology_spec", {}, "R02_CANDIDATE_TOPOLOGY_FIELDS_INVALID"),
+        ("topology_spec", {"n_estimators": 8}, "R02_CANDIDATE_TOPOLOGY_FIELDS_INVALID"),
+        ("preprocessing", {"scaling": "MAGIC"}, "R02_CANDIDATE_PREPROCESSING_INVALID"),
+        ("preprocessing", {"scaling": []}, "R02_CANDIDATE_PREPROCESSING_INVALID"),
+        (
+            "training_configuration",
+            {
+                "objective": "BINARY",
+                "class_weighting": "BALANCED",
+                "accelerator": "GPU_CUDA",
+                "device_id": 0,
+                "platform_id": None,
+            },
+            "R02_CANDIDATE_TRAINING_CONFIGURATION_INVALID",
+        ),
+        (
+            "training_configuration",
+            {
+                "objective": "MULTICLASS",
+                "class_weighting": "BALANCED",
+                "accelerator": "GPU_CUDA",
+                "device_id": 0,
+                "platform_id": None,
+                "early_stopping": True,
+            },
+            "R02_CANDIDATE_TRAINING_CONFIGURATION_INVALID",
+        ),
+    ],
+)
+def test_executable_candidate_configuration_is_exact_and_explicit(
+    field: str,
+    value: object,
+    error: str,
+) -> None:
+    request = _request()
+    request["candidates"][0][field] = value
+    with pytest.raises(ValueError, match=error):
+        build_discovery_plan(request)
+
+
+@pytest.mark.parametrize(
+    ("family", "accelerator", "device_id", "platform_id", "error"),
+    [
+        ("xgboost", "GPU_CUDA", 0, 0, "R02_CANDIDATE_TRAINING_CONFIGURATION_INVALID"),
+        ("xgboost", "GPU_OPENCL", 0, None, "R02_CANDIDATE_TRAINING_CONFIGURATION_INVALID"),
+        ("lightgbm", "GPU_OPENCL", None, 0, "R02_CANDIDATE_TRAINING_CONFIGURATION_INVALID"),
+        ("lightgbm", "GPU_CUDA", 0, None, "R02_CANDIDATE_TRAINING_CONFIGURATION_INVALID"),
+        ("random_forest", "GPU_CUDA", 0, None, "R02_CANDIDATE_TRAINING_CONFIGURATION_INVALID"),
+        ("xgboost", "GPU_CUDA", True, None, "R02_CANDIDATE_TRAINING_CONFIGURATION_INVALID"),
+    ],
+)
+def test_candidate_accelerator_is_family_specific_and_explicit(
+    family: str,
+    accelerator: str,
+    device_id: object,
+    platform_id: object,
+    error: str,
+) -> None:
+    request = _request()
+    candidate = next(
+        item for item in request["candidates"] if item["model_family"] == family
+    )
+    candidate["training_configuration"].update({
+        "accelerator": accelerator,
+        "device_id": device_id,
+        "platform_id": platform_id,
+    })
+    with pytest.raises(ValueError, match=error):
         build_discovery_plan(request)

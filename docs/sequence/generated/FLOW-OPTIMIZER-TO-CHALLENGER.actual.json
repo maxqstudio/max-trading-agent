@@ -389,6 +389,13 @@
       "to": "backend/max_backend/optimizer_core.py::parse_set_optimizer_entries"
     },
     {
+      "action": "join",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::write_challenger_set",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_executor.py::test_bounded_fit_predict_stops_timed_out_worker.FakeProcess.join"
+    },
+    {
       "action": "conn.execute",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready",
@@ -1544,6 +1551,13 @@
       "to": "backend/max_backend/workflow_store.py::migrate_current"
     },
     {
+      "action": "join",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::update_batch",
+      "resolver": "python_ast",
+      "to": "backend/tests/test_r02_executor.py::test_bounded_fit_predict_stops_timed_out_worker.FakeProcess.join"
+    },
+    {
       "action": "conn.execute",
       "evidence": "STATIC",
       "from": "backend/max_backend/workflow_store.py::update_batch",
@@ -2531,8 +2545,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::get_batch",
       "language": "Python",
-      "line_end": 661,
-      "line_start": 638,
+      "line_end": 681,
+      "line_start": 658,
       "locator": "backend/max_backend/workflow_store.py::get_batch"
     },
     {
@@ -2540,8 +2554,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::insert_challenger_batch_rows",
       "language": "Python",
-      "line_end": 870,
-      "line_start": 756,
+      "line_end": 890,
+      "line_start": 776,
       "locator": "backend/max_backend/workflow_store.py::insert_challenger_batch_rows"
     },
     {
@@ -2549,7 +2563,7 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::migrate_current",
       "language": "Python",
-      "line_end": 635,
+      "line_end": 655,
       "line_start": 137,
       "locator": "backend/max_backend/workflow_store.py::migrate_current"
     },
@@ -2558,8 +2572,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::prepare_batch",
       "language": "Python",
-      "line_end": 713,
-      "line_start": 664,
+      "line_end": 733,
+      "line_start": 684,
       "locator": "backend/max_backend/workflow_store.py::prepare_batch"
     },
     {
@@ -2567,8 +2581,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::update_batch",
       "language": "Python",
-      "line_end": 753,
-      "line_start": 716,
+      "line_end": 773,
+      "line_start": 736,
       "locator": "backend/max_backend/workflow_store.py::update_batch"
     },
     {
@@ -2590,16 +2604,25 @@
       "locator": "backend/tests/test_m01_recovery.py::good_pass"
     },
     {
+      "id": "backend/tests/test_r02_executor.py::test_bounded_fit_predict_stops_timed_out_worker.FakeProcess.join",
+      "kind": "method",
+      "label": "backend/tests/test_r02_executor.py::test_bounded_fit_predict_stops_timed_out_worker.FakeProcess.join",
+      "language": "Python",
+      "line_end": 452,
+      "line_start": 451,
+      "locator": "backend/tests/test_r02_executor.py::test_bounded_fit_predict_stops_timed_out_worker.FakeProcess.join"
+    },
+    {
       "id": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute",
       "kind": "method",
       "label": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute",
       "language": "Python",
-      "line_end": 665,
-      "line_start": 664,
+      "line_end": 669,
+      "line_start": 668,
       "locator": "backend/tests/test_r02_readback_integrity.py::test_public_read_paths_wrap_database_errors.BrokenConnection.execute"
     }
   ],
-  "observed_head": "c913c47a45ca54d805470caf40bb54bf655b45c6",
+  "observed_head": "35f237f25a898b60b2a5123d6246ebc34fcbec8d",
   "schema_version": 1,
-  "source_digest": "79e949b09cc369109e717fa3b495ad9bb16d89b67ba0feead151ced8df9ea119"
+  "source_digest": "443b922b7050377aedb0931e91789d0825fc86c9db64ae7e318361204ac65cf4"
 }

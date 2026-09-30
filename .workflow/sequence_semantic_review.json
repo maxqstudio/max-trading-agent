@@ -372,7 +372,7 @@
   "runtime_trace_required": false,
   "schema_version": 1,
   "scope": "CURRENT",
-  "skill_authority_sha": "1f9b48b9a3bf29bf2929a7d38b1ec9a645dfb720",
+  "skill_authority_sha": "c1d7e58a0fcadc606c8cf75c6283a17278f99259",
   "unresolved_critical_sequence_bindings": 0,
   "hosted_governance_rebase": {
     "repository": "maxqstudio/max-trading-agent",

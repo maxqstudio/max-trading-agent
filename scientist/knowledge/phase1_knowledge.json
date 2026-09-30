@@ -161,7 +161,7 @@
       "classification": "EXISTING",
       "facts": [
         "Previous-epoch R00 is accepted historical evidence; the current fresh epoch has no Research project and current-epoch R00 has not started.",
-        "Previous-epoch R01 source/runtime repair has historical targeted re-audit PASS; current source resolves R01 from the latest accepted current R00 immutable lineage without retired epoch IDs, while real current-epoch R01 remains blocked/not started until a new R00 exists and Owner authorizes execution; R02 remains blocked.",
+        "Previous-epoch R01 source/runtime repair has historical targeted re-audit PASS; current source resolves R01 from the latest accepted current R00 immutable lineage without retired epoch IDs, while real current-epoch R01 remains blocked/not started until a new R00 exists and Owner authorizes execution. Control Room has authorized bounded R02 executor source and synthetic-only CI fitting; real current-epoch R02 execution remains blocked and unproven.",
         "The system owns deterministic scientific PASS/FAIL and may recommend; the Owner selects which qualified candidates advance.",
         "No Research gate automatically opens the next gate, creates a Strategy Challenger, or mutates Champion authority."
       ],
@@ -202,15 +202,30 @@
         "Current Research stage is derived from immutable R00 history plus the persisted R01 run; R00 evidence is not rewritten after R01 begins.",
         "R01 terminal publication atomically binds run state, immutable artifacts, gate events and non-adaptive Research Memory, then stops waiting for Owner.",
         "R01 performs zero model training, zero ONNX export, zero Research Challenger creation, no Champion mutation and cannot execute R02.",
-        "R02 frozen Discovery authorization is immutable and one-block-per-Research; source also defines an append-only all-candidate Cheap Screen outcome ledger/COMPLETE_WAITING_OWNER terminal contract, but no trainer executes it and no outcome has R03 qualification authority."
+        "R02 frozen Discovery authorization is immutable and one-block-per-Research. The current source candidate adds a bounded LightGBM/XGBoost/Random Forest executor and an append-only all-candidate Cheap Screen outcome ledger ending COMPLETE_WAITING_OWNER; only synthetic test/CI fitting is permitted in this source phase, no real Research execution is proven, and no outcome has R03 qualification authority."
       ],
       "ref": "contract:r01-data-foundation",
       "title": "R01 Dataset + Label + Leakage Foundation"
     },
     {
+      "classification": "EXTENSION",
+      "facts": [
+        "Execution authority is bound to the accepted R01 Research, dataset identity, output-manifest SHA, feature/label contracts, parent lineage, Discovery partition, frozen R02 authorization, candidate identity/spec/seed and exact frozen candidate universe; the executor does not accept arbitrary outcome payloads.",
+        "Training reads only the sealed R01 Discovery training artifact; Locked OOS and Fresh/Forward target outcomes are not readable by this path. The deterministic screen is chronological 80/20 with no shuffle and purges training targets using the R01 minimum legal purge-bar authority.",
+        "The split requires at least 24 training rows, 12 validation rows and all three target classes in training. Preprocessing is candidate-local and fitted on training rows only.",
+        "Only explicit CPU, one-thread LightGBM, XGBoost and Random Forest adapters are supported; family topology, preprocessing, training configuration and seed come from the frozen candidate spec, with no silent defaults or retries.",
+        "Cheap Screen reports balanced accuracy, macro-F1, log loss and multiclass Brier score. Its frozen pass policy is balanced accuracy >= 0.4 and log loss <= 1.5; these are screening diagnostics, not scientific qualification thresholds.",
+        "Compute is bounded in the frozen block's FIT_SECONDS unit; one durable attempt marker is written before fitting, timeout/failure is retained as an outcome, and uncertain partial execution fails closed rather than retraining.",
+        "Every frozen candidate is represented in the terminal ledger as SCREEN_PASS, SCREEN_FAIL or EXECUTION_ERROR. COMPLETE_WAITING_OWNER is not scientific PASS; Cheap Screen qualification authority is false and Qualified Pool admission is R03_FULL_WFA_ONLY.",
+        "This phase authorizes synthetic deterministic fitting in tests/CI only. Real current-epoch R00/R01/R02 execution, real Research training and scientific outcomes remain blocked/not proven; no R03, ONNX, Challenger or Champion mutation is authorized."
+      ],
+      "ref": "contract:r02-cheap-screen-executor",
+      "title": "R02 Discovery-only Cheap Screen executor"
+    },
+    {
       "classification": "OUTSIDE_CURRENT_CONTRACT",
       "facts": [
-        "Model training, LightGBM, GRU, Transformer, PatchTST, TFT, MoE, WFA/CPCV model lifecycle, Tournament, Monte Carlo and Fresh model validation are outside current Phase-1 contract.",
+        "Real Research model training/execution, GRU, LSTM, Transformer, PatchTST, TFT, TCN, MoE, iTransformer, WFA/CPCV model lifecycle, Tournament, Monte Carlo and Fresh model validation are outside the current source phase; synthetic fitting of the three bounded R02 families is test/CI verification only.",
         "ONNX, Shadow, Live, portfolio execution, news/sentiment, web research and autonomous Scientist coding are outside current Phase-1 contract."
       ],
       "ref": "contract:deferred-capabilities",
@@ -218,8 +233,8 @@
     }
   ],
   "explicit_deferred_capabilities": [
-    "model training",
-    "LightGBM/GRU/Transformer/PatchTST/TFT/MoE research lifecycle",
+    "real Research model training/execution",
+    "GRU/LSTM/Transformer/PatchTST/TFT/TCN/MoE/iTransformer research lifecycle",
     "WFA/CPCV model lifecycle",
     "Tournament/Monte Carlo/Fresh model validation",
     "ONNX lifecycle",
@@ -239,12 +254,13 @@
     "M08 accepted qualified pool, multi-Challenger selection, Backtest results and Artifact control plane",
     "Historical previous-epoch R00 Research Authority Foundation accepted; current fresh Research epoch has no current Research project and R00 has not started",
     "Historical previous-epoch R01 Dataset + Label + Leakage Foundation implementation/runtime repair has targeted re-audit PASS; current source binds R01 to the latest accepted current R00 immutable lineage without retired epoch IDs; real current-epoch R01 remains blocked/not started",
+    "R02 bounded Discovery-only Cheap Screen executor source candidate for LightGBM, XGBoost and Random Forest; synthetic test/CI fitting only, no real Research execution or qualification authority",
     "V6 Strategy Optimizer source candidate with 17 dimensions including an exact Owner-grid InpRiskPct 0.5%..5.0% step 0.5% that refinement cannot shift off-grid, plus fixed 5.0% daily-loss authority for new jobs"
   ],
   "planned_capabilities": [
     "Current-epoch R00 initialization and acceptance under the fresh epoch before any real R01 execution",
     "R01 current-lineage source binding is merged/revalidated; real current-epoch R00/R01 execution remains deferred to final Owner runtime",
-    "R02 source can deterministically plan/freeze one Owner-authorized Discovery block and define an immutable outcome ledger; real model fitting/execution remains separately blocked and only future R03 Full WFA can create Qualified Pool authority"
+    "R02 source phase hosted validation and governance closeout; real current-epoch execution remains blocked and only future authorized R03 Full WFA can create Qualified Pool authority"
   ],
   "project": {
     "name": "MAX Trading Agent",
@@ -254,15 +270,15 @@
   "source_manifest": [
     {
       "path": "pyproject.toml",
-      "sha256": "c28fd7813620ed4409ef489da1cacd6ee7915098dbb5d33b530f895d98fa0f09"
+      "sha256": "bde36149ffe3a7eeeddbeeb6bcc1384f466f9a40a5b88352fd964ed6a2a80ff3"
     },
     {
       "path": "docs/PRD.md",
-      "sha256": "9ecde9a38146770c3e854027f7ea7ba277f54d0260a468f088f18619ce7c8f1c"
+      "sha256": "199e05bc5600d0e28ae57ffe03b8a38197ad6a1a2382d96453453d38823c0780"
     },
     {
       "path": "docs/ROADMAP.md",
-      "sha256": "4cea04bd2c9e81b137728d5722acf939bb8c8294a5101ca5e164a44098a2b4f2"
+      "sha256": "72f82aa53843a90818a4cfde3507a3eaa338f985e74ef9207eb6106873d4c369"
     },
     {
       "path": "docs/RESEARCH_MODEL_ROADMAP.md",
@@ -294,7 +310,7 @@
     },
     {
       "path": "backend/max_backend/schema.py",
-      "sha256": "fb026c5cae33d9eb08422dcfc6f767a2383ad9b22ccaca166f6564624d190a7a"
+      "sha256": "d4c1bdfe8f065d2c224c2174fac86cc6f782f59f0dbb7543faea63dce4e54f91"
     },
     {
       "path": "backend/max_backend/workflow_contract.py",
@@ -302,7 +318,7 @@
     },
     {
       "path": "backend/max_backend/workflow_store.py",
-      "sha256": "e09ea91ee12c2298f00cc8d0eafe402292abdbc07ac5db3111bbe96dc0b7fa3e"
+      "sha256": "36ea7cd8a24892db377aeb0d912ecb8a8a9c20782488be7f8d04fc9422019284"
     },
     {
       "path": "backend/max_backend/mtf_geometry.py",
@@ -434,7 +450,7 @@
     },
     {
       "path": "backend/max_backend/research_leakage.py",
-      "sha256": "5563409139525c9ca61ec6828f95dc5ff483d9bcf2ae7e126e62084bb116487e"
+      "sha256": "a245661ade901c9c73469303cb4a103221c190e421a172d2592f16502371bed5"
     },
     {
       "path": "backend/max_backend/research_r01_store.py",
@@ -442,11 +458,11 @@
     },
     {
       "path": "backend/max_backend/research_r01_service.py",
-      "sha256": "38ac4afd360918e27912795e2cd7c1946048ca3642d230273e11a7fc97e1a5a1"
+      "sha256": "c6511c39fcf45fe658bdd166cd08ae7bc33228d6675c16eee97e4b50d3aabf81"
     },
     {
       "path": "backend/max_backend/research_r02_contract.py",
-      "sha256": "f4993030f60bbc51916bced52db8f65b29508a9b057fb076a6d4b606aa4af7e7"
+      "sha256": "5855abe30eb5ca55f68e77dd1e9fa10ef3540aebda8ce298c7feeab267a7ae4d"
     },
     {
       "path": "backend/max_backend/research_r02_outcome.py",
@@ -454,15 +470,23 @@
     },
     {
       "path": "backend/max_backend/research_r02_service.py",
-      "sha256": "551b5546d5802f51be07af4153ec28d134fd7b0b467443fcb3349ed8789601ec"
+      "sha256": "ae18c03eb961459aedb9b6b6faac5ced00334668b67e1af38334e157857e78c2"
     },
     {
       "path": "backend/max_backend/research_r02_store.py",
-      "sha256": "4ae05468ed7d5146807137866f68f2003dc96bf600f3496fa0903a516a432e0a"
+      "sha256": "399a0cc501b1e383f462c96e7fb4463d66c791764f1a3b4e65c2b635c17680f6"
+    },
+    {
+      "path": "backend/max_backend/research_r02_models.py",
+      "sha256": "21b79b2ea51d02df6c708990a85c201db0f301f2ca9d1bb86fdadd89e6dc0d74"
+    },
+    {
+      "path": "backend/max_backend/research_r02_executor.py",
+      "sha256": "75f2090b32d62f2107277dcb7cbba68ea6b3451109248eb34d79fb9fb7041611"
     },
     {
       "path": "backend/max_backend/scientist_knowledge.py",
-      "sha256": "4f17c7a9d9c937faecdd68add46f9ad3c8e0c33ffd3abcec296d20e4f9dc7220"
+      "sha256": "ac6a55740ca00e80b445c4d1e71b9cde5ffd77d6a37a569fbf4ea4a866e29435"
     },
     {
       "path": "backend/max_backend/scientist_context.py",
