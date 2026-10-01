@@ -18,7 +18,7 @@ Branch: work/optimizer-durability-performance-hardening
 Authoritative SHA: external final acceptance evidence
 Last accepted SHA: 5a30097d76a46ad077bed8dfd978eb6b27f83264
 Current candidate SHA: external final acceptance evidence
-Current source digest: 3d351a6470de85fc65b53f5d0404ccae8c256928429031b675c0d4eb900b1ed0
+Current source digest: 03dc42377454dff52460fbaa397ddbcdadfed58a191970a772c360911713c492
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md

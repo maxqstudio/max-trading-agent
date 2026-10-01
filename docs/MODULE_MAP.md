@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 3d351a6470de85fc65b53f5d0404ccae8c256928429031b675c0d4eb900b1ed0
+Source digest: 03dc42377454dff52460fbaa397ddbcdadfed58a191970a772c360911713c492
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -77,7 +77,7 @@ Generated/refreshed: current compiler run
 | backend/tests/test_m07_true_mtf.py | Python | 245 | backend/tests | YES |
 | backend/tests/test_m08_strategy_results.py | Python | 2013 | backend/tests | YES |
 | backend/tests/test_optimizer_draft.py | Python | 114 | backend/tests | YES |
-| backend/tests/test_optimizer_reliability.py | Python | 855 | backend/tests | YES |
+| backend/tests/test_optimizer_reliability.py | Python | 866 | backend/tests | YES |
 | backend/tests/test_optimizer_runtime_durability.py | Python | 83 | backend/tests | YES |
 | backend/tests/test_retired_subsystem_migration.py | Python | 98 | backend/tests | YES |
 | backend/tests/test_strategy_workspace_reset.py | Python | 316 | backend/tests | YES |
