@@ -199,7 +199,7 @@
       "file": "backend/max_backend/optimizer_jobs.py",
       "is_test": false,
       "language": "Python",
-      "lines": 911
+      "lines": 1013
     },
     {
       "directory": "backend/max_backend",
@@ -500,7 +500,7 @@
       "file": "backend/tests/test_optimizer_reliability.py",
       "is_test": true,
       "language": "Python",
-      "lines": 581
+      "lines": 855
     },
     {
       "directory": "backend/tests",
@@ -18123,6 +18123,14 @@
     },
     {
       "caller": "backend/max_backend/optimizer_jobs.py::_process_identity",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_process_identity",
+      "target_token": "value.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_process_identity",
       "target_token": "str"
     },
     {
@@ -18350,6 +18358,114 @@
       "target_token": "RuntimeError"
     },
     {
+      "caller": "backend/max_backend/optimizer_jobs.py::_is_venv_python_launcher",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_is_venv_python_launcher",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_is_venv_python_launcher",
+      "target_token": "identity.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_is_venv_python_launcher",
+      "target_token": "bool"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_is_venv_python_launcher",
+      "target_token": "executable.parent.name.casefold"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_is_venv_python_launcher",
+      "target_token": "is_file"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "target_token": "row.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "target_token": "by_pid.values"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "target_token": "_is_venv_python_launcher"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate.descends_from",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate.descends_from",
+      "target_token": "row.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate.descends_from",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate.descends_from",
+      "target_token": "visited.add"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate.descends_from",
+      "target_token": "by_pid.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate.descends_from",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate.descends_from",
+      "target_token": "parent.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "target_token": "descends_from"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "target_token": "row.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
       "caller": "backend/max_backend/optimizer_jobs.py::_find_worker_by_token",
       "target_token": "subprocess.run"
     },
@@ -18359,11 +18475,11 @@
     },
     {
       "caller": "backend/max_backend/optimizer_jobs.py::_find_worker_by_token",
-      "target_token": "json.loads"
+      "target_token": "strip"
     },
     {
       "caller": "backend/max_backend/optimizer_jobs.py::_find_worker_by_token",
-      "target_token": "strip"
+      "target_token": "json.loads"
     },
     {
       "caller": "backend/max_backend/optimizer_jobs.py::_find_worker_by_token",
@@ -18380,6 +18496,14 @@
     {
       "caller": "backend/max_backend/optimizer_jobs.py::_find_worker_by_token",
       "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_find_worker_by_token",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_find_worker_by_token",
+      "target_token": "row.get"
     },
     {
       "caller": "backend/max_backend/optimizer_jobs.py::_find_worker_by_token",
@@ -18423,11 +18547,47 @@
     },
     {
       "caller": "backend/max_backend/optimizer_jobs.py::_find_worker_by_token",
-      "target_token": "len"
+      "target_token": "_select_worker_candidate"
     },
     {
-      "caller": "backend/max_backend/optimizer_jobs.py::_find_worker_by_token",
+      "caller": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
+      "target_token": "time.monotonic"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
+      "target_token": "_find_worker_by_token"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
+      "target_token": "get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
+      "target_token": "_process_identity"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
+      "target_token": "_worker_identity_matches"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
+      "target_token": "time.monotonic"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
       "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
+      "target_token": "time.sleep"
     },
     {
       "caller": "backend/max_backend/optimizer_jobs.py::_mark_reconciliation_required",
@@ -18523,23 +18683,15 @@
     },
     {
       "caller": "backend/max_backend/optimizer_jobs.py::_spawn_worker",
-      "target_token": "_process_identity"
+      "target_token": "_wait_for_worker_identity"
     },
     {
       "caller": "backend/max_backend/optimizer_jobs.py::_spawn_worker",
-      "target_token": "int"
+      "target_token": "update_job"
     },
     {
       "caller": "backend/max_backend/optimizer_jobs.py::_spawn_worker",
-      "target_token": "int"
-    },
-    {
-      "caller": "backend/max_backend/optimizer_jobs.py::_spawn_worker",
-      "target_token": "subprocess.list2cmdline"
-    },
-    {
-      "caller": "backend/max_backend/optimizer_jobs.py::_spawn_worker",
-      "target_token": "time.time"
+      "target_token": "RuntimeError"
     },
     {
       "caller": "backend/max_backend/optimizer_jobs.py::_spawn_worker",
@@ -45410,6 +45562,306 @@
       "target_token": "_worker_identity_matches"
     },
     {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_worker_process_resolution_selects_venv_python_child",
+      "target_token": "mkdir"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_worker_process_resolution_selects_venv_python_child",
+      "target_token": "write_text"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_worker_process_resolution_selects_venv_python_child",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_worker_process_resolution_selects_venv_python_child",
+      "target_token": "optimizer_jobs._select_worker_candidate"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_worker_process_resolution_fails_closed_for_multiple_children",
+      "target_token": "mkdir"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_worker_process_resolution_fails_closed_for_multiple_children",
+      "target_token": "write_text"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_worker_process_resolution_fails_closed_for_multiple_children",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_worker_process_resolution_fails_closed_for_multiple_children",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_worker_process_resolution_fails_closed_for_multiple_children",
+      "target_token": "optimizer_jobs._select_worker_candidate"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_worker_process_resolution_does_not_accept_venv_launcher_alone",
+      "target_token": "mkdir"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_worker_process_resolution_does_not_accept_venv_launcher_alone",
+      "target_token": "write_text"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_worker_process_resolution_does_not_accept_venv_launcher_alone",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_worker_process_resolution_does_not_accept_venv_launcher_alone",
+      "target_token": "optimizer_jobs._select_worker_candidate"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "optimizer_jobs.uuid.uuid4"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "optimizer_jobs.uuid.uuid4"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "optimizer_jobs.subprocess.Popen"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "getattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "optimizer_jobs.time.monotonic"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "optimizer_jobs.time.monotonic"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "optimizer_jobs._find_worker_by_token"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "optimizer_jobs.time.sleep"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "optimizer_jobs._process_identity"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "optimizer_jobs._worker_identity_matches"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "optimizer_jobs._terminate_verified_worker"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "optimizer_jobs.subprocess.run"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "process.wait"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "process.kill"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "target_token": "process.wait"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "make_db"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "create_job"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "evidence.mkdir"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "persisted_get_job"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "persisted_claim"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid.update_in_test_db",
+      "target_token": "changes.setdefault"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid.update_in_test_db",
+      "target_token": "persisted_update_job"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid.confirm_in_test_db",
+      "target_token": "changes.setdefault"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid.confirm_in_test_db",
+      "target_token": "persisted_confirm"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "FakeProcess"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "SimpleNamespace"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "optimizer_jobs._spawn_worker"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "target_token": "get_job"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "make_db"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "create_job"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "evidence.mkdir"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "persisted_get_job"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "persisted_claim"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified.update_in_test_db",
+      "target_token": "changes.setdefault"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified.update_in_test_db",
+      "target_token": "persisted_update_job"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "FakeProcess"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "SimpleNamespace"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "optimizer_jobs._spawn_worker"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "target_token": "get_job"
+    },
+    {
       "caller": "backend/tests/test_optimizer_reliability.py::test_stop_blocks_when_worker_is_gone_but_terminal_ownership_is_unproven",
       "target_token": "make_db"
     },
@@ -62038,160 +62490,192 @@
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 80,
-      "line_start": 60,
+      "line_end": 83,
+      "line_start": 63,
       "locator": "backend/max_backend/optimizer_jobs.py::_process_command_line",
       "symbol": "_process_command_line"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 130,
-      "line_start": 83,
+      "line_end": 134,
+      "line_start": 86,
       "locator": "backend/max_backend/optimizer_jobs.py::_process_identity",
       "symbol": "_process_identity"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 164,
-      "line_start": 133,
+      "line_end": 168,
+      "line_start": 137,
       "locator": "backend/max_backend/optimizer_jobs.py::_worker_identity_matches",
       "symbol": "_worker_identity_matches"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 179,
-      "line_start": 167,
+      "line_end": 183,
+      "line_start": 171,
       "locator": "backend/max_backend/optimizer_jobs.py::_worker_is_alive",
       "symbol": "_worker_is_alive"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 228,
-      "line_start": 182,
+      "line_end": 232,
+      "line_start": 186,
       "locator": "backend/max_backend/optimizer_jobs.py::_terminate_verified_worker",
       "symbol": "_terminate_verified_worker"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 274,
-      "line_start": 231,
+      "line_end": 241,
+      "line_start": 235,
+      "locator": "backend/max_backend/optimizer_jobs.py::_is_venv_python_launcher",
+      "symbol": "_is_venv_python_launcher"
+    },
+    {
+      "file": "backend/max_backend/optimizer_jobs.py",
+      "kind": "function",
+      "line_end": 283,
+      "line_start": 244,
+      "locator": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "symbol": "_select_worker_candidate"
+    },
+    {
+      "file": "backend/max_backend/optimizer_jobs.py",
+      "kind": "method",
+      "line_end": 266,
+      "line_start": 255,
+      "locator": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate.descends_from",
+      "symbol": "_select_worker_candidate.descends_from"
+    },
+    {
+      "file": "backend/max_backend/optimizer_jobs.py",
+      "kind": "function",
+      "line_end": 336,
+      "line_start": 286,
       "locator": "backend/max_backend/optimizer_jobs.py::_find_worker_by_token",
       "symbol": "_find_worker_by_token"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 286,
-      "line_start": 277,
+      "line_end": 372,
+      "line_start": 339,
+      "locator": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
+      "symbol": "_wait_for_worker_identity"
+    },
+    {
+      "file": "backend/max_backend/optimizer_jobs.py",
+      "kind": "function",
+      "line_end": 384,
+      "line_start": 375,
       "locator": "backend/max_backend/optimizer_jobs.py::_mark_reconciliation_required",
       "symbol": "_mark_reconciliation_required"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 293,
-      "line_start": 289,
+      "line_end": 391,
+      "line_start": 387,
       "locator": "backend/max_backend/optimizer_jobs.py::_public_job",
       "symbol": "_public_job"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 405,
-      "line_start": 296,
+      "line_end": 507,
+      "line_start": 394,
       "locator": "backend/max_backend/optimizer_jobs.py::_spawn_worker",
       "symbol": "_spawn_worker"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 429,
-      "line_start": 408,
+      "line_end": 531,
+      "line_start": 510,
       "locator": "backend/max_backend/optimizer_jobs.py::start_optimizer",
       "symbol": "start_optimizer"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 444,
-      "line_start": 432,
+      "line_end": 546,
+      "line_start": 534,
       "locator": "backend/max_backend/optimizer_jobs.py::_round_has_mt5_launch_authority",
       "symbol": "_round_has_mt5_launch_authority"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 494,
-      "line_start": 447,
+      "line_end": 596,
+      "line_start": 549,
       "locator": "backend/max_backend/optimizer_jobs.py::_stop_verified_optimizer_mt5",
       "symbol": "_stop_verified_optimizer_mt5"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 561,
-      "line_start": 497,
+      "line_end": 663,
+      "line_start": 599,
       "locator": "backend/max_backend/optimizer_jobs.py::stop_optimizer",
       "symbol": "stop_optimizer"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 594,
-      "line_start": 564,
+      "line_end": 696,
+      "line_start": 666,
       "locator": "backend/max_backend/optimizer_jobs.py::resume_optimizer",
       "symbol": "resume_optimizer"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 648,
-      "line_start": 597,
+      "line_end": 750,
+      "line_start": 699,
       "locator": "backend/max_backend/optimizer_jobs.py::_reconcile_uncertain_round",
       "symbol": "_reconcile_uncertain_round"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 661,
-      "line_start": 651,
+      "line_end": 763,
+      "line_start": 753,
       "locator": "backend/max_backend/optimizer_jobs.py::_ensure_request_snapshot",
       "symbol": "_ensure_request_snapshot"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 780,
-      "line_start": 664,
+      "line_end": 882,
+      "line_start": 766,
       "locator": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
       "symbol": "reconcile_optimizer_startup"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 802,
-      "line_start": 783,
+      "line_end": 904,
+      "line_start": 885,
       "locator": "backend/max_backend/optimizer_jobs.py::_round_passes",
       "symbol": "_round_passes"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 899,
-      "line_start": 805,
+      "line_end": 1001,
+      "line_start": 907,
       "locator": "backend/max_backend/optimizer_jobs.py::job_detail",
       "symbol": "job_detail"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 911,
-      "line_start": 902,
+      "line_end": 1013,
+      "line_start": 1004,
       "locator": "backend/max_backend/optimizer_jobs.py::latest_job_detail",
       "symbol": "latest_job_detail"
     },
@@ -68358,104 +68842,208 @@
     {
       "file": "backend/tests/test_optimizer_reliability.py",
       "kind": "function",
-      "line_end": 242,
+      "line_end": 216,
       "line_start": 185,
+      "locator": "backend/tests/test_optimizer_reliability.py::test_worker_process_resolution_selects_venv_python_child",
+      "symbol": "test_worker_process_resolution_selects_venv_python_child"
+    },
+    {
+      "file": "backend/tests/test_optimizer_reliability.py",
+      "kind": "function",
+      "line_end": 252,
+      "line_start": 219,
+      "locator": "backend/tests/test_optimizer_reliability.py::test_worker_process_resolution_fails_closed_for_multiple_children",
+      "symbol": "test_worker_process_resolution_fails_closed_for_multiple_children"
+    },
+    {
+      "file": "backend/tests/test_optimizer_reliability.py",
+      "kind": "function",
+      "line_end": 272,
+      "line_start": 255,
+      "locator": "backend/tests/test_optimizer_reliability.py::test_worker_process_resolution_does_not_accept_venv_launcher_alone",
+      "symbol": "test_worker_process_resolution_does_not_accept_venv_launcher_alone"
+    },
+    {
+      "file": "backend/tests/test_optimizer_reliability.py",
+      "kind": "function",
+      "line_end": 338,
+      "line_start": 276,
+      "locator": "backend/tests/test_optimizer_reliability.py::test_windows_venv_worker_resolution_finds_actual_child_process",
+      "symbol": "test_windows_venv_worker_resolution_finds_actual_child_process"
+    },
+    {
+      "file": "backend/tests/test_optimizer_reliability.py",
+      "kind": "function",
+      "line_end": 404,
+      "line_start": 341,
+      "locator": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid",
+      "symbol": "test_spawn_persists_verified_worker_pid_not_venv_launcher_pid"
+    },
+    {
+      "file": "backend/tests/test_optimizer_reliability.py",
+      "kind": "method",
+      "line_end": 378,
+      "line_start": 376,
+      "locator": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid.update_in_test_db",
+      "symbol": "test_spawn_persists_verified_worker_pid_not_venv_launcher_pid.update_in_test_db"
+    },
+    {
+      "file": "backend/tests/test_optimizer_reliability.py",
+      "kind": "method",
+      "line_end": 382,
+      "line_start": 380,
+      "locator": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid.confirm_in_test_db",
+      "symbol": "test_spawn_persists_verified_worker_pid_not_venv_launcher_pid.confirm_in_test_db"
+    },
+    {
+      "file": "backend/tests/test_optimizer_reliability.py",
+      "kind": "class",
+      "line_end": 389,
+      "line_start": 384,
+      "locator": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid.FakeProcess",
+      "symbol": "test_spawn_persists_verified_worker_pid_not_venv_launcher_pid.FakeProcess"
+    },
+    {
+      "file": "backend/tests/test_optimizer_reliability.py",
+      "kind": "method",
+      "line_end": 389,
+      "line_start": 388,
+      "locator": "backend/tests/test_optimizer_reliability.py::test_spawn_persists_verified_worker_pid_not_venv_launcher_pid.FakeProcess.poll",
+      "symbol": "test_spawn_persists_verified_worker_pid_not_venv_launcher_pid.FakeProcess.poll"
+    },
+    {
+      "file": "backend/tests/test_optimizer_reliability.py",
+      "kind": "function",
+      "line_end": 456,
+      "line_start": 407,
+      "locator": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified",
+      "symbol": "test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified"
+    },
+    {
+      "file": "backend/tests/test_optimizer_reliability.py",
+      "kind": "method",
+      "line_end": 432,
+      "line_start": 430,
+      "locator": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified.update_in_test_db",
+      "symbol": "test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified.update_in_test_db"
+    },
+    {
+      "file": "backend/tests/test_optimizer_reliability.py",
+      "kind": "class",
+      "line_end": 439,
+      "line_start": 434,
+      "locator": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified.FakeProcess",
+      "symbol": "test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified.FakeProcess"
+    },
+    {
+      "file": "backend/tests/test_optimizer_reliability.py",
+      "kind": "method",
+      "line_end": 439,
+      "line_start": 438,
+      "locator": "backend/tests/test_optimizer_reliability.py::test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified.FakeProcess.poll",
+      "symbol": "test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified.FakeProcess.poll"
+    },
+    {
+      "file": "backend/tests/test_optimizer_reliability.py",
+      "kind": "function",
+      "line_end": 516,
+      "line_start": 459,
       "locator": "backend/tests/test_optimizer_reliability.py::test_stop_blocks_when_worker_is_gone_but_terminal_ownership_is_unproven",
       "symbol": "test_stop_blocks_when_worker_is_gone_but_terminal_ownership_is_unproven"
     },
     {
       "file": "backend/tests/test_optimizer_reliability.py",
       "kind": "method",
-      "line_end": 226,
-      "line_start": 224,
+      "line_end": 500,
+      "line_start": 498,
       "locator": "backend/tests/test_optimizer_reliability.py::test_stop_blocks_when_worker_is_gone_but_terminal_ownership_is_unproven.update_in_test_db",
       "symbol": "test_stop_blocks_when_worker_is_gone_but_terminal_ownership_is_unproven.update_in_test_db"
     },
     {
       "file": "backend/tests/test_optimizer_reliability.py",
       "kind": "function",
-      "line_end": 313,
-      "line_start": 245,
+      "line_end": 587,
+      "line_start": 519,
       "locator": "backend/tests/test_optimizer_reliability.py::test_stop_terminates_only_the_uniquely_verified_optimizer_terminal",
       "symbol": "test_stop_terminates_only_the_uniquely_verified_optimizer_terminal"
     },
     {
       "file": "backend/tests/test_optimizer_reliability.py",
       "kind": "method",
-      "line_end": 286,
-      "line_start": 284,
+      "line_end": 560,
+      "line_start": 558,
       "locator": "backend/tests/test_optimizer_reliability.py::test_stop_terminates_only_the_uniquely_verified_optimizer_terminal.update_in_test_db",
       "symbol": "test_stop_terminates_only_the_uniquely_verified_optimizer_terminal.update_in_test_db"
     },
     {
       "file": "backend/tests/test_optimizer_reliability.py",
       "kind": "function",
-      "line_end": 349,
-      "line_start": 316,
+      "line_end": 623,
+      "line_start": 590,
       "locator": "backend/tests/test_optimizer_reliability.py::test_startup_process_query_failure_keeps_job_active_and_blocks_new_starts",
       "symbol": "test_startup_process_query_failure_keeps_job_active_and_blocks_new_starts"
     },
     {
       "file": "backend/tests/test_optimizer_reliability.py",
       "kind": "function",
-      "line_end": 381,
-      "line_start": 352,
+      "line_end": 655,
+      "line_start": 626,
       "locator": "backend/tests/test_optimizer_reliability.py::test_startup_does_not_treat_unverifiable_occupied_pid_as_worker_loss",
       "symbol": "test_startup_does_not_treat_unverifiable_occupied_pid_as_worker_loss"
     },
     {
       "file": "backend/tests/test_optimizer_reliability.py",
       "kind": "function",
-      "line_end": 425,
-      "line_start": 384,
+      "line_end": 699,
+      "line_start": 658,
       "locator": "backend/tests/test_optimizer_reliability.py::test_startup_accepts_pid_reuse_only_when_persisted_creation_identity_differs",
       "symbol": "test_startup_accepts_pid_reuse_only_when_persisted_creation_identity_differs"
     },
     {
       "file": "backend/tests/test_optimizer_reliability.py",
       "kind": "function",
-      "line_end": 449,
-      "line_start": 428,
+      "line_end": 723,
+      "line_start": 702,
       "locator": "backend/tests/test_optimizer_reliability.py::test_stopped_launch_token_cannot_enter_optimizer_worker",
       "symbol": "test_stopped_launch_token_cannot_enter_optimizer_worker"
     },
     {
       "file": "backend/tests/test_optimizer_reliability.py",
       "kind": "function",
-      "line_end": 474,
-      "line_start": 452,
+      "line_end": 748,
+      "line_start": 726,
       "locator": "backend/tests/test_optimizer_reliability.py::test_worker_waits_for_parent_to_persist_its_launch_identity",
       "symbol": "test_worker_waits_for_parent_to_persist_its_launch_identity"
     },
     {
       "file": "backend/tests/test_optimizer_reliability.py",
       "kind": "function",
-      "line_end": 521,
-      "line_start": 477,
+      "line_end": 795,
+      "line_start": 751,
       "locator": "backend/tests/test_optimizer_reliability.py::test_worker_log_open_failure_does_not_leave_an_active_launch_claim",
       "symbol": "test_worker_log_open_failure_does_not_leave_an_active_launch_claim"
     },
     {
       "file": "backend/tests/test_optimizer_reliability.py",
       "kind": "method",
-      "line_end": 505,
-      "line_start": 503,
+      "line_end": 779,
+      "line_start": 777,
       "locator": "backend/tests/test_optimizer_reliability.py::test_worker_log_open_failure_does_not_leave_an_active_launch_claim.update_in_test_db",
       "symbol": "test_worker_log_open_failure_does_not_leave_an_active_launch_claim.update_in_test_db"
     },
     {
       "file": "backend/tests/test_optimizer_reliability.py",
       "kind": "function",
-      "line_end": 581,
-      "line_start": 524,
+      "line_end": 855,
+      "line_start": 798,
       "locator": "backend/tests/test_optimizer_reliability.py::test_stop_finds_and_stops_worker_by_launch_token_when_pid_was_not_persisted",
       "symbol": "test_stop_finds_and_stops_worker_by_launch_token_when_pid_was_not_persisted"
     },
     {
       "file": "backend/tests/test_optimizer_reliability.py",
       "kind": "method",
-      "line_end": 561,
-      "line_start": 559,
+      "line_end": 835,
+      "line_start": 833,
       "locator": "backend/tests/test_optimizer_reliability.py::test_stop_finds_and_stops_worker_by_launch_token_when_pid_was_not_persisted.update_in_test_db",
       "symbol": "test_stop_finds_and_stops_worker_by_launch_token_when_pid_was_not_persisted.update_in_test_db"
     },
@@ -70045,7 +70633,7 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
+  "source_digest": "3d351a6470de85fc65b53f5d0404ccae8c256928429031b675c0d4eb900b1ed0",
   "source_summary": {
     "files": 113,
     "languages": {
@@ -70054,7 +70642,7 @@
       "TypeScript": 3,
       "TypeScript/React": 17
     },
-    "lines": 51387,
+    "lines": 51763,
     "test_files": 37
   },
   "tests": [
