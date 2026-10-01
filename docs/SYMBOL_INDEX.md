@@ -3,7 +3,7 @@
 # SYMBOL INDEX
 
 Authority SHA: external final acceptance evidence
-Source digest: fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e
+Source digest: 03dc42377454dff52460fbaa397ddbcdadfed58a191970a772c360911713c492
 Status: CURRENT
 
 | File | Symbol | Kind | Lines@SHA | Responsibility | Reads/Writes | Called By | Tests |
@@ -336,26 +336,30 @@ Status: CURRENT
 | backend/max_backend/optimizer_draft.py | _decode | function | 125-152 | Observed Python symbol | | | |
 | backend/max_backend/optimizer_draft.py | get_optimizer_draft | function | 155-160 | Observed Python symbol | | | |
 | backend/max_backend/optimizer_draft.py | put_optimizer_draft | function | 163-201 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | _process_command_line | function | 60-80 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | _process_identity | function | 83-130 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | _worker_identity_matches | function | 133-164 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | _worker_is_alive | function | 167-179 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | _terminate_verified_worker | function | 182-228 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | _find_worker_by_token | function | 231-274 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | _mark_reconciliation_required | function | 277-286 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | _public_job | function | 289-293 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | _spawn_worker | function | 296-405 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | start_optimizer | function | 408-429 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | _round_has_mt5_launch_authority | function | 432-444 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | _stop_verified_optimizer_mt5 | function | 447-494 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | stop_optimizer | function | 497-561 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | resume_optimizer | function | 564-594 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | _reconcile_uncertain_round | function | 597-648 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | _ensure_request_snapshot | function | 651-661 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | reconcile_optimizer_startup | function | 664-780 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | _round_passes | function | 783-802 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | job_detail | function | 805-899 | Observed Python symbol | | | |
-| backend/max_backend/optimizer_jobs.py | latest_job_detail | function | 902-911 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _process_command_line | function | 63-83 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _process_identity | function | 86-134 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _worker_identity_matches | function | 137-168 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _worker_is_alive | function | 171-183 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _terminate_verified_worker | function | 186-232 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _is_venv_python_launcher | function | 235-241 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _select_worker_candidate | function | 244-283 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _select_worker_candidate.descends_from | method | 255-266 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _find_worker_by_token | function | 286-336 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _wait_for_worker_identity | function | 339-372 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _mark_reconciliation_required | function | 375-384 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _public_job | function | 387-391 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _spawn_worker | function | 394-507 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | start_optimizer | function | 510-531 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _round_has_mt5_launch_authority | function | 534-546 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _stop_verified_optimizer_mt5 | function | 549-596 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | stop_optimizer | function | 599-663 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | resume_optimizer | function | 666-696 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _reconcile_uncertain_round | function | 699-750 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _ensure_request_snapshot | function | 753-763 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | reconcile_optimizer_startup | function | 766-882 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | _round_passes | function | 885-904 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | job_detail | function | 907-1001 | Observed Python symbol | | | |
+| backend/max_backend/optimizer_jobs.py | latest_job_detail | function | 1004-1013 | Observed Python symbol | | | |
 | backend/max_backend/optimizer_runtime.py | ReportPending | class | 32-33 | Observed Python symbol | | | |
 | backend/max_backend/optimizer_runtime.py | job_evidence_dir | function | 36-39 | Observed Python symbol | | | |
 | backend/max_backend/optimizer_runtime.py | round_evidence_dir | function | 42-45 | Observed Python symbol | | | |
@@ -1126,19 +1130,32 @@ Status: CURRENT
 | backend/tests/test_optimizer_reliability.py | test_resume_launch_claim_is_single_flight | function | 93-122 | Observed Python symbol | | | |
 | backend/tests/test_optimizer_reliability.py | test_worker_launch_confirmation_cannot_reactivate_a_stopped_claim | function | 125-152 | Observed Python symbol | | | |
 | backend/tests/test_optimizer_reliability.py | test_worker_ownership_requires_exact_job_token_and_executable | function | 155-182 | Observed Python symbol | | | |
-| backend/tests/test_optimizer_reliability.py | test_stop_blocks_when_worker_is_gone_but_terminal_ownership_is_unproven | function | 185-242 | Observed Python symbol | | | |
-| backend/tests/test_optimizer_reliability.py | test_stop_blocks_when_worker_is_gone_but_terminal_ownership_is_unproven.update_in_test_db | method | 224-226 | Observed Python symbol | | | |
-| backend/tests/test_optimizer_reliability.py | test_stop_terminates_only_the_uniquely_verified_optimizer_terminal | function | 245-313 | Observed Python symbol | | | |
-| backend/tests/test_optimizer_reliability.py | test_stop_terminates_only_the_uniquely_verified_optimizer_terminal.update_in_test_db | method | 284-286 | Observed Python symbol | | | |
-| backend/tests/test_optimizer_reliability.py | test_startup_process_query_failure_keeps_job_active_and_blocks_new_starts | function | 316-349 | Observed Python symbol | | | |
-| backend/tests/test_optimizer_reliability.py | test_startup_does_not_treat_unverifiable_occupied_pid_as_worker_loss | function | 352-381 | Observed Python symbol | | | |
-| backend/tests/test_optimizer_reliability.py | test_startup_accepts_pid_reuse_only_when_persisted_creation_identity_differs | function | 384-425 | Observed Python symbol | | | |
-| backend/tests/test_optimizer_reliability.py | test_stopped_launch_token_cannot_enter_optimizer_worker | function | 428-449 | Observed Python symbol | | | |
-| backend/tests/test_optimizer_reliability.py | test_worker_waits_for_parent_to_persist_its_launch_identity | function | 452-474 | Observed Python symbol | | | |
-| backend/tests/test_optimizer_reliability.py | test_worker_log_open_failure_does_not_leave_an_active_launch_claim | function | 477-521 | Observed Python symbol | | | |
-| backend/tests/test_optimizer_reliability.py | test_worker_log_open_failure_does_not_leave_an_active_launch_claim.update_in_test_db | method | 503-505 | Observed Python symbol | | | |
-| backend/tests/test_optimizer_reliability.py | test_stop_finds_and_stops_worker_by_launch_token_when_pid_was_not_persisted | function | 524-581 | Observed Python symbol | | | |
-| backend/tests/test_optimizer_reliability.py | test_stop_finds_and_stops_worker_by_launch_token_when_pid_was_not_persisted.update_in_test_db | method | 559-561 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_worker_process_resolution_selects_venv_python_child | function | 185-216 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_worker_process_resolution_fails_closed_for_multiple_children | function | 219-252 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_worker_process_resolution_does_not_accept_venv_launcher_alone | function | 255-272 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_windows_venv_worker_resolution_finds_actual_child_process | function | 276-349 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_spawn_persists_verified_worker_pid_not_venv_launcher_pid | function | 352-415 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_spawn_persists_verified_worker_pid_not_venv_launcher_pid.update_in_test_db | method | 387-389 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_spawn_persists_verified_worker_pid_not_venv_launcher_pid.confirm_in_test_db | method | 391-393 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_spawn_persists_verified_worker_pid_not_venv_launcher_pid.FakeProcess | class | 395-400 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_spawn_persists_verified_worker_pid_not_venv_launcher_pid.FakeProcess.poll | method | 399-400 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified | function | 418-467 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified.update_in_test_db | method | 441-443 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified.FakeProcess | class | 445-450 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified.FakeProcess.poll | method | 449-450 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_stop_blocks_when_worker_is_gone_but_terminal_ownership_is_unproven | function | 470-527 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_stop_blocks_when_worker_is_gone_but_terminal_ownership_is_unproven.update_in_test_db | method | 509-511 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_stop_terminates_only_the_uniquely_verified_optimizer_terminal | function | 530-598 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_stop_terminates_only_the_uniquely_verified_optimizer_terminal.update_in_test_db | method | 569-571 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_startup_process_query_failure_keeps_job_active_and_blocks_new_starts | function | 601-634 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_startup_does_not_treat_unverifiable_occupied_pid_as_worker_loss | function | 637-666 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_startup_accepts_pid_reuse_only_when_persisted_creation_identity_differs | function | 669-710 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_stopped_launch_token_cannot_enter_optimizer_worker | function | 713-734 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_worker_waits_for_parent_to_persist_its_launch_identity | function | 737-759 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_worker_log_open_failure_does_not_leave_an_active_launch_claim | function | 762-806 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_worker_log_open_failure_does_not_leave_an_active_launch_claim.update_in_test_db | method | 788-790 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_stop_finds_and_stops_worker_by_launch_token_when_pid_was_not_persisted | function | 809-866 | Observed Python symbol | | | |
+| backend/tests/test_optimizer_reliability.py | test_stop_finds_and_stops_worker_by_launch_token_when_pid_was_not_persisted.update_in_test_db | method | 844-846 | Observed Python symbol | | | |
 | backend/tests/test_optimizer_runtime_durability.py | _sources | function | 11-20 | Observed Python symbol | | | |
 | backend/tests/test_optimizer_runtime_durability.py | _commit | function | 23-32 | Observed Python symbol | | | |
 | backend/tests/test_optimizer_runtime_durability.py | test_committed_round_replay_returns_identical_verified_identity | function | 35-48 | Observed Python symbol | | | |

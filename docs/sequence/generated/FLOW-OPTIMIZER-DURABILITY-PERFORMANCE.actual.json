@@ -1696,6 +1696,13 @@
       "to": "backend/max_backend/optimizer_runtime.py::job_evidence_dir"
     },
     {
+      "action": "_select_worker_candidate",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_jobs.py::_find_worker_by_token",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate"
+    },
+    {
       "action": "_worker_identity_matches",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_jobs.py::_find_worker_by_token",
@@ -1724,11 +1731,18 @@
       "to": "backend/max_backend/optimizer_runtime.py::optimizer_terminal_process_state"
     },
     {
-      "action": "_process_identity",
+      "action": "_is_venv_python_launcher",
       "evidence": "STATIC",
-      "from": "backend/max_backend/optimizer_jobs.py::_spawn_worker",
+      "from": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
       "resolver": "python_ast",
-      "to": "backend/max_backend/optimizer_jobs.py::_process_identity"
+      "to": "backend/max_backend/optimizer_jobs.py::_is_venv_python_launcher"
+    },
+    {
+      "action": "descends_from",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate.descends_from"
     },
     {
       "action": "_public_job",
@@ -1743,6 +1757,13 @@
       "from": "backend/max_backend/optimizer_jobs.py::_spawn_worker",
       "resolver": "python_ast",
       "to": "backend/max_backend/optimizer_jobs.py::_terminate_verified_worker"
+    },
+    {
+      "action": "_wait_for_worker_identity",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_jobs.py::_spawn_worker",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity"
     },
     {
       "action": "job_evidence_dir",
@@ -1790,6 +1811,27 @@
       "action": "_worker_identity_matches",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_jobs.py::_terminate_verified_worker",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_jobs.py::_worker_identity_matches"
+    },
+    {
+      "action": "_find_worker_by_token",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_jobs.py::_find_worker_by_token"
+    },
+    {
+      "action": "_process_identity",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_jobs.py::_process_identity"
+    },
+    {
+      "action": "_worker_identity_matches",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
       "resolver": "python_ast",
       "to": "backend/max_backend/optimizer_jobs.py::_worker_identity_matches"
     },
@@ -4469,8 +4511,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_ensure_request_snapshot",
       "language": "Python",
-      "line_end": 661,
-      "line_start": 651,
+      "line_end": 763,
+      "line_start": 753,
       "locator": "backend/max_backend/optimizer_jobs.py::_ensure_request_snapshot"
     },
     {
@@ -4478,17 +4520,26 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_find_worker_by_token",
       "language": "Python",
-      "line_end": 274,
-      "line_start": 231,
+      "line_end": 336,
+      "line_start": 286,
       "locator": "backend/max_backend/optimizer_jobs.py::_find_worker_by_token"
+    },
+    {
+      "id": "backend/max_backend/optimizer_jobs.py::_is_venv_python_launcher",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_jobs.py::_is_venv_python_launcher",
+      "language": "Python",
+      "line_end": 241,
+      "line_start": 235,
+      "locator": "backend/max_backend/optimizer_jobs.py::_is_venv_python_launcher"
     },
     {
       "id": "backend/max_backend/optimizer_jobs.py::_mark_reconciliation_required",
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_mark_reconciliation_required",
       "language": "Python",
-      "line_end": 286,
-      "line_start": 277,
+      "line_end": 384,
+      "line_start": 375,
       "locator": "backend/max_backend/optimizer_jobs.py::_mark_reconciliation_required"
     },
     {
@@ -4496,8 +4547,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_process_identity",
       "language": "Python",
-      "line_end": 130,
-      "line_start": 83,
+      "line_end": 134,
+      "line_start": 86,
       "locator": "backend/max_backend/optimizer_jobs.py::_process_identity"
     },
     {
@@ -4505,8 +4556,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_public_job",
       "language": "Python",
-      "line_end": 293,
-      "line_start": 289,
+      "line_end": 391,
+      "line_start": 387,
       "locator": "backend/max_backend/optimizer_jobs.py::_public_job"
     },
     {
@@ -4514,8 +4565,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_reconcile_uncertain_round",
       "language": "Python",
-      "line_end": 648,
-      "line_start": 597,
+      "line_end": 750,
+      "line_start": 699,
       "locator": "backend/max_backend/optimizer_jobs.py::_reconcile_uncertain_round"
     },
     {
@@ -4523,17 +4574,35 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_round_has_mt5_launch_authority",
       "language": "Python",
-      "line_end": 444,
-      "line_start": 432,
+      "line_end": 546,
+      "line_start": 534,
       "locator": "backend/max_backend/optimizer_jobs.py::_round_has_mt5_launch_authority"
+    },
+    {
+      "id": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
+      "language": "Python",
+      "line_end": 283,
+      "line_start": 244,
+      "locator": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate"
+    },
+    {
+      "id": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate.descends_from",
+      "kind": "method",
+      "label": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate.descends_from",
+      "language": "Python",
+      "line_end": 266,
+      "line_start": 255,
+      "locator": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate.descends_from"
     },
     {
       "id": "backend/max_backend/optimizer_jobs.py::_spawn_worker",
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_spawn_worker",
       "language": "Python",
-      "line_end": 405,
-      "line_start": 296,
+      "line_end": 507,
+      "line_start": 394,
       "locator": "backend/max_backend/optimizer_jobs.py::_spawn_worker"
     },
     {
@@ -4541,8 +4610,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_stop_verified_optimizer_mt5",
       "language": "Python",
-      "line_end": 494,
-      "line_start": 447,
+      "line_end": 596,
+      "line_start": 549,
       "locator": "backend/max_backend/optimizer_jobs.py::_stop_verified_optimizer_mt5"
     },
     {
@@ -4550,17 +4619,26 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_terminate_verified_worker",
       "language": "Python",
-      "line_end": 228,
-      "line_start": 182,
+      "line_end": 232,
+      "line_start": 186,
       "locator": "backend/max_backend/optimizer_jobs.py::_terminate_verified_worker"
+    },
+    {
+      "id": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
+      "language": "Python",
+      "line_end": 372,
+      "line_start": 339,
+      "locator": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity"
     },
     {
       "id": "backend/max_backend/optimizer_jobs.py::_worker_identity_matches",
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_worker_identity_matches",
       "language": "Python",
-      "line_end": 164,
-      "line_start": 133,
+      "line_end": 168,
+      "line_start": 137,
       "locator": "backend/max_backend/optimizer_jobs.py::_worker_identity_matches"
     },
     {
@@ -4568,8 +4646,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_worker_is_alive",
       "language": "Python",
-      "line_end": 179,
-      "line_start": 167,
+      "line_end": 183,
+      "line_start": 171,
       "locator": "backend/max_backend/optimizer_jobs.py::_worker_is_alive"
     },
     {
@@ -4577,8 +4655,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
       "language": "Python",
-      "line_end": 780,
-      "line_start": 664,
+      "line_end": 882,
+      "line_start": 766,
       "locator": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup"
     },
     {
@@ -4586,8 +4664,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::resume_optimizer",
       "language": "Python",
-      "line_end": 594,
-      "line_start": 564,
+      "line_end": 696,
+      "line_start": 666,
       "locator": "backend/max_backend/optimizer_jobs.py::resume_optimizer"
     },
     {
@@ -4595,8 +4673,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::start_optimizer",
       "language": "Python",
-      "line_end": 429,
-      "line_start": 408,
+      "line_end": 531,
+      "line_start": 510,
       "locator": "backend/max_backend/optimizer_jobs.py::start_optimizer"
     },
     {
@@ -4604,8 +4682,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::stop_optimizer",
       "language": "Python",
-      "line_end": 561,
-      "line_start": 497,
+      "line_end": 663,
+      "line_start": 599,
       "locator": "backend/max_backend/optimizer_jobs.py::stop_optimizer"
     },
     {
@@ -5615,7 +5693,7 @@
       "locator": "frontend/src/OptimizerPage.tsx::<module>"
     }
   ],
-  "observed_head": "073e69044c03f4296849dd5bc02516f30b9439b1",
+  "observed_head": "724215d83f4f5ef89316b41dfb6ff400b1459156",
   "schema_version": 1,
-  "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e"
+  "source_digest": "03dc42377454dff52460fbaa397ddbcdadfed58a191970a772c360911713c492"
 }

@@ -56,6 +56,9 @@ RESUMABLE_JOB_STATUSES = {
     "EXECUTION_UNCERTAIN",
 }
 
+WORKER_IDENTITY_WAIT_SECONDS = 12.0
+WORKER_IDENTITY_POLL_SECONDS = 0.1
+
 
 def _process_command_line(pid: int) -> str:
     if pid <= 0:
@@ -88,7 +91,7 @@ def _process_identity(pid: int) -> dict[str, Any] | None:
             "$p=Get-CimInstance Win32_Process -Filter 'ProcessId="
             + str(int(pid))
             + "' -ErrorAction SilentlyContinue;"
-            + "if($p){$p | Select-Object ProcessId,ExecutablePath,CommandLine,CreationDate "
+            + "if($p){$p | Select-Object ProcessId,ParentProcessId,ExecutablePath,CommandLine,CreationDate "
             + "| ConvertTo-Json -Compress}"
         )
         result = subprocess.run(
@@ -110,6 +113,7 @@ def _process_identity(pid: int) -> dict[str, Any] | None:
             raise RuntimeError("OPTIMIZER_PROCESS_IDENTITY_QUERY_INVALID")
         return {
             "pid": int(value.get("ProcessId") or 0),
+            "parent_pid": int(value.get("ParentProcessId") or 0),
             "executable_path": str(value.get("ExecutablePath") or ""),
             "command_line": str(value.get("CommandLine") or ""),
             "creation_time": str(value.get("CreationDate") or ""),
@@ -228,12 +232,68 @@ def _terminate_verified_worker(
     return True
 
 
-def _find_worker_by_token(launch_token: str | None, job_id: str) -> dict[str, Any] | None:
+def _is_venv_python_launcher(identity: dict[str, Any]) -> bool:
+    executable = Path(str(identity.get("executable_path") or ""))
+    return bool(
+        os.name == "nt"
+        and executable.parent.name.casefold() == "scripts"
+        and (executable.parent.parent / "pyvenv.cfg").is_file()
+    )
+
+
+def _select_worker_candidate(
+    matches: list[dict[str, Any]],
+    *,
+    launcher_pid: int | None,
+) -> dict[str, Any] | None:
+    """Resolve a Python venv launcher/child pair without trusting the shim PID."""
+    by_pid = {int(row["pid"]): row for row in matches if int(row.get("pid") or 0) > 0}
+    candidates = [row for row in by_pid.values() if not _is_venv_python_launcher(row)]
+    if not candidates:
+        return None
+
+    def descends_from(row: dict[str, Any], ancestor_pid: int) -> bool:
+        parent_pid = int(row.get("parent_pid") or 0)
+        visited: set[int] = set()
+        while parent_pid > 0 and parent_pid not in visited:
+            if parent_pid == ancestor_pid:
+                return True
+            visited.add(parent_pid)
+            parent = by_pid.get(parent_pid)
+            if parent is None:
+                return False
+            parent_pid = int(parent.get("parent_pid") or 0)
+        return False
+
+    if launcher_pid is not None:
+        descendants = [row for row in candidates if descends_from(row, launcher_pid)]
+        if descendants:
+            candidates = descendants
+
+    if len(candidates) == 1:
+        return candidates[0]
+
+    candidate_pids = {int(row["pid"]) for row in candidates}
+    parent_pids = {int(row.get("parent_pid") or 0) for row in candidates}
+    leaves = [row for row in candidates if int(row["pid"]) not in parent_pids]
+    if len(leaves) == 1:
+        return leaves[0]
+    if len(candidate_pids) > 1:
+        raise RuntimeError("OPTIMIZER_WORKER_OWNERSHIP_AMBIGUOUS")
+    return None
+
+
+def _find_worker_by_token(
+    launch_token: str | None,
+    job_id: str,
+    *,
+    launcher_pid: int | None = None,
+) -> dict[str, Any] | None:
     if os.name != "nt":
         return None
     command = (
         "$rows=Get-CimInstance Win32_Process -Filter \"Name='python.exe' OR Name='pythonw.exe'\" "
-        "-ErrorAction SilentlyContinue | Select-Object ProcessId,ExecutablePath,CommandLine,CreationDate;"
+        "-ErrorAction SilentlyContinue | Select-Object ProcessId,ParentProcessId,ExecutablePath,CommandLine,CreationDate;"
         "if($rows){$rows | ConvertTo-Json -Compress}"
     )
     result = subprocess.run(
@@ -244,8 +304,11 @@ def _find_worker_by_token(launch_token: str | None, job_id: str) -> dict[str, An
     )
     if result.returncode != 0:
         raise RuntimeError("OPTIMIZER_WORKER_PROCESS_QUERY_FAILED")
+    raw = (result.stdout or "").strip()
+    if not raw:
+        return None
     try:
-        rows = json.loads((result.stdout or "").strip())
+        rows = json.loads(raw)
     except json.JSONDecodeError as exc:
         raise RuntimeError("OPTIMIZER_WORKER_PROCESS_QUERY_INVALID") from exc
     if isinstance(rows, dict):
@@ -258,6 +321,7 @@ def _find_worker_by_token(launch_token: str | None, job_id: str) -> dict[str, An
             continue
         identity = {
             "pid": int(row.get("ProcessId") or 0),
+            "parent_pid": int(row.get("ParentProcessId") or 0),
             "executable_path": str(row.get("ExecutablePath") or ""),
             "command_line": str(row.get("CommandLine") or ""),
             "creation_time": str(row.get("CreationDate") or ""),
@@ -269,9 +333,43 @@ def _find_worker_by_token(launch_token: str | None, job_id: str) -> dict[str, An
             expected=None,
         ):
             matches.append(identity)
-    if len(matches) > 1:
-        raise RuntimeError("OPTIMIZER_WORKER_OWNERSHIP_AMBIGUOUS")
-    return matches[0] if matches else None
+    return _select_worker_candidate(matches, launcher_pid=launcher_pid)
+
+
+def _wait_for_worker_identity(
+    process: subprocess.Popen[Any],
+    *,
+    job_id: str,
+    launch_token: str,
+) -> dict[str, Any]:
+    """Wait for the actual worker, then re-read its OS identity before persisting it."""
+    launcher_pid = int(process.pid)
+    deadline = time.monotonic() + WORKER_IDENTITY_WAIT_SECONDS
+    while True:
+        if os.name == "nt":
+            discovered = _find_worker_by_token(
+                launch_token,
+                job_id,
+                launcher_pid=launcher_pid,
+            )
+            discovered_pid = int((discovered or {}).get("pid") or 0)
+        else:
+            discovered_pid = launcher_pid
+            discovered = {"pid": launcher_pid}
+
+        if discovered_pid > 0:
+            identity = _process_identity(discovered_pid)
+            if _worker_identity_matches(
+                identity,
+                job_id=job_id,
+                launch_token=launch_token,
+                expected=discovered,
+            ):
+                return identity or {}
+
+        if time.monotonic() >= deadline:
+            raise RuntimeError("OPTIMIZER_WORKER_IDENTITY_UNVERIFIED")
+        time.sleep(WORKER_IDENTITY_POLL_SECONDS)
 
 
 def _mark_reconciliation_required(job_id: str, *, path: Path, reason: str) -> dict[str, Any]:
@@ -367,27 +465,31 @@ def _spawn_worker(job_id: str, *, resume: bool) -> dict[str, Any]:
         if stderr is not None:
             stderr.close()
     try:
-        identity = _process_identity(int(process.pid))
-    except Exception:
-        identity = None
-    identity = identity or {
-        "pid": int(process.pid),
-        "executable_path": sys.executable,
-        "command_line": subprocess.list2cmdline(command),
-        "creation_time": "",
-        "observed_utc_epoch": time.time(),
-    }
+        identity = _wait_for_worker_identity(
+            process,
+            job_id=job_id,
+            launch_token=launch_token,
+        )
+    except Exception as identity_error:
+        update_job(
+            job_id,
+            status="RECONCILIATION_REQUIRED",
+            active=True,
+            message="Optimizer worker was launched but its process identity could not be verified.",
+            first_blocker="OPTIMIZER_WORKER_LAUNCH_IDENTITY_UNVERIFIED",
+        )
+        raise RuntimeError("OPTIMIZER_WORKER_LAUNCH_RECONCILIATION_REQUIRED") from identity_error
     try:
         job = confirm_worker_launch(
             job_id,
             launch_token,
-            worker_pid=int(process.pid),
+            worker_pid=int(identity["pid"]),
             worker_identity=identity,
         )
     except Exception as claim_error:
         try:
             _terminate_verified_worker(
-                int(process.pid),
+                int(identity["pid"]),
                 job_id=job_id,
                 launch_token=launch_token,
                 expected=identity,

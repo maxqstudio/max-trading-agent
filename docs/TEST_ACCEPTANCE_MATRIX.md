@@ -7,7 +7,7 @@
 Starting authority 5a30097d76a46ad077bed8dfd978eb6b27f83264 is the source baseline for STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING. The candidate is local on work/optimizer-durability-performance-hardening. Optimizer tests use synthetic temporary databases/evidence and isolated or mocked process boundaries; the Owner operational database, real MT5, broker and market data are not used. Initial read-only inspection found zero Optimizer jobs/rounds and no files in the inspected Optimizer artifact directories, so no deletion was necessary or performed. Fresh R00-R11 remain planned and blocked until a real MT5 sample is Owner-declared READY and Control Room separately authorizes a source phase. Exact final GitHub main SHA and hosted CI identity remain external acceptance evidence per D-012.
 
 Final tested source: external final acceptance evidence.
-Current source digest: fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e
+Current source digest: 03dc42377454dff52460fbaa397ddbcdadfed58a191970a772c360911713c492
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|

@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e
+Source digest: 03dc42377454dff52460fbaa397ddbcdadfed58a191970a772c360911713c492
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -34,7 +34,7 @@ Generated/refreshed: current compiler run
 | backend/max_backend/optimizer_candidates.py | Python | 679 | backend/max_backend | NO |
 | backend/max_backend/optimizer_core.py | Python | 1627 | backend/max_backend | NO |
 | backend/max_backend/optimizer_draft.py | Python | 201 | backend/max_backend | NO |
-| backend/max_backend/optimizer_jobs.py | Python | 911 | backend/max_backend | NO |
+| backend/max_backend/optimizer_jobs.py | Python | 1013 | backend/max_backend | NO |
 | backend/max_backend/optimizer_runtime.py | Python | 782 | backend/max_backend | NO |
 | backend/max_backend/optimizer_scientist.py | Python | 767 | backend/max_backend | NO |
 | backend/max_backend/optimizer_scientist_transition.py | Python | 670 | backend/max_backend | NO |
@@ -77,7 +77,7 @@ Generated/refreshed: current compiler run
 | backend/tests/test_m07_true_mtf.py | Python | 245 | backend/tests | YES |
 | backend/tests/test_m08_strategy_results.py | Python | 2013 | backend/tests | YES |
 | backend/tests/test_optimizer_draft.py | Python | 114 | backend/tests | YES |
-| backend/tests/test_optimizer_reliability.py | Python | 581 | backend/tests | YES |
+| backend/tests/test_optimizer_reliability.py | Python | 866 | backend/tests | YES |
 | backend/tests/test_optimizer_runtime_durability.py | Python | 83 | backend/tests | YES |
 | backend/tests/test_retired_subsystem_migration.py | Python | 98 | backend/tests | YES |
 | backend/tests/test_strategy_workspace_reset.py | Python | 316 | backend/tests | YES |
