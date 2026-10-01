@@ -387,7 +387,9 @@ describe('M06 Strategy Challenger operations UI', () => {
     vi.stubGlobal('fetch', fetchMock)
 
     render(<ChallengersPage />)
-    fireEvent.click(await screen.findByRole('button', { name: 'Run Backtest' }))
+    const runBacktestButton = await screen.findByRole('button', { name: 'Run Backtest' })
+    await waitFor(() => expect(runBacktestButton).toBeEnabled())
+    fireEvent.click(runBacktestButton)
 
     expect(await screen.findByText(/Backtest request returned status: Completed/)).toBeInTheDocument()
     await waitFor(() => {
