@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4
+Source digest: fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -85,7 +85,7 @@ Generated/refreshed: current compiler run
 | frontend/src/App.tsx | TypeScript/React | 435 | frontend/src | NO |
 | frontend/src/ArtifactsPage.test.tsx | TypeScript/React | 342 | frontend/src | YES |
 | frontend/src/ArtifactsPage.tsx | TypeScript/React | 738 | frontend/src | NO |
-| frontend/src/ChallengersPage.test.tsx | TypeScript/React | 835 | frontend/src | YES |
+| frontend/src/ChallengersPage.test.tsx | TypeScript/React | 837 | frontend/src | YES |
 | frontend/src/ChallengersPage.tsx | TypeScript/React | 1701 | frontend/src | NO |
 | frontend/src/ChampionPage.test.tsx | TypeScript/React | 101 | frontend/src | YES |
 | frontend/src/ChampionPage.tsx | TypeScript/React | 175 | frontend/src | NO |

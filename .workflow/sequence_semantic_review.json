@@ -6,8 +6,8 @@
   "skill_authority_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
   "generation_anchor_policy": {
     "meaning": "The observed head is a pre-commit generation anchor. Final hosted source SHA and CI identity remain external acceptance evidence; real MT5 and Owner-PC runtime remain deferred.",
-    "observed_head": "b9c98ef4ebfd55606bc26032865958c163ca4c44",
-    "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4"
+    "observed_head": "073e69044c03f4296849dd5bc02516f30b9439b1",
+    "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e"
   },
   "flows": [
     {
@@ -29,9 +29,9 @@
         "backend/max_backend/artifact_api.py::strategy_workspace_reset",
         "backend/max_backend/artifact_control.py::clean_generated_data"
       ],
-      "generated_nodes": 76,
-      "generated_edges": 111,
-      "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
+      "generated_nodes": 118,
+      "generated_edges": 216,
+      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_strategy_workspace_reset.py",
@@ -51,9 +51,9 @@
         "backend/max_backend/challenger_operations.py::run_challenger_backtest",
         "backend/max_backend/challenger_store.py::consumed_source_identities"
       ],
-      "generated_nodes": 21,
-      "generated_edges": 20,
-      "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
+      "generated_nodes": 80,
+      "generated_edges": 117,
+      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
       "tests": [
         "backend/tests/test_m06_challenger_operations.py",
         "backend/tests/test_m08_strategy_results.py"
@@ -71,9 +71,9 @@
         "backend/max_backend/challenger_registry.py::challenger_detail",
         "backend/max_backend/challenger_operations.py::challenger_registry_page"
       ],
-      "generated_nodes": 2,
-      "generated_edges": 0,
-      "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
+      "generated_nodes": 44,
+      "generated_edges": 62,
+      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
       "tests": [
         "backend/tests/test_m03_challenger.py",
         "backend/tests/test_m06_challenger_operations.py"
@@ -90,9 +90,9 @@
       "declared_entries": [
         "backend/max_backend/promotion_service.py::promote_strategy_challenger"
       ],
-      "generated_nodes": 37,
-      "generated_edges": 68,
-      "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
+      "generated_nodes": 134,
+      "generated_edges": 272,
+      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
       "tests": [
         "backend/tests/test_m04_promotion.py",
         "backend/tests/test_m04_store.py"
@@ -110,9 +110,9 @@
         "backend/max_backend/optimizer_api.py::get_qualified_candidates",
         "backend/max_backend/optimizer_api.py::promote_qualified_candidates"
       ],
-      "generated_nodes": 4,
-      "generated_edges": 2,
-      "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
+      "generated_nodes": 126,
+      "generated_edges": 214,
+      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_m03_challenger.py"
@@ -130,9 +130,9 @@
         "backend/max_backend/scientist_knowledge.py::load_knowledge",
         "backend/max_backend/scientist_api.py::get_status"
       ],
-      "generated_nodes": 5,
-      "generated_edges": 3,
-      "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
+      "generated_nodes": 48,
+      "generated_edges": 75,
+      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
       "tests": [
         "backend/tests/test_m05_scientist.py",
         "backend/tests/test_m05_final_evidence_contract.py",
@@ -158,9 +158,9 @@
         "backend/max_backend/strategy_reset.py::database_recovery_status",
         "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
       ],
-      "generated_nodes": 55,
-      "generated_edges": 76,
-      "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
+      "generated_nodes": 79,
+      "generated_edges": 113,
+      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
       "tests": [
         "backend/tests/test_strategy_workspace_reset.py",
         "backend/tests/test_retired_subsystem_migration.py",
@@ -191,9 +191,9 @@
         "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
         "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration"
       ],
-      "generated_nodes": 96,
-      "generated_edges": 149,
-      "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
+      "generated_nodes": 249,
+      "generated_edges": 479,
+      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
       "tests": [
         "backend/tests/test_optimizer_draft.py",
         "backend/tests/test_optimizer_reliability.py",
@@ -211,7 +211,7 @@
   "parse_failure_boundary": {
     "classification": "NO_FAILURES",
     "python_parse_failures": 0,
-    "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
+    "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
     "detail": "All current source files parsed during canonical sequence regeneration; no temporary pytest fixture is present in the workspace."
   },
   "retrospective_plan_artifacts": 0,

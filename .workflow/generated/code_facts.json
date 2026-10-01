@@ -556,7 +556,7 @@
       "file": "frontend/src/ChallengersPage.test.tsx",
       "is_test": true,
       "language": "TypeScript/React",
-      "lines": 835
+      "lines": 837
     },
     {
       "directory": "frontend/src",
@@ -70045,7 +70045,7 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
+  "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
   "source_summary": {
     "files": 113,
     "languages": {
@@ -70054,7 +70054,7 @@
       "TypeScript": 3,
       "TypeScript/React": 17
     },
-    "lines": 51385,
+    "lines": 51387,
     "test_files": 37
   },
   "tests": [
