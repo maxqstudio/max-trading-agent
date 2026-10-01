@@ -7,7 +7,7 @@
   "generation_anchor_policy": {
     "meaning": "The observed head is a pre-commit generation anchor. Final hosted source SHA and CI identity remain external acceptance evidence; real MT5 and Owner-PC runtime remain deferred.",
     "observed_head": "5a30097d76a46ad077bed8dfd978eb6b27f83264",
-    "source_digest": "14bfad2c4d182c18852ac6dad75b8e97d899a8ec9d8bfc38613d9087a0813614"
+    "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4"
   },
   "flows": [
     {
@@ -31,7 +31,7 @@
       ],
       "generated_nodes": 76,
       "generated_edges": 111,
-      "source_digest": "14bfad2c4d182c18852ac6dad75b8e97d899a8ec9d8bfc38613d9087a0813614",
+      "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_strategy_workspace_reset.py",
@@ -53,7 +53,7 @@
       ],
       "generated_nodes": 21,
       "generated_edges": 20,
-      "source_digest": "14bfad2c4d182c18852ac6dad75b8e97d899a8ec9d8bfc38613d9087a0813614",
+      "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
       "tests": [
         "backend/tests/test_m06_challenger_operations.py",
         "backend/tests/test_m08_strategy_results.py"
@@ -73,7 +73,7 @@
       ],
       "generated_nodes": 2,
       "generated_edges": 0,
-      "source_digest": "14bfad2c4d182c18852ac6dad75b8e97d899a8ec9d8bfc38613d9087a0813614",
+      "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
       "tests": [
         "backend/tests/test_m03_challenger.py",
         "backend/tests/test_m06_challenger_operations.py"
@@ -92,7 +92,7 @@
       ],
       "generated_nodes": 37,
       "generated_edges": 68,
-      "source_digest": "14bfad2c4d182c18852ac6dad75b8e97d899a8ec9d8bfc38613d9087a0813614",
+      "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
       "tests": [
         "backend/tests/test_m04_promotion.py",
         "backend/tests/test_m04_store.py"
@@ -112,7 +112,7 @@
       ],
       "generated_nodes": 4,
       "generated_edges": 2,
-      "source_digest": "14bfad2c4d182c18852ac6dad75b8e97d899a8ec9d8bfc38613d9087a0813614",
+      "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_m03_challenger.py"
@@ -132,7 +132,7 @@
       ],
       "generated_nodes": 5,
       "generated_edges": 3,
-      "source_digest": "14bfad2c4d182c18852ac6dad75b8e97d899a8ec9d8bfc38613d9087a0813614",
+      "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
       "tests": [
         "backend/tests/test_m05_scientist.py",
         "backend/tests/test_m05_final_evidence_contract.py",
@@ -160,7 +160,7 @@
       ],
       "generated_nodes": 55,
       "generated_edges": 76,
-      "source_digest": "14bfad2c4d182c18852ac6dad75b8e97d899a8ec9d8bfc38613d9087a0813614",
+      "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
       "tests": [
         "backend/tests/test_strategy_workspace_reset.py",
         "backend/tests/test_retired_subsystem_migration.py",
@@ -193,7 +193,7 @@
       ],
       "generated_nodes": 96,
       "generated_edges": 149,
-      "source_digest": "14bfad2c4d182c18852ac6dad75b8e97d899a8ec9d8bfc38613d9087a0813614",
+      "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
       "tests": [
         "backend/tests/test_optimizer_draft.py",
         "backend/tests/test_optimizer_reliability.py",
@@ -211,7 +211,7 @@
   "parse_failure_boundary": {
     "classification": "NO_FAILURES",
     "python_parse_failures": 0,
-    "source_digest": "14bfad2c4d182c18852ac6dad75b8e97d899a8ec9d8bfc38613d9087a0813614",
+    "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4",
     "detail": "All current source files parsed during canonical sequence regeneration; no temporary pytest fixture is present in the workspace."
   },
   "retrospective_plan_artifacts": 0,

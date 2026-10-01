@@ -13,7 +13,7 @@ Repository: maxqstudio/max-trading-agent
 Active branch: work/optimizer-durability-performance-hardening
 Current authoritative SHA: external final acceptance evidence
 Last accepted SHA: 5a30097d76a46ad077bed8dfd978eb6b27f83264
-Current source digest: 14bfad2c4d182c18852ac6dad75b8e97d899a8ec9d8bfc38613d9087a0813614
+Current source digest: 546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.
