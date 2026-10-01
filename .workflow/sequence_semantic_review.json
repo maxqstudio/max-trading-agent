@@ -6,7 +6,7 @@
   "skill_authority_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
   "generation_anchor_policy": {
     "meaning": "The observed head is a pre-commit generation anchor. Final hosted source SHA and CI identity remain external acceptance evidence; real MT5 and Owner-PC runtime remain deferred.",
-    "observed_head": "5a30097d76a46ad077bed8dfd978eb6b27f83264",
+    "observed_head": "b9c98ef4ebfd55606bc26032865958c163ca4c44",
     "source_digest": "546c9a474bffa21c65995f37412c03e78b032e7240e4b57d1aee0d90bcef25e4"
   },
   "flows": [
