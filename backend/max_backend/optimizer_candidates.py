@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 from pathlib import Path
 from typing import Any
 
 from .config import DATABASE_PATH, ROOT
+from .db import connect
 from .challenger_store import consumed_source_identities
 from .mtf_geometry import STRATEGY_CONTRACT, assert_geometry_matches_main
 from .optimizer_core import (
@@ -19,7 +21,12 @@ from .optimizer_core import (
     report_matches_request,
     sha256_file,
 )
-from .optimizer_store import attach_rounds, get_job
+from .optimizer_store import (
+    attach_rounds,
+    get_job,
+    persist_candidate_projection,
+)
+from .optimizer_runtime import committed_round_dir, verify_committed_round_bundle
 from .workflow_contract import optimizer_uses_owner_selection
 
 ALLOWED_PAGE_SIZES = {25, 50, 100}
@@ -70,7 +77,12 @@ def _verify_round_files(
     round_no = int(round_record["round_no"])
     if str(round_record.get("phase") or "") != "PARSED":
         raise RuntimeError("QUALIFIED_SOURCE_ROUND_NOT_PARSED")
-    root = _round_root(job, round_no)
+    round_root = _round_root(job, round_no)
+    root = committed_round_dir(job["job_id"], round_no)
+    if not root.is_dir():
+        root = round_root
+    else:
+        verify_committed_round_bundle(root, job_id=job["job_id"], round_no=round_no)
     passes_path = root / "passes.json"
     audit_path = root / "eligibility_audit.json"
     provenance_path = root / "report_provenance.json"
@@ -346,6 +358,129 @@ def _all_candidates(job: dict[str, Any]) -> tuple[list[dict[str, Any]], int]:
     return ranked, raw_count
 
 
+def candidate_projection_payload(
+    *,
+    job_id: str,
+    request: dict[str, Any],
+    round_no: int,
+    passes_payload: list[dict[str, Any]],
+    report_path: str | Path,
+    sidecar_path: str | Path,
+    report_sha256: str,
+    sidecar_sha256: str,
+    bundle_path: str | Path,
+    request_path: str | Path,
+    run_nonce: int,
+) -> dict[str, Any]:
+    bundle = Path(bundle_path)
+    report = _resolve_project_path(report_path)
+    sidecar = _resolve_project_path(sidecar_path)
+    if not report.is_file() or not sidecar.is_file():
+        raise RuntimeError("OPTIMIZER_PROJECTION_SOURCE_EVIDENCE_MISSING")
+    candidates: list[dict[str, Any]] = []
+    for payload in passes_payload:
+        if not isinstance(payload, dict):
+            raise RuntimeError("OPTIMIZER_PROJECTION_PASS_INVALID")
+        qualifies, _reasons, normalized = qualification_check(payload, request)
+        if not qualifies:
+            continue
+        candidate = {
+            **normalized,
+            "job_id": job_id,
+            "round": int(round_no),
+            "report_sha256": report_sha256,
+            "sidecar_sha256": sidecar_sha256,
+            "report_path": str(report),
+            "sidecar_path": str(sidecar),
+            "passes_path": str(bundle / "passes.json"),
+            "audit_path": str(bundle / "eligibility_audit.json"),
+            "report_provenance_path": str(bundle / "report_provenance.json"),
+            "strategy_contract": request["strategy_contract"],
+            "strategy_geometry": request["strategy_geometry"],
+            "ea_sha256": request["ea"]["sha256"],
+            "request_path": str(request_path),
+            "run_nonce": int(run_nonce),
+        }
+        search_text = (
+            f"{int(round_no)} {int(candidate['pass'])} "
+            + json.dumps(candidate["params"], sort_keys=True, separators=(",", ":"))
+        ).casefold()
+        candidates.append({
+            "pass": int(candidate["pass"]),
+            "mean_r": float(candidate["mean_r"]),
+            "custom_fitness": candidate.get("custom_fitness"),
+            "weighted_r": float(candidate["weighted_r"]),
+            "profit_factor": float(candidate["profit_factor"]),
+            "recovery_factor": float(candidate["recovery_factor"]),
+            "trades": int(candidate["trades"]),
+            "required_trades": int(candidate["required_trades"]),
+            "search_text": search_text,
+            "candidate": candidate,
+        })
+    content = json.dumps(candidates, sort_keys=True, separators=(",", ":"))
+    return {
+        "report_sha256": str(report_sha256),
+        "sidecar_sha256": str(sidecar_sha256),
+        "projection_sha256": hashlib.sha256(content.encode("utf-8")).hexdigest(),
+        "candidates": candidates,
+    }
+
+
+def _ensure_candidate_projection(
+    job: dict[str, Any],
+    *,
+    path: Path,
+) -> None:
+    with connect(path) as conn:
+        projected = {
+            (str(row["job_id"]), int(row["round_no"]))
+            for row in conn.execute(
+                "SELECT job_id,round_no FROM optimizer_candidate_projection_rounds "
+                "WHERE job_id=?",
+                (str(job["job_id"]),),
+            ).fetchall()
+        }
+    for record in job.get("rounds") or []:
+        round_no = int(record["round_no"])
+        if record.get("phase") != "PARSED" or (job["job_id"], round_no) in projected:
+            continue
+        evidence = _verify_round_files(job, record)
+        projection = candidate_projection_payload(
+            job_id=str(job["job_id"]),
+            request=job["request"],
+            round_no=round_no,
+            passes_payload=evidence["rows"],
+            report_path=evidence["report_path"],
+            sidecar_path=evidence["sidecar_path"],
+            report_sha256=evidence["report_sha256"],
+            sidecar_sha256=evidence["sidecar_sha256"],
+            bundle_path=evidence["root"],
+            request_path=_job_root(job) / "request.json",
+            run_nonce=int((record.get("state") or {}).get("optimizer_run_nonce") or 0),
+        )
+        persist_candidate_projection(
+            str(job["job_id"]), round_no, projection, path=path
+        )
+
+
+def _candidate_consumed_sql(alias: str = "p") -> str:
+    return f"""(
+        EXISTS (
+            SELECT 1 FROM strategy_challengers c
+            WHERE c.source_job_id={alias}.job_id
+              AND c.source_round={alias}.round_no
+              AND c.source_pass={alias}.pass_no
+        ) OR EXISTS (
+            SELECT 1
+            FROM strategy_challenger_batch_items i
+            JOIN strategy_challenger_batches b ON b.batch_id=i.batch_id
+            WHERE b.job_id={alias}.job_id AND b.state='COMMITTED'
+              AND i.source_round={alias}.round_no
+              AND i.source_pass={alias}.pass_no
+        )
+    )"""
+
+
 def qualified_candidates_page(
     job_id: str,
     *,
@@ -369,53 +504,68 @@ def qualified_candidates_page(
         raise ValueError("page_size must be 25, 50, or 100")
     requested_page = max(1, int(page))
     job = _load_job(job_id, path=path)
-    candidates, raw_count = _all_candidates(job)
-    historical_qualified_count = len(candidates)
-    consumed = consumed_source_identities(job_id, path=path)
-    candidates = [
-        item
-        for item in candidates
-        if (int(item["round"]), int(item["pass"])) not in consumed
-    ]
-    qualified_count = len(candidates)
-    needle = str(query or "").strip().casefold()
-    filtered = [
-        item
-        for item in candidates
-        if (round_no is None or int(item["round"]) == int(round_no))
-        and (
-            not needle
-            or needle in str(item["pass"]).casefold()
-            or needle in str(item["round"]).casefold()
-            or needle in json.dumps(item["params"], sort_keys=True).casefold()
-        )
-    ]
-    reverse = direction == "desc"
-    key_map = {
-        "rank": lambda row: int(row["rank"]),
-        "pass": lambda row: int(row["pass"]),
-        "mean_r": lambda row: float(row["mean_r"]),
-        "custom_fitness": lambda row: (
-            float(row["custom_fitness"])
-            if row.get("custom_fitness") is not None
-            else float("-inf")
-        ),
-        "weighted_r": lambda row: float(row["weighted_r"]),
-        "profit_factor": lambda row: float(row["profit_factor"]),
-        "recovery_factor": lambda row: float(row["recovery_factor"]),
-        "trades": lambda row: int(row["trades"]),
-        "required_trades": lambda row: int(row["required_trades"]),
-        "round": lambda row: int(row["round"]),
+    _ensure_candidate_projection(job, path=path)
+    consumed_sql = _candidate_consumed_sql()
+    sort_columns = {
+        "rank": "p.rank_value",
+        "pass": "p.pass_no",
+        "mean_r": "p.mean_r",
+        "custom_fitness": "p.custom_fitness",
+        "weighted_r": "p.weighted_r",
+        "profit_factor": "p.profit_factor",
+        "recovery_factor": "p.recovery_factor",
+        "trades": "p.trades",
+        "required_trades": "p.required_trades",
+        "round": "p.round_no",
     }
-    filtered.sort(
-        key=lambda row: (key_map[sort](row), -int(row["round"]), -int(row["pass"])),
-        reverse=reverse,
-    )
-    total = len(filtered)
-    pages = max(1, math.ceil(total / size)) if total else 1
-    bounded_page = min(requested_page, pages)
-    start = (bounded_page - 1) * size
-    items = filtered[start : start + size]
+    where = ["p.job_id=?", f"NOT {consumed_sql}"]
+    params: list[Any] = [job_id]
+    if round_no is not None:
+        where.append("p.round_no=?")
+        params.append(int(round_no))
+    needle = str(query or "").strip().casefold()
+    if needle:
+        where.append("p.search_text LIKE ? ESCAPE '\\'")
+        escaped = needle.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        params.append(f"%{escaped}%")
+    where_sql = " AND ".join(where)
+    sort_direction = direction.upper()
+    tie_direction = "ASC" if direction == "desc" else "DESC"
+    with connect(path) as conn:
+        raw_count = int(conn.execute(
+            "SELECT COALESCE(SUM(parsed_passes),0) AS n FROM optimizer_rounds "
+            "WHERE job_id=? AND phase='PARSED'",
+            (job_id,),
+        ).fetchone()["n"])
+        historical_qualified_count = int(conn.execute(
+            "SELECT COUNT(*) AS n FROM optimizer_candidate_projection WHERE job_id=?",
+            (job_id,),
+        ).fetchone()["n"])
+        consumed_count = int(conn.execute(
+            f"SELECT COUNT(*) AS n FROM optimizer_candidate_projection p "
+            f"WHERE p.job_id=? AND {consumed_sql}",
+            (job_id,),
+        ).fetchone()["n"])
+        qualified_count = historical_qualified_count - consumed_count
+        total = int(conn.execute(
+            "SELECT COUNT(*) AS n FROM optimizer_candidate_projection p WHERE " + where_sql,
+            tuple(params),
+        ).fetchone()["n"])
+        pages = max(1, math.ceil(total / size)) if total else 1
+        bounded_page = min(requested_page, pages)
+        offset = (bounded_page - 1) * size
+        rows = conn.execute(
+            "SELECT p.rank_value,p.candidate_json FROM optimizer_candidate_projection p "
+            "WHERE " + where_sql +
+            f" ORDER BY {sort_columns[sort]} {sort_direction}, "
+            f"p.round_no {tie_direction},p.pass_no {tie_direction} LIMIT ? OFFSET ?",
+            tuple(params + [size, offset]),
+        ).fetchall()
+    items = []
+    for row in rows:
+        candidate = json.loads(str(row["candidate_json"]))
+        candidate["rank"] = int(row["rank_value"])
+        items.append(candidate)
     return {
         "job_id": job_id,
         "raw_count": raw_count,

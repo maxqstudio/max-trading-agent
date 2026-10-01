@@ -13,6 +13,7 @@ from typing import Any
 from .config import DATABASE_PATH, ROOT
 from .mt5 import detect_mt5
 from .path_safety import assert_owned_path, file_size_tree, remove_owned_path
+from .schema import CURRENT_SCHEMA_VERSION
 
 STRATEGY_RESET_CONFIRMATION = "RESET_MAX_STRATEGY_WORKSPACE"
 RECOVERY_RESET_CONFIRMATION = "BACKUP_AND_RESET_CORRUPT_MAX_STATE"
@@ -244,7 +245,7 @@ def _read_counts(path: Path, *, root: Path) -> dict[str, Any]:
         or str((baseline_summary or {}).get("status") or "") != "BASELINE_NOT_CHAMPION"
     ):
         blockers["baseline_authority"] = 1
-    if schema_version != "14":
+    if schema_version != str(CURRENT_SCHEMA_VERSION):
         blockers["schema_version"] = 1
     unsafe_paths = 0
     for item, allowed_root in paths:
@@ -448,7 +449,7 @@ def _bootstrap_database(path: Path) -> None:
         version = conn.execute(
             "SELECT value FROM schema_meta WHERE key='schema_version'"
         ).fetchone()
-        if version is None or int(version["value"]) != 14:
+        if version is None or int(version["value"]) != CURRENT_SCHEMA_VERSION:
             raise StrategyResetError("RECOVERY_SCHEMA_BOOTSTRAP_FAILED")
         if conn.execute("PRAGMA integrity_check").fetchone()[0] != "ok":
             raise StrategyResetError("RECOVERY_DATABASE_INTEGRITY_FAILED")
@@ -496,7 +497,7 @@ def backup_and_reset_corrupt_database(
         "reason": status["reason"],
         "quarantine": str(quarantine),
         "preserved_files": preserved,
-        "schema_version": 14,
+        "schema_version": CURRENT_SCHEMA_VERSION,
         "baseline_registered": True,
         "provider_settings_preserved": True,
         "generated_strategy_state": "EMPTY",

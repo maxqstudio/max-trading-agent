@@ -4,10 +4,10 @@
 
 ## Evidence boundary
 
-Starting authority e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d is the source baseline for PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE. The current candidate is local and IN_PROGRESS. Only synthetic/test databases and fixtures are used. The retired active Research implementation is being removed; fresh R00-R11 remain planned and blocked until the Owner declares a real MT5 sample READY and Control Room separately authorizes a source phase. The exact final GitHub main SHA and hosted CI identity remain external acceptance evidence per D-012. No real MT5, broker, or scientific execution is performed in this source phase.
+Starting authority 5a30097d76a46ad077bed8dfd978eb6b27f83264 is the source baseline for STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING. The candidate is local on work/optimizer-durability-performance-hardening. Optimizer tests use synthetic temporary databases/evidence and isolated or mocked process boundaries; the Owner operational database, real MT5, broker and market data are not used. Initial read-only inspection found zero Optimizer jobs/rounds and no files in the inspected Optimizer artifact directories, so no deletion was necessary or performed. Fresh R00-R11 remain planned and blocked until a real MT5 sample is Owner-declared READY and Control Room separately authorizes a source phase. Exact final GitHub main SHA and hosted CI identity remain external acceptance evidence per D-012.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126
+Current source digest: fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
@@ -18,14 +18,20 @@ Current source digest: 9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58
 | STRAT-UI-FEEDBACK-01 | Safety-blocked controls are disabled with a visible reason; callbacks also fail closed, and asynchronous actions display progress and a result/error. | frontend/src/ArtifactsPage.tsx; frontend/src/ChallengersPage.tsx; frontend/src/App.tsx; frontend/src/ArtifactsPage.test.tsx; frontend/src/ChallengersPage.test.tsx | PASS_LOCAL |
 | RESEARCH-PURGE-01 | The rejected active Research APIs, backend modules, pages, active sequence sessions, persistence tables, metadata keys, and runtime dependencies are removed; the schema migration preserves Strategy authority. | backend/max_backend/schema.py; backend/max_backend/workflow_store.py; backend/tests/test_retired_subsystem_migration.py | PASS_LOCAL |
 | RESEARCH-GATE-01 | Fresh R00-R11 remain planned and blocked until the Owner declares REAL_MT5_BACKTEST_SAMPLE_READY and Control Room issues separate authorization. | .workflow/roadmap.json; .workflow/state.json | PASS_LOCAL |
-| REGRESSION-01 | Full current backend/frontend regressions, dependency checks, build, governance validators, and exact-tree source-only scan pass without unexplained skips or failures. | Current candidate test and validator reports; exact hosted evidence remains external. | NOT_PROVEN |
+| REGRESSION-01 | Full current backend/frontend regressions, dependency checks, build, governance validators, and exact-tree source-only scan pass without unexplained skips or failures. | Local backend 435-pass/0-skip/0-fail and frontend 52-pass/8-file reports are recorded; governance/profile/security scan and exact hosted evidence remain pending. | NOT_PROVEN |
 | HOSTED-01 | Windows GitHub Actions passes on the exact PR head and exact merged main before phase closure. | External GitHub Actions run bound to exact candidate SHA. | NOT_PROVEN |
-| OWNER-RUNTIME-01 | Owner-PC database reset and fresh Optimizer verification are deferred until source/hosted gates pass; real MT5 runtime remains Owner evidence. | Owner-PC final acceptance remains deferred. | NOT_PROVEN |
+| OWNER-RUNTIME-01 | Owner-PC reset and any fresh real Optimizer/MT5 verification remain separate from synthetic Builder tests; real MT5 runtime remains NOT_PROVEN. | Owner-PC final acceptance remains deferred. | NOT_PROVEN |
+| OPT-DRAFT-01 | Editable Optimizer draft persists with stale-revision rejection and stays separate from immutable per-job request snapshots. | backend/max_backend/optimizer_draft.py; backend/tests/test_optimizer_draft.py; backend/max_backend/optimizer_jobs.py::start_optimizer | PASS_LOCAL |
+| OPT-RECOVERY-01 | Startup reconciliation and worker/MT5 process identity fail closed on uncertain launch, prevent duplicate claims, and stop only proven Optimizer-owned processes. | backend/max_backend/optimizer_jobs.py; backend/tests/test_optimizer_reliability.py; backend/tests/test_m01_recovery.py | PASS_LOCAL |
+| OPT-EVIDENCE-01 | Derived round evidence is staged, verified and atomically published before SQLite advances; deterministic replay cannot masquerade as new MT5 execution. | backend/max_backend/optimizer_runtime.py::commit_round_evidence; backend/tests/test_optimizer_runtime_durability.py | PASS_LOCAL |
+| OPT-READMODEL-01 | Ordinary candidate reads use bounded SQLite projection while Challenger mutation strictly revalidates canonical retained evidence. | backend/max_backend/optimizer_candidates.py::qualified_candidates_page; backend/tests/test_m08_strategy_results.py | PASS_LOCAL |
+| OPT-UI-01 | Optimizer requests cancel/reject stale responses, debounce draft writes, bound/adapt polling, and show visible loading/block/success/failure feedback. | frontend/src/OptimizerPage.tsx; frontend/src/OptimizerPage.test.tsx; frontend/src/ChallengersPage.test.tsx | PASS_LOCAL |
+| OPT-PERFORMANCE-01 | Record reproducible synthetic request latency/payload and practical CPU/RAM/disk observations without substituting real Owner runtime measurements. | Actual synthetic 750-row qualified page median 23.651 ms/p95 68.983 ms/61,462 bytes. Separate 108-request Windows process profile excluding actual qualified SQL measured CPU 1.0781 s, peak working set 64,405,504 bytes, read I/O 6,060,864 bytes, write I/O 0, and tracemalloc peak 569,928 bytes. | PASS_LOCAL |
 
 ## Test commands
 
-- .venv/Scripts/python.exe -m pytest backend/tests/test_m08_strategy_results.py backend/tests/test_strategy_workspace_reset.py backend/tests/test_retired_subsystem_migration.py -q -o addopts=
-- .venv/Scripts/python.exe -m pytest backend/tests -q -o addopts= --basetemp .venv/pytest-full-revalidation
+- .venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_draft.py backend/tests/test_optimizer_reliability.py backend/tests/test_optimizer_runtime_durability.py backend/tests/test_m01_jobs.py backend/tests/test_m01_recovery.py backend/tests/test_m08_strategy_results.py -q -o addopts=
+- .venv/Scripts/python.exe -m pytest backend/tests -q -o addopts= --basetemp .venv/pytest-optimizer-full-rerun-20261001
 - cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all
 - .venv/Scripts/python.exe -m pip check
 - .venv/Scripts/python.exe scripts/scan_m05_candidate_tree.py --candidate-sha HEAD
@@ -41,7 +47,7 @@ Current source digest: 9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58
 
 ## Runtime checks
 
-- NOT_RUN: Owner runtime database backup/reset and fresh Optimizer verification; deferred until all hosted source gates pass.
+- NOT_RUN: Owner operational database reset and fresh real Optimizer/MT5 verification; no Owner data was touched. Two synthetic profile directories remain under ignored .venv because cleanup was rejected by shell policy.
 - NOT_RUN: real MT5/MetaEditor/broker/data-root/Strategy Tester runtime.
 - NOT_RUN: real R00/R01/R02 execution, model fitting/training, or Cheap Screen outcomes.
 - NOT_RUN: R03 qualification, ONNX, Research Challenger creation, or Champion mutation.
@@ -54,8 +60,8 @@ ROADMAP_SYNC: PASS
 ## Sequence contract evidence
 
 Sequence mode for this phase/session: DURING
-Sequence session contract: FLOW-ARTIFACT-CONTROL and FLOW-STRATEGY-RESET-RECOVERY
-SEQUENCE_SYNC: PASS_LOCAL: 7 DURING/CURRENT sessions, 0 failed, 0 Python parse failures
+Sequence session contract: FLOW-OPTIMIZER-DURABILITY-PERFORMANCE
+SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; all session/graph source digests match 8a5b70a056203d393d7efe83fe68f1eec637b51fe81845f45b89f9c8f73447c4. Generator reports one SyntaxError only in ignored pytest fixture .pytest-baseline-e4af; the canonical sequence validator accepts all 8 sessions with no warnings.
 
 ## Project Truth Compiler evidence
 

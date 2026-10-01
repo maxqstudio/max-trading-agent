@@ -49,6 +49,22 @@
       "purpose": "Expose current optimizer contract"
     },
     {
+      "authority": "backend/max_backend/optimizer_draft.py::get_optimizer_draft",
+      "error_behavior": "Read-only; missing/corrupt draft reports explicit status without changing jobs.",
+      "method": "GET",
+      "mutation": "none",
+      "path": "/api/optimizer/draft",
+      "purpose": "Restore the Owner's current editable Optimizer draft"
+    },
+    {
+      "authority": "backend/max_backend/optimizer_draft.py::put_optimizer_draft",
+      "error_behavior": "Invalid or stale revision fails/returns stale-write status; does not invoke preview, MT5, compilation, hashing or evidence scans.",
+      "method": "PUT",
+      "mutation": "bounded current editable draft only; started and historical job snapshots remain immutable",
+      "path": "/api/optimizer/draft",
+      "purpose": "Persist the latest validated editable Optimizer draft"
+    },
+    {
       "authority": "optimizer domain",
       "error_behavior": "Invalid request fails; no job mutation.",
       "method": "POST",
@@ -320,7 +336,36 @@
       "mutability": "immutable retained evidence; job lifecycle operational",
       "name": "Optimizer evidence",
       "retention": "forensic/lineage",
-      "source_of_truth": "MT5 report/sidecar plus Python verification"
+      "source_of_truth": "Atomically committed report/sidecar evidence bundle plus Python verification; MT5 report bytes remain canonical and SQLite candidate rows are only a read projection"
+    },
+    {
+      "invariants": [
+        "only one current editable draft exists and its monotonically increasing revision rejects stale saves",
+        "each started job freezes the exact validated request separately from later draft edits",
+        "draft writes do not trigger preview, MT5 discovery, compilation, report parsing or evidence scanning"
+      ],
+      "legal_writes": [
+        "backend/max_backend/optimizer_draft.py::put_optimizer_draft",
+        "backend/max_backend/optimizer_jobs.py::start_optimizer"
+      ],
+      "mutability": "editable draft mutable by revision; per-job request snapshot immutable",
+      "name": "Optimizer draft and started-job request",
+      "retention": "current draft persists across app/browser restart; job request persists for lineage",
+      "source_of_truth": "optimizer_drafts plus optimizer_jobs.request_json"
+    },
+    {
+      "invariants": [
+        "projection rows derive only from a committed and verified canonical round bundle",
+        "ordinary list/search/count/page reads use indexed SQLite projection and bounded server-side pagination",
+        "Challenger registration strictly revalidates the immutable canonical round evidence"
+      ],
+      "legal_writes": [
+        "backend/max_backend/optimizer_store.py::persist_candidate_projection"
+      ],
+      "mutability": "rebuildable derived projection; never independent qualification authority",
+      "name": "Optimizer qualified-candidate read projection",
+      "retention": "indexed while its source job/round is retained",
+      "source_of_truth": "optimizer_candidate_projection derived from the committed Optimizer round bundle"
     },
     {
       "invariants": [
@@ -379,7 +424,7 @@
     },
     {
       "name": "Retired Research runtime state",
-      "source_of_truth": "schema migration 14 and legacy research tables/metadata when encountered",
+      "source_of_truth": "schema migration 15 and legacy research tables/metadata when encountered",
       "mutability": "purged from current operational authority during migration",
       "legal_writes": [
         "backend/max_backend/workflow_store.py::_purge_research_authority"
@@ -390,14 +435,14 @@
         "fresh R00-R11 phases require future Owner readiness and separate authorization"
       ],
       "retention": "historical source lineage only; no active runtime state",
-      "source_of_truth": "schema_meta schema version 14 plus migration regression tests"
+      "source_of_truth": "schema_meta schema version 15 plus migration regression tests"
     }
   ],
   "runbook_steps": [
     {
       "name": "Verify hosted source",
-      "command": "git fetch origin main; git switch work/strategy-stabilization-research-purge; git rev-parse HEAD; git status --porcelain",
-      "expected": "Current source work stays on the authorized Strategy stabilization/purge branch; never reset or overwrite newer main."
+      "command": "git fetch origin main; git switch work/optimizer-durability-performance-hardening; git rev-parse HEAD; git status --porcelain",
+      "expected": "Current source work stays on the authorized Optimizer hardening branch; never reset or overwrite newer main."
     },
     {
       "name": "Python environment",
@@ -427,7 +472,7 @@
     {
       "name": "Validate sequence sessions",
       "command": ".\\.venv\\Scripts\\python.exe .workflow\\tools\\validate_sequence_sessions.py",
-      "expected": "Seven current DURING sessions, zero failed sessions."
+      "expected": "Eight current DURING sessions, zero failed sessions."
     },
     {
       "name": "Validate handoff",
@@ -447,12 +492,12 @@
     {
       "name": "Backend cumulative tests",
       "command": ".\\.venv\\Scripts\\python.exe -m pytest backend\\tests -q -o addopts= --basetemp .venv\\pytest-full-revalidation",
-      "expected": "All collected backend tests PASS with zero skips/failures; report the exact count and compare against the accepted baseline, accounting only for intentionally retired Research tests and added Strategy reset coverage."
+      "expected": "All collected backend tests PASS with zero skips/failures; report the exact count against the 410-pass starting floor and include the Optimizer durability regressions."
     },
     {
       "name": "Frontend tests/lint/build",
       "command": "cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all; cd ..",
-      "expected": "Current Strategy frontend test inventory PASS, lint exits zero, production build PASS, dependency tree exits zero; report exact test/file counts and any lint warnings."
+      "expected": "Current frontend regression PASS (52 tests across 8 files at this candidate), lint exits zero without warnings, production build PASS, dependency tree exits zero; report any bundler advisory separately."
     },
     {
       "name": "Python dependencies",

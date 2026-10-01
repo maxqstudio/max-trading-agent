@@ -18,6 +18,7 @@ Expected outcomes:
 - Stabilize the Strategy lifecycle, generated artifact controls, explicit reset/recovery behavior, and fail-closed Owner-facing actions.
 - Remove the rejected active Research subsystem and keep fresh R00-R11 work planned and blocked until the Owner declares a real MT5 sample READY.
 - Keep public-source development reproducible from GitHub with Windows CI as hosted build/test authority while deferring real MT5/runtime acceptance to the final Owner-PC phase.
+- Make the Strategy Optimizer draft durable, job execution restart-safe, evidence publication atomic, and ordinary candidate reads bounded before any fresh Owner runtime run.
 
 ## System at a glance
 
@@ -27,7 +28,7 @@ Users / External Systems
     -> State / Evidence Authorities
     -> External Runtime / Outputs
 
-Observed source inventory: 109 files, 4 language categories.
+Observed source inventory: 113 files, 4 language categories.
 
 ## Major components
 
@@ -35,6 +36,7 @@ Observed source inventory: 109 files, 4 language categories.
 |---|---|---|---|
 | Owner React Control Surface | Present semantic Strategy, Artifact and Settings state with explicit feedback for blocked, running and completed Owner actions. | frontend/src/App.tsx::App, frontend/src/OptimizerPage.tsx::OptimizerPage, frontend/src/ChallengersPage.tsx::ChallengersPage, frontend/src/ChampionPage.tsx::ChampionPage, frontend/src/ScientistPage.tsx::ScientistPage | FastAPI semantic APIs |
 | Strategy lifecycle domain | Own optimizer qualification, Challenger registration/lifecycle and Champion promotion/tenure semantics. | backend/max_backend/optimizer_candidates.py::qualified_candidates_page, backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration, backend/max_backend/challenger_selection.py::create_selected_challengers, backend/max_backend/challenger_store.py::consumed_source_identities, backend/max_backend/challenger_registry.py::challenger_detail, backend/max_backend/challenger_operations.py::retire_challenger, backend/max_backend/champion_store.py::commit_promotion_authority, backend/max_backend/promotion_service.py::promote_strategy_challenger | SQLite, immutable Challenger/optimizer evidence, MT5/MetaEditor |
+| Optimizer job orchestration and read model | Persist editable draft separately from immutable job requests, reconcile exact worker/MT5 launch identity, atomically publish round evidence, and serve paginated candidate projections without weakening canonical mutation verification. | backend/max_backend/optimizer_draft.py, backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup, backend/max_backend/optimizer_worker.py, backend/max_backend/optimizer_store.py::persist_candidate_projection, backend/max_backend/optimizer_candidates.py::qualified_candidates_page | SQLite operational state, immutable round evidence, MT5/MetaEditor execution boundary |
 | Scientist advisory subsystem | Expose hash-verified static knowledge and bounded committed runtime context to an advisory LLM/chat workflow. | backend/max_backend/scientist_knowledge.py::load_knowledge, backend/max_backend/scientist_api.py::get_status, frontend/src/ScientistPage.tsx::ScientistPage | scientist/knowledge/source_manifest.json, Scientist store/provider settings |
 | FastAPI runtime | Start migrations/recovery, route semantic APIs and expose overview/readiness. | backend/max_backend/main.py::lifespan, backend/max_backend/main.py::overview, backend/max_backend/main.py::app | domain services, SQLite, MT5 detection |
 | Windows launcher/readiness | Verify or start canonical backend/frontend instances, reject invalid occupied ports and emit MAX_READY only after authority/readiness checks. | RUN_MAX.cmd, scripts/run_max.ps1 | backend /api/overview, frontend proxy/root, Scientist status, ports 8000/5173 |
@@ -50,6 +52,9 @@ Observed source inventory: 109 files, 4 language categories.
 - FastAPI runtime -> Strategy lifecycle domain: Strategy actions are domain-validated before any SQLite/artifact/MT5 mutation.
 - Strategy lifecycle domain -> MT5/MetaEditor execution boundary: MT5/MetaEditor execute simulation/optimization/compile while Python verifies legality and evidence.
 - Strategy lifecycle domain -> Immutable evidence/artifact layer: Strategy evidence and lifecycle changes are governed through the owning domain and retained artifact lineage.
+- Owner React Control Surface -> Optimizer job orchestration and read model: Debounced draft edits persist independently; START snapshots the validated draft into a new immutable job request.
+- Optimizer job orchestration and read model -> MT5/MetaEditor execution boundary: A confirmed worker executes one authorized round; frozen and verified evidence is atomically published before SQLite advances, then a bounded projection serves ordinary reads.
+- Optimizer job orchestration and read model -> Strategy lifecycle domain: Candidate pages use the indexed projection; Challenger selection separately revalidates canonical retained evidence.
 - Scientist advisory subsystem -> Owner React Control Surface: Scientist returns bounded advisory context only; no scientific/promotion authority.
 - Current project governance -> Generated canonical docs/ governance Markdown: Project Truth Compiler projects source facts plus explicit semantic authority deterministically into canonical docs/ Markdown.
 
@@ -102,6 +107,23 @@ Authority: Owner authorization + promotion service + champion store atomic commi
 - DEPLOYMENT_VERIFIED -> PROMOTION_COMMITTED : Atomically commit selected source PROMOTED and new CURRENT tenure; close prior CURRENT to FORMER.
 - PROMOTION_COMMITTED -> CURRENT_CHAMPION : Expose newly verified current Champion authority.
 
+### FLOW-OPTIMIZER-DURABILITY-PERFORMANCE — Durable Strategy Optimizer draft, recovery, evidence and bounded reads
+
+Make editable Optimizer state durable, future Strategy Optimizer jobs recoverable without duplicate execution, evidence publication atomic, and ordinary Owner reads/actions bounded and explicit.
+
+Authority: SQLite job/draft state, verified immutable round bundle, and exact Optimizer worker/MT5 process identity
+
+- EDITABLE_DRAFT -> DRAFT_SAVE_PENDING : Validate the bounded editable draft and persist with a monotonic revision; debounce frontend writes and reject stale responses.
+- EDITABLE_DRAFT -> PREVIEW_VALIDATING : Build preview without creating a job; display progress and validation errors rather than a silent no-op.
+- START_REQUEST_VALIDATED -> JOB_REQUEST_FROZEN : Validate exact start request, persist an immutable request snapshot and a single-flight launch claim, then spawn the bound worker.
+- WORKER_LAUNCH_CLAIMED -> WORKER_CONFIRMED : Worker waits until its exact job/token/PID identity has been committed by the parent; stopped or superseded claims cannot reactivate.
+- WORKER_CONFIRMED -> COMPILING_EA : Compile the frozen EA request; crashes follow deterministic startup reconciliation and do not create an undefined active zombie.
+- ROUND_PREPARED -> LAUNCH_INTENT : Persist round preparation and launch intent before starting MT5; confirm exact child identity before treating execution as started.
+- MT5_PROCESS_CONFIRMED -> REPORT_DISCOVERED : Observe owned MT5 exit and freeze a fresh matching report; uncertain launch/process state enters RECOVERY_REQUIRED without relaunch.
+- RAW_EVIDENCE_FROZEN -> EVIDENCE_BUNDLE_COMMITTED : Parse only frozen raw report bytes, stage derived metrics/passes/provenance and manifest, verify hashes, atomically publish bundle, then commit SQLite round and projection.
+- CANDIDATE_PROJECTION_COMMITTED -> WAITING_OWNER_SELECTION : Serve count/search/sort/filter/page from bounded indexed projection; strictly revalidate canonical evidence before Challenger mutation.
+- WORKER_CONFIRMED -> STOPPED : STOP is idempotent, preserves committed checkpoints and terminates only an exact verified Optimizer-owned process.
+
 ### FLOW-OPTIMIZER-TO-CHALLENGER — Optimizer result to qualified pool, Owner selection and Challenger registration
 
 Expose only canonically qualified and unconsumed optimizer rows, require explicit Owner selection, revalidate every source tuple, then commit immutable Challenger batch/registry authority.
@@ -140,7 +162,7 @@ Authority: SQLite integrity/recovery status plus exact Owner confirmation and ve
 
 ## Lifecycle and state
 
-Current phase: PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE
+Current phase: STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING
 
 Current status: IN_PROGRESS
 
@@ -158,7 +180,9 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 | immutable_scientific_evidence | Sealed manifests, bundles, reports and retained artifacts | Scientific/execution history is immutable when its owning runtime contract marks it immutable; runtime evidence/artifacts are intentionally not tracked in the public source repository. |
 | strategy_champion | backend/max_backend/champion_store.py::commit_promotion_authority plus explicit Owner promotion | Current Champion tenure changes only through verified promotion authority; prior tenure becomes FORMER history. |
 | strategy_challenger | backend/max_backend/challenger_store.py plus retained immutable Challenger bundle | Active eligibility and historical PROMOTED/RETIRED identity are distinct; retained request epoch defines exact parameter universe. |
-| optimizer | MT5 optimizer reports/sidecars plus Python canonical revalidation | MT5 executes optimization; Python verifies identity, hashes, hard gates, request epoch and durable consumed-source eligibility. |
+| optimizer | MT5 optimizer reports/sidecars plus Python canonical revalidation | MT5 executes optimization; the immutable started-job snapshot, launch token and process identity govern recovery; Python verifies retained report identity/hashes/gates. SQLite candidate projections serve reads only and canonical evidence is revalidated before mutation. |
+| optimizer_draft_and_execution_snapshot | backend/max_backend/optimizer_draft.py and optimizer job/store transactions | One bounded editable draft persists as current Owner preference; each started job freezes its own request snapshot that later draft edits cannot change. |
+| optimizer_round_evidence_and_read_projection | Committed immutable Optimizer round bundle plus optimizer_candidate_projection read model | A verified atomic bundle is canonical retained evidence. Its normalized SQLite projection is a derived read model; it never grants qualification or bypasses canonical revalidation at Challenger mutation. |
 | mt5_execution | MetaTrader 5 Strategy Tester and MetaEditor | MT5/MetaEditor own simulation, optimization and compile execution truth; Python owns legality/orchestration/evidence verification. |
 | scientist | Hash-verified static knowledge plus bounded committed runtime context | Scientist output is advisory only and cannot mutate Strategy/Research scientific authority. |
 | frontend | Semantic backend API representation | React presents authority; UI labels/local state do not create domain eligibility, gate completion or scientific PASS. |
@@ -181,7 +205,8 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 - sqlite_operational_state: Mutable operational lifecycle/settings state is authoritative only where the corresponding store/service owns it.
 - strategy_champion: Current Champion tenure changes only through verified promotion authority; prior tenure becomes FORMER history.
 - strategy_challenger: Active eligibility and historical PROMOTED/RETIRED identity are distinct; retained request epoch defines exact parameter universe.
-- optimizer: MT5 executes optimization; Python verifies identity, hashes, hard gates, request epoch and durable consumed-source eligibility.
+- optimizer: MT5 executes optimization; the immutable started-job snapshot, launch token and process identity govern recovery; Python verifies retained report identity/hashes/gates. SQLite candidate projections serve reads only and canonical evidence is revalidated before mutation.
+- optimizer_draft_and_execution_snapshot: One bounded editable draft persists as current Owner preference; each started job freezes its own request snapshot that later draft edits cannot change.
 - mt5_execution: MT5/MetaEditor own simulation, optimization and compile execution truth; Python owns legality/orchestration/evidence verification.
 - scientist: Scientist output is advisory only and cannot mutate Strategy/Research scientific authority.
 - frontend: React presents authority; UI labels/local state do not create domain eligibility, gate completion or scientific PASS.
@@ -194,6 +219,7 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 ### Immutable history / evidence
 
 - immutable_scientific_evidence: Scientific/execution history is immutable when its owning runtime contract marks it immutable; runtime evidence/artifacts are intentionally not tracked in the public source repository.
+- optimizer_round_evidence_and_read_projection: A verified atomic bundle is canonical retained evidence. Its normalized SQLite projection is a derived read model; it never grants qualification or bypasses canonical revalidation at Challenger mutation.
 - historical_evidence: Historical evidence remains historically truthful and is not rewritten to mimic current terminology or configuration.
 - governance_tools: Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed.
 
@@ -210,6 +236,12 @@ compiler does not infer them from implementation names.
 - FLOW-CHALLENGER-CONSUMPTION: Preflight failure leaves state unchanged and reports blockers; no best-effort destructive cleanup.
 - FLOW-CHALLENGER-DETAIL: Tampered/missing bundle, identity mismatch or illegal parameter universe returns domain failure rather than partial detail.
 - FLOW-CHALLENGER-TO-CHAMPION: Compile/parity/stale/authority failure blocks commit and preserves prior Champion/source authority.
+- FLOW-OPTIMIZER-DURABILITY-PERFORMANCE: Draft validation and revision checks fail closed; a stale save cannot overwrite newer edits or mutate any job.
+- FLOW-OPTIMIZER-DURABILITY-PERFORMANCE: A STARTED request is immutable even when the current editable draft later changes.
+- FLOW-OPTIMIZER-DURABILITY-PERFORMANCE: Startup reconciliation inspects only known active jobs and exact worker/launch identity; uncertain MT5 launch is blocked rather than blindly relaunched.
+- FLOW-OPTIMIZER-DURABILITY-PERFORMANCE: MAX never terminates an MT5 process unless the process identity is uniquely bound to the Optimizer job/launch token.
+- FLOW-OPTIMIZER-DURABILITY-PERFORMANCE: Partial evidence staging is never authoritative; committed files are verified before the database references the round, and missing/tampered committed evidence fails closed.
+- FLOW-OPTIMIZER-DURABILITY-PERFORMANCE: Candidate projections accelerate reads only; Challenger registration revalidates canonical retained evidence.
 - FLOW-OPTIMIZER-TO-CHALLENGER: Stale/rejected/consumed/mismatched candidate aborts before legal registry mutation.
 - FLOW-OPTIMIZER-TO-CHALLENGER: Partial post-directory state becomes recovery-required rather than invented success.
 - FLOW-SCIENTIST-KNOWLEDGE: Stale knowledge, invalid provider response/evidence or uncertain in-flight request blocks authoritative completion/retry.
@@ -220,37 +252,39 @@ compiler does not infer them from implementation names.
 ## Current project state
 
 Next authorized actions:
-- Complete only PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE and validate it through Windows GitHub Actions, PR, merge and exact-main CI.
-- After successful closeout, Owner manually performs Strategy Optimizer → Challenger selection → Champion promotion → real MT5 backtest/sample preparation.
-- Control Room may authorize a fresh R00 source phase only after REAL_MT5_BACKTEST_SAMPLE_READY is explicitly declared.
+- Complete only STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING; run required local tests, performance measurements, governance and exact-tree security scan.
+- After local gates pass, push the authorized work branch, require green Windows CI on the exact PR head, squash merge, and require green Windows CI on exact main.
+- After source acceptance, Owner may manually start a fresh real Strategy Optimizer; no automatic optimizer run, Research phase, or Champion mutation is authorized here.
+- Fresh R00-R11 remains blocked until a real MT5 sample is Owner-declared READY and Control Room separately authorizes the next source phase.
 
 Blocked actions:
-- Real current-epoch R00-R11 Research execution, model training, dataset execution, ONNX, or Research Challenger creation; the rejected Research implementation is being removed.
-- Starting fresh R00 before the Owner declares a real MT5 backtest/sample dataset READY and Control Room authorizes that future source phase.
-- Broker login, Strategy Tester, real MT5 scientific execution, or Owner-PC runtime acceptance during this source repair.
-- Automatic transition from this repair phase into R00; after closure the next gate is Owner Strategy Champion and real MT5 sample preparation.
-- Any unrelated roadmap expansion or reuse of the deleted R00/R01/R02 implementation.
+- Real MT5 optimization, MetaEditor compilation, broker/data-root execution, and Owner-PC runtime acceptance during this source phase.
+- Owner fresh real Optimizer execution before source and exact-main Windows CI acceptance; no automatic long-running job is started by the Builder.
+- Fresh R00-R11 Research execution, real model training, Research dataset creation, ONNX, Research Challenger creation, and Champion mutation; Research remains paused and roadmap-gated.
+- Strategy Challenger selection/promotion and live MT5 backtest during this source implementation phase.
+- Unrelated roadmap or product-scope expansion.
 
 Known blockers:
-- The Owner-declared real MT5 backtest/sample dataset is not yet READY; fresh R00-R11 remain blocked after this Strategy stabilization phase.
+- Exact hosted PR/main Windows CI acceptance for this candidate is not yet proven.
+- Owner-PC runtime and fresh real Strategy Optimizer behavior remain NOT_PROVEN and deferred.
 
 ## Proven vs not proven
 
 ### Proven
 
-- Starting source authority is maxqstudio/max-trading-agent main e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d; the authorized working branch is work/strategy-stabilization-research-purge.
-- At the authorized baseline, backend regression completed with 706 passed and frontend completed with 53 passed across 10 files; schema version was 13.
-- Skill Workflow upstream main was checked and matches the pinned authority 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8; the pin is preserved.
-- The prior R02 phases were historically accepted in their respective source revisions, but the Owner has rejected the active Research subsystem; those implementations are not current runtime or compatibility authority.
-- Local candidate backend regression completed with 410 passed, 0 skipped and 0 failed; frontend completed with 46 passed across 8 files. pip check, npm dependency tree, frontend build and sequence validation passed; lint passed with two warnings.
-- Critical browser smoke exercised recovery progress/success and visible blocked artifact/reset controls with all API responses mocked; no Owner database, live backend or MT5 runtime was used.
+- Starting source authority is maxqstudio/max-trading-agent main 5a30097d76a46ad077bed8dfd978eb6b27f83264; work is isolated on work/optimizer-durability-performance-hardening.
+- Accepted starting floor: backend 410 passed, frontend 46 passed across 8 files, schema 14; Skill Workflow authority is 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8.
+- Current Skill_Workflow/main was fetched and verified unchanged at 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8; no newer tools or validator patches were adopted.
+- Optimizer draft, launch/recovery identity, atomic evidence, read-model, frontend request lifecycle, and visible action feedback are under the authorized source-hardening scope.
+- Source tests and 750-candidate API profile used synthetic SQLite/evidence only; actual qualified-candidate endpoint median was 23.651 ms, p95 68.983 ms, with a 61,462-byte page; no real MT5 or market data was used.
+- A separate Windows process-counter run measured CPU 1.0781 s, peak working set 64,405,504 bytes, read I/O 6,060,864 bytes and write I/O 0 over 108 requests; qualified route was mocked in that resource run.
 
 ### Not proven
 
-- Exact hosted PR/main CI acceptance of the Strategy lifecycle, artifact and reset/recovery candidate; local tests do not substitute for hosted acceptance.
-- Exact source-only/secret scan, final governance validation, PR CI, merged-main CI and external exact-SHA acceptance for this phase.
-- Actual local Owner-state backup/reset and fresh Optimizer start verification.
-- Owner declaration that a real MT5 backtest/sample dataset is READY.
+- Final governance/source-only scan and exact hosted branch/PR/main CI acceptance for this candidate.
+- Exact branch/PR/main Windows CI and external final-SHA acceptance under D-012.
+- Owner fresh real Optimizer, Challenger selection, Champion promotion, MT5 backtest, and runtime acceptance.
+- Cleanup of two synthetic profile directories under ignored .venv is incomplete: automatic cleanup hit a Windows SQLite file lock and explicit recursive cleanup was rejected by shell policy; no Owner data is present.
 
 ## Important limitations
 

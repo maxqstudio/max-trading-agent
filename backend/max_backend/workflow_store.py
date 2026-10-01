@@ -248,6 +248,54 @@ def migrate_current(path: Path = DATABASE_PATH) -> None:
             ON artifact_registry(owner_type, owner_id, artifact_type);
             CREATE INDEX IF NOT EXISTS ix_artifact_registry_retention
             ON artifact_registry(retention_class, in_use);
+
+            CREATE TABLE IF NOT EXISTS optimizer_drafts (
+                draft_id INTEGER PRIMARY KEY CHECK (draft_id = 1),
+                revision INTEGER NOT NULL CHECK (revision >= 0),
+                draft_json TEXT NOT NULL,
+                updated_utc TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS optimizer_candidate_projection_rounds (
+                job_id TEXT NOT NULL,
+                round_no INTEGER NOT NULL,
+                source_report_sha256 TEXT NOT NULL,
+                source_sidecar_sha256 TEXT NOT NULL,
+                projection_sha256 TEXT NOT NULL,
+                candidate_count INTEGER NOT NULL CHECK (candidate_count >= 0),
+                projected_utc TEXT NOT NULL,
+                PRIMARY KEY(job_id, round_no),
+                FOREIGN KEY(job_id, round_no)
+                    REFERENCES optimizer_rounds(job_id, round_no) ON DELETE CASCADE
+            );
+
+            CREATE TABLE IF NOT EXISTS optimizer_candidate_projection (
+                job_id TEXT NOT NULL,
+                round_no INTEGER NOT NULL,
+                pass_no INTEGER NOT NULL,
+                rank_value INTEGER NOT NULL DEFAULT 0,
+                mean_r REAL NOT NULL,
+                custom_fitness REAL,
+                weighted_r REAL NOT NULL,
+                profit_factor REAL NOT NULL,
+                recovery_factor REAL NOT NULL,
+                trades INTEGER NOT NULL,
+                required_trades INTEGER NOT NULL,
+                search_text TEXT NOT NULL,
+                candidate_json TEXT NOT NULL,
+                PRIMARY KEY(job_id, round_no, pass_no),
+                FOREIGN KEY(job_id, round_no)
+                    REFERENCES optimizer_candidate_projection_rounds(job_id, round_no)
+                    ON DELETE CASCADE
+            );
+            CREATE INDEX IF NOT EXISTS ix_optimizer_projection_rank
+            ON optimizer_candidate_projection(job_id, rank_value, round_no, pass_no);
+            CREATE INDEX IF NOT EXISTS ix_optimizer_projection_mean_r
+            ON optimizer_candidate_projection(job_id, mean_r, weighted_r, round_no, pass_no);
+            CREATE INDEX IF NOT EXISTS ix_optimizer_projection_weighted_r
+            ON optimizer_candidate_projection(job_id, weighted_r, mean_r, round_no, pass_no);
+            CREATE INDEX IF NOT EXISTS ix_optimizer_projection_round
+            ON optimizer_candidate_projection(job_id, round_no, pass_no);
             """
         )
         conn.execute(

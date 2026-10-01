@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import OptimizerPage from './OptimizerPage'
 
@@ -121,6 +121,37 @@ function contract() {
   }
 }
 
+function defaultDraft() {
+  const value = contract()
+  return {
+    symbol: '',
+    relative_symbol: '',
+    period: value.defaults.period,
+    from_date: '2021.01.01',
+    to_date: '2024.12.31',
+    model: value.defaults.model,
+    optimization: value.defaults.optimization,
+    max_rounds: value.defaults.max_rounds,
+    deposit: value.defaults.deposit,
+    leverage: value.defaults.leverage,
+    optimizer_trade_exponent_alpha: value.defaults.optimizer_trade_exponent_alpha,
+    optimize_params: [...value.default_optimize_params],
+    search_space: structuredClone(value.default_search_space),
+    kpi: { ...value.default_kpi },
+    scientist_assist: false,
+  }
+}
+
+function draftResponse(draft = defaultDraft(), revision = 0) {
+  return {
+    status: 'READY',
+    reason: null,
+    revision,
+    updated_utc: null,
+    draft,
+  }
+}
+
 const terminalJob = {
   job_id: 'JOB1',
   status: 'ELIGIBLE_WINNER_FOUND',
@@ -202,6 +233,9 @@ describe('M01 Optimizer UI', () => {
   it('renders 17 dense parameter rows, hard bounds, results, and winner terminology without future actions', async () => {
     vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
       const url = String(input)
+      if (url.endsWith('/api/optimizer/draft')) {
+        return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      }
       if (url.endsWith('/api/optimizer/contract')) {
         return Promise.resolve({ ok: true, json: async () => contract() } as Response)
       }
@@ -233,6 +267,9 @@ describe('M01 Optimizer UI', () => {
   it('shows owner-readable risk controls and fixed daily loss authority', async () => {
     vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
       const url = String(input)
+      if (url.endsWith('/api/optimizer/draft')) {
+        return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      }
       if (url.endsWith('/api/optimizer/contract')) {
         return Promise.resolve({ ok: true, json: async () => contract() } as Response)
       }
@@ -257,6 +294,9 @@ describe('M01 Optimizer UI', () => {
   it('offers only legal M07 Main timeframes while role-only periods stay internal', async () => {
     vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
       const url = String(input)
+      if (url.endsWith('/api/optimizer/draft')) {
+        return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      }
       if (url.endsWith('/api/optimizer/contract')) {
         return Promise.resolve({ ok: true, json: async () => contract() } as Response)
       }
@@ -280,8 +320,17 @@ describe('M01 Optimizer UI', () => {
 
   it('submits the configured request on the single START action', async () => {
     let submitted: any = null
+    const actionOrder: string[] = []
     vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
       const url = String(input)
+      if (url.endsWith('/api/optimizer/draft')) {
+        if (init?.method === 'PUT') {
+          actionOrder.push('draft')
+          const saved = JSON.parse(String(init.body))
+          return Promise.resolve({ ok: true, json: async () => draftResponse(saved.draft, saved.revision) } as Response)
+        }
+        return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      }
       if (url.endsWith('/api/optimizer/contract')) {
         return Promise.resolve({ ok: true, json: async () => contract() } as Response)
       }
@@ -307,8 +356,9 @@ describe('M01 Optimizer UI', () => {
         } as Response)
       }
       if (url.endsWith('/api/optimizer/start')) {
+        actionOrder.push('start')
         submitted = JSON.parse(String(init?.body))
-        return Promise.resolve({ ok: true, json: async () => ({ job_id: 'JSTART' }) } as Response)
+        return Promise.resolve({ ok: true, json: async () => ({ job_id: 'JSTART', status: 'QUEUED', active: true }) } as Response)
       }
       if (url.endsWith('/api/optimizer/jobs/JSTART')) {
         return Promise.resolve({
@@ -347,12 +397,16 @@ describe('M01 Optimizer UI', () => {
     expect(submitted.optimizer_trade_exponent_alpha).toBe(0.65)
     expect(submitted.optimize_params).toHaveLength(17)
     expect(Object.keys(submitted.search_space)).toHaveLength(17)
+    expect(actionOrder).toEqual(['draft', 'start'])
     expect(await screen.findByText('Queued')).toBeInTheDocument()
   })
 
   it('renders the first blocker from backend state', async () => {
     vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
       const url = String(input)
+      if (url.endsWith('/api/optimizer/draft')) {
+        return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      }
       if (url.endsWith('/api/optimizer/contract')) {
         return Promise.resolve({ ok: true, json: async () => contract() } as Response)
       }
@@ -385,6 +439,9 @@ describe('M01 Optimizer UI', () => {
     }
     const fetchMock = vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
       const url = String(input)
+      if (url.endsWith('/api/optimizer/draft')) {
+        return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      }
       if (url.endsWith('/api/optimizer/contract')) {
         return Promise.resolve({ ok: true, json: async () => contract() } as Response)
       }
@@ -430,6 +487,9 @@ describe('M01 Optimizer UI', () => {
     }
     const fetchMock = vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
       const url = String(input)
+      if (url.endsWith('/api/optimizer/draft')) {
+        return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      }
       if (url.endsWith('/api/optimizer/contract')) {
         return Promise.resolve({ ok: true, json: async () => contract() } as Response)
       }
@@ -471,6 +531,9 @@ describe('M02 Scientist advisory UI', () => {
   it('shows toggle and sanitized route status without secret input', async () => {
     vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
       const url = String(input)
+      if (url.endsWith('/api/optimizer/draft')) {
+        return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      }
       if (url.endsWith('/api/optimizer/contract')) {
         return Promise.resolve({ ok: true, json: async () => contract() } as Response)
       }
@@ -546,6 +609,9 @@ describe('M02 Scientist advisory UI', () => {
     }
     vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
       const url = String(input)
+      if (url.endsWith('/api/optimizer/draft')) {
+        return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      }
       if (url.endsWith('/api/optimizer/contract')) {
         return Promise.resolve({ ok: true, json: async () => contract() } as Response)
       }
@@ -648,6 +714,9 @@ describe('M02 Scientist advisory UI', () => {
     }
     vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
       const url = String(input)
+      if (url.endsWith('/api/optimizer/draft')) {
+        return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      }
       if (url.endsWith('/api/optimizer/contract')) {
         return Promise.resolve({ ok: true, json: async () => contract() } as Response)
       }
@@ -718,6 +787,9 @@ describe('M08 qualified candidate control', () => {
 
     vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
       const url = String(input)
+      if (url.endsWith('/api/optimizer/draft')) {
+        return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      }
       if (url.endsWith('/api/optimizer/contract')) {
         return Promise.resolve({ ok: true, json: async () => contract() } as Response)
       }
@@ -850,6 +922,9 @@ describe('M08 qualified candidate control', () => {
 
     vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
       const url = String(input)
+      if (url.endsWith('/api/optimizer/draft')) {
+        return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      }
       if (url.endsWith('/api/optimizer/contract')) {
         return Promise.resolve({ ok: true, json: async () => contract() } as Response)
       }
@@ -889,5 +964,236 @@ describe('M08 qualified candidate control', () => {
     expect(screen.getByLabelText('Rows per page')).toHaveValue('25')
     expect(screen.queryByLabelText('Candidate page size')).not.toBeInTheDocument()
     expect(screen.queryByText('Historical optimizer pass evidence')).not.toBeInTheDocument()
+  })
+
+  it('restores the complete saved draft, including ranges, account settings, and KPI values', async () => {
+    const saved = defaultDraft()
+    saved.symbol = 'GBPUSD.m'
+    saved.deposit = 25000
+    saved.leverage = 200
+    saved.kpi.min_weighted_r = 0.35
+    saved.search_space.InpEntryThreshold.stop = 0.42
+
+    vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
+      const url = String(input)
+      if (url.endsWith('/api/optimizer/contract')) return Promise.resolve({ ok: true, json: async () => contract() } as Response)
+      if (url.endsWith('/api/optimizer/current')) return Promise.resolve({ ok: true, json: async () => null } as Response)
+      if (url.endsWith('/api/optimizer/draft')) return Promise.resolve({ ok: true, json: async () => draftResponse(saved, 8) } as Response)
+      throw new Error('unexpected fetch ' + url)
+    }))
+
+    render(<OptimizerPage />)
+
+    expect(await screen.findByLabelText('Main Symbol')).toHaveValue('GBPUSD.m')
+    expect(screen.getByLabelText('Initial deposit')).toHaveValue(25000)
+    expect(screen.getByLabelText('Leverage')).toHaveValue(200)
+    expect(screen.getByLabelText('Min Weighted R')).toHaveValue(0.35)
+    expect(screen.getByLabelText('Stop InpEntryThreshold')).toHaveValue(0.42)
+    expect(screen.getByText('Saved configuration restored from this device.')).toBeInTheDocument()
+  })
+
+  it('does not start from a corrupt draft until the Owner explicitly saves the shown defaults', async () => {
+    let startCalls = 0
+    vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input)
+      if (url.endsWith('/api/optimizer/contract')) return Promise.resolve({ ok: true, json: async () => contract() } as Response)
+      if (url.endsWith('/api/optimizer/current')) return Promise.resolve({ ok: true, json: async () => null } as Response)
+      if (url.endsWith('/api/optimizer/draft')) {
+        if (init?.method === 'PUT') {
+          const saved = JSON.parse(String(init.body))
+          return Promise.resolve({ ok: true, json: async () => draftResponse(saved.draft, saved.revision) } as Response)
+        }
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ ...draftResponse(), status: 'RECOVERY_REQUIRED', reason: 'DRAFT_CORRUPT', revision: 4 }),
+        } as Response)
+      }
+      if (url.endsWith('/api/optimizer/start')) {
+        startCalls += 1
+        return Promise.resolve({ ok: true, json: async () => ({ job_id: 'JSTART', status: 'QUEUED', active: true }) } as Response)
+      }
+      throw new Error('unexpected fetch ' + url)
+    }))
+
+    render(<OptimizerPage />)
+    const start = await screen.findByRole('button', { name: 'START OPTIMIZER' })
+    expect(start).toBeDisabled()
+    expect(screen.getByText(/Defaults are shown but were not saved/)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'SAVE DRAFT' }))
+    expect(await screen.findByText('Configuration saved on this device.')).toBeInTheDocument()
+    expect(startCalls).toBe(0)
+  })
+
+  it('locks duplicate START clicks immediately and exposes pending progress', async () => {
+    const saveGate = deferred<Response>()
+    let saveCalls = 0
+    let startCalls = 0
+    let savingPayload: any = null
+    vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input)
+      if (url.endsWith('/api/optimizer/contract')) return Promise.resolve({ ok: true, json: async () => contract() } as Response)
+      if (url.endsWith('/api/optimizer/current')) return Promise.resolve({ ok: true, json: async () => null } as Response)
+      if (url.endsWith('/api/optimizer/draft') && init?.method === 'PUT') {
+        saveCalls += 1
+        savingPayload = JSON.parse(String(init.body))
+        return saveGate.promise
+      }
+      if (url.endsWith('/api/optimizer/draft')) return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      if (url.endsWith('/api/optimizer/start')) {
+        startCalls += 1
+        return Promise.resolve({ ok: true, json: async () => ({ job_id: 'JSTART', status: 'QUEUED', active: true }) } as Response)
+      }
+      if (url.endsWith('/api/optimizer/jobs/JSTART')) return Promise.resolve({ ok: true, json: async () => ({ ...terminalJob, job_id: 'JSTART', status: 'QUEUED', active: true, rounds: [] }) } as Response)
+      throw new Error('unexpected fetch ' + url)
+    }))
+
+    render(<OptimizerPage />)
+    const start = await screen.findByRole('button', { name: 'START OPTIMIZER' })
+    act(() => {
+      start.click()
+      start.click()
+    })
+    expect(screen.getByRole('button', { name: 'Starting...' })).toBeDisabled()
+    expect(saveCalls).toBe(1)
+    expect(startCalls).toBe(0)
+
+    saveGate.resolve({ ok: true, json: async () => draftResponse(savingPayload.draft, savingPayload.revision) } as Response)
+    await waitFor(() => expect(startCalls).toBe(1))
+  })
+
+  it('keeps the latest preview when an older preview response arrives last', async () => {
+    const earlier = deferred<Response>()
+    const later = deferred<Response>()
+    let previewCalls = 0
+    const saved = defaultDraft()
+    saved.symbol = 'XAUUSD.m'
+    saved.relative_symbol = 'EURUSD.m'
+
+    vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
+      const url = String(input)
+      if (url.endsWith('/api/optimizer/contract')) return Promise.resolve({ ok: true, json: async () => contract() } as Response)
+      if (url.endsWith('/api/optimizer/current')) return Promise.resolve({ ok: true, json: async () => null } as Response)
+      if (url.endsWith('/api/optimizer/draft')) return Promise.resolve({ ok: true, json: async () => draftResponse(saved, 3) } as Response)
+      if (url.endsWith('/api/optimizer/preview')) {
+        previewCalls += 1
+        return previewCalls === 1 ? earlier.promise : later.promise
+      }
+      throw new Error('unexpected fetch ' + url)
+    }))
+
+    render(<OptimizerPage />)
+    await screen.findByLabelText('Main Symbol')
+    await waitFor(() => expect(previewCalls).toBe(1), { timeout: 1500 })
+    fireEvent.change(screen.getByLabelText('Main Symbol'), { target: { value: 'GBPUSD.m' } })
+    await waitFor(() => expect(previewCalls).toBe(2), { timeout: 1500 })
+
+    const preview = (trades: number) => ({
+      ok: true,
+      json: async () => ({
+        status: 'VALID',
+        trade_sample: { timeframe: 'H1', scaled_trades_per_month: trades, calendar_months: 1, minimum_trades: trades },
+        search_space_cardinality: { raw_complete_grid_combinations: 1, authority: 'SYNTHETIC_TEST' },
+      }),
+    } as Response)
+    later.resolve(preview(77))
+    expect((await screen.findAllByText('77')).length).toBeGreaterThanOrEqual(1)
+    earlier.resolve(preview(11))
+    await new Promise((resolve) => window.setTimeout(resolve, 20))
+    expect(screen.getAllByText('77').length).toBeGreaterThanOrEqual(1)
+    expect(screen.queryByText('11')).not.toBeInTheDocument()
+  })
+
+  it('offers explicit stop and resume controls for an uncertain execution and blocks a new job', async () => {
+    const uncertain = {
+      ...terminalJob,
+      status: 'EXECUTION_UNCERTAIN',
+      active: false,
+      winner: null,
+      rounds: [],
+      message: 'The previous execution needs process reconciliation.',
+    }
+    vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
+      const url = String(input)
+      if (url.endsWith('/api/optimizer/contract')) return Promise.resolve({ ok: true, json: async () => contract() } as Response)
+      if (url.endsWith('/api/optimizer/current')) return Promise.resolve({ ok: true, json: async () => uncertain } as Response)
+      if (url.endsWith('/api/optimizer/draft')) return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      throw new Error('unexpected fetch ' + url)
+    }))
+
+    render(<OptimizerPage />)
+    expect(await screen.findByRole('button', { name: 'START OPTIMIZER' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'STOP' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'RESUME' })).toBeEnabled()
+    expect(screen.getByText('Execution needs reconciliation')).toBeInTheDocument()
+    expect(screen.getByText('The previous execution needs process reconciliation.')).toBeInTheDocument()
+  })
+
+  it('debounces candidate search and ignores a stale response after the newer filter wins', async () => {
+    const stale = deferred<Response>()
+    const currentJob = {
+      ...terminalJob,
+      status: 'QUALIFIED_POOL_READY',
+      active: false,
+      optimizer_result_workflow: 'QUALIFIED_POOL_OWNER_SELECTION',
+      request: { ...terminalJob.request, optimizer_result_workflow: 'QUALIFIED_POOL_OWNER_SELECTION' },
+    }
+    const requests: string[] = []
+    const page = (pass: number, query: string) => ({
+      job_id: 'JOB1',
+      raw_count: 2,
+      qualified_count: 2,
+      historical_qualified_count: 2,
+      consumed_count: 0,
+      rejected_count: 0,
+      page: 1,
+      page_size: 25,
+      pages: 1,
+      total: 1,
+      sort: 'mean_r',
+      order: 'desc',
+      query,
+      round: null,
+      items: [{
+        job_id: 'JOB1',
+        rank: pass,
+        pass,
+        round: 1,
+        mean_r: pass / 100,
+        custom_fitness: pass / 10,
+        weighted_r: 0.1,
+        profit_factor: 1.2,
+        recovery_factor: 0.4,
+        trades: 25,
+        required_trades: 20,
+        params: { InpEntryThreshold: 0.2 },
+      }],
+    })
+
+    vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
+      const url = String(input)
+      if (url.endsWith('/api/optimizer/contract')) return Promise.resolve({ ok: true, json: async () => contract() } as Response)
+      if (url.endsWith('/api/optimizer/current')) return Promise.resolve({ ok: true, json: async () => currentJob } as Response)
+      if (url.endsWith('/api/optimizer/draft')) return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      if (url.includes('/api/optimizer/jobs/JOB1/qualified-candidates?')) {
+        requests.push(url)
+        const query = new URL(url, 'http://local').searchParams.get('q') ?? ''
+        if (query === 'first') return stale.promise
+        return Promise.resolve({ ok: true, json: async () => page(77, query) } as Response)
+      }
+      throw new Error('unexpected fetch ' + url)
+    }))
+
+    render(<OptimizerPage />)
+    await screen.findByLabelText('Search qualified candidates')
+    await waitFor(() => expect(requests.some((url) => new URL(url, 'http://local').searchParams.get('q') === '')).toBe(true))
+    fireEvent.change(screen.getByLabelText('Search qualified candidates'), { target: { value: 'first' } })
+    await waitFor(() => expect(requests.some((url) => new URL(url, 'http://local').searchParams.get('q') === 'first')).toBe(true), { timeout: 1500 })
+    fireEvent.change(screen.getByLabelText('Search qualified candidates'), { target: { value: 'latest' } })
+    expect(await screen.findByLabelText('Select candidate R1 P77')).toBeInTheDocument()
+    stale.resolve({ ok: true, json: async () => page(11, 'first') } as Response)
+    await new Promise((resolve) => window.setTimeout(resolve, 20))
+    expect(screen.getByLabelText('Select candidate R1 P77')).toBeInTheDocument()
+    expect(screen.queryByLabelText('Select candidate R1 P11')).not.toBeInTheDocument()
+    expect(requests.filter((url) => new URL(url, 'http://local').searchParams.get('q') === 'latest')).toHaveLength(1)
   })
 })

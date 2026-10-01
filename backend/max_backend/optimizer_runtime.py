@@ -7,6 +7,7 @@ import re
 import shutil
 import subprocess
 import time
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -23,6 +24,7 @@ from .optimizer_core import (
     report_matches_request,
     sha256_file,
 )
+from .path_safety import remove_owned_path
 
 OPTIMIZER_EVIDENCE_ROOT = OPTIMIZER_ARTIFACT_ROOT
 
@@ -43,11 +45,27 @@ def round_evidence_dir(job_id: str, round_no: int) -> Path:
     return path
 
 
+def committed_round_dir(job_id: str, round_no: int) -> Path:
+    return round_evidence_dir(job_id, round_no) / "committed"
+
+
 def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.exists():
         raise FileExistsError(f"Immutable evidence already exists: {path}")
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+    temporary = path.with_name(f".{path.name}.{uuid.uuid4().hex}.tmp")
+    encoded = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+    try:
+        with temporary.open("x", encoding="utf-8", newline="\n") as handle:
+            handle.write(encoded)
+            handle.flush()
+            os.fsync(handle.fileno())
+        if path.exists():
+            raise FileExistsError(f"Immutable evidence already exists: {path}")
+        os.rename(temporary, path)
+    finally:
+        if temporary.exists():
+            temporary.unlink()
 
 
 def write_state_snapshot(job_id: str, round_no: int, state: dict[str, Any]) -> Path:
@@ -373,6 +391,8 @@ def _matching_terminal_pids(terminal: Path) -> list[int]:
         text=True,
         timeout=8,
     )
+    if result.returncode != 0:
+        raise RuntimeError("MT5_PROCESS_OWNERSHIP_QUERY_FAILED")
     pids: list[int] = []
     for line in (result.stdout or "").splitlines():
         text = line.strip()
@@ -381,11 +401,72 @@ def _matching_terminal_pids(terminal: Path) -> list[int]:
     return pids
 
 
+def optimizer_terminal_process_state(
+    request: dict[str, Any],
+    *,
+    ini_path: str | Path,
+) -> dict[str, Any]:
+    """Match MT5 ownership by executable and this round's unique INI path."""
+    if os.name != "nt":
+        return {"status": "UNKNOWN", "processes": []}
+    command = (
+        "$rows=Get-CimInstance Win32_Process -Filter \"Name='terminal64.exe'\" "
+        "-ErrorAction SilentlyContinue | Select-Object ProcessId,ExecutablePath,CommandLine,CreationDate;"
+        "if($rows){$rows | ConvertTo-Json -Compress}"
+    )
+    result = subprocess.run(
+        ["powershell.exe", "-NoLogo", "-NoProfile", "-Command", command],
+        capture_output=True,
+        text=True,
+        timeout=8,
+    )
+    if result.returncode != 0:
+        raise RuntimeError("MT5_PROCESS_OWNERSHIP_QUERY_FAILED")
+    try:
+        rows = json.loads((result.stdout or "").strip()) if (result.stdout or "").strip() else []
+    except json.JSONDecodeError as exc:
+        raise RuntimeError("MT5_PROCESS_OWNERSHIP_QUERY_INVALID") from exc
+    if isinstance(rows, dict):
+        rows = [rows]
+    if not isinstance(rows, list):
+        raise RuntimeError("MT5_PROCESS_OWNERSHIP_QUERY_INVALID")
+    expected_exe = str(Path(request["mt5"]["terminal"]).resolve()).casefold()
+    expected_ini = str(Path(ini_path).resolve()).replace("/", "\\").casefold()
+    owned: list[dict[str, Any]] = []
+    unrelated: list[dict[str, Any]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        executable = str(row.get("ExecutablePath") or "")
+        line = str(row.get("CommandLine") or "")
+        item = {
+            "pid": int(row.get("ProcessId") or 0),
+            "executable_path": executable,
+            "command_line": line,
+            "creation_time": str(row.get("CreationDate") or ""),
+        }
+        if executable.casefold() != expected_exe:
+            continue
+        normalized_line = line.replace("/", "\\").casefold()
+        if expected_ini in normalized_line:
+            owned.append(item)
+        else:
+            unrelated.append(item)
+    if len(owned) == 1:
+        return {"status": "OPTIMIZER_OWNED_RUNNING", "processes": owned}
+    if len(owned) > 1:
+        return {"status": "OWNERSHIP_AMBIGUOUS", "processes": owned}
+    if unrelated:
+        return {"status": "UNRELATED_MT5_RUNNING", "processes": unrelated}
+    return {"status": "NOT_RUNNING", "processes": []}
+
+
 def launch_mt5(
     request: dict[str, Any],
     *,
     ini_path: str | Path,
     timeout_sec: int,
+    on_process: Any | None = None,
 ) -> int:
     terminal = Path(request["mt5"]["terminal"])
     if not terminal.is_file():
@@ -396,14 +477,23 @@ def launch_mt5(
             "MT5_TERMINAL_ALREADY_RUNNING: "
             + ",".join(str(pid) for pid in existing)
         )
-    process = subprocess.run(
-        [str(terminal), f"/config:{Path(ini_path)}"],
-        cwd=str(terminal.parent),
-        timeout=int(timeout_sec),
-    )
-    if process.returncode not in (0, None):
-        raise RuntimeError(f"MT5_EXECUTION_FAILURE: exit={process.returncode}")
-    return int(process.returncode or 0)
+    command = [str(terminal), f"/config:{Path(ini_path)}"]
+    process = subprocess.Popen(command, cwd=str(terminal.parent))
+    if on_process is not None:
+        on_process({
+            "pid": int(process.pid),
+            "executable_path": str(terminal.resolve()),
+            "command_line": subprocess.list2cmdline(command),
+            "ini_path": str(Path(ini_path).resolve()),
+            "started_utc_epoch": time.time(),
+        })
+    try:
+        returncode = process.wait(timeout=int(timeout_sec))
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeError("MT5_EXECUTION_TIMEOUT_UNCERTAIN") from exc
+    if returncode not in (0, None):
+        raise RuntimeError(f"MT5_EXECUTION_FAILURE: exit={returncode}")
+    return int(returncode or 0)
 
 
 def stage_raw_round_evidence(
@@ -412,23 +502,84 @@ def stage_raw_round_evidence(
     round_no: int,
     report: Path,
     metrics_path: Path,
+    expected_report_fingerprint: dict[str, Any] | None = None,
 ) -> dict[str, str]:
     evidence = round_evidence_dir(job_id, round_no)
-    staged: dict[str, str] = {}
-    for source, name, key in (
-        (report, "raw_Max_MTF.xml", "raw_report"),
-        (metrics_path, "raw_Max_MTF_metrics.csv", "raw_sidecar"),
+    staging = evidence / ".staging" / "raw-freeze"
+    manifest_path = staging / "raw-manifest.json"
+    names = {
+        "raw_report": "raw_Max_MTF.xml",
+        "raw_sidecar": "raw_Max_MTF_metrics.csv",
+    }
+
+    def validated_result(manifest: dict[str, Any]) -> dict[str, str]:
+        if (
+            manifest.get("schema") != "MAX_OPTIMIZER_RAW_FREEZE_V1"
+            or manifest.get("job_id") != job_id
+            or manifest.get("round") != int(round_no)
+            or not isinstance(manifest.get("files"), dict)
+        ):
+            raise RuntimeError("RAW_ROUND_FREEZE_MANIFEST_INVALID")
+        if (
+            expected_report_fingerprint is not None
+            and manifest.get("source_report_fingerprint") != expected_report_fingerprint
+        ):
+            raise RuntimeError("RAW_ROUND_FREEZE_SOURCE_FINGERPRINT_MISMATCH")
+        result: dict[str, str] = {"raw_manifest_path": str(manifest_path)}
+        for key, name in names.items():
+            expected = str(manifest["files"].get(name) or "")
+            target = staging / name
+            if not expected or not target.is_file() or sha256_file(target) != expected:
+                raise RuntimeError(f"RAW_ROUND_FREEZE_FILE_INVALID:{name}")
+            result[f"{key}_path"] = str(target)
+            result[f"{key}_sha256"] = expected
+        return result
+
+    if manifest_path.is_file():
+        try:
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise RuntimeError("RAW_ROUND_FREEZE_MANIFEST_INVALID") from exc
+        return validated_result(manifest)
+
+    if staging.exists():
+        current = report_fingerprint(report)
+        if expected_report_fingerprint != current:
+            raise RuntimeError("RAW_ROUND_FREEZE_SOURCE_CHANGED")
+        remove_owned_path(staging, roots=[OPTIMIZER_EVIDENCE_ROOT])
+
+    if not report.is_file() or not metrics_path.is_file():
+        raise FileNotFoundError("RAW_ROUND_FREEZE_SOURCE_MISSING")
+    if expected_report_fingerprint is not None and report_fingerprint(report) != expected_report_fingerprint:
+        raise RuntimeError("RAW_ROUND_FREEZE_SOURCE_CHANGED")
+    staging.mkdir(parents=True, exist_ok=False)
+    files: dict[str, str] = {}
+    for source, name in (
+        (report, names["raw_report"]),
+        (metrics_path, names["raw_sidecar"]),
     ):
-        target = evidence / name
+        temporary = staging / f".{name}.{uuid.uuid4().hex}.tmp"
+        target = staging / name
+        shutil.copy2(source, temporary)
         source_sha = sha256_file(source)
-        if target.exists():
-            if sha256_file(target) != source_sha:
-                raise RuntimeError(f"Immutable raw round evidence mismatch: {target}")
-        else:
-            shutil.copy2(source, target)
-        staged[f"{key}_path"] = str(target)
-        staged[f"{key}_sha256"] = source_sha
-    return staged
+        if sha256_file(temporary) != source_sha:
+            raise RuntimeError(f"RAW_ROUND_FREEZE_COPY_MISMATCH:{name}")
+        os.rename(temporary, target)
+        files[name] = source_sha
+    manifest = {
+        "schema": "MAX_OPTIMIZER_RAW_FREEZE_V1",
+        "job_id": job_id,
+        "round": int(round_no),
+        "source_report_fingerprint": report_fingerprint(report),
+        "files": files,
+    }
+    write_json(manifest_path, manifest)
+    return validated_result(manifest)
+
+
+def discard_raw_round_staging(job_id: str, round_no: int) -> int:
+    staging = round_evidence_dir(job_id, round_no) / ".staging" / "raw-freeze"
+    return remove_owned_path(staging, roots=[OPTIMIZER_EVIDENCE_ROOT])
 
 
 def commit_round_evidence(
@@ -442,37 +593,124 @@ def commit_round_evidence(
     report_selection_mode: str,
 ) -> dict[str, Any]:
     evidence = round_evidence_dir(job_id, round_no)
-    local_report = evidence / OPTIMIZER_REPORT_XML
-    local_metrics = evidence / OPTIMIZER_METRICS_CSV
+    final = evidence / "committed"
+    if not report.is_file() or not metrics_path.is_file():
+        raise FileNotFoundError("ROUND_SOURCE_EVIDENCE_MISSING")
+    report_sha = sha256_file(report)
+    metrics_sha = sha256_file(metrics_path)
+    if final.exists():
+        manifest = verify_committed_round_bundle(final, job_id=job_id, round_no=round_no)
+        if (
+            manifest["files"].get(OPTIMIZER_REPORT_XML) != report_sha
+            or manifest["files"].get(OPTIMIZER_METRICS_CSV) != metrics_sha
+        ):
+            raise RuntimeError("COMMITTED_ROUND_BUNDLE_MISMATCH")
+        try:
+            provenance = json.loads(
+                (final / "report_provenance.json").read_text(encoding="utf-8")
+            )
+        except (OSError, json.JSONDecodeError) as exc:
+            raise RuntimeError("COMMITTED_ROUND_PROVENANCE_INVALID") from exc
+        report_identity = provenance.get("report_identity") if isinstance(provenance, dict) else None
+        if (
+            not isinstance(provenance, dict)
+            or provenance.get("schema") != "MAX_REBUILD_OPTIMIZER_REPORT_PROVENANCE_V1"
+            or provenance.get("selection_mode") != report_selection_mode
+            or provenance.get("report_sha256") != report_sha
+            or provenance.get("sidecar_sha256") != metrics_sha
+            or not isinstance(report_identity, dict)
+            or report_identity.get("path") != str((final / OPTIMIZER_REPORT_XML).resolve())
+        ):
+            raise RuntimeError("COMMITTED_ROUND_PROVENANCE_AUTHORITY_MISMATCH")
+    else:
+        staging_parent = evidence / ".staging"
+        staging_parent.mkdir(parents=True, exist_ok=True)
+        staging = staging_parent / uuid.uuid4().hex
+        staging.mkdir()
+        try:
+            staged_report = staging / OPTIMIZER_REPORT_XML
+            staged_metrics = staging / OPTIMIZER_METRICS_CSV
+            shutil.copy2(report, staged_report)
+            shutil.copy2(metrics_path, staged_metrics)
+            shutil.copy2(report, staging / "raw_Max_MTF.xml")
+            shutil.copy2(metrics_path, staging / "raw_Max_MTF_metrics.csv")
 
-    if local_report.exists() or local_metrics.exists():
-        raise FileExistsError("Committed round evidence already exists")
-    shutil.copy2(report, local_report)
-    shutil.copy2(metrics_path, local_metrics)
+            report_identity = optimization_report_identity(staged_report)
+            report_identity["path"] = str((final / OPTIMIZER_REPORT_XML).resolve())
+            report_fingerprint = report_fingerprint_for_publication(
+                staged_report,
+                final / OPTIMIZER_REPORT_XML,
+            )
+            _write_synced_json(staging / "eligibility_audit.json", audit)
+            _write_synced_json(
+                staging / "passes.json",
+                {
+                    "schema": "MAX_REBUILD_OPTIMIZER_PASSES_V1",
+                    "round": round_no,
+                    "passes": passes_payload,
+                },
+            )
+            _write_synced_json(
+                staging / "report_provenance.json",
+                {
+                    "schema": "MAX_REBUILD_OPTIMIZER_REPORT_PROVENANCE_V1",
+                    "selection_mode": report_selection_mode,
+                    "report_identity": report_identity,
+                    "report_fingerprint": report_fingerprint,
+                    "report_sha256": report_sha,
+                    "sidecar_sha256": metrics_sha,
+                },
+            )
+            files = {
+                item.name: sha256_file(item)
+                for item in staging.iterdir()
+                if item.is_file()
+            }
+            manifest = {
+                "schema": "MAX_OPTIMIZER_ROUND_BUNDLE_V1",
+                "job_id": job_id,
+                "round": int(round_no),
+                "files": files,
+            }
+            _write_synced_json(staging / "manifest.json", manifest)
+            verify_committed_round_bundle(staging, job_id=job_id, round_no=round_no)
+            try:
+                os.rename(staging, final)
+            except OSError:
+                # Another publisher may have won the same immutable bundle
+                # race. Accept only its exact verified bytes.
+                if not final.is_dir():
+                    raise
+                concurrent = verify_committed_round_bundle(
+                    final,
+                    job_id=job_id,
+                    round_no=round_no,
+                )
+                if (
+                    concurrent["files"].get(OPTIMIZER_REPORT_XML) != report_sha
+                    or concurrent["files"].get(OPTIMIZER_METRICS_CSV) != metrics_sha
+                ):
+                    raise RuntimeError("COMMITTED_ROUND_BUNDLE_MISMATCH")
+                provenance = json.loads(
+                    (final / "report_provenance.json").read_text(encoding="utf-8")
+                )
+                concurrent_identity = provenance.get("report_identity") if isinstance(provenance, dict) else None
+                if (
+                    not isinstance(concurrent_identity, dict)
+                    or provenance.get("selection_mode") != report_selection_mode
+                    or provenance.get("report_sha256") != report_sha
+                    or provenance.get("sidecar_sha256") != metrics_sha
+                    or concurrent_identity.get("path") != str((final / OPTIMIZER_REPORT_XML).resolve())
+                ):
+                    raise RuntimeError("COMMITTED_ROUND_PROVENANCE_AUTHORITY_MISMATCH")
+                report_identity = concurrent_identity
+        except Exception:
+            # A remaining .staging/<attempt> is intentionally isolated and is
+            # never interpreted as committed round evidence.
+            raise
 
-    report_identity = optimization_report_identity(local_report)
-    report_sha = sha256_file(local_report)
-    metrics_sha = sha256_file(local_metrics)
-    write_json(evidence / "eligibility_audit.json", audit)
-    write_json(
-        evidence / "passes.json",
-        {
-            "schema": "MAX_REBUILD_OPTIMIZER_PASSES_V1",
-            "round": round_no,
-            "passes": passes_payload,
-        },
-    )
-    write_json(
-        evidence / "report_provenance.json",
-        {
-            "schema": "MAX_REBUILD_OPTIMIZER_REPORT_PROVENANCE_V1",
-            "selection_mode": report_selection_mode,
-            "report_identity": report_identity,
-            "report_fingerprint": report_fingerprint(local_report),
-            "report_sha256": report_sha,
-            "sidecar_sha256": metrics_sha,
-        },
-    )
+    local_report = final / OPTIMIZER_REPORT_XML
+    local_metrics = final / OPTIMIZER_METRICS_CSV
     return {
         "report_path": str(local_report),
         "report_sha256": report_sha,
@@ -480,4 +718,65 @@ def commit_round_evidence(
         "sidecar_sha256": metrics_sha,
         "report_identity": report_identity,
         "report_selection_mode": report_selection_mode,
+        "bundle_path": str(final),
+        "manifest_sha256": sha256_file(final / "manifest.json"),
     }
+
+
+def report_fingerprint_for_publication(source: Path, published_path: Path) -> dict[str, Any]:
+    stat = source.stat()
+    return {
+        "path": str(published_path.resolve()),
+        "size": int(stat.st_size),
+        "mtime_ns": int(stat.st_mtime_ns),
+    }
+
+
+def _write_synced_json(path: Path, payload: dict[str, Any]) -> None:
+    encoded = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+    with path.open("x", encoding="utf-8", newline="\n") as handle:
+        handle.write(encoded)
+        handle.flush()
+        os.fsync(handle.fileno())
+
+
+def verify_committed_round_bundle(
+    directory: Path,
+    *,
+    job_id: str,
+    round_no: int,
+) -> dict[str, Any]:
+    manifest_path = directory / "manifest.json"
+    if not manifest_path.is_file():
+        raise RuntimeError("COMMITTED_ROUND_MANIFEST_MISSING")
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError("COMMITTED_ROUND_MANIFEST_INVALID") from exc
+    if (
+        not isinstance(manifest, dict)
+        or manifest.get("schema") != "MAX_OPTIMIZER_ROUND_BUNDLE_V1"
+        or manifest.get("job_id") != job_id
+        or manifest.get("round") != int(round_no)
+        or not isinstance(manifest.get("files"), dict)
+    ):
+        raise RuntimeError("COMMITTED_ROUND_MANIFEST_AUTHORITY_MISMATCH")
+    files = manifest["files"]
+    for name, expected in files.items():
+        if not isinstance(name, str) or Path(name).name != name or name == "manifest.json":
+            raise RuntimeError("COMMITTED_ROUND_MANIFEST_PATH_INVALID")
+        path = directory / name
+        if not path.is_file() or sha256_file(path) != str(expected):
+            raise RuntimeError(f"COMMITTED_ROUND_BUNDLE_FILE_INVALID:{name}")
+    required = {
+        OPTIMIZER_REPORT_XML,
+        OPTIMIZER_METRICS_CSV,
+        "raw_Max_MTF.xml",
+        "raw_Max_MTF_metrics.csv",
+        "eligibility_audit.json",
+        "passes.json",
+        "report_provenance.json",
+    }
+    if not required.issubset(files):
+        raise RuntimeError("COMMITTED_ROUND_BUNDLE_INCOMPLETE")
+    return manifest

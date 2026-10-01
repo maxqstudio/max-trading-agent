@@ -9,6 +9,7 @@ from pathlib import Path
 import pytest
 
 import max_backend.artifact_control as artifact_control
+import max_backend.optimizer_candidates as optimizer_candidates
 import max_backend.backtest_control as backtest_control
 import max_backend.challenger_selection as selection
 import max_backend.challenger_operations as challenger_operations
@@ -359,7 +360,7 @@ def test_qualified_candidate_requires_every_frozen_gate(
     assert reason in reasons
 
 
-def test_qualified_endpoint_reparses_evidence_filters_rejected_and_pages(
+def test_qualified_endpoint_uses_projection_and_strict_mutation_revalidates(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -421,11 +422,27 @@ def test_qualified_endpoint_reparses_evidence_filters_rejected_and_pages(
     with pytest.raises(ValueError, match="page_size"):
         qualified_candidates_page(job["job_id"], page_size=200, path=db)
 
-    # Canonical report tamper is detected instead of trusting passes.json.
+    # Read pages from the persisted projection; mutation still checks the
+    # retained canonical report and fails closed after tampering.
     report_path = Path(page["items"][0]["report_path"])
     report_path.write_text(report_path.read_text(encoding="utf-8") + " ", encoding="utf-8")
-    with pytest.raises(RuntimeError, match="REPORT_HASH_MISMATCH"):
-        qualified_candidates_page(job["job_id"], path=db)
+    with monkeypatch.context() as no_evidence_read:
+        no_evidence_read.setattr(
+            optimizer_candidates,
+            "_verify_round_files",
+            lambda *_args, **_kwargs: (_ for _ in ()).throw(
+                AssertionError("candidate list reread canonical evidence")
+            ),
+        )
+        replay = qualified_candidates_page(job["job_id"], path=db)
+    assert replay["total"] == 30
+    with pytest.raises(RuntimeError, match="ROUND_BUNDLE_FILE_INVALID|REPORT_HASH_MISMATCH"):
+        revalidate_candidate_for_registration(
+            job["job_id"],
+            int(page["items"][0]["round"]),
+            int(page["items"][0]["pass"]),
+            path=db,
+        )
 
 
 def test_new_optimizer_terminal_never_auto_registers_challenger(

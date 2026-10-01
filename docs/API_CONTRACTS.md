@@ -10,6 +10,8 @@
 | POST | /api/recovery/reset | Explicitly recover an unopenable or corrupt operational database | backend/max_backend/main.py::reset_corrupt_state | backup/quarantine corrupt database and rebuild fresh Strategy workspace | Requires RECOVERY_REQUIRED and exact confirmation; creates and verifies backup before quarantine/bootstrap; failure remains fail-closed. |
 | GET | /api/mt5/preflight | MT5 executable/data-root readiness | MT5 detector | none | Read-only; missing/invalid runtime fails closed. |
 | GET | /api/optimizer/contract | Expose current optimizer contract | optimizer domain | none | Read-only. |
+| GET | /api/optimizer/draft | Restore the Owner's current editable Optimizer draft | backend/max_backend/optimizer_draft.py::get_optimizer_draft | none | Read-only; missing/corrupt draft reports explicit status without changing jobs. |
+| PUT | /api/optimizer/draft | Persist the latest validated editable Optimizer draft | backend/max_backend/optimizer_draft.py::put_optimizer_draft | bounded current editable draft only; started and historical job snapshots remain immutable | Invalid or stale revision fails/returns stale-write status; does not invoke preview, MT5, compilation, hashing or evidence scans. |
 | POST | /api/optimizer/preview | Validate/freeze optimizer preview | optimizer domain | none | Invalid request fails; no job mutation. |
 | POST | /api/optimizer/start | Start legal optimizer job | optimizer domain + Owner request | optimizer job/evidence + MT5 worker | Illegal lifecycle/contract fails closed. |
 | GET | /api/optimizer/current | Current/latest optimizer state | optimizer store | none | Read-only. |

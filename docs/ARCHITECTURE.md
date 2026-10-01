@@ -2,7 +2,7 @@
 
 # ARCHITECTURE
 
-Current source digest: 9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126
+Current source digest: fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e
 
 ## Components
 
@@ -10,6 +10,7 @@ Current source digest: 9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58
 |---|---|---|---|---|
 | owner-ui | Owner React Control Surface | Present semantic Strategy, Artifact and Settings state with explicit feedback for blocked, running and completed Owner actions. | frontend/src/App.tsx::App, frontend/src/OptimizerPage.tsx::OptimizerPage, frontend/src/ChallengersPage.tsx::ChallengersPage, frontend/src/ChampionPage.tsx::ChampionPage, frontend/src/ScientistPage.tsx::ScientistPage | FastAPI semantic APIs |
 | strategy-domain | Strategy lifecycle domain | Own optimizer qualification, Challenger registration/lifecycle and Champion promotion/tenure semantics. | backend/max_backend/optimizer_candidates.py::qualified_candidates_page, backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration, backend/max_backend/challenger_selection.py::create_selected_challengers, backend/max_backend/challenger_store.py::consumed_source_identities, backend/max_backend/challenger_registry.py::challenger_detail, backend/max_backend/challenger_operations.py::retire_challenger, backend/max_backend/champion_store.py::commit_promotion_authority, backend/max_backend/promotion_service.py::promote_strategy_challenger | SQLite, immutable Challenger/optimizer evidence, MT5/MetaEditor |
+| optimizer-orchestration | Optimizer job orchestration and read model | Persist editable draft separately from immutable job requests, reconcile exact worker/MT5 launch identity, atomically publish round evidence, and serve paginated candidate projections without weakening canonical mutation verification. | backend/max_backend/optimizer_draft.py, backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup, backend/max_backend/optimizer_worker.py, backend/max_backend/optimizer_store.py::persist_candidate_projection, backend/max_backend/optimizer_candidates.py::qualified_candidates_page | SQLite operational state, immutable round evidence, MT5/MetaEditor execution boundary |
 | scientist | Scientist advisory subsystem | Expose hash-verified static knowledge and bounded committed runtime context to an advisory LLM/chat workflow. | backend/max_backend/scientist_knowledge.py::load_knowledge, backend/max_backend/scientist_api.py::get_status, frontend/src/ScientistPage.tsx::ScientistPage | scientist/knowledge/source_manifest.json, Scientist store/provider settings |
 | backend-runtime | FastAPI runtime | Start migrations/recovery, route semantic APIs and expose overview/readiness. | backend/max_backend/main.py::lifespan, backend/max_backend/main.py::overview, backend/max_backend/main.py::app | domain services, SQLite, MT5 detection |
 | launcher | Windows launcher/readiness | Verify or start canonical backend/frontend instances, reject invalid occupied ports and emit MAX_READY only after authority/readiness checks. | RUN_MAX.cmd, scripts/run_max.ps1 | backend /api/overview, frontend proxy/root, Scientist status, ports 8000/5173 |
@@ -25,6 +26,9 @@ Current source digest: 9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58
 - FastAPI runtime -> Strategy lifecycle domain: Strategy actions are domain-validated before any SQLite/artifact/MT5 mutation.
 - Strategy lifecycle domain -> MT5/MetaEditor execution boundary: MT5/MetaEditor execute simulation/optimization/compile while Python verifies legality and evidence.
 - Strategy lifecycle domain -> Immutable evidence/artifact layer: Strategy evidence and lifecycle changes are governed through the owning domain and retained artifact lineage.
+- Owner React Control Surface -> Optimizer job orchestration and read model: Debounced draft edits persist independently; START snapshots the validated draft into a new immutable job request.
+- Optimizer job orchestration and read model -> MT5/MetaEditor execution boundary: A confirmed worker executes one authorized round; frozen and verified evidence is atomically published before SQLite advances, then a bounded projection serves ordinary reads.
+- Optimizer job orchestration and read model -> Strategy lifecycle domain: Candidate pages use the indexed projection; Challenger selection separately revalidates canonical retained evidence.
 - Scientist advisory subsystem -> Owner React Control Surface: Scientist returns bounded advisory context only; no scientific/promotion authority.
 - Current project governance -> Generated canonical docs/ governance Markdown: Project Truth Compiler projects source facts plus explicit semantic authority deterministically into canonical docs/ Markdown.
 
@@ -39,9 +43,9 @@ Current source digest: 9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58
 
 ## Observed implementation inventory
 
-Source files: 109
-Source lines: 48099
-Languages: PowerShell=2, Python=87, TypeScript=3, TypeScript/React=17
+Source files: 113
+Source lines: 51387
+Languages: PowerShell=2, Python=91, TypeScript=3, TypeScript/React=17
 
 Structural facts come from the code extractor. Component meaning comes from
 .workflow/architecture.json.

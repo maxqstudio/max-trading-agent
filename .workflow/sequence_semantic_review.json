@@ -6,8 +6,8 @@
   "skill_authority_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
   "generation_anchor_policy": {
     "meaning": "The observed head is a pre-commit generation anchor. Final hosted source SHA and CI identity remain external acceptance evidence; real MT5 and Owner-PC runtime remain deferred.",
-    "observed_head": "93a96a2613695009d7787f066db863c4c1e0e226",
-    "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126"
+    "observed_head": "073e69044c03f4296849dd5bc02516f30b9439b1",
+    "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e"
   },
   "flows": [
     {
@@ -31,7 +31,7 @@
       ],
       "generated_nodes": 118,
       "generated_edges": 216,
-      "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126",
+      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_strategy_workspace_reset.py",
@@ -53,7 +53,7 @@
       ],
       "generated_nodes": 80,
       "generated_edges": 117,
-      "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126",
+      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
       "tests": [
         "backend/tests/test_m06_challenger_operations.py",
         "backend/tests/test_m08_strategy_results.py"
@@ -73,7 +73,7 @@
       ],
       "generated_nodes": 44,
       "generated_edges": 62,
-      "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126",
+      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
       "tests": [
         "backend/tests/test_m03_challenger.py",
         "backend/tests/test_m06_challenger_operations.py"
@@ -90,9 +90,9 @@
       "declared_entries": [
         "backend/max_backend/promotion_service.py::promote_strategy_challenger"
       ],
-      "generated_nodes": 130,
-      "generated_edges": 268,
-      "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126",
+      "generated_nodes": 134,
+      "generated_edges": 272,
+      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
       "tests": [
         "backend/tests/test_m04_promotion.py",
         "backend/tests/test_m04_store.py"
@@ -110,9 +110,9 @@
         "backend/max_backend/optimizer_api.py::get_qualified_candidates",
         "backend/max_backend/optimizer_api.py::promote_qualified_candidates"
       ],
-      "generated_nodes": 116,
-      "generated_edges": 199,
-      "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126",
+      "generated_nodes": 126,
+      "generated_edges": 214,
+      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_m03_challenger.py"
@@ -132,7 +132,7 @@
       ],
       "generated_nodes": 48,
       "generated_edges": 75,
-      "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126",
+      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
       "tests": [
         "backend/tests/test_m05_scientist.py",
         "backend/tests/test_m05_final_evidence_contract.py",
@@ -160,7 +160,7 @@
       ],
       "generated_nodes": 79,
       "generated_edges": 113,
-      "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126",
+      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
       "tests": [
         "backend/tests/test_strategy_workspace_reset.py",
         "backend/tests/test_retired_subsystem_migration.py",
@@ -169,12 +169,50 @@
       ],
       "unresolved_bindings": [],
       "runtime_evidence_boundary": "UI checks used mocked API responses; reset/recovery behavior was tested only with synthetic temporary SQLite databases."
+    },
+    {
+      "flow_id": "FLOW-OPTIMIZER-DURABILITY-PERFORMANCE",
+      "mode": "DURING",
+      "scope": "CURRENT",
+      "semantic_review": "PASS",
+      "purpose": "Persist editable Optimizer drafts independently from immutable job requests, reconcile worker/MT5 identity safely after interruption, atomically publish verified round evidence before database commit, and serve candidate reads from a bounded projection without weakening canonical mutation checks.",
+      "declared_entries": [
+        "frontend/src/OptimizerPage.tsx::<module>",
+        "backend/max_backend/optimizer_draft.py::get_optimizer_draft",
+        "backend/max_backend/optimizer_draft.py::put_optimizer_draft",
+        "backend/max_backend/optimizer_jobs.py::start_optimizer",
+        "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
+        "backend/max_backend/optimizer_jobs.py::stop_optimizer",
+        "backend/max_backend/optimizer_jobs.py::resume_optimizer",
+        "backend/max_backend/optimizer_store.py::claim_initial_worker_launch",
+        "backend/max_backend/optimizer_store.py::confirm_worker_launch",
+        "backend/max_backend/optimizer_worker.py::run_job",
+        "backend/max_backend/optimizer_runtime.py::commit_round_evidence",
+        "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
+        "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration"
+      ],
+      "generated_nodes": 249,
+      "generated_edges": 479,
+      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
+      "tests": [
+        "backend/tests/test_optimizer_draft.py",
+        "backend/tests/test_optimizer_reliability.py",
+        "backend/tests/test_optimizer_runtime_durability.py",
+        "backend/tests/test_m01_jobs.py",
+        "backend/tests/test_m01_recovery.py",
+        "backend/tests/test_m08_strategy_results.py",
+        "frontend/src/OptimizerPage.test.tsx",
+        "frontend/src/ChallengersPage.test.tsx"
+      ],
+      "unresolved_bindings": [],
+      "runtime_evidence_boundary": "Synthetic temporary databases/evidence and mocked or isolated process boundaries only; no real Owner Optimizer/MT5 execution or scientific result is claimed."
     }
   ],
   "parse_failure_boundary": {
-    "classification": "NONE",
+    "classification": "NO_FAILURES",
     "python_parse_failures": 0,
-    "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126"
+    "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
+    "detail": "All current source files parsed during canonical sequence regeneration; no temporary pytest fixture is present in the workspace."
   },
   "retrospective_plan_artifacts": 0,
   "runtime_trace_required": false,

@@ -1,24 +1,25 @@
 {
-  "current_phase": "PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE",
+  "current_phase": "STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING",
   "current_phase_results": {
-    "backend_full": "PASS_LOCAL: 410 passed, 0 skipped, 0 failed. An earlier 388-pass/22-failure run exposed a stale Scientist allowlist after Research-source removal; canonical knowledge rebuild was applied before the clean full rerun.",
-    "backend_targeted": "128 passed, 0 skipped, 0 failed",
+    "backend_full": "PASS_LOCAL: 435 passed, 0 skipped, 0 failed in 480.97s after Optimizer durability/source repairs and canonical Scientist knowledge regeneration.",
+    "backend_targeted": "PASS_LOCAL: 51 Optimizer reliability/draft/runtime durability tests; a separate 86-test repair slice also passed.",
     "browser_e2e": "PASS_LOCAL_CRITICAL_CONTROL_SMOKE_WITH_MOCKED_APIS; not a live backend or Owner-PC E2E",
     "build": "PASS_LOCAL",
-    "frontend": "46 passed / 8 files",
-    "frontend_targeted": "14 passed / 2 files",
+    "frontend": "52 passed / 8 files",
+    "frontend_targeted": "9 passed / 1 file",
     "hosted_ci": "NOT_RUN",
-    "lint": "PASS_LOCAL_WITH_2_WARNINGS",
+    "lint": "PASS_LOCAL_NO_WARNINGS",
     "npm_tree": "PASS_LOCAL",
     "owner_runtime": "NOT_PROVEN",
     "pip_check": "PASS_LOCAL",
-    "schema_version": 14,
-    "sequence": "PASS_LOCAL: 7 DURING/CURRENT sessions, 0 failed, 0 Python parse failures",
+    "schema_version": 15,
+    "sequence": "NOT_RUN: Optimizer durability DURING/CURRENT flow added; regeneration/validation pending",
     "skill_workflow_current_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
-    "source_only_scan": "NOT_RUN"
+    "source_only_scan": "NOT_RUN",
+    "synthetic_optimizer_profile": "PASS_LOCAL: 750-candidate synthetic profile, 12 requests/endpoint; actual qualified-page median 23.651 ms/p95 68.983 ms, 61,462-byte response. Separate Windows process profile measured CPU/RSS/read/write I/O with the qualified route mocked. No real MT5 or Owner DB used; temporary test DB/evidence cleanup was rejected by shell policy."
   },
   "current_phase_status": "IN_PROGRESS",
-  "evidence_boundary": "Starting authority e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d is the source baseline for PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE. The current candidate is local and IN_PROGRESS. Only synthetic/test databases and fixtures are used. The retired active Research implementation is being removed; fresh R00-R11 remain planned and blocked until the Owner declares a real MT5 sample READY and Control Room separately authorizes a source phase. The exact final GitHub main SHA and hosted CI identity remain external acceptance evidence per D-012. No real MT5, broker, or scientific execution is performed in this source phase.",
+  "evidence_boundary": "Starting authority 5a30097d76a46ad077bed8dfd978eb6b27f83264 is the source baseline for STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING. The candidate is local on work/optimizer-durability-performance-hardening. Optimizer tests use synthetic temporary databases/evidence and isolated or mocked process boundaries; the Owner operational database, real MT5, broker and market data are not used. Initial read-only inspection found zero Optimizer jobs/rounds and no files in the inspected Optimizer artifact directories, so no deletion was necessary or performed. Fresh R00-R11 remain planned and blocked until a real MT5 sample is Owner-declared READY and Control Room separately authorizes a source phase. Exact final GitHub main SHA and hosted CI identity remain external acceptance evidence per D-012.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
     "How does important data flow through the system?": "PASS",
@@ -78,7 +79,7 @@
       "status": "PASS_LOCAL"
     },
     {
-      "evidence": "Current candidate test and validator reports; exact hosted evidence remains external.",
+      "evidence": "Local backend 435-pass/0-skip/0-fail and frontend 52-pass/8-file reports are recorded; governance/profile/security scan and exact hosted evidence remain pending.",
       "id": "REGRESSION-01",
       "requirement": "Full current backend/frontend regressions, dependency checks, build, governance validators, and exact-tree source-only scan pass without unexplained skips or failures.",
       "status": "NOT_PROVEN"
@@ -92,8 +93,44 @@
     {
       "evidence": "Owner-PC final acceptance remains deferred.",
       "id": "OWNER-RUNTIME-01",
-      "requirement": "Owner-PC database reset and fresh Optimizer verification are deferred until source/hosted gates pass; real MT5 runtime remains Owner evidence.",
+      "requirement": "Owner-PC reset and any fresh real Optimizer/MT5 verification remain separate from synthetic Builder tests; real MT5 runtime remains NOT_PROVEN.",
       "status": "NOT_PROVEN"
+    },
+    {
+      "evidence": "backend/max_backend/optimizer_draft.py; backend/tests/test_optimizer_draft.py; backend/max_backend/optimizer_jobs.py::start_optimizer",
+      "id": "OPT-DRAFT-01",
+      "requirement": "Editable Optimizer draft persists with stale-revision rejection and stays separate from immutable per-job request snapshots.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": "backend/max_backend/optimizer_jobs.py; backend/tests/test_optimizer_reliability.py; backend/tests/test_m01_recovery.py",
+      "id": "OPT-RECOVERY-01",
+      "requirement": "Startup reconciliation and worker/MT5 process identity fail closed on uncertain launch, prevent duplicate claims, and stop only proven Optimizer-owned processes.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": "backend/max_backend/optimizer_runtime.py::commit_round_evidence; backend/tests/test_optimizer_runtime_durability.py",
+      "id": "OPT-EVIDENCE-01",
+      "requirement": "Derived round evidence is staged, verified and atomically published before SQLite advances; deterministic replay cannot masquerade as new MT5 execution.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": "backend/max_backend/optimizer_candidates.py::qualified_candidates_page; backend/tests/test_m08_strategy_results.py",
+      "id": "OPT-READMODEL-01",
+      "requirement": "Ordinary candidate reads use bounded SQLite projection while Challenger mutation strictly revalidates canonical retained evidence.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": "frontend/src/OptimizerPage.tsx; frontend/src/OptimizerPage.test.tsx; frontend/src/ChallengersPage.test.tsx",
+      "id": "OPT-UI-01",
+      "requirement": "Optimizer requests cancel/reject stale responses, debounce draft writes, bound/adapt polling, and show visible loading/block/success/failure feedback.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": "Actual synthetic 750-row qualified page median 23.651 ms/p95 68.983 ms/61,462 bytes. Separate 108-request Windows process profile excluding actual qualified SQL measured CPU 1.0781 s, peak working set 64,405,504 bytes, read I/O 6,060,864 bytes, write I/O 0, and tracemalloc peak 569,928 bytes.",
+      "id": "OPT-PERFORMANCE-01",
+      "requirement": "Record reproducible synthetic request latency/payload and practical CPU/RAM/disk observations without substituting real Owner runtime measurements.",
+      "status": "PASS_LOCAL"
     }
   ],
   "results": {
@@ -103,13 +140,13 @@
       "tested_sha": null
     },
     "regression": {
-      "backend_full_status": "PASS_LOCAL: 410 passed, 0 skipped, 0 failed; earlier stale Scientist allowlist failures were resolved by canonical knowledge rebuild before the full rerun",
-      "backend_targeted": 128,
+      "backend_full_status": "PASS_LOCAL: 435 passed, 0 skipped, 0 failed in 480.97s",
+      "backend_targeted": 51,
       "build": "PASS_LOCAL",
       "frontend_files": 8,
       "frontend_status": "PASS_LOCAL",
-      "frontend_tests": 46,
-      "lint": "PASS_LOCAL_WITH_2_WARNINGS",
+      "frontend_tests": 52,
+      "lint": "PASS_LOCAL_NO_WARNINGS",
       "npm_ls_all": "PASS_LOCAL",
       "pip_check": "PASS_LOCAL"
     },
@@ -118,7 +155,7 @@
       "mt5": "NOT_PROVEN",
       "owner_pc": "NOT_PROVEN"
     },
-    "schema_version": 14,
+    "schema_version": 15,
     "scientific_state": {
       "champion_mutation": 0,
       "cheap_screen_real_runs": 0,
@@ -132,16 +169,84 @@
       "research_challenger": 0
     },
     "skill_authority_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
+    "synthetic_optimizer_profile": {
+      "baseline_from_prechange_terminal_evidence": {
+        "comparability": "Indicative only: same synthetic 750-candidate workload reported in the Builder handoff, but its exact harness log is not preserved.",
+        "python_tracemalloc_peak_bytes": 19963840,
+        "qualified_candidates_median_ms": 1162.392,
+        "qualified_candidates_p95_ms": 1207.722,
+        "requests": 5,
+        "response_bytes": 68555
+      },
+      "cleanup": "Temporary SQLite/evidence directories remain under ignored .venv because auto-cleanup encountered a Windows SQLite file lock and explicit recursive cleanup was rejected by shell policy. Exact paths: D:/max/.venv/optimizer-after-profile-9rzldl__ and D:/max/.venv/optimizer-after-profile-d3nh0uvp. Synthetic only; no Owner data.",
+      "fixture": "750 synthetic candidate projections, 25-row page, TestClient, 12 requests per endpoint; test DB/evidence under ignored .venv. Actual current/job/draft/qualified DB paths in API latency run; preview/start/stop/resume mocked. Separate process-counter run used actual current/job/draft paths but mocked qualified route.",
+      "per_endpoint": {
+        "GET /api/optimizer/current": {
+          "median_ms": 13.389,
+          "median_payload_bytes": 7835,
+          "p95_ms": 33.449
+        },
+        "GET /api/optimizer/draft": {
+          "median_ms": 6.493,
+          "median_payload_bytes": 1731,
+          "p95_ms": 10.71
+        },
+        "GET /api/optimizer/jobs/{job_id}": {
+          "median_ms": 9.168,
+          "median_payload_bytes": 7835,
+          "p95_ms": 15.132
+        },
+        "GET /api/optimizer/jobs/{job_id}/qualified-candidates": {
+          "median_ms": 23.651,
+          "median_payload_bytes": 61462,
+          "p95_ms": 68.983
+        },
+        "POST /api/optimizer/jobs/{job_id}/resume": {
+          "median_ms": 3.458,
+          "median_payload_bytes": 69,
+          "p95_ms": 8.908
+        },
+        "POST /api/optimizer/jobs/{job_id}/stop": {
+          "median_ms": 3.241,
+          "median_payload_bytes": 67,
+          "p95_ms": 17.672
+        },
+        "POST /api/optimizer/preview": {
+          "median_ms": 4.708,
+          "median_payload_bytes": 116,
+          "p95_ms": 9.848
+        },
+        "POST /api/optimizer/start": {
+          "median_ms": 4.139,
+          "median_payload_bytes": 68,
+          "p95_ms": 13.085
+        },
+        "PUT /api/optimizer/draft": {
+          "median_ms": 10.266,
+          "median_payload_bytes": 1745,
+          "p95_ms": 20.371
+        }
+      },
+      "process_profile": {
+        "cpu_seconds": 1.0781,
+        "python_tracemalloc_peak_bytes": 569928,
+        "qualified_route": "MOCKED; process totals do not include the actual qualified-candidate SQLite query",
+        "read_io_bytes": 6060864,
+        "requests": 108,
+        "working_set_peak_bytes": 64405504,
+        "write_io_bytes": 0
+      }
+    },
     "targeted": {
-      "backend_tests": 128,
-      "frontend_files": 2,
-      "frontend_tests": 14,
+      "backend_tests": 51,
+      "frontend_files": 1,
+      "frontend_tests": 9,
       "status": "PASS_LOCAL",
       "tested_worktree_base": "e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d"
     }
   },
   "runtime_checks": [
-    "NOT_RUN: Owner runtime database backup/reset and fresh Optimizer verification; deferred until all hosted source gates pass.",
+    "NOT_RUN: Owner operational database reset and fresh real Optimizer/MT5 verification; no Owner data was touched. Two synthetic profile directories remain under ignored .venv because cleanup was rejected by shell policy.",
     "NOT_RUN: real MT5/MetaEditor/broker/data-root/Strategy Tester runtime.",
     "NOT_RUN: real R00/R01/R02 execution, model fitting/training, or Cheap Screen outcomes.",
     "NOT_RUN: R03 qualification, ONNX, Research Challenger creation, or Champion mutation."
@@ -149,11 +254,11 @@
   "runtime_status": "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED",
   "schema_version": 1,
   "sequence_mode": "DURING",
-  "sequence_session": "FLOW-ARTIFACT-CONTROL and FLOW-STRATEGY-RESET-RECOVERY",
-  "sequence_sync_status": "PASS_LOCAL: 7 DURING/CURRENT sessions, 0 failed, 0 Python parse failures",
+  "sequence_session": "FLOW-OPTIMIZER-DURABILITY-PERFORMANCE",
+  "sequence_sync_status": "PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; all session/graph source digests match 8a5b70a056203d393d7efe83fe68f1eec637b51fe81845f45b89f9c8f73447c4. Generator reports one SyntaxError only in ignored pytest fixture .pytest-baseline-e4af; the canonical sequence validator accepts all 8 sessions with no warnings.",
   "test_commands": [
-    ".venv/Scripts/python.exe -m pytest backend/tests/test_m08_strategy_results.py backend/tests/test_strategy_workspace_reset.py backend/tests/test_retired_subsystem_migration.py -q -o addopts=",
-    ".venv/Scripts/python.exe -m pytest backend/tests -q -o addopts= --basetemp .venv/pytest-full-revalidation",
+    ".venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_draft.py backend/tests/test_optimizer_reliability.py backend/tests/test_optimizer_runtime_durability.py backend/tests/test_m01_jobs.py backend/tests/test_m01_recovery.py backend/tests/test_m08_strategy_results.py -q -o addopts=",
+    ".venv/Scripts/python.exe -m pytest backend/tests -q -o addopts= --basetemp .venv/pytest-optimizer-full-rerun-20261001",
     "cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all",
     ".venv/Scripts/python.exe -m pip check",
     ".venv/Scripts/python.exe scripts/scan_m05_candidate_tree.py --candidate-sha HEAD",

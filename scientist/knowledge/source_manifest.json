@@ -9,7 +9,7 @@
   },
   {
     "path": "docs/ROADMAP.md",
-    "sha256": "98edef924d9e020ef1cb6de542180931a529a31a410d36b3b7755b1141fb4563"
+    "sha256": "44b04b63d7d7b5d30e37cf616d27d797cf9aae10a67904bc5db550fa463c613c"
   },
   {
     "path": "docs/ARCHITECTURE_PHASE1.md",
@@ -29,7 +29,7 @@
   },
   {
     "path": "backend/max_backend/schema.py",
-    "sha256": "5849eafe43622dd50d9b940cf75609c275a206d32b41c0224a8c41c2bea8c328"
+    "sha256": "688a63b06c9c44f72d168ef372ef2ad8363464e2f1ee23dc06382b6aece24bff"
   },
   {
     "path": "backend/max_backend/workflow_contract.py",
@@ -37,7 +37,7 @@
   },
   {
     "path": "backend/max_backend/workflow_store.py",
-    "sha256": "171813ff03566a890ce5f1f4da7f522e26731bffcd799fc97abdf765d2b7a776"
+    "sha256": "11e327411be58543f82c6a53ce1b04f0d97b34c13169799d39891e7c8d65e129"
   },
   {
     "path": "backend/max_backend/mtf_geometry.py",
@@ -49,19 +49,19 @@
   },
   {
     "path": "backend/max_backend/optimizer_store.py",
-    "sha256": "03bd3ed4254d4940f79781b0fec0f90a3d8ead9bd787888899a2e34d131a79b4"
+    "sha256": "9a7f4b5930b4d0882a3be5c3c75f315c0ae981dc7d5cb1aedfaa88571c3cf77f"
   },
   {
     "path": "backend/max_backend/optimizer_worker.py",
-    "sha256": "f0ac35557961d7b7a5291b945581120bcd8e6466f1beb86ef76f06df6bfce245"
+    "sha256": "b8dec74565ad02b24c7760bceba06c946f93200781cb1ac67f188c7c5f7316e8"
   },
   {
     "path": "backend/max_backend/optimizer_api.py",
-    "sha256": "9970e956c96ebf125900e054fb289ff3fd36ce276f81171c9c57ac131e865de5"
+    "sha256": "fcb1868197e18eed309e75c5530a92ff9f1914bb7470ad52d2fb1fc08f03b90f"
   },
   {
     "path": "backend/max_backend/optimizer_candidates.py",
-    "sha256": "7744c3be401739804eb09b02c373e9209f80ecd7bb7202b50100deaf13170173"
+    "sha256": "5112c410bb5fc0e9e70ba4925bf0ca07a5c89e44588f9a60979f379dd533df40"
   },
   {
     "path": "backend/max_backend/challenger_selection.py",
@@ -109,7 +109,7 @@
   },
   {
     "path": "backend/max_backend/artifact_control.py",
-    "sha256": "106f93fc201bb3e0eb9711701099da3377c097997079b884f3ea155eeb4c7771"
+    "sha256": "c93a5e6c575e43d70cee0a5c70d8d593c66851cac0ad78c0034d55e40cdaa305"
   },
   {
     "path": "backend/max_backend/artifact_api.py",
@@ -129,7 +129,7 @@
   },
   {
     "path": "backend/max_backend/main.py",
-    "sha256": "131fbc1dc86bf218e0562dfc1770851c2523da2a2c515d09174f0d175b185212"
+    "sha256": "d9e24f269787b4c13387f832da61a9a094965987c84992f0e551eb2bc79fae56"
   },
   {
     "path": "backend/max_backend/scientist_knowledge.py",

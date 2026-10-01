@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 from .challenger_selection import create_selected_challengers
 from .optimizer_candidates import qualified_candidates_page
 from .optimizer_core import contract_payload, freeze_request
+from .optimizer_draft import get_optimizer_draft, put_optimizer_draft
 from .optimizer_scientist import scientist_route_status
 from .optimizer_jobs import (
     job_detail,
@@ -29,9 +30,27 @@ class PromoteQualifiedRequest(BaseModel):
     selections: list[QualifiedSelection]
 
 
+class OptimizerDraftRequest(BaseModel):
+    revision: int = Field(ge=1)
+    draft: dict
+
+
 @router.get("/contract")
 def get_contract() -> dict:
     return contract_payload()
+
+
+@router.get("/draft")
+def get_draft() -> dict:
+    return get_optimizer_draft()
+
+
+@router.put("/draft")
+def save_draft(payload: OptimizerDraftRequest) -> dict:
+    try:
+        return put_optimizer_draft(payload.draft, revision=payload.revision)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @router.get("/scientist/status")
@@ -75,7 +94,11 @@ def start(payload: dict) -> dict:
         return start_optimizer(payload)
     except RuntimeError as exc:
         message = str(exc)
-        code = 409 if "already active" in message else 400
+        code = 409 if (
+            "already active" in message
+            or "requires reconciliation" in message
+            or "requires resume or explicit stop" in message
+        ) else 400
         raise HTTPException(status_code=code, detail=message) from exc
     except (ValueError, FileNotFoundError) as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc

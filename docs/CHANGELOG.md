@@ -139,3 +139,15 @@ Type: governance
 - Vendor the updated sequence generator, cross-document validator and STRICT selftest byte-identically; no local validator patch is introduced.
 - Preserve HTTP route predecessors in actual graphs and resolve Python class-method path::symbol references.
 - Regenerate governed sequence/Project Truth projections; no product behavior, schema, scientific authority or runtime boundary changes.
+
+## 2026-10-01 — Strategy Optimizer durability and performance hardening candidate
+
+Type: source_hardening
+
+- Persist a bounded revisioned editable Optimizer draft separately from each immutable job request; migrate schema 14 to 15 and keep reset/recovery on the shared current schema constant.
+- Add startup job reconciliation, single-flight launch claims, exact worker launch identity/confirmation, ownership-bound stop behavior, and fail-closed handling for uncertain MT5 launches.
+- Stage, hash and verify raw/derived round evidence before atomic bundle publication and database advancement; replay the same committed identity without repeating MT5.
+- Persist candidate read projections for bounded server-side pages while retaining strict canonical evidence checks before Challenger mutation.
+- Add frontend draft persistence, stale-request rejection, debounced search/adaptive polling, and visible blocked/in-flight/completed/error feedback.
+- Local candidate regression: backend 435 passed with zero skips/failures; frontend 52 passed across 8 files; lint, build, pip check and npm tree passed. Synthetic 750-candidate endpoint latency/payload and Windows process counters are recorded in acceptance.json; exact Windows hosted validation remains pending.
+- No real Owner Optimizer/MT5 execution, Research activity, Champion mutation or live trading is claimed.

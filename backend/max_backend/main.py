@@ -19,6 +19,7 @@ from .db import ensure_baseline_registered, initialize_database, read_baseline
 from .mt5 import detect_mt5
 from .workflow_store import migrate_current
 from .optimizer_api import router as optimizer_router
+from .optimizer_jobs import reconcile_optimizer_startup
 from .optimizer_store import latest_job
 from .promotion_service import recover_incomplete_promotions
 from .scientist_api import router as scientist_router
@@ -58,6 +59,7 @@ async def lifespan(_: FastAPI):
         migrate_m06()
         recover_incomplete_backtests()
         migrate_current()
+        reconcile_optimizer_startup()
     except Exception:
         recovery = database_recovery_status()
         if recovery["status"] != "RECOVERY_REQUIRED":

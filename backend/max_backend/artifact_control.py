@@ -1314,7 +1314,6 @@ def artifact_preflight(
     *,
     path: Path = DATABASE_PATH,
 ) -> dict[str, Any]:
-    reconcile_artifacts(path=path)
     unique = list(dict.fromkeys(str(value) for value in artifact_ids))
     if not unique:
         raise ValueError("no artifacts selected")
@@ -1330,6 +1329,16 @@ def artifact_preflight(
             reason = "IN_USE"
         elif not (item["deletable"] or item["cleanable"]):
             reason = "NOT_DELETABLE_OR_CLEANABLE"
+        elif item["storage"] == "PROJECT":
+            try:
+                canonical = assert_owned_path(
+                    str(item["canonical_path"]),
+                    roots=[ROOT],
+                )
+                if not canonical.exists():
+                    reason = "ARTIFACT_PATH_MISSING"
+            except RuntimeError as exc:
+                reason = str(exc)
         items.append({**item, "blocked_reason": reason})
     return {
         "selected": len(items),

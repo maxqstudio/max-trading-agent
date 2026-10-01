@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Pagination, SortHeader } from './DataTable'
 import { compactNumber } from './tableFormat'
 
@@ -247,6 +247,10 @@ function ownerOperationalStatus(value?: string) {
     SCIENTIST_REQUESTING: 'Scientist advisory in progress',
     REGISTERING_CHALLENGER: 'Creating Strategy Challenger',
     RESUMING: 'Resuming',
+    STARTING: 'Starting',
+    INTERRUPTED_SAFE_TO_RESUME: 'Interrupted · safe to resume or stop',
+    EXECUTION_UNCERTAIN: 'Execution needs reconciliation',
+    RECONCILIATION_REQUIRED: 'Process ownership needs review',
     QUALIFIED_POOL_READY: 'Qualified candidates ready',
     ELIGIBLE_WINNER_FOUND: 'Qualified winner found',
     STRATEGY_CHALLENGER_FOUND: 'Strategy Challenger created',
@@ -273,6 +277,28 @@ function candidateKey(row: { round: number; pass: number }) {
   return row.round + ':' + row.pass
 }
 
+function defaultOptimizerDraft(contract: Contract) {
+  return {
+    symbol: '',
+    relative_symbol: '',
+    period: contract.defaults.period,
+    from_date: '2021.01.01',
+    to_date: '2024.12.31',
+    model: contract.defaults.model,
+    optimization: contract.defaults.optimization,
+    max_rounds: contract.defaults.max_rounds,
+    deposit: contract.defaults.deposit,
+    leverage: contract.defaults.leverage,
+    optimizer_trade_exponent_alpha: contract.defaults.optimizer_trade_exponent_alpha,
+    optimize_params: [...contract.default_optimize_params],
+    search_space: structuredClone(contract.default_search_space),
+    kpi: { ...contract.default_kpi },
+    scientist_assist: false,
+  }
+}
+
+type DraftStatus = 'LOADING' | 'SAVED' | 'DIRTY' | 'SAVING' | 'RECOVERY_REQUIRED' | 'SAVE_FAILED' | 'CONFLICT'
+
 function ActionProgress({
   active,
   idle,
@@ -295,9 +321,12 @@ export default function OptimizerPage() {
   const [job, setJob] = useState<Job | null>(null)
   const [error, setError] = useState('')
   const [preview, setPreview] = useState<Preview | null>(null)
+  const [previewStatus, setPreviewStatus] = useState('idle')
   const [busy, setBusy] = useState(false)
   const [busyAction, setBusyAction] = useState('')
   const [config, setConfig] = useState<any>(null)
+  const [draftStatus, setDraftStatus] = useState<DraftStatus>('LOADING')
+  const [draftMessage, setDraftMessage] = useState('Loading saved configuration…')
   const [qualified, setQualified] = useState<QualifiedPage | null>(null)
   const [qualifiedError, setQualifiedError] = useState('')
   const [qualifiedLoading, setQualifiedLoading] = useState(true)
@@ -306,67 +335,155 @@ export default function OptimizerPage() {
   const [candidatePage, setCandidatePage] = useState(1)
   const [candidatePageSize, setCandidatePageSize] = useState(25)
   const [candidateQuery, setCandidateQuery] = useState('')
+  const [candidateSearch, setCandidateSearch] = useState('')
   const [candidateRound, setCandidateRound] = useState('')
   const [candidateSelection, setCandidateSelection] = useState<Set<string>>(new Set())
   const [candidateRefresh, setCandidateRefresh] = useState(0)
   const [promotionMessage, setPromotionMessage] = useState('')
 
+  const initializedRef = useRef(false)
+  const autosaveEnabledRef = useRef(false)
+  const lastSavedDraftRef = useRef('')
+  const draftRevisionRef = useRef(0)
+  const draftSaveSequenceRef = useRef(0)
+  const draftSaveControllerRef = useRef<AbortController | null>(null)
+  const actionLockRef = useRef(false)
+  const actionControllerRef = useRef<AbortController | null>(null)
+  const previewSequenceRef = useRef(0)
+  const qualifiedSequenceRef = useRef(0)
+  const qualifiedControllerRef = useRef<AbortController | null>(null)
+
+  async function persistDraft(value: any) {
+    const sequence = ++draftSaveSequenceRef.current
+    draftSaveControllerRef.current?.abort()
+    const controller = new AbortController()
+    draftSaveControllerRef.current = controller
+    const nextRevision = Math.max(Date.now(), draftRevisionRef.current + 1)
+    setDraftStatus('SAVING')
+    setDraftMessage('Saving configuration on this device…')
+    try {
+      const response = await fetch('/api/optimizer/draft', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ revision: nextRevision, draft: value }),
+        signal: controller.signal,
+      })
+      const body = await response.json()
+      if (!response.ok) {
+        throw new Error(ownerErrorMessage(body.detail, 'Configuration could not be saved'))
+      }
+      if (sequence !== draftSaveSequenceRef.current) return
+      if (body.status !== 'READY' || Number(body.revision) !== nextRevision) {
+        setDraftStatus('CONFLICT')
+        setDraftMessage('Another configuration revision exists. Reload this page before starting.')
+        throw new Error('Configuration changed in another page. Reload before starting.')
+      }
+      draftRevisionRef.current = Number(body.revision)
+      lastSavedDraftRef.current = JSON.stringify(value)
+      autosaveEnabledRef.current = true
+      setDraftStatus('SAVED')
+      setDraftMessage('Configuration saved on this device.')
+    } catch (reason) {
+      if (controller.signal.aborted || sequence !== draftSaveSequenceRef.current) return
+      setDraftStatus((current) => current === 'CONFLICT' ? current : 'SAVE_FAILED')
+      setDraftMessage('Save failed. Review the connection and save again before starting.')
+      throw reason
+    } finally {
+      if (draftSaveControllerRef.current === controller) draftSaveControllerRef.current = null
+    }
+  }
+
   useEffect(() => {
+    const controller = new AbortController()
     Promise.all([
-      fetch('/api/optimizer/contract').then((r) => {
+      fetch('/api/optimizer/contract', { signal: controller.signal }).then((r) => {
         if (!r.ok) throw new Error('Optimizer contract HTTP ' + r.status)
         return r.json()
       }),
-      fetch('/api/optimizer/current').then((r) => {
+      fetch('/api/optimizer/current', { signal: controller.signal }).then((r) => {
         if (!r.ok) throw new Error('Optimizer current HTTP ' + r.status)
         return r.json()
       }),
+      Promise.resolve().then(() => fetch('/api/optimizer/draft', { signal: controller.signal }))
+        .then(async (r) => {
+          if (!r.ok) throw new Error('Saved configuration HTTP ' + r.status)
+          return r.json()
+        })
+        .catch(() => ({ status: 'UNAVAILABLE', revision: 0, draft: null })),
     ])
-      .then(([c, current]) => {
+      .then(([c, current, saved]) => {
+        if (controller.signal.aborted) return
         setContract(c)
         setJob(current)
-        setConfig({
-          symbol: '',
-          relative_symbol: '',
-          period: c.defaults.period,
-          from_date: '2021.01.01',
-          to_date: '2024.12.31',
-          model: c.defaults.model,
-          optimization: c.defaults.optimization,
-          max_rounds: c.defaults.max_rounds,
-          deposit: c.defaults.deposit,
-          leverage: c.defaults.leverage,
-          optimizer_trade_exponent_alpha: c.defaults.optimizer_trade_exponent_alpha,
-          optimize_params: [...c.default_optimize_params],
-          search_space: structuredClone(c.default_search_space),
-          kpi: {
-            min_profit_factor: c.default_kpi.min_profit_factor,
-            min_recovery_factor: c.default_kpi.min_recovery_factor,
-            min_expectancy_r: c.default_kpi.min_expectancy_r,
-            min_weighted_r: c.default_kpi.min_weighted_r,
-            base_h1_trades_per_month: c.default_kpi.base_h1_trades_per_month,
-          },
-          scientist_assist: false,
-        })
+        const defaults = defaultOptimizerDraft(c)
+        const canRestore = saved.status === 'READY' && saved.draft && typeof saved.draft === 'object'
+        const restored = canRestore ? saved.draft : defaults
+        const serialized = JSON.stringify(restored)
+        initializedRef.current = true
+        autosaveEnabledRef.current = canRestore
+        lastSavedDraftRef.current = serialized
+        draftRevisionRef.current = Number(saved.revision) || 0
+        setDraftStatus(canRestore ? 'SAVED' : saved.status === 'RECOVERY_REQUIRED' ? 'RECOVERY_REQUIRED' : 'SAVE_FAILED')
+        setDraftMessage(
+          canRestore
+            ? 'Saved configuration restored from this device.'
+            : saved.status === 'RECOVERY_REQUIRED'
+              ? 'Saved configuration could not be read. Defaults are shown but were not saved. Review and save explicitly.'
+              : 'Saved configuration is unavailable. Review the defaults and save explicitly before starting.',
+        )
+        setConfig(restored)
+        setPreviewStatus(restored.symbol && restored.relative_symbol && restored.from_date && restored.to_date ? 'waiting' : 'idle')
       })
-      .catch((reason: Error) => setError(reason.message))
+      .catch((reason: Error) => {
+        if (!controller.signal.aborted) setError(reason.message)
+      })
+    return () => controller.abort()
   }, [])
 
   useEffect(() => {
     if (!job?.active) return
-    const timer = window.setInterval(() => {
-      fetch('/api/optimizer/jobs/' + job.job_id)
-        .then((r) => (r.ok ? r.json() : Promise.reject(new Error('Optimizer update unavailable'))))
-        .then(setJob)
-        .catch((reason: Error) => setError(reason.message))
-    }, 2000)
-    return () => window.clearInterval(timer)
-  }, [job?.active, job?.job_id])
+    const controller = new AbortController()
+    let timer = 0
+    let stopped = false
+    const jobId = job.job_id
+    const delay = job.status === 'MT5_RUNNING' ? 5000 : ['STARTING', 'RESUMING', 'COMPILING_EA', 'PREPARING_MT5'].includes(job.status) ? 1000 : 2000
+    const poll = async () => {
+      try {
+        const response = await fetch('/api/optimizer/jobs/' + jobId, { signal: controller.signal })
+        if (!response.ok) throw new Error('Optimizer update unavailable')
+        const body = await response.json()
+        if (!stopped) {
+          setJob((current) => current?.job_id === jobId ? body : current)
+          if (body.message) setError('')
+        }
+      } catch (reason) {
+        if (!stopped && !controller.signal.aborted) {
+          setError(reason instanceof Error ? reason.message : 'Optimizer update unavailable')
+        }
+      } finally {
+        if (!stopped && !controller.signal.aborted) timer = window.setTimeout(poll, delay)
+      }
+    }
+    timer = window.setTimeout(poll, delay)
+    return () => {
+      stopped = true
+      controller.abort()
+      window.clearTimeout(timer)
+    }
+  }, [job?.active, job?.job_id, job?.status])
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setCandidateQuery(candidateSearch.trim()), 300)
+    return () => window.clearTimeout(timer)
+  }, [candidateSearch])
 
   useEffect(() => {
     if (!job?.job_id || job.optimizer_result_workflow !== 'QUALIFIED_POOL_OWNER_SELECTION') {
       return
     }
+    const controller = new AbortController()
+    const sequence = ++qualifiedSequenceRef.current
+    qualifiedControllerRef.current = controller
     const params = new URLSearchParams({
       sort: candidateSort,
       order: candidateOrder,
@@ -375,19 +492,28 @@ export default function OptimizerPage() {
       q: candidateQuery,
     })
     if (candidateRound) params.set('round', candidateRound)
-    fetch('/api/optimizer/jobs/' + job.job_id + '/qualified-candidates?' + params.toString())
+    fetch('/api/optimizer/jobs/' + job.job_id + '/qualified-candidates?' + params.toString(), { signal: controller.signal })
       .then(async (response) => {
         const body = await response.json()
         if (!response.ok) throw new Error(ownerErrorMessage(body.detail, 'Qualified candidates unavailable'))
         return body as QualifiedPage
       })
       .then((body) => {
+        if (sequence !== qualifiedSequenceRef.current || controller.signal.aborted) return
         setQualifiedError('')
         setQualified(body)
         if (body.page !== candidatePage) setCandidatePage(body.page)
       })
-      .catch((reason: Error) => setQualifiedError(reason.message))
-      .finally(() => setQualifiedLoading(false))
+      .catch((reason: Error) => {
+        if (sequence === qualifiedSequenceRef.current && !controller.signal.aborted) setQualifiedError(reason.message)
+      })
+      .finally(() => {
+        if (sequence === qualifiedSequenceRef.current && !controller.signal.aborted) setQualifiedLoading(false)
+      })
+    return () => {
+      controller.abort()
+      if (qualifiedControllerRef.current === controller) qualifiedControllerRef.current = null
+    }
   }, [
     job?.job_id,
     job?.status,
@@ -405,27 +531,52 @@ export default function OptimizerPage() {
     if (!config?.symbol || !config?.relative_symbol || !config?.from_date || !config?.to_date) {
       return
     }
+    const controller = new AbortController()
+    const sequence = ++previewSequenceRef.current
     const timer = window.setTimeout(() => {
+      setPreviewStatus('checking')
       fetch('/api/optimizer/preview', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(config),
+        signal: controller.signal,
       })
         .then(async (r) => {
           if (!r.ok) throw new Error(ownerErrorMessage((await r.json()).detail, 'Preview unavailable'))
           return r.json()
         })
         .then((value) => {
+          if (sequence !== previewSequenceRef.current || controller.signal.aborted) return
           setPreview(value)
-          setError('')
+          setPreviewStatus('ready')
         })
         .catch((reason: Error) => {
+          if (sequence !== previewSequenceRef.current || controller.signal.aborted) return
           setPreview(null)
+          setPreviewStatus('invalid')
           setError(reason.message)
         })
     }, 350)
+    return () => {
+      window.clearTimeout(timer)
+      controller.abort()
+    }
+  }, [config])
+
+  useEffect(() => {
+    if (!config || !initializedRef.current || !autosaveEnabledRef.current) return
+    if (JSON.stringify(config) === lastSavedDraftRef.current) return
+    const timer = window.setTimeout(() => {
+      void persistDraft(config).catch(() => undefined)
+    }, 500)
     return () => window.clearTimeout(timer)
   }, [config])
+
+  useEffect(() => () => {
+    draftSaveControllerRef.current?.abort()
+    actionControllerRef.current?.abort()
+    qualifiedControllerRef.current?.abort()
+  }, [])
 
   const parameterByName = useMemo(() => {
     const map = new Map<string, ParameterContract>()
@@ -445,8 +596,47 @@ export default function OptimizerPage() {
   const currentQualifiedWorkflow =
     job?.optimizer_result_workflow === 'QUALIFIED_POOL_OWNER_SELECTION'
 
+  const recoverableStatuses = [
+    'INTERRUPTED_SAFE_TO_RESUME',
+    'EXECUTION_UNCERTAIN',
+    'RECONCILIATION_REQUIRED',
+  ]
+  const resumableStatuses = [
+    'INTERRUPTED_SAFE_TO_RESUME',
+    'EXECUTION_UNCERTAIN',
+    'MT5_COMPLETE',
+    'MT5_COMPLETE_UNCONFIRMED',
+    'WAITING_FOR_REPORT',
+    'REPORT_READY',
+    'ROUND_COMPLETE_NO_WINNER',
+    'SCIENTIST_REQUESTING',
+    'REGISTERING_CHALLENGER',
+    'CHALLENGER_REGISTRATION_FAILED',
+  ]
+  const startBlockedByJob = Boolean(
+    job?.active || (job && recoverableStatuses.includes(job.status)),
+  )
+  const startBlockedByDraft = ['LOADING', 'RECOVERY_REQUIRED', 'SAVE_FAILED', 'CONFLICT'].includes(draftStatus)
+  const canStart = !busy && !startBlockedByJob && !startBlockedByDraft
+  const canStop = Boolean(job && (job.active || recoverableStatuses.includes(job.status)))
+  const canResume = Boolean(job && !job.active && resumableStatuses.includes(job.status))
+
+  function markDraftDirty() {
+    autosaveEnabledRef.current = true
+    setDraftStatus('DIRTY')
+    setDraftMessage('Unsaved changes. Saving automatically…')
+  }
+
+  function markPreviewChanged(next: any) {
+    setPreview(null)
+    setPreviewStatus(next.symbol && next.relative_symbol && next.from_date && next.to_date ? 'waiting' : 'idle')
+  }
+
   function updateConfig(key: string, value: unknown) {
-    setConfig((current: any) => ({ ...current, [key]: value }))
+    markDraftDirty()
+    const next = { ...config, [key]: value }
+    setConfig(next)
+    markPreviewChanged(next)
   }
 
   function toggleParameter(name: string) {
@@ -460,31 +650,43 @@ export default function OptimizerPage() {
     const parameter = parameterByName.get(name)
     if (!parameter) return
     const value = parameter.type === 'int' ? Number.parseInt(raw, 10) : Number.parseFloat(raw)
-    setConfig((current: any) => ({
-      ...current,
+    markDraftDirty()
+    const next = {
+      ...config,
       search_space: {
-        ...current.search_space,
-        [name]: { ...current.search_space[name], [key]: value },
+        ...config.search_space,
+        [name]: { ...config.search_space[name], [key]: value },
       },
-    }))
+    }
+    setConfig(next)
+    markPreviewChanged(next)
   }
 
-  async function refreshJob(jobId: string) {
-    const response = await fetch('/api/optimizer/jobs/' + jobId)
-    if (!response.ok) throw new Error('Optimizer state unavailable')
-    setJob(await response.json())
+  async function saveDraftExplicitly() {
+    try {
+      await persistDraft(structuredClone(config))
+      setError('')
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : 'Configuration could not be saved')
+    }
   }
 
   async function start() {
-    if (busy) return
+    if (actionLockRef.current || !canStart) return
+    actionLockRef.current = true
     setBusy(true)
     setBusyAction('start')
     setError('')
+    const frozenConfig = structuredClone(config)
     try {
+      await persistDraft(frozenConfig)
+      const controller = new AbortController()
+      actionControllerRef.current = controller
       const response = await fetch('/api/optimizer/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(config),
+        body: JSON.stringify(frozenConfig),
+        signal: controller.signal,
       })
       const body = await response.json()
       if (!response.ok) throw new Error(ownerErrorMessage(body.detail, 'Optimizer could not start'))
@@ -492,30 +694,58 @@ export default function OptimizerPage() {
       setCandidatePage(1)
       setPromotionMessage('')
       setQualifiedLoading(true)
-      await refreshJob(body.job_id)
+      setJob((current) => {
+        const mutation = {
+          ...body,
+          active: body.active ?? true,
+          status: body.status ?? 'STARTING',
+          current_round: body.current_round ?? 0,
+          max_rounds: body.max_rounds ?? frozenConfig.max_rounds,
+          created_utc: body.created_utc ?? new Date().toISOString(),
+          message: body.message ?? 'Optimizer launch accepted; checking its state.',
+          request: body.request ?? frozenConfig,
+          rounds: body.rounds ?? [],
+          scientist_calls: body.scientist_calls ?? 0,
+          challenger_created: body.challenger_created ?? 0,
+          champion_mutation: body.champion_mutation ?? 'NONE',
+        }
+        return current?.job_id === body.job_id
+          ? { ...current, ...mutation } as Job
+          : mutation as Job
+      })
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : String(reason))
     } finally {
+      actionControllerRef.current = null
+      actionLockRef.current = false
       setBusy(false)
       setBusyAction('')
     }
   }
 
   async function action(kind: 'stop' | 'resume') {
-    if (!job || busy) return
+    if (!job || actionLockRef.current || (kind === 'stop' ? !canStop : !canResume)) return
+    actionLockRef.current = true
     setBusy(true)
     setBusyAction(kind)
     setError('')
     try {
+      const controller = new AbortController()
+      actionControllerRef.current = controller
       const response = await fetch('/api/optimizer/jobs/' + job.job_id + '/' + kind, {
         method: 'POST',
+        signal: controller.signal,
       })
       const body = await response.json()
       if (!response.ok) throw new Error(ownerErrorMessage(body.detail, 'Optimizer action could not be completed'))
-      await refreshJob(job.job_id)
+      setJob((current) => current?.job_id === job.job_id
+        ? { ...current, ...body, rounds: body.rounds ?? current.rounds, request: body.request ?? current.request } as Job
+        : current)
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : String(reason))
     } finally {
+      actionControllerRef.current = null
+      actionLockRef.current = false
       setBusy(false)
       setBusyAction('')
     }
@@ -553,12 +783,15 @@ export default function OptimizerPage() {
   }
 
   async function promoteSelectedCandidates() {
-    if (!job || candidateSelection.size === 0 || busy) return
+    if (!job || candidateSelection.size === 0 || actionLockRef.current || busy) return
+    actionLockRef.current = true
     setBusy(true)
     setBusyAction('promote-selected')
     setError('')
     setPromotionMessage('')
     try {
+      const controller = new AbortController()
+      actionControllerRef.current = controller
       const selections = Array.from(candidateSelection)
         .map((key) => {
           const [round, pass] = key.split(':').map(Number)
@@ -569,6 +802,7 @@ export default function OptimizerPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ selections }),
+        signal: controller.signal,
       })
       const body = await response.json()
       if (!response.ok) throw new Error(ownerErrorMessage(body.detail, 'Strategy Challenger creation could not be completed'))
@@ -582,6 +816,8 @@ export default function OptimizerPage() {
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : String(reason))
     } finally {
+      actionControllerRef.current = null
+      actionLockRef.current = false
       setBusy(false)
       setBusyAction('')
     }
@@ -598,6 +834,12 @@ export default function OptimizerPage() {
 
       {error && <p role="alert" className="error">{error}</p>}
 
+      <p role="status" className={draftStatus === 'SAVE_FAILED' || draftStatus === 'RECOVERY_REQUIRED' || draftStatus === 'CONFLICT' ? 'error' : 'loading'}>
+        {draftMessage}
+      </p>
+
+      <fieldset className="optimizer-config-fields" disabled={busyAction === 'start'}>
+
       <section aria-labelledby="optimizer-config">
         <h2 id="optimizer-config">Configuration</h2>
         <div className="form-grid">
@@ -606,6 +848,8 @@ export default function OptimizerPage() {
           <label>Timeframe<select aria-label="Timeframe" value={config.period} onChange={(e) => updateConfig('period', e.target.value)}>{contract.main_timeframes.map((tf) => <option key={tf}>{tf}</option>)}</select></label>
           <label>Optimization From<input aria-label="Optimization From" value={config.from_date} onChange={(e) => updateConfig('from_date', e.target.value)} /></label>
           <label>Optimization To<input aria-label="Optimization To" value={config.to_date} onChange={(e) => updateConfig('to_date', e.target.value)} /></label>
+          <label>Initial deposit<input aria-label="Initial deposit" type="number" min="1" step="100" value={config.deposit} onChange={(e) => updateConfig('deposit', Number(e.target.value))} /></label>
+          <label>Leverage<input aria-label="Leverage" type="number" min="1" value={config.leverage} onChange={(e) => updateConfig('leverage', Number(e.target.value))} /></label>
           <label>MT5 Tick Model<select aria-label="MT5 Tick Model" value={config.model} onChange={(e) => updateConfig('model', Number(e.target.value))}>{contract.tick_models.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label>
           <label>Native Optimizer<select aria-label="Native Optimizer" value={config.optimization} onChange={(e) => updateConfig('optimization', Number(e.target.value))}>{contract.optimization_modes.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label>
           <label>
@@ -665,6 +909,9 @@ export default function OptimizerPage() {
           <div><dt>Required minimum closed trades</dt><dd>{visiblePreview?.trade_sample.minimum_trades ?? '—'}</dd></div>
           <div><dt>Raw complete grid combinations</dt><dd>{visiblePreview?.search_space_cardinality.raw_complete_grid_combinations?.toLocaleString() ?? '—'} · context only, not expected MT5 genetic tasks</dd></div>
         </dl>
+        {previewStatus === 'waiting' || previewStatus === 'checking' ? (
+          <p role="status" className="loading">{previewStatus === 'waiting' ? 'Waiting for edits to settle…' : 'Checking the configuration…'}</p>
+        ) : null}
       </section>
 
       <section aria-labelledby="optimizer-parameters">
@@ -705,19 +952,36 @@ export default function OptimizerPage() {
         </div>
       </section>
 
+      </fieldset>
+
       <section aria-labelledby="optimizer-actions">
         <h2 id="optimizer-actions">Owner actions</h2>
         <div className="actions">
-          <button onClick={start} disabled={busy || Boolean(job?.active)}>
+          <button onClick={saveDraftExplicitly} disabled={busy || draftStatus === 'SAVING' || !config}>
+            <ActionProgress active={draftStatus === 'SAVING'} idle="SAVE DRAFT" pending="Saving draft…" />
+          </button>
+          <button onClick={start} disabled={!canStart}>
             <ActionProgress active={busyAction === 'start'} idle="START OPTIMIZER" pending="Starting..." />
           </button>
-          <button onClick={() => action('stop')} disabled={busy || !job?.active}>
+          <button onClick={() => action('stop')} disabled={busy || !canStop}>
             <ActionProgress active={busyAction === 'stop'} idle="STOP" pending="Stopping..." />
           </button>
-          <button onClick={() => action('resume')} disabled={busy || !job || !['WAITING_FOR_REPORT', 'MT5_RUNNING', 'MT5_COMPLETE', 'MT5_COMPLETE_UNCONFIRMED', 'REPORT_READY', 'ROUND_COMPLETE_NO_WINNER', 'SCIENTIST_REQUESTING', 'REGISTERING_CHALLENGER', 'CHALLENGER_REGISTRATION_FAILED', 'RESUMING'].includes(job.status)}>
+          <button onClick={() => action('resume')} disabled={busy || !canResume}>
             <ActionProgress active={busyAction === 'resume'} idle="RESUME" pending="Resuming..." />
           </button>
         </div>
+        {!canStart && (
+          <p role="status" className="loading">
+            {startBlockedByDraft
+              ? 'Save or recover the configuration above before starting.'
+              : job?.active
+                ? 'A job is active. Use its live status before starting another job.'
+                : 'This job needs an explicit Resume or Stop decision before a new job can start.'}
+          </p>
+        )}
+        {job && !canStop && !canResume && !job.active && (
+          <p role="status" className="loading">No active or recoverable job is available to stop or resume.</p>
+        )}
       </section>
 
       {job && (
@@ -734,11 +998,12 @@ export default function OptimizerPage() {
             {job.first_blocker && <div><dt>Constraint</dt><dd className="error-text">Optimizer evidence requires review before continuing.</dd></div>}
             <div><dt>Scientist advisory</dt><dd>{job.request.scientist_assist ? 'Enabled' : 'Disabled'}</dd></div>
             <div><dt>Scientist route</dt><dd>{job.request.scientist ? job.request.scientist.provider + ' · ' + job.request.scientist.model : 'Legacy deterministic job'}</dd></div>
-            <div><dt>Scientist calls</dt><dd>{job.scientist_calls}</dd></div>
-            <div><dt>Scientist fallbacks</dt><dd>{job.scientist_counters?.fallbacks ?? 0}</dd></div>
-          </dl>
+          <div><dt>Scientist calls</dt><dd>{job.scientist_calls}</dd></div>
+          <div><dt>Scientist fallbacks</dt><dd>{job.scientist_counters?.fallbacks ?? 0}</dd></div>
+        </dl>
+        {job.message && <p role="status" className="loading">{job.message}</p>}
 
-          <h2>Round history</h2>
+        <h2>Round history</h2>
           <div className="table-wrap">
             <table>
               <thead><tr><th>Round</th><th>Status</th><th>Parsed</th><th>Qualified</th></tr></thead>
@@ -804,10 +1069,11 @@ export default function OptimizerPage() {
               <input
                 aria-label="Search qualified candidates"
                 placeholder="Search pass, round, parameter"
-                value={candidateQuery}
+                value={candidateSearch}
                 onChange={(event) => {
+                  qualifiedControllerRef.current?.abort()
                   setQualifiedLoading(true)
-                  setCandidateQuery(event.target.value)
+                  setCandidateSearch(event.target.value)
                   setCandidatePage(1)
                 }}
               />
@@ -815,6 +1081,7 @@ export default function OptimizerPage() {
                 aria-label="Filter candidate round"
                 value={candidateRound}
                 onChange={(event) => {
+                  qualifiedControllerRef.current?.abort()
                   setQualifiedLoading(true)
                   setCandidateRound(event.target.value)
                   setCandidatePage(1)

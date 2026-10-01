@@ -2,18 +2,18 @@
 
 # RUNBOOK
 
-1. Verify hosted source — git fetch origin main; git switch work/strategy-stabilization-research-purge; git rev-parse HEAD; git status --porcelain — expected: Current source work stays on the authorized Strategy stabilization/purge branch; never reset or overwrite newer main.
+1. Verify hosted source — git fetch origin main; git switch work/optimizer-durability-performance-hardening; git rev-parse HEAD; git status --porcelain — expected: Current source work stays on the authorized Optimizer hardening branch; never reset or overwrite newer main.
 2. Python environment — py -3.13 -m venv .venv; .\.venv\Scripts\python.exe -m pip install -r requirements.lock.txt — expected: Python 3.13 environment with locked dependencies.
 3. Frontend dependencies — cd frontend; npm ci; cd .. — expected: package-lock resolves without required dependency errors.
 4. Sync generated governance — .\.venv\Scripts\python.exe .workflow\tools\sync_project_truth.py — expected: PROJECT_DOCS_SYNC=PASS; generated docs are compiler output, not manual edits.
 5. Rebuild Scientist knowledge — .\.venv\Scripts\python.exe scripts\build_scientist_knowledge.py — expected: Scientist source manifest and knowledge snapshot bind to current authoritative source/docs.
 6. Validate generated docs — .\.venv\Scripts\python.exe .workflow\tools\validate_project_docs.py — expected: PROJECT_DOCS_SYNC=PASS with no stale/missing generated docs.
-7. Validate sequence sessions — .\.venv\Scripts\python.exe .workflow\tools\validate_sequence_sessions.py — expected: Seven current DURING sessions, zero failed sessions.
+7. Validate sequence sessions — .\.venv\Scripts\python.exe .workflow\tools\validate_sequence_sessions.py — expected: Eight current DURING sessions, zero failed sessions.
 8. Validate handoff — .\.venv\Scripts\python.exe .workflow\tools\validate_handoff.py — expected: STRICT required docs present/current.
 9. Validate human comprehension — .\.venv\Scripts\python.exe .workflow\tools\validate_human_comprehension.py --require-pass — expected: HUMAN_COMPREHENSION_GATE PASS.
 10. Validate project truth — .\.venv\Scripts\python.exe .workflow\tools\validate_project_truth.py — expected: No explicit FAIL; hosted phase may retain final Owner runtime as NOT_PROVEN.
-11. Backend cumulative tests — .\.venv\Scripts\python.exe -m pytest backend\tests -q -o addopts= --basetemp .venv\pytest-full-revalidation — expected: All collected backend tests PASS with zero skips/failures; report the exact count and compare against the accepted baseline, accounting only for intentionally retired Research tests and added Strategy reset coverage.
-12. Frontend tests/lint/build — cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all; cd .. — expected: Current Strategy frontend test inventory PASS, lint exits zero, production build PASS, dependency tree exits zero; report exact test/file counts and any lint warnings.
+11. Backend cumulative tests — .\.venv\Scripts\python.exe -m pytest backend\tests -q -o addopts= --basetemp .venv\pytest-full-revalidation — expected: All collected backend tests PASS with zero skips/failures; report the exact count against the 410-pass starting floor and include the Optimizer durability regressions.
+12. Frontend tests/lint/build — cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all; cd .. — expected: Current frontend regression PASS (52 tests across 8 files at this candidate), lint exits zero without warnings, production build PASS, dependency tree exits zero; report any bundler advisory separately.
 13. Python dependencies — .\.venv\Scripts\python.exe -m pip check — expected: No broken requirements.
 14. Hosted phase authority — GitHub Actions workflow .github/workflows/windows-ci.yml — expected: Source-only policy, public secret scan, Skill provenance/STRICT selftest, project governance, backend, frontend and dependency gates all PASS on windows-latest before merge.
 15. Final Owner-PC runtime acceptance — Deferred until GitHub development roadmap closure; then use INSTALL.ps1 and the final acceptance runbook. — expected: Only final Owner-PC acceptance may prove fresh DB, real MT5/MetaEditor/Strategy Tester, deployment and browser E2E.

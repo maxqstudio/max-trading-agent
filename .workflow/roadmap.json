@@ -1,39 +1,12 @@
 {
   "schema_version": 1,
-  "current_phase": "PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE",
+  "current_phase": "STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING",
   "phases": [
     {
-      "id": "R02_CHEAP_SCREEN_OUTCOME_LEDGER",
-      "title": "Historical R02 outcome-ledger implementation",
-      "status": "SUPERSEDED",
-      "objective": "Historical source phase; the Owner has rejected the current Research subsystem and this implementation is removed from active MAX.",
-      "exit_criteria": [
-        "Retained only as Git history; not a current runtime or compatibility authority."
-      ]
-    },
-    {
-      "id": "R02_OUTCOME_READBACK_INTEGRITY",
-      "title": "Historical R02 readback-integrity implementation",
-      "status": "SUPERSEDED",
-      "objective": "Historical source phase; the Owner has rejected the current Research subsystem and this implementation is removed from active MAX.",
-      "exit_criteria": [
-        "Retained only as Git history; not a current runtime or compatibility authority."
-      ]
-    },
-    {
-      "id": "R02_CHEAP_SCREEN_TRAINER_EXECUTOR_SOURCE",
-      "title": "Historical R02 trainer/executor implementation",
-      "status": "SUPERSEDED",
-      "objective": "Rejected Research implementation; do not reuse or continue hardening.",
-      "exit_criteria": [
-        "All active R00/R01/R02 implementation, API, UI, database authority and model dependencies are removed."
-      ]
-    },
-    {
       "id": "PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE",
-      "title": "Strategy stabilization and Research subsystem purge",
-      "status": "CURRENT",
-      "objective": "Stabilize Strategy lifecycle, artifact controls, reset/recovery paths, frontend/backend read behavior, and remove the rejected Research subsystem before any fresh Research work.",
+      "title": "Completed Strategy stabilization and Research subsystem purge",
+      "status": "SUPERSEDED",
+      "objective": "The Strategy lifecycle and Research purge were accepted at the starting main authority; this lineage remains the foundation for the current Optimizer durability hardening.",
       "exit_criteria": [
         "Strategy artifact reads are DB-backed and do not globally reconcile or probe MT5.",
         "Safe cleanup remains distinct from explicit Strategy Workspace Reset; reset preserves baseline, schema, generic settings and Scientist provider configuration.",
@@ -44,10 +17,25 @@
       ]
     },
     {
+      "id": "STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING",
+      "title": "Strategy Optimizer durability and performance hardening",
+      "status": "CURRENT",
+      "objective": "Make the existing Strategy Optimizer recoverable, durable, responsive and explicit at every Owner action boundary before a fresh Owner run.",
+      "exit_criteria": [
+        "Editable Optimizer draft persists independently from each immutable started-job request snapshot; schema migration and reset/recovery use the same current schema authority.",
+        "Worker launch, startup reconciliation, STOP and RESUME bind to durable job/token/PID/process identity; uncertain MT5 execution is never blindly relaunched and unrelated MT5 is never killed.",
+        "Round raw evidence is frozen and verified; derived evidence publishes as one immutable bundle before database authority advances; replay is deterministic and partial staging cannot masquerade as committed evidence.",
+        "Qualified-candidate reads use a bounded SQLite projection with server-side pagination; Challenger mutation still verifies retained canonical evidence.",
+        "Frontend preview/search/poll/mutation requests cancel or reject stale responses, are bounded/adaptive, and display immediate pending/block/success/error feedback.",
+        "Synthetic performance/resource measurements and regression tests show ordinary reads do not reparse or rehash retained MT5 evidence; no real Optimizer or MT5 execution is used as CI evidence.",
+        "Backend/frontend regression, zero-warning lint, build, dependency checks, source-only/security, governance and exact Windows CI pass; Owner runtime remains NOT_PROVEN."
+      ]
+    },
+    {
       "id": "OWNER_STRATEGY_CHAMPION_AND_MT5_SAMPLE_PREPARATION",
       "title": "Owner Strategy Champion and real MT5 sample preparation",
       "status": "BLOCKED_BY_OWNER_ACTION",
-      "objective": "Owner manually runs the stabilized Strategy lifecycle, selects and promotes a Strategy Champion, then runs a real MT5 backtest to produce the sample dataset required for future Research.",
+      "objective": "After exact source/hosted acceptance, Owner manually runs a fresh Strategy Optimizer, selects/promotes a Strategy Champion, then runs a real MT5 backtest to produce the sample dataset required for any future Research.",
       "exit_criteria": [
         "Owner verifies Strategy Optimizer → Challenger selection → Champion promotion → real MT5 backtest/sample.",
         "Owner explicitly declares REAL_MT5_BACKTEST_SAMPLE_READY before Control Room can authorize fresh R00."
