@@ -273,12 +273,23 @@ def test_worker_process_resolution_does_not_accept_venv_launcher_alone(tmp_path:
 
 
 @pytest.mark.skipif(optimizer_jobs.os.name != "nt", reason="Windows Python venv launch behavior")
-def test_windows_venv_worker_resolution_finds_actual_child_process() -> None:
+def test_windows_venv_worker_resolution_finds_actual_child_process(tmp_path: Path) -> None:
+    venv_root = tmp_path / "worker-launch-venv"
+    created = optimizer_jobs.subprocess.run(
+        [optimizer_jobs.sys.executable, "-m", "venv", "--without-pip", str(venv_root)],
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    assert created.returncode == 0, created.stderr
+    launcher = venv_root / "Scripts" / "python.exe"
+    assert launcher.is_file()
+
     job_id = "pid-probe-" + optimizer_jobs.uuid.uuid4().hex
     token = optimizer_jobs.uuid.uuid4().hex
     process = optimizer_jobs.subprocess.Popen(
         [
-            optimizer_jobs.sys.executable,
+            str(launcher),
             "-c",
             "import time; time.sleep(30)",
             "max_backend.optimizer_worker",
