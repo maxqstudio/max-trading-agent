@@ -37,6 +37,23 @@
     },
     {
       "depends_on": [
+        "SQLite operational state",
+        "immutable round evidence",
+        "MT5/MetaEditor execution boundary"
+      ],
+      "id": "optimizer-orchestration",
+      "name": "Optimizer job orchestration and read model",
+      "owns": [
+        "backend/max_backend/optimizer_draft.py",
+        "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
+        "backend/max_backend/optimizer_worker.py",
+        "backend/max_backend/optimizer_store.py::persist_candidate_projection",
+        "backend/max_backend/optimizer_candidates.py::qualified_candidates_page"
+      ],
+      "purpose": "Persist editable draft separately from immutable job requests, reconcile exact worker/MT5 launch identity, atomically publish round evidence, and serve paginated candidate projections without weakening canonical mutation verification."
+    },
+    {
+      "depends_on": [
         "scientist/knowledge/source_manifest.json",
         "Scientist store/provider settings"
       ],
@@ -173,6 +190,21 @@
       "from": "Strategy lifecycle domain",
       "meaning": "Strategy evidence and lifecycle changes are governed through the owning domain and retained artifact lineage.",
       "to": "Immutable evidence/artifact layer"
+    },
+    {
+      "from": "Owner React Control Surface",
+      "meaning": "Debounced draft edits persist independently; START snapshots the validated draft into a new immutable job request.",
+      "to": "Optimizer job orchestration and read model"
+    },
+    {
+      "from": "Optimizer job orchestration and read model",
+      "meaning": "A confirmed worker executes one authorized round; frozen and verified evidence is atomically published before SQLite advances, then a bounded projection serves ordinary reads.",
+      "to": "MT5/MetaEditor execution boundary"
+    },
+    {
+      "from": "Optimizer job orchestration and read model",
+      "meaning": "Candidate pages use the indexed projection; Challenger selection separately revalidates canonical retained evidence.",
+      "to": "Strategy lifecycle domain"
     },
     {
       "from": "Scientist advisory subsystem",

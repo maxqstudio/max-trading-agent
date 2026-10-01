@@ -716,6 +716,41 @@
       "to": "backend/max_backend/optimizer_candidates.py::qualification_check"
     },
     {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_ensure_candidate_projection",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_job_root",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_ensure_candidate_projection",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_job_root"
+    },
+    {
+      "action": "_verify_round_files",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_ensure_candidate_projection",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_verify_round_files"
+    },
+    {
+      "action": "candidate_projection_payload",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_ensure_candidate_projection",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::candidate_projection_payload"
+    },
+    {
+      "action": "persist_candidate_projection",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_ensure_candidate_projection",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_store.py::persist_candidate_projection"
+    },
+    {
       "action": "_resolve_project_path",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_candidates.py::_job_root",
@@ -835,11 +870,39 @@
       "to": "backend/max_backend/optimizer_core.py::report_matches_request"
     },
     {
+      "action": "committed_round_dir",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_verify_round_files",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_runtime.py::committed_round_dir"
+    },
+    {
+      "action": "verify_committed_round_bundle",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_verify_round_files",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_runtime.py::verify_committed_round_bundle"
+    },
+    {
       "action": "optimizer_uses_owner_selection",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_candidates.py::_verify_round_files",
       "resolver": "python_ast",
       "to": "backend/max_backend/workflow_contract.py::optimizer_uses_owner_selection"
+    },
+    {
+      "action": "_resolve_project_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::candidate_projection_payload",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_resolve_project_path"
+    },
+    {
+      "action": "qualification_check",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::candidate_projection_payload",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::qualification_check"
     },
     {
       "action": "_finite_number",
@@ -870,18 +933,25 @@
       "to": "backend/max_backend/optimizer_candidates.py::_load_job"
     },
     {
-      "action": "consumed_source_identities",
+      "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
       "resolver": "python_ast",
-      "to": "backend/max_backend/challenger_store.py::consumed_source_identities"
+      "to": "backend/max_backend/db.py::connect"
     },
     {
-      "action": "_all_candidates",
+      "action": "_candidate_consumed_sql",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
       "resolver": "python_ast",
-      "to": "backend/max_backend/optimizer_candidates.py::_all_candidates"
+      "to": "backend/max_backend/optimizer_candidates.py::_candidate_consumed_sql"
+    },
+    {
+      "action": "_ensure_candidate_projection",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_ensure_candidate_projection"
     },
     {
       "action": "_load_job",
@@ -1213,6 +1283,27 @@
       "to": "backend/max_backend/optimizer_core.py::optimizer_fitness_contract"
     },
     {
+      "action": "round_evidence_dir",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_runtime.py::committed_round_dir",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_runtime.py::round_evidence_dir"
+    },
+    {
+      "action": "job_evidence_dir",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_runtime.py::round_evidence_dir",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_runtime.py::job_evidence_dir"
+    },
+    {
+      "action": "utc_now",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::_persist_candidate_projection",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_store.py::utc_now"
+    },
+    {
       "action": "get_rounds",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_store.py::attach_rounds",
@@ -1260,6 +1351,20 @@
       "from": "backend/max_backend/optimizer_store.py::migrate_m02",
       "resolver": "python_ast",
       "to": "backend/max_backend/optimizer_store.py::migrate_m01"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::persist_candidate_projection",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_persist_candidate_projection",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::persist_candidate_projection",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_store.py::_persist_candidate_projection"
     },
     {
       "action": "migrate_m04",
@@ -1885,8 +1990,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_api.py::get_qualified_candidates",
       "language": "Python",
-      "line_end": 107,
-      "line_start": 85,
+      "line_end": 130,
+      "line_start": 108,
       "locator": "backend/max_backend/optimizer_api.py::get_qualified_candidates"
     },
     {
@@ -1894,8 +1999,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_api.py::promote_qualified_candidates",
       "language": "Python",
-      "line_end": 126,
-      "line_start": 111,
+      "line_end": 149,
+      "line_start": 134,
       "locator": "backend/max_backend/optimizer_api.py::promote_qualified_candidates"
     },
     {
@@ -1903,17 +2008,35 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_candidates.py::_all_candidates",
       "language": "Python",
-      "line_end": 346,
-      "line_start": 292,
+      "line_end": 358,
+      "line_start": 304,
       "locator": "backend/max_backend/optimizer_candidates.py::_all_candidates"
+    },
+    {
+      "id": "backend/max_backend/optimizer_candidates.py::_candidate_consumed_sql",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_candidates.py::_candidate_consumed_sql",
+      "language": "Python",
+      "line_end": 481,
+      "line_start": 466,
+      "locator": "backend/max_backend/optimizer_candidates.py::_candidate_consumed_sql"
+    },
+    {
+      "id": "backend/max_backend/optimizer_candidates.py::_ensure_candidate_projection",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_candidates.py::_ensure_candidate_projection",
+      "language": "Python",
+      "line_end": 463,
+      "line_start": 429,
+      "locator": "backend/max_backend/optimizer_candidates.py::_ensure_candidate_projection"
     },
     {
       "id": "backend/max_backend/optimizer_candidates.py::_finite_number",
       "kind": "function",
       "label": "backend/max_backend/optimizer_candidates.py::_finite_number",
       "language": "Python",
-      "line_end": 178,
-      "line_start": 171,
+      "line_end": 190,
+      "line_start": 183,
       "locator": "backend/max_backend/optimizer_candidates.py::_finite_number"
     },
     {
@@ -1921,8 +2044,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_candidates.py::_job_root",
       "language": "Python",
-      "line_end": 50,
-      "line_start": 46,
+      "line_end": 57,
+      "line_start": 53,
       "locator": "backend/max_backend/optimizer_candidates.py::_job_root"
     },
     {
@@ -1930,8 +2053,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_candidates.py::_load_job",
       "language": "Python",
-      "line_end": 253,
-      "line_start": 235,
+      "line_end": 265,
+      "line_start": 247,
       "locator": "backend/max_backend/optimizer_candidates.py::_load_job"
     },
     {
@@ -1939,8 +2062,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_candidates.py::_load_json",
       "language": "Python",
-      "line_end": 63,
-      "line_start": 57,
+      "line_end": 70,
+      "line_start": 64,
       "locator": "backend/max_backend/optimizer_candidates.py::_load_json"
     },
     {
@@ -1948,8 +2071,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_candidates.py::_resolve_project_path",
       "language": "Python",
-      "line_end": 43,
-      "line_start": 41,
+      "line_end": 50,
+      "line_start": 48,
       "locator": "backend/max_backend/optimizer_candidates.py::_resolve_project_path"
     },
     {
@@ -1957,8 +2080,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_candidates.py::_round_lineage",
       "language": "Python",
-      "line_end": 289,
-      "line_start": 256,
+      "line_end": 301,
+      "line_start": 268,
       "locator": "backend/max_backend/optimizer_candidates.py::_round_lineage"
     },
     {
@@ -1966,8 +2089,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_candidates.py::_round_root",
       "language": "Python",
-      "line_end": 54,
-      "line_start": 53,
+      "line_end": 61,
+      "line_start": 60,
       "locator": "backend/max_backend/optimizer_candidates.py::_round_root"
     },
     {
@@ -1975,17 +2098,26 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_candidates.py::_verify_round_files",
       "language": "Python",
-      "line_end": 140,
-      "line_start": 66,
+      "line_end": 152,
+      "line_start": 73,
       "locator": "backend/max_backend/optimizer_candidates.py::_verify_round_files"
+    },
+    {
+      "id": "backend/max_backend/optimizer_candidates.py::candidate_projection_payload",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_candidates.py::candidate_projection_payload",
+      "language": "Python",
+      "line_end": 426,
+      "line_start": 361,
+      "locator": "backend/max_backend/optimizer_candidates.py::candidate_projection_payload"
     },
     {
       "id": "backend/max_backend/optimizer_candidates.py::qualification_check",
       "kind": "function",
       "label": "backend/max_backend/optimizer_candidates.py::qualification_check",
       "language": "Python",
-      "line_end": 232,
-      "line_start": 181,
+      "line_end": 244,
+      "line_start": 193,
       "locator": "backend/max_backend/optimizer_candidates.py::qualification_check"
     },
     {
@@ -1993,8 +2125,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_candidates.py::qualified_candidate",
       "language": "Python",
-      "line_end": 458,
-      "line_start": 438,
+      "line_end": 608,
+      "line_start": 588,
       "locator": "backend/max_backend/optimizer_candidates.py::qualified_candidate"
     },
     {
@@ -2002,8 +2134,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
       "language": "Python",
-      "line_end": 435,
-      "line_start": 349,
+      "line_end": 585,
+      "line_start": 484,
       "locator": "backend/max_backend/optimizer_candidates.py::qualified_candidates_page"
     },
     {
@@ -2011,8 +2143,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
       "language": "Python",
-      "line_end": 529,
-      "line_start": 461,
+      "line_end": 679,
+      "line_start": 611,
       "locator": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration"
     },
     {
@@ -2020,8 +2152,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_candidates.py::validate_candidate_params",
       "language": "Python",
-      "line_end": 168,
-      "line_start": 143,
+      "line_end": 180,
+      "line_start": 155,
       "locator": "backend/max_backend/optimizer_candidates.py::validate_candidate_params"
     },
     {
@@ -2286,21 +2418,66 @@
       "locator": "backend/max_backend/optimizer_core.py::validate_optimizer_trade_exponent"
     },
     {
+      "id": "backend/max_backend/optimizer_runtime.py::committed_round_dir",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_runtime.py::committed_round_dir",
+      "language": "Python",
+      "line_end": 49,
+      "line_start": 48,
+      "locator": "backend/max_backend/optimizer_runtime.py::committed_round_dir"
+    },
+    {
+      "id": "backend/max_backend/optimizer_runtime.py::job_evidence_dir",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_runtime.py::job_evidence_dir",
+      "language": "Python",
+      "line_end": 39,
+      "line_start": 36,
+      "locator": "backend/max_backend/optimizer_runtime.py::job_evidence_dir"
+    },
+    {
+      "id": "backend/max_backend/optimizer_runtime.py::round_evidence_dir",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_runtime.py::round_evidence_dir",
+      "language": "Python",
+      "line_end": 45,
+      "line_start": 42,
+      "locator": "backend/max_backend/optimizer_runtime.py::round_evidence_dir"
+    },
+    {
+      "id": "backend/max_backend/optimizer_runtime.py::verify_committed_round_bundle",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_runtime.py::verify_committed_round_bundle",
+      "language": "Python",
+      "line_end": 782,
+      "line_start": 743,
+      "locator": "backend/max_backend/optimizer_runtime.py::verify_committed_round_bundle"
+    },
+    {
       "id": "backend/max_backend/optimizer_store.py::_decode_round",
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::_decode_round",
       "language": "Python",
-      "line_end": 179,
-      "line_start": 176,
+      "line_end": 194,
+      "line_start": 191,
       "locator": "backend/max_backend/optimizer_store.py::_decode_round"
+    },
+    {
+      "id": "backend/max_backend/optimizer_store.py::_persist_candidate_projection",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_store.py::_persist_candidate_projection",
+      "language": "Python",
+      "line_end": 642,
+      "line_start": 540,
+      "locator": "backend/max_backend/optimizer_store.py::_persist_candidate_projection"
     },
     {
       "id": "backend/max_backend/optimizer_store.py::attach_rounds",
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::attach_rounds",
       "language": "Python",
-      "line_end": 415,
-      "line_start": 410,
+      "line_end": 692,
+      "line_start": 687,
       "locator": "backend/max_backend/optimizer_store.py::attach_rounds"
     },
     {
@@ -2308,8 +2485,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::get_rounds",
       "language": "Python",
-      "line_end": 407,
-      "line_start": 400,
+      "line_end": 684,
+      "line_start": 677,
       "locator": "backend/max_backend/optimizer_store.py::get_rounds"
     },
     {
@@ -2317,8 +2494,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::migrate_m01",
       "language": "Python",
-      "line_end": 98,
-      "line_start": 45,
+      "line_end": 111,
+      "line_start": 46,
       "locator": "backend/max_backend/optimizer_store.py::migrate_m01"
     },
     {
@@ -2326,9 +2503,27 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::migrate_m02",
       "language": "Python",
-      "line_end": 121,
-      "line_start": 101,
+      "line_end": 134,
+      "line_start": 114,
       "locator": "backend/max_backend/optimizer_store.py::migrate_m02"
+    },
+    {
+      "id": "backend/max_backend/optimizer_store.py::persist_candidate_projection",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_store.py::persist_candidate_projection",
+      "language": "Python",
+      "line_end": 659,
+      "line_start": 645,
+      "locator": "backend/max_backend/optimizer_store.py::persist_candidate_projection"
+    },
+    {
+      "id": "backend/max_backend/optimizer_store.py::utc_now",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_store.py::utc_now",
+      "language": "Python",
+      "line_end": 43,
+      "line_start": 42,
+      "locator": "backend/max_backend/optimizer_store.py::utc_now"
     },
     {
       "id": "backend/max_backend/scientist_store.py::migrate_m05",
@@ -2398,8 +2593,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::get_batch",
       "language": "Python",
-      "line_end": 287,
-      "line_start": 264,
+      "line_end": 335,
+      "line_start": 312,
       "locator": "backend/max_backend/workflow_store.py::get_batch"
     },
     {
@@ -2407,8 +2602,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::insert_challenger_batch_rows",
       "language": "Python",
-      "line_end": 496,
-      "line_start": 382,
+      "line_end": 544,
+      "line_start": 430,
       "locator": "backend/max_backend/workflow_store.py::insert_challenger_batch_rows"
     },
     {
@@ -2416,7 +2611,7 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::migrate_current",
       "language": "Python",
-      "line_end": 261,
+      "line_end": 309,
       "line_start": 183,
       "locator": "backend/max_backend/workflow_store.py::migrate_current"
     },
@@ -2425,8 +2620,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::prepare_batch",
       "language": "Python",
-      "line_end": 339,
-      "line_start": 290,
+      "line_end": 387,
+      "line_start": 338,
       "locator": "backend/max_backend/workflow_store.py::prepare_batch"
     },
     {
@@ -2434,8 +2629,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::update_batch",
       "language": "Python",
-      "line_end": 379,
-      "line_start": 342,
+      "line_end": 427,
+      "line_start": 390,
       "locator": "backend/max_backend/workflow_store.py::update_batch"
     },
     {
@@ -2457,7 +2652,7 @@
       "locator": "backend/tests/test_m01_recovery.py::good_pass"
     }
   ],
-  "observed_head": "93a96a2613695009d7787f066db863c4c1e0e226",
+  "observed_head": "5a30097d76a46ad077bed8dfd978eb6b27f83264",
   "schema_version": 1,
-  "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126"
+  "source_digest": "14bfad2c4d182c18852ac6dad75b8e97d899a8ec9d8bfc38613d9087a0813614"
 }

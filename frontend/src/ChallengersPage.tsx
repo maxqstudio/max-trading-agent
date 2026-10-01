@@ -404,7 +404,11 @@ export default function ChallengersPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
   const [detailLoading, setDetailLoading] = useState(false)
-  const [backtestsLoading, setBacktestsLoading] = useState(false)
+  const [loadedBacktestKey, setLoadedBacktestKey] = useState('')
+  const backtestRequestKey = JSON.stringify([
+    detail?.challenger_id, backtestQuery, backtestState, backtestSort, backtestOrder, backtestPage, backtestPageSize,
+  ])
+  const backtestsLoading = Boolean(detail?.challenger_id) && loadedBacktestKey !== backtestRequestKey
   const [backtestDetailLoadingId, setBacktestDetailLoadingId] = useState('')
   const detailController = useRef<AbortController | null>(null)
   const [backtestForm, setBacktestForm] = useState({
@@ -471,7 +475,6 @@ export default function ChallengersPage() {
     detailController.current?.abort()
     detailController.current = null
     setDetailLoading(false)
-    setBacktestsLoading(false)
     applyDetail(null)
     setDeletePreflight(null)
     setBacktests(null)
@@ -547,7 +550,6 @@ export default function ChallengersPage() {
           setDeletePreflight(null)
           setBacktests(null)
           setDetailLoading(false)
-          setBacktestsLoading(false)
           setOperationResult('')
           return
         }
@@ -570,12 +572,10 @@ export default function ChallengersPage() {
 
   useEffect(() => {
     if (!detail?.challenger_id) {
-      setBacktestsLoading(false)
       return
     }
     let active = true
     const controller = new AbortController()
-    setBacktestsLoading(true)
     fetchBacktests(
       detail.challenger_id,
       backtestQuery,
@@ -589,13 +589,14 @@ export default function ChallengersPage() {
       .then((next) => {
         if (!active) return
         setBacktests(next)
+        setLoadedBacktestKey(backtestRequestKey)
         if (next.page !== backtestPage) setBacktestPage(next.page)
       })
       .catch((reason: Error) => {
-        if (active && !controller.signal.aborted) setError(reason.message)
-      })
-      .finally(() => {
-        if (active && !controller.signal.aborted) setBacktestsLoading(false)
+        if (active && !controller.signal.aborted) {
+          setError(reason.message)
+          setLoadedBacktestKey(backtestRequestKey)
+        }
       })
     return () => { active = false; controller.abort() }
   }, [
@@ -606,6 +607,7 @@ export default function ChallengersPage() {
     backtestOrder,
     backtestPage,
     backtestPageSize,
+    backtestRequestKey,
   ])
 
   const searchRegistry = (event: FormEvent) => {

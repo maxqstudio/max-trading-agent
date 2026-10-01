@@ -276,7 +276,7 @@ Rationale: The Owner requested the latest Skill Workflow; adopting its small ins
 
 ## D-035 — Strategy stabilization and rejected Research subsystem purge
 
-Status: CURRENT
+Status: SUPERSEDED
 
 The current PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE phase stabilizes the existing Strategy lifecycle and removes the rejected active Research implementation. Fresh R00-R11 phases remain planned and blocked until the Owner declares a real MT5 backtest/sample dataset READY and Control Room separately authorizes the next source phase. This phase does not run real MT5/Research execution or prove Owner runtime.
 
@@ -289,3 +289,11 @@ Status: CURRENT
 A safety-blocked or in-flight Owner action must not appear inert: disable the unsafe/duplicate action and visibly explain the blocker or show progress; report success or failure after completion. No click may silently do nothing when a visible explanation is required.
 
 Rationale: Make data-protection controls understandable and prevent silent failures or misleading no-op interactions.
+
+## D-037 — Make Strategy Optimizer draft, execution and evidence restart-safe
+
+Status: CURRENT
+
+Persist one bounded mutable Optimizer draft separately from every immutable started-job request. A durable job/launch token and exact process identity govern startup reconciliation, STOP and recovery; uncertain MT5 launch is never blindly repeated. Freeze raw reports, stage and verify derived round evidence, publish one immutable bundle atomically before database commit, and derive the indexed qualified-candidate read model only from committed evidence. Ordinary list reads may use the projection, but Challenger registration continues strict canonical evidence verification. Builder tests and profiles use synthetic temporary databases/evidence; no real Owner MT5 optimization or scientific result is claimed in this source phase.
+
+Rationale: The Owner-authorized Strategy Optimizer hardening repairs durable drafts, crash windows, process ownership, partial evidence publication and expensive candidate reads while keeping MT5 as execution truth and preserving the existing Challenger/Champion authority boundary.

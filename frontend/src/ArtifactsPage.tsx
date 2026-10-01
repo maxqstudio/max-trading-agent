@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Pagination, SortHeader } from './DataTable'
 
 type Artifact = {
@@ -80,7 +80,8 @@ function formatBytes(value: number) {
 export default function ArtifactsPage() {
   const [data, setData] = useState<ArtifactPage | null>(null)
   const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [operationLoading, setOperationLoading] = useState(false)
+  const [loadedInventoryKey, setLoadedInventoryKey] = useState('')
   const [query, setQuery] = useState('')
   const [type, setType] = useState('')
   const [producer, setProducer] = useState('')
@@ -103,9 +104,15 @@ export default function ArtifactsPage() {
   const [operationBusy, setOperationBusy] = useState('')
   const [trace, setTrace] = useState<any>(null)
   const [message, setMessage] = useState('')
+  const inventoryRequestSequence = useRef(0)
+  const inventoryRequestKey = JSON.stringify([
+    query, type, producer, retention, status, inUse, storage, sort, order, page, pageSize, refresh,
+  ])
+  const loading = operationLoading || loadedInventoryKey !== inventoryRequestKey
 
   useEffect(() => {
     const controller = new AbortController()
+    const sequence = ++inventoryRequestSequence.current
     const params = new URLSearchParams({
       q: query,
       type,
@@ -119,7 +126,6 @@ export default function ArtifactsPage() {
       page: String(page),
       page_size: String(pageSize),
     })
-    setLoading(true)
     fetch('/api/artifacts?' + params.toString(), { signal: controller.signal })
       .then(async (response) => {
         const body = await response.json()
@@ -127,17 +133,20 @@ export default function ArtifactsPage() {
         return body as ArtifactPage
       })
       .then((body) => {
+        if (controller.signal.aborted || sequence !== inventoryRequestSequence.current) return
         setData(body)
         if (body.page !== page) setPage(body.page)
       })
       .catch((reason: Error) => {
-        if (!controller.signal.aborted) setError(reason.message)
+        if (!controller.signal.aborted && sequence === inventoryRequestSequence.current) setError(reason.message)
       })
       .finally(() => {
-        if (!controller.signal.aborted) setLoading(false)
+        if (!controller.signal.aborted && sequence === inventoryRequestSequence.current) {
+          setLoadedInventoryKey(inventoryRequestKey)
+        }
       })
     return () => controller.abort()
-  }, [query, type, producer, retention, status, inUse, storage, sort, order, page, pageSize, refresh])
+  }, [query, type, producer, retention, status, inUse, storage, sort, order, page, pageSize, refresh, inventoryRequestKey])
 
   const allPageSelected = useMemo(
     () => Boolean(data?.items.length)
@@ -227,7 +236,7 @@ export default function ArtifactsPage() {
       setMessage('Action blocked: another inventory operation is in progress.')
       return
     }
-    setLoading(true)
+    setOperationLoading(true)
     setMessage(pendingAction === 'clean'
       ? 'Cleaning selected generated runtime…'
       : 'Deleting selected generated artifacts…')
@@ -257,7 +266,7 @@ export default function ArtifactsPage() {
       setError(reason instanceof Error ? reason.message : String(reason))
       setMessage('The selected artifact action was blocked or failed.')
     } finally {
-      setLoading(false)
+      setOperationLoading(false)
     }
   }
 
@@ -353,7 +362,7 @@ export default function ArtifactsPage() {
       return
     }
     setOperationBusy('reconcile')
-    setLoading(true)
+    setOperationLoading(true)
     setError('')
     setMessage('Checking runtime paths and reconciling the artifact inventory…')
     try {
@@ -369,7 +378,7 @@ export default function ArtifactsPage() {
       setError(reason instanceof Error ? reason.message : String(reason))
       setMessage('Inventory reconciliation did not complete.')
     } finally {
-      setLoading(false)
+      setOperationLoading(false)
       setOperationBusy('')
     }
   }
@@ -384,7 +393,7 @@ export default function ArtifactsPage() {
       return
     }
     setOperationBusy('global-cleanup')
-    setLoading(true)
+    setOperationLoading(true)
     setMessage('Cleaning generated Strategy data…')
     try {
       const response = await fetch('/api/artifacts/cleanup', {
@@ -402,7 +411,7 @@ export default function ArtifactsPage() {
       setError(reason instanceof Error ? reason.message : String(reason))
       setMessage('Generated data cleanup was blocked or failed.')
     } finally {
-      setLoading(false)
+      setOperationLoading(false)
       setOperationBusy('')
     }
   }

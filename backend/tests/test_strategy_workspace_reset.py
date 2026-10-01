@@ -14,6 +14,7 @@ from max_backend.champion_store import current_champion_summary, migrate_m04
 from max_backend.config import ROOT
 from max_backend.db import ensure_baseline_registered, initialize_database
 from max_backend.scientist_store import migrate_m05
+from max_backend.schema import CURRENT_SCHEMA_VERSION
 from max_backend.workflow_store import migrate_current
 
 
@@ -228,7 +229,7 @@ def test_preflight_and_reset_handle_malformed_generated_json_and_current_champio
         assert conn.execute("SELECT COUNT(*) FROM optimizer_jobs").fetchone()[0] == 0
         assert conn.execute("SELECT COUNT(*) FROM strategy_challenger_backtests").fetchone()[0] == 0
         assert conn.execute("SELECT COUNT(*) FROM artifact_registry").fetchone()[0] == 1
-        assert conn.execute("SELECT value FROM schema_meta WHERE key='schema_version'").fetchone()[0] == "14"
+        assert conn.execute("SELECT value FROM schema_meta WHERE key='schema_version'").fetchone()[0] == str(CURRENT_SCHEMA_VERSION)
         assert conn.execute("SELECT sha256 FROM ea_baseline WHERE id=1").fetchone()[0] == baseline_before["sha256"]
     assert result["current_champion_count"] == 0
     assert result["generated_artifact_rows"] == 0
@@ -285,7 +286,7 @@ def test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema(
     assert strategy_reset.database_recovery_status(path=database)["status"] == "READY"
     with sqlite3.connect(database) as conn:
         assert conn.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
-        assert conn.execute("SELECT value FROM schema_meta WHERE key='schema_version'").fetchone()[0] == "14"
+        assert conn.execute("SELECT value FROM schema_meta WHERE key='schema_version'").fetchone()[0] == str(CURRENT_SCHEMA_VERSION)
         assert conn.execute("SELECT status FROM ea_baseline WHERE id=1").fetchone()[0] == "BASELINE_NOT_CHAMPION"
         assert conn.execute("SELECT COUNT(*) FROM optimizer_jobs").fetchone()[0] == 0
 

@@ -1131,8 +1131,8 @@
       "kind": "function",
       "label": "backend/max_backend/main.py::_foundation_state",
       "language": "Python",
-      "line_end": 155,
-      "line_start": 128,
+      "line_end": 157,
+      "line_start": 130,
       "locator": "backend/max_backend/main.py::_foundation_state"
     },
     {
@@ -1140,8 +1140,8 @@
       "kind": "function",
       "label": "backend/max_backend/main.py::overview",
       "language": "Python",
-      "line_end": 196,
-      "line_start": 189,
+      "line_end": 198,
+      "line_start": 191,
       "locator": "backend/max_backend/main.py::overview"
     },
     {
@@ -1149,8 +1149,8 @@
       "kind": "async_function",
       "label": "backend/max_backend/main.py::recovery_required_gate",
       "language": "Python",
-      "line_end": 93,
-      "line_start": 80,
+      "line_end": 95,
+      "line_start": 82,
       "locator": "backend/max_backend/main.py::recovery_required_gate"
     },
     {
@@ -1158,8 +1158,8 @@
       "kind": "function",
       "label": "backend/max_backend/main.py::recovery_status",
       "language": "Python",
-      "line_end": 109,
-      "line_start": 97,
+      "line_end": 111,
+      "line_start": 99,
       "locator": "backend/max_backend/main.py::recovery_status"
     },
     {
@@ -1167,8 +1167,8 @@
       "kind": "function",
       "label": "backend/max_backend/main.py::reset_corrupt_state",
       "language": "Python",
-      "line_end": 125,
-      "line_start": 113,
+      "line_end": 127,
+      "line_start": 115,
       "locator": "backend/max_backend/main.py::reset_corrupt_state"
     },
     {
@@ -1221,8 +1221,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::_decode_job",
       "language": "Python",
-      "line_end": 173,
-      "line_start": 165,
+      "line_end": 188,
+      "line_start": 178,
       "locator": "backend/max_backend/optimizer_store.py::_decode_job"
     },
     {
@@ -1230,8 +1230,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::latest_job",
       "language": "Python",
-      "line_end": 247,
-      "line_start": 241,
+      "line_end": 278,
+      "line_start": 272,
       "locator": "backend/max_backend/optimizer_store.py::latest_job"
     },
     {
@@ -1239,8 +1239,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::migrate_m01",
       "language": "Python",
-      "line_end": 98,
-      "line_start": 45,
+      "line_end": 111,
+      "line_start": 46,
       "locator": "backend/max_backend/optimizer_store.py::migrate_m01"
     },
     {
@@ -1248,8 +1248,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::migrate_m02",
       "language": "Python",
-      "line_end": 121,
-      "line_start": 101,
+      "line_end": 134,
+      "line_start": 114,
       "locator": "backend/max_backend/optimizer_store.py::migrate_m02"
     },
     {
@@ -1302,8 +1302,8 @@
       "kind": "class",
       "label": "backend/max_backend/strategy_reset.py::StrategyResetError",
       "language": "Python",
-      "line_end": 67,
-      "line_start": 66,
+      "line_end": 68,
+      "line_start": 67,
       "locator": "backend/max_backend/strategy_reset.py::StrategyResetError"
     },
     {
@@ -1311,8 +1311,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_bootstrap_database",
       "language": "Python",
-      "line_end": 454,
-      "line_start": 434,
+      "line_end": 455,
+      "line_start": 435,
       "locator": "backend/max_backend/strategy_reset.py::_bootstrap_database"
     },
     {
@@ -1320,8 +1320,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_connect",
       "language": "Python",
-      "line_end": 100,
-      "line_start": 95,
+      "line_end": 101,
+      "line_start": 96,
       "locator": "backend/max_backend/strategy_reset.py::_connect"
     },
     {
@@ -1329,8 +1329,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_count",
       "language": "Python",
-      "line_end": 114,
-      "line_start": 112,
+      "line_end": 115,
+      "line_start": 113,
       "locator": "backend/max_backend/strategy_reset.py::_count"
     },
     {
@@ -1338,8 +1338,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_delete_rows",
       "language": "Python",
-      "line_end": 343,
-      "line_start": 323,
+      "line_end": 344,
+      "line_start": 324,
       "locator": "backend/max_backend/strategy_reset.py::_delete_rows"
     },
     {
@@ -1347,8 +1347,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_hash_file",
       "language": "Python",
-      "line_end": 75,
-      "line_start": 70,
+      "line_end": 76,
+      "line_start": 71,
       "locator": "backend/max_backend/strategy_reset.py::_hash_file"
     },
     {
@@ -1356,8 +1356,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_make_database_backup",
       "language": "Python",
-      "line_end": 320,
-      "line_start": 297,
+      "line_end": 321,
+      "line_start": 298,
       "locator": "backend/max_backend/strategy_reset.py::_make_database_backup"
     },
     {
@@ -1365,8 +1365,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_owned_paths",
       "language": "Python",
-      "line_end": 173,
-      "line_start": 144,
+      "line_end": 174,
+      "line_start": 145,
       "locator": "backend/max_backend/strategy_reset.py::_owned_paths"
     },
     {
@@ -1374,8 +1374,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_read_counts",
       "language": "Python",
-      "line_end": 285,
-      "line_start": 176,
+      "line_end": 286,
+      "line_start": 177,
       "locator": "backend/max_backend/strategy_reset.py::_read_counts"
     },
     {
@@ -1383,8 +1383,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_runtime_paths",
       "language": "Python",
-      "line_end": 141,
-      "line_start": 117,
+      "line_end": 142,
+      "line_start": 118,
       "locator": "backend/max_backend/strategy_reset.py::_runtime_paths"
     },
     {
@@ -1392,8 +1392,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_settings_fingerprint",
       "language": "Python",
-      "line_end": 92,
-      "line_start": 78,
+      "line_end": 93,
+      "line_start": 79,
       "locator": "backend/max_backend/strategy_reset.py::_settings_fingerprint"
     },
     {
@@ -1401,8 +1401,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_tables",
       "language": "Python",
-      "line_end": 109,
-      "line_start": 103,
+      "line_end": 110,
+      "line_start": 104,
       "locator": "backend/max_backend/strategy_reset.py::_tables"
     },
     {
@@ -1410,8 +1410,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database",
       "language": "Python",
-      "line_end": 503,
-      "line_start": 457,
+      "line_end": 504,
+      "line_start": 458,
       "locator": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
     },
     {
@@ -1419,8 +1419,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::database_recovery_status",
       "language": "Python",
-      "line_end": 431,
-      "line_start": 421,
+      "line_end": 432,
+      "line_start": 422,
       "locator": "backend/max_backend/strategy_reset.py::database_recovery_status"
     },
     {
@@ -1428,8 +1428,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
       "language": "Python",
-      "line_end": 418,
-      "line_start": 346,
+      "line_end": 419,
+      "line_start": 347,
       "locator": "backend/max_backend/strategy_reset.py::reset_strategy_workspace"
     },
     {
@@ -1437,8 +1437,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
       "language": "Python",
-      "line_end": 294,
-      "line_start": 288,
+      "line_end": 295,
+      "line_start": 289,
       "locator": "backend/max_backend/strategy_reset.py::strategy_reset_preflight"
     },
     {
@@ -1482,7 +1482,7 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::migrate_current",
       "language": "Python",
-      "line_end": 261,
+      "line_end": 309,
       "line_start": 183,
       "locator": "backend/max_backend/workflow_store.py::migrate_current"
     },
@@ -1501,7 +1501,7 @@
       "locator": "frontend/src/ArtifactsPage.tsx::<module>"
     }
   ],
-  "observed_head": "93a96a2613695009d7787f066db863c4c1e0e226",
+  "observed_head": "5a30097d76a46ad077bed8dfd978eb6b27f83264",
   "schema_version": 1,
-  "source_digest": "9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126"
+  "source_digest": "14bfad2c4d182c18852ac6dad75b8e97d899a8ec9d8bfc38613d9087a0813614"
 }

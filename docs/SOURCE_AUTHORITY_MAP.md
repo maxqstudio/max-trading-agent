@@ -14,7 +14,9 @@ Canonical authority is declared in .workflow/authority.json.
 | immutable_scientific_evidence | Sealed manifests, bundles, reports and retained artifacts | Scientific/execution history is immutable when its owning runtime contract marks it immutable; runtime evidence/artifacts are intentionally not tracked in the public source repository. | NO |
 | strategy_champion | backend/max_backend/champion_store.py::commit_promotion_authority plus explicit Owner promotion | Current Champion tenure changes only through verified promotion authority; prior tenure becomes FORMER history. | YES |
 | strategy_challenger | backend/max_backend/challenger_store.py plus retained immutable Challenger bundle | Active eligibility and historical PROMOTED/RETIRED identity are distinct; retained request epoch defines exact parameter universe. | YES |
-| optimizer | MT5 optimizer reports/sidecars plus Python canonical revalidation | MT5 executes optimization; Python verifies identity, hashes, hard gates, request epoch and durable consumed-source eligibility. | YES |
+| optimizer | MT5 optimizer reports/sidecars plus Python canonical revalidation | MT5 executes optimization; the immutable started-job snapshot, launch token and process identity govern recovery; Python verifies retained report identity/hashes/gates. SQLite candidate projections serve reads only and canonical evidence is revalidated before mutation. | YES |
+| optimizer_draft_and_execution_snapshot | backend/max_backend/optimizer_draft.py and optimizer job/store transactions | One bounded editable draft persists as current Owner preference; each started job freezes its own request snapshot that later draft edits cannot change. | YES |
+| optimizer_round_evidence_and_read_projection | Committed immutable Optimizer round bundle plus optimizer_candidate_projection read model | A verified atomic bundle is canonical retained evidence. Its normalized SQLite projection is a derived read model; it never grants qualification or bypasses canonical revalidation at Challenger mutation. | NO |
 | mt5_execution | MetaTrader 5 Strategy Tester and MetaEditor | MT5/MetaEditor own simulation, optimization and compile execution truth; Python owns legality/orchestration/evidence verification. | YES |
 | scientist | Hash-verified static knowledge plus bounded committed runtime context | Scientist output is advisory only and cannot mutate Strategy/Research scientific authority. | YES |
 | frontend | Semantic backend API representation | React presents authority; UI labels/local state do not create domain eligibility, gate completion or scientific PASS. | YES |
@@ -38,6 +40,7 @@ Canonical authority is declared in .workflow/authority.json.
 - Fresh Research R00-R11 is inactive planned work until the Owner declares a real MT5 sample READY and Control Room separately authorizes the phase.
 - Strategy Artifact inventory GETs do not reconcile runtime state; destructive controls require fresh preflight and explicit confirmation.
 - Corrupt operational state fails closed and normal application actions remain disabled until explicit recovery is completed.
+- An uncertain prior MT5 launch is reconciled, never blindly relaunched; MAX stops a terminal only when Optimizer ownership is proven.
 - Generated canonical docs/ Markdown is repaired through source/.workflow authority and regeneration, never manual patching.
 
 ## Conflict rule

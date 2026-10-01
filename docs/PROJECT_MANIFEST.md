@@ -10,10 +10,10 @@ Governance profile: strict
 
 ## Repositories
 Repository: maxqstudio/max-trading-agent
-Active branch: work/strategy-stabilization-research-purge
+Active branch: work/optimizer-durability-performance-hardening
 Current authoritative SHA: external final acceptance evidence
-Last accepted SHA: e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d
-Current source digest: 9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126
+Last accepted SHA: 5a30097d76a46ad077bed8dfd978eb6b27f83264
+Current source digest: 14bfad2c4d182c18852ac6dad75b8e97d899a8ec9d8bfc38613d9087a0813614
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.
@@ -71,6 +71,9 @@ Generated from PROJECT_PROFILE.yaml.
 - The Owner explicitly authorizes Strategy promotion. Fresh Research work remains blocked until the Owner declares a real MT5 backtest/sample dataset READY and Control Room authorizes a source phase.
 - Scientist is advisory only and cannot create scientific, promotion, risk or execution authority.
 - The previously implemented Research subsystem is rejected and removed from active MAX source, API, UI, schema authority and runtime dependencies.
-- No Research runtime, model fitting, or scientific outcome is proven or authorized by the current Strategy source phase.
+- No Research runtime, Research model fitting, or scientific outcome is proven or authorized by the current Strategy source phase; synthetic Optimizer fixtures are source tests only.
+- Optimizer editable draft is mutable current preference state; every started job owns an immutable request snapshot, durable launch identity, and atomically published round evidence.
+- Optimizer read projections may accelerate ordinary listing only; candidate-to-Challenger mutations still revalidate retained canonical evidence.
+- Builder verification uses synthetic temporary databases/evidence and mocked or isolated process boundaries; it does not run a real Owner MT5 optimization or touch the Owner operational database.
 - Destructive Strategy reset requires explicit confirmation, verified backup and ownership-scoped cleanup; ordinary cleanup remains a distinct action.
 - Current governance method is Skill Workflow exact SHA 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 with roadmap authority, generated documentation and DURING sequence evidence.

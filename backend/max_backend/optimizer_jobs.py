@@ -2,24 +2,59 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 import sys
+import time
+import uuid
 from pathlib import Path
 from typing import Any
 
 from .challenger_store import get_challenger_by_source, migrate_m03
 from .config import DATABASE_PATH, ROOT
 from .optimizer_core import freeze_request
-from .optimizer_runtime import OPTIMIZER_EVIDENCE_ROOT, job_evidence_dir, write_json
+from .optimizer_runtime import (
+    OPTIMIZER_EVIDENCE_ROOT,
+    compatible_reports,
+    is_new_or_changed,
+    job_evidence_dir,
+    optimizer_terminal_process_state,
+    write_json,
+)
 from .workflow_contract import optimizer_result_workflow, optimizer_uses_owner_selection
 from .optimizer_store import (
     TERMINAL_STATES,
     attach_rounds,
+    active_job,
+    claim_initial_worker_launch,
+    claim_resume_worker_launch,
+    confirm_worker_launch,
     create_job,
     get_job,
+    get_round,
+    get_rounds,
     latest_job,
     update_job,
 )
+
+RESUMABLE_JOB_STATUSES = {
+    "QUEUED",
+    "STARTING",
+    "COMPILING_EA",
+    "PREPARING_MT5",
+    "MT5_COMPLETE",
+    "MT5_COMPLETE_UNCONFIRMED",
+    "WAITING_FOR_REPORT",
+    "REPORT_READY",
+    "PARSING_RESULTS",
+    "ROUND_COMPLETE_NO_WINNER",
+    "SCIENTIST_REQUESTING",
+    "REGISTERING_CHALLENGER",
+    "CHALLENGER_REGISTRATION_FAILED",
+    "RESUMING",
+    "INTERRUPTED_SAFE_TO_RESUME",
+    "EXECUTION_UNCERTAIN",
+}
 
 
 def _process_command_line(pid: int) -> str:
@@ -45,28 +80,261 @@ def _process_command_line(pid: int) -> str:
     return ""
 
 
-def _worker_is_alive(job_id: str, pid: int) -> bool:
-    command = _process_command_line(pid)
-    return bool(
-        command
-        and "max_backend.optimizer_worker" in command
-        and job_id in command
+def _process_identity(pid: int) -> dict[str, Any] | None:
+    if pid <= 0:
+        return None
+    if os.name == "nt":
+        command = (
+            "$p=Get-CimInstance Win32_Process -Filter 'ProcessId="
+            + str(int(pid))
+            + "' -ErrorAction SilentlyContinue;"
+            + "if($p){$p | Select-Object ProcessId,ExecutablePath,CommandLine,CreationDate "
+            + "| ConvertTo-Json -Compress}"
+        )
+        result = subprocess.run(
+            ["powershell.exe", "-NoLogo", "-NoProfile", "-Command", command],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        if result.returncode != 0:
+            raise RuntimeError("OPTIMIZER_PROCESS_IDENTITY_QUERY_FAILED")
+        raw = (result.stdout or "").strip()
+        if not raw:
+            return None
+        try:
+            value = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError("OPTIMIZER_PROCESS_IDENTITY_QUERY_INVALID") from exc
+        if not isinstance(value, dict):
+            raise RuntimeError("OPTIMIZER_PROCESS_IDENTITY_QUERY_INVALID")
+        return {
+            "pid": int(value.get("ProcessId") or 0),
+            "executable_path": str(value.get("ExecutablePath") or ""),
+            "command_line": str(value.get("CommandLine") or ""),
+            "creation_time": str(value.get("CreationDate") or ""),
+        }
+    proc = Path(f"/proc/{int(pid)}")
+    if not proc.is_dir():
+        return None
+    try:
+        command = proc.joinpath("cmdline").read_text(encoding="utf-8", errors="ignore")
+        executable = str(proc.joinpath("exe").resolve())
+    except OSError as exc:
+        raise RuntimeError("OPTIMIZER_PROCESS_IDENTITY_QUERY_FAILED") from exc
+    return {
+        "pid": int(pid),
+        "executable_path": executable,
+        "command_line": command.replace("\x00", " "),
+        "creation_time": "",
+    }
+
+
+def _worker_identity_matches(
+    identity: dict[str, Any] | None,
+    *,
+    job_id: str,
+    launch_token: str | None,
+    expected: dict[str, Any] | None,
+) -> bool:
+    if not isinstance(identity, dict):
+        return False
+    executable = str(identity.get("executable_path") or "")
+    command = str(identity.get("command_line") or "")
+    if not executable or not command:
+        return False
+    if Path(executable).name.casefold() not in {Path(sys.executable).name.casefold(), "python.exe", "pythonw.exe"}:
+        return False
+    if "max_backend.optimizer_worker" not in command:
+        return False
+    if not re.search(r"(?:^|\s)--job-id\s+(?:\"?" + re.escape(job_id) + r"\"?)(?:\s|$)", command):
+        return False
+    if launch_token and not re.search(
+        r"(?:^|\s)--launch-token\s+(?:\"?" + re.escape(launch_token) + r"\"?)(?:\s|$)",
+        command,
+    ):
+        return False
+    if expected:
+        expected_executable = str(expected.get("executable_path") or "")
+        expected_created = str(expected.get("creation_time") or "")
+        if expected_executable and Path(expected_executable).as_posix().casefold() != Path(executable).as_posix().casefold():
+            return False
+        if expected_created and str(identity.get("creation_time") or "") != expected_created:
+            return False
+    return True
+
+
+def _worker_is_alive(
+    job_id: str,
+    pid: int,
+    *,
+    launch_token: str | None = None,
+    expected: dict[str, Any] | None = None,
+) -> bool:
+    return _worker_identity_matches(
+        _process_identity(pid),
+        job_id=job_id,
+        launch_token=launch_token,
+        expected=expected,
     )
+
+
+def _terminate_verified_worker(
+    pid: int,
+    *,
+    job_id: str,
+    launch_token: str | None,
+    expected: dict[str, Any] | None,
+) -> bool:
+    identity = _process_identity(pid)
+    if identity is None:
+        return False
+    if not _worker_identity_matches(
+        identity,
+        job_id=job_id,
+        launch_token=launch_token,
+        expected=expected,
+    ):
+        raise RuntimeError("Stored optimizer worker PID is owned by another process; refusing to kill it")
+    current = _process_identity(pid)
+    if current is None:
+        return False
+    if not _worker_identity_matches(
+        current,
+        job_id=job_id,
+        launch_token=launch_token,
+        expected=expected,
+    ):
+        raise RuntimeError("Optimizer worker identity changed before stop; refusing to kill it")
+    if os.name == "nt":
+        result = subprocess.run(
+            ["taskkill", "/PID", str(pid), "/F"],
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+        if result.returncode not in (0, 128):
+            raise RuntimeError("Unable to terminate verified optimizer worker process")
+    else:
+        os.kill(pid, 15)
+    remaining = _process_identity(pid)
+    if remaining and _worker_identity_matches(
+        remaining,
+        job_id=job_id,
+        launch_token=launch_token,
+        expected=expected,
+    ):
+        raise RuntimeError("Verified optimizer worker is still running after stop request")
+    return True
+
+
+def _find_worker_by_token(launch_token: str | None, job_id: str) -> dict[str, Any] | None:
+    if os.name != "nt":
+        return None
+    command = (
+        "$rows=Get-CimInstance Win32_Process -Filter \"Name='python.exe' OR Name='pythonw.exe'\" "
+        "-ErrorAction SilentlyContinue | Select-Object ProcessId,ExecutablePath,CommandLine,CreationDate;"
+        "if($rows){$rows | ConvertTo-Json -Compress}"
+    )
+    result = subprocess.run(
+        ["powershell.exe", "-NoLogo", "-NoProfile", "-Command", command],
+        capture_output=True,
+        text=True,
+        timeout=8,
+    )
+    if result.returncode != 0:
+        raise RuntimeError("OPTIMIZER_WORKER_PROCESS_QUERY_FAILED")
+    try:
+        rows = json.loads((result.stdout or "").strip())
+    except json.JSONDecodeError as exc:
+        raise RuntimeError("OPTIMIZER_WORKER_PROCESS_QUERY_INVALID") from exc
+    if isinstance(rows, dict):
+        rows = [rows]
+    if not isinstance(rows, list):
+        return None
+    matches: list[dict[str, Any]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        identity = {
+            "pid": int(row.get("ProcessId") or 0),
+            "executable_path": str(row.get("ExecutablePath") or ""),
+            "command_line": str(row.get("CommandLine") or ""),
+            "creation_time": str(row.get("CreationDate") or ""),
+        }
+        if _worker_identity_matches(
+            identity,
+            job_id=job_id,
+            launch_token=launch_token,
+            expected=None,
+        ):
+            matches.append(identity)
+    if len(matches) > 1:
+        raise RuntimeError("OPTIMIZER_WORKER_OWNERSHIP_AMBIGUOUS")
+    return matches[0] if matches else None
+
+
+def _mark_reconciliation_required(job_id: str, *, path: Path, reason: str) -> dict[str, Any]:
+    update_job(
+        job_id,
+        status="RECONCILIATION_REQUIRED",
+        active=True,
+        message="Optimizer process ownership could not be proven; new starts remain blocked.",
+        first_blocker=reason,
+        path=path,
+    )
+    return {"status": "BLOCKED", "job_id": job_id, "action": reason}
+
+
+def _public_job(job: dict[str, Any]) -> dict[str, Any]:
+    result = dict(job)
+    for field in ("launch_token", "worker_identity", "worker_pid"):
+        result.pop(field, None)
+    return result
 
 
 def _spawn_worker(job_id: str, *, resume: bool) -> dict[str, Any]:
     job = get_job(job_id)
     if job is None:
         raise FileNotFoundError(job_id)
-    evidence = job_evidence_dir(job_id)
-    stdout = (evidence / "worker_stdout.log").open("a", encoding="utf-8")
-    stderr = (evidence / "worker_stderr.log").open("a", encoding="utf-8")
+    launch_token = uuid.uuid4().hex
+    if resume:
+        claim_resume_worker_launch(
+            job_id,
+            launch_token,
+            allowed_statuses=RESUMABLE_JOB_STATUSES,
+        )
+    else:
+        claim_initial_worker_launch(job_id, launch_token)
+    stdout = None
+    stderr = None
+    try:
+        evidence = job_evidence_dir(job_id)
+        stdout = (evidence / "worker_stdout.log").open("a", encoding="utf-8")
+        stderr = (evidence / "worker_stderr.log").open("a", encoding="utf-8")
+    except Exception as exc:
+        if stdout is not None:
+            stdout.close()
+        if stderr is not None:
+            stderr.close()
+        update_job(
+            job_id,
+            status="FAILED",
+            active=False,
+            message="Optimizer worker logs could not be opened",
+            first_blocker="OPTIMIZER_WORKER_LOG_OPEN_FAILED",
+            terminal_result="FAIL",
+            mark_completed=True,
+        )
+        raise RuntimeError("OPTIMIZER_WORKER_LOG_OPEN_FAILED") from exc
     command = [
         sys.executable,
         "-m",
         "max_backend.optimizer_worker",
         "--job-id",
         job_id,
+        "--launch-token",
+        launch_token,
     ]
     if resume:
         command.append("--resume")
@@ -82,21 +350,59 @@ def _spawn_worker(job_id: str, *, resume: bool) -> dict[str, Any]:
             stdout=stdout,
             stderr=stderr,
         )
+    except Exception as exc:
+        update_job(
+            job_id,
+            status="FAILED",
+            active=False,
+            message="Optimizer worker could not be launched",
+            first_blocker="OPTIMIZER_WORKER_SPAWN_FAILED",
+            terminal_result="FAIL",
+            mark_completed=True,
+        )
+        raise RuntimeError("OPTIMIZER_WORKER_SPAWN_FAILED") from exc
     finally:
-        stdout.close()
-        stderr.close()
-
-    return update_job(
-        job_id,
-        worker_pid=process.pid,
-        active=True,
-        status="RESUMING" if resume else "QUEUED",
-        message=(
-            "Resuming checkpointed optimizer evidence without blind MT5 relaunch"
-            if resume
-            else "Queued deterministic Strategy Optimizer worker"
-        ),
-    )
+        if stdout is not None:
+            stdout.close()
+        if stderr is not None:
+            stderr.close()
+    try:
+        identity = _process_identity(int(process.pid))
+    except Exception:
+        identity = None
+    identity = identity or {
+        "pid": int(process.pid),
+        "executable_path": sys.executable,
+        "command_line": subprocess.list2cmdline(command),
+        "creation_time": "",
+        "observed_utc_epoch": time.time(),
+    }
+    try:
+        job = confirm_worker_launch(
+            job_id,
+            launch_token,
+            worker_pid=int(process.pid),
+            worker_identity=identity,
+        )
+    except Exception as claim_error:
+        try:
+            _terminate_verified_worker(
+                int(process.pid),
+                job_id=job_id,
+                launch_token=launch_token,
+                expected=identity,
+            )
+        except Exception as stop_error:
+            update_job(
+                job_id,
+                status="RECONCILIATION_REQUIRED",
+                active=True,
+                message="Worker launch confirmation was lost and its process could not be verified as stopped.",
+                first_blocker="OPTIMIZER_WORKER_LAUNCH_OWNERSHIP_UNVERIFIED",
+            )
+            raise RuntimeError("OPTIMIZER_WORKER_LAUNCH_RECONCILIATION_REQUIRED") from stop_error
+        raise RuntimeError("OPTIMIZER_WORKER_LAUNCH_CLAIM_LOST") from claim_error
+    return _public_job(job)
 
 
 def start_optimizer(raw_request: dict[str, Any]) -> dict[str, Any]:
@@ -107,8 +413,85 @@ def start_optimizer(raw_request: dict[str, Any]) -> dict[str, Any]:
         evidence_root=OPTIMIZER_EVIDENCE_ROOT,
     )
     evidence = job_evidence_dir(job["job_id"])
-    write_json(evidence / "request.json", request)
+    try:
+        write_json(evidence / "request.json", request)
+    except Exception as exc:
+        update_job(
+            job["job_id"],
+            status="FAILED",
+            active=False,
+            message="Optimizer request snapshot could not be written atomically",
+            first_blocker="OPTIMIZER_REQUEST_SNAPSHOT_FAILED",
+            terminal_result="FAIL",
+            mark_completed=True,
+        )
+        raise RuntimeError("OPTIMIZER_REQUEST_SNAPSHOT_FAILED") from exc
     return _spawn_worker(job["job_id"], resume=False)
+
+
+def _round_has_mt5_launch_authority(job: dict[str, Any]) -> bool:
+    round_no = int(job.get("current_round") or 0)
+    if round_no <= 0:
+        return str(job.get("status") or "") == "EXECUTION_UNCERTAIN"
+    record = get_round(str(job["job_id"]), round_no)
+    state = (record or {}).get("state") or {}
+    phase = str((record or {}).get("phase") or state.get("phase") or "")
+    return phase in {
+        "LAUNCH_INTENT",
+        "MT5_RUNNING",
+        "MT5_PROCESS_CONFIRMED",
+        "MT5_COMPLETE_UNCONFIRMED",
+    } or str(job.get("status") or "") == "EXECUTION_UNCERTAIN"
+
+
+def _stop_verified_optimizer_mt5(job: dict[str, Any]) -> None:
+    job_id = str(job["job_id"])
+    round_no = int(job.get("current_round") or 0)
+    record = get_round(job_id, round_no) if round_no > 0 else None
+    state = (record or {}).get("state") or {}
+    ini_path = str(state.get("ini_path") or "")
+    if not ini_path:
+        raise RuntimeError(
+            "MT5 ownership is not proven; the round has no exact Optimizer INI identity."
+        )
+
+    process_state = optimizer_terminal_process_state(job["request"], ini_path=ini_path)
+    if process_state["status"] == "OPTIMIZER_OWNED_RUNNING":
+        processes = process_state.get("processes")
+        if not isinstance(processes, list) or len(processes) != 1:
+            raise RuntimeError("MT5 ownership is ambiguous; no terminal was stopped.")
+        pid = int(processes[0].get("pid") or 0)
+        if pid <= 0:
+            raise RuntimeError("MT5 ownership is invalid; no terminal was stopped.")
+        rechecked = optimizer_terminal_process_state(job["request"], ini_path=ini_path)
+        current = rechecked.get("processes")
+        if rechecked.get("status") != "OPTIMIZER_OWNED_RUNNING" or not isinstance(current, list) or len(current) != 1:
+            raise RuntimeError("MT5 ownership changed before stop; no terminal was stopped.")
+        current_process = current[0]
+        if (
+            int(current_process.get("pid") or 0) != pid
+            or str(current_process.get("executable_path") or "").casefold()
+            != str(processes[0].get("executable_path") or "").casefold()
+            or str(current_process.get("command_line") or "")
+            != str(processes[0].get("command_line") or "")
+            or str(current_process.get("creation_time") or "")
+            != str(processes[0].get("creation_time") or "")
+        ):
+            raise RuntimeError("MT5 process identity changed before stop; no terminal was stopped.")
+        result = subprocess.run(
+            ["taskkill", "/PID", str(pid), "/F"],
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+        if result.returncode not in (0, 128):
+            raise RuntimeError("Unable to stop verified Optimizer-owned MT5 process")
+        process_state = optimizer_terminal_process_state(job["request"], ini_path=ini_path)
+
+    if process_state["status"] != "NOT_RUNNING":
+        raise RuntimeError(
+            "MT5 ownership is not proven; no terminal was stopped. Review the running session before continuing."
+        )
 
 
 def stop_optimizer(job_id: str) -> dict[str, Any]:
@@ -116,68 +499,285 @@ def stop_optimizer(job_id: str) -> dict[str, Any]:
     if job is None:
         raise FileNotFoundError(job_id)
     if str(job["status"]) in TERMINAL_STATES:
-        return job
+        return _public_job(job)
 
     pid = int(job.get("worker_pid") or 0)
+    token = str(job.get("launch_token") or "") or None
+    expected = job.get("worker_identity")
+    if not isinstance(expected, dict):
+        expected = None
+    worker_stopped = False
     if pid > 0:
-        command = _process_command_line(pid)
-        if command:
-            if not _worker_is_alive(job_id, pid):
-                raise RuntimeError(
-                    "Stored optimizer worker PID is owned by another process; refusing to kill it"
-                )
-            if os.name == "nt":
-                result = subprocess.run(
-                    ["taskkill", "/PID", str(pid), "/T", "/F"],
-                    capture_output=True,
-                    text=True,
-                    timeout=15,
-                )
-                if result.returncode not in (0, 128):
-                    raise RuntimeError(
-                        "Unable to terminate optimizer-owned process tree: "
-                        + (result.stderr or result.stdout or "")
-                    )
-            else:
-                os.kill(pid, 15)
+        try:
+            worker_stopped = _terminate_verified_worker(
+                pid,
+                job_id=job_id,
+                launch_token=token,
+                expected=expected,
+            )
+        except Exception as exc:
+            raise RuntimeError("Optimizer worker ownership could not be proven; no process was stopped.") from exc
 
-    return update_job(
+    try:
+        if not worker_stopped:
+            discovered = _find_worker_by_token(token, job_id) if token else None
+            if discovered is None:
+                discovered = _find_worker_by_token(None, job_id)
+                if discovered is not None and token:
+                    raise RuntimeError("Optimizer worker launch token differs from the saved authority; stop is blocked.")
+            if discovered is not None:
+                worker_stopped = _terminate_verified_worker(
+                    int(discovered["pid"]),
+                    job_id=job_id,
+                    launch_token=token,
+                    expected=discovered,
+                )
+    except Exception as exc:
+        raise RuntimeError("Optimizer worker ownership could not be proven; no process was stopped.") from exc
+
+    if (
+        not worker_stopped
+        and not token
+        and str(job.get("status") or "") in {"STARTING", "RESUMING"}
+    ):
+        raise RuntimeError("Optimizer launch has no durable process identity; stop is blocked for review.")
+
+    if _round_has_mt5_launch_authority(job):
+        _stop_verified_optimizer_mt5(job)
+
+    return _public_job(update_job(
         job_id,
         status="STOPPED",
         active=False,
-        message="Stopped by Owner; committed evidence/checkpoints preserved",
+        message=(
+            "Stopped after exact Optimizer process reconciliation; checkpoints were preserved."
+            if str(job["status"]) == "EXECUTION_UNCERTAIN" or worker_stopped
+            else "Stopped by Owner; committed evidence/checkpoints preserved"
+        ),
         first_blocker="",
         terminal_result="STOPPED",
         mark_stopped=True,
         mark_completed=True,
-    )
+    ))
 
 
 def resume_optimizer(job_id: str) -> dict[str, Any]:
     job = get_job(job_id)
     if job is None:
         raise FileNotFoundError(job_id)
-    allowed = {
-        "PREPARED",
-        "MT5_RUNNING",
-        "MT5_COMPLETE",
-        "MT5_COMPLETE_UNCONFIRMED",
-        "WAITING_FOR_REPORT",
-        "REPORT_READY",
-        "ROUND_COMPLETE_NO_WINNER",
-        "SCIENTIST_REQUESTING",
-        "REGISTERING_CHALLENGER",
-        "CHALLENGER_REGISTRATION_FAILED",
-        "RESUMING",
-    }
-    if str(job["status"]) not in allowed:
+    if str(job["status"]) == "EXECUTION_UNCERTAIN":
+        _reconcile_uncertain_round(job)
+        job = get_job(job_id)
+        if job is None:
+            raise FileNotFoundError(job_id)
+    if str(job["status"]) not in RESUMABLE_JOB_STATUSES:
         raise RuntimeError(f"Optimizer job is not resumable: {job['status']}")
 
     pid = int(job.get("worker_pid") or 0)
-    if pid > 0 and _worker_is_alive(job_id, pid):
-        raise RuntimeError("Optimizer worker is still running; resume is not allowed")
+    if pid > 0:
+        try:
+            worker_alive = _worker_is_alive(
+                job_id,
+                pid,
+                launch_token=job.get("launch_token"),
+                expected=job.get("worker_identity"),
+            )
+        except Exception as exc:
+            raise RuntimeError(
+                "Optimizer worker ownership could not be checked; resume is blocked."
+            ) from exc
+        if worker_alive:
+            raise RuntimeError("Optimizer worker is still running; resume is not allowed")
+
+    _ensure_request_snapshot(job)
 
     return _spawn_worker(job_id, resume=True)
+
+
+def _reconcile_uncertain_round(job: dict[str, Any]) -> None:
+    job_id = str(job["job_id"])
+    round_no = int(job.get("current_round") or 0)
+    record = get_round(job_id, round_no)
+    if record is None:
+        raise RuntimeError("The uncertain MT5 execution has no round checkpoint; manual review is required.")
+    state = dict(record.get("state") or {})
+    ini_path = str(state.get("ini_path") or "")
+    if not ini_path:
+        raise RuntimeError("The uncertain MT5 execution has no owned INI identity; it cannot be resumed safely.")
+    process_state = optimizer_terminal_process_state(job["request"], ini_path=ini_path)
+    if process_state["status"] == "OPTIMIZER_OWNED_RUNNING":
+        raise RuntimeError("MT5 is still running from this Optimizer; wait for it to exit before resuming.")
+    if process_state["status"] != "NOT_RUNNING":
+        raise RuntimeError("MT5 ownership is not proven; no process was changed and resume is blocked.")
+
+    prior = state.get("prelaunch_report_snapshot")
+    if not isinstance(prior, list):
+        prior = []
+    candidates = [
+        path for path in compatible_reports(job["request"])
+        if is_new_or_changed(path, prior)
+    ]
+    if len(candidates) != 1:
+        raise RuntimeError(
+            "The previous MT5 execution is uncertain; a unique fresh report was not found, so it will not be relaunched."
+        )
+    report = candidates[0]
+    metrics = Path(str(state.get("optimizer_metrics_path") or ""))
+    if not metrics.is_file():
+        raise RuntimeError("The previous MT5 execution report exists but its Weighted-R sidecar is missing.")
+    state.update({
+        "phase": "MT5_COMPLETE_UNCONFIRMED",
+        "report_path": str(report),
+        "report_selection_mode": "STARTUP_EXACT_IDENTITY_RECONCILIATION",
+        "recovery_reason": "PROCESS_EXITED_FRESH_REPORT_FOUND_NO_RELAUNCH",
+    })
+    upsert_round(
+        job_id,
+        round_no,
+        phase="MT5_COMPLETE_UNCONFIRMED",
+        state=state,
+        report_path=str(report),
+        path=DATABASE_PATH,
+    )
+    update_job(
+        job_id,
+        status="MT5_COMPLETE_UNCONFIRMED",
+        active=False,
+        message="The exact MT5 process exited and a unique fresh report was found; resume will parse without relaunch.",
+        first_blocker="",
+    )
+
+
+def _ensure_request_snapshot(job: dict[str, Any]) -> None:
+    target = job_evidence_dir(str(job["job_id"])) / "request.json"
+    if not target.exists():
+        write_json(target, job["request"])
+        return
+    try:
+        persisted = json.loads(target.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError("OPTIMIZER_REQUEST_SNAPSHOT_CORRUPT") from exc
+    if persisted != job["request"]:
+        raise RuntimeError("OPTIMIZER_REQUEST_SNAPSHOT_MISMATCH")
+
+
+def reconcile_optimizer_startup(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
+    """Resolve only the one DB-authorized active job; never scan artifact trees."""
+    job = active_job(path=path)
+    if job is None:
+        return {"status": "READY", "job_id": None, "action": "NO_ACTIVE_JOB"}
+    job_id = str(job["job_id"])
+    pid = int(job.get("worker_pid") or 0)
+    identity = job.get("worker_identity")
+    token = job.get("launch_token")
+    try:
+        pid_identity = _process_identity(pid) if pid else None
+    except Exception:
+        return _mark_reconciliation_required(
+            job_id,
+            path=path,
+            reason="OPTIMIZER_PROCESS_OWNERSHIP_UNVERIFIED",
+        )
+    if pid_identity and _worker_identity_matches(
+        pid_identity,
+        job_id=job_id,
+        launch_token=token,
+        expected=identity,
+    ):
+        return {"status": "ACTIVE", "job_id": job_id, "action": "VERIFIED_WORKER_PRESENT"}
+
+    expected_executable = str((identity or {}).get("executable_path") or "")
+    expected_created = str((identity or {}).get("creation_time") or "")
+    actual_executable = str((pid_identity or {}).get("executable_path") or "")
+    actual_created = str((pid_identity or {}).get("creation_time") or "")
+    proven_pid_reuse = bool(
+        pid_identity
+        and expected_executable
+        and actual_executable
+        and Path(expected_executable).as_posix().casefold() != Path(actual_executable).as_posix().casefold()
+    ) or bool(pid_identity and expected_created and actual_created and expected_created != actual_created)
+    if pid_identity and not proven_pid_reuse:
+        return _mark_reconciliation_required(
+            job_id,
+            path=path,
+            reason="OPTIMIZER_PROCESS_IDENTITY_MISMATCH",
+        )
+
+    if token:
+        try:
+            discovered = _find_worker_by_token(str(token), job_id)
+        except Exception:
+            return _mark_reconciliation_required(
+                job_id,
+                path=path,
+                reason="OPTIMIZER_PROCESS_OWNERSHIP_UNVERIFIED",
+            )
+        if discovered is not None:
+            update_job(
+                job_id,
+                worker_pid=int(discovered["pid"]),
+                worker_identity=discovered,
+                path=path,
+            )
+            return {"status": "ACTIVE", "job_id": job_id, "action": "WORKER_ADOPTED_BY_TOKEN"}
+
+    try:
+        worker_for_job = _find_worker_by_token(None, job_id)
+    except Exception:
+        return _mark_reconciliation_required(
+            job_id,
+            path=path,
+            reason="OPTIMIZER_PROCESS_OWNERSHIP_UNVERIFIED",
+        )
+    if worker_for_job is not None:
+        if token:
+            return _mark_reconciliation_required(
+                job_id,
+                path=path,
+                reason="OPTIMIZER_WORKER_LAUNCH_TOKEN_MISMATCH",
+            )
+        update_job(
+            job_id,
+            worker_pid=int(worker_for_job["pid"]),
+            worker_identity=worker_for_job,
+            path=path,
+        )
+        return {"status": "ACTIVE", "job_id": job_id, "action": "WORKER_ADOPTED_BY_JOB_ID"}
+
+    rounds = get_rounds(job_id, path=path)
+    latest = rounds[-1] if rounds else None
+    phase = str((latest or {}).get("phase") or "")
+    uncertain_external = phase in {
+        "LAUNCH_INTENT",
+        "MT5_RUNNING",
+        "MT5_PROCESS_CONFIRMED",
+        "MT5_COMPLETE_UNCONFIRMED",
+    }
+    if uncertain_external:
+        status = "EXECUTION_UNCERTAIN"
+        blocker = "MT5_EXECUTION_REQUIRES_RECONCILIATION"
+        message = (
+            "MT5 may have started before interruption. Resume is blocked until the "
+            "exact terminal process and report evidence are reconciled."
+        )
+    else:
+        status = "INTERRUPTED_SAFE_TO_RESUME"
+        blocker = "WORKER_INTERRUPTED_SAFE_TO_RESUME"
+        message = (
+            "Optimizer worker stopped before an uncertain MT5 launch. The saved "
+            "checkpoint can be resumed without creating a second job."
+        )
+    update_job(
+        job_id,
+        status=status,
+        active=False,
+        message=message,
+        first_blocker=blocker,
+        terminal_result="INTERRUPTED",
+        mark_completed=True,
+        path=path,
+    )
+    return {"status": status, "job_id": job_id, "action": "STALE_ACTIVE_JOB_RECONCILED"}
 
 
 def _round_passes(
@@ -288,7 +888,15 @@ def job_detail(
         challenger.get("challenger_id") if isinstance(challenger, dict) else None
     )
     job["champion_mutation"] = "NONE"
-    return job
+    for item in job["rounds"]:
+        state = item.get("state") if isinstance(item.get("state"), dict) else {}
+        if "mt5_process_identity" in state:
+            item["state"] = {
+                key: value
+                for key, value in state.items()
+                if key != "mt5_process_identity"
+            }
+    return _public_job(job)
 
 
 def latest_job_detail(

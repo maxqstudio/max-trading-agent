@@ -102,6 +102,8 @@ class Harness:
             "sidecar_sha256": "metricsha",
             "report_identity": {"title": "fixture"},
             "report_selection_mode": kwargs["report_selection_mode"],
+            "bundle_path": str(self.tmp_path / "committed"),
+            "manifest_sha256": "manifestsha",
         }
 
 
@@ -111,6 +113,12 @@ def patch_harness(monkeypatch: pytest.MonkeyPatch, harness: Harness) -> None:
     monkeypatch.setattr(worker, "update_job", harness.update_job)
     monkeypatch.setattr(worker, "write_state_snapshot", lambda *args, **kwargs: None)
     monkeypatch.setattr(worker, "sha256_file", lambda *args, **kwargs: "sha")
+    monkeypatch.setattr(
+        worker,
+        "optimization_report_identity",
+        lambda path: {"path": str(path), "fixture": True},
+    )
+    monkeypatch.setattr(worker, "report_matches_request", lambda *_args, **_kwargs: True)
     monkeypatch.setattr(worker, "snapshot_compatible_reports", lambda *args, **kwargs: [])
     monkeypatch.setattr(worker, "clear_stale_sidecar", lambda *args, **kwargs: None)
     monkeypatch.setattr(worker, "launch_mt5", harness.launch_mt5)
@@ -127,6 +135,11 @@ def patch_harness(monkeypatch: pytest.MonkeyPatch, harness: Harness) -> None:
         },
     )
     monkeypatch.setattr(worker, "commit_round_evidence", harness.commit)
+    monkeypatch.setattr(
+        worker,
+        "candidate_projection_payload",
+        lambda **_kwargs: {"projection_sha256": "projectionsha", "items": []},
+    )
     monkeypatch.setattr(worker, "job_evidence_dir", lambda *args, **kwargs: harness.tmp_path)
     monkeypatch.setattr(worker, "round_evidence_dir", lambda *args, **kwargs: harness.tmp_path)
 
@@ -247,6 +260,57 @@ def test_waiting_for_report_resume_never_relaunches(
 
     assert harness.launch_count == 0
     assert harness.wait_count == 1
+
+
+def test_report_ready_resume_reuses_frozen_raw_evidence_after_source_disappears(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    state = state_for(tmp_path, "REPORT_READY")
+    state["report_path"] = str(tmp_path / "removed-original.xml")
+    state["report_fingerprint"] = {"size": 99, "mtime_ns": 1}
+    freeze_manifest = tmp_path / ".staging" / "raw-freeze" / "raw-manifest.json"
+    freeze_manifest.parent.mkdir(parents=True)
+    freeze_manifest.write_text("{}", encoding="utf-8")
+    harness = Harness(tmp_path, state)
+    patch_harness(monkeypatch, harness)
+    staged: list[dict] = []
+
+    def reuse_frozen_raw(**kwargs):
+        staged.append(kwargs)
+        return {
+            "raw_report_path": str(harness.report),
+            "raw_report_sha256": "sha",
+            "raw_sidecar_path": str(harness.metrics),
+            "raw_sidecar_sha256": "sha",
+            "raw_manifest_path": str(freeze_manifest),
+        }
+
+    monkeypatch.setattr(worker, "stage_raw_round_evidence", reuse_frozen_raw)
+    monkeypatch.setattr(
+        worker,
+        "wait_for_fresh_report",
+        lambda *_args, **_kwargs: pytest.fail("frozen evidence must bypass report discovery"),
+    )
+    monkeypatch.setattr(
+        worker,
+        "report_matches_request",
+        lambda *_args, **_kwargs: pytest.fail("frozen evidence must bypass source revalidation"),
+    )
+
+    rows, audit, winner = worker.execute_round(
+        request_payload(),
+        job_id="J7",
+        round_no=1,
+        search_space={},
+        resume=True,
+    )
+
+    assert harness.launch_count == 0
+    assert harness.parse_count == 1
+    assert len(staged) == 1
+    assert audit["eligible_passes"] == 1
+    assert winner is not None
 
 
 def test_stale_report_fingerprint_rejected(tmp_path: Path) -> None:

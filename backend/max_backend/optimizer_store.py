@@ -12,6 +12,7 @@ from .db import connect
 from .workflow_contract import OPTIMIZER_TERMINAL_QUALIFIED_POOL
 
 ACTIVE_STATES = {
+    "STARTING",
     "QUEUED",
     "COMPILING_EA",
     "PREPARING_MT5",
@@ -63,7 +64,9 @@ def migrate_m01(path: Path = DATABASE_PATH) -> None:
                 message TEXT NOT NULL DEFAULT '',
                 first_blocker TEXT,
                 terminal_result TEXT,
-                winner_json TEXT
+                winner_json TEXT,
+                launch_token TEXT,
+                worker_identity_json TEXT
             );
 
             CREATE UNIQUE INDEX IF NOT EXISTS ux_optimizer_single_active
@@ -88,6 +91,16 @@ def migrate_m01(path: Path = DATABASE_PATH) -> None:
             );
             """
         )
+        columns = {
+            str(row["name"])
+            for row in conn.execute("PRAGMA table_info(optimizer_jobs)").fetchall()
+        }
+        if "launch_token" not in columns:
+            conn.execute("ALTER TABLE optimizer_jobs ADD COLUMN launch_token TEXT")
+        if "worker_identity_json" not in columns:
+            conn.execute(
+                "ALTER TABLE optimizer_jobs ADD COLUMN worker_identity_json TEXT"
+            )
         current = conn.execute(
             "SELECT value FROM schema_meta WHERE key='schema_version'"
         ).fetchone()
@@ -170,6 +183,8 @@ def _decode_job(row: sqlite3.Row | None) -> dict[str, Any] | None:
     result["request"] = json.loads(result.pop("request_json"))
     winner_json = result.pop("winner_json")
     result["winner"] = json.loads(winner_json) if winner_json else None
+    identity_json = result.pop("worker_identity_json", None)
+    result["worker_identity"] = json.loads(identity_json) if identity_json else None
     return result
 
 
@@ -201,6 +216,22 @@ def create_job(
         if active is not None:
             raise RuntimeError(
                 f"Strategy Optimizer already active: {active['job_id']} ({active['status']})"
+            )
+        uncertain = conn.execute(
+            """
+            SELECT job_id,status FROM optimizer_jobs
+            WHERE status IN (
+                'EXECUTION_UNCERTAIN','RECONCILIATION_REQUIRED',
+                'INTERRUPTED_SAFE_TO_RESUME','WAITING_FOR_REPORT',
+                'MT5_COMPLETE_UNCONFIRMED','CHALLENGER_REGISTRATION_FAILED'
+            )
+            ORDER BY updated_utc DESC LIMIT 1
+            """
+        ).fetchone()
+        if uncertain is not None:
+            raise RuntimeError(
+                "Strategy Optimizer previous execution requires resume or explicit stop: "
+                f"{uncertain['job_id']} ({uncertain['status']})"
             )
         conn.execute(
             """
@@ -263,6 +294,9 @@ def update_job(
     active: bool | None = None,
     current_round: int | None = None,
     worker_pid: int | None = None,
+    launch_token: str | None = None,
+    worker_identity: dict[str, Any] | None = None,
+    clear_worker_identity: bool = False,
     message: str | None = None,
     first_blocker: str | None = None,
     terminal_result: str | None = None,
@@ -286,6 +320,15 @@ def update_job(
     if worker_pid is not None:
         fields.append("worker_pid=?")
         values.append(int(worker_pid))
+    if launch_token is not None:
+        fields.append("launch_token=?")
+        values.append(str(launch_token))
+    if worker_identity is not None:
+        fields.append("worker_identity_json=?")
+        values.append(json.dumps(worker_identity, sort_keys=True))
+    elif clear_worker_identity:
+        fields.append("worker_identity_json=NULL")
+        fields.append("worker_pid=NULL")
     if message is not None:
         fields.append("message=?")
         values.append(str(message))
@@ -322,6 +365,109 @@ def update_job(
     return job
 
 
+def claim_initial_worker_launch(
+    job_id: str,
+    launch_token: str,
+    *,
+    path: Path = DATABASE_PATH,
+) -> None:
+    with connect(path) as conn:
+        conn.execute("BEGIN IMMEDIATE")
+        row = conn.execute(
+            "SELECT status,active,launch_token FROM optimizer_jobs WHERE job_id=?",
+            (str(job_id),),
+        ).fetchone()
+        if row is None:
+            raise FileNotFoundError(job_id)
+        if (
+            str(row["status"]) != "QUEUED"
+            or not bool(row["active"])
+            or row["launch_token"] is not None
+        ):
+            raise RuntimeError("OPTIMIZER_INITIAL_WORKER_LAUNCH_ALREADY_CLAIMED")
+        conn.execute(
+            """
+            UPDATE optimizer_jobs
+            SET status='STARTING',launch_token=?,worker_pid=NULL,
+                worker_identity_json=NULL,updated_utc=?
+            WHERE job_id=?
+            """,
+            (str(launch_token), utc_now(), str(job_id)),
+        )
+
+
+def claim_resume_worker_launch(
+    job_id: str,
+    launch_token: str,
+    *,
+    allowed_statuses: set[str],
+    path: Path = DATABASE_PATH,
+) -> None:
+    with connect(path) as conn:
+        conn.execute("BEGIN IMMEDIATE")
+        row = conn.execute(
+            "SELECT status,active FROM optimizer_jobs WHERE job_id=?",
+            (str(job_id),),
+        ).fetchone()
+        if row is None:
+            raise FileNotFoundError(job_id)
+        if bool(row["active"]):
+            raise RuntimeError("OPTIMIZER_WORKER_LAUNCH_ALREADY_ACTIVE")
+        if str(row["status"]) not in allowed_statuses:
+            raise RuntimeError(f"Optimizer job is not resumable: {row['status']}")
+        conn.execute(
+            """
+            UPDATE optimizer_jobs
+            SET status='RESUMING',active=1,launch_token=?,worker_pid=NULL,
+                worker_identity_json=NULL,message=?,updated_utc=?
+            WHERE job_id=? AND active=0
+            """,
+            (
+                str(launch_token),
+                "Recovery planner claimed one bounded worker launch",
+                utc_now(),
+                str(job_id),
+            ),
+        )
+
+
+def confirm_worker_launch(
+    job_id: str,
+    launch_token: str,
+    *,
+    worker_pid: int,
+    worker_identity: dict[str, Any],
+    path: Path = DATABASE_PATH,
+) -> dict[str, Any]:
+    with connect(path) as conn:
+        conn.execute("BEGIN IMMEDIATE")
+        cursor = conn.execute(
+            """
+            UPDATE optimizer_jobs
+            SET worker_pid=?,worker_identity_json=?,updated_utc=?
+            WHERE job_id=? AND launch_token=? AND active=1
+              AND status IN ('STARTING','RESUMING')
+            """,
+            (
+                int(worker_pid),
+                json.dumps(worker_identity, sort_keys=True),
+                utc_now(),
+                str(job_id),
+                str(launch_token),
+            ),
+        )
+        if cursor.rowcount != 1:
+            raise RuntimeError("OPTIMIZER_WORKER_LAUNCH_CLAIM_LOST")
+        row = conn.execute(
+            "SELECT * FROM optimizer_jobs WHERE job_id=?",
+            (str(job_id),),
+        ).fetchone()
+    result = _decode_job(row)
+    if result is None:
+        raise FileNotFoundError(job_id)
+    return result
+
+
 def upsert_round(
     job_id: str,
     round_no: int,
@@ -335,6 +481,7 @@ def upsert_round(
     parsed_passes: int | None = None,
     eligible_passes: int | None = None,
     winner_pass: int | None = None,
+    candidate_projection: dict[str, Any] | None = None,
     path: Path = DATABASE_PATH,
 ) -> dict[str, Any]:
     payload = dict(state)
@@ -342,6 +489,7 @@ def upsert_round(
     payload["round"] = int(round_no)
     payload["updated_utc"] = utc_now()
     with connect(path) as conn:
+        conn.execute("BEGIN IMMEDIATE")
         conn.execute(
             """
             INSERT INTO optimizer_rounds(
@@ -376,10 +524,139 @@ def upsert_round(
                 winner_pass,
             ),
         )
+        if candidate_projection is not None:
+            _persist_candidate_projection(
+                conn,
+                job_id=job_id,
+                round_no=int(round_no),
+                projection=candidate_projection,
+            )
     row = get_round(job_id, round_no, path=path)
     if row is None:
         raise RuntimeError("Optimizer round persistence failed")
     return row
+
+
+def _persist_candidate_projection(
+    conn: sqlite3.Connection,
+    *,
+    job_id: str,
+    round_no: int,
+    projection: dict[str, Any],
+) -> None:
+    existing = conn.execute(
+        """
+        SELECT source_report_sha256,source_sidecar_sha256,projection_sha256,candidate_count
+        FROM optimizer_candidate_projection_rounds
+        WHERE job_id=? AND round_no=?
+        """,
+        (job_id, int(round_no)),
+    ).fetchone()
+    rows = projection.get("candidates")
+    if not isinstance(rows, list):
+        raise ValueError("OPTIMIZER_CANDIDATE_PROJECTION_INVALID")
+    identity = (
+        str(projection.get("report_sha256") or ""),
+        str(projection.get("sidecar_sha256") or ""),
+        str(projection.get("projection_sha256") or ""),
+        len(rows),
+    )
+    if existing is not None:
+        current = (
+            str(existing["source_report_sha256"]),
+            str(existing["source_sidecar_sha256"]),
+            str(existing["projection_sha256"]),
+            int(existing["candidate_count"]),
+        )
+        if current != identity:
+            raise RuntimeError("OPTIMIZER_CANDIDATE_PROJECTION_REPLAY_MISMATCH")
+        return
+
+    conn.execute(
+        """
+        INSERT INTO optimizer_candidate_projection_rounds(
+            job_id,round_no,source_report_sha256,source_sidecar_sha256,
+            projection_sha256,candidate_count,projected_utc
+        ) VALUES(?,?,?,?,?,?,?)
+        """,
+        (
+            job_id,
+            int(round_no),
+            identity[0],
+            identity[1],
+            identity[2],
+            identity[3],
+            utc_now(),
+        ),
+    )
+    conn.executemany(
+        """
+        INSERT INTO optimizer_candidate_projection(
+            job_id,round_no,pass_no,rank_value,mean_r,custom_fitness,weighted_r,
+            profit_factor,recovery_factor,trades,required_trades,search_text,candidate_json
+        ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)
+        """,
+        [
+            (
+                job_id,
+                int(round_no),
+                int(item["pass"]),
+                0,
+                float(item["mean_r"]),
+                (
+                    float(item["custom_fitness"])
+                    if item.get("custom_fitness") is not None else None
+                ),
+                float(item["weighted_r"]),
+                float(item["profit_factor"]),
+                float(item["recovery_factor"]),
+                int(item["trades"]),
+                int(item["required_trades"]),
+                str(item["search_text"]),
+                json.dumps(item["candidate"], sort_keys=True, separators=(",", ":")),
+            )
+            for item in rows
+        ],
+    )
+    conn.execute(
+        """
+        WITH ranked AS (
+            SELECT job_id,round_no,pass_no,
+                ROW_NUMBER() OVER (
+                    ORDER BY mean_r DESC,weighted_r DESC,profit_factor DESC,
+                        recovery_factor DESC,round_no ASC,pass_no ASC
+                ) AS value
+            FROM optimizer_candidate_projection
+            WHERE job_id=?
+        )
+        UPDATE optimizer_candidate_projection
+        SET rank_value=(
+            SELECT value FROM ranked
+            WHERE ranked.job_id=optimizer_candidate_projection.job_id
+              AND ranked.round_no=optimizer_candidate_projection.round_no
+              AND ranked.pass_no=optimizer_candidate_projection.pass_no
+        )
+        WHERE job_id=?
+        """,
+        (job_id, job_id),
+    )
+
+
+def persist_candidate_projection(
+    job_id: str,
+    round_no: int,
+    projection: dict[str, Any],
+    *,
+    path: Path = DATABASE_PATH,
+) -> None:
+    with connect(path) as conn:
+        conn.execute("BEGIN IMMEDIATE")
+        _persist_candidate_projection(
+            conn,
+            job_id=job_id,
+            round_no=int(round_no),
+            projection=projection,
+        )
 
 
 def get_round(

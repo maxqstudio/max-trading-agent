@@ -1,0 +1,54 @@
+{
+  "acceptance_report": "artifacts/sequence/FLOW-OPTIMIZER-DURABILITY-PERFORMANCE.acceptance.json",
+  "actual": {
+    "diagram": "docs/sequence/generated/FLOW-OPTIMIZER-DURABILITY-PERFORMANCE.actual.mmd",
+    "entries": [
+      "frontend/src/OptimizerPage.tsx::<module>",
+      "backend/max_backend/optimizer_draft.py::get_optimizer_draft",
+      "backend/max_backend/optimizer_draft.py::put_optimizer_draft",
+      "backend/max_backend/optimizer_jobs.py::start_optimizer",
+      "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
+      "backend/max_backend/optimizer_jobs.py::stop_optimizer",
+      "backend/max_backend/optimizer_jobs.py::resume_optimizer",
+      "backend/max_backend/optimizer_store.py::claim_initial_worker_launch",
+      "backend/max_backend/optimizer_store.py::confirm_worker_launch",
+      "backend/max_backend/optimizer_worker.py::run_job",
+      "backend/max_backend/optimizer_runtime.py::commit_round_evidence",
+      "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
+      "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration"
+    ],
+    "graph": "docs/sequence/generated/FLOW-OPTIMIZER-DURABILITY-PERFORMANCE.actual.json",
+    "source_digest": "14bfad2c4d182c18852ac6dad75b8e97d899a8ec9d8bfc38613d9087a0813614"
+  },
+  "critical": true,
+  "implementation_base_sha": "5a30097d76a46ad077bed8dfd978eb6b27f83264",
+  "mode": "DURING",
+  "phase": "STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING",
+  "plan": {
+    "contract": "",
+    "diagram": "",
+    "frozen": false,
+    "frozen_commit": "",
+    "required": false,
+    "sha256": ""
+  },
+  "runtime_trace": {
+    "graph": "",
+    "required": false
+  },
+  "schema_version": 1,
+  "scope": "CURRENT",
+  "session_id": "FLOW-OPTIMIZER-DURABILITY-PERFORMANCE",
+  "status": "CURRENT",
+  "test_traceability_required": true,
+  "tests": [
+    "backend/tests/test_optimizer_draft.py",
+    "backend/tests/test_optimizer_reliability.py",
+    "backend/tests/test_optimizer_runtime_durability.py",
+    "backend/tests/test_m01_jobs.py",
+    "backend/tests/test_m01_recovery.py",
+    "backend/tests/test_m08_strategy_results.py",
+    "frontend/src/OptimizerPage.test.tsx",
+    "frontend/src/ChallengersPage.test.tsx"
+  ]
+}

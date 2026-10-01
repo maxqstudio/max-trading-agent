@@ -89,6 +89,84 @@
       "status": "FIXED/ACCEPTED_CANDIDATE",
       "summary": "R02 compute-budget validation converted arbitrary integers to float without catching OverflowError, allowing extreme API numeric input to escape the intended fail-closed validation path.",
       "evidence": "research_r02_contract.py and research_r02_outcome.py catch OverflowError/TypeError/ValueError around numeric conversion. Targeted Windows run 36412664127 passed 84 R02 tests; exact full branch Windows CI run 36413020299 passed 581 backend tests plus complete frontend/source-only/governance/dependency gates at a178b4be591c42e88bb6a5ea3bcec1d113987dcb."
+    },
+    {
+      "id": "OPTIMIZER-DRAFT-NOT-PERSISTED",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Editable Optimizer form was reset to defaults across page/app restarts and was not durably separated from job snapshots.",
+      "evidence": "optimizer_draft.py persists a bounded revisioned draft; start freezes a separate job request. test_optimizer_draft.py covers database reopen, stale saves and schema-14 migration."
+    },
+    {
+      "id": "OPTIMIZER-QUEUED-CRASH-ZOMBIE",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Crash after durable job creation but before confirmed worker launch could strand an active QUEUED/STARTING job.",
+      "evidence": "Conditional launch claims, persisted launch token and worker confirmation handshake are covered by test_optimizer_reliability.py and test_m01_jobs.py."
+    },
+    {
+      "id": "OPTIMIZER-COMPILE-CRASH-NONRESUMABLE",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Worker loss during EA compilation could leave active work with no deterministic recovery contract.",
+      "evidence": "Startup reconciliation distinguishes pre-MT5 worker loss from uncertain external execution; test_startup_reconciles_worker_loss_before_mt5_to_resumable_state covers safe recovery."
+    },
+    {
+      "id": "OPTIMIZER-PARSING-CRASH-NONRESUMABLE",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Interrupted result parsing could strand an active job or cause an unnecessary repeat of MT5 execution.",
+      "evidence": "Frozen raw evidence and idempotent committed-round verification/replay are covered by test_optimizer_runtime_durability.py and test_m01_recovery.py."
+    },
+    {
+      "id": "OPTIMIZER-NO-STARTUP-RECONCILIATION",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Backend startup did not reconcile known active Optimizer jobs against durable worker, round and evidence state.",
+      "evidence": "reconcile_optimizer_startup is called by backend lifespan and bounded to known active jobs; test_optimizer_reliability.py covers recovery and uncertainty branches."
+    },
+    {
+      "id": "OPTIMIZER-EVIDENCE-NONATOMIC-PUBLICATION",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Round evidence used multiple writes that could expose partial or inconsistent files as complete.",
+      "evidence": "commit_round_evidence stages and verifies a manifest-bound bundle before atomic publication and DB advancement; test_optimizer_runtime_durability.py covers replay, concurrency and changed bytes."
+    },
+    {
+      "id": "OPTIMIZER-MT5-LAUNCH-UNCERTAINTY",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "A crash around MT5 launch did not durably distinguish never-started from possibly-started execution.",
+      "evidence": "Launch intent and terminal identity are persisted; uncertain launch becomes EXECUTION_UNCERTAIN and is never blindly relaunched, covered by test_optimizer_reliability.py."
+    },
+    {
+      "id": "OPTIMIZER-ORPHAN-PROCESS-OWNERSHIP",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "PID-only process ownership could mistake an unrelated or reused MT5/worker PID for the Optimizer child.",
+      "evidence": "Worker stop/reconcile validates launch token, executable and process creation identity and refuses unproven MT5 termination; covered by test_optimizer_reliability.py."
+    },
+    {
+      "id": "OPTIMIZER-QUALIFIED-LIST-EXPENSIVE-RECOMPUTE",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Qualified-candidate page reads repeatedly parsed and revalidated canonical MT5 evidence instead of using a bounded read model.",
+      "evidence": "Committed rounds persist an indexed SQLite candidate projection; test_qualified_endpoint_uses_projection_and_strict_mutation_revalidates proves reads avoid evidence verification while registration remains strict."
+    },
+    {
+      "id": "OPTIMIZER-PREVIEW-STALE-RESPONSE",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Out-of-order preview responses could overwrite current Optimizer form feedback.",
+      "evidence": "Optimizer UI request generations/abort handling reject stale responses; frontend/src/OptimizerPage.test.tsx covers stale request behavior."
+    },
+    {
+      "id": "OPTIMIZER-SEARCH-REQUEST-STORM",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Rapid candidate search/filter changes could issue unbounded duplicate requests and render stale pages.",
+      "evidence": "Search input is debounced and stale results are ignored; frontend/src/OptimizerPage.test.tsx verifies the debounce and stale-response behavior."
+    },
+    {
+      "id": "OPTIMIZER-RESOURCE-USAGE-UNBOUNDED-RISK",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Optimizer read-path memory/CPU/IO behavior lacked a repeatable synthetic resource profile and bounded-work evidence.",
+      "evidence": "Synthetic 750-row TestClient profile: actual qualified page median 23.651 ms/p95 68.983 ms for page size 25. Separate 108-request Windows process-counter profile (qualified route mocked) measured CPU 1.0781s, peak working set 64,405,504 bytes, read I/O 6,060,864 bytes, write I/O 0; profile boundaries and cleanup limitation are recorded in .workflow/acceptance.json."
+    },
+    {
+      "id": "ARTIFACT-PREFLIGHT-GLOBAL-RECONCILIATION",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "A preflight read triggered global artifact reconciliation, adding filesystem/MT5 work to ordinary UI access.",
+      "evidence": "Artifact preflight no longer invokes global reconciliation; test_artifact_inventory_read_does_not_reconcile_or_probe_mt5 and artifact route tests protect read-only behavior."
     }
   ],
   "schema_version": 1

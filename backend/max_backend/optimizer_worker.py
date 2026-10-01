@@ -3,6 +3,8 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import os
+import time
 import traceback
 from pathlib import Path
 from typing import Any
@@ -15,19 +17,25 @@ from .optimizer_core import (
     eligibility_audit,
     optimizer_fitness_for_request,
     parse_optimization_xml,
+    report_matches_request,
     select_winner,
     sha256_file,
+    optimization_report_identity,
     unresolved_weighted_contenders,
 )
 from .optimizer_scientist_transition import _refine_for_next_round
+from .optimizer_candidates import candidate_projection_payload
 from .optimizer_runtime import (
     ReportPending,
     clear_stale_sidecar,
+    committed_round_dir,
     commit_round_evidence,
     compile_ea,
+    discard_raw_round_staging,
     job_evidence_dir,
     launch_mt5,
     prepare_round,
+    report_fingerprint,
     round_evidence_dir,
     snapshot_compatible_reports,
     stage_raw_round_evidence,
@@ -108,6 +116,7 @@ def _save_phase(
     round_no: int,
     state: dict[str, Any],
     phase: str,
+    candidate_projection: dict[str, Any] | None = None,
     **fields: Any,
 ) -> dict[str, Any]:
     payload = {**state, **fields, "phase": phase}
@@ -123,6 +132,7 @@ def _save_phase(
         parsed_passes=fields.get("parsed_passes"),
         eligible_passes=fields.get("eligible_passes"),
         winner_pass=fields.get("winner_pass"),
+        candidate_projection=candidate_projection,
     )
     write_state_snapshot(job_id, round_no, record["state"])
     return record["state"]
@@ -147,7 +157,9 @@ def _load_parsed_round(
     job_id: str,
     round_no: int,
 ) -> tuple[list[OptimizationPass], dict[str, Any], OptimizationPass | None]:
-    evidence = round_evidence_dir(job_id, round_no)
+    evidence = committed_round_dir(job_id, round_no)
+    if not evidence.is_dir():
+        evidence = round_evidence_dir(job_id, round_no)
     passes_obj = json.loads((evidence / "passes.json").read_text(encoding="utf-8"))
     audit = json.loads((evidence / "eligibility_audit.json").read_text(encoding="utf-8"))
     rows = [_pass_from_payload(item) for item in passes_obj["passes"]]
@@ -178,15 +190,16 @@ def execute_round(
 
     phase = str(state.get("phase") or "PREPARED")
     if phase == "PARSED":
+        discard_raw_round_staging(job_id, round_no)
         return _load_parsed_round(job_id, round_no)
 
-    if phase == "MT5_RUNNING":
+    if phase in {"LAUNCH_INTENT", "MT5_RUNNING", "MT5_PROCESS_CONFIRMED"}:
         state = _save_phase(
             job_id,
             round_no,
             state,
             "MT5_COMPLETE_UNCONFIRMED",
-            recovery_reason="WORKER_RESTART_DURING_MT5_RUNNING_NO_RELAUNCH",
+            recovery_reason="WORKER_RESTART_AFTER_LAUNCH_INTENT_NO_RELAUNCH",
         )
         phase = "MT5_COMPLETE_UNCONFIRMED"
 
@@ -199,8 +212,9 @@ def execute_round(
             job_id,
             round_no,
             state,
-            "MT5_RUNNING",
+            "LAUNCH_INTENT",
             prelaunch_report_snapshot=prelaunch,
+            execution_attempt_id=state["optimizer_run_nonce"],
         )
         update_job(
             job_id,
@@ -210,10 +224,21 @@ def execute_round(
             message=f"Real MT5 native optimization round {round_no}/{request['max_rounds']}",
             mark_started=True,
         )
+        def confirm_mt5_process(identity: dict[str, Any]) -> None:
+            nonlocal state
+            state = _save_phase(
+                job_id,
+                round_no,
+                state,
+                "MT5_PROCESS_CONFIRMED",
+                mt5_process_identity=identity,
+            )
+
         returncode = launch_mt5(
             request,
             ini_path=state["ini_path"],
             timeout_sec=21600,
+            on_process=confirm_mt5_process,
         )
         state = _save_phase(
             job_id,
@@ -224,12 +249,20 @@ def execute_round(
         )
         phase = "MT5_COMPLETE"
 
+    raw_manifest_path = (
+        round_evidence_dir(job_id, round_no)
+        / ".staging"
+        / "raw-freeze"
+        / "raw-manifest.json"
+    )
+    has_frozen_raw_evidence = raw_manifest_path.is_file()
+
     if phase in {
         "MT5_COMPLETE",
         "MT5_COMPLETE_UNCONFIRMED",
         "WAITING_FOR_REPORT",
         "REPORT_READY",
-    }:
+    } and not (phase == "REPORT_READY" and has_frozen_raw_evidence):
         report: Path | None = None
         selection_mode = str(state.get("report_selection_mode") or "")
         checkpointed = str(state.get("report_path") or "")
@@ -272,7 +305,8 @@ def execute_round(
             state,
             "REPORT_READY",
             report_path=str(report),
-            report_identity={},
+            report_identity=optimization_report_identity(report),
+            report_fingerprint=report_fingerprint(report),
             report_selection_mode=selection_mode,
         )
         phase = "REPORT_READY"
@@ -280,17 +314,20 @@ def execute_round(
     if phase != "REPORT_READY":
         raise RuntimeError(f"Unsupported round recovery phase: {phase}")
 
-    metrics_path = Path(state["optimizer_metrics_path"])
-    if not metrics_path.is_file():
-        raise FileNotFoundError(
-            f"Optimizer Weighted-R sidecar missing: {metrics_path}"
-        )
-
+    metrics_path = Path(state.get("optimizer_metrics_path") or "")
+    if not has_frozen_raw_evidence:
+        if not metrics_path.is_file():
+            raise FileNotFoundError(
+                f"Optimizer Weighted-R sidecar missing: {metrics_path}"
+            )
+        if not report_matches_request(Path(state["report_path"]), request):
+            raise RuntimeError("OPTIMIZER_REPORT_IDENTITY_MISMATCH_BEFORE_RAW_FREEZE")
     raw_evidence = stage_raw_round_evidence(
         job_id=job_id,
         round_no=round_no,
         report=Path(state["report_path"]),
         metrics_path=metrics_path,
+        expected_report_fingerprint=state.get("report_fingerprint"),
     )
     state = _save_phase(
         job_id,
@@ -306,10 +343,12 @@ def execute_round(
         current_round=round_no,
         message=f"Parsing real MT5 round {round_no} evidence",
     )
+    frozen_report = Path(state["raw_report_path"])
+    frozen_metrics = Path(state["raw_sidecar_path"])
     rows = parse_optimization_xml(
-        state["report_path"],
+        frozen_report,
         round_no=round_no,
-        metrics_path=metrics_path,
+        metrics_path=frozen_metrics,
         expected_nonce=int(state["optimizer_run_nonce"]),
         fixed_param_values=request["fixed_param_values"],
         optimize_params=request["optimize_params"],
@@ -338,17 +377,31 @@ def execute_round(
     evidence = commit_round_evidence(
         job_id=job_id,
         round_no=round_no,
-        report=Path(state["report_path"]),
-        metrics_path=metrics_path,
+        report=frozen_report,
+        metrics_path=frozen_metrics,
         audit=audit,
         passes_payload=[row.payload() for row in rows],
         report_selection_mode=str(state.get("report_selection_mode") or "IDENTITY_MATCH"),
+    )
+    projection = candidate_projection_payload(
+        job_id=job_id,
+        request=request,
+        round_no=round_no,
+        passes_payload=[row.payload() for row in rows],
+        report_path=evidence["report_path"],
+        sidecar_path=evidence["sidecar_path"],
+        report_sha256=evidence["report_sha256"],
+        sidecar_sha256=evidence["sidecar_sha256"],
+        bundle_path=evidence["bundle_path"],
+        request_path=job_evidence_dir(job_id) / "request.json",
+        run_nonce=int(state["optimizer_run_nonce"]),
     )
     _save_phase(
         job_id,
         round_no,
         state,
         "PARSED",
+        candidate_projection=projection,
         report_path=evidence["report_path"],
         report_sha256=evidence["report_sha256"],
         sidecar_path=evidence["sidecar_path"],
@@ -361,6 +414,7 @@ def execute_round(
             None if current_pool_workflow else winner.pass_no if winner else None
         ),
     )
+    discard_raw_round_staging(job_id, round_no)
     return rows, audit, winner
 
 
@@ -498,10 +552,21 @@ def _register_committed_winner(
     return 0
 
 
-def run_job(job_id: str, *, resume: bool = False) -> int:
+def run_job(
+    job_id: str,
+    *,
+    resume: bool = False,
+    launch_token: str | None = None,
+) -> int:
     job = get_job(job_id)
     if job is None:
         raise FileNotFoundError(job_id)
+    if launch_token:
+        job = _await_worker_launch_confirmation(
+            job_id,
+            launch_token,
+            resume=resume,
+        )
     request = job["request"]
 
     current_pool_workflow = optimizer_uses_owner_selection(request)
@@ -612,7 +677,21 @@ def run_job(job_id: str, *, resume: bool = False) -> int:
     except Exception as exc:
         current = get_job(job_id)
         stage = str((current or {}).get("status") or "UNKNOWN")
+        round_record = get_round(job_id, round_no)
+        round_phase = str((round_record or {}).get("phase") or "")
         diagnostic = _diagnostic(job_id, stage, exc, round_no)
+        if round_phase in {"LAUNCH_INTENT", "MT5_RUNNING", "MT5_PROCESS_CONFIRMED"}:
+            update_job(
+                job_id,
+                status="EXECUTION_UNCERTAIN",
+                active=False,
+                current_round=round_no,
+                message="MT5 execution state is uncertain; resume will reconcile process and report evidence.",
+                first_blocker="MT5_EXECUTION_REQUIRES_RECONCILIATION",
+                terminal_result="INTERRUPTED",
+                mark_completed=True,
+            )
+            return 5
         update_job(
             job_id,
             status="FAILED",
@@ -626,12 +705,45 @@ def run_job(job_id: str, *, resume: bool = False) -> int:
         return 1
 
 
+def _await_worker_launch_confirmation(
+    job_id: str,
+    launch_token: str,
+    *,
+    resume: bool,
+) -> dict[str, Any]:
+    """Do not let a child begin work before its parent durably records ownership."""
+    expected_status = "RESUMING" if resume else "STARTING"
+    worker_pid = os.getpid()
+    deadline = time.monotonic() + 15.0
+    while True:
+        job = get_job(job_id)
+        if job is None:
+            raise FileNotFoundError(job_id)
+        if str(job.get("launch_token") or "") != str(launch_token):
+            raise RuntimeError("OPTIMIZER_WORKER_LAUNCH_TOKEN_MISMATCH")
+        if not bool(job.get("active")) or str(job.get("status") or "") != expected_status:
+            raise RuntimeError("OPTIMIZER_WORKER_LAUNCH_CLAIM_LOST")
+        persisted_pid = int(job.get("worker_pid") or 0)
+        if persisted_pid == worker_pid:
+            return job
+        if persisted_pid > 0:
+            raise RuntimeError("OPTIMIZER_WORKER_LAUNCH_PID_MISMATCH")
+        if time.monotonic() >= deadline:
+            raise RuntimeError("OPTIMIZER_WORKER_LAUNCH_CONFIRMATION_TIMEOUT")
+        time.sleep(0.1)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--job-id", required=True)
+    parser.add_argument("--launch-token", default="")
     parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
-    return run_job(args.job_id, resume=bool(args.resume))
+    return run_job(
+        args.job_id,
+        resume=bool(args.resume),
+        launch_token=str(args.launch_token or "") or None,
+    )
 
 
 if __name__ == "__main__":

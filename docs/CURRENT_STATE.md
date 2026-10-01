@@ -3,22 +3,22 @@
 # CURRENT STATE
 
 Last updated: generated from current specs
-Authority verified at SHA: e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d
+Authority verified at SHA: 5a30097d76a46ad077bed8dfd978eb6b27f83264
 Governance profile: strict
 
 ## Current phase
-Phase: PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE
+Phase: STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING
 Status: IN_PROGRESS
-Roadmap phase: PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE
+Roadmap phase: STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING
 ROADMAP_SYNC: PASS
 
 ## Source
 Repository: maxqstudio/max-trading-agent
-Branch: work/strategy-stabilization-research-purge
+Branch: work/optimizer-durability-performance-hardening
 Authoritative SHA: external final acceptance evidence
-Last accepted SHA: e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d
+Last accepted SHA: 5a30097d76a46ad077bed8dfd978eb6b27f83264
 Current candidate SHA: external final acceptance evidence
-Current source digest: 9cdaece5af55945d249a2a50e214d04aa6428e80a98c1d5aee8115c58493b126
+Current source digest: 14bfad2c4d182c18852ac6dad75b8e97d899a8ec9d8bfc38613d9087a0813614
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
@@ -35,37 +35,39 @@ PROJECT_DOCS_SYNC: PASS
 ## Sequence governance
 Sequence policy: REQUIRED
 Current sequence mode: DURING
-Current sequence session: FLOW-ARTIFACT-CONTROL and FLOW-STRATEGY-RESET-RECOVERY
-SEQUENCE_SYNC: PASS_LOCAL: 7 DURING/CURRENT sessions, 0 failed, 0 Python parse failures
+Current sequence session: FLOW-OPTIMIZER-DURABILITY-PERFORMANCE
+SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; all session/graph source digests match 8a5b70a056203d393d7efe83fe68f1eec637b51fe81845f45b89f9c8f73447c4. Generator reports one SyntaxError only in ignored pytest fixture .pytest-baseline-e4af; the canonical sequence validator accepts all 8 sessions with no warnings.
 
 ## Proven
-- Starting source authority is maxqstudio/max-trading-agent main e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d; the authorized working branch is work/strategy-stabilization-research-purge.
-- At the authorized baseline, backend regression completed with 706 passed and frontend completed with 53 passed across 10 files; schema version was 13.
-- Skill Workflow upstream main was checked and matches the pinned authority 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8; the pin is preserved.
-- The prior R02 phases were historically accepted in their respective source revisions, but the Owner has rejected the active Research subsystem; those implementations are not current runtime or compatibility authority.
-- Local candidate backend regression completed with 410 passed, 0 skipped and 0 failed; frontend completed with 46 passed across 8 files. pip check, npm dependency tree, frontend build and sequence validation passed; lint passed with two warnings.
-- Critical browser smoke exercised recovery progress/success and visible blocked artifact/reset controls with all API responses mocked; no Owner database, live backend or MT5 runtime was used.
+- Starting source authority is maxqstudio/max-trading-agent main 5a30097d76a46ad077bed8dfd978eb6b27f83264; work is isolated on work/optimizer-durability-performance-hardening.
+- Accepted starting floor: backend 410 passed, frontend 46 passed across 8 files, schema 14; Skill Workflow authority is 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8.
+- Current Skill_Workflow/main was fetched and verified unchanged at 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8; no newer tools or validator patches were adopted.
+- Optimizer draft, launch/recovery identity, atomic evidence, read-model, frontend request lifecycle, and visible action feedback are under the authorized source-hardening scope.
+- Source tests and 750-candidate API profile used synthetic SQLite/evidence only; actual qualified-candidate endpoint median was 23.651 ms, p95 68.983 ms, with a 61,462-byte page; no real MT5 or market data was used.
+- A separate Windows process-counter run measured CPU 1.0781 s, peak working set 64,405,504 bytes, read I/O 6,060,864 bytes and write I/O 0 over 108 requests; qualified route was mocked in that resource run.
 
 ## Not proven
-- Exact hosted PR/main CI acceptance of the Strategy lifecycle, artifact and reset/recovery candidate; local tests do not substitute for hosted acceptance.
-- Exact source-only/secret scan, final governance validation, PR CI, merged-main CI and external exact-SHA acceptance for this phase.
-- Actual local Owner-state backup/reset and fresh Optimizer start verification.
-- Owner declaration that a real MT5 backtest/sample dataset is READY.
+- Final governance/source-only scan and exact hosted branch/PR/main CI acceptance for this candidate.
+- Exact branch/PR/main Windows CI and external final-SHA acceptance under D-012.
+- Owner fresh real Optimizer, Challenger selection, Champion promotion, MT5 backtest, and runtime acceptance.
+- Cleanup of two synthetic profile directories under ignored .venv is incomplete: automatic cleanup hit a Windows SQLite file lock and explicit recursive cleanup was rejected by shell policy; no Owner data is present.
 
 ## Known blockers
-- The Owner-declared real MT5 backtest/sample dataset is not yet READY; fresh R00-R11 remain blocked after this Strategy stabilization phase.
+- Exact hosted PR/main Windows CI acceptance for this candidate is not yet proven.
+- Owner-PC runtime and fresh real Strategy Optimizer behavior remain NOT_PROVEN and deferred.
 
 ## Known defects
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Complete only PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE and validate it through Windows GitHub Actions, PR, merge and exact-main CI.
-- After successful closeout, Owner manually performs Strategy Optimizer → Challenger selection → Champion promotion → real MT5 backtest/sample preparation.
-- Control Room may authorize a fresh R00 source phase only after REAL_MT5_BACKTEST_SAMPLE_READY is explicitly declared.
+- Complete only STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING; run required local tests, performance measurements, governance and exact-tree security scan.
+- After local gates pass, push the authorized work branch, require green Windows CI on the exact PR head, squash merge, and require green Windows CI on exact main.
+- After source acceptance, Owner may manually start a fresh real Strategy Optimizer; no automatic optimizer run, Research phase, or Champion mutation is authorized here.
+- Fresh R00-R11 remains blocked until a real MT5 sample is Owner-declared READY and Control Room separately authorizes the next source phase.
 
 ## Explicitly blocked
-- Real current-epoch R00-R11 Research execution, model training, dataset execution, ONNX, or Research Challenger creation; the rejected Research implementation is being removed.
-- Starting fresh R00 before the Owner declares a real MT5 backtest/sample dataset READY and Control Room authorizes that future source phase.
-- Broker login, Strategy Tester, real MT5 scientific execution, or Owner-PC runtime acceptance during this source repair.
-- Automatic transition from this repair phase into R00; after closure the next gate is Owner Strategy Champion and real MT5 sample preparation.
-- Any unrelated roadmap expansion or reuse of the deleted R00/R01/R02 implementation.
+- Real MT5 optimization, MetaEditor compilation, broker/data-root execution, and Owner-PC runtime acceptance during this source phase.
+- Owner fresh real Optimizer execution before source and exact-main Windows CI acceptance; no automatic long-running job is started by the Builder.
+- Fresh R00-R11 Research execution, real model training, Research dataset creation, ONNX, Research Challenger creation, and Champion mutation; Research remains paused and roadmap-gated.
+- Strategy Challenger selection/promotion and live MT5 backtest during this source implementation phase.
+- Unrelated roadmap or product-scope expansion.

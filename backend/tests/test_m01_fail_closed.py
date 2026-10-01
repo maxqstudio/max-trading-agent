@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -16,7 +17,13 @@ from max_backend.optimizer_core import (
     parse_optimization_xml,
     parse_optimizer_metrics_csv,
 )
-from max_backend.optimizer_runtime import clear_stale_sidecar, compile_ea, launch_mt5
+from max_backend.optimizer_runtime import (
+    clear_stale_sidecar,
+    compile_ea,
+    launch_mt5,
+    report_fingerprint,
+    stage_raw_round_evidence,
+)
 
 
 def request_for_compile(source: Path, tmp_path: Path) -> dict:
@@ -188,8 +195,8 @@ def test_mt5_nonzero_exit_fails_closed(
     monkeypatch.setattr(runtime, "_matching_terminal_pids", lambda _terminal: [])
     monkeypatch.setattr(
         runtime.subprocess,
-        "run",
-        lambda *args, **kwargs: SimpleNamespace(returncode=7),
+        "Popen",
+        lambda *args, **kwargs: SimpleNamespace(pid=4321, wait=lambda **_kwargs: 7),
     )
     with pytest.raises(RuntimeError, match="MT5_EXECUTION_FAILURE"):
         launch_mt5(request, ini_path=ini, timeout_sec=10)
@@ -211,6 +218,99 @@ def test_stale_sidecar_clear_failure_is_not_ignored(
     monkeypatch.setattr(Path, "unlink", fail_unlink)
     with pytest.raises(RuntimeError, match="STALE_SIDECAR_CANNOT_BE_CLEARED"):
         clear_stale_sidecar({"optimizer_metrics_path": str(sidecar)})
+
+
+def test_raw_freeze_replay_verifies_existing_copy_without_original_sources(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(runtime, "OPTIMIZER_EVIDENCE_ROOT", tmp_path / "optimizer")
+    report = tmp_path / "Max_MTF.xml"
+    metrics = tmp_path / "Max_MTF_metrics.csv"
+    report.write_text("synthetic report source", encoding="utf-8")
+    metrics.write_text("synthetic weighted-r source", encoding="utf-8")
+    expected = report_fingerprint(report)
+
+    first = stage_raw_round_evidence(
+        job_id="SYNTHETIC-JOB",
+        round_no=1,
+        report=report,
+        metrics_path=metrics,
+        expected_report_fingerprint=expected,
+    )
+    report.unlink()
+    metrics.unlink()
+
+    replay = stage_raw_round_evidence(
+        job_id="SYNTHETIC-JOB",
+        round_no=1,
+        report=report,
+        metrics_path=metrics,
+        expected_report_fingerprint=expected,
+    )
+
+    assert replay == first
+    assert Path(replay["raw_report_path"]).read_text(encoding="utf-8") == "synthetic report source"
+    assert Path(replay["raw_sidecar_path"]).read_text(encoding="utf-8") == "synthetic weighted-r source"
+
+
+def test_raw_freeze_rejects_manifest_bound_to_different_source_fingerprint(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(runtime, "OPTIMIZER_EVIDENCE_ROOT", tmp_path / "optimizer")
+    report = tmp_path / "Max_MTF.xml"
+    metrics = tmp_path / "Max_MTF_metrics.csv"
+    report.write_text("synthetic report source", encoding="utf-8")
+    metrics.write_text("synthetic weighted-r source", encoding="utf-8")
+    expected = report_fingerprint(report)
+    frozen = stage_raw_round_evidence(
+        job_id="SYNTHETIC-JOB",
+        round_no=1,
+        report=report,
+        metrics_path=metrics,
+        expected_report_fingerprint=expected,
+    )
+    manifest_path = Path(frozen["raw_manifest_path"])
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["source_report_fingerprint"] = {"size": 0, "mtime_ns": 0}
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    with pytest.raises(RuntimeError, match="RAW_ROUND_FREEZE_SOURCE_FINGERPRINT_MISMATCH"):
+        stage_raw_round_evidence(
+            job_id="SYNTHETIC-JOB",
+            round_no=1,
+            report=report,
+            metrics_path=metrics,
+            expected_report_fingerprint=expected,
+        )
+
+
+def test_raw_freeze_discards_partial_staging_and_rebuilds_from_unchanged_sources(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(runtime, "OPTIMIZER_EVIDENCE_ROOT", tmp_path / "optimizer")
+    report = tmp_path / "Max_MTF.xml"
+    metrics = tmp_path / "Max_MTF_metrics.csv"
+    report.write_text("synthetic report source", encoding="utf-8")
+    metrics.write_text("synthetic weighted-r source", encoding="utf-8")
+    expected = report_fingerprint(report)
+    partial = runtime.round_evidence_dir("SYNTHETIC-JOB", 1) / ".staging" / "raw-freeze"
+    partial.mkdir(parents=True)
+    (partial / "partial-copy.tmp").write_text("interrupted write", encoding="utf-8")
+
+    frozen = stage_raw_round_evidence(
+        job_id="SYNTHETIC-JOB",
+        round_no=1,
+        report=report,
+        metrics_path=metrics,
+        expected_report_fingerprint=expected,
+    )
+
+    assert Path(frozen["raw_manifest_path"]).is_file()
+    assert not (partial / "partial-copy.tmp").exists()
+    assert Path(frozen["raw_report_path"]).read_text(encoding="utf-8") == "synthetic report source"
 
 
 def test_freeze_rejects_mt5_unavailable(monkeypatch: pytest.MonkeyPatch) -> None:
