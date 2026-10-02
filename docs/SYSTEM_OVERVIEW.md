@@ -260,8 +260,7 @@ compiler does not infer them from implementation names.
 ## Current project state
 
 Next authorized actions:
-- Repair OPTIMIZER-WORKER-IDENTITY-CIM-TIMEOUT on the existing PR #17 branch using authenticated deterministic worker identity plus native PID/path/creation-time verification; keep stop/recovery fail-closed.
-- Run bounded repeated real temporary-venv worker lifecycle regressions, the full backend/frontend and dependency checks, governance, exact-tree source-only scan, then push and require both push and PR-head Windows CI PASS before stopping for Control Room audit. Do not merge.
+- After exact push and PR-head Windows CI pass on the final governance-only PR #17 head, stop and return it to Control Room for audit. Do not merge.
 - Owner-PC runtime, real MT5 diagnostics, and all R00-R11 Research remain out of scope for this repair; runtime stays NOT_PROVEN and Research remains PAUSED.
 
 Blocked actions:
@@ -274,7 +273,7 @@ Blocked actions:
 Known blockers:
 - The authorized bounded V2 MT5 diagnostic is blocked before launch: current Windows commit headroom is 12.71 GiB, below the frozen one-agent requirement of 32 GiB. Do not bypass the resource guard or change OS/pagefile settings.
 - Owner-reported full-range 17D Fast Genetic attempt crashed under Windows commit-memory exhaustion; exact final Owner Optimizer/runtime acceptance remains NOT_PROVEN.
-- OPTIMIZER-WORKER-IDENTITY-CIM-TIMEOUT is open: push CI run 37004211038 attempt 1 timed out in PowerShell/CIM worker discovery on exact head b167d2a6df432ed6c146f1fabe100521cc7feefc. Repair source and tests before returning PR #17 for audit.
+- The final governance-only PR #17 branch head must pass exact push and PR-head CI before it is returned to Control Room for audit; do not merge.
 
 ## Proven vs not proven
 
@@ -282,19 +281,20 @@ Known blockers:
 
 - Accepted starting authority: maxqstudio/max-trading-agent main 7f3fade6fd71892266ad18a178dab9d503b5ce77; baseline backend 456 passed, frontend 53 passed across 8 files, schema 15.
 - Current Skill_Workflow/main was fetched and verified at 964481ed1609f87904ba9e08890bffc0a10c3fd4; its exact governance-tool delta was inspected and the applicable tools are vendored byte-identically, with no local validator patch.
-- The Git-aware source inventory excludes Git-ignored Owner Optimizer XML artifacts without modifying them; all 8 DURING/CURRENT sessions and generated actual graphs were regenerated and validate at digest 00f0ef0b45150135315cd619f2976a134579c4e63c9e75527bc4f15d33267af2.
+- The Git-aware source inventory excludes Git-ignored Owner Optimizer XML artifacts without modifying them; all 8 DURING/CURRENT sessions and generated actual graphs were regenerated and validate at digest fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b.
 - Optimizer draft, launch/recovery identity, atomic evidence, read-model, frontend request lifecycle, and visible action feedback are under the authorized source-hardening scope.
 - Source tests and 750-candidate API profile used synthetic SQLite/evidence only; actual qualified-candidate endpoint median was 23.651 ms, p95 68.983 ms, with a 61,462-byte page; no real MT5 or market data was used.
 - A separate Windows process-counter run measured CPU 1.0781 s, peak working set 64,405,504 bytes, read I/O 6,060,864 bytes and write I/O 0 over 108 requests; qualified route was mocked in that resource run.
 - Historical PR15 bounded Stage C/D tests and Optimizer UI control-flow evidence remain accepted as historical evidence; they did not represent the later Owner-reported long-range commit-memory failure and do not prove V2 behavior.
 - V2 targeted optimizer/resource regression passes 171/171; full backend passes 474 tests with zero skips/failures; frontend passes 53 tests, with lint, build, npm tree and pip check passing. Canonical Scientist knowledge was rebuilt after the first full-suite run exposed stale source hashes.
-- On exact PR #17 head b167d2a6df432ed6c146f1fabe100521cc7feefc, PR-head run 37004215150 passed; push run 37004211038 attempt 2 passed after attempt 1 failed the actual venv worker identity test with an 8-second PowerShell/CIM TimeoutExpired. This exposes open defect OPTIMIZER-WORKER-IDENTITY-CIM-TIMEOUT; a green rerun does not resolve it. Exact IDs remain external per D-012. PR #17 is open and unmerged; PR #16 is closed and superseded.
+- The baseline PR #17 head b167d2a6df432ed6c146f1fabe100521cc7feefc had one push attempt fail the actual venv worker identity test with an 8-second PowerShell/CIM TimeoutExpired; its passing reruns did not resolve the defect. The repair source candidate removed that production dependency, passed 32 focused identity/recovery/stop tests, passed 3 repeated venv runs (15/15 actual worker lifecycles), passed full backend (483, zero skips/failures), and passed both push and PR-head Windows CI across all three jobs. Exact final SHA/run identities are external per D-012. PR #17 remains open and unmerged; PR #16 is closed and superseded.
+- Worker identity is now proven on the repair source candidate: deterministic authenticated named-pipe handshake; exact job/token/peer PID/executable/process-creation binding; verified-only termination; 483 full backend tests passed; repeated real Windows venv tests passed 15/15; both push and PR-head CI passed. The current task adds only final governance status after this evidence; no Owner runtime or MT5 process was used.
 - Read-only active-job check found zero active Optimizer jobs and zero terminal/tester processes. Frozen V2 preflight safely returned BLOCKED at 12.71 GiB commit headroom versus 32 GiB required for one bounded agent; no MT5 process was launched and no Owner draft or OS setting was changed.
 
 ### Not proven
 
 - Owner runtime acceptance remains NOT_PROVEN because the V2 diagnostic was blocked before launch by commit preflight; exact final SHA/run identity remains external per D-012.
-- Worker identity reliability remains NOT_PROVEN until the PowerShell/CIM discovery path is removed, real Windows venv handshake tests pass repeatedly, and the repair candidate passes full local and hosted gates.
+- Control Room has not yet accepted PR #17; no merge or phase closure is claimed. Exact final SHA and CI run identities remain external evidence per D-012.
 - Full production-scale/long-range Owner Strategy Optimizer execution, Challenger selection, Champion promotion, MT5 backtest, and end-to-end runtime acceptance.
 - Fresh R00-R11 Research execution, model training, ONNX, Research Challenger creation, or Champion mutation.
 

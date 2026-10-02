@@ -178,14 +178,14 @@
       "id": "OPTIMIZER-COMMIT-MEMORY-EXHAUSTION",
       "status": "IN_PROGRESS",
       "summary": "Long-range Fast Genetic Optimizer exhausted Windows commit memory despite prior physical-RAM and local-agent admission.",
-      "evidence": "Owner-reported full-range 17D Fast Genetic crash is the V2 repair trigger. PR #17 source hardening at b167d2a6df432ed6c146f1fabe100521cc7feefc has local full regression, source scan, and PR-head CI; push CI passed on attempt 2 after attempt 1 exposed OPTIMIZER-WORKER-IDENTITY-CIM-TIMEOUT. The worker identity defect remains open pending its source repair, tests, and new hosted CI. Historical Stage C/D bounded results remain valid but do not prove current V2 runtime safety."
+      "evidence": "Owner-reported full-range 17D Fast Genetic crash remains the V2 repair trigger. The PR #17 V2 source candidate passed full local regression (483 backend tests, zero skips/failures; frontend 53/8; lint/build/npm tree/pip check), governance, exact-tree/secret scan, and both Windows push and PR-head CI. The separate OPTIMIZER-WORKER-IDENTITY-CIM-TIMEOUT exposed by baseline CI was repaired with deterministic authenticated handshake/native process identity, repeated real venv tests, and both hosted CI triggers passing. REAL V2 MT5 remains NOT_PROVEN because the bounded diagnostic was blocked before launch by commit headroom; FULL OWNER OPTIMIZER remains NOT_PROVEN; Research R00-R11 remains PAUSED. Exact candidate SHA/run identities remain external per D-012. Historical Stage C/D bounded results remain valid but do not prove current V2 runtime safety."
     },
     {
       "id": "OPTIMIZER-WORKER-IDENTITY-CIM-TIMEOUT",
-      "status": "IN_PROGRESS",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
       "summary": "Optimizer worker launch identity discovery depends on PowerShell/CIM global process enumeration with a fixed 8-second timeout.",
-      "evidence": "GitHub Windows push run 37004211038 attempt 1 failed test_windows_venv_worker_resolution_finds_actual_child_process with subprocess.TimeoutExpired in optimizer_jobs._find_worker_by_token while powershell.exe/Get-CimInstance enumerated Win32_Process. PR-head run 37004215150 and push attempt 2 passed the same exact SHA b167d2a6df432ed6c146f1fabe100521cc7feefc, demonstrating nondeterminism but not closing the production dependency.",
-      "resolution": "Replace shell/CIM discovery with a deterministic authenticated worker handshake and native process identity/termination verification. Keep open until focused/repeated Windows tests, full regression, governance, source scan, and exact push plus PR-head CI pass."
+      "evidence": "Baseline GitHub Windows push run 37004211038 attempt 1 failed test_windows_venv_worker_resolution_finds_actual_child_process with subprocess.TimeoutExpired in optimizer_jobs._find_worker_by_token while powershell.exe/Get-CimInstance enumerated Win32_Process; reruns of that same baseline did not close the defect. The repair source candidate passed 32 focused identity/recovery/stop tests, 3 repeated real Windows venv tests covering 15/15 worker lifecycles, full backend (483 passed, 0 skipped, 0 failed), governance, exact-tree/secret scanning, and both push and PR-head Windows CI across all three jobs. Exact final SHA and CI run identities are external evidence per D-012.",
+      "resolution": "PowerShell/CIM worker discovery is replaced by a deterministic authenticated one-use named-pipe handshake and native actual-peer PID, executable-path, process-creation-identity, and verified-termination checks. Source and hosted acceptance gates pass on the repair candidate. This remains an unmerged candidate; phase closure and Owner runtime are not claimed."
     }
   ],
   "schema_version": 1
