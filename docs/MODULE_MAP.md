@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 00f0ef0b45150135315cd619f2976a134579c4e63c9e75527bc4f15d33267af2
+Source digest: fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -34,14 +34,15 @@ Generated/refreshed: current compiler run
 | backend/max_backend/optimizer_candidates.py | Python | 679 | backend/max_backend | NO |
 | backend/max_backend/optimizer_core.py | Python | 1652 | backend/max_backend | NO |
 | backend/max_backend/optimizer_draft.py | Python | 211 | backend/max_backend | NO |
-| backend/max_backend/optimizer_jobs.py | Python | 1029 | backend/max_backend | NO |
+| backend/max_backend/optimizer_jobs.py | Python | 931 | backend/max_backend | NO |
 | backend/max_backend/optimizer_resource_runtime.py | Python | 474 | backend/max_backend | NO |
 | backend/max_backend/optimizer_resources.py | Python | 600 | backend/max_backend | NO |
 | backend/max_backend/optimizer_runtime.py | Python | 794 | backend/max_backend | NO |
 | backend/max_backend/optimizer_scientist.py | Python | 767 | backend/max_backend | NO |
 | backend/max_backend/optimizer_scientist_transition.py | Python | 670 | backend/max_backend | NO |
 | backend/max_backend/optimizer_store.py | Python | 786 | backend/max_backend | NO |
-| backend/max_backend/optimizer_worker.py | Python | 824 | backend/max_backend | NO |
+| backend/max_backend/optimizer_worker.py | Python | 835 | backend/max_backend | NO |
+| backend/max_backend/optimizer_worker_identity.py | Python | 428 | backend/max_backend | NO |
 | backend/max_backend/path_safety.py | Python | 98 | backend/max_backend | NO |
 | backend/max_backend/promotion_service.py | Python | 1178 | backend/max_backend | NO |
 | backend/max_backend/schema.py | Python | 1 | backend/max_backend | NO |
@@ -57,7 +58,7 @@ Generated/refreshed: current compiler run
 | backend/tests/conftest.py | Python | 17 | backend/tests | YES |
 | backend/tests/test_m00_foundation.py | Python | 326 | backend/tests | YES |
 | backend/tests/test_m01_fail_closed.py | Python | 468 | backend/tests | YES |
-| backend/tests/test_m01_jobs.py | Python | 86 | backend/tests | YES |
+| backend/tests/test_m01_jobs.py | Python | 126 | backend/tests | YES |
 | backend/tests/test_m01_lifecycle.py | Python | 193 | backend/tests | YES |
 | backend/tests/test_m01_optimizer_core.py | Python | 1265 | backend/tests | YES |
 | backend/tests/test_m01_optimizer_store.py | Python | 218 | backend/tests | YES |
@@ -79,9 +80,10 @@ Generated/refreshed: current compiler run
 | backend/tests/test_m07_true_mtf.py | Python | 257 | backend/tests | YES |
 | backend/tests/test_m08_strategy_results.py | Python | 2018 | backend/tests | YES |
 | backend/tests/test_optimizer_draft.py | Python | 144 | backend/tests | YES |
-| backend/tests/test_optimizer_reliability.py | Python | 866 | backend/tests | YES |
+| backend/tests/test_optimizer_reliability.py | Python | 846 | backend/tests | YES |
 | backend/tests/test_optimizer_resources.py | Python | 596 | backend/tests | YES |
 | backend/tests/test_optimizer_runtime_durability.py | Python | 83 | backend/tests | YES |
+| backend/tests/test_optimizer_worker_identity.py | Python | 361 | backend/tests | YES |
 | backend/tests/test_retired_subsystem_migration.py | Python | 98 | backend/tests | YES |
 | backend/tests/test_strategy_workspace_reset.py | Python | 316 | backend/tests | YES |
 | frontend/src/App.test.tsx | TypeScript/React | 187 | frontend/src | YES |

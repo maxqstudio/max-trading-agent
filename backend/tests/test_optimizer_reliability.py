@@ -8,10 +8,7 @@ import pytest
 import max_backend.optimizer_jobs as optimizer_jobs
 import max_backend.optimizer_worker as optimizer_worker
 from max_backend.db import ensure_baseline_registered, initialize_database
-from max_backend.optimizer_jobs import (
-    _worker_identity_matches,
-    reconcile_optimizer_startup,
-)
+from max_backend.optimizer_jobs import reconcile_optimizer_startup
 from max_backend.optimizer_store import (
     claim_initial_worker_launch,
     claim_resume_worker_launch,
@@ -33,6 +30,27 @@ def make_db(tmp_path: Path) -> Path:
     return path
 
 
+def persisted_worker_identity(
+    job_id: str,
+    *,
+    pid: int = 4321,
+    token: str = "launch-token",
+    executable: str = r"C:\Python313\python.exe",
+    creation_time: str = "worker-created",
+) -> dict[str, object]:
+    return {
+        "pid": pid,
+        "job_id": job_id,
+        "launch_token": token,
+        "worker_module": "max_backend.optimizer_worker",
+        "worker_executable_path": r"D:\max\.venv\Scripts\python.exe",
+        "identity_protocol": "named-pipe-hmac-v1",
+        "startup_identity": "a" * 64,
+        "executable_path": executable,
+        "creation_time": creation_time,
+    }
+
+
 def test_startup_reconciles_worker_loss_before_mt5_to_resumable_state(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
@@ -43,8 +61,6 @@ def test_startup_reconciles_worker_loss_before_mt5_to_resumable_state(
         evidence_root=tmp_path / "artifacts" / "optimizer",
         path=path,
     )
-    monkeypatch.setattr("max_backend.optimizer_jobs._worker_is_alive", lambda *_a, **_k: False)
-    monkeypatch.setattr("max_backend.optimizer_jobs._find_worker_by_token", lambda *_a, **_k: None)
     result = reconcile_optimizer_startup(path=path)
 
     current = get_job(job["job_id"], path=path)
@@ -73,8 +89,6 @@ def test_startup_never_converts_mt5_launch_intent_to_blind_resume(
         state={"phase": "LAUNCH_INTENT", "ini_path": str(tmp_path / "unique.ini")},
         path=path,
     )
-    monkeypatch.setattr("max_backend.optimizer_jobs._worker_is_alive", lambda *_a, **_k: False)
-    monkeypatch.setattr("max_backend.optimizer_jobs._find_worker_by_token", lambda *_a, **_k: None)
     result = reconcile_optimizer_startup(path=path)
 
     current = get_job(job["job_id"], path=path)
@@ -152,203 +166,6 @@ def test_worker_launch_confirmation_cannot_reactivate_a_stopped_claim(tmp_path: 
     assert current["active"] is False
 
 
-def test_worker_ownership_requires_exact_job_token_and_executable() -> None:
-    identity = {
-        "pid": 100,
-        "executable_path": r"C:\Python313\python.exe",
-        "command_line": (
-            '"C:\\Python313\\python.exe" -m max_backend.optimizer_worker '
-            "--job-id job-1 --launch-token token-1"
-        ),
-        "creation_time": "created",
-    }
-    assert _worker_identity_matches(
-        identity,
-        job_id="job-1",
-        launch_token="token-1",
-        expected={"executable_path": identity["executable_path"], "creation_time": "created"},
-    )
-    assert not _worker_identity_matches(
-        identity,
-        job_id="job-1",
-        launch_token="token-2",
-        expected=None,
-    )
-    assert not _worker_identity_matches(
-        identity,
-        job_id="job-10",
-        launch_token="token-1",
-        expected=None,
-    )
-
-
-def test_worker_process_resolution_selects_venv_python_child(tmp_path: Path) -> None:
-    venv = tmp_path / ".venv"
-    (venv / "Scripts").mkdir(parents=True)
-    (venv / "pyvenv.cfg").write_text("home = synthetic\n", encoding="utf-8")
-    job_id = "job-venv-launch"
-    token = "launch-venv-token"
-    command_line = (
-        '"C:\\Python313\\python.exe" -m max_backend.optimizer_worker '
-        f"--job-id {job_id} --launch-token {token}"
-    )
-    matches = [
-        {
-            "pid": 100,
-            "parent_pid": 1,
-            "executable_path": str(venv / "Scripts" / "python.exe"),
-            "command_line": command_line,
-            "creation_time": "launcher-created",
-        },
-        {
-            "pid": 200,
-            "parent_pid": 100,
-            "executable_path": r"C:\Python313\python.exe",
-            "command_line": command_line,
-            "creation_time": "worker-created",
-        },
-    ]
-
-    selected = optimizer_jobs._select_worker_candidate(matches, launcher_pid=100)
-
-    assert selected is not None
-    assert selected["pid"] == 200
-    assert selected["parent_pid"] == 100
-
-
-def test_worker_process_resolution_fails_closed_for_multiple_children(tmp_path: Path) -> None:
-    venv = tmp_path / ".venv"
-    (venv / "Scripts").mkdir(parents=True)
-    (venv / "pyvenv.cfg").write_text("home = synthetic\n", encoding="utf-8")
-    command_line = (
-        '"C:\\Python313\\python.exe" -m max_backend.optimizer_worker '
-        "--job-id job-1 --launch-token token-1"
-    )
-    matches = [
-        {
-            "pid": 100,
-            "parent_pid": 1,
-            "executable_path": str(venv / "Scripts" / "python.exe"),
-            "command_line": command_line,
-            "creation_time": "launcher-created",
-        },
-        {
-            "pid": 200,
-            "parent_pid": 100,
-            "executable_path": r"C:\Python313\python.exe",
-            "command_line": command_line,
-            "creation_time": "worker-one",
-        },
-        {
-            "pid": 201,
-            "parent_pid": 100,
-            "executable_path": r"C:\Python313\python.exe",
-            "command_line": command_line,
-            "creation_time": "worker-two",
-        },
-    ]
-
-    with pytest.raises(RuntimeError, match="OPTIMIZER_WORKER_OWNERSHIP_AMBIGUOUS"):
-        optimizer_jobs._select_worker_candidate(matches, launcher_pid=100)
-
-
-def test_worker_process_resolution_does_not_accept_venv_launcher_alone(tmp_path: Path) -> None:
-    venv = tmp_path / ".venv"
-    (venv / "Scripts").mkdir(parents=True)
-    (venv / "pyvenv.cfg").write_text("home = synthetic\n", encoding="utf-8")
-    matches = [
-        {
-            "pid": 100,
-            "parent_pid": 1,
-            "executable_path": str(venv / "Scripts" / "python.exe"),
-            "command_line": (
-                r"C:\max\.venv\Scripts\python.exe -m max_backend.optimizer_worker "
-                "--job-id job-1 --launch-token token-1"
-            ),
-            "creation_time": "launcher-created",
-        }
-    ]
-
-    assert optimizer_jobs._select_worker_candidate(matches, launcher_pid=100) is None
-
-
-@pytest.mark.skipif(optimizer_jobs.os.name != "nt", reason="Windows Python venv launch behavior")
-def test_windows_venv_worker_resolution_finds_actual_child_process(tmp_path: Path) -> None:
-    venv_root = tmp_path / "worker-launch-venv"
-    created = optimizer_jobs.subprocess.run(
-        [optimizer_jobs.sys.executable, "-m", "venv", "--without-pip", str(venv_root)],
-        capture_output=True,
-        text=True,
-        timeout=60,
-    )
-    assert created.returncode == 0, created.stderr
-    launcher = venv_root / "Scripts" / "python.exe"
-    assert launcher.is_file()
-
-    job_id = "pid-probe-" + optimizer_jobs.uuid.uuid4().hex
-    token = optimizer_jobs.uuid.uuid4().hex
-    process = optimizer_jobs.subprocess.Popen(
-        [
-            str(launcher),
-            "-c",
-            "import time; time.sleep(30)",
-            "max_backend.optimizer_worker",
-            "--job-id",
-            job_id,
-            "--launch-token",
-            token,
-        ],
-        cwd=str(optimizer_jobs.ROOT),
-        creationflags=getattr(optimizer_jobs.subprocess, "CREATE_NO_WINDOW", 0),
-        stdout=optimizer_jobs.subprocess.DEVNULL,
-        stderr=optimizer_jobs.subprocess.DEVNULL,
-    )
-    identity: dict[str, object] | None = None
-    deadline = optimizer_jobs.time.monotonic() + 10.0
-    try:
-        while optimizer_jobs.time.monotonic() < deadline:
-            identity = optimizer_jobs._find_worker_by_token(
-                token,
-                job_id,
-                launcher_pid=int(process.pid),
-            )
-            if identity is not None:
-                break
-            optimizer_jobs.time.sleep(0.1)
-
-        assert identity is not None
-        assert identity["pid"] != process.pid
-        assert identity["parent_pid"] == process.pid
-        current = optimizer_jobs._process_identity(int(identity["pid"]))
-        assert optimizer_jobs._worker_identity_matches(
-            current,
-            job_id=job_id,
-            launch_token=token,
-            expected=identity,
-        )
-    finally:
-        try:
-            if identity is not None:
-                optimizer_jobs._terminate_verified_worker(
-                    int(identity["pid"]),
-                    job_id=job_id,
-                    launch_token=token,
-                    expected=identity,
-                )
-        finally:
-            optimizer_jobs.subprocess.run(
-                ["taskkill", "/PID", str(process.pid), "/T", "/F"],
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-            try:
-                process.wait(timeout=5)
-            except optimizer_jobs.subprocess.TimeoutExpired:
-                process.kill()
-                process.wait(timeout=5)
-
-
 def test_spawn_persists_verified_worker_pid_not_venv_launcher_pid(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
@@ -361,13 +178,13 @@ def test_spawn_persists_verified_worker_pid_not_venv_launcher_pid(
     )
     identity = {
         "pid": 222,
-        "parent_pid": 111,
+        "job_id": job["job_id"],
+        "launch_token": "launch-token",
+        "worker_module": "max_backend.optimizer_worker",
+        "worker_executable_path": r"D:\max\.venv\Scripts\python.exe",
+        "identity_protocol": "named-pipe-hmac-v1",
+        "startup_identity": "a" * 64,
         "executable_path": r"C:\Python313\python.exe",
-        "command_line": (
-            r"C:\Python313\python.exe -m max_backend.optimizer_worker --job-id "
-            + job["job_id"]
-            + " --launch-token launch-token"
-        ),
         "creation_time": "worker-created",
     }
     evidence = tmp_path / "worker-evidence"
@@ -377,7 +194,11 @@ def test_spawn_persists_verified_worker_pid_not_venv_launcher_pid(
     persisted_claim = optimizer_jobs.claim_initial_worker_launch
     persisted_confirm = optimizer_jobs.confirm_worker_launch
 
-    monkeypatch.setattr(optimizer_jobs, "get_job", lambda job_id: persisted_get_job(job_id, path=path))
+    monkeypatch.setattr(
+        optimizer_jobs,
+        "get_job",
+        lambda job_id, **_kwargs: persisted_get_job(job_id, path=path),
+    )
     monkeypatch.setattr(
         optimizer_jobs,
         "claim_initial_worker_launch",
@@ -385,11 +206,11 @@ def test_spawn_persists_verified_worker_pid_not_venv_launcher_pid(
     )
 
     def update_in_test_db(job_id: str, **changes: object) -> dict[str, object]:
-        changes.setdefault("path", path)
+        changes["path"] = path
         return persisted_update_job(job_id, **changes)
 
     def confirm_in_test_db(job_id: str, token: str, **changes: object) -> dict[str, object]:
-        changes.setdefault("path", path)
+        changes["path"] = path
         return persisted_confirm(job_id, token, **changes)
 
     class FakeProcess:
@@ -403,8 +224,13 @@ def test_spawn_persists_verified_worker_pid_not_venv_launcher_pid(
     monkeypatch.setattr(optimizer_jobs, "confirm_worker_launch", confirm_in_test_db)
     monkeypatch.setattr(optimizer_jobs, "job_evidence_dir", lambda _job_id: evidence)
     monkeypatch.setattr(optimizer_jobs.subprocess, "Popen", lambda *_a, **_k: FakeProcess())
-    monkeypatch.setattr(optimizer_jobs, "_find_worker_by_token", lambda *_a, **_k: identity)
-    monkeypatch.setattr(optimizer_jobs, "_process_identity", lambda _pid: identity)
+    server = SimpleNamespace(address=r"\\.\pipe\synthetic-worker", close=lambda: None)
+    monkeypatch.setattr(optimizer_jobs, "WorkerIdentityServer", lambda: server)
+    monkeypatch.setattr(
+        optimizer_jobs,
+        "_wait_for_worker_identity",
+        lambda *_args, **_kwargs: identity,
+    )
     monkeypatch.setattr(optimizer_jobs.uuid, "uuid4", lambda: SimpleNamespace(hex="launch-token"))
 
     optimizer_jobs._spawn_worker(job["job_id"], resume=False)
@@ -413,6 +239,85 @@ def test_spawn_persists_verified_worker_pid_not_venv_launcher_pid(
     assert current is not None
     assert current["worker_pid"] == 222
     assert current["worker_identity"]["pid"] == 222
+    assert current["worker_identity"]["job_id"] == job["job_id"]
+    assert current["worker_identity"]["launch_token"] == "launch-token"
+
+
+@pytest.mark.parametrize(
+    ("stop_before_failure", "expected_status"),
+    [(False, "INTERRUPTED_SAFE_TO_RESUME"), (True, "STOPPED")],
+)
+def test_lost_launch_confirmation_terminates_only_the_verified_worker(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    stop_before_failure: bool,
+    expected_status: str,
+) -> None:
+    path = make_db(tmp_path)
+    job = create_job(
+        {"max_rounds": 1},
+        evidence_root=tmp_path / "artifacts" / "optimizer",
+        path=path,
+    )
+    evidence = tmp_path / "worker-evidence-lost-confirmation"
+    evidence.mkdir()
+    identity = persisted_worker_identity(job["job_id"], pid=222)
+    persisted_get_job = optimizer_jobs.get_job
+    persisted_update_job = optimizer_jobs.update_job
+    persisted_claim = optimizer_jobs.claim_initial_worker_launch
+
+    monkeypatch.setattr(
+        optimizer_jobs,
+        "get_job",
+        lambda job_id, **_kwargs: persisted_get_job(job_id, path=path),
+    )
+    monkeypatch.setattr(
+        optimizer_jobs,
+        "claim_initial_worker_launch",
+        lambda job_id, token: persisted_claim(job_id, token, path=path),
+    )
+
+    def update_in_test_db(job_id: str, **changes: object) -> dict[str, object]:
+        changes["path"] = path
+        return persisted_update_job(job_id, **changes)
+
+    def lose_confirmation(job_id: str, token: str, **_changes: object) -> dict[str, object]:
+        if stop_before_failure:
+            persisted_update_job(job_id, status="STOPPED", active=False, path=path)
+        raise RuntimeError("OPTIMIZER_WORKER_LAUNCH_CLAIM_LOST")
+
+    class FakeProcess:
+        pid = 111
+
+    server = SimpleNamespace(address=r"\\.\pipe\synthetic-worker", close=lambda: None)
+    monkeypatch.setattr(optimizer_jobs, "update_job", update_in_test_db)
+    monkeypatch.setattr(optimizer_jobs, "confirm_worker_launch", lose_confirmation)
+    monkeypatch.setattr(optimizer_jobs, "job_evidence_dir", lambda _job_id: evidence)
+    monkeypatch.setattr(optimizer_jobs.subprocess, "Popen", lambda *_args, **_kwargs: FakeProcess())
+    monkeypatch.setattr(optimizer_jobs, "WorkerIdentityServer", lambda: server)
+    monkeypatch.setattr(optimizer_jobs, "_wait_for_worker_identity", lambda *_args, **_kwargs: identity)
+    monkeypatch.setattr(optimizer_jobs, "_process_identity", lambda _pid: {
+        "pid": identity["pid"],
+        "executable_path": identity["executable_path"],
+        "creation_time": identity["creation_time"],
+    })
+    terminated: list[tuple[int, dict[str, object]]] = []
+
+    def terminate(pid: int, *, expected: dict[str, object], **_kwargs: object) -> bool:
+        terminated.append((pid, expected))
+        return True
+
+    monkeypatch.setattr(optimizer_jobs, "terminate_process_verified", terminate)
+    monkeypatch.setattr(optimizer_jobs.uuid, "uuid4", lambda: SimpleNamespace(hex="launch-token"))
+
+    with pytest.raises(RuntimeError, match="OPTIMIZER_WORKER_LAUNCH_CLAIM_LOST"):
+        optimizer_jobs._spawn_worker(job["job_id"], resume=False)
+
+    current = get_job(job["job_id"], path=path)
+    assert terminated == [(222, identity)]
+    assert current is not None
+    assert current["status"] == expected_status
+    assert current["active"] is False
 
 
 def test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified(
@@ -431,7 +336,11 @@ def test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified(
     persisted_update_job = optimizer_jobs.update_job
     persisted_claim = optimizer_jobs.claim_initial_worker_launch
 
-    monkeypatch.setattr(optimizer_jobs, "get_job", lambda job_id: persisted_get_job(job_id, path=path))
+    monkeypatch.setattr(
+        optimizer_jobs,
+        "get_job",
+        lambda job_id, **_kwargs: persisted_get_job(job_id, path=path),
+    )
     monkeypatch.setattr(
         optimizer_jobs,
         "claim_initial_worker_launch",
@@ -439,7 +348,7 @@ def test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified(
     )
 
     def update_in_test_db(job_id: str, **changes: object) -> dict[str, object]:
-        changes.setdefault("path", path)
+        changes["path"] = path
         return persisted_update_job(job_id, **changes)
 
     class FakeProcess:
@@ -452,8 +361,13 @@ def test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified(
     monkeypatch.setattr(optimizer_jobs, "update_job", update_in_test_db)
     monkeypatch.setattr(optimizer_jobs, "job_evidence_dir", lambda _job_id: evidence)
     monkeypatch.setattr(optimizer_jobs.subprocess, "Popen", lambda *_a, **_k: FakeProcess())
-    monkeypatch.setattr(optimizer_jobs, "_find_worker_by_token", lambda *_a, **_k: None)
-    monkeypatch.setattr(optimizer_jobs, "WORKER_IDENTITY_WAIT_SECONDS", 0.0)
+    server = SimpleNamespace(address=r"\\.\pipe\synthetic-worker", close=lambda: None)
+    monkeypatch.setattr(optimizer_jobs, "WorkerIdentityServer", lambda: server)
+    monkeypatch.setattr(
+        optimizer_jobs,
+        "_wait_for_worker_identity",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(TimeoutError("no proof")),
+    )
     monkeypatch.setattr(optimizer_jobs.uuid, "uuid4", lambda: SimpleNamespace(hex="launch-token"))
 
     with pytest.raises(RuntimeError, match="OPTIMIZER_WORKER_LAUNCH_RECONCILIATION_REQUIRED"):
@@ -462,7 +376,7 @@ def test_spawn_marks_reconciliation_required_when_worker_identity_is_unverified(
     current = get_job(job["job_id"], path=path)
     assert current is not None
     assert current["status"] == "RECONCILIATION_REQUIRED"
-    assert current["active"] is True
+    assert current["active"] is False
     assert current["worker_pid"] is None
     assert current["first_blocker"] == "OPTIMIZER_WORKER_LAUNCH_IDENTITY_UNVERIFIED"
 
@@ -477,6 +391,17 @@ def test_stop_blocks_when_worker_is_gone_but_terminal_ownership_is_unproven(
         evidence_root=tmp_path / "artifacts" / "optimizer",
         path=path,
     )
+    worker_identity = {
+        "pid": 4321,
+        "job_id": job["job_id"],
+        "launch_token": "worker-token",
+        "worker_module": "max_backend.optimizer_worker",
+        "worker_executable_path": r"D:\max\.venv\Scripts\python.exe",
+        "identity_protocol": "named-pipe-hmac-v1",
+        "startup_identity": "a" * 64,
+        "executable_path": r"C:\Python313\python.exe",
+        "creation_time": "worker-created",
+    }
     upsert_round(
         job["job_id"],
         1,
@@ -489,6 +414,9 @@ def test_stop_blocks_when_worker_is_gone_but_terminal_ownership_is_unproven(
         status="MT5_RUNNING",
         active=True,
         current_round=1,
+        worker_pid=4321,
+        launch_token="worker-token",
+        worker_identity=worker_identity,
         path=path,
     )
 
@@ -498,7 +426,7 @@ def test_stop_blocks_when_worker_is_gone_but_terminal_ownership_is_unproven(
     monkeypatch.setattr(
         optimizer_jobs,
         "get_job",
-        lambda job_id: persisted_get_job(job_id, path=path),
+        lambda job_id, **_kwargs: persisted_get_job(job_id, path=path),
     )
     monkeypatch.setattr(
         optimizer_jobs,
@@ -507,11 +435,11 @@ def test_stop_blocks_when_worker_is_gone_but_terminal_ownership_is_unproven(
     )
 
     def update_in_test_db(job_id: str, **changes: object) -> dict[str, object]:
-        changes.setdefault("path", path)
+        changes["path"] = path
         return persisted_update_job(job_id, **changes)
 
     monkeypatch.setattr(optimizer_jobs, "update_job", update_in_test_db)
-    monkeypatch.setattr(optimizer_jobs, "_find_worker_by_token", lambda *_a, **_k: None)
+    monkeypatch.setattr(optimizer_jobs, "_process_identity", lambda _pid: None)
     monkeypatch.setattr(
         optimizer_jobs,
         "optimizer_terminal_process_state",
@@ -558,7 +486,7 @@ def test_stop_terminates_only_the_uniquely_verified_optimizer_terminal(
     monkeypatch.setattr(
         optimizer_jobs,
         "get_job",
-        lambda job_id: persisted_get_job(job_id, path=path),
+        lambda job_id, **_kwargs: persisted_get_job(job_id, path=path),
     )
     monkeypatch.setattr(
         optimizer_jobs,
@@ -567,11 +495,10 @@ def test_stop_terminates_only_the_uniquely_verified_optimizer_terminal(
     )
 
     def update_in_test_db(job_id: str, **changes: object) -> dict[str, object]:
-        changes.setdefault("path", path)
+        changes["path"] = path
         return persisted_update_job(job_id, **changes)
 
     monkeypatch.setattr(optimizer_jobs, "update_job", update_in_test_db)
-    monkeypatch.setattr(optimizer_jobs, "_find_worker_by_token", lambda *_a, **_k: None)
     terminal_reads = iter([
         {"status": "OPTIMIZER_OWNED_RUNNING", "processes": [{"pid": 6123}]},
         {"status": "OPTIMIZER_OWNED_RUNNING", "processes": [{"pid": 6123}]},
@@ -608,7 +535,14 @@ def test_startup_process_query_failure_keeps_job_active_and_blocks_new_starts(
         evidence_root=tmp_path / "artifacts" / "optimizer",
         path=path,
     )
-    update_job(job["job_id"], worker_pid=4321, launch_token="launch-token", path=path)
+    update_job(
+        job["job_id"],
+        status="STARTING",
+        worker_pid=4321,
+        launch_token="launch-token",
+        worker_identity=persisted_worker_identity(job["job_id"]),
+        path=path,
+    )
     monkeypatch.setattr(
         optimizer_jobs,
         "_process_identity",
@@ -644,14 +578,20 @@ def test_startup_does_not_treat_unverifiable_occupied_pid_as_worker_loss(
         evidence_root=tmp_path / "artifacts" / "optimizer",
         path=path,
     )
-    update_job(job["job_id"], worker_pid=4321, path=path)
+    update_job(
+        job["job_id"],
+        status="STARTING",
+        worker_pid=4321,
+        launch_token="launch-token",
+        worker_identity=persisted_worker_identity(job["job_id"]),
+        path=path,
+    )
     monkeypatch.setattr(
         optimizer_jobs,
         "_process_identity",
         lambda pid: {
             "pid": pid,
             "executable_path": r"C:\Python313\python.exe",
-            "command_line": "python.exe process identity unavailable",
             "creation_time": "",
         },
     )
@@ -666,7 +606,7 @@ def test_startup_does_not_treat_unverifiable_occupied_pid_as_worker_loss(
     assert current["active"] is True
 
 
-def test_startup_accepts_pid_reuse_only_when_persisted_creation_identity_differs(
+def test_startup_rejects_pid_reuse_when_creation_identity_differs(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -682,12 +622,11 @@ def test_startup_accepts_pid_reuse_only_when_persisted_creation_identity_differs
         status="STARTING",
         worker_pid=4321,
         launch_token="launch-token",
-        worker_identity={
-            "pid": 4321,
-            "executable_path": executable,
-            "command_line": "worker --job-id " + job["job_id"] + " --launch-token launch-token",
-            "creation_time": "old-process",
-        },
+        worker_identity=persisted_worker_identity(
+            job["job_id"],
+            executable=executable,
+            creation_time="old-process",
+        ),
         path=path,
     )
     monkeypatch.setattr(
@@ -696,18 +635,18 @@ def test_startup_accepts_pid_reuse_only_when_persisted_creation_identity_differs
         lambda pid: {
             "pid": pid,
             "executable_path": executable,
-            "command_line": "unrelated replacement process",
             "creation_time": "new-process",
         },
     )
-    monkeypatch.setattr(optimizer_jobs, "_find_worker_by_token", lambda *_a, **_k: None)
 
     result = reconcile_optimizer_startup(path=path)
 
     current = get_job(job["job_id"], path=path)
-    assert result["status"] == "INTERRUPTED_SAFE_TO_RESUME"
+    assert result["status"] == "BLOCKED"
+    assert result["action"] == "OPTIMIZER_PROCESS_IDENTITY_MISMATCH"
     assert current is not None
-    assert current["active"] is False
+    assert current["status"] == "RECONCILIATION_REQUIRED"
+    assert current["active"] is True
 
 
 def test_stopped_launch_token_cannot_enter_optimizer_worker(
@@ -786,7 +725,7 @@ def test_worker_log_open_failure_does_not_leave_an_active_launch_claim(
     )
 
     def update_in_test_db(job_id: str, **changes: object) -> dict[str, object]:
-        changes.setdefault("path", path)
+        changes["path"] = path
         return persisted_update(job_id, **changes)
 
     monkeypatch.setattr(optimizer_jobs, "update_job", update_in_test_db)
@@ -806,7 +745,7 @@ def test_worker_log_open_failure_does_not_leave_an_active_launch_claim(
     assert current["first_blocker"] == "OPTIMIZER_WORKER_LOG_OPEN_FAILED"
 
 
-def test_stop_finds_and_stops_worker_by_launch_token_when_pid_was_not_persisted(
+def test_stop_without_persisted_worker_identity_requires_reconciliation(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -816,16 +755,6 @@ def test_stop_finds_and_stops_worker_by_launch_token_when_pid_was_not_persisted(
         evidence_root=tmp_path / "artifacts" / "optimizer",
         path=path,
     )
-    identity = {
-        "pid": 7654,
-        "executable_path": r"C:\Python313\python.exe",
-        "command_line": (
-            r"C:\Python313\python.exe -m max_backend.optimizer_worker --job-id "
-            + job["job_id"]
-            + " --launch-token token-1"
-        ),
-        "creation_time": "created",
-    }
     update_job(
         job["job_id"],
         status="STARTING",
@@ -838,29 +767,80 @@ def test_stop_finds_and_stops_worker_by_launch_token_when_pid_was_not_persisted(
     monkeypatch.setattr(
         optimizer_jobs,
         "get_job",
-        lambda job_id: persisted_get_job(job_id, path=path),
+        lambda job_id, **_kwargs: persisted_get_job(job_id, path=path),
     )
 
     def update_in_test_db(job_id: str, **changes: object) -> dict[str, object]:
-        changes.setdefault("path", path)
+        changes["path"] = path
         return persisted_update_job(job_id, **changes)
 
     monkeypatch.setattr(optimizer_jobs, "update_job", update_in_test_db)
-    monkeypatch.setattr(optimizer_jobs, "_process_identity", lambda _pid: identity)
-    monkeypatch.setattr(optimizer_jobs, "_find_worker_by_token", lambda *_a, **_k: identity)
-    stopped: list[list[str]] = []
-    identities = iter([identity, identity, None])
-    monkeypatch.setattr(optimizer_jobs, "_process_identity", lambda _pid: next(identities))
-    monkeypatch.setattr(
-        optimizer_jobs.subprocess,
-        "run",
-        lambda command, **_kwargs: (stopped.append(command) or SimpleNamespace(returncode=0)),
-    )
-
-    result = optimizer_jobs.stop_optimizer(job["job_id"])
+    with pytest.raises(RuntimeError, match="Optimizer worker ownership could not be proven"):
+        optimizer_jobs.stop_optimizer(job["job_id"])
 
     current = get_job(job["job_id"], path=path)
-    assert stopped == [["taskkill", "/PID", "7654", "/F"]]
-    assert result["status"] == "STOPPED"
     assert current is not None
+    assert current["status"] == "RECONCILIATION_REQUIRED"
     assert current["active"] is False
+    assert current["worker_pid"] is None
+    assert current["first_blocker"] == "OPTIMIZER_WORKER_STOP_OWNERSHIP_UNVERIFIED"
+    stopped = optimizer_jobs.stop_optimizer(job["job_id"])
+    assert stopped["status"] == "STOPPED"
+    assert "revoking an unconfirmed launch claim" in stopped["message"]
+
+
+def test_resume_pid_reuse_requires_reconciliation_instead_of_new_worker(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    path = make_db(tmp_path)
+    job = create_job(
+        {"max_rounds": 1},
+        evidence_root=tmp_path / "artifacts" / "optimizer",
+        path=path,
+    )
+    identity = persisted_worker_identity(job["job_id"])
+    update_job(
+        job["job_id"],
+        status="WAITING_FOR_REPORT",
+        worker_pid=4321,
+        launch_token="launch-token",
+        worker_identity=identity,
+        path=path,
+    )
+    persisted_get_job = optimizer_jobs.get_job
+    persisted_update_job = optimizer_jobs.update_job
+    monkeypatch.setattr(
+        optimizer_jobs,
+        "get_job",
+        lambda job_id, **_kwargs: persisted_get_job(job_id, path=path),
+    )
+
+    def update_in_test_db(job_id: str, **changes: object) -> dict[str, object]:
+        changes["path"] = path
+        return persisted_update_job(job_id, **changes)
+
+    monkeypatch.setattr(optimizer_jobs, "update_job", update_in_test_db)
+    monkeypatch.setattr(
+        optimizer_jobs,
+        "_process_identity",
+        lambda _pid: {
+            "pid": 4321,
+            "executable_path": identity["executable_path"],
+            "creation_time": "different-process-creation",
+        },
+    )
+    monkeypatch.setattr(
+        optimizer_jobs,
+        "_spawn_worker",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("resume launched an unverified replacement")),
+    )
+
+    with pytest.raises(RuntimeError, match="ownership could not be proven; resume is blocked"):
+        optimizer_jobs.resume_optimizer(job["job_id"])
+
+    current = get_job(job["job_id"], path=path)
+    assert current is not None
+    assert current["status"] == "RECONCILIATION_REQUIRED"
+    assert current["active"] is True
+    assert current["first_blocker"] == "OPTIMIZER_PROCESS_IDENTITY_MISMATCH"

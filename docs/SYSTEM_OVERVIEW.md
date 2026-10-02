@@ -28,7 +28,7 @@ Users / External Systems
     -> State / Evidence Authorities
     -> External Runtime / Outputs
 
-Observed source inventory: 116 files, 4 language categories.
+Observed source inventory: 118 files, 4 language categories.
 
 ## Major components
 
@@ -260,10 +260,9 @@ compiler does not infer them from implementation names.
 ## Current project state
 
 Next authorized actions:
-- Submit PR #17 to Control Room for audit; do not merge before explicit Control Room/Owner authorization.
-- Retry a bounded MT5 diagnostic only after a fresh read-only active-job check and frozen resource preflight return SAFE; current commit headroom is insufficient and must not be bypassed.
-- Any bounded live diagnostic must not overwrite Owner draft/evidence, change OS/pagefile settings, or run past 20 minutes; normal full Strategy Optimizer completion remains deferred.
-- Fresh R00-R11 remains blocked until a real MT5 sample is Owner-declared READY and Control Room separately authorizes the next source phase.
+- Repair OPTIMIZER-WORKER-IDENTITY-CIM-TIMEOUT on the existing PR #17 branch using authenticated deterministic worker identity plus native PID/path/creation-time verification; keep stop/recovery fail-closed.
+- Run bounded repeated real temporary-venv worker lifecycle regressions, the full backend/frontend and dependency checks, governance, exact-tree source-only scan, then push and require both push and PR-head Windows CI PASS before stopping for Control Room audit. Do not merge.
+- Owner-PC runtime, real MT5 diagnostics, and all R00-R11 Research remain out of scope for this repair; runtime stays NOT_PROVEN and Research remains PAUSED.
 
 Blocked actions:
 - Full/complete or unattended real MT5 Optimizer execution; only explicitly bounded diagnostics of at most 20 minutes are in scope, and a run must not be allowed to complete normally.
@@ -275,6 +274,7 @@ Blocked actions:
 Known blockers:
 - The authorized bounded V2 MT5 diagnostic is blocked before launch: current Windows commit headroom is 12.71 GiB, below the frozen one-agent requirement of 32 GiB. Do not bypass the resource guard or change OS/pagefile settings.
 - Owner-reported full-range 17D Fast Genetic attempt crashed under Windows commit-memory exhaustion; exact final Owner Optimizer/runtime acceptance remains NOT_PROVEN.
+- OPTIMIZER-WORKER-IDENTITY-CIM-TIMEOUT is open: push CI run 37004211038 attempt 1 timed out in PowerShell/CIM worker discovery on exact head b167d2a6df432ed6c146f1fabe100521cc7feefc. Repair source and tests before returning PR #17 for audit.
 
 ## Proven vs not proven
 
@@ -288,12 +288,13 @@ Known blockers:
 - A separate Windows process-counter run measured CPU 1.0781 s, peak working set 64,405,504 bytes, read I/O 6,060,864 bytes and write I/O 0 over 108 requests; qualified route was mocked in that resource run.
 - Historical PR15 bounded Stage C/D tests and Optimizer UI control-flow evidence remain accepted as historical evidence; they did not represent the later Owner-reported long-range commit-memory failure and do not prove V2 behavior.
 - V2 targeted optimizer/resource regression passes 171/171; full backend passes 474 tests with zero skips/failures; frontend passes 53 tests, with lint, build, npm tree and pip check passing. Canonical Scientist knowledge was rebuilt after the first full-suite run exposed stale source hashes.
-- Exact-tree source-only scan and exact PR-head Windows Actions passed; final SHA/run identity is external per D-012. PR #17 is open for Control Room audit; PR #16 is closed and marked superseded.
+- On exact PR #17 head b167d2a6df432ed6c146f1fabe100521cc7feefc, PR-head run 37004215150 passed; push run 37004211038 attempt 2 passed after attempt 1 failed the actual venv worker identity test with an 8-second PowerShell/CIM TimeoutExpired. This exposes open defect OPTIMIZER-WORKER-IDENTITY-CIM-TIMEOUT; a green rerun does not resolve it. Exact IDs remain external per D-012. PR #17 is open and unmerged; PR #16 is closed and superseded.
 - Read-only active-job check found zero active Optimizer jobs and zero terminal/tester processes. Frozen V2 preflight safely returned BLOCKED at 12.71 GiB commit headroom versus 32 GiB required for one bounded agent; no MT5 process was launched and no Owner draft or OS setting was changed.
 
 ### Not proven
 
 - Owner runtime acceptance remains NOT_PROVEN because the V2 diagnostic was blocked before launch by commit preflight; exact final SHA/run identity remains external per D-012.
+- Worker identity reliability remains NOT_PROVEN until the PowerShell/CIM discovery path is removed, real Windows venv handshake tests pass repeatedly, and the repair candidate passes full local and hosted gates.
 - Full production-scale/long-range Owner Strategy Optimizer execution, Challenger selection, Champion promotion, MT5 backtest, and end-to-end runtime acceptance.
 - Fresh R00-R11 Research execution, model training, ONNX, Research Challenger creation, or Champion mutation.
 

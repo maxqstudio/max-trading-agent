@@ -202,7 +202,12 @@
       "source_owners": [
         "backend/max_backend/optimizer_draft.py::get_optimizer_draft",
         "backend/max_backend/optimizer_draft.py::put_optimizer_draft",
+        "backend/max_backend/optimizer_jobs.py::_spawn_worker",
+        "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
         "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
+        "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer",
+        "backend/max_backend/optimizer_worker_identity.py::terminate_process_verified",
+        "backend/max_backend/optimizer_worker.py::main",
         "backend/max_backend/optimizer_runtime.py::commit_round_evidence",
         "backend/max_backend/optimizer_candidates.py::qualified_candidates_page"
       ],
@@ -210,6 +215,7 @@
       "tests": [
         "backend/tests/test_optimizer_draft.py",
         "backend/tests/test_optimizer_reliability.py",
+        "backend/tests/test_optimizer_worker_identity.py",
         "backend/tests/test_optimizer_runtime_durability.py",
         "backend/tests/test_m08_strategy_results.py"
       ]

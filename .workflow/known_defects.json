@@ -178,7 +178,14 @@
       "id": "OPTIMIZER-COMMIT-MEMORY-EXHAUSTION",
       "status": "IN_PROGRESS",
       "summary": "Long-range Fast Genetic Optimizer exhausted Windows commit memory despite prior physical-RAM and local-agent admission.",
-      "evidence": "Owner-reported full-range 17D Fast Genetic crash is the current V2 repair trigger. Historical Stage C/D bounded results remain valid but do not prove commit-pressure safety for this workload. Exact new bounded-runtime validation, local full regression and hosted PR CI are pending."
+      "evidence": "Owner-reported full-range 17D Fast Genetic crash is the V2 repair trigger. PR #17 source hardening at b167d2a6df432ed6c146f1fabe100521cc7feefc has local full regression, source scan, and PR-head CI; push CI passed on attempt 2 after attempt 1 exposed OPTIMIZER-WORKER-IDENTITY-CIM-TIMEOUT. The worker identity defect remains open pending its source repair, tests, and new hosted CI. Historical Stage C/D bounded results remain valid but do not prove current V2 runtime safety."
+    },
+    {
+      "id": "OPTIMIZER-WORKER-IDENTITY-CIM-TIMEOUT",
+      "status": "IN_PROGRESS",
+      "summary": "Optimizer worker launch identity discovery depends on PowerShell/CIM global process enumeration with a fixed 8-second timeout.",
+      "evidence": "GitHub Windows push run 37004211038 attempt 1 failed test_windows_venv_worker_resolution_finds_actual_child_process with subprocess.TimeoutExpired in optimizer_jobs._find_worker_by_token while powershell.exe/Get-CimInstance enumerated Win32_Process. PR-head run 37004215150 and push attempt 2 passed the same exact SHA b167d2a6df432ed6c146f1fabe100521cc7feefc, demonstrating nondeterminism but not closing the production dependency.",
+      "resolution": "Replace shell/CIM discovery with a deterministic authenticated worker handshake and native process identity/termination verification. Keep open until focused/repeated Windows tests, full regression, governance, source scan, and exact push plus PR-head CI pass."
     }
   ],
   "schema_version": 1

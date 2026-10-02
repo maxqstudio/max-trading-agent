@@ -4,10 +4,10 @@
 
 ## Evidence boundary
 
-Starting authority is exact maxqstudio/max-trading-agent main 7f3fade6fd71892266ad18a178dab9d503b5ce77 on work/optimizer-commit-memory-resource-safety-v2. Historical Stage C/D bounded MT5 tests and browser evidence remain accepted, but the Owner subsequently reported a crash during the full-range 17D Fast Genetic attempt from Windows commit-memory exhaustion. V2 local source gates, exact-tree source-only scan, and hosted push/PR Windows workflows pass; exact final SHA and CI identities remain external acceptance evidence per D-012. No V2 MT5 process was launched because current commit headroom was 12.71 GiB versus the frozen one-agent requirement of 32 GiB. No OS/pagefile settings or Owner draft were changed. Full Optimizer completion, R00-R11 execution, and scientific acceptance remain unproven/blocked.
+Starting authority is exact maxqstudio/max-trading-agent main 7f3fade6fd71892266ad18a178dab9d503b5ce77 on work/optimizer-commit-memory-resource-safety-v2. Historical Stage C/D bounded MT5 tests and browser evidence remain accepted, but the Owner subsequently reported a crash during the full-range 17D Fast Genetic attempt from Windows commit-memory exhaustion. Baseline V2 local source gates and exact-tree source-only scan passed. On exact baseline head b167d2a6df432ed6c146f1fabe100521cc7feefc, PR-head run 37004215150 and push run 37004211038 attempt 2 passed, but attempt 1 failed on the production PowerShell/CIM worker-identity timeout; therefore worker identity reliability is NOT_PROVEN and this repair remains IN_PROGRESS. Exact final SHA/run identities remain external acceptance evidence per D-012. No V2 MT5 process was launched for this repair; Owner runtime remains NOT_PROVEN, full Optimizer completion remains NOT_PROVEN, and Research remains PAUSED. No OS/pagefile settings, Owner draft, or Owner database were changed.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 00f0ef0b45150135315cd619f2976a134579c4e63c9e75527bc4f15d33267af2
+Current source digest: fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
@@ -23,6 +23,7 @@ Current source digest: 00f0ef0b45150135315cd619f2976a134579c4e63c9e75527bc4f15d3
 | OWNER-RUNTIME-01 | Bounded repair diagnostics may prove resource-control behavior, but full Owner Strategy Optimizer/Challenger/Champion runtime acceptance remains a separate post-source gate. | Bounded real-MT5 resource diagnostics passed; full normal Owner Optimizer workflow remains deferred and NOT_PROVEN. | NOT_PROVEN |
 | OPT-DRAFT-01 | Editable Optimizer draft persists with stale-revision rejection and stays separate from immutable per-job request snapshots. | backend/max_backend/optimizer_draft.py; backend/tests/test_optimizer_draft.py; backend/max_backend/optimizer_jobs.py::start_optimizer | PASS_LOCAL |
 | OPT-RECOVERY-01 | Startup reconciliation and worker/MT5 process identity fail closed on uncertain launch, prevent duplicate claims, and stop only proven Optimizer-owned processes. | backend/max_backend/optimizer_jobs.py; backend/tests/test_optimizer_reliability.py; backend/tests/test_m01_recovery.py | PASS_LOCAL |
+| OPT-WORKER-IDENTITY-01 | Worker launch ownership is proven by a deterministic authenticated launch handshake bound to job ID, launch token, actual Windows pipe-client PID, executable path, and process creation identity, without PowerShell/WMI/CIM or global shell process enumeration. Ambiguous or missing proof fails closed. | Baseline push run 37004211038 attempt 1 failed with TimeoutExpired in optimizer_jobs._find_worker_by_token PowerShell/CIM enumeration; same-SHA attempt 2 and PR-head run 37004215150 passed but do not close the nondeterministic defect. Repair candidate and new exact-head CI are pending. | NOT_PROVEN |
 | OPT-EVIDENCE-01 | Derived round evidence is staged, verified and atomically published before SQLite advances; deterministic replay cannot masquerade as new MT5 execution. | backend/max_backend/optimizer_runtime.py::commit_round_evidence; backend/tests/test_optimizer_runtime_durability.py | PASS_LOCAL |
 | OPT-READMODEL-01 | Ordinary candidate reads use bounded SQLite projection while Challenger mutation strictly revalidates canonical retained evidence. | backend/max_backend/optimizer_candidates.py::qualified_candidates_page; backend/tests/test_m08_strategy_results.py | PASS_LOCAL |
 | OPT-UI-01 | Optimizer requests cancel/reject stale responses, debounce draft writes, bound/adapt polling, and show visible loading/block/success/failure feedback. | frontend/src/OptimizerPage.tsx; frontend/src/OptimizerPage.test.tsx; real headless Chrome live frontend/backend START/STOP resource-evidence refresh. | PASS_LOCAL |
@@ -32,6 +33,8 @@ Current source digest: 00f0ef0b45150135315cd619f2976a134579c4e63c9e75527bc4f15d3
 
 ## Test commands
 
+- .venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_worker_identity.py backend/tests/test_optimizer_reliability.py backend/tests/test_m01_jobs.py -q -o addopts= --basetemp .pytest-codex-worker-targeted-final
+- PowerShell loop (3 iterations): .venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_worker_identity.py::test_windows_venv_worker_identity_is_repeatedly_bound_to_real_pipe_peer -q -o addopts= --basetemp .pytest-codex-worker-identity-$i
 - .venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_resources.py backend/tests/test_optimizer_runtime.py backend/tests/test_optimizer_reliability.py -q -o addopts=
 - .venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_draft.py backend/tests/test_optimizer_reliability.py backend/tests/test_optimizer_runtime_durability.py backend/tests/test_m01_jobs.py backend/tests/test_m01_recovery.py backend/tests/test_m08_strategy_results.py -q -o addopts=
 - .venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_resources.py backend/tests/test_m01_optimizer_core.py backend/tests/test_m01_optimizer_store.py backend/tests/test_m01_jobs.py backend/tests/test_m01_recovery.py backend/tests/test_optimizer_reliability.py backend/tests/test_optimizer_runtime_durability.py -q -o addopts= --basetemp .pytest-codex-resource-targeted
@@ -67,7 +70,7 @@ ROADMAP_SYNC: PASS
 
 Sequence mode for this phase/session: DURING
 Sequence session contract: FLOW-OPTIMIZER-DURABILITY-PERFORMANCE
-SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match Git-aware inventory digest 00f0ef0b45150135315cd619f2976a134579c4e63c9e75527bc4f15d33267af2. Git-ignored Owner Optimizer artifacts are excluded and unchanged.
+SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match Git-aware inventory digest fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b. Git-ignored Owner Optimizer artifacts are excluded and unchanged.
 
 ## Project Truth Compiler evidence
 

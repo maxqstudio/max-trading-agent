@@ -61,7 +61,7 @@
   },
   {
     "path": "backend/max_backend/optimizer_worker.py",
-    "sha256": "9dc5f06e0bece111c4186d2778da7a927a77ef39b5ea79695a38383cb60f49c7"
+    "sha256": "cc5a58eae928243701686ee3d5ce6fc5d7d27963ea12a974fa4e3c25c9d6bb86"
   },
   {
     "path": "backend/max_backend/optimizer_api.py",

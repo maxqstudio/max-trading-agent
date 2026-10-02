@@ -44,6 +44,7 @@ from .optimizer_runtime import (
     write_state_snapshot,
 )
 from .optimizer_resource_runtime import ResourceGuardTriggered
+from .optimizer_worker_identity import send_worker_identity
 from .optimizer_resources import frozen_resource_admission
 from .workflow_contract import (
     OPTIMIZER_TERMINAL_QUALIFIED_POOL,
@@ -811,12 +812,22 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--job-id", required=True)
     parser.add_argument("--launch-token", default="")
+    parser.add_argument("--identity-pipe", default="")
     parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
+    launch_token = str(args.launch_token or "") or None
+    if launch_token:
+        if not args.identity_pipe:
+            raise RuntimeError("OPTIMIZER_WORKER_IDENTITY_CHANNEL_MISSING")
+        send_worker_identity(
+            str(args.identity_pipe),
+            job_id=str(args.job_id),
+            launch_token=launch_token,
+        )
     return run_job(
         args.job_id,
         resume=bool(args.resume),
-        launch_token=str(args.launch_token or "") or None,
+        launch_token=launch_token,
     )
 
 
