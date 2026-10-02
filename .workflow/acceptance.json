@@ -16,7 +16,7 @@
     "schema_version": 15,
     "sequence": "PASS_LOCAL: 8/8 DURING/CURRENT sessions; canonical actual graphs regenerated from current source digest 6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa.",
     "skill_workflow_current_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
-    "source_only_scan": "NOT_RUN",
+    "source_only_scan": "PASS_EXACT_TREE: 94b7c394f00ed69e97fed2ed86b1413b4c791efb; 247 tracked text files; 0 secret matches; no tracked credential/DPAPI settings.",
     "synthetic_optimizer_profile": "PASS_LOCAL: 750-candidate synthetic profile, 12 requests/endpoint; actual qualified-page median 23.651 ms/p95 68.983 ms, 61,462-byte response. Separate Windows process profile measured CPU/RSS/read/write I/O with the qualified route mocked. No real MT5 or Owner DB used; temporary test DB/evidence cleanup was rejected by shell policy."
   },
   "current_phase_status": "IN_PROGRESS",
@@ -80,10 +80,10 @@
       "status": "PASS_LOCAL"
     },
     {
-      "evidence": "Final local regression: backend 456/456, frontend 52/52 across 8 files, lint 0 warnings/errors, build PASS, npm tree exit 0, pip check PASS; governance/security scan pending.",
+      "evidence": "Backend 456/456, frontend 52/52, lint/build/npm/pip PASS, governance validators PASS, sequence 8/8, exact-tree secret scan PASS on 94b7c394f00ed69e97fed2ed86b1413b4c791efb.",
       "id": "REGRESSION-01",
       "requirement": "Full current backend/frontend regressions, dependency checks, build, governance validators, and exact-tree source-only scan pass without unexplained skips or failures.",
-      "status": "NOT_PROVEN"
+      "status": "PASS_LOCAL"
     },
     {
       "evidence": "External GitHub Actions run bound to exact candidate SHA.",
@@ -177,6 +177,12 @@
       "research_challenger": 0
     },
     "skill_authority_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
+    "source_only_scan": {
+      "candidate_sha": "94b7c394f00ed69e97fed2ed86b1413b4c791efb",
+      "matches": 0,
+      "status": "PASS",
+      "tracked_text_files": 247
+    },
     "synthetic_optimizer_profile": {
       "baseline_from_prechange_terminal_evidence": {
         "comparability": "Indicative only: same synthetic 750-candidate workload reported in the Builder handoff, but its exact harness log is not preserved.",
