@@ -15,6 +15,7 @@ type Contract = {
   parameters: ParameterContract[]
   default_search_space: Record<string, { start: number; step: number; stop: number }>
   default_optimize_params: string[]
+  default_resources: ResourceSettings
   optimizer_parameter_count: number
   fixed_execution_authority: {
     InpMaxDailyLossPct: number
@@ -60,6 +61,40 @@ type Contract = {
   }
 }
 
+type ResourceSettings = {
+  mode: 'AUTO_SAFE' | 'CUSTOM'
+  custom_max_local_agents: number
+  custom_min_free_ram_gb: number
+  custom_cpu_reserve_logical: number
+}
+
+type ResourcePreflight = {
+  schema: string
+  mode: 'AUTO_SAFE' | 'CUSTOM'
+  status: 'SAFE' | 'BLOCKED'
+  reason?: string | null
+  detected: {
+    physical_cores: number
+    logical_processors: number
+    total_ram_bytes: number
+    available_ram_bytes: number
+    configured_local_agent_capacity: number
+    mt5_build: string
+  }
+  minimum_free_ram_bytes: number
+  safe_mt5_ram_budget_bytes: number
+  cpu_reserve_logical: number
+  resolved_max_local_agents: number
+  workload: {
+    optimization_name: string
+    optimized_parameter_count: number
+    raw_complete_grid_combinations: number
+    from_date: string
+    to_date: string
+    tick_model_name: string
+  }
+}
+
 type Job = {
   job_id: string
   status: string
@@ -97,6 +132,7 @@ type Job = {
       timeout_sec: number
     }
     ea: { sha256: string }
+    resource_policy?: ResourcePreflight
   }
   winner?: {
     round: number
@@ -120,6 +156,14 @@ type Job = {
       optimizer_run_nonce?: number
       report_selection_mode?: string
       search_space?: Record<string, { start: number; step: number; stop: number }>
+      resource_runtime?: {
+        resource_state: string
+        resolved_max_local_agents: number
+        actual_max_active_agents: number
+        min_available_ram_bytes: number
+        peak_mt5_working_set_bytes: number
+        stop_reason?: string | null
+      }
     }
     scientist_decision?: {
       mode: string
@@ -182,6 +226,7 @@ type Preview = {
     formula: string
     trade_exponent_alpha: number
   }
+  resource_preflight: ResourcePreflight
 }
 
 type QualifiedCandidate = {
@@ -215,6 +260,12 @@ type QualifiedPage = {
 
 function rangeText(value?: { start: number; step: number; stop: number }) {
   return value ? value.start + ' / ' + value.step + ' / ' + value.stop : '—'
+}
+
+function gibibytes(value?: number) {
+  return typeof value === 'number' && Number.isFinite(value)
+    ? (value / (1024 ** 3)).toFixed(2) + ' GiB'
+    : '—'
 }
 
 function parameterLabel(name: string) {
@@ -251,6 +302,7 @@ function ownerOperationalStatus(value?: string) {
     INTERRUPTED_SAFE_TO_RESUME: 'Interrupted · safe to resume or stop',
     EXECUTION_UNCERTAIN: 'Execution needs reconciliation',
     RECONCILIATION_REQUIRED: 'Process ownership needs review',
+    RESOURCE_STOPPED: 'Stopped by resource safety guard',
     QUALIFIED_POOL_READY: 'Qualified candidates ready',
     ELIGIBLE_WINNER_FOUND: 'Qualified winner found',
     STRATEGY_CHALLENGER_FOUND: 'Strategy Challenger created',
@@ -294,6 +346,17 @@ function defaultOptimizerDraft(contract: Contract) {
     search_space: structuredClone(contract.default_search_space),
     kpi: { ...contract.default_kpi },
     scientist_assist: false,
+    resources: { ...contract.default_resources },
+  }
+}
+
+function normalizeOptimizerDraft(contract: Contract, saved: any) {
+  const defaults = defaultOptimizerDraft(contract)
+  if (!saved || typeof saved !== 'object') return defaults
+  return {
+    ...defaults,
+    ...saved,
+    resources: { ...defaults.resources, ...(saved.resources ?? {}) },
   }
 }
 
@@ -417,7 +480,7 @@ export default function OptimizerPage() {
         setJob(current)
         const defaults = defaultOptimizerDraft(c)
         const canRestore = saved.status === 'READY' && saved.draft && typeof saved.draft === 'object'
-        const restored = canRestore ? saved.draft : defaults
+        const restored = canRestore ? normalizeOptimizerDraft(c, saved.draft) : defaults
         const serialized = JSON.stringify(restored)
         initializedRef.current = true
         autosaveEnabledRef.current = canRestore
@@ -567,6 +630,7 @@ export default function OptimizerPage() {
     if (!config || !initializedRef.current || !autosaveEnabledRef.current) return
     if (JSON.stringify(config) === lastSavedDraftRef.current) return
     const timer = window.setTimeout(() => {
+      if (actionLockRef.current) return
       void persistDraft(config).catch(() => undefined)
     }, 500)
     return () => window.clearTimeout(timer)
@@ -600,6 +664,7 @@ export default function OptimizerPage() {
     'INTERRUPTED_SAFE_TO_RESUME',
     'EXECUTION_UNCERTAIN',
     'RECONCILIATION_REQUIRED',
+    'RESOURCE_STOPPED',
   ]
   const resumableStatuses = [
     'INTERRUPTED_SAFE_TO_RESUME',
@@ -612,14 +677,17 @@ export default function OptimizerPage() {
     'SCIENTIST_REQUESTING',
     'REGISTERING_CHALLENGER',
     'CHALLENGER_REGISTRATION_FAILED',
+    'RESOURCE_STOPPED',
   ]
   const startBlockedByJob = Boolean(
     job?.active || (job && recoverableStatuses.includes(job.status)),
   )
   const startBlockedByDraft = ['LOADING', 'RECOVERY_REQUIRED', 'SAVE_FAILED', 'CONFLICT'].includes(draftStatus)
-  const canStart = !busy && !startBlockedByJob && !startBlockedByDraft
+  const startBlockedByResource = previewStatus !== 'ready' || visiblePreview?.resource_preflight?.status !== 'SAFE'
+  const canStart = !busy && !startBlockedByJob && !startBlockedByDraft && !startBlockedByResource
   const canStop = Boolean(job && (job.active || recoverableStatuses.includes(job.status)))
   const canResume = Boolean(job && !job.active && resumableStatuses.includes(job.status))
+  const currentResourceRuntime = job?.rounds.find((round) => round.round_no === job.current_round)?.state.resource_runtime
 
   function markDraftDirty() {
     autosaveEnabledRef.current = true
@@ -679,7 +747,10 @@ export default function OptimizerPage() {
     setError('')
     const frozenConfig = structuredClone(config)
     try {
-      await persistDraft(frozenConfig)
+      const serialized = JSON.stringify(frozenConfig)
+      if (!autosaveEnabledRef.current || serialized !== lastSavedDraftRef.current) {
+        await persistDraft(frozenConfig)
+      }
       const controller = new AbortController()
       actionControllerRef.current = controller
       const response = await fetch('/api/optimizer/start', {
@@ -738,8 +809,21 @@ export default function OptimizerPage() {
       })
       const body = await response.json()
       if (!response.ok) throw new Error(ownerErrorMessage(body.detail, 'Optimizer action could not be completed'))
+      let authoritativeBody = body
+      const detailResponse = await fetch('/api/optimizer/jobs/' + job.job_id, { signal: controller.signal })
+      if (detailResponse.ok) {
+        const detail = await detailResponse.json()
+        if (detail?.job_id === job.job_id) authoritativeBody = detail
+      } else {
+        setError('Optimizer action completed, but final job detail could not be refreshed.')
+      }
       setJob((current) => current?.job_id === job.job_id
-        ? { ...current, ...body, rounds: body.rounds ?? current.rounds, request: body.request ?? current.request } as Job
+        ? {
+            ...current,
+            ...authoritativeBody,
+            rounds: authoritativeBody.rounds ?? current.rounds,
+            request: authoritativeBody.request ?? current.request,
+          } as Job
         : current)
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : String(reason))
@@ -868,6 +952,79 @@ export default function OptimizerPage() {
         </div>
       </section>
 
+      <section aria-labelledby="optimizer-resources">
+        <h2 id="optimizer-resources">Resource safety</h2>
+        <div className="form-grid">
+          <label>
+            Resource mode
+            <select
+              aria-label="Resource mode"
+              value={config.resources.mode}
+              onChange={(e) => updateConfig('resources', { ...config.resources, mode: e.target.value })}
+            >
+              <option value="AUTO_SAFE">AUTO_SAFE</option>
+              <option value="CUSTOM">CUSTOM</option>
+            </select>
+          </label>
+          <label>
+            Max local agents
+            <input
+              aria-label="Max local agents"
+              type="number"
+              min="1"
+              disabled={config.resources.mode !== 'CUSTOM'}
+              value={config.resources.custom_max_local_agents}
+              onChange={(e) => updateConfig('resources', { ...config.resources, custom_max_local_agents: Number(e.target.value) })}
+            />
+          </label>
+          <label>
+            Minimum free RAM (GiB)
+            <input
+              aria-label="Minimum free RAM"
+              type="number"
+              min="0.5"
+              step="0.5"
+              disabled={config.resources.mode !== 'CUSTOM'}
+              value={config.resources.custom_min_free_ram_gb}
+              onChange={(e) => updateConfig('resources', { ...config.resources, custom_min_free_ram_gb: Number(e.target.value) })}
+            />
+          </label>
+          <label>
+            CPU reserve (logical)
+            <input
+              aria-label="CPU reserve"
+              type="number"
+              min="0"
+              disabled={config.resources.mode !== 'CUSTOM'}
+              value={config.resources.custom_cpu_reserve_logical}
+              onChange={(e) => updateConfig('resources', { ...config.resources, custom_cpu_reserve_logical: Number(e.target.value) })}
+            />
+          </label>
+        </div>
+        {visiblePreview?.resource_preflight ? (
+          <>
+            <dl className="facts compact">
+              <div><dt>Status</dt><dd><strong>{visiblePreview.resource_preflight.status === 'SAFE' ? 'SAFE TO START' : 'BLOCKED'}</strong></dd></div>
+              <div><dt>CPU</dt><dd>{visiblePreview.resource_preflight.detected.physical_cores} physical / {visiblePreview.resource_preflight.detected.logical_processors} logical</dd></div>
+              <div><dt>RAM</dt><dd>{gibibytes(visiblePreview.resource_preflight.detected.total_ram_bytes)} total / {gibibytes(visiblePreview.resource_preflight.detected.available_ram_bytes)} available</dd></div>
+              <div><dt>Protected reserve</dt><dd>{gibibytes(visiblePreview.resource_preflight.minimum_free_ram_bytes)}</dd></div>
+              <div><dt>MT5 budget</dt><dd>{gibibytes(visiblePreview.resource_preflight.safe_mt5_ram_budget_bytes)}</dd></div>
+              <div><dt>Resolved local agents</dt><dd>{visiblePreview.resource_preflight.resolved_max_local_agents}</dd></div>
+              <div><dt>CPU reserve</dt><dd>{visiblePreview.resource_preflight.cpu_reserve_logical} logical processor(s)</dd></div>
+              <div><dt>Workload</dt><dd>{visiblePreview.resource_preflight.workload.optimization_name} · {visiblePreview.resource_preflight.workload.optimized_parameter_count} optimized parameters</dd></div>
+              <div><dt>Date / tick model</dt><dd>{visiblePreview.resource_preflight.workload.from_date} → {visiblePreview.resource_preflight.workload.to_date} · {visiblePreview.resource_preflight.workload.tick_model_name}</dd></div>
+              <div><dt>Raw Cartesian context</dt><dd>{visiblePreview.resource_preflight.workload.raw_complete_grid_combinations.toLocaleString()} · not MT5 genetic pass count</dd></div>
+            </dl>
+            {visiblePreview.resource_preflight.reason && <p role="alert" className="error">{visiblePreview.resource_preflight.reason}</p>}
+            {visiblePreview.resource_preflight.workload.optimized_parameter_count >= 12 && (
+              <p className="subtle">Large multidimensional native optimization. Resource admission limits active local agents without reducing the scientific search space.</p>
+            )}
+          </>
+        ) : (
+          <p role="status" className="loading">Resource preflight will appear after the configuration is valid.</p>
+        )}
+      </section>
+
       <section aria-labelledby="scientist-advisory">
         <h2 id="scientist-advisory">Scientist advisory</h2>
         <div className="form-grid">
@@ -974,9 +1131,11 @@ export default function OptimizerPage() {
           <p role="status" className="loading">
             {startBlockedByDraft
               ? 'Save or recover the configuration above before starting.'
-              : job?.active
-                ? 'A job is active. Use its live status before starting another job.'
-                : 'This job needs an explicit Resume or Stop decision before a new job can start.'}
+              : startBlockedByResource
+                ? 'Resource preflight must report SAFE TO START before MT5 can launch.'
+                : job?.active
+                  ? 'A job is active. Use its live status before starting another job.'
+                  : 'This job needs an explicit Resume or Stop decision before a new job can start.'}
           </p>
         )}
         {job && !canStop && !canResume && !job.active && (
@@ -994,7 +1153,14 @@ export default function OptimizerPage() {
             <div><dt>Trade Weight α</dt><dd>{job.request.optimizer_fitness?.trade_exponent_alpha ?? 'Legacy Mean R'}</dd></div>
             <div><dt>Market</dt><dd>{job.request.symbol} / {job.request.relative_symbol} · {job.request.period} · {job.request.from_date} → {job.request.to_date}</dd></div>
             <div><dt>Started</dt><dd>{job.started_utc ?? job.created_utc}</dd></div>
-            <div><dt>Scheduling</dt><dd>MT5 owns native pass/task scheduling</dd></div>
+            <div><dt>Scheduling</dt><dd>MT5 owns native pass/task scheduling; MAX caps active local agents</dd></div>
+            {job.request.resource_policy && <div><dt>Resource mode</dt><dd>{job.request.resource_policy.mode}</dd></div>}
+            {job.request.resource_policy && <div><dt>Frozen local-agent cap</dt><dd>{job.request.resource_policy.resolved_max_local_agents}</dd></div>}
+            {currentResourceRuntime && <div><dt>Resource state</dt><dd><strong>{currentResourceRuntime.resource_state}</strong></dd></div>}
+            {currentResourceRuntime && <div><dt>Max active agents observed</dt><dd>{currentResourceRuntime.actual_max_active_agents} / {currentResourceRuntime.resolved_max_local_agents}</dd></div>}
+            {currentResourceRuntime && <div><dt>Minimum free RAM observed</dt><dd>{gibibytes(currentResourceRuntime.min_available_ram_bytes)}</dd></div>}
+            {currentResourceRuntime && <div><dt>Peak MT5 working set</dt><dd>{gibibytes(currentResourceRuntime.peak_mt5_working_set_bytes)}</dd></div>}
+            {currentResourceRuntime?.stop_reason && <div><dt>Resource stop reason</dt><dd className="error-text">{currentResourceRuntime.stop_reason}</dd></div>}
             {job.first_blocker && <div><dt>Constraint</dt><dd className="error-text">Optimizer evidence requires review before continuing.</dd></div>}
             <div><dt>Scientist advisory</dt><dd>{job.request.scientist_assist ? 'Enabled' : 'Disabled'}</dd></div>
             <div><dt>Scientist route</dt><dd>{job.request.scientist ? job.request.scientist.provider + ' · ' + job.request.scientist.model : 'Legacy deterministic job'}</dd></div>

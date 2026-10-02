@@ -171,7 +171,7 @@
       "file": "backend/max_backend/optimizer_api.py",
       "is_test": false,
       "language": "Python",
-      "lines": 169
+      "lines": 170
     },
     {
       "directory": "backend/max_backend",
@@ -185,28 +185,42 @@
       "file": "backend/max_backend/optimizer_core.py",
       "is_test": false,
       "language": "Python",
-      "lines": 1627
+      "lines": 1648
     },
     {
       "directory": "backend/max_backend",
       "file": "backend/max_backend/optimizer_draft.py",
       "is_test": false,
       "language": "Python",
-      "lines": 201
+      "lines": 211
     },
     {
       "directory": "backend/max_backend",
       "file": "backend/max_backend/optimizer_jobs.py",
       "is_test": false,
       "language": "Python",
-      "lines": 1013
+      "lines": 1029
+    },
+    {
+      "directory": "backend/max_backend",
+      "file": "backend/max_backend/optimizer_resource_runtime.py",
+      "is_test": false,
+      "language": "Python",
+      "lines": 317
+    },
+    {
+      "directory": "backend/max_backend",
+      "file": "backend/max_backend/optimizer_resources.py",
+      "is_test": false,
+      "language": "Python",
+      "lines": 308
     },
     {
       "directory": "backend/max_backend",
       "file": "backend/max_backend/optimizer_runtime.py",
       "is_test": false,
       "language": "Python",
-      "lines": 782
+      "lines": 794
     },
     {
       "directory": "backend/max_backend",
@@ -227,14 +241,14 @@
       "file": "backend/max_backend/optimizer_store.py",
       "is_test": false,
       "language": "Python",
-      "lines": 692
+      "lines": 693
     },
     {
       "directory": "backend/max_backend",
       "file": "backend/max_backend/optimizer_worker.py",
       "is_test": false,
       "language": "Python",
-      "lines": 750
+      "lines": 795
     },
     {
       "directory": "backend/max_backend",
@@ -283,7 +297,7 @@
       "file": "backend/max_backend/scientist_knowledge.py",
       "is_test": false,
       "language": "Python",
-      "lines": 168
+      "lines": 170
     },
     {
       "directory": "backend/max_backend",
@@ -339,7 +353,7 @@
       "file": "backend/tests/test_m01_fail_closed.py",
       "is_test": true,
       "language": "Python",
-      "lines": 446
+      "lines": 468
     },
     {
       "directory": "backend/tests",
@@ -360,7 +374,7 @@
       "file": "backend/tests/test_m01_optimizer_core.py",
       "is_test": true,
       "language": "Python",
-      "lines": 1255
+      "lines": 1265
     },
     {
       "directory": "backend/tests",
@@ -381,7 +395,7 @@
       "file": "backend/tests/test_m02_scientist.py",
       "is_test": true,
       "language": "Python",
-      "lines": 1068
+      "lines": 1074
     },
     {
       "directory": "backend/tests",
@@ -479,21 +493,21 @@
       "file": "backend/tests/test_m07_true_mtf.py",
       "is_test": true,
       "language": "Python",
-      "lines": 245
+      "lines": 257
     },
     {
       "directory": "backend/tests",
       "file": "backend/tests/test_m08_strategy_results.py",
       "is_test": true,
       "language": "Python",
-      "lines": 2013
+      "lines": 2018
     },
     {
       "directory": "backend/tests",
       "file": "backend/tests/test_optimizer_draft.py",
       "is_test": true,
       "language": "Python",
-      "lines": 114
+      "lines": 144
     },
     {
       "directory": "backend/tests",
@@ -501,6 +515,13 @@
       "is_test": true,
       "language": "Python",
       "lines": 866
+    },
+    {
+      "directory": "backend/tests",
+      "file": "backend/tests/test_optimizer_resources.py",
+      "is_test": true,
+      "language": "Python",
+      "lines": 204
     },
     {
       "directory": "backend/tests",
@@ -598,14 +619,14 @@
       "file": "frontend/src/OptimizerPage.test.tsx",
       "is_test": true,
       "language": "TypeScript/React",
-      "lines": 1199
+      "lines": 1263
     },
     {
       "directory": "frontend/src",
       "file": "frontend/src/OptimizerPage.tsx",
       "is_test": false,
       "language": "TypeScript/React",
-      "lines": 1228
+      "lines": 1394
     },
     {
       "directory": "frontend/src",
@@ -682,7 +703,7 @@
       "file": "scripts/build_scientist_knowledge.py",
       "is_test": false,
       "language": "Python",
-      "lines": 233
+      "lines": 235
     },
     {
       "directory": "scripts",
@@ -16055,11 +16076,23 @@
     },
     {
       "caller": "backend/max_backend/optimizer_core.py::freeze_request",
-      "target_token": "optimizer_fixed_execution_authority"
+      "target_token": "search_space_cardinality"
     },
     {
       "caller": "backend/max_backend/optimizer_core.py::freeze_request",
-      "target_token": "search_space_cardinality"
+      "target_token": "build_resource_preflight"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_core.py::freeze_request",
+      "target_token": "request.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_core.py::freeze_request",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_core.py::freeze_request",
+      "target_token": "optimizer_fixed_execution_authority"
     },
     {
       "caller": "backend/max_backend/optimizer_core.py::freeze_request",
@@ -17675,6 +17708,10 @@
     },
     {
       "caller": "backend/max_backend/optimizer_core.py::contract_payload",
+      "target_token": "default_resource_settings"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_core.py::contract_payload",
       "target_token": "optimizer_fixed_execution_authority"
     },
     {
@@ -17710,12 +17747,12 @@
       "target_token": "deepcopy"
     },
     {
-      "caller": "backend/max_backend/optimizer_draft.py::_validate_draft",
-      "target_token": "isinstance"
+      "caller": "backend/max_backend/optimizer_draft.py::default_optimizer_draft",
+      "target_token": "default_resource_settings"
     },
     {
       "caller": "backend/max_backend/optimizer_draft.py::_validate_draft",
-      "target_token": "set"
+      "target_token": "isinstance"
     },
     {
       "caller": "backend/max_backend/optimizer_draft.py::_validate_draft",
@@ -17724,6 +17761,22 @@
     {
       "caller": "backend/max_backend/optimizer_draft.py::_validate_draft",
       "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_draft.py::_validate_draft",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_draft.py::_validate_draft",
+      "target_token": "default_resource_settings"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_draft.py::_validate_draft",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_draft.py::_validate_draft",
+      "target_token": "ValueError"
     },
     {
       "caller": "backend/max_backend/optimizer_draft.py::_validate_draft",
@@ -17792,6 +17845,10 @@
     {
       "caller": "backend/max_backend/optimizer_draft.py::_validate_draft",
       "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_draft.py::_validate_draft",
+      "target_token": "validate_resource_settings"
     },
     {
       "caller": "backend/max_backend/optimizer_draft.py::_validate_draft",
@@ -18735,6 +18792,26 @@
     },
     {
       "caller": "backend/max_backend/optimizer_jobs.py::start_optimizer",
+      "target_token": "request.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::start_optimizer",
+      "target_token": "resource_policy.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::start_optimizer",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::start_optimizer",
+      "target_token": "resource_policy.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::start_optimizer",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::start_optimizer",
       "target_token": "create_job"
     },
     {
@@ -19148,6 +19225,38 @@
     {
       "caller": "backend/max_backend/optimizer_jobs.py::resume_optimizer",
       "target_token": "_ensure_request_snapshot"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::resume_optimizer",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::resume_optimizer",
+      "target_token": "job.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::resume_optimizer",
+      "target_token": "frozen_resource_admission"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::resume_optimizer",
+      "target_token": "get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::resume_optimizer",
+      "target_token": "admission.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::resume_optimizer",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::resume_optimizer",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::resume_optimizer",
+      "target_token": "admission.get"
     },
     {
       "caller": "backend/max_backend/optimizer_jobs.py::resume_optimizer",
@@ -19680,6 +19789,1234 @@
     {
       "caller": "backend/max_backend/optimizer_jobs.py::latest_job_detail",
       "target_token": "job_detail"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::ResourceGuardTriggered.__init__",
+      "target_token": "__init__"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::ResourceGuardTriggered.__init__",
+      "target_token": "super"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_system_available_ram_bytes",
+      "target_token": "MemoryStatus"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_system_available_ram_bytes",
+      "target_token": "ctypes.sizeof"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_system_available_ram_bytes",
+      "target_token": "ctypes.windll.kernel32.GlobalMemoryStatusEx"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_system_available_ram_bytes",
+      "target_token": "ctypes.byref"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_system_available_ram_bytes",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_system_available_ram_bytes",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "replace"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "terminal.resolve"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "replace"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "resolve"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "terminal.with_name"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "subprocess.run"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "strip"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "json.loads"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "row.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "row.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "target_token": "agents.append"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "ctypes.POINTER"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "ctypes.WinDLL"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "kernel32.CreateJobObjectW"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "OSError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "ctypes.get_last_error"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "EXTENDED_LIMIT"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "kernel32.SetInformationJobObject"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "ctypes.byref"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "ctypes.sizeof"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "kernel32.CloseHandle"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "OSError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "ctypes.get_last_error"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "STARTUPINFO"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "ctypes.sizeof"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "PROCESS_INFORMATION"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "subprocess.list2cmdline"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "ctypes.create_unicode_buffer"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "kernel32.CreateProcessW"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "ctypes.byref"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "ctypes.byref"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "kernel32.CloseHandle"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "OSError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "ctypes.get_last_error"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "kernel32.AssignProcessToJobObject"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "OSError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "ctypes.get_last_error"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "kernel32.ResumeThread"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "OSError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "ctypes.get_last_error"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "kernel32.TerminateJobObject"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "kernel32.CloseHandle"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "kernel32.CloseHandle"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "kernel32.CloseHandle"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "kernel32.CloseHandle"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "policy.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "policy.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "_launch_in_job"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "ctypes.WinDLL"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "on_process"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "terminal.resolve"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "ini_path.resolve"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "time.time"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "time.monotonic"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "kernel32.WaitForSingleObject"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "wintypes.DWORD"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "kernel32.GetExitCodeProcess"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "ctypes.byref"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "OSError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "ctypes.get_last_error"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "time.monotonic"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "kernel32.TerminateJobObject"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "_system_available_ram_bytes"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "_process_rows"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "sum"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "row.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "max"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "min"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "max"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "max"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "max"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "resource_pressure_state"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "transitions.append"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "on_resource"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "time.monotonic"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "on_resource"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "transitions.append"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "on_resource"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "kernel32.TerminateJobObject"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "kernel32.WaitForSingleObject"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "transitions.append"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "on_resource"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "ResourceGuardTriggered"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "time.sleep"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "round"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "time.monotonic"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "on_resource"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "kernel32.CloseHandle"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "target_token": "kernel32.CloseHandle"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::default_resource_settings",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "default_resource_settings"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "upper"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "value.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "value.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "value.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "value.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "float"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "math.isfinite"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_current_process_working_set_bytes",
+      "target_token": "ctypes.WinDLL"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_current_process_working_set_bytes",
+      "target_token": "ctypes.WinDLL"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_current_process_working_set_bytes",
+      "target_token": "ctypes.POINTER"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_current_process_working_set_bytes",
+      "target_token": "PROCESS_MEMORY_COUNTERS"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_current_process_working_set_bytes",
+      "target_token": "ctypes.sizeof"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_current_process_working_set_bytes",
+      "target_token": "psapi.GetProcessMemoryInfo"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_current_process_working_set_bytes",
+      "target_token": "kernel32.GetCurrentProcess"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_current_process_working_set_bytes",
+      "target_token": "ctypes.byref"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_current_process_working_set_bytes",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_current_process_working_set_bytes",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_configured_local_agent_count",
+      "target_token": "os.getenv"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_configured_local_agent_count",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_configured_local_agent_count",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_configured_local_agent_count",
+      "target_token": "tester_root.is_dir"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_configured_local_agent_count",
+      "target_token": "sum"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_configured_local_agent_count",
+      "target_token": "tester_root.glob"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_configured_local_agent_count",
+      "target_token": "path.is_dir"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_windows_capacity_snapshot",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_windows_capacity_snapshot",
+      "target_token": "replace"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_windows_capacity_snapshot",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_windows_capacity_snapshot",
+      "target_token": "terminal.resolve"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_windows_capacity_snapshot",
+      "target_token": "subprocess.run"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_windows_capacity_snapshot",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_windows_capacity_snapshot",
+      "target_token": "json.loads"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_windows_capacity_snapshot",
+      "target_token": "strip"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_windows_capacity_snapshot",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_windows_capacity_snapshot",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::_windows_capacity_snapshot",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "mt5.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "mt5.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "terminal.is_file"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "terminal.resolve"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "data_root.exists"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "data_root.resolve"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "time.monotonic"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "_RESOURCE_CACHE.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "_RESOURCE_CACHE.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "float"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "_RESOURCE_CACHE.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "_current_process_working_set_bytes"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "_windows_capacity_snapshot"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "value.update"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "_configured_local_agent_count"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "_current_process_working_set_bytes"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "terminal.resolve"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "data_root.resolve"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "_RESOURCE_CACHE.update"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::clear_resource_capacity_cache",
+      "target_token": "_RESOURCE_CACHE.update"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "validate_resource_settings"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "capacity.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "capacity.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "capacity.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "capacity.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "capacity.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "capacity.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "min"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "max"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "min"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "max"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "max"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "max"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "max"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "max"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "math.ceil"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "max"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "min"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "max"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "max"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "min"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "max"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "capacity.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "capacity.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "capacity.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "capacity.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "capacity.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "target_token": "deepcopy"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::build_resource_preflight",
+      "target_token": "validate_resource_settings"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::build_resource_preflight",
+      "target_token": "detect_resource_capacity"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::build_resource_preflight",
+      "target_token": "resolve_resource_preflight"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resource_pressure_state",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resource_pressure_state",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::resource_pressure_state",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "policy.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "detect_resource_capacity"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "policy.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "policy.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "policy.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "policy.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "policy.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "max"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "capacity.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "capacity.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "min"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "capacity.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "capacity.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "target_token": "capacity.get"
     },
     {
       "caller": "backend/max_backend/optimizer_runtime.py::job_evidence_dir",
@@ -20568,6 +21905,26 @@
     {
       "caller": "backend/max_backend/optimizer_runtime.py::launch_mt5",
       "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_runtime.py::launch_mt5",
+      "target_token": "request.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_runtime.py::launch_mt5",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_runtime.py::launch_mt5",
+      "target_token": "launch_bounded_mt5"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_runtime.py::launch_mt5",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_runtime.py::launch_mt5",
+      "target_token": "int"
     },
     {
       "caller": "backend/max_backend/optimizer_runtime.py::launch_mt5",
@@ -24139,6 +25496,10 @@
     },
     {
       "caller": "backend/max_backend/optimizer_worker.py::execute_round",
+      "target_token": "_save_phase"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_worker.py::execute_round",
       "target_token": "sha256_file"
     },
     {
@@ -24166,8 +25527,36 @@
       "target_token": "_save_phase"
     },
     {
+      "caller": "backend/max_backend/optimizer_worker.py::execute_round.record_resource",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_worker.py::execute_round.record_resource",
+      "target_token": "upsert_round"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_worker.py::execute_round.record_resource",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_worker.py::execute_round.record_resource",
+      "target_token": "payload.get"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_worker.py::execute_round.record_resource",
+      "target_token": "dict"
+    },
+    {
       "caller": "backend/max_backend/optimizer_worker.py::execute_round",
       "target_token": "launch_mt5"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_worker.py::execute_round",
+      "target_token": "_save_phase"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_worker.py::execute_round",
+      "target_token": "update_job"
     },
     {
       "caller": "backend/max_backend/optimizer_worker.py::execute_round",
@@ -33326,6 +34715,34 @@
       "target_token": "launch_mt5"
     },
     {
+      "caller": "backend/tests/test_m01_fail_closed.py::test_resource_launch_forwards_process_and_resource_callbacks",
+      "target_token": "terminal.write_bytes"
+    },
+    {
+      "caller": "backend/tests/test_m01_fail_closed.py::test_resource_launch_forwards_process_and_resource_callbacks",
+      "target_token": "ini.write_text"
+    },
+    {
+      "caller": "backend/tests/test_m01_fail_closed.py::test_resource_launch_forwards_process_and_resource_callbacks",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/tests/test_m01_fail_closed.py::test_resource_launch_forwards_process_and_resource_callbacks",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_m01_fail_closed.py::test_resource_launch_forwards_process_and_resource_callbacks.fake_bounded",
+      "target_token": "seen.update"
+    },
+    {
+      "caller": "backend/tests/test_m01_fail_closed.py::test_resource_launch_forwards_process_and_resource_callbacks",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_m01_fail_closed.py::test_resource_launch_forwards_process_and_resource_callbacks",
+      "target_token": "launch_mt5"
+    },
+    {
       "caller": "backend/tests/test_m01_fail_closed.py::test_stale_sidecar_clear_failure_is_not_ignored",
       "target_token": "sidecar.write_text"
     },
@@ -33900,6 +35317,10 @@
     {
       "caller": "backend/tests/test_m01_optimizer_core.py::raw_request",
       "target_token": "payload.update"
+    },
+    {
+      "caller": "backend/tests/test_m01_optimizer_core.py::freeze",
+      "target_token": "monkeypatch.setattr"
     },
     {
       "caller": "backend/tests/test_m01_optimizer_core.py::freeze",
@@ -36492,6 +37913,10 @@
     {
       "caller": "backend/tests/test_m02_scientist.py::_raw_freeze_request",
       "target_token": "payload.update"
+    },
+    {
+      "caller": "backend/tests/test_m02_scientist.py::test_request_freezes_server_scientist_route_without_secret",
+      "target_token": "monkeypatch.setattr"
     },
     {
       "caller": "backend/tests/test_m02_scientist.py::test_request_freezes_server_scientist_route_without_secret",
@@ -43123,6 +44548,10 @@
     },
     {
       "caller": "backend/tests/test_m07_true_mtf.py::test_optimizer_freezes_exact_geometry",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_m07_true_mtf.py::test_optimizer_freezes_exact_geometry",
       "target_token": "core.freeze_request"
     },
     {
@@ -43160,6 +44589,10 @@
     {
       "caller": "backend/tests/test_m07_true_mtf.py::test_optimizer_rejects_invalid_main_timeframe",
       "target_token": "request_payload"
+    },
+    {
+      "caller": "backend/tests/test_m07_true_mtf.py::test_challenger_set_retains_exact_geometry",
+      "target_token": "monkeypatch.setattr"
     },
     {
       "caller": "backend/tests/test_m07_true_mtf.py::test_challenger_set_retains_exact_geometry",
@@ -43404,6 +44837,10 @@
     {
       "caller": "backend/tests/test_m08_strategy_results.py::build_optimizer_fixture",
       "target_token": "fake_mt5"
+    },
+    {
+      "caller": "backend/tests/test_m08_strategy_results.py::build_optimizer_fixture",
+      "target_token": "monkeypatch.setattr"
     },
     {
       "caller": "backend/tests/test_m08_strategy_results.py::build_optimizer_fixture",
@@ -45414,6 +46851,58 @@
       "target_token": "issubset"
     },
     {
+      "caller": "backend/tests/test_optimizer_draft.py::test_optimizer_resource_settings_persist_with_draft",
+      "target_token": "make_database"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_draft.py::test_optimizer_resource_settings_persist_with_draft",
+      "target_token": "get_optimizer_draft"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_draft.py::test_optimizer_resource_settings_persist_with_draft",
+      "target_token": "json.loads"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_draft.py::test_optimizer_resource_settings_persist_with_draft",
+      "target_token": "json.dumps"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_draft.py::test_optimizer_resource_settings_persist_with_draft",
+      "target_token": "put_optimizer_draft"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_draft.py::test_optimizer_resource_settings_persist_with_draft",
+      "target_token": "get_optimizer_draft"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_draft.py::test_legacy_optimizer_draft_without_resources_is_upgraded_in_memory",
+      "target_token": "make_database"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_draft.py::test_legacy_optimizer_draft_without_resources_is_upgraded_in_memory",
+      "target_token": "get_optimizer_draft"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_draft.py::test_legacy_optimizer_draft_without_resources_is_upgraded_in_memory",
+      "target_token": "legacy.pop"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_draft.py::test_legacy_optimizer_draft_without_resources_is_upgraded_in_memory",
+      "target_token": "connect"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_draft.py::test_legacy_optimizer_draft_without_resources_is_upgraded_in_memory",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_draft.py::test_legacy_optimizer_draft_without_resources_is_upgraded_in_memory",
+      "target_token": "json.dumps"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_draft.py::test_legacy_optimizer_draft_without_resources_is_upgraded_in_memory",
+      "target_token": "get_optimizer_draft"
+    },
+    {
       "caller": "backend/tests/test_optimizer_reliability.py::make_db",
       "target_token": "initialize_database"
     },
@@ -46296,6 +47785,302 @@
     {
       "caller": "backend/tests/test_optimizer_reliability.py::test_stop_finds_and_stops_worker_by_launch_token_when_pid_was_not_persisted",
       "target_token": "get_job"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::capacity",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::capacity",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::capacity",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::capacity",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_auto_safe_resolves_bounded_cpu_and_ram_cap",
+      "target_token": "resolve_resource_preflight"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_auto_safe_resolves_bounded_cpu_and_ram_cap",
+      "target_token": "default_resource_settings"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_auto_safe_resolves_bounded_cpu_and_ram_cap",
+      "target_token": "capacity"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_auto_safe_resolves_bounded_cpu_and_ram_cap",
+      "target_token": "workload"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_auto_safe_blocks_when_even_one_agent_has_no_headroom",
+      "target_token": "resolve_resource_preflight"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_auto_safe_blocks_when_even_one_agent_has_no_headroom",
+      "target_token": "default_resource_settings"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_auto_safe_blocks_when_even_one_agent_has_no_headroom",
+      "target_token": "capacity"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_auto_safe_blocks_when_even_one_agent_has_no_headroom",
+      "target_token": "workload"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_single_logical_processor_fails_closed",
+      "target_token": "resolve_resource_preflight"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_single_logical_processor_fails_closed",
+      "target_token": "default_resource_settings"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_single_logical_processor_fails_closed",
+      "target_token": "capacity"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_single_logical_processor_fails_closed",
+      "target_token": "workload"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_many_logical_processors_still_reserves_cpu",
+      "target_token": "resolve_resource_preflight"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_many_logical_processors_still_reserves_cpu",
+      "target_token": "default_resource_settings"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_many_logical_processors_still_reserves_cpu",
+      "target_token": "capacity"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_many_logical_processors_still_reserves_cpu",
+      "target_token": "workload"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_custom_cap_is_respected_without_expanding_hardware_capacity",
+      "target_token": "default_resource_settings"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_custom_cap_is_respected_without_expanding_hardware_capacity",
+      "target_token": "settings.update"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_custom_cap_is_respected_without_expanding_hardware_capacity",
+      "target_token": "resolve_resource_preflight"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_custom_cap_is_respected_without_expanding_hardware_capacity",
+      "target_token": "capacity"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_custom_cap_is_respected_without_expanding_hardware_capacity",
+      "target_token": "workload"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_custom_settings_reject_invalid_values",
+      "target_token": "default_resource_settings"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_custom_settings_reject_invalid_values",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_custom_settings_reject_invalid_values",
+      "target_token": "validate_resource_settings"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_resource_pressure_states_are_explicit",
+      "target_token": "resource_pressure_state"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_resource_pressure_states_are_explicit",
+      "target_token": "resource_pressure_state"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_resource_pressure_states_are_explicit",
+      "target_token": "resource_pressure_state"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_frozen_policy_resume_blocks_when_current_ram_cannot_honor_cap",
+      "target_token": "resolve_resource_preflight"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_frozen_policy_resume_blocks_when_current_ram_cannot_honor_cap",
+      "target_token": "default_resource_settings"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_frozen_policy_resume_blocks_when_current_ram_cannot_honor_cap",
+      "target_token": "capacity"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_frozen_policy_resume_blocks_when_current_ram_cannot_honor_cap",
+      "target_token": "workload"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_frozen_policy_resume_blocks_when_current_ram_cannot_honor_cap",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_frozen_policy_resume_blocks_when_current_ram_cannot_honor_cap",
+      "target_token": "capacity"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_frozen_policy_resume_blocks_when_current_ram_cannot_honor_cap",
+      "target_token": "frozen_resource_admission"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_start_blocks_before_job_creation_when_preflight_is_unsafe",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_start_blocks_before_job_creation_when_preflight_is_unsafe",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_start_blocks_before_job_creation_when_preflight_is_unsafe",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_start_blocks_before_job_creation_when_preflight_is_unsafe",
+      "target_token": "throw"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_start_blocks_before_job_creation_when_preflight_is_unsafe",
+      "target_token": "AssertionError"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_start_blocks_before_job_creation_when_preflight_is_unsafe",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_start_blocks_before_job_creation_when_preflight_is_unsafe",
+      "target_token": "optimizer_jobs.start_optimizer"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "target_token": "resolve_resource_preflight"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "target_token": "default_resource_settings"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "target_token": "capacity"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "target_token": "workload"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "target_token": "terminal.write_bytes"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "target_token": "ini.write_text"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job.Kernel.TerminateJobObject",
+      "target_token": "calls.append"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job.Kernel.CloseHandle",
+      "target_token": "calls.append"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "target_token": "Kernel"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "target_token": "optimizer_resource_runtime.launch_bounded_mt5"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "target_token": "states.append"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_resource_stopped_resume_rechecks_frozen_admission",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_resource_stopped_resume_rechecks_frozen_admission",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_resource_stopped_resume_rechecks_frozen_admission",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_resource_stopped_resume_rechecks_frozen_admission",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_resource_stopped_resume_rechecks_frozen_admission",
+      "target_token": "throw"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_resource_stopped_resume_rechecks_frozen_admission",
+      "target_token": "AssertionError"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_resource_stopped_resume_rechecks_frozen_admission",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_resource_stopped_resume_rechecks_frozen_admission",
+      "target_token": "optimizer_jobs.resume_optimizer"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_backend_working_set_detector_returns_real_bytes",
+      "target_token": "optimizer_resource_runtime.os.getpid"
+    },
+    {
+      "caller": "backend/tests/test_optimizer_resources.py::test_backend_working_set_detector_returns_real_bytes",
+      "target_token": "_current_process_working_set_bytes"
     },
     {
       "caller": "backend/tests/test_optimizer_runtime_durability.py::_sources",
@@ -61890,7 +63675,7 @@
     {
       "file": "backend/max_backend/optimizer_api.py",
       "kind": "function",
-      "line_end": 75,
+      "line_end": 76,
       "line_start": 62,
       "locator": "backend/max_backend/optimizer_api.py::preview_request",
       "symbol": "preview_request"
@@ -61898,56 +63683,56 @@
     {
       "file": "backend/max_backend/optimizer_api.py",
       "kind": "function",
-      "line_end": 80,
-      "line_start": 79,
+      "line_end": 81,
+      "line_start": 80,
       "locator": "backend/max_backend/optimizer_api.py::current_job",
       "symbol": "current_job"
     },
     {
       "file": "backend/max_backend/optimizer_api.py",
       "kind": "function",
-      "line_end": 88,
-      "line_start": 84,
+      "line_end": 89,
+      "line_start": 85,
       "locator": "backend/max_backend/optimizer_api.py::get_job",
       "symbol": "get_job"
     },
     {
       "file": "backend/max_backend/optimizer_api.py",
       "kind": "function",
-      "line_end": 104,
-      "line_start": 92,
+      "line_end": 105,
+      "line_start": 93,
       "locator": "backend/max_backend/optimizer_api.py::start",
       "symbol": "start"
     },
     {
       "file": "backend/max_backend/optimizer_api.py",
       "kind": "function",
-      "line_end": 130,
-      "line_start": 108,
+      "line_end": 131,
+      "line_start": 109,
       "locator": "backend/max_backend/optimizer_api.py::get_qualified_candidates",
       "symbol": "get_qualified_candidates"
     },
     {
       "file": "backend/max_backend/optimizer_api.py",
       "kind": "function",
-      "line_end": 149,
-      "line_start": 134,
+      "line_end": 150,
+      "line_start": 135,
       "locator": "backend/max_backend/optimizer_api.py::promote_qualified_candidates",
       "symbol": "promote_qualified_candidates"
     },
     {
       "file": "backend/max_backend/optimizer_api.py",
       "kind": "function",
-      "line_end": 159,
-      "line_start": 153,
+      "line_end": 160,
+      "line_start": 154,
       "locator": "backend/max_backend/optimizer_api.py::stop",
       "symbol": "stop"
     },
     {
       "file": "backend/max_backend/optimizer_api.py",
       "kind": "function",
-      "line_end": 169,
-      "line_start": 163,
+      "line_end": 170,
+      "line_start": 164,
       "locator": "backend/max_backend/optimizer_api.py::resume",
       "symbol": "resume"
     },
@@ -62090,840 +63875,1032 @@
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 99,
-      "line_start": 91,
+      "line_end": 100,
+      "line_start": 92,
       "locator": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_schema",
       "symbol": "optimizer_parameter_bounds_for_schema"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 113,
-      "line_start": 101,
+      "line_end": 114,
+      "line_start": 102,
       "locator": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys",
       "symbol": "optimizer_parameter_bounds_for_keys"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 132,
-      "line_start": 115,
+      "line_end": 133,
+      "line_start": 116,
       "locator": "backend/max_backend/optimizer_core.py::optimizer_fixed_execution_authority",
       "symbol": "optimizer_fixed_execution_authority"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "class",
-      "line_end": 253,
-      "line_start": 188,
+      "line_end": 254,
+      "line_start": 189,
       "locator": "backend/max_backend/optimizer_core.py::OptimizationPass",
       "symbol": "OptimizationPass"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "method",
-      "line_end": 223,
-      "line_start": 214,
+      "line_end": 224,
+      "line_start": 215,
       "locator": "backend/max_backend/optimizer_core.py::OptimizationPass.passes_nonweighted",
       "symbol": "OptimizationPass.passes_nonweighted"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "method",
-      "line_end": 231,
-      "line_start": 226,
+      "line_end": 232,
+      "line_start": 227,
       "locator": "backend/max_backend/optimizer_core.py::OptimizationPass.eligible",
       "symbol": "OptimizationPass.eligible"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "method",
-      "line_end": 253,
-      "line_start": 233,
+      "line_end": 254,
+      "line_start": 234,
       "locator": "backend/max_backend/optimizer_core.py::OptimizationPass.payload",
       "symbol": "OptimizationPass.payload"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 269,
-      "line_start": 267,
+      "line_end": 270,
+      "line_start": 268,
       "locator": "backend/max_backend/optimizer_core.py::_risk_grid_aligned",
       "symbol": "_risk_grid_aligned"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 280,
-      "line_start": 272,
+      "line_end": 281,
+      "line_start": 273,
       "locator": "backend/max_backend/optimizer_core.py::_snap_risk_grid_window",
       "symbol": "_snap_risk_grid_window"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 294,
-      "line_start": 283,
+      "line_end": 295,
+      "line_start": 284,
       "locator": "backend/max_backend/optimizer_core.py::validate_optimizer_trade_exponent",
       "symbol": "validate_optimizer_trade_exponent"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 305,
-      "line_start": 297,
+      "line_end": 306,
+      "line_start": 298,
       "locator": "backend/max_backend/optimizer_core.py::optimizer_fitness_contract",
       "symbol": "optimizer_fitness_contract"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 320,
-      "line_start": 308,
+      "line_end": 321,
+      "line_start": 309,
       "locator": "backend/max_backend/optimizer_core.py::validate_optimizer_fitness_contract",
       "symbol": "validate_optimizer_fitness_contract"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 340,
-      "line_start": 323,
+      "line_end": 341,
+      "line_start": 324,
       "locator": "backend/max_backend/optimizer_core.py::optimizer_fitness_for_request",
       "symbol": "optimizer_fitness_for_request"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 357,
-      "line_start": 343,
+      "line_end": 358,
+      "line_start": 344,
       "locator": "backend/max_backend/optimizer_core.py::optimizer_fitness_value",
       "symbol": "optimizer_fitness_value"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 370,
-      "line_start": 360,
+      "line_end": 371,
+      "line_start": 361,
       "locator": "backend/max_backend/optimizer_core.py::_is_fail_closed_sentinel",
       "symbol": "_is_fail_closed_sentinel"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 389,
-      "line_start": 373,
+      "line_end": 390,
+      "line_start": 374,
       "locator": "backend/max_backend/optimizer_core.py::_is_v2_zero_trade_sentinel",
       "symbol": "_is_v2_zero_trade_sentinel"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 397,
-      "line_start": 392,
+      "line_end": 398,
+      "line_start": 393,
       "locator": "backend/max_backend/optimizer_core.py::sha256_file",
       "symbol": "sha256_file"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 417,
-      "line_start": 400,
+      "line_end": 418,
+      "line_start": 401,
       "locator": "backend/max_backend/optimizer_core.py::read_ea_optimizer_defaults",
       "symbol": "read_ea_optimizer_defaults"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 471,
-      "line_start": 420,
+      "line_end": 472,
+      "line_start": 421,
       "locator": "backend/max_backend/optimizer_core.py::validate_search_space",
       "symbol": "validate_search_space"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 493,
-      "line_start": 474,
+      "line_end": 494,
+      "line_start": 475,
       "locator": "backend/max_backend/optimizer_core.py::normalize_optimize_params",
       "symbol": "normalize_optimize_params"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 516,
-      "line_start": 496,
+      "line_end": 517,
+      "line_start": 497,
       "locator": "backend/max_backend/optimizer_core.py::search_space_cardinality",
       "symbol": "search_space_cardinality"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 526,
-      "line_start": 519,
+      "line_end": 527,
+      "line_start": 520,
       "locator": "backend/max_backend/optimizer_core.py::_parse_date",
       "symbol": "_parse_date"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 566,
-      "line_start": 529,
+      "line_end": 567,
+      "line_start": 530,
       "locator": "backend/max_backend/optimizer_core.py::trade_sample",
       "symbol": "trade_sample"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 717,
-      "line_start": 569,
+      "line_end": 735,
+      "line_start": 570,
       "locator": "backend/max_backend/optimizer_core.py::freeze_request",
       "symbol": "freeze_request"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 725,
-      "line_start": 720,
+      "line_end": 743,
+      "line_start": 738,
       "locator": "backend/max_backend/optimizer_core.py::_format_set_value",
       "symbol": "_format_set_value"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 788,
-      "line_start": 728,
+      "line_end": 806,
+      "line_start": 746,
       "locator": "backend/max_backend/optimizer_core.py::build_set_text",
       "symbol": "build_set_text"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 816,
-      "line_start": 791,
+      "line_end": 834,
+      "line_start": 809,
       "locator": "backend/max_backend/optimizer_core.py::parse_set_optimizer_entries",
       "symbol": "parse_set_optimizer_entries"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 851,
-      "line_start": 819,
+      "line_end": 871,
+      "line_start": 837,
       "locator": "backend/max_backend/optimizer_core.py::build_tester_ini",
       "symbol": "build_tester_ini"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 855,
-      "line_start": 854,
+      "line_end": 875,
+      "line_start": 874,
       "locator": "backend/max_backend/optimizer_core.py::_strip_ns",
       "symbol": "_strip_ns"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 863,
-      "line_start": 858,
+      "line_end": 883,
+      "line_start": 878,
       "locator": "backend/max_backend/optimizer_core.py::_row_values",
       "symbol": "_row_values"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 879,
-      "line_start": 866,
+      "line_end": 899,
+      "line_start": 886,
       "locator": "backend/max_backend/optimizer_core.py::_float",
       "symbol": "_float"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 886,
-      "line_start": 882,
+      "line_end": 906,
+      "line_start": 902,
       "locator": "backend/max_backend/optimizer_core.py::_int",
       "symbol": "_int"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 904,
-      "line_start": 889,
+      "line_end": 924,
+      "line_start": 909,
       "locator": "backend/max_backend/optimizer_core.py::parameter_signature",
       "symbol": "parameter_signature"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 926,
-      "line_start": 907,
+      "line_end": 946,
+      "line_start": 927,
       "locator": "backend/max_backend/optimizer_core.py::_parse_frame_inputs",
       "symbol": "_parse_frame_inputs"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 1095,
-      "line_start": 929,
+      "line_end": 1115,
+      "line_start": 949,
       "locator": "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv",
       "symbol": "parse_optimizer_metrics_csv"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 1121,
-      "line_start": 1097,
+      "line_end": 1141,
+      "line_start": 1117,
       "locator": "backend/max_backend/optimizer_core.py::optimization_report_identity",
       "symbol": "optimization_report_identity"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 1136,
-      "line_start": 1124,
+      "line_end": 1156,
+      "line_start": 1144,
       "locator": "backend/max_backend/optimizer_core.py::report_matches_request",
       "symbol": "report_matches_request"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 1418,
-      "line_start": 1139,
+      "line_end": 1438,
+      "line_start": 1159,
       "locator": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
       "symbol": "parse_optimization_xml"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "method",
-      "line_end": 1193,
-      "line_start": 1189,
+      "line_end": 1213,
+      "line_start": 1209,
       "locator": "backend/max_backend/optimizer_core.py::parse_optimization_xml.column",
       "symbol": "parse_optimization_xml.column"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "method",
-      "line_end": 1222,
-      "line_start": 1221,
+      "line_end": 1242,
+      "line_start": 1241,
       "locator": "backend/max_backend/optimizer_core.py::parse_optimization_xml.at",
       "symbol": "parse_optimization_xml.at"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 1428,
-      "line_start": 1420,
+      "line_end": 1448,
+      "line_start": 1440,
       "locator": "backend/max_backend/optimizer_core.py::apply_frozen_gates",
       "symbol": "apply_frozen_gates"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 1436,
-      "line_start": 1431,
+      "line_end": 1456,
+      "line_start": 1451,
       "locator": "backend/max_backend/optimizer_core.py::unresolved_weighted_contenders",
       "symbol": "unresolved_weighted_contenders"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 1454,
-      "line_start": 1439,
+      "line_end": 1474,
+      "line_start": 1459,
       "locator": "backend/max_backend/optimizer_core.py::select_winner",
       "symbol": "select_winner"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 1507,
-      "line_start": 1457,
+      "line_end": 1527,
+      "line_start": 1477,
       "locator": "backend/max_backend/optimizer_core.py::eligibility_audit",
       "symbol": "eligibility_audit"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 1534,
-      "line_start": 1510,
+      "line_end": 1554,
+      "line_start": 1530,
       "locator": "backend/max_backend/optimizer_core.py::best_near_miss",
       "symbol": "best_near_miss"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 1573,
-      "line_start": 1537,
+      "line_end": 1593,
+      "line_start": 1557,
       "locator": "backend/max_backend/optimizer_core.py::deterministic_refine",
       "symbol": "deterministic_refine"
     },
     {
       "file": "backend/max_backend/optimizer_core.py",
       "kind": "function",
-      "line_end": 1627,
-      "line_start": 1576,
+      "line_end": 1648,
+      "line_start": 1596,
       "locator": "backend/max_backend/optimizer_core.py::contract_payload",
       "symbol": "contract_payload"
     },
     {
       "file": "backend/max_backend/optimizer_draft.py",
       "kind": "function",
-      "line_end": 64,
-      "line_start": 47,
+      "line_end": 67,
+      "line_start": 49,
       "locator": "backend/max_backend/optimizer_draft.py::default_optimizer_draft",
       "symbol": "default_optimizer_draft"
     },
     {
       "file": "backend/max_backend/optimizer_draft.py",
       "kind": "function",
-      "line_end": 122,
-      "line_start": 67,
+      "line_end": 132,
+      "line_start": 70,
       "locator": "backend/max_backend/optimizer_draft.py::_validate_draft",
       "symbol": "_validate_draft"
     },
     {
       "file": "backend/max_backend/optimizer_draft.py",
       "kind": "function",
-      "line_end": 152,
-      "line_start": 125,
+      "line_end": 162,
+      "line_start": 135,
       "locator": "backend/max_backend/optimizer_draft.py::_decode",
       "symbol": "_decode"
     },
     {
       "file": "backend/max_backend/optimizer_draft.py",
       "kind": "function",
-      "line_end": 160,
-      "line_start": 155,
+      "line_end": 170,
+      "line_start": 165,
       "locator": "backend/max_backend/optimizer_draft.py::get_optimizer_draft",
       "symbol": "get_optimizer_draft"
     },
     {
       "file": "backend/max_backend/optimizer_draft.py",
       "kind": "function",
-      "line_end": 201,
-      "line_start": 163,
+      "line_end": 211,
+      "line_start": 173,
       "locator": "backend/max_backend/optimizer_draft.py::put_optimizer_draft",
       "symbol": "put_optimizer_draft"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 83,
-      "line_start": 63,
+      "line_end": 85,
+      "line_start": 65,
       "locator": "backend/max_backend/optimizer_jobs.py::_process_command_line",
       "symbol": "_process_command_line"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 134,
-      "line_start": 86,
+      "line_end": 136,
+      "line_start": 88,
       "locator": "backend/max_backend/optimizer_jobs.py::_process_identity",
       "symbol": "_process_identity"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 168,
-      "line_start": 137,
+      "line_end": 170,
+      "line_start": 139,
       "locator": "backend/max_backend/optimizer_jobs.py::_worker_identity_matches",
       "symbol": "_worker_identity_matches"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 183,
-      "line_start": 171,
+      "line_end": 185,
+      "line_start": 173,
       "locator": "backend/max_backend/optimizer_jobs.py::_worker_is_alive",
       "symbol": "_worker_is_alive"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 232,
-      "line_start": 186,
+      "line_end": 234,
+      "line_start": 188,
       "locator": "backend/max_backend/optimizer_jobs.py::_terminate_verified_worker",
       "symbol": "_terminate_verified_worker"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 241,
-      "line_start": 235,
+      "line_end": 243,
+      "line_start": 237,
       "locator": "backend/max_backend/optimizer_jobs.py::_is_venv_python_launcher",
       "symbol": "_is_venv_python_launcher"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 283,
-      "line_start": 244,
+      "line_end": 285,
+      "line_start": 246,
       "locator": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate",
       "symbol": "_select_worker_candidate"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "method",
-      "line_end": 266,
-      "line_start": 255,
+      "line_end": 268,
+      "line_start": 257,
       "locator": "backend/max_backend/optimizer_jobs.py::_select_worker_candidate.descends_from",
       "symbol": "_select_worker_candidate.descends_from"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 336,
-      "line_start": 286,
+      "line_end": 338,
+      "line_start": 288,
       "locator": "backend/max_backend/optimizer_jobs.py::_find_worker_by_token",
       "symbol": "_find_worker_by_token"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 372,
-      "line_start": 339,
+      "line_end": 374,
+      "line_start": 341,
       "locator": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
       "symbol": "_wait_for_worker_identity"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 384,
-      "line_start": 375,
+      "line_end": 386,
+      "line_start": 377,
       "locator": "backend/max_backend/optimizer_jobs.py::_mark_reconciliation_required",
       "symbol": "_mark_reconciliation_required"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 391,
-      "line_start": 387,
+      "line_end": 393,
+      "line_start": 389,
       "locator": "backend/max_backend/optimizer_jobs.py::_public_job",
       "symbol": "_public_job"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 507,
-      "line_start": 394,
+      "line_end": 509,
+      "line_start": 396,
       "locator": "backend/max_backend/optimizer_jobs.py::_spawn_worker",
       "symbol": "_spawn_worker"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 531,
-      "line_start": 510,
+      "line_end": 537,
+      "line_start": 512,
       "locator": "backend/max_backend/optimizer_jobs.py::start_optimizer",
       "symbol": "start_optimizer"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 546,
-      "line_start": 534,
+      "line_end": 552,
+      "line_start": 540,
       "locator": "backend/max_backend/optimizer_jobs.py::_round_has_mt5_launch_authority",
       "symbol": "_round_has_mt5_launch_authority"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 596,
-      "line_start": 549,
+      "line_end": 602,
+      "line_start": 555,
       "locator": "backend/max_backend/optimizer_jobs.py::_stop_verified_optimizer_mt5",
       "symbol": "_stop_verified_optimizer_mt5"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 663,
-      "line_start": 599,
+      "line_end": 669,
+      "line_start": 605,
       "locator": "backend/max_backend/optimizer_jobs.py::stop_optimizer",
       "symbol": "stop_optimizer"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 696,
-      "line_start": 666,
+      "line_end": 712,
+      "line_start": 672,
       "locator": "backend/max_backend/optimizer_jobs.py::resume_optimizer",
       "symbol": "resume_optimizer"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 750,
-      "line_start": 699,
+      "line_end": 766,
+      "line_start": 715,
       "locator": "backend/max_backend/optimizer_jobs.py::_reconcile_uncertain_round",
       "symbol": "_reconcile_uncertain_round"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 763,
-      "line_start": 753,
+      "line_end": 779,
+      "line_start": 769,
       "locator": "backend/max_backend/optimizer_jobs.py::_ensure_request_snapshot",
       "symbol": "_ensure_request_snapshot"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 882,
-      "line_start": 766,
+      "line_end": 898,
+      "line_start": 782,
       "locator": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
       "symbol": "reconcile_optimizer_startup"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 904,
-      "line_start": 885,
+      "line_end": 920,
+      "line_start": 901,
       "locator": "backend/max_backend/optimizer_jobs.py::_round_passes",
       "symbol": "_round_passes"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 1001,
-      "line_start": 907,
+      "line_end": 1017,
+      "line_start": 923,
       "locator": "backend/max_backend/optimizer_jobs.py::job_detail",
       "symbol": "job_detail"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 1013,
-      "line_start": 1004,
+      "line_end": 1029,
+      "line_start": 1020,
       "locator": "backend/max_backend/optimizer_jobs.py::latest_job_detail",
       "symbol": "latest_job_detail"
     },
     {
+      "file": "backend/max_backend/optimizer_resource_runtime.py",
+      "kind": "class",
+      "line_end": 21,
+      "line_start": 17,
+      "locator": "backend/max_backend/optimizer_resource_runtime.py::ResourceGuardTriggered",
+      "symbol": "ResourceGuardTriggered"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resource_runtime.py",
+      "kind": "method",
+      "line_end": 21,
+      "line_start": 18,
+      "locator": "backend/max_backend/optimizer_resource_runtime.py::ResourceGuardTriggered.__init__",
+      "symbol": "ResourceGuardTriggered.__init__"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resource_runtime.py",
+      "kind": "function",
+      "line_end": 41,
+      "line_start": 24,
+      "locator": "backend/max_backend/optimizer_resource_runtime.py::_system_available_ram_bytes",
+      "symbol": "_system_available_ram_bytes"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resource_runtime.py",
+      "kind": "class",
+      "line_end": 36,
+      "line_start": 25,
+      "locator": "backend/max_backend/optimizer_resource_runtime.py::_system_available_ram_bytes.MemoryStatus",
+      "symbol": "_system_available_ram_bytes.MemoryStatus"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resource_runtime.py",
+      "kind": "function",
+      "line_end": 86,
+      "line_start": 44,
+      "locator": "backend/max_backend/optimizer_resource_runtime.py::_process_rows",
+      "symbol": "_process_rows"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resource_runtime.py",
+      "kind": "function",
+      "line_end": 189,
+      "line_start": 88,
+      "locator": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job",
+      "symbol": "_launch_in_job"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resource_runtime.py",
+      "kind": "class",
+      "line_end": 113,
+      "line_start": 101,
+      "locator": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job.STARTUPINFO",
+      "symbol": "_launch_in_job.STARTUPINFO"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resource_runtime.py",
+      "kind": "class",
+      "line_end": 118,
+      "line_start": 114,
+      "locator": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job.PROCESS_INFORMATION",
+      "symbol": "_launch_in_job.PROCESS_INFORMATION"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resource_runtime.py",
+      "kind": "class",
+      "line_end": 124,
+      "line_start": 120,
+      "locator": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job.IO_COUNTERS",
+      "symbol": "_launch_in_job.IO_COUNTERS"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resource_runtime.py",
+      "kind": "class",
+      "line_end": 133,
+      "line_start": 126,
+      "locator": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job.BASIC_LIMIT",
+      "symbol": "_launch_in_job.BASIC_LIMIT"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resource_runtime.py",
+      "kind": "class",
+      "line_end": 140,
+      "line_start": 135,
+      "locator": "backend/max_backend/optimizer_resource_runtime.py::_launch_in_job.EXTENDED_LIMIT",
+      "symbol": "_launch_in_job.EXTENDED_LIMIT"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resource_runtime.py",
+      "kind": "function",
+      "line_end": 317,
+      "line_start": 191,
+      "locator": "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+      "symbol": "launch_bounded_mt5"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resources.py",
+      "kind": "function",
+      "line_end": 31,
+      "line_start": 30,
+      "locator": "backend/max_backend/optimizer_resources.py::default_resource_settings",
+      "symbol": "default_resource_settings"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resources.py",
+      "kind": "function",
+      "line_end": 59,
+      "line_start": 34,
+      "locator": "backend/max_backend/optimizer_resources.py::validate_resource_settings",
+      "symbol": "validate_resource_settings"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resources.py",
+      "kind": "function",
+      "line_end": 82,
+      "line_start": 61,
+      "locator": "backend/max_backend/optimizer_resources.py::_current_process_working_set_bytes",
+      "symbol": "_current_process_working_set_bytes"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resources.py",
+      "kind": "class",
+      "line_end": 72,
+      "line_start": 65,
+      "locator": "backend/max_backend/optimizer_resources.py::_current_process_working_set_bytes.PROCESS_MEMORY_COUNTERS",
+      "symbol": "_current_process_working_set_bytes.PROCESS_MEMORY_COUNTERS"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resources.py",
+      "kind": "function",
+      "line_end": 93,
+      "line_start": 85,
+      "locator": "backend/max_backend/optimizer_resources.py::_configured_local_agent_count",
+      "symbol": "_configured_local_agent_count"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resources.py",
+      "kind": "function",
+      "line_end": 129,
+      "line_start": 95,
+      "locator": "backend/max_backend/optimizer_resources.py::_windows_capacity_snapshot",
+      "symbol": "_windows_capacity_snapshot"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resources.py",
+      "kind": "function",
+      "line_end": 158,
+      "line_start": 131,
+      "locator": "backend/max_backend/optimizer_resources.py::detect_resource_capacity",
+      "symbol": "detect_resource_capacity"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resources.py",
+      "kind": "function",
+      "line_end": 163,
+      "line_start": 161,
+      "locator": "backend/max_backend/optimizer_resources.py::clear_resource_capacity_cache",
+      "symbol": "clear_resource_capacity_cache"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resources.py",
+      "kind": "function",
+      "line_end": 249,
+      "line_start": 165,
+      "locator": "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+      "symbol": "resolve_resource_preflight"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resources.py",
+      "kind": "function",
+      "line_end": 262,
+      "line_start": 252,
+      "locator": "backend/max_backend/optimizer_resources.py::build_resource_preflight",
+      "symbol": "build_resource_preflight"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resources.py",
+      "kind": "function",
+      "line_end": 276,
+      "line_start": 265,
+      "locator": "backend/max_backend/optimizer_resources.py::resource_pressure_state",
+      "symbol": "resource_pressure_state"
+    },
+    {
+      "file": "backend/max_backend/optimizer_resources.py",
+      "kind": "function",
+      "line_end": 308,
+      "line_start": 278,
+      "locator": "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+      "symbol": "frozen_resource_admission"
+    },
+    {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "class",
-      "line_end": 33,
-      "line_start": 32,
+      "line_end": 34,
+      "line_start": 33,
       "locator": "backend/max_backend/optimizer_runtime.py::ReportPending",
       "symbol": "ReportPending"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 39,
-      "line_start": 36,
+      "line_end": 40,
+      "line_start": 37,
       "locator": "backend/max_backend/optimizer_runtime.py::job_evidence_dir",
       "symbol": "job_evidence_dir"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 45,
-      "line_start": 42,
+      "line_end": 46,
+      "line_start": 43,
       "locator": "backend/max_backend/optimizer_runtime.py::round_evidence_dir",
       "symbol": "round_evidence_dir"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 49,
-      "line_start": 48,
+      "line_end": 50,
+      "line_start": 49,
       "locator": "backend/max_backend/optimizer_runtime.py::committed_round_dir",
       "symbol": "committed_round_dir"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 68,
-      "line_start": 52,
+      "line_end": 69,
+      "line_start": 53,
       "locator": "backend/max_backend/optimizer_runtime.py::write_json",
       "symbol": "write_json"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 78,
-      "line_start": 71,
+      "line_end": 79,
+      "line_start": 72,
       "locator": "backend/max_backend/optimizer_runtime.py::write_state_snapshot",
       "symbol": "write_state_snapshot"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 101,
-      "line_start": 81,
+      "line_end": 102,
+      "line_start": 82,
       "locator": "backend/max_backend/optimizer_runtime.py::_read_text_flexible",
       "symbol": "_read_text_flexible"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 120,
-      "line_start": 104,
+      "line_end": 121,
+      "line_start": 105,
       "locator": "backend/max_backend/optimizer_runtime.py::compile_summary",
       "symbol": "compile_summary"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 208,
-      "line_start": 123,
+      "line_end": 209,
+      "line_start": 124,
       "locator": "backend/max_backend/optimizer_runtime.py::compile_ea",
       "symbol": "compile_ea"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 218,
-      "line_start": 211,
+      "line_end": 219,
+      "line_start": 212,
       "locator": "backend/max_backend/optimizer_runtime.py::_report_roots",
       "symbol": "_report_roots"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 234,
-      "line_start": 221,
+      "line_end": 235,
+      "line_start": 222,
       "locator": "backend/max_backend/optimizer_runtime.py::compatible_reports",
       "symbol": "compatible_reports"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 243,
-      "line_start": 237,
+      "line_end": 244,
+      "line_start": 238,
       "locator": "backend/max_backend/optimizer_runtime.py::report_fingerprint",
       "symbol": "report_fingerprint"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 247,
-      "line_start": 246,
+      "line_end": 248,
+      "line_start": 247,
       "locator": "backend/max_backend/optimizer_runtime.py::snapshot_compatible_reports",
       "symbol": "snapshot_compatible_reports"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 257,
-      "line_start": 250,
+      "line_end": 258,
+      "line_start": 251,
       "locator": "backend/max_backend/optimizer_runtime.py::_snapshot_index",
       "symbol": "_snapshot_index"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 265,
-      "line_start": 260,
+      "line_end": 266,
+      "line_start": 261,
       "locator": "backend/max_backend/optimizer_runtime.py::is_new_or_changed",
       "symbol": "is_new_or_changed"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 305,
-      "line_start": 268,
+      "line_end": 306,
+      "line_start": 269,
       "locator": "backend/max_backend/optimizer_runtime.py::wait_for_fresh_report",
       "symbol": "wait_for_fresh_report"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 313,
-      "line_start": 308,
+      "line_end": 314,
+      "line_start": 309,
       "locator": "backend/max_backend/optimizer_runtime.py::optimizer_run_nonce",
       "symbol": "optimizer_run_nonce"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 362,
-      "line_start": 316,
+      "line_end": 363,
+      "line_start": 317,
       "locator": "backend/max_backend/optimizer_runtime.py::prepare_round",
       "symbol": "prepare_round"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 373,
-      "line_start": 365,
+      "line_end": 374,
+      "line_start": 366,
       "locator": "backend/max_backend/optimizer_runtime.py::clear_stale_sidecar",
       "symbol": "clear_stale_sidecar"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 401,
-      "line_start": 376,
+      "line_end": 402,
+      "line_start": 377,
       "locator": "backend/max_backend/optimizer_runtime.py::_matching_terminal_pids",
       "symbol": "_matching_terminal_pids"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 461,
-      "line_start": 404,
+      "line_end": 462,
+      "line_start": 405,
       "locator": "backend/max_backend/optimizer_runtime.py::optimizer_terminal_process_state",
       "symbol": "optimizer_terminal_process_state"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 496,
-      "line_start": 464,
+      "line_end": 508,
+      "line_start": 465,
       "locator": "backend/max_backend/optimizer_runtime.py::launch_mt5",
       "symbol": "launch_mt5"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 577,
-      "line_start": 499,
+      "line_end": 589,
+      "line_start": 511,
       "locator": "backend/max_backend/optimizer_runtime.py::stage_raw_round_evidence",
       "symbol": "stage_raw_round_evidence"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "method",
-      "line_end": 536,
-      "line_start": 515,
+      "line_end": 548,
+      "line_start": 527,
       "locator": "backend/max_backend/optimizer_runtime.py::stage_raw_round_evidence.validated_result",
       "symbol": "stage_raw_round_evidence.validated_result"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 582,
-      "line_start": 580,
+      "line_end": 594,
+      "line_start": 592,
       "locator": "backend/max_backend/optimizer_runtime.py::discard_raw_round_staging",
       "symbol": "discard_raw_round_staging"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 723,
-      "line_start": 585,
+      "line_end": 735,
+      "line_start": 597,
       "locator": "backend/max_backend/optimizer_runtime.py::commit_round_evidence",
       "symbol": "commit_round_evidence"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 732,
-      "line_start": 726,
+      "line_end": 744,
+      "line_start": 738,
       "locator": "backend/max_backend/optimizer_runtime.py::report_fingerprint_for_publication",
       "symbol": "report_fingerprint_for_publication"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 740,
-      "line_start": 735,
+      "line_end": 752,
+      "line_start": 747,
       "locator": "backend/max_backend/optimizer_runtime.py::_write_synced_json",
       "symbol": "_write_synced_json"
     },
     {
       "file": "backend/max_backend/optimizer_runtime.py",
       "kind": "function",
-      "line_end": 782,
-      "line_start": 743,
+      "line_end": 794,
+      "line_start": 755,
       "locator": "backend/max_backend/optimizer_runtime.py::verify_committed_round_bundle",
       "symbol": "verify_committed_round_bundle"
     },
@@ -63242,7 +65219,7 @@
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 259,
+      "line_end": 260,
       "line_start": 197,
       "locator": "backend/max_backend/optimizer_store.py::create_job",
       "symbol": "create_job"
@@ -63250,208 +65227,216 @@
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 269,
-      "line_start": 262,
+      "line_end": 270,
+      "line_start": 263,
       "locator": "backend/max_backend/optimizer_store.py::get_job",
       "symbol": "get_job"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 278,
-      "line_start": 272,
+      "line_end": 279,
+      "line_start": 273,
       "locator": "backend/max_backend/optimizer_store.py::latest_job",
       "symbol": "latest_job"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 287,
-      "line_start": 281,
+      "line_end": 288,
+      "line_start": 282,
       "locator": "backend/max_backend/optimizer_store.py::active_job",
       "symbol": "active_job"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 365,
-      "line_start": 290,
+      "line_end": 366,
+      "line_start": 291,
       "locator": "backend/max_backend/optimizer_store.py::update_job",
       "symbol": "update_job"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 396,
-      "line_start": 368,
+      "line_end": 397,
+      "line_start": 369,
       "locator": "backend/max_backend/optimizer_store.py::claim_initial_worker_launch",
       "symbol": "claim_initial_worker_launch"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 431,
-      "line_start": 399,
+      "line_end": 432,
+      "line_start": 400,
       "locator": "backend/max_backend/optimizer_store.py::claim_resume_worker_launch",
       "symbol": "claim_resume_worker_launch"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 468,
-      "line_start": 434,
+      "line_end": 469,
+      "line_start": 435,
       "locator": "backend/max_backend/optimizer_store.py::confirm_worker_launch",
       "symbol": "confirm_worker_launch"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 537,
-      "line_start": 471,
+      "line_end": 538,
+      "line_start": 472,
       "locator": "backend/max_backend/optimizer_store.py::upsert_round",
       "symbol": "upsert_round"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 642,
-      "line_start": 540,
+      "line_end": 643,
+      "line_start": 541,
       "locator": "backend/max_backend/optimizer_store.py::_persist_candidate_projection",
       "symbol": "_persist_candidate_projection"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 659,
-      "line_start": 645,
+      "line_end": 660,
+      "line_start": 646,
       "locator": "backend/max_backend/optimizer_store.py::persist_candidate_projection",
       "symbol": "persist_candidate_projection"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 674,
-      "line_start": 662,
+      "line_end": 675,
+      "line_start": 663,
       "locator": "backend/max_backend/optimizer_store.py::get_round",
       "symbol": "get_round"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 684,
-      "line_start": 677,
+      "line_end": 685,
+      "line_start": 678,
       "locator": "backend/max_backend/optimizer_store.py::get_rounds",
       "symbol": "get_rounds"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 692,
-      "line_start": 687,
+      "line_end": 693,
+      "line_start": 688,
       "locator": "backend/max_backend/optimizer_store.py::attach_rounds",
       "symbol": "attach_rounds"
     },
     {
       "file": "backend/max_backend/optimizer_worker.py",
       "kind": "function",
-      "line_end": 91,
-      "line_start": 58,
+      "line_end": 92,
+      "line_start": 59,
       "locator": "backend/max_backend/optimizer_worker.py::_first_blocker",
       "symbol": "_first_blocker"
     },
     {
       "file": "backend/max_backend/optimizer_worker.py",
       "kind": "function",
-      "line_end": 111,
-      "line_start": 94,
+      "line_end": 112,
+      "line_start": 95,
       "locator": "backend/max_backend/optimizer_worker.py::_diagnostic",
       "symbol": "_diagnostic"
     },
     {
       "file": "backend/max_backend/optimizer_worker.py",
       "kind": "function",
-      "line_end": 138,
-      "line_start": 114,
+      "line_end": 139,
+      "line_start": 115,
       "locator": "backend/max_backend/optimizer_worker.py::_save_phase",
       "symbol": "_save_phase"
     },
     {
       "file": "backend/max_backend/optimizer_worker.py",
       "kind": "function",
-      "line_end": 153,
-      "line_start": 141,
+      "line_end": 154,
+      "line_start": 142,
       "locator": "backend/max_backend/optimizer_worker.py::_pass_from_payload",
       "symbol": "_pass_from_payload"
     },
     {
       "file": "backend/max_backend/optimizer_worker.py",
       "kind": "function",
-      "line_end": 167,
-      "line_start": 156,
+      "line_end": 168,
+      "line_start": 157,
       "locator": "backend/max_backend/optimizer_worker.py::_load_parsed_round",
       "symbol": "_load_parsed_round"
     },
     {
       "file": "backend/max_backend/optimizer_worker.py",
       "kind": "function",
-      "line_end": 418,
-      "line_start": 170,
+      "line_end": 461,
+      "line_start": 171,
       "locator": "backend/max_backend/optimizer_worker.py::execute_round",
       "symbol": "execute_round"
     },
     {
       "file": "backend/max_backend/optimizer_worker.py",
       "kind": "method",
-      "line_end": 235,
-      "line_start": 227,
+      "line_end": 246,
+      "line_start": 238,
       "locator": "backend/max_backend/optimizer_worker.py::execute_round.confirm_mt5_process",
       "symbol": "execute_round.confirm_mt5_process"
     },
     {
       "file": "backend/max_backend/optimizer_worker.py",
+      "kind": "method",
+      "line_end": 257,
+      "line_start": 248,
+      "locator": "backend/max_backend/optimizer_worker.py::execute_round.record_resource",
+      "symbol": "execute_round.record_resource"
+    },
+    {
+      "file": "backend/max_backend/optimizer_worker.py",
       "kind": "function",
-      "line_end": 476,
-      "line_start": 421,
+      "line_end": 519,
+      "line_start": 464,
       "locator": "backend/max_backend/optimizer_worker.py::_write_winner",
       "symbol": "_write_winner"
     },
     {
       "file": "backend/max_backend/optimizer_worker.py",
       "kind": "function",
-      "line_end": 496,
-      "line_start": 479,
+      "line_end": 539,
+      "line_start": 522,
       "locator": "backend/max_backend/optimizer_worker.py::_load_committed_winner",
       "symbol": "_load_committed_winner"
     },
     {
       "file": "backend/max_backend/optimizer_worker.py",
       "kind": "function",
-      "line_end": 552,
-      "line_start": 499,
+      "line_end": 595,
+      "line_start": 542,
       "locator": "backend/max_backend/optimizer_worker.py::_register_committed_winner",
       "symbol": "_register_committed_winner"
     },
     {
       "file": "backend/max_backend/optimizer_worker.py",
       "kind": "function",
-      "line_end": 705,
-      "line_start": 555,
+      "line_end": 750,
+      "line_start": 598,
       "locator": "backend/max_backend/optimizer_worker.py::run_job",
       "symbol": "run_job"
     },
     {
       "file": "backend/max_backend/optimizer_worker.py",
       "kind": "function",
-      "line_end": 733,
-      "line_start": 708,
+      "line_end": 778,
+      "line_start": 753,
       "locator": "backend/max_backend/optimizer_worker.py::_await_worker_launch_confirmation",
       "symbol": "_await_worker_launch_confirmation"
     },
     {
       "file": "backend/max_backend/optimizer_worker.py",
       "kind": "function",
-      "line_end": 746,
-      "line_start": 736,
+      "line_end": 791,
+      "line_start": 781,
       "locator": "backend/max_backend/optimizer_worker.py::main",
       "symbol": "main"
     },
@@ -64034,64 +66019,64 @@
     {
       "file": "backend/max_backend/scientist_knowledge.py",
       "kind": "function",
-      "line_end": 64,
-      "line_start": 63,
+      "line_end": 66,
+      "line_start": 65,
       "locator": "backend/max_backend/scientist_knowledge.py::_sha256_bytes",
       "symbol": "_sha256_bytes"
     },
     {
       "file": "backend/max_backend/scientist_knowledge.py",
       "kind": "function",
-      "line_end": 70,
-      "line_start": 67,
+      "line_end": 72,
+      "line_start": 69,
       "locator": "backend/max_backend/scientist_knowledge.py::source_sha256",
       "symbol": "source_sha256"
     },
     {
       "file": "backend/max_backend/scientist_knowledge.py",
       "kind": "function",
-      "line_end": 80,
-      "line_start": 73,
+      "line_end": 82,
+      "line_start": 75,
       "locator": "backend/max_backend/scientist_knowledge.py::_canonical_json",
       "symbol": "_canonical_json"
     },
     {
       "file": "backend/max_backend/scientist_knowledge.py",
       "kind": "function",
-      "line_end": 111,
-      "line_start": 83,
+      "line_end": 113,
+      "line_start": 85,
       "locator": "backend/max_backend/scientist_knowledge.py::load_knowledge",
       "symbol": "load_knowledge"
     },
     {
       "file": "backend/max_backend/scientist_knowledge.py",
       "kind": "function",
-      "line_end": 115,
-      "line_start": 114,
+      "line_end": 117,
+      "line_start": 116,
       "locator": "backend/max_backend/scientist_knowledge.py::knowledge_sha256",
       "symbol": "knowledge_sha256"
     },
     {
       "file": "backend/max_backend/scientist_knowledge.py",
       "kind": "function",
-      "line_end": 136,
-      "line_start": 118,
+      "line_end": 138,
+      "line_start": 120,
       "locator": "backend/max_backend/scientist_knowledge.py::knowledge_status",
       "symbol": "knowledge_status"
     },
     {
       "file": "backend/max_backend/scientist_knowledge.py",
       "kind": "function",
-      "line_end": 148,
-      "line_start": 139,
+      "line_end": 150,
+      "line_start": 141,
       "locator": "backend/max_backend/scientist_knowledge.py::safe_knowledge_summary",
       "symbol": "safe_knowledge_summary"
     },
     {
       "file": "backend/max_backend/scientist_knowledge.py",
       "kind": "function",
-      "line_end": 168,
-      "line_start": 151,
+      "line_end": 170,
+      "line_start": 153,
       "locator": "backend/max_backend/scientist_knowledge.py::static_evidence",
       "symbol": "static_evidence"
     },
@@ -65114,120 +67099,136 @@
     {
       "file": "backend/tests/test_m01_fail_closed.py",
       "kind": "function",
-      "line_end": 220,
+      "line_end": 224,
       "line_start": 205,
+      "locator": "backend/tests/test_m01_fail_closed.py::test_resource_launch_forwards_process_and_resource_callbacks",
+      "symbol": "test_resource_launch_forwards_process_and_resource_callbacks"
+    },
+    {
+      "file": "backend/tests/test_m01_fail_closed.py",
+      "kind": "method",
+      "line_end": 218,
+      "line_start": 216,
+      "locator": "backend/tests/test_m01_fail_closed.py::test_resource_launch_forwards_process_and_resource_callbacks.fake_bounded",
+      "symbol": "test_resource_launch_forwards_process_and_resource_callbacks.fake_bounded"
+    },
+    {
+      "file": "backend/tests/test_m01_fail_closed.py",
+      "kind": "function",
+      "line_end": 242,
+      "line_start": 227,
       "locator": "backend/tests/test_m01_fail_closed.py::test_stale_sidecar_clear_failure_is_not_ignored",
       "symbol": "test_stale_sidecar_clear_failure_is_not_ignored"
     },
     {
       "file": "backend/tests/test_m01_fail_closed.py",
       "kind": "method",
-      "line_end": 216,
-      "line_start": 213,
+      "line_end": 238,
+      "line_start": 235,
       "locator": "backend/tests/test_m01_fail_closed.py::test_stale_sidecar_clear_failure_is_not_ignored.fail_unlink",
       "symbol": "test_stale_sidecar_clear_failure_is_not_ignored.fail_unlink"
     },
     {
       "file": "backend/tests/test_m01_fail_closed.py",
       "kind": "function",
-      "line_end": 254,
-      "line_start": 223,
+      "line_end": 276,
+      "line_start": 245,
       "locator": "backend/tests/test_m01_fail_closed.py::test_raw_freeze_replay_verifies_existing_copy_without_original_sources",
       "symbol": "test_raw_freeze_replay_verifies_existing_copy_without_original_sources"
     },
     {
       "file": "backend/tests/test_m01_fail_closed.py",
       "kind": "function",
-      "line_end": 286,
-      "line_start": 257,
+      "line_end": 308,
+      "line_start": 279,
       "locator": "backend/tests/test_m01_fail_closed.py::test_raw_freeze_rejects_manifest_bound_to_different_source_fingerprint",
       "symbol": "test_raw_freeze_rejects_manifest_bound_to_different_source_fingerprint"
     },
     {
       "file": "backend/tests/test_m01_fail_closed.py",
       "kind": "function",
-      "line_end": 313,
-      "line_start": 289,
+      "line_end": 335,
+      "line_start": 311,
       "locator": "backend/tests/test_m01_fail_closed.py::test_raw_freeze_discards_partial_staging_and_rebuilds_from_unchanged_sources",
       "symbol": "test_raw_freeze_discards_partial_staging_and_rebuilds_from_unchanged_sources"
     },
     {
       "file": "backend/tests/test_m01_fail_closed.py",
       "kind": "function",
-      "line_end": 332,
-      "line_start": 316,
+      "line_end": 354,
+      "line_start": 338,
       "locator": "backend/tests/test_m01_fail_closed.py::test_freeze_rejects_mt5_unavailable",
       "symbol": "test_freeze_rejects_mt5_unavailable"
     },
     {
       "file": "backend/tests/test_m01_fail_closed.py",
       "kind": "function",
-      "line_end": 336,
-      "line_start": 335,
+      "line_end": 358,
+      "line_start": 357,
       "locator": "backend/tests/test_m01_fail_closed.py::full_params",
       "symbol": "full_params"
     },
     {
       "file": "backend/tests/test_m01_fail_closed.py",
       "kind": "function",
-      "line_end": 365,
-      "line_start": 339,
+      "line_end": 387,
+      "line_start": 361,
       "locator": "backend/tests/test_m01_fail_closed.py::write_xml",
       "symbol": "write_xml"
     },
     {
       "file": "backend/tests/test_m01_fail_closed.py",
       "kind": "method",
-      "line_end": 357,
-      "line_start": 354,
+      "line_end": 379,
+      "line_start": 376,
       "locator": "backend/tests/test_m01_fail_closed.py::write_xml.xml_row",
       "symbol": "write_xml.xml_row"
     },
     {
       "file": "backend/tests/test_m01_fail_closed.py",
       "kind": "function",
-      "line_end": 400,
-      "line_start": 368,
+      "line_end": 422,
+      "line_start": 390,
       "locator": "backend/tests/test_m01_fail_closed.py::write_metric",
       "symbol": "write_metric"
     },
     {
       "file": "backend/tests/test_m01_fail_closed.py",
       "kind": "function",
-      "line_end": 412,
-      "line_start": 403,
+      "line_end": 434,
+      "line_start": 425,
       "locator": "backend/tests/test_m01_fail_closed.py::test_missing_sidecar_fails_closed",
       "symbol": "test_missing_sidecar_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_fail_closed.py",
       "kind": "function",
-      "line_end": 421,
-      "line_start": 415,
+      "line_end": 443,
+      "line_start": 437,
       "locator": "backend/tests/test_m01_fail_closed.py::test_malformed_xml_fails_closed",
       "symbol": "test_malformed_xml_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_fail_closed.py",
       "kind": "function",
-      "line_end": 430,
-      "line_start": 424,
+      "line_end": 452,
+      "line_start": 446,
       "locator": "backend/tests/test_m01_fail_closed.py::test_zero_passes_fails_closed",
       "symbol": "test_zero_passes_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_fail_closed.py",
       "kind": "function",
-      "line_end": 439,
-      "line_start": 433,
+      "line_end": 461,
+      "line_start": 455,
       "locator": "backend/tests/test_m01_fail_closed.py::test_nonfinite_native_metric_fails_closed",
       "symbol": "test_nonfinite_native_metric_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_fail_closed.py",
       "kind": "function",
-      "line_end": 446,
-      "line_start": 442,
+      "line_end": 468,
+      "line_start": 464,
       "locator": "backend/tests/test_m01_fail_closed.py::test_nonfinite_weighted_metric_fails_closed",
       "symbol": "test_nonfinite_weighted_metric_fails_closed"
     },
@@ -65418,7 +67419,7 @@
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 105,
+      "line_end": 115,
       "line_start": 103,
       "locator": "backend/tests/test_m01_optimizer_core.py::freeze",
       "symbol": "freeze"
@@ -65426,496 +67427,496 @@
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 111,
-      "line_start": 108,
+      "line_end": 121,
+      "line_start": 118,
       "locator": "backend/tests/test_m01_optimizer_core.py::param_vector",
       "symbol": "param_vector"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 143,
-      "line_start": 114,
+      "line_end": 153,
+      "line_start": 124,
       "locator": "backend/tests/test_m01_optimizer_core.py::write_xml",
       "symbol": "write_xml"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "method",
-      "line_end": 125,
-      "line_start": 120,
+      "line_end": 135,
+      "line_start": 130,
       "locator": "backend/tests/test_m01_optimizer_core.py::write_xml.row_xml",
       "symbol": "write_xml.row_xml"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 181,
-      "line_start": 146,
+      "line_end": 191,
+      "line_start": 156,
       "locator": "backend/tests/test_m01_optimizer_core.py::write_metrics",
       "symbol": "write_metrics"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 242,
-      "line_start": 184,
+      "line_end": 252,
+      "line_start": 194,
       "locator": "backend/tests/test_m01_optimizer_core.py::write_metrics_v2",
       "symbol": "write_metrics_v2"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 258,
-      "line_start": 245,
+      "line_end": 268,
+      "line_start": 255,
       "locator": "backend/tests/test_m01_optimizer_core.py::pass_row",
       "symbol": "pass_row"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 268,
-      "line_start": 261,
+      "line_end": 278,
+      "line_start": 271,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_exact_17_parameter_universe_and_family_weights",
       "symbol": "test_exact_17_parameter_universe_and_family_weights"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 291,
-      "line_start": 287,
+      "line_end": 301,
+      "line_start": 297,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_search_space_fail_closed",
       "symbol": "test_search_space_fail_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 310,
-      "line_start": 294,
+      "line_end": 320,
+      "line_start": 304,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_selected_and_unselected_set_flags_are_frozen",
       "symbol": "test_selected_and_unselected_set_flags_are_frozen"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 340,
-      "line_start": 313,
+      "line_end": 350,
+      "line_start": 323,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_risk_pct_default_range_and_daily_loss_authority",
       "symbol": "test_risk_pct_default_range_and_daily_loss_authority"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 358,
-      "line_start": 343,
+      "line_end": 368,
+      "line_start": 353,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_current_v6_freeze_rejects_legacy_16d_search_space",
       "symbol": "test_current_v6_freeze_rejects_legacy_16d_search_space"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 369,
-      "line_start": 361,
+      "line_end": 379,
+      "line_start": 371,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_risk_pct_discrete_values_are_exact",
       "symbol": "test_risk_pct_discrete_values_are_exact"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 389,
-      "line_start": 385,
+      "line_end": 399,
+      "line_start": 395,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_risk_pct_illegal_ranges_fail_closed",
       "symbol": "test_risk_pct_illegal_ranges_fail_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 422,
-      "line_start": 393,
+      "line_end": 432,
+      "line_start": 403,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_risk_pct_refinement_stays_on_exact_owner_grid",
       "symbol": "test_risk_pct_refinement_stays_on_exact_owner_grid"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 430,
-      "line_start": 425,
+      "line_end": 440,
+      "line_start": 435,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_parameter_vector_identity_distinguishes_risk_pct",
       "symbol": "test_parameter_vector_identity_distinguishes_risk_pct"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 437,
-      "line_start": 433,
+      "line_end": 447,
+      "line_start": 443,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_optimizer_fitness_v2_is_independent_of_risk_pct",
       "symbol": "test_optimizer_fitness_v2_is_independent_of_risk_pct"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 445,
-      "line_start": 440,
+      "line_end": 455,
+      "line_start": 450,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_raw_cardinality_is_context_not_genetic_tasks",
       "symbol": "test_raw_cardinality_is_context_not_genetic_tasks"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 460,
-      "line_start": 448,
+      "line_end": 470,
+      "line_start": 458,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_request_freeze_and_ea_hash",
       "symbol": "test_request_freeze_and_ea_hash"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 484,
-      "line_start": 478,
+      "line_end": 494,
+      "line_start": 488,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_request_validation_rejects_illegal_contract",
       "symbol": "test_request_validation_rejects_illegal_contract"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 496,
-      "line_start": 487,
+      "line_end": 506,
+      "line_start": 497,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_optimizer_trade_exponent_default_and_legal_edges",
       "symbol": "test_optimizer_trade_exponent_default_and_legal_edges"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 509,
-      "line_start": 503,
+      "line_end": 519,
+      "line_start": 513,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_optimizer_trade_exponent_rejects_invalid",
       "symbol": "test_optimizer_trade_exponent_rejects_invalid"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 522,
-      "line_start": 521,
+      "line_end": 532,
+      "line_start": 531,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_legacy_request_without_fitness_retains_mean_r_semantics",
       "symbol": "test_legacy_request_without_fitness_retains_mean_r_semantics"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 541,
-      "line_start": 534,
+      "line_end": 551,
+      "line_start": 544,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_legacy_request_with_v2_fitness_is_rejected",
       "symbol": "test_legacy_request_with_v2_fitness_is_rejected"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 552,
-      "line_start": 544,
+      "line_end": 562,
+      "line_start": 554,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_v5_valid_fitness_contract_is_accepted",
       "symbol": "test_v5_valid_fitness_contract_is_accepted"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 562,
-      "line_start": 555,
+      "line_end": 572,
+      "line_start": 565,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_v5_missing_fitness_contract_fails_closed",
       "symbol": "test_v5_missing_fitness_contract_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 575,
-      "line_start": 565,
+      "line_end": 585,
+      "line_start": 575,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_v5_malformed_fitness_contract_fails_closed",
       "symbol": "test_v5_malformed_fitness_contract_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 588,
-      "line_start": 578,
+      "line_end": 598,
+      "line_start": 588,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_v5_wrong_authority_fails_closed",
       "symbol": "test_v5_wrong_authority_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 606,
-      "line_start": 592,
+      "line_end": 616,
+      "line_start": 602,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_v5_invalid_alpha_fails_closed",
       "symbol": "test_v5_invalid_alpha_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 617,
-      "line_start": 609,
+      "line_end": 627,
+      "line_start": 619,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_v6_valid_fitness_contract_is_accepted",
       "symbol": "test_v6_valid_fitness_contract_is_accepted"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 627,
-      "line_start": 620,
+      "line_end": 637,
+      "line_start": 630,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_v6_missing_fitness_contract_fails_closed",
       "symbol": "test_v6_missing_fitness_contract_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 634,
-      "line_start": 630,
+      "line_end": 644,
+      "line_start": 640,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_future_schema_without_fitness_fails_closed",
       "symbol": "test_future_schema_without_fitness_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 645,
-      "line_start": 637,
+      "line_end": 655,
+      "line_start": 647,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_future_schema_with_valid_looking_fitness_fails_closed",
       "symbol": "test_future_schema_with_valid_looking_fitness_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 653,
-      "line_start": 648,
+      "line_end": 663,
+      "line_start": 658,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_optimizer_fitness_formula_edges_and_negative_mean",
       "symbol": "test_optimizer_fitness_formula_edges_and_negative_mean"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 680,
-      "line_start": 656,
+      "line_end": 690,
+      "line_start": 666,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_v2_custom_fitness_is_distinct_from_mean_r_and_cross_verified",
       "symbol": "test_v2_custom_fitness_is_distinct_from_mean_r_and_cross_verified"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 697,
-      "line_start": 683,
+      "line_end": 707,
+      "line_start": 693,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_v2_mismatched_fitness_evidence_fails_closed",
       "symbol": "test_v2_mismatched_fitness_evidence_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 713,
-      "line_start": 700,
+      "line_end": 723,
+      "line_start": 710,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_v2_mean_r_arithmetic_mismatch_fails_closed",
       "symbol": "test_v2_mean_r_arithmetic_mismatch_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 737,
-      "line_start": 716,
+      "line_end": 747,
+      "line_start": 726,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_custom_fitness_never_changes_kpi_eligibility",
       "symbol": "test_custom_fitness_never_changes_kpi_eligibility"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 753,
-      "line_start": 740,
+      "line_end": 763,
+      "line_start": 750,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_legacy_custom_result_remains_mean_r_semantics",
       "symbol": "test_legacy_custom_result_remains_mean_r_semantics"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 804,
-      "line_start": 756,
+      "line_end": 814,
+      "line_start": 766,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_v2_zero_trade_fail_closed_sentinel_is_retained_as_ineligible",
       "symbol": "test_v2_zero_trade_fail_closed_sentinel_is_retained_as_ineligible"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 827,
-      "line_start": 807,
+      "line_end": 837,
+      "line_start": 817,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_v2_malformed_zero_trade_sentinel_still_fails_closed",
       "symbol": "test_v2_malformed_zero_trade_sentinel_still_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 840,
-      "line_start": 830,
+      "line_end": 850,
+      "line_start": 840,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_v2_positive_trade_zero_risk_still_fails_closed",
       "symbol": "test_v2_positive_trade_zero_risk_still_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 858,
-      "line_start": 843,
+      "line_end": 868,
+      "line_start": 853,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_v2_invalid_accounting_evidence_fails_closed",
       "symbol": "test_v2_invalid_accounting_evidence_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 874,
-      "line_start": 861,
+      "line_end": 884,
+      "line_start": 871,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_ea_source_implements_v2_fitness_without_strategy_dimension_mutation",
       "symbol": "test_ea_source_implements_v2_fitness_without_strategy_dimension_mutation"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 884,
-      "line_start": 877,
+      "line_end": 894,
+      "line_start": 887,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_auto_trade_sample_matches_h1_sqrt_authority",
       "symbol": "test_auto_trade_sample_matches_h1_sqrt_authority"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 899,
-      "line_start": 887,
+      "line_end": 909,
+      "line_start": 897,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_tester_ini_modes_and_fixed_authority",
       "symbol": "test_tester_ini_modes_and_fixed_authority"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 954,
-      "line_start": 902,
+      "line_end": 964,
+      "line_start": 912,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_historical_v5_parameter_vector_remains_readable",
       "symbol": "test_historical_v5_parameter_vector_remains_readable"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 962,
-      "line_start": 957,
+      "line_end": 972,
+      "line_start": 967,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_parameter_signature_is_exact_vector_identity",
       "symbol": "test_parameter_signature_is_exact_vector_identity"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 981,
-      "line_start": 965,
+      "line_end": 991,
+      "line_start": 975,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_xml_and_sidecar_join_by_parameter_vector_not_pass_number",
       "symbol": "test_xml_and_sidecar_join_by_parameter_vector_not_pass_number"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 1037,
-      "line_start": 984,
+      "line_end": 1047,
+      "line_start": 994,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_subset_xml_reconstructs_full_vector_from_frozen_defaults",
       "symbol": "test_subset_xml_reconstructs_full_vector_from_frozen_defaults"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 1047,
-      "line_start": 1040,
+      "line_end": 1057,
+      "line_start": 1050,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_missing_recovery_factor_fails_closed",
       "symbol": "test_missing_recovery_factor_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 1055,
-      "line_start": 1050,
+      "line_end": 1065,
+      "line_start": 1060,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_wrong_nonce_fails_closed",
       "symbol": "test_wrong_nonce_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 1064,
-      "line_start": 1058,
+      "line_end": 1074,
+      "line_start": 1068,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_duplicate_parameter_vector_fails_closed",
       "symbol": "test_duplicate_parameter_vector_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 1072,
-      "line_start": 1067,
+      "line_end": 1082,
+      "line_start": 1077,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_accounting_error_fails_closed",
       "symbol": "test_accounting_error_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 1080,
-      "line_start": 1075,
+      "line_end": 1090,
+      "line_start": 1085,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_weighted_r_arithmetic_mismatch_fails_closed",
       "symbol": "test_weighted_r_arithmetic_mismatch_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 1091,
-      "line_start": 1083,
+      "line_end": 1101,
+      "line_start": 1093,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_trade_count_xml_sidecar_mismatch_fails_closed",
       "symbol": "test_trade_count_xml_sidecar_mismatch_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 1107,
-      "line_start": 1094,
+      "line_end": 1117,
+      "line_start": 1104,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_sidecar_extra_vector_fails_closed",
       "symbol": "test_sidecar_extra_vector_fails_closed"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 1130,
-      "line_start": 1110,
+      "line_end": 1140,
+      "line_start": 1120,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_missing_weighted_row_blocks_winner_selection",
       "symbol": "test_missing_weighted_row_blocks_winner_selection"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 1151,
-      "line_start": 1133,
+      "line_end": 1161,
+      "line_start": 1143,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_inclusive_eligibility_boundaries",
       "symbol": "test_inclusive_eligibility_boundaries"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 1172,
-      "line_start": 1154,
+      "line_end": 1182,
+      "line_start": 1164,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_deterministic_ranking_exact_tie_order",
       "symbol": "test_deterministic_ranking_exact_tie_order"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 1197,
-      "line_start": 1175,
+      "line_end": 1207,
+      "line_start": 1185,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_eligibility_audit_and_refinement_preserve_universe",
       "symbol": "test_eligibility_audit_and_refinement_preserve_universe"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "function",
-      "line_end": 1255,
-      "line_start": 1200,
+      "line_end": 1265,
+      "line_start": 1210,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_subset_optimization_xml_reconstructs_frozen_full_vector",
       "symbol": "test_subset_optimization_xml_reconstructs_frozen_full_vector"
     },
     {
       "file": "backend/tests/test_m01_optimizer_core.py",
       "kind": "method",
-      "line_end": 1230,
-      "line_start": 1226,
+      "line_end": 1240,
+      "line_start": 1236,
       "locator": "backend/tests/test_m01_optimizer_core.py::test_subset_optimization_xml_reconstructs_frozen_full_vector.xml_row",
       "symbol": "test_subset_optimization_xml_reconstructs_frozen_full_vector.xml_row"
     },
@@ -66482,7 +68483,7 @@
     {
       "file": "backend/tests/test_m02_scientist.py",
       "kind": "function",
-      "line_end": 886,
+      "line_end": 892,
       "line_start": 864,
       "locator": "backend/tests/test_m02_scientist.py::test_request_freezes_server_scientist_route_without_secret",
       "symbol": "test_request_freezes_server_scientist_route_without_secret"
@@ -66490,40 +68491,40 @@
     {
       "file": "backend/tests/test_m02_scientist.py",
       "kind": "function",
-      "line_end": 899,
-      "line_start": 890,
+      "line_end": 905,
+      "line_start": 896,
       "locator": "backend/tests/test_m02_scientist.py::test_frontend_cannot_supply_scientist_route",
       "symbol": "test_frontend_cannot_supply_scientist_route"
     },
     {
       "file": "backend/tests/test_m02_scientist.py",
       "kind": "function",
-      "line_end": 937,
-      "line_start": 902,
+      "line_end": 943,
+      "line_start": 908,
       "locator": "backend/tests/test_m02_scientist.py::test_provider_secret_echo_is_blocked_and_not_retained",
       "symbol": "test_provider_secret_echo_is_blocked_and_not_retained"
     },
     {
       "file": "backend/tests/test_m02_scientist.py",
       "kind": "function",
-      "line_end": 1068,
-      "line_start": 940,
+      "line_end": 1074,
+      "line_start": 946,
       "locator": "backend/tests/test_m02_scientist.py::test_run_job_resume_after_committed_scientist_decision_runs_round2_without_duplicate_call",
       "symbol": "test_run_job_resume_after_committed_scientist_decision_runs_round2_without_duplicate_call"
     },
     {
       "file": "backend/tests/test_m02_scientist.py",
       "kind": "method",
-      "line_end": 1038,
-      "line_start": 1033,
+      "line_end": 1044,
+      "line_start": 1039,
       "locator": "backend/tests/test_m02_scientist.py::test_run_job_resume_after_committed_scientist_decision_runs_round2_without_duplicate_call.fake_execute",
       "symbol": "test_run_job_resume_after_committed_scientist_decision_runs_round2_without_duplicate_call.fake_execute"
     },
     {
       "file": "backend/tests/test_m02_scientist.py",
       "kind": "method",
-      "line_end": 1058,
-      "line_start": 1042,
+      "line_end": 1064,
+      "line_start": 1048,
       "locator": "backend/tests/test_m02_scientist.py::test_run_job_resume_after_committed_scientist_decision_runs_round2_without_duplicate_call.fake_update",
       "symbol": "test_run_job_resume_after_committed_scientist_decision_runs_round2_without_duplicate_call.fake_update"
     },
@@ -68354,7 +70355,7 @@
     {
       "file": "backend/tests/test_m07_true_mtf.py",
       "kind": "function",
-      "line_end": 173,
+      "line_end": 179,
       "line_start": 161,
       "locator": "backend/tests/test_m07_true_mtf.py::test_optimizer_freezes_exact_geometry",
       "symbol": "test_optimizer_freezes_exact_geometry"
@@ -68362,40 +70363,40 @@
     {
       "file": "backend/tests/test_m07_true_mtf.py",
       "kind": "function",
-      "line_end": 183,
-      "line_start": 177,
+      "line_end": 189,
+      "line_start": 183,
       "locator": "backend/tests/test_m07_true_mtf.py::test_optimizer_rejects_invalid_main_timeframe",
       "symbol": "test_optimizer_rejects_invalid_main_timeframe"
     },
     {
       "file": "backend/tests/test_m07_true_mtf.py",
       "kind": "function",
-      "line_end": 198,
-      "line_start": 186,
+      "line_end": 210,
+      "line_start": 192,
       "locator": "backend/tests/test_m07_true_mtf.py::test_challenger_set_retains_exact_geometry",
       "symbol": "test_challenger_set_retains_exact_geometry"
     },
     {
       "file": "backend/tests/test_m07_true_mtf.py",
       "kind": "function",
-      "line_end": 220,
-      "line_start": 201,
+      "line_end": 232,
+      "line_start": 213,
       "locator": "backend/tests/test_m07_true_mtf.py::test_ea_source_is_role_aware_and_preserves_32_feature_boundary",
       "symbol": "test_ea_source_is_role_aware_and_preserves_32_feature_boundary"
     },
     {
       "file": "backend/tests/test_m07_true_mtf.py",
       "kind": "function",
-      "line_end": 236,
-      "line_start": 223,
+      "line_end": 248,
+      "line_start": 235,
       "locator": "backend/tests/test_m07_true_mtf.py::test_ea_relative_family_uses_role_timeframe_for_both_symbols",
       "symbol": "test_ea_relative_family_uses_role_timeframe_for_both_symbols"
     },
     {
       "file": "backend/tests/test_m07_true_mtf.py",
       "kind": "function",
-      "line_end": 245,
-      "line_start": 239,
+      "line_end": 257,
+      "line_start": 251,
       "locator": "backend/tests/test_m07_true_mtf.py::test_backend_and_ea_share_supported_timeframe_table_contract",
       "symbol": "test_backend_and_ea_share_supported_timeframe_table_contract"
     },
@@ -68458,7 +70459,7 @@
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 322,
+      "line_end": 327,
       "line_start": 236,
       "locator": "backend/tests/test_m08_strategy_results.py::build_optimizer_fixture",
       "symbol": "build_optimizer_fixture"
@@ -68466,304 +70467,304 @@
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 360,
-      "line_start": 335,
+      "line_end": 365,
+      "line_start": 340,
       "locator": "backend/tests/test_m08_strategy_results.py::test_qualified_candidate_requires_every_frozen_gate",
       "symbol": "test_qualified_candidate_requires_every_frozen_gate"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 445,
-      "line_start": 363,
+      "line_end": 450,
+      "line_start": 368,
       "locator": "backend/tests/test_m08_strategy_results.py::test_qualified_endpoint_uses_projection_and_strict_mutation_revalidates",
       "symbol": "test_qualified_endpoint_uses_projection_and_strict_mutation_revalidates"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 497,
-      "line_start": 448,
+      "line_end": 502,
+      "line_start": 453,
       "locator": "backend/tests/test_m08_strategy_results.py::test_new_optimizer_terminal_never_auto_registers_challenger",
       "symbol": "test_new_optimizer_terminal_never_auto_registers_challenger"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 555,
-      "line_start": 500,
+      "line_end": 560,
+      "line_start": 505,
       "locator": "backend/tests/test_m08_strategy_results.py::test_owner_selection_creates_independent_challengers_and_retry_is_idempotent",
       "symbol": "test_owner_selection_creates_independent_challengers_and_retry_is_idempotent"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 659,
-      "line_start": 558,
+      "line_end": 664,
+      "line_start": 563,
       "locator": "backend/tests/test_m08_strategy_results.py::test_batch_prevalidation_failure_registers_zero_and_recovery_retry_no_duplicate",
       "symbol": "test_batch_prevalidation_failure_registers_zero_and_recovery_retry_no_duplicate"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "method",
-      "line_end": 578,
-      "line_start": 574,
+      "line_end": 583,
+      "line_start": 579,
       "locator": "backend/tests/test_m08_strategy_results.py::test_batch_prevalidation_failure_registers_zero_and_recovery_retry_no_duplicate.fail_second",
       "symbol": "test_batch_prevalidation_failure_registers_zero_and_recovery_retry_no_duplicate.fail_second"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "method",
-      "line_end": 610,
-      "line_start": 606,
+      "line_end": 615,
+      "line_start": 611,
       "locator": "backend/tests/test_m08_strategy_results.py::test_batch_prevalidation_failure_registers_zero_and_recovery_retry_no_duplicate.fail_first_db_commit",
       "symbol": "test_batch_prevalidation_failure_registers_zero_and_recovery_retry_no_duplicate.fail_first_db_commit"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 697,
-      "line_start": 662,
+      "line_end": 702,
+      "line_start": 667,
       "locator": "backend/tests/test_m08_strategy_results.py::test_historical_optimizer_job_keeps_legacy_pass_evidence",
       "symbol": "test_historical_optimizer_job_keeps_legacy_pass_evidence"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 717,
-      "line_start": 700,
+      "line_end": 722,
+      "line_start": 705,
       "locator": "backend/tests/test_m08_strategy_results.py::valid_backtest_html",
       "symbol": "valid_backtest_html"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 744,
-      "line_start": 720,
+      "line_end": 749,
+      "line_start": 725,
       "locator": "backend/tests/test_m08_strategy_results.py::test_mt5_backtest_report_parser_and_hash_fail_closed",
       "symbol": "test_mt5_backtest_report_parser_and_hash_fail_closed"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 764,
-      "line_start": 746,
+      "line_end": 769,
+      "line_start": 751,
       "locator": "backend/tests/test_m08_strategy_results.py::create_one_challenger_fixture",
       "symbol": "create_one_challenger_fixture"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 857,
-      "line_start": 767,
+      "line_end": 862,
+      "line_start": 772,
       "locator": "backend/tests/test_m08_strategy_results.py::create_completed_backtest_fixture",
       "symbol": "create_completed_backtest_fixture"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 912,
-      "line_start": 860,
+      "line_end": 917,
+      "line_start": 865,
       "locator": "backend/tests/test_m08_strategy_results.py::test_runtime_cleanup_preserves_result_then_backtest_delete_is_physical",
       "symbol": "test_runtime_cleanup_preserves_result_then_backtest_delete_is_physical"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1006,
-      "line_start": 917,
+      "line_end": 1011,
+      "line_start": 922,
       "locator": "backend/tests/test_m08_strategy_results.py::test_failed_backtest_without_report_can_clean_and_delete",
       "symbol": "test_failed_backtest_without_report_can_clean_and_delete"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1040,
-      "line_start": 1009,
+      "line_end": 1045,
+      "line_start": 1014,
       "locator": "backend/tests/test_m08_strategy_results.py::test_path_safety_rejects_traversal_foreign_and_symlink_escape",
       "symbol": "test_path_safety_rejects_traversal_foreign_and_symlink_escape"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1090,
-      "line_start": 1043,
+      "line_end": 1095,
+      "line_start": 1048,
       "locator": "backend/tests/test_m08_strategy_results.py::test_orphan_runtime_reconciliation_registers_but_does_not_auto_delete",
       "symbol": "test_orphan_runtime_reconciliation_registers_but_does_not_auto_delete"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1149,
-      "line_start": 1093,
+      "line_end": 1154,
+      "line_start": 1098,
       "locator": "backend/tests/test_m08_strategy_results.py::test_artifact_registry_ownership_and_bulk_blocking",
       "symbol": "test_artifact_registry_ownership_and_bulk_blocking"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1249,
-      "line_start": 1152,
+      "line_end": 1254,
+      "line_start": 1157,
       "locator": "backend/tests/test_m08_strategy_results.py::test_artifact_reconciliation_indexes_generated_files_without_double_counting",
       "symbol": "test_artifact_reconciliation_indexes_generated_files_without_double_counting"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1296,
-      "line_start": 1252,
+      "line_end": 1301,
+      "line_start": 1257,
       "locator": "backend/tests/test_m08_strategy_results.py::test_artifact_inventory_read_does_not_reconcile_or_probe_mt5",
       "symbol": "test_artifact_inventory_read_does_not_reconcile_or_probe_mt5"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "method",
-      "line_end": 1274,
-      "line_start": 1273,
+      "line_end": 1279,
+      "line_start": 1278,
       "locator": "backend/tests/test_m08_strategy_results.py::test_artifact_inventory_read_does_not_reconcile_or_probe_mt5.forbidden",
       "symbol": "test_artifact_inventory_read_does_not_reconcile_or_probe_mt5.forbidden"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1318,
-      "line_start": 1299,
+      "line_end": 1323,
+      "line_start": 1304,
       "locator": "backend/tests/test_m08_strategy_results.py::test_challenger_registry_list_does_not_verify_each_bundle",
       "symbol": "test_challenger_registry_list_does_not_verify_each_bundle"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "method",
-      "line_end": 1306,
-      "line_start": 1305,
+      "line_end": 1311,
+      "line_start": 1310,
       "locator": "backend/tests/test_m08_strategy_results.py::test_challenger_registry_list_does_not_verify_each_bundle.forbidden",
       "symbol": "test_challenger_registry_list_does_not_verify_each_bundle.forbidden"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1394,
-      "line_start": 1321,
+      "line_end": 1399,
+      "line_start": 1326,
       "locator": "backend/tests/test_m08_strategy_results.py::test_backtest_bulk_preflight_blocks_before_mutation_and_clean_is_confirmed",
       "symbol": "test_backtest_bulk_preflight_blocks_before_mutation_and_clean_is_confirmed"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1434,
-      "line_start": 1398,
+      "line_end": 1439,
+      "line_start": 1403,
       "locator": "backend/tests/test_m08_strategy_results.py::test_backtest_bulk_partial_failure_reports_completed_identity",
       "symbol": "test_backtest_bulk_partial_failure_reports_completed_identity"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "method",
-      "line_end": 1416,
-      "line_start": 1413,
+      "line_end": 1421,
+      "line_start": 1418,
       "locator": "backend/tests/test_m08_strategy_results.py::test_backtest_bulk_partial_failure_reports_completed_identity.fake_clean",
       "symbol": "test_backtest_bulk_partial_failure_reports_completed_identity.fake_clean"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1471,
-      "line_start": 1438,
+      "line_end": 1476,
+      "line_start": 1443,
       "locator": "backend/tests/test_m08_strategy_results.py::_patch_global_cleanup_roots",
       "symbol": "_patch_global_cleanup_roots"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1574,
-      "line_start": 1474,
+      "line_end": 1579,
+      "line_start": 1479,
       "locator": "backend/tests/test_m08_strategy_results.py::_insert_complex_generated_state",
       "symbol": "_insert_complex_generated_state"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1617,
-      "line_start": 1577,
+      "line_end": 1622,
+      "line_start": 1582,
       "locator": "backend/tests/test_m08_strategy_results.py::test_v6_owner_workflow_survives_future_v7_current_schema",
       "symbol": "test_v6_owner_workflow_survives_future_v7_current_schema"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1683,
-      "line_start": 1620,
+      "line_end": 1688,
+      "line_start": 1625,
       "locator": "backend/tests/test_m08_strategy_results.py::test_job_detail_exposes_resolved_workflow_and_future_schema_fails_closed",
       "symbol": "test_job_detail_exposes_resolved_workflow_and_future_schema_fails_closed"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "method",
-      "line_end": 1639,
-      "line_start": 1623,
+      "line_end": 1644,
+      "line_start": 1628,
       "locator": "backend/tests/test_m08_strategy_results.py::test_job_detail_exposes_resolved_workflow_and_future_schema_fails_closed.detail_for",
       "symbol": "test_job_detail_exposes_resolved_workflow_and_future_schema_fails_closed.detail_for"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1729,
-      "line_start": 1686,
+      "line_end": 1734,
+      "line_start": 1691,
       "locator": "backend/tests/test_m08_strategy_results.py::test_global_clean_dependency_chain_and_idempotency",
       "symbol": "test_global_clean_dependency_chain_and_idempotency"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1795,
-      "line_start": 1732,
+      "line_end": 1800,
+      "line_start": 1737,
       "locator": "backend/tests/test_m08_strategy_results.py::test_global_clean_complex_state_and_artifact_producer_coverage",
       "symbol": "test_global_clean_complex_state_and_artifact_producer_coverage"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1813,
-      "line_start": 1798,
+      "line_end": 1818,
+      "line_start": 1803,
       "locator": "backend/tests/test_m08_strategy_results.py::test_global_clean_scientist_failure_is_fail_closed",
       "symbol": "test_global_clean_scientist_failure_is_fail_closed"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "method",
-      "line_end": 1809,
-      "line_start": 1808,
+      "line_end": 1814,
+      "line_start": 1813,
       "locator": "backend/tests/test_m08_strategy_results.py::test_global_clean_scientist_failure_is_fail_closed.fail_purge",
       "symbol": "test_global_clean_scientist_failure_is_fail_closed.fail_purge"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1820,
-      "line_start": 1816,
+      "line_end": 1825,
+      "line_start": 1821,
       "locator": "backend/tests/test_m08_strategy_results.py::test_new_backtest_runtime_naming_never_emits_legacy_m06",
       "symbol": "test_new_backtest_runtime_naming_never_emits_legacy_m06"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1887,
-      "line_start": 1824,
+      "line_end": 1892,
+      "line_start": 1829,
       "locator": "backend/tests/test_m08_strategy_results.py::test_global_clean_preserves_protected_baseline_history",
       "symbol": "test_global_clean_preserves_protected_baseline_history"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 1963,
-      "line_start": 1894,
+      "line_end": 1968,
+      "line_start": 1899,
       "locator": "backend/tests/test_m08_strategy_results.py::test_consumed_optimizer_source_never_returns_to_active_candidate_pool",
       "symbol": "test_consumed_optimizer_source_never_returns_to_active_candidate_pool"
     },
     {
       "file": "backend/tests/test_m08_strategy_results.py",
       "kind": "function",
-      "line_end": 2013,
-      "line_start": 1966,
+      "line_end": 2018,
+      "line_start": 1971,
       "locator": "backend/tests/test_m08_strategy_results.py::test_committed_batch_keeps_source_consumed_after_challenger_row_delete",
       "symbol": "test_committed_batch_keeps_source_consumed_after_challenger_row_delete"
     },
@@ -68806,6 +70807,22 @@
       "line_start": 83,
       "locator": "backend/tests/test_optimizer_draft.py::test_schema_15_upgrades_version_14_optimizer_storage_without_job_rows",
       "symbol": "test_schema_15_upgrades_version_14_optimizer_storage_without_job_rows"
+    },
+    {
+      "file": "backend/tests/test_optimizer_draft.py",
+      "kind": "function",
+      "line_end": 130,
+      "line_start": 117,
+      "locator": "backend/tests/test_optimizer_draft.py::test_optimizer_resource_settings_persist_with_draft",
+      "symbol": "test_optimizer_resource_settings_persist_with_draft"
+    },
+    {
+      "file": "backend/tests/test_optimizer_draft.py",
+      "kind": "function",
+      "line_end": 144,
+      "line_start": 133,
+      "locator": "backend/tests/test_optimizer_draft.py::test_legacy_optimizer_draft_without_resources_is_upgraded_in_memory",
+      "symbol": "test_legacy_optimizer_draft_without_resources_is_upgraded_in_memory"
     },
     {
       "file": "backend/tests/test_optimizer_reliability.py",
@@ -69064,6 +71081,150 @@
       "symbol": "test_stop_finds_and_stops_worker_by_launch_token_when_pid_was_not_persisted.update_in_test_db"
     },
     {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "function",
+      "line_end": 40,
+      "line_start": 20,
+      "locator": "backend/tests/test_optimizer_resources.py::capacity",
+      "symbol": "capacity"
+    },
+    {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "function",
+      "line_end": 53,
+      "line_start": 43,
+      "locator": "backend/tests/test_optimizer_resources.py::workload",
+      "symbol": "workload"
+    },
+    {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "function",
+      "line_end": 64,
+      "line_start": 56,
+      "locator": "backend/tests/test_optimizer_resources.py::test_auto_safe_resolves_bounded_cpu_and_ram_cap",
+      "symbol": "test_auto_safe_resolves_bounded_cpu_and_ram_cap"
+    },
+    {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "function",
+      "line_end": 75,
+      "line_start": 67,
+      "locator": "backend/tests/test_optimizer_resources.py::test_auto_safe_blocks_when_even_one_agent_has_no_headroom",
+      "symbol": "test_auto_safe_blocks_when_even_one_agent_has_no_headroom"
+    },
+    {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "function",
+      "line_end": 86,
+      "line_start": 78,
+      "locator": "backend/tests/test_optimizer_resources.py::test_single_logical_processor_fails_closed",
+      "symbol": "test_single_logical_processor_fails_closed"
+    },
+    {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "function",
+      "line_end": 97,
+      "line_start": 89,
+      "locator": "backend/tests/test_optimizer_resources.py::test_many_logical_processors_still_reserves_cpu",
+      "symbol": "test_many_logical_processors_still_reserves_cpu"
+    },
+    {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "function",
+      "line_end": 112,
+      "line_start": 100,
+      "locator": "backend/tests/test_optimizer_resources.py::test_custom_cap_is_respected_without_expanding_hardware_capacity",
+      "symbol": "test_custom_cap_is_respected_without_expanding_hardware_capacity"
+    },
+    {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "function",
+      "line_end": 119,
+      "line_start": 115,
+      "locator": "backend/tests/test_optimizer_resources.py::test_custom_settings_reject_invalid_values",
+      "symbol": "test_custom_settings_reject_invalid_values"
+    },
+    {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "function",
+      "line_end": 125,
+      "line_start": 122,
+      "locator": "backend/tests/test_optimizer_resources.py::test_resource_pressure_states_are_explicit",
+      "symbol": "test_resource_pressure_states_are_explicit"
+    },
+    {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "function",
+      "line_end": 141,
+      "line_start": 128,
+      "locator": "backend/tests/test_optimizer_resources.py::test_frozen_policy_resume_blocks_when_current_ram_cannot_honor_cap",
+      "symbol": "test_frozen_policy_resume_blocks_when_current_ram_cannot_honor_cap"
+    },
+    {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "function",
+      "line_end": 162,
+      "line_start": 144,
+      "locator": "backend/tests/test_optimizer_resources.py::test_start_blocks_before_job_creation_when_preflight_is_unsafe",
+      "symbol": "test_start_blocks_before_job_creation_when_preflight_is_unsafe"
+    },
+    {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "function",
+      "line_end": 186,
+      "line_start": 165,
+      "locator": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job",
+      "symbol": "test_critical_ram_fault_injection_terminates_owned_job"
+    },
+    {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "class",
+      "line_end": 179,
+      "line_start": 176,
+      "locator": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job.Kernel",
+      "symbol": "test_critical_ram_fault_injection_terminates_owned_job.Kernel"
+    },
+    {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "method",
+      "line_end": 177,
+      "line_start": 177,
+      "locator": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job.Kernel.WaitForSingleObject",
+      "symbol": "test_critical_ram_fault_injection_terminates_owned_job.Kernel.WaitForSingleObject"
+    },
+    {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "method",
+      "line_end": 178,
+      "line_start": 178,
+      "locator": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job.Kernel.TerminateJobObject",
+      "symbol": "test_critical_ram_fault_injection_terminates_owned_job.Kernel.TerminateJobObject"
+    },
+    {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "method",
+      "line_end": 179,
+      "line_start": 179,
+      "locator": "backend/tests/test_optimizer_resources.py::test_critical_ram_fault_injection_terminates_owned_job.Kernel.CloseHandle",
+      "symbol": "test_critical_ram_fault_injection_terminates_owned_job.Kernel.CloseHandle"
+    },
+    {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "function",
+      "line_end": 196,
+      "line_start": 189,
+      "locator": "backend/tests/test_optimizer_resources.py::test_resource_stopped_resume_rechecks_frozen_admission",
+      "symbol": "test_resource_stopped_resume_rechecks_frozen_admission"
+    },
+    {
+      "file": "backend/tests/test_optimizer_resources.py",
+      "kind": "function",
+      "line_end": 204,
+      "line_start": 200,
+      "locator": "backend/tests/test_optimizer_resources.py::test_backend_working_set_detector_returns_real_bytes",
+      "symbol": "test_backend_working_set_detector_returns_real_bytes"
+    },
+    {
       "file": "backend/tests/test_optimizer_runtime_durability.py",
       "kind": "function",
       "line_end": 20,
@@ -69274,7 +71435,7 @@
     {
       "file": "scripts/build_scientist_knowledge.py",
       "kind": "function",
-      "line_end": 229,
+      "line_end": 231,
       "line_start": 19,
       "locator": "scripts/build_scientist_knowledge.py::main",
       "symbol": "main"
@@ -70649,17 +72810,17 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "03dc42377454dff52460fbaa397ddbcdadfed58a191970a772c360911713c492",
+  "source_digest": "05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826",
   "source_summary": {
-    "files": 113,
+    "files": 116,
     "languages": {
       "PowerShell": 2,
-      "Python": 91,
+      "Python": 94,
       "TypeScript": 3,
       "TypeScript/React": 17
     },
-    "lines": 51774,
-    "test_files": 37
+    "lines": 53028,
+    "test_files": 38
   },
   "tests": [
     "backend/tests/conftest.py",
@@ -70688,6 +72849,7 @@
     "backend/tests/test_m08_strategy_results.py",
     "backend/tests/test_optimizer_draft.py",
     "backend/tests/test_optimizer_reliability.py",
+    "backend/tests/test_optimizer_resources.py",
     "backend/tests/test_optimizer_runtime_durability.py",
     "backend/tests/test_retired_subsystem_migration.py",
     "backend/tests/test_strategy_workspace_reset.py",

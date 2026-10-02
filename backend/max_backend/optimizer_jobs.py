@@ -13,6 +13,7 @@ from typing import Any
 from .challenger_store import get_challenger_by_source, migrate_m03
 from .config import DATABASE_PATH, ROOT
 from .optimizer_core import freeze_request
+from .optimizer_resources import frozen_resource_admission
 from .optimizer_runtime import (
     OPTIMIZER_EVIDENCE_ROOT,
     compatible_reports,
@@ -54,6 +55,7 @@ RESUMABLE_JOB_STATUSES = {
     "RESUMING",
     "INTERRUPTED_SAFE_TO_RESUME",
     "EXECUTION_UNCERTAIN",
+    "RESOURCE_STOPPED",
 }
 
 WORKER_IDENTITY_WAIT_SECONDS = 12.0
@@ -509,7 +511,11 @@ def _spawn_worker(job_id: str, *, resume: bool) -> dict[str, Any]:
 
 def start_optimizer(raw_request: dict[str, Any]) -> dict[str, Any]:
     migrate_m03()
-    request = freeze_request(raw_request)
+    request = freeze_request(raw_request, force_resource_refresh=True)
+    resource_policy = request.get("resource_policy") or {}
+    if resource_policy.get("status") != "SAFE":
+        reason = str(resource_policy.get("reason") or "Resource safety could not be established.")
+        raise RuntimeError(f"RESOURCE_PREFLIGHT_BLOCKED: {reason}")
     job = create_job(
         request,
         evidence_root=OPTIMIZER_EVIDENCE_ROOT,
@@ -692,6 +698,16 @@ def resume_optimizer(job_id: str) -> dict[str, Any]:
             raise RuntimeError("Optimizer worker is still running; resume is not allowed")
 
     _ensure_request_snapshot(job)
+    if str(job.get("status") or "") == "RESOURCE_STOPPED":
+        admission = frozen_resource_admission(
+            job["request"].get("resource_policy") or {},
+            mt5=job["request"]["mt5"],
+        )
+        if admission.get("status") != "SAFE":
+            raise RuntimeError(
+                "RESOURCE_PREFLIGHT_BLOCKED: "
+                + str(admission.get("reason") or "Current resources are unsafe for resume.")
+            )
 
     return _spawn_worker(job_id, resume=True)
 

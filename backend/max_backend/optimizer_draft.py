@@ -16,6 +16,7 @@ from .optimizer_core import (
     DEFAULT_SPACE,
 )
 from .optimizer_store import utc_now
+from .optimizer_resources import default_resource_settings, validate_resource_settings
 
 MAX_DRAFT_BYTES = 128 * 1024
 DRAFT_FIELDS = {
@@ -34,6 +35,7 @@ DRAFT_FIELDS = {
     "search_space",
     "kpi",
     "scientist_assist",
+    "resources",
 }
 KPI_FIELDS = {
     "min_profit_factor",
@@ -61,13 +63,20 @@ def default_optimizer_draft() -> dict[str, Any]:
         "search_space": deepcopy(DEFAULT_SPACE),
         "kpi": {key: DEFAULT_KPI[key] for key in KPI_FIELDS},
         "scientist_assist": False,
+        "resources": default_resource_settings(),
     }
 
 
 def _validate_draft(value: Any) -> dict[str, Any]:
-    if not isinstance(value, dict) or set(value) != DRAFT_FIELDS:
+    if not isinstance(value, dict):
         raise ValueError("OPTIMIZER_DRAFT_SHAPE_INVALID")
-    draft = deepcopy(value)
+    candidate = deepcopy(value)
+    legacy_fields = DRAFT_FIELDS - {"resources"}
+    if set(candidate) == legacy_fields:
+        candidate["resources"] = default_resource_settings()
+    if set(candidate) != DRAFT_FIELDS:
+        raise ValueError("OPTIMIZER_DRAFT_SHAPE_INVALID")
+    draft = candidate
     for key in ("symbol", "relative_symbol", "period", "from_date", "to_date"):
         if not isinstance(draft[key], str) or len(draft[key]) > 128:
             raise ValueError(f"OPTIMIZER_DRAFT_FIELD_INVALID:{key}")
@@ -86,6 +95,7 @@ def _validate_draft(value: Any) -> dict[str, Any]:
             raise ValueError(f"OPTIMIZER_DRAFT_FIELD_NONFINITE:{key}")
     if not isinstance(draft["scientist_assist"], bool):
         raise ValueError("OPTIMIZER_DRAFT_FIELD_INVALID:scientist_assist")
+    draft["resources"] = validate_resource_settings(draft["resources"])
 
     names = set(ABSOLUTE_BOUNDS)
     enabled = draft["optimize_params"]

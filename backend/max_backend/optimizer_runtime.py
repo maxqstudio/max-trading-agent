@@ -25,6 +25,7 @@ from .optimizer_core import (
     sha256_file,
 )
 from .path_safety import remove_owned_path
+from .optimizer_resource_runtime import launch_bounded_mt5
 
 OPTIMIZER_EVIDENCE_ROOT = OPTIMIZER_ARTIFACT_ROOT
 
@@ -467,6 +468,7 @@ def launch_mt5(
     ini_path: str | Path,
     timeout_sec: int,
     on_process: Any | None = None,
+    on_resource: Any | None = None,
 ) -> int:
     terminal = Path(request["mt5"]["terminal"])
     if not terminal.is_file():
@@ -476,6 +478,16 @@ def launch_mt5(
         raise RuntimeError(
             "MT5_TERMINAL_ALREADY_RUNNING: "
             + ",".join(str(pid) for pid in existing)
+        )
+    resource_policy = request.get("resource_policy")
+    if isinstance(resource_policy, dict):
+        return launch_bounded_mt5(
+            terminal,
+            Path(ini_path),
+            timeout_sec=int(timeout_sec),
+            policy=resource_policy,
+            on_process=on_process,
+            on_resource=on_resource,
         )
     command = [str(terminal), f"/config:{Path(ini_path)}"]
     process = subprocess.Popen(command, cwd=str(terminal.parent))

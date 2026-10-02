@@ -1,25 +1,27 @@
 {
   "current_phase": "STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING",
   "current_phase_results": {
-    "backend_full": "PASS_LOCAL: 435 passed, 0 skipped, 0 failed in 480.97s after Optimizer durability/source repairs and canonical Scientist knowledge regeneration.",
-    "backend_targeted": "PASS_LOCAL: 51 Optimizer reliability/draft/runtime durability tests; a separate 86-test repair slice also passed.",
-    "browser_e2e": "PASS_LOCAL_CRITICAL_CONTROL_SMOKE_WITH_MOCKED_APIS; not a live backend or Owner-PC E2E",
+    "backend_full": "PASS_LOCAL: 456 passed, 0 skipped, 0 failed in 530.11s after resource-safety repair and final Scientist knowledge regeneration.",
+    "backend_targeted": "PASS_LOCAL: resource/runtime focused gates include callback forwarding, RSS detection, resource-stop fault injection, resume admission, and existing optimizer reliability suites.",
+    "browser_e2e": "PASS_LOCAL_REAL_BROWSER_OWNER_PC: headless Chrome against live Vite + live backend; draft reload/backend-restart persistence PASS; native MT5 START observed 2/2 agents; UI STOP reached STOPPED; final resource evidence refreshed to 2/2; Owner 17D draft restored.",
     "build": "PASS_LOCAL",
-    "frontend": "52 passed / 8 files",
-    "frontend_targeted": "9 passed / 1 file",
+    "frontend": "PASS_LOCAL: 53 passed / 8 files",
+    "frontend_targeted": "PASS_LOCAL: 19 Optimizer UI tests / 1 file including terminal resource-evidence refresh",
     "hosted_ci": "NOT_RUN",
     "lint": "PASS_LOCAL_NO_WARNINGS",
     "npm_tree": "PASS_LOCAL",
-    "owner_runtime": "NOT_PROVEN",
+    "owner_runtime": "BOUNDED_RESOURCE_DIAGNOSTICS_PASS; full Owner Optimizer acceptance NOT_PROVEN",
     "pip_check": "PASS_LOCAL",
+    "real_mt5_resource_safety": "PASS_LOCAL_REAL_MT5: Stage C 9/9 parsed passes at frozen 3/3 agents; Stage D 17D Fast Genetic raw-cardinality context 18,259,010,497,728,000 produced 512 report rows at frozen 2/2 agents; both rc=0 and SAFE.",
+    "resource_preflight_latency": "PASS_LOCAL_LIVE: cold forced hardware preflight 1826.583 ms; warm cached median 16.083 ms, p95 31.184 ms; current median 20.346 ms; detail 5.851 ms; qualified page 8.238 ms.",
     "schema_version": 15,
-    "sequence": "NOT_RUN: Optimizer durability DURING/CURRENT flow added; regeneration/validation pending",
+    "sequence": "PASS_LOCAL: 8/8 DURING/CURRENT sessions; canonical actual graphs regenerated from current source digest 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826.",
     "skill_workflow_current_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
-    "source_only_scan": "NOT_RUN",
+    "source_only_scan": "NOT_RUN_FINAL_HEAD: rerun after final source/governance commit",
     "synthetic_optimizer_profile": "PASS_LOCAL: 750-candidate synthetic profile, 12 requests/endpoint; actual qualified-page median 23.651 ms/p95 68.983 ms, 61,462-byte response. Separate Windows process profile measured CPU/RSS/read/write I/O with the qualified route mocked. No real MT5 or Owner DB used; temporary test DB/evidence cleanup was rejected by shell policy."
   },
   "current_phase_status": "IN_PROGRESS",
-  "evidence_boundary": "Starting authority 5a30097d76a46ad077bed8dfd978eb6b27f83264 is the source baseline for STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING. The candidate is local on work/optimizer-durability-performance-hardening. Optimizer tests use synthetic temporary databases/evidence and isolated or mocked process boundaries; the Owner operational database, real MT5, broker and market data are not used. Initial read-only inspection found zero Optimizer jobs/rounds and no files in the inspected Optimizer artifact directories, so no deletion was necessary or performed. Fresh R00-R11 remain planned and blocked until a real MT5 sample is Owner-declared READY and Control Room separately authorizes a source phase. Exact final GitHub main SHA and hosted CI identity remain external acceptance evidence per D-012.",
+  "evidence_boundary": "Starting authority is exact maxqstudio/max-trading-agent main 80efac39312218ff8bd6ba05269791c69a3b9061 on work/optimizer-mt5-resource-safety. Source/unit/UI acceptance uses local tests. In addition, Owner-authorized bounded real-MT5 diagnostics were executed only to prove the resource controller: Stage C used a 2D/9-pass Slow Complete workload; Stage D used all 17 dimensions with Fast Genetic and a short cheap interval. These diagnostics prove bounded local-agent concurrency and RAM safety behavior, not full production-scale Optimizer/Challenger/Champion acceptance. Fresh R00-R11 remain roadmap-gated.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
     "How does important data flow through the system?": "PASS",
@@ -79,10 +81,10 @@
       "status": "PASS_LOCAL"
     },
     {
-      "evidence": "Local backend 435-pass/0-skip/0-fail and frontend 52-pass/8-file reports are recorded; governance/profile/security scan and exact hosted evidence remain pending.",
+      "evidence": "Backend 456/456; frontend 53/53 across 8 files; lint 0 warnings/errors; build/npm/pip PASS. Final source-only and governance are rerun after candidate commit.",
       "id": "REGRESSION-01",
       "requirement": "Full current backend/frontend regressions, dependency checks, build, governance validators, and exact-tree source-only scan pass without unexplained skips or failures.",
-      "status": "NOT_PROVEN"
+      "status": "PASS_LOCAL"
     },
     {
       "evidence": "External GitHub Actions run bound to exact candidate SHA.",
@@ -91,9 +93,9 @@
       "status": "NOT_PROVEN"
     },
     {
-      "evidence": "Owner-PC final acceptance remains deferred.",
+      "evidence": "Bounded real-MT5 resource diagnostics passed; full normal Owner Optimizer workflow remains deferred and NOT_PROVEN.",
       "id": "OWNER-RUNTIME-01",
-      "requirement": "Owner-PC reset and any fresh real Optimizer/MT5 verification remain separate from synthetic Builder tests; real MT5 runtime remains NOT_PROVEN.",
+      "requirement": "Bounded repair diagnostics may prove resource-control behavior, but full Owner Strategy Optimizer/Challenger/Champion runtime acceptance remains a separate post-source gate.",
       "status": "NOT_PROVEN"
     },
     {
@@ -121,7 +123,7 @@
       "status": "PASS_LOCAL"
     },
     {
-      "evidence": "frontend/src/OptimizerPage.tsx; frontend/src/OptimizerPage.test.tsx; frontend/src/ChallengersPage.test.tsx",
+      "evidence": "frontend/src/OptimizerPage.tsx; frontend/src/OptimizerPage.test.tsx; real headless Chrome live frontend/backend START/STOP resource-evidence refresh.",
       "id": "OPT-UI-01",
       "requirement": "Optimizer requests cancel/reject stale responses, debounce draft writes, bound/adapt polling, and show visible loading/block/success/failure feedback.",
       "status": "PASS_LOCAL"
@@ -131,6 +133,12 @@
       "id": "OPT-PERFORMANCE-01",
       "requirement": "Record reproducible synthetic request latency/payload and practical CPU/RAM/disk observations without substituting real Owner runtime measurements.",
       "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": "optimizer_resources.py; optimizer_resource_runtime.py; optimizer_worker.py; optimizer_jobs.py; test_optimizer_resources.py; test_optimizer_runtime.py; real Stage C/D bounded MT5 diagnostics.",
+      "id": "OPT-RESOURCE-01",
+      "requirement": "Optimizer resource admission is hardware-aware and fail-closed, freezes an execution concurrency cap without shrinking scientific search space, enforces the cap on owned local MT5 processes, records runtime pressure, and supports controlled RESOURCE_STOPPED recovery.",
+      "status": "PASS_LOCAL_REAL_MT5_BOUNDED"
     }
   ],
   "results": {
@@ -140,20 +148,28 @@
       "tested_sha": null
     },
     "regression": {
-      "backend_full_status": "PASS_LOCAL: 435 passed, 0 skipped, 0 failed in 480.97s",
+      "backend_full_status": "PASS_LOCAL: 456 passed, 0 skipped, 0 failed in 530.11s",
       "backend_targeted": 51,
       "build": "PASS_LOCAL",
       "frontend_files": 8,
-      "frontend_status": "PASS_LOCAL",
-      "frontend_tests": 52,
+      "frontend_status": "PASS_LOCAL: 53 passed / 8 files",
+      "frontend_tests": 53,
       "lint": "PASS_LOCAL_NO_WARNINGS",
       "npm_ls_all": "PASS_LOCAL",
-      "pip_check": "PASS_LOCAL"
+      "pip_check": "PASS_LOCAL",
+      "resource_targeted": "PASS_LOCAL: focused resource/runtime tests passed including real Windows RSS detection and controlled guard/re-admission cases"
     },
     "runtime": {
-      "browser_e2e": "PASS_LOCAL_CRITICAL_CONTROL_SMOKE_WITH_MOCKED_APIS; no live backend or Owner-PC E2E",
-      "mt5": "NOT_PROVEN",
-      "owner_pc": "NOT_PROVEN"
+      "browser_e2e": "PASS_LOCAL_REAL_BROWSER_OWNER_PC: headless Chrome against live Vite + live backend; draft reload/backend-restart persistence PASS; native MT5 START observed 2/2 agents; UI STOP reached STOPPED; final resource evidence refreshed to 2/2; Owner 17D draft restored.",
+      "live_api_latency": {
+        "current_median_ms": 20.346,
+        "detail_median_ms": 5.851,
+        "qualified_median_ms": 8.238,
+        "resource_preflight_cold_ms": 1826.583,
+        "resource_preflight_warm_median_ms": 16.083
+      },
+      "mt5": "PASS_BOUNDED_RESOURCE_DIAGNOSTICS; full normal Owner workflow NOT_PROVEN",
+      "owner_pc": "BOUNDED_RESOURCE_DIAGNOSTICS_AND_REAL_BROWSER_CONTROL_FLOW_PASS; FULL_LONG_OWNER_ACCEPTANCE_NOT_RUN"
     },
     "schema_version": 15,
     "scientific_state": {
@@ -169,6 +185,12 @@
       "research_challenger": 0
     },
     "skill_authority_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
+    "source_only_scan": {
+      "candidate_sha": null,
+      "matches": null,
+      "status": "NOT_RUN_FINAL_HEAD",
+      "tracked_text_files": null
+    },
     "synthetic_optimizer_profile": {
       "baseline_from_prechange_terminal_evidence": {
         "comparability": "Indicative only: same synthetic 750-candidate workload reported in the Builder handoff, but its exact harness log is not preserved.",
@@ -240,23 +262,25 @@
     "targeted": {
       "backend_tests": 51,
       "frontend_files": 1,
-      "frontend_tests": 9,
+      "frontend_tests": 19,
       "status": "PASS_LOCAL",
       "tested_worktree_base": "e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d"
     }
   },
   "runtime_checks": [
-    "NOT_RUN: Owner operational database reset and fresh real Optimizer/MT5 verification; no Owner data was touched. Two synthetic profile directories remain under ignored .venv because cleanup was rejected by shell policy.",
-    "NOT_RUN: real MT5/MetaEditor/broker/data-root/Strategy Tester runtime.",
-    "NOT_RUN: real R00/R01/R02 execution, model fitting/training, or Cheap Screen outcomes.",
-    "NOT_RUN: R03 qualification, ONNX, Research Challenger creation, or Champion mutation."
+    "PASS_BOUNDED: real MT5 Stage C resource-control diagnostic, 2 dimensions / 9 passes, parsed 9, frozen/observed agents 3/3, rc=0, SAFE.",
+    "PASS_BOUNDED: real MT5 Stage D queue-stress diagnostic, 17 dimensions, raw Cartesian context 18,259,010,497,728,000, 512 report rows, frozen/observed agents 2/2, rc=0, SAFE.",
+    "PASS_BOUNDED_REAL_BROWSER: live frontend/backend draft persistence across page/backend restart, native MT5 START/STOP, observed 2/2 agent cap, clean STOP, authoritative final UI resource evidence, and Owner draft restoration.",
+    "NOT_RUN: full production-scale/long-range Owner Optimizer \u2192 Challenger \u2192 Champion \u2192 backtest workflow.",
+    "NOT_RUN: real R00-R11 Research execution, model training, ONNX, Research Challenger creation, or Champion mutation."
   ],
-  "runtime_status": "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED",
+  "runtime_status": "BOUNDED_REAL_MT5_RESOURCE_DIAGNOSTICS_PASS_FULL_OWNER_ACCEPTANCE_REQUIRED",
   "schema_version": 1,
   "sequence_mode": "DURING",
   "sequence_session": "FLOW-OPTIMIZER-DURABILITY-PERFORMANCE",
-  "sequence_sync_status": "PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; all session/graph source digests match 8a5b70a056203d393d7efe83fe68f1eec637b51fe81845f45b89f9c8f73447c4. Generator reports one SyntaxError only in ignored pytest fixture .pytest-baseline-e4af; the canonical sequence validator accepts all 8 sessions with no warnings.",
+  "sequence_sync_status": "PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826.",
   "test_commands": [
+    ".venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_resources.py backend/tests/test_optimizer_runtime.py backend/tests/test_optimizer_reliability.py -q -o addopts=",
     ".venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_draft.py backend/tests/test_optimizer_reliability.py backend/tests/test_optimizer_runtime_durability.py backend/tests/test_m01_jobs.py backend/tests/test_m01_recovery.py backend/tests/test_m08_strategy_results.py -q -o addopts=",
     ".venv/Scripts/python.exe -m pytest backend/tests -q -o addopts= --basetemp .venv/pytest-optimizer-full-rerun-20261001",
     "cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all",

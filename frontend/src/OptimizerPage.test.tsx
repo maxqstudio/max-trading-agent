@@ -79,6 +79,12 @@ function contract() {
       min_weighted_r: 0,
       base_h1_trades_per_month: 20,
     },
+    default_resources: {
+      mode: 'AUTO_SAFE',
+      custom_max_local_agents: 1,
+      custom_min_free_ram_gb: 4,
+      custom_cpu_reserve_logical: 2,
+    },
     main_timeframes: ['M15', 'M20', 'M30', 'H1', 'H2', 'H3', 'H4', 'H6', 'H8', 'H12', 'D1'],
     role_timeframes: ['M1','M2','M3','M4','M5','M6','M10','M12','M15','M20','M30','H1','H2','H3','H4','H6','H8','H12','D1','W1','MN1'],
     strategy_contract: 'MAX_TRUE_MTF_DYNAMIC_V1',
@@ -139,6 +145,16 @@ function defaultDraft() {
     search_space: structuredClone(value.default_search_space),
     kpi: { ...value.default_kpi },
     scientist_assist: false,
+    resources: { ...value.default_resources },
+  }
+}
+
+function safeResourcePreflight() {
+  return {
+    schema: 'MAX_OPTIMIZER_RESOURCE_POLICY_V1', mode: 'AUTO_SAFE', status: 'SAFE', reason: null,
+    detected: { physical_cores: 6, logical_processors: 12, total_ram_bytes: 34359738368, available_ram_bytes: 21474836480, configured_local_agent_capacity: 12, mt5_build: '5.0.0.6231' },
+    minimum_free_ram_bytes: 6442450944, safe_mt5_ram_budget_bytes: 12884901888, cpu_reserve_logical: 2, resolved_max_local_agents: 2,
+    workload: { optimization_name: 'Fast Genetic', optimized_parameter_count: 17, raw_complete_grid_combinations: 10, from_date: '2021.01.01', to_date: '2024.12.31', tick_model_name: '1 minute OHLC' },
   }
 }
 
@@ -352,6 +368,7 @@ describe('M01 Optimizer UI', () => {
               raw_complete_grid_combinations: 10,
               authority: 'RAW_CARTESIAN_GRID_ONLY_NOT_MT5_GENETIC_TASK_COUNT',
             },
+            resource_preflight: safeResourcePreflight(),
           }),
         } as Response)
       }
@@ -388,6 +405,8 @@ describe('M01 Optimizer UI', () => {
 
     fireEvent.change(screen.getByLabelText('Main Symbol'), { target: { value: 'XAUUSD.m' } })
     fireEvent.change(screen.getByLabelText('Relative reference symbol'), { target: { value: 'EURUSD.m' } })
+    await waitFor(() => expect(screen.getByRole('button', { name: 'START OPTIMIZER' })).toBeEnabled(), { timeout: 1500 })
+    await waitFor(() => expect(actionOrder).toEqual(['draft']), { timeout: 1500 })
     fireEvent.click(screen.getByRole('button', { name: 'START OPTIMIZER' }))
 
     await waitFor(() => expect(submitted).not.toBeNull())
@@ -1025,23 +1044,23 @@ describe('M08 qualified candidate control', () => {
   })
 
   it('locks duplicate START clicks immediately and exposes pending progress', async () => {
-    const saveGate = deferred<Response>()
-    let saveCalls = 0
+    const startGate = deferred<Response>()
+    const saved = defaultDraft()
+    saved.symbol = 'XAUUSD.m'
+    saved.relative_symbol = 'EURUSD.m'
     let startCalls = 0
-    let savingPayload: any = null
     vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
       const url = String(input)
       if (url.endsWith('/api/optimizer/contract')) return Promise.resolve({ ok: true, json: async () => contract() } as Response)
       if (url.endsWith('/api/optimizer/current')) return Promise.resolve({ ok: true, json: async () => null } as Response)
       if (url.endsWith('/api/optimizer/draft') && init?.method === 'PUT') {
-        saveCalls += 1
-        savingPayload = JSON.parse(String(init.body))
-        return saveGate.promise
+        return Promise.resolve({ ok: true, json: async () => draftResponse(JSON.parse(String(init.body)).draft, JSON.parse(String(init.body)).revision) } as Response)
       }
-      if (url.endsWith('/api/optimizer/draft')) return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      if (url.endsWith('/api/optimizer/draft')) return Promise.resolve({ ok: true, json: async () => draftResponse(saved, 3) } as Response)
+      if (url.endsWith('/api/optimizer/preview')) return Promise.resolve({ ok: true, json: async () => ({ status: 'VALID', trade_sample: { timeframe: 'H1', scaled_trades_per_month: 20, calendar_months: 1, minimum_trades: 20 }, search_space_cardinality: { raw_complete_grid_combinations: 10, authority: 'SYNTHETIC_TEST' }, resource_preflight: safeResourcePreflight() }) } as Response)
       if (url.endsWith('/api/optimizer/start')) {
         startCalls += 1
-        return Promise.resolve({ ok: true, json: async () => ({ job_id: 'JSTART', status: 'QUEUED', active: true }) } as Response)
+        return startGate.promise
       }
       if (url.endsWith('/api/optimizer/jobs/JSTART')) return Promise.resolve({ ok: true, json: async () => ({ ...terminalJob, job_id: 'JSTART', status: 'QUEUED', active: true, rounds: [] }) } as Response)
       throw new Error('unexpected fetch ' + url)
@@ -1049,16 +1068,17 @@ describe('M08 qualified candidate control', () => {
 
     render(<OptimizerPage />)
     const start = await screen.findByRole('button', { name: 'START OPTIMIZER' })
+    await waitFor(() => expect(start).toBeEnabled(), { timeout: 1500 })
     act(() => {
       start.click()
       start.click()
     })
     expect(screen.getByRole('button', { name: 'Starting...' })).toBeDisabled()
-    expect(saveCalls).toBe(1)
-    expect(startCalls).toBe(0)
+    expect(startCalls).toBe(1)
 
-    saveGate.resolve({ ok: true, json: async () => draftResponse(savingPayload.draft, savingPayload.revision) } as Response)
-    await waitFor(() => expect(startCalls).toBe(1))
+    startGate.resolve({ ok: true, json: async () => ({ job_id: 'JSTART', status: 'QUEUED', active: true }) } as Response)
+    expect(await screen.findByText('Queued')).toBeInTheDocument()
+    expect(startCalls).toBe(1)
   })
 
   it('keeps the latest preview when an older preview response arrives last', async () => {
@@ -1093,6 +1113,7 @@ describe('M08 qualified candidate control', () => {
         status: 'VALID',
         trade_sample: { timeframe: 'H1', scaled_trades_per_month: trades, calendar_months: 1, minimum_trades: trades },
         search_space_cardinality: { raw_complete_grid_combinations: 1, authority: 'SYNTHETIC_TEST' },
+        resource_preflight: safeResourcePreflight(),
       }),
     } as Response)
     later.resolve(preview(77))
@@ -1126,6 +1147,49 @@ describe('M08 qualified candidate control', () => {
     expect(screen.getByRole('button', { name: 'RESUME' })).toBeEnabled()
     expect(screen.getByText('Execution needs reconciliation')).toBeInTheDocument()
     expect(screen.getByText('The previous execution needs process reconciliation.')).toBeInTheDocument()
+  })
+
+  it('refreshes authoritative resource evidence after STOP before terminal polling ends', async () => {
+    const staleRuntime = {
+      resource_state: 'SAFE', resolved_max_local_agents: 2, actual_max_active_agents: 0,
+      min_available_ram_bytes: 16 * 1024 ** 3, peak_mt5_working_set_bytes: 80 * 1024 ** 2,
+    }
+    const finalRuntime = {
+      resource_state: 'SAFE', resolved_max_local_agents: 2, actual_max_active_agents: 2,
+      min_available_ram_bytes: 14 * 1024 ** 3, peak_mt5_working_set_bytes: 900 * 1024 ** 2,
+    }
+    const running = {
+      ...terminalJob, status: 'MT5_RUNNING', active: true, winner: null,
+      request: { ...terminalJob.request, resource_policy: safeResourcePreflight() },
+      rounds: [{ ...terminalJob.rounds[0], phase: 'MT5_PROCESS_CONFIRMED', state: { optimizer_run_nonce: 123, resource_runtime: staleRuntime } }],
+    }
+    const stopped = {
+      ...running, status: 'STOPPED', active: false, message: 'Stopped by Owner',
+      rounds: [{ ...running.rounds[0], state: { optimizer_run_nonce: 123, resource_runtime: finalRuntime } }],
+    }
+    let detailCalls = 0
+    vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
+      const url = String(input)
+      if (url.endsWith('/api/optimizer/contract')) return Promise.resolve({ ok: true, json: async () => contract() } as Response)
+      if (url.endsWith('/api/optimizer/current')) return Promise.resolve({ ok: true, json: async () => running } as Response)
+      if (url.endsWith('/api/optimizer/draft')) return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      if (url.endsWith('/api/optimizer/preview')) return Promise.resolve({ ok: true, json: async () => ({ status: 'VALID', trade_sample: { timeframe: 'H1', scaled_trades_per_month: 20, calendar_months: 1, minimum_trades: 20 }, search_space_cardinality: { raw_complete_grid_combinations: 10, authority: 'SYNTHETIC_TEST' }, resource_preflight: safeResourcePreflight() }) } as Response)
+      if (url.endsWith('/api/optimizer/jobs/JOB1/stop')) return Promise.resolve({ ok: true, json: async () => ({ job_id: 'JOB1', status: 'STOPPED', active: false }) } as Response)
+      if (url.endsWith('/api/optimizer/jobs/JOB1')) {
+        detailCalls += 1
+        return Promise.resolve({ ok: true, json: async () => stopped } as Response)
+      }
+      throw new Error('unexpected fetch ' + url)
+    }))
+
+    render(<OptimizerPage />)
+    const stop = await screen.findByRole('button', { name: 'STOP' })
+    expect(stop).toBeEnabled()
+    expect(screen.getByText('0 / 2')).toBeInTheDocument()
+    fireEvent.click(stop)
+    await waitFor(() => expect(screen.getByText('2 / 2')).toBeInTheDocument())
+    expect(detailCalls).toBe(1)
+    expect(screen.getByText('Stopped')).toBeInTheDocument()
   })
 
   it('debounces candidate search and ignores a stale response after the newer filter wins', async () => {

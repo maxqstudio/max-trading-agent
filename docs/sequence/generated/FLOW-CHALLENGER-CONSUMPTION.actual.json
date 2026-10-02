@@ -1487,8 +1487,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::optimizer_fixed_execution_authority",
       "language": "Python",
-      "line_end": 132,
-      "line_start": 115,
+      "line_end": 133,
+      "line_start": 116,
       "locator": "backend/max_backend/optimizer_core.py::optimizer_fixed_execution_authority"
     },
     {
@@ -1496,8 +1496,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys",
       "language": "Python",
-      "line_end": 113,
-      "line_start": 101,
+      "line_end": 114,
+      "line_start": 102,
       "locator": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys"
     },
     {
@@ -1505,8 +1505,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_schema",
       "language": "Python",
-      "line_end": 99,
-      "line_start": 91,
+      "line_end": 100,
+      "line_start": 92,
       "locator": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_schema"
     },
     {
@@ -1514,8 +1514,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::parse_set_optimizer_entries",
       "language": "Python",
-      "line_end": 816,
-      "line_start": 791,
+      "line_end": 834,
+      "line_start": 809,
       "locator": "backend/max_backend/optimizer_core.py::parse_set_optimizer_entries"
     },
     {
@@ -1523,8 +1523,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::read_ea_optimizer_defaults",
       "language": "Python",
-      "line_end": 417,
-      "line_start": 400,
+      "line_end": 418,
+      "line_start": 401,
       "locator": "backend/max_backend/optimizer_core.py::read_ea_optimizer_defaults"
     },
     {
@@ -1532,8 +1532,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_runtime.py::compile_summary",
       "language": "Python",
-      "line_end": 120,
-      "line_start": 104,
+      "line_end": 121,
+      "line_start": 105,
       "locator": "backend/max_backend/optimizer_runtime.py::compile_summary"
     },
     {
@@ -1564,7 +1564,7 @@
       "locator": "backend/max_backend/scientist_store.py::migrate_m05"
     }
   ],
-  "observed_head": "724215d83f4f5ef89316b41dfb6ff400b1459156",
+  "observed_head": "26cd11724719e7f220042c6ae164f34b4aa83f8f",
   "schema_version": 1,
-  "source_digest": "03dc42377454dff52460fbaa397ddbcdadfed58a191970a772c360911713c492"
+  "source_digest": "05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826"
 }
