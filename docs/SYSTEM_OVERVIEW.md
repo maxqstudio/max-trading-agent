@@ -54,7 +54,7 @@ Observed source inventory: 116 files, 4 language categories.
 - Strategy lifecycle domain -> Immutable evidence/artifact layer: Strategy evidence and lifecycle changes are governed through the owning domain and retained artifact lineage.
 - Owner React Control Surface -> Optimizer job orchestration and read model: Debounced draft edits persist independently; START snapshots the validated draft into a new immutable job request.
 - Optimizer job orchestration and read model -> MT5/MetaEditor execution boundary: A confirmed worker executes one authorized round; frozen and verified evidence is atomically published before SQLite advances, then a bounded projection serves ordinary reads.
-- Optimizer job orchestration and read model -> Strategy lifecycle domain: Candidate pages use the indexed projection; Challenger selection separately revalidates canonical evidence.
+- Optimizer job orchestration and read model -> Strategy lifecycle domain: Candidate pages use the indexed projection; Challenger selection separately revalidates canonical retained evidence.
 - Scientist advisory subsystem -> Owner React Control Surface: Scientist returns bounded advisory context only; no scientific/promotion authority.
 - Current project governance -> Generated canonical docs/ governance Markdown: Project Truth Compiler projects source facts plus explicit semantic authority deterministically into canonical docs/ Markdown.
 
