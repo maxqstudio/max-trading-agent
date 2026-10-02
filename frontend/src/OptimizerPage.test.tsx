@@ -79,12 +79,6 @@ function contract() {
       min_weighted_r: 0,
       base_h1_trades_per_month: 20,
     },
-    default_resources: {
-      mode: 'AUTO_SAFE',
-      custom_max_local_agents: 1,
-      custom_min_free_ram_gb: 4,
-      custom_cpu_reserve_logical: 2,
-    },
     main_timeframes: ['M15', 'M20', 'M30', 'H1', 'H2', 'H3', 'H4', 'H6', 'H8', 'H12', 'D1'],
     role_timeframes: ['M1','M2','M3','M4','M5','M6','M10','M12','M15','M20','M30','H1','H2','H3','H4','H6','H8','H12','D1','W1','MN1'],
     strategy_contract: 'MAX_TRUE_MTF_DYNAMIC_V1',
@@ -145,17 +139,6 @@ function defaultDraft() {
     search_space: structuredClone(value.default_search_space),
     kpi: { ...value.default_kpi },
     scientist_assist: false,
-    resources: { ...value.default_resources },
-  }
-}
-
-function safeResourcePreflight() {
-  return {
-    schema: 'MAX_OPTIMIZER_RESOURCE_POLICY_V2', mode: 'AUTO_SAFE', status: 'SAFE', reason: null,
-    detected: { physical_cores: 6, logical_processors: 12, total_ram_bytes: 34359738368, available_ram_bytes: 21474836480, commit_charge_bytes: 12884901888, commit_limit_bytes: 68719476736, commit_headroom_bytes: 55834574848, configured_local_agent_capacity: 12, local_agent_capacity_source: 'MT5_AGENT_DIRECTORIES', mt5_build: '5.0.0.6231' },
-    minimum_free_ram_bytes: 6442450944, safe_mt5_ram_budget_bytes: 12884901888, protected_system_commit_reserve_bytes: 6871947673, minimum_commit_headroom_bytes: 9022998521, safe_job_commit_budget_bytes: 46815143527, terminal_commit_budget_bytes: 15032385536, per_agent_commit_budget_bytes: 12884901888, terminal_memory_budget_bytes: 6442450944, per_agent_memory_budget_bytes: 4294967296,
-    cpu_reserve_logical: 2, requested_max_local_agents: 2, safe_agent_cap: 2, resolved_max_local_agents: 2, calibration_status: 'NONE', estimation_source: 'CONSERVATIVE_FALLBACK',
-    workload: { compatibility_key: 'a'.repeat(64), symbol: 'XAUUSD.m', period: 'H1', history_span_bucket: '3Y+', optimization_name: 'Fast Genetic', optimized_parameter_count: 17, raw_complete_grid_combinations: 10, from_date: '2021.01.01', to_date: '2024.12.31', tick_model_name: '1 minute OHLC' },
   }
 }
 
@@ -369,7 +352,6 @@ describe('M01 Optimizer UI', () => {
               raw_complete_grid_combinations: 10,
               authority: 'RAW_CARTESIAN_GRID_ONLY_NOT_MT5_GENETIC_TASK_COUNT',
             },
-            resource_preflight: safeResourcePreflight(),
           }),
         } as Response)
       }
@@ -1058,7 +1040,7 @@ describe('M08 qualified candidate control', () => {
         return Promise.resolve({ ok: true, json: async () => draftResponse(JSON.parse(String(init.body)).draft, JSON.parse(String(init.body)).revision) } as Response)
       }
       if (url.endsWith('/api/optimizer/draft')) return Promise.resolve({ ok: true, json: async () => draftResponse(saved, 3) } as Response)
-      if (url.endsWith('/api/optimizer/preview')) return Promise.resolve({ ok: true, json: async () => ({ status: 'VALID', trade_sample: { timeframe: 'H1', scaled_trades_per_month: 20, calendar_months: 1, minimum_trades: 20 }, search_space_cardinality: { raw_complete_grid_combinations: 10, authority: 'SYNTHETIC_TEST' }, resource_preflight: safeResourcePreflight() }) } as Response)
+      if (url.endsWith('/api/optimizer/preview')) return Promise.resolve({ ok: true, json: async () => ({ status: 'VALID', trade_sample: { timeframe: 'H1', scaled_trades_per_month: 20, calendar_months: 1, minimum_trades: 20 }, search_space_cardinality: { raw_complete_grid_combinations: 10, authority: 'SYNTHETIC_TEST' }, resource_preflight: { status: 'BLOCKED' } }) } as Response)
       if (url.endsWith('/api/optimizer/start')) {
         startCalls += 1
         return startGate.promise
@@ -1070,11 +1052,8 @@ describe('M08 qualified candidate control', () => {
     render(<OptimizerPage />)
     const start = await screen.findByRole('button', { name: 'START OPTIMIZER' })
     await waitFor(() => expect(start).toBeEnabled(), { timeout: 1500 })
-    expect(screen.getByText('Windows commit')).toBeInTheDocument()
-    expect(screen.getByText('Commit estimates')).toBeInTheDocument()
-    expect(screen.getByText('Agent limit')).toBeInTheDocument()
-    expect(screen.getByText('MT5 local-agent ceiling')).toBeInTheDocument()
-    expect(screen.getByText(/Conservative workload-based fallback/)).toBeInTheDocument()
+    expect(screen.getByText(/MT5 uses its configured tester agents/)).toBeInTheDocument()
+    expect(screen.queryByText('Agent limit')).not.toBeInTheDocument()
     act(() => {
       start.click()
       start.click()
@@ -1119,7 +1098,6 @@ describe('M08 qualified candidate control', () => {
         status: 'VALID',
         trade_sample: { timeframe: 'H1', scaled_trades_per_month: trades, calendar_months: 1, minimum_trades: trades },
         search_space_cardinality: { raw_complete_grid_combinations: 1, authority: 'SYNTHETIC_TEST' },
-        resource_preflight: safeResourcePreflight(),
       }),
     } as Response)
     later.resolve(preview(77))
@@ -1166,7 +1144,7 @@ describe('M08 qualified candidate control', () => {
     }
     const running = {
       ...terminalJob, status: 'MT5_RUNNING', active: true, winner: null,
-      request: { ...terminalJob.request, resource_policy: safeResourcePreflight() },
+      request: { ...terminalJob.request },
       rounds: [{ ...terminalJob.rounds[0], phase: 'MT5_PROCESS_CONFIRMED', state: { optimizer_run_nonce: 123, resource_runtime: staleRuntime } }],
     }
     const stopped = {
@@ -1179,7 +1157,7 @@ describe('M08 qualified candidate control', () => {
       if (url.endsWith('/api/optimizer/contract')) return Promise.resolve({ ok: true, json: async () => contract() } as Response)
       if (url.endsWith('/api/optimizer/current')) return Promise.resolve({ ok: true, json: async () => running } as Response)
       if (url.endsWith('/api/optimizer/draft')) return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
-      if (url.endsWith('/api/optimizer/preview')) return Promise.resolve({ ok: true, json: async () => ({ status: 'VALID', trade_sample: { timeframe: 'H1', scaled_trades_per_month: 20, calendar_months: 1, minimum_trades: 20 }, search_space_cardinality: { raw_complete_grid_combinations: 10, authority: 'SYNTHETIC_TEST' }, resource_preflight: safeResourcePreflight() }) } as Response)
+      if (url.endsWith('/api/optimizer/preview')) return Promise.resolve({ ok: true, json: async () => ({ status: 'VALID', trade_sample: { timeframe: 'H1', scaled_trades_per_month: 20, calendar_months: 1, minimum_trades: 20 }, search_space_cardinality: { raw_complete_grid_combinations: 10, authority: 'SYNTHETIC_TEST' } }) } as Response)
       if (url.endsWith('/api/optimizer/jobs/JOB1/stop')) return Promise.resolve({ ok: true, json: async () => ({ job_id: 'JOB1', status: 'STOPPED', active: false }) } as Response)
       if (url.endsWith('/api/optimizer/jobs/JOB1')) {
         detailCalls += 1

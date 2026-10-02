@@ -873,11 +873,6 @@ def test_request_freezes_server_scientist_route_without_secret(
     }
     monkeypatch.setattr(core, "detect_mt5", _fake_mt5)
 
-    monkeypatch.setattr(
-        core,
-        "build_resource_preflight",
-        lambda *_args, **_kwargs: {"schema": "MAX_OPTIMIZER_RESOURCE_POLICY_V1", "status": "SAFE", "resolved_max_local_agents": 1},
-    )
     monkeypatch.setattr(core, "route_config_from_environment", lambda: deepcopy(route))
     monkeypatch.setenv("M02_ROUTE_KEY", "M02_SECRET_MUST_NOT_PERSIST_FREEZE")
 

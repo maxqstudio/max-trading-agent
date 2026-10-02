@@ -70,7 +70,6 @@ def preview_request(payload: dict) -> dict:
             "ea": frozen["ea"],
             "mt5": frozen["mt5"],
             "kpi": frozen["kpi"],
-            "resource_preflight": frozen["resource_policy"],
         }
     except Exception as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc

@@ -160,12 +160,6 @@ def test_timing_tf_can_change_fused_strategy_family_with_main_constant() -> None
 
 def test_optimizer_freezes_exact_geometry(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(core, "detect_mt5", fake_mt5)
-
-    monkeypatch.setattr(
-        core,
-        "build_resource_preflight",
-        lambda *_args, **_kwargs: {"schema": "MAX_OPTIMIZER_RESOURCE_POLICY_V1", "status": "SAFE", "resolved_max_local_agents": 1},
-    )
     request = core.freeze_request(request_payload("M30"))
     assert request["schema"] == OPTIMIZER_REQUEST_SCHEMA_CURRENT
     assert request["strategy_contract"] == STRATEGY_CONTRACT
@@ -194,12 +188,6 @@ def test_challenger_set_retains_exact_geometry(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setattr(core, "detect_mt5", fake_mt5)
-
-    monkeypatch.setattr(
-        core,
-        "build_resource_preflight",
-        lambda *_args, **_kwargs: {"schema": "MAX_OPTIMIZER_RESOURCE_POLICY_V1", "status": "SAFE", "resolved_max_local_agents": 1},
-    )
     request = core.freeze_request(request_payload("H1"))
     params = core.read_ea_optimizer_defaults()
     path = tmp_path / "challenger.set"

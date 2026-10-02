@@ -77,7 +77,7 @@ def main() -> int:
                 "V6 adds InpRiskPct as the 17th optimizer dimension at 0.5%..5.0% with exact 0.5% step; refinement may narrow the Owner grid but cannot shift its 0.5% origin or create off-grid values. New V6 jobs fix deterministic daily loss at 5.0% and InpMaxDailyLossPct is not optimized.",
                 "Historical V1-V5 16-parameter jobs remain readable and are not rewritten or migrated.",
                 "MAX_OPTIMIZER_FITNESS_V2 remains MeanR * Trades^alpha search guidance and is independent of the new risk dimension; Mean R and Weighted R remain independent hard-gate evidence.",
-                "AUTO_SAFE is the default Optimizer execution resource policy: MAX freezes the resolved policy at START, caps active local MT5 agents, reserves RAM/CPU headroom, blocks unsafe admission, and may stop owned execution under critical pressure without reducing the scientific search space.",
+                "Optimizer launches terminal64.exe with the frozen native tester INI through subprocess.Popen; MetaTrader manages tester agents using its configured settings. MAX does not impose an external active-agent cap or memory-estimate START admission gate.",
                 "A Challenger does not become Champion without explicit Owner promotion.",
             ],
         },
@@ -200,7 +200,7 @@ def main() -> int:
             "M07 accepted causal true-MTF Strategy epoch",
             "M08 accepted qualified pool, multi-Challenger selection, Backtest results and Artifact control plane",
             "V6 Strategy Optimizer source candidate with 17 dimensions including an exact Owner-grid InpRiskPct 0.5%..5.0% step 0.5% that refinement cannot shift off-grid, plus fixed 5.0% daily-loss authority for new jobs",
-            "Hardware-aware Strategy Optimizer resource admission with AUTO_SAFE default, bounded active local MT5 agents, RAM/CPU headroom and controlled resource stop semantics"
+            "Strategy Optimizer launches the frozen native tester INI through subprocess.Popen and relies on MetaTrader's configured tester-agent behavior without an external active-agent cap or memory-estimate START admission gate"
         ],
         "planned_capabilities": [
             "Owner Strategy Champion and real MT5 sample preparation before future Research source work is authorized",

@@ -30,8 +30,6 @@ SOURCE_ALLOWLIST = (
     "backend/max_backend/workflow_store.py",
     "backend/max_backend/mtf_geometry.py",
     "backend/max_backend/optimizer_core.py",
-    "backend/max_backend/optimizer_resources.py",
-    "backend/max_backend/optimizer_resource_runtime.py",
     "backend/max_backend/optimizer_store.py",
     "backend/max_backend/optimizer_worker.py",
     "backend/max_backend/optimizer_api.py",

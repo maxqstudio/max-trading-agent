@@ -114,7 +114,7 @@ def test_schema_15_upgrades_version_14_optimizer_storage_without_job_rows(tmp_pa
     assert job_count == 0
 
 
-def test_optimizer_resource_settings_persist_with_draft(tmp_path):
+def test_optimizer_resource_settings_are_discarded_from_draft(tmp_path):
     path = make_database(tmp_path)
     initial = get_optimizer_draft(path=path)
     changed = json.loads(json.dumps(initial["draft"]))
@@ -127,13 +127,15 @@ def test_optimizer_resource_settings_persist_with_draft(tmp_path):
     saved = put_optimizer_draft(changed, revision=1, path=path)
     reopened = get_optimizer_draft(path=path)
     assert saved["status"] == "READY"
-    assert reopened["draft"]["resources"] == changed["resources"]
+    assert "resources" not in saved["draft"]
+    assert "resources" not in reopened["draft"]
+    assert reopened["draft"] == initial["draft"]
 
 
-def test_legacy_optimizer_draft_without_resources_is_upgraded_in_memory(tmp_path):
+def test_legacy_optimizer_draft_with_resource_settings_is_sanitized_in_memory(tmp_path):
     path = make_database(tmp_path)
     legacy = get_optimizer_draft(path=path)["draft"]
-    legacy.pop("resources")
+    legacy["resources"] = {"mode": "AUTO_SAFE", "custom_max_local_agents": 1}
     with connect(path) as conn:
         conn.execute(
             "INSERT INTO optimizer_drafts(draft_id,revision,draft_json,updated_utc) VALUES(1,1,?,?)",
@@ -141,4 +143,4 @@ def test_legacy_optimizer_draft_without_resources_is_upgraded_in_memory(tmp_path
         )
     restored = get_optimizer_draft(path=path)
     assert restored["status"] == "READY"
-    assert restored["draft"]["resources"]["mode"] == "AUTO_SAFE"
+    assert "resources" not in restored["draft"]

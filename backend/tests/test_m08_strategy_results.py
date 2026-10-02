@@ -249,11 +249,6 @@ def build_optimizer_fixture(
     editor.write_bytes(b"metaeditor")
     (tmp_path / "mt5").mkdir()
     monkeypatch.setattr(core, "detect_mt5", lambda: fake_mt5(tmp_path))
-    monkeypatch.setattr(
-        core,
-        "build_resource_preflight",
-        lambda *_args, **_kwargs: {"schema": "MAX_OPTIMIZER_RESOURCE_POLICY_V1", "status": "SAFE", "resolved_max_local_agents": 1},
-    )
     request = freeze_request(raw_request())
     assert request["schema"] == OPTIMIZER_REQUEST_SCHEMA_CURRENT
 

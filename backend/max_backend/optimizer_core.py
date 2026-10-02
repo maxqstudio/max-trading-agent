@@ -21,7 +21,6 @@ from .mtf_geometry import (
     resolve_strategy_geometry,
 )
 from .optimizer_scientist import route_config_from_environment, scientist_route_status
-from .optimizer_resources import build_resource_preflight, default_resource_settings, history_span_bucket
 from .workflow_contract import (
     OPTIMIZER_REQUEST_SCHEMA_CURRENT,
     OPTIMIZER_WORKFLOW_OWNER_EXPLICIT,
@@ -567,7 +566,7 @@ def trade_sample(period: str, from_date: str, to_date: str, kpi: dict[str, Any])
     }
 
 
-def freeze_request(raw: dict[str, Any], *, force_resource_refresh: bool = False) -> dict[str, Any]:
+def freeze_request(raw: dict[str, Any]) -> dict[str, Any]:
     request = dict(raw or {})
     symbol = str(request.get("symbol") or "").strip()
     relative = str(request.get("relative_symbol") or request.get("confirm_symbol") or "").strip()
@@ -667,25 +666,6 @@ def freeze_request(raw: dict[str, Any], *, force_resource_refresh: bool = False)
 
     sample = trade_sample(period, from_date, to_date, kpi)
     cardinality = search_space_cardinality(space, selected)
-    resource_policy = build_resource_preflight(
-        request.get("resources"),
-        mt5=mt5,
-        workload={
-            "optimization": optimization,
-            "optimization_name": OPTIMIZATION_MODES[optimization],
-            "optimized_parameter_count": len(selected),
-            "raw_complete_grid_combinations": cardinality["raw_complete_grid_combinations"],
-            "symbol": symbol,
-            "period": period,
-            "ea_sha256": ea_sha,
-            "history_span_bucket": history_span_bucket(from_date, to_date),
-            "from_date": from_date,
-            "to_date": to_date,
-            "tick_model": model,
-            "tick_model_name": TICK_MODELS[model],
-        },
-        force=force_resource_refresh,
-    )
     return {
         "schema": OPTIMIZER_REQUEST_SCHEMA_CURRENT,
         "optimizer_result_workflow": OPTIMIZER_WORKFLOW_OWNER_EXPLICIT,
@@ -713,7 +693,6 @@ def freeze_request(raw: dict[str, Any], *, force_resource_refresh: bool = False)
             OPTIMIZER_REQUEST_SCHEMA_CURRENT
         ),
         "search_space_cardinality": cardinality,
-        "resource_policy": resource_policy,
         "kpi": kpi,
         "trade_sample": sample,
         "mt5": {
@@ -866,8 +845,6 @@ def build_tester_ini(
             f"Report={report_name}",
             "ReplaceReport=1",
             "ShutdownTerminal=1",
-            "UseLocal=1",
-            "UseRemote=0",
             "UseCloud=0",
             "Visual=0",
             "",
@@ -1616,7 +1593,6 @@ def contract_payload() -> dict[str, Any]:
         "default_search_space": DEFAULT_SPACE,
         "default_optimize_params": list(ABSOLUTE_BOUNDS),
         "default_kpi": DEFAULT_KPI,
-        "default_resources": default_resource_settings(),
         "fixed_execution_authority": optimizer_fixed_execution_authority(
             CURRENT_OPTIMIZER_SCHEMA
         ),
