@@ -804,8 +804,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys",
       "language": "Python",
-      "line_end": 113,
-      "line_start": 101,
+      "line_end": 114,
+      "line_start": 102,
       "locator": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys"
     },
     {
@@ -813,8 +813,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::parse_set_optimizer_entries",
       "language": "Python",
-      "line_end": 816,
-      "line_start": 791,
+      "line_end": 834,
+      "line_start": 809,
       "locator": "backend/max_backend/optimizer_core.py::parse_set_optimizer_entries"
     },
     {
@@ -822,8 +822,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::read_ea_optimizer_defaults",
       "language": "Python",
-      "line_end": 417,
-      "line_start": 400,
+      "line_end": 418,
+      "line_start": 401,
       "locator": "backend/max_backend/optimizer_core.py::read_ea_optimizer_defaults"
     },
     {
@@ -854,7 +854,7 @@
       "locator": "backend/max_backend/scientist_store.py::migrate_m05"
     }
   ],
-  "observed_head": "724215d83f4f5ef89316b41dfb6ff400b1459156",
+  "observed_head": "80efac39312218ff8bd6ba05269791c69a3b9061",
   "schema_version": 1,
-  "source_digest": "03dc42377454dff52460fbaa397ddbcdadfed58a191970a772c360911713c492"
+  "source_digest": "6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa"
 }

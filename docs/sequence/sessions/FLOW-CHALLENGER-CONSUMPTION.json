@@ -8,7 +8,7 @@
       "backend/max_backend/challenger_store.py::consumed_source_identities"
     ],
     "graph": "docs/sequence/generated/FLOW-CHALLENGER-CONSUMPTION.actual.json",
-    "source_digest": "03dc42377454dff52460fbaa397ddbcdadfed58a191970a772c360911713c492"
+    "source_digest": "6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa"
   },
   "critical": true,
   "implementation_base_sha": "eb6192873eb518b9fe4c7f15d03600ca4ac1e73d",

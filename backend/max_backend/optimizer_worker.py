@@ -43,6 +43,7 @@ from .optimizer_runtime import (
     write_json,
     write_state_snapshot,
 )
+from .optimizer_resource_runtime import ResourceGuardTriggered
 from .workflow_contract import (
     OPTIMIZER_TERMINAL_QUALIFIED_POOL,
     optimizer_uses_owner_selection,
@@ -193,6 +194,16 @@ def execute_round(
         discard_raw_round_staging(job_id, round_no)
         return _load_parsed_round(job_id, round_no)
 
+    if phase == "RESOURCE_STOPPED" and resume:
+        state = _save_phase(
+            job_id,
+            round_no,
+            state,
+            "PREPARED",
+            resumed_after_resource_stop=True,
+        )
+        phase = "PREPARED"
+
     if phase in {"LAUNCH_INTENT", "MT5_RUNNING", "MT5_PROCESS_CONFIRMED"}:
         state = _save_phase(
             job_id,
@@ -234,12 +245,44 @@ def execute_round(
                 mt5_process_identity=identity,
             )
 
-        returncode = launch_mt5(
-            request,
-            ini_path=state["ini_path"],
-            timeout_sec=21600,
-            on_process=confirm_mt5_process,
-        )
+        def record_resource(summary: dict[str, Any]) -> None:
+            nonlocal state
+            payload = {**state, "resource_runtime": dict(summary)}
+            record = upsert_round(
+                job_id,
+                round_no,
+                phase=str(payload.get("phase") or "MT5_PROCESS_CONFIRMED"),
+                state=payload,
+            )
+            state = dict(record["state"])
+
+        try:
+            returncode = launch_mt5(
+                request,
+                ini_path=state["ini_path"],
+                timeout_sec=21600,
+                on_process=confirm_mt5_process,
+                on_resource=record_resource,
+            )
+        except ResourceGuardTriggered as exc:
+            state = _save_phase(
+                job_id,
+                round_no,
+                state,
+                "RESOURCE_STOPPED",
+                resource_runtime=exc.summary,
+                resource_stop_reason=exc.reason,
+            )
+            update_job(
+                job_id,
+                status="RESOURCE_STOPPED",
+                active=False,
+                current_round=round_no,
+                message="Optimizer stopped by the resource safety guard; resume is allowed after resources recover.",
+                first_blocker="OPTIMIZER_RESOURCE_GUARD",
+                terminal_result="RESOURCE_STOPPED",
+            )
+            raise
         state = _save_phase(
             job_id,
             round_no,
@@ -674,6 +717,8 @@ def run_job(
 
     except ReportPending:
         return 3
+    except ResourceGuardTriggered:
+        return 6
     except Exception as exc:
         current = get_job(job_id)
         stage = str((current or {}).get("status") or "UNKNOWN")

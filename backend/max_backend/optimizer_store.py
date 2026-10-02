@@ -223,7 +223,8 @@ def create_job(
             WHERE status IN (
                 'EXECUTION_UNCERTAIN','RECONCILIATION_REQUIRED',
                 'INTERRUPTED_SAFE_TO_RESUME','WAITING_FOR_REPORT',
-                'MT5_COMPLETE_UNCONFIRMED','CHALLENGER_REGISTRATION_FAILED'
+                'MT5_COMPLETE_UNCONFIRMED','CHALLENGER_REGISTRATION_FAILED',
+                'RESOURCE_STOPPED'
             )
             ORDER BY updated_utc DESC LIMIT 1
             """

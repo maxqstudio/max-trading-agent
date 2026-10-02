@@ -202,6 +202,28 @@ def test_mt5_nonzero_exit_fails_closed(
         launch_mt5(request, ini_path=ini, timeout_sec=10)
 
 
+def test_resource_launch_forwards_process_and_resource_callbacks(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    terminal = tmp_path / "terminal64.exe"
+    terminal.write_bytes(b"MZ")
+    ini = tmp_path / "round.ini"
+    ini.write_text("[Tester]", encoding="utf-8")
+    request = {"mt5": {"terminal": str(terminal)}, "resource_policy": {"resolved_max_local_agents": 1}}
+    monkeypatch.setattr(runtime, "_matching_terminal_pids", lambda _terminal: [])
+    seen = {}
+    def fake_bounded(_terminal, _ini, **kwargs):
+        seen.update(kwargs)
+        return 0
+    monkeypatch.setattr(runtime, "launch_bounded_mt5", fake_bounded)
+    on_process = lambda _value: None
+    on_resource = lambda _value: None
+    assert launch_mt5(request, ini_path=ini, timeout_sec=10, on_process=on_process, on_resource=on_resource) == 0
+    assert seen["on_process"] is on_process
+    assert seen["on_resource"] is on_resource
+
+
 def test_stale_sidecar_clear_failure_is_not_ignored(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,

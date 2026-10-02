@@ -2534,8 +2534,8 @@
       "kind": "class",
       "label": "backend/max_backend/optimizer_core.py::OptimizationPass",
       "language": "Python",
-      "line_end": 253,
-      "line_start": 188,
+      "line_end": 254,
+      "line_start": 189,
       "locator": "backend/max_backend/optimizer_core.py::OptimizationPass"
     },
     {
@@ -2543,8 +2543,8 @@
       "kind": "method",
       "label": "backend/max_backend/optimizer_core.py::OptimizationPass.payload",
       "language": "Python",
-      "line_end": 253,
-      "line_start": 233,
+      "line_end": 254,
+      "line_start": 234,
       "locator": "backend/max_backend/optimizer_core.py::OptimizationPass.payload"
     },
     {
@@ -2552,8 +2552,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::_float",
       "language": "Python",
-      "line_end": 879,
-      "line_start": 866,
+      "line_end": 899,
+      "line_start": 886,
       "locator": "backend/max_backend/optimizer_core.py::_float"
     },
     {
@@ -2561,8 +2561,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::_int",
       "language": "Python",
-      "line_end": 886,
-      "line_start": 882,
+      "line_end": 906,
+      "line_start": 902,
       "locator": "backend/max_backend/optimizer_core.py::_int"
     },
     {
@@ -2570,8 +2570,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::_is_fail_closed_sentinel",
       "language": "Python",
-      "line_end": 370,
-      "line_start": 360,
+      "line_end": 371,
+      "line_start": 361,
       "locator": "backend/max_backend/optimizer_core.py::_is_fail_closed_sentinel"
     },
     {
@@ -2579,8 +2579,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::_is_v2_zero_trade_sentinel",
       "language": "Python",
-      "line_end": 389,
-      "line_start": 373,
+      "line_end": 390,
+      "line_start": 374,
       "locator": "backend/max_backend/optimizer_core.py::_is_v2_zero_trade_sentinel"
     },
     {
@@ -2588,8 +2588,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::_parse_date",
       "language": "Python",
-      "line_end": 526,
-      "line_start": 519,
+      "line_end": 527,
+      "line_start": 520,
       "locator": "backend/max_backend/optimizer_core.py::_parse_date"
     },
     {
@@ -2597,8 +2597,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::_parse_frame_inputs",
       "language": "Python",
-      "line_end": 926,
-      "line_start": 907,
+      "line_end": 946,
+      "line_start": 927,
       "locator": "backend/max_backend/optimizer_core.py::_parse_frame_inputs"
     },
     {
@@ -2606,8 +2606,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::_row_values",
       "language": "Python",
-      "line_end": 863,
-      "line_start": 858,
+      "line_end": 883,
+      "line_start": 878,
       "locator": "backend/max_backend/optimizer_core.py::_row_values"
     },
     {
@@ -2615,8 +2615,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::_strip_ns",
       "language": "Python",
-      "line_end": 855,
-      "line_start": 854,
+      "line_end": 875,
+      "line_start": 874,
       "locator": "backend/max_backend/optimizer_core.py::_strip_ns"
     },
     {
@@ -2624,8 +2624,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::apply_frozen_gates",
       "language": "Python",
-      "line_end": 1428,
-      "line_start": 1420,
+      "line_end": 1448,
+      "line_start": 1440,
       "locator": "backend/max_backend/optimizer_core.py::apply_frozen_gates"
     },
     {
@@ -2633,8 +2633,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::eligibility_audit",
       "language": "Python",
-      "line_end": 1507,
-      "line_start": 1457,
+      "line_end": 1527,
+      "line_start": 1477,
       "locator": "backend/max_backend/optimizer_core.py::eligibility_audit"
     },
     {
@@ -2642,8 +2642,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::normalize_optimize_params",
       "language": "Python",
-      "line_end": 493,
-      "line_start": 474,
+      "line_end": 494,
+      "line_start": 475,
       "locator": "backend/max_backend/optimizer_core.py::normalize_optimize_params"
     },
     {
@@ -2651,8 +2651,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::optimization_report_identity",
       "language": "Python",
-      "line_end": 1121,
-      "line_start": 1097,
+      "line_end": 1141,
+      "line_start": 1117,
       "locator": "backend/max_backend/optimizer_core.py::optimization_report_identity"
     },
     {
@@ -2660,8 +2660,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::optimizer_fitness_contract",
       "language": "Python",
-      "line_end": 305,
-      "line_start": 297,
+      "line_end": 306,
+      "line_start": 298,
       "locator": "backend/max_backend/optimizer_core.py::optimizer_fitness_contract"
     },
     {
@@ -2669,8 +2669,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::optimizer_fitness_for_request",
       "language": "Python",
-      "line_end": 340,
-      "line_start": 323,
+      "line_end": 341,
+      "line_start": 324,
       "locator": "backend/max_backend/optimizer_core.py::optimizer_fitness_for_request"
     },
     {
@@ -2678,8 +2678,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::optimizer_fitness_value",
       "language": "Python",
-      "line_end": 357,
-      "line_start": 343,
+      "line_end": 358,
+      "line_start": 344,
       "locator": "backend/max_backend/optimizer_core.py::optimizer_fitness_value"
     },
     {
@@ -2687,8 +2687,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys",
       "language": "Python",
-      "line_end": 113,
-      "line_start": 101,
+      "line_end": 114,
+      "line_start": 102,
       "locator": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys"
     },
     {
@@ -2696,8 +2696,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::parameter_signature",
       "language": "Python",
-      "line_end": 904,
-      "line_start": 889,
+      "line_end": 924,
+      "line_start": 909,
       "locator": "backend/max_backend/optimizer_core.py::parameter_signature"
     },
     {
@@ -2705,8 +2705,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
       "language": "Python",
-      "line_end": 1418,
-      "line_start": 1139,
+      "line_end": 1438,
+      "line_start": 1159,
       "locator": "backend/max_backend/optimizer_core.py::parse_optimization_xml"
     },
     {
@@ -2714,8 +2714,8 @@
       "kind": "method",
       "label": "backend/max_backend/optimizer_core.py::parse_optimization_xml.at",
       "language": "Python",
-      "line_end": 1222,
-      "line_start": 1221,
+      "line_end": 1242,
+      "line_start": 1241,
       "locator": "backend/max_backend/optimizer_core.py::parse_optimization_xml.at"
     },
     {
@@ -2723,8 +2723,8 @@
       "kind": "method",
       "label": "backend/max_backend/optimizer_core.py::parse_optimization_xml.column",
       "language": "Python",
-      "line_end": 1193,
-      "line_start": 1189,
+      "line_end": 1213,
+      "line_start": 1209,
       "locator": "backend/max_backend/optimizer_core.py::parse_optimization_xml.column"
     },
     {
@@ -2732,8 +2732,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv",
       "language": "Python",
-      "line_end": 1095,
-      "line_start": 929,
+      "line_end": 1115,
+      "line_start": 949,
       "locator": "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv"
     },
     {
@@ -2741,8 +2741,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::parse_set_optimizer_entries",
       "language": "Python",
-      "line_end": 816,
-      "line_start": 791,
+      "line_end": 834,
+      "line_start": 809,
       "locator": "backend/max_backend/optimizer_core.py::parse_set_optimizer_entries"
     },
     {
@@ -2750,8 +2750,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::read_ea_optimizer_defaults",
       "language": "Python",
-      "line_end": 417,
-      "line_start": 400,
+      "line_end": 418,
+      "line_start": 401,
       "locator": "backend/max_backend/optimizer_core.py::read_ea_optimizer_defaults"
     },
     {
@@ -2759,8 +2759,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::report_matches_request",
       "language": "Python",
-      "line_end": 1136,
-      "line_start": 1124,
+      "line_end": 1156,
+      "line_start": 1144,
       "locator": "backend/max_backend/optimizer_core.py::report_matches_request"
     },
     {
@@ -2768,8 +2768,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::select_winner",
       "language": "Python",
-      "line_end": 1454,
-      "line_start": 1439,
+      "line_end": 1474,
+      "line_start": 1459,
       "locator": "backend/max_backend/optimizer_core.py::select_winner"
     },
     {
@@ -2777,8 +2777,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::trade_sample",
       "language": "Python",
-      "line_end": 566,
-      "line_start": 529,
+      "line_end": 567,
+      "line_start": 530,
       "locator": "backend/max_backend/optimizer_core.py::trade_sample"
     },
     {
@@ -2786,8 +2786,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::unresolved_weighted_contenders",
       "language": "Python",
-      "line_end": 1436,
-      "line_start": 1431,
+      "line_end": 1456,
+      "line_start": 1451,
       "locator": "backend/max_backend/optimizer_core.py::unresolved_weighted_contenders"
     },
     {
@@ -2795,8 +2795,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::validate_optimizer_fitness_contract",
       "language": "Python",
-      "line_end": 320,
-      "line_start": 308,
+      "line_end": 321,
+      "line_start": 309,
       "locator": "backend/max_backend/optimizer_core.py::validate_optimizer_fitness_contract"
     },
     {
@@ -2804,8 +2804,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::validate_optimizer_trade_exponent",
       "language": "Python",
-      "line_end": 294,
-      "line_start": 283,
+      "line_end": 295,
+      "line_start": 284,
       "locator": "backend/max_backend/optimizer_core.py::validate_optimizer_trade_exponent"
     },
     {
@@ -2813,8 +2813,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_runtime.py::committed_round_dir",
       "language": "Python",
-      "line_end": 49,
-      "line_start": 48,
+      "line_end": 50,
+      "line_start": 49,
       "locator": "backend/max_backend/optimizer_runtime.py::committed_round_dir"
     },
     {
@@ -2822,8 +2822,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_runtime.py::compile_summary",
       "language": "Python",
-      "line_end": 120,
-      "line_start": 104,
+      "line_end": 121,
+      "line_start": 105,
       "locator": "backend/max_backend/optimizer_runtime.py::compile_summary"
     },
     {
@@ -2831,8 +2831,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_runtime.py::job_evidence_dir",
       "language": "Python",
-      "line_end": 39,
-      "line_start": 36,
+      "line_end": 40,
+      "line_start": 37,
       "locator": "backend/max_backend/optimizer_runtime.py::job_evidence_dir"
     },
     {
@@ -2840,8 +2840,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_runtime.py::round_evidence_dir",
       "language": "Python",
-      "line_end": 45,
-      "line_start": 42,
+      "line_end": 46,
+      "line_start": 43,
       "locator": "backend/max_backend/optimizer_runtime.py::round_evidence_dir"
     },
     {
@@ -2849,8 +2849,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_runtime.py::verify_committed_round_bundle",
       "language": "Python",
-      "line_end": 782,
-      "line_start": 743,
+      "line_end": 794,
+      "line_start": 755,
       "locator": "backend/max_backend/optimizer_runtime.py::verify_committed_round_bundle"
     },
     {
@@ -2867,8 +2867,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::attach_rounds",
       "language": "Python",
-      "line_end": 692,
-      "line_start": 687,
+      "line_end": 693,
+      "line_start": 688,
       "locator": "backend/max_backend/optimizer_store.py::attach_rounds"
     },
     {
@@ -2876,8 +2876,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::get_rounds",
       "language": "Python",
-      "line_end": 684,
-      "line_start": 677,
+      "line_end": 685,
+      "line_start": 678,
       "locator": "backend/max_backend/optimizer_store.py::get_rounds"
     },
     {
@@ -3133,7 +3133,7 @@
       "locator": "backend/tests/test_m01_recovery.py::good_pass"
     }
   ],
-  "observed_head": "724215d83f4f5ef89316b41dfb6ff400b1459156",
+  "observed_head": "80efac39312218ff8bd6ba05269791c69a3b9061",
   "schema_version": 1,
-  "source_digest": "03dc42377454dff52460fbaa397ddbcdadfed58a191970a772c360911713c492"
+  "source_digest": "6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa"
 }

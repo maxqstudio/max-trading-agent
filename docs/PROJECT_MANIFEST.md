@@ -10,10 +10,10 @@ Governance profile: strict
 
 ## Repositories
 Repository: maxqstudio/max-trading-agent
-Active branch: work/optimizer-durability-performance-hardening
+Active branch: work/optimizer-mt5-resource-safety
 Current authoritative SHA: external final acceptance evidence
-Last accepted SHA: 5a30097d76a46ad077bed8dfd978eb6b27f83264
-Current source digest: 03dc42377454dff52460fbaa397ddbcdadfed58a191970a772c360911713c492
+Last accepted SHA: 80efac39312218ff8bd6ba05269791c69a3b9061
+Current source digest: 6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.

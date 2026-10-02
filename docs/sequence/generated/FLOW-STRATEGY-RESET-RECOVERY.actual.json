@@ -1230,8 +1230,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::latest_job",
       "language": "Python",
-      "line_end": 278,
-      "line_start": 272,
+      "line_end": 279,
+      "line_start": 273,
       "locator": "backend/max_backend/optimizer_store.py::latest_job"
     },
     {
@@ -1501,7 +1501,7 @@
       "locator": "frontend/src/ArtifactsPage.tsx::<module>"
     }
   ],
-  "observed_head": "724215d83f4f5ef89316b41dfb6ff400b1459156",
+  "observed_head": "80efac39312218ff8bd6ba05269791c69a3b9061",
   "schema_version": 1,
-  "source_digest": "03dc42377454dff52460fbaa397ddbcdadfed58a191970a772c360911713c492"
+  "source_digest": "6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa"
 }
