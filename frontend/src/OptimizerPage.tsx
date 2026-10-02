@@ -630,6 +630,7 @@ export default function OptimizerPage() {
     if (!config || !initializedRef.current || !autosaveEnabledRef.current) return
     if (JSON.stringify(config) === lastSavedDraftRef.current) return
     const timer = window.setTimeout(() => {
+      if (actionLockRef.current) return
       void persistDraft(config).catch(() => undefined)
     }, 500)
     return () => window.clearTimeout(timer)
@@ -746,7 +747,10 @@ export default function OptimizerPage() {
     setError('')
     const frozenConfig = structuredClone(config)
     try {
-      await persistDraft(frozenConfig)
+      const serialized = JSON.stringify(frozenConfig)
+      if (!autosaveEnabledRef.current || serialized !== lastSavedDraftRef.current) {
+        await persistDraft(frozenConfig)
+      }
       const controller = new AbortController()
       actionControllerRef.current = controller
       const response = await fetch('/api/optimizer/start', {

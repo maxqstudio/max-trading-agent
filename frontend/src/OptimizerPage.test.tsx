@@ -406,6 +406,7 @@ describe('M01 Optimizer UI', () => {
     fireEvent.change(screen.getByLabelText('Main Symbol'), { target: { value: 'XAUUSD.m' } })
     fireEvent.change(screen.getByLabelText('Relative reference symbol'), { target: { value: 'EURUSD.m' } })
     await waitFor(() => expect(screen.getByRole('button', { name: 'START OPTIMIZER' })).toBeEnabled(), { timeout: 1500 })
+    await waitFor(() => expect(actionOrder).toEqual(['draft']), { timeout: 1500 })
     fireEvent.click(screen.getByRole('button', { name: 'START OPTIMIZER' }))
 
     await waitFor(() => expect(submitted).not.toBeNull())
@@ -1043,27 +1044,23 @@ describe('M08 qualified candidate control', () => {
   })
 
   it('locks duplicate START clicks immediately and exposes pending progress', async () => {
-    const saveGate = deferred<Response>()
+    const startGate = deferred<Response>()
     const saved = defaultDraft()
     saved.symbol = 'XAUUSD.m'
     saved.relative_symbol = 'EURUSD.m'
-    let saveCalls = 0
     let startCalls = 0
-    let savingPayload: any = null
     vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
       const url = String(input)
       if (url.endsWith('/api/optimizer/contract')) return Promise.resolve({ ok: true, json: async () => contract() } as Response)
       if (url.endsWith('/api/optimizer/current')) return Promise.resolve({ ok: true, json: async () => null } as Response)
       if (url.endsWith('/api/optimizer/draft') && init?.method === 'PUT') {
-        saveCalls += 1
-        savingPayload = JSON.parse(String(init.body))
-        return saveGate.promise
+        return Promise.resolve({ ok: true, json: async () => draftResponse(JSON.parse(String(init.body)).draft, JSON.parse(String(init.body)).revision) } as Response)
       }
       if (url.endsWith('/api/optimizer/draft')) return Promise.resolve({ ok: true, json: async () => draftResponse(saved, 3) } as Response)
       if (url.endsWith('/api/optimizer/preview')) return Promise.resolve({ ok: true, json: async () => ({ status: 'VALID', trade_sample: { timeframe: 'H1', scaled_trades_per_month: 20, calendar_months: 1, minimum_trades: 20 }, search_space_cardinality: { raw_complete_grid_combinations: 10, authority: 'SYNTHETIC_TEST' }, resource_preflight: safeResourcePreflight() }) } as Response)
       if (url.endsWith('/api/optimizer/start')) {
         startCalls += 1
-        return Promise.resolve({ ok: true, json: async () => ({ job_id: 'JSTART', status: 'QUEUED', active: true }) } as Response)
+        return startGate.promise
       }
       if (url.endsWith('/api/optimizer/jobs/JSTART')) return Promise.resolve({ ok: true, json: async () => ({ ...terminalJob, job_id: 'JSTART', status: 'QUEUED', active: true, rounds: [] }) } as Response)
       throw new Error('unexpected fetch ' + url)
@@ -1077,11 +1074,11 @@ describe('M08 qualified candidate control', () => {
       start.click()
     })
     expect(screen.getByRole('button', { name: 'Starting...' })).toBeDisabled()
-    expect(saveCalls).toBe(1)
-    expect(startCalls).toBe(0)
+    expect(startCalls).toBe(1)
 
-    saveGate.resolve({ ok: true, json: async () => draftResponse(savingPayload.draft, savingPayload.revision) } as Response)
-    await waitFor(() => expect(startCalls).toBe(1))
+    startGate.resolve({ ok: true, json: async () => ({ job_id: 'JSTART', status: 'QUEUED', active: true }) } as Response)
+    expect(await screen.findByText('Queued')).toBeInTheDocument()
+    expect(startCalls).toBe(1)
   })
 
   it('keeps the latest preview when an older preview response arrives last', async () => {
