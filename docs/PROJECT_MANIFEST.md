@@ -10,7 +10,7 @@ Governance profile: strict
 
 ## Repositories
 Repository: maxqstudio/max-trading-agent
-Active branch: main
+Active branch: work/governance-closeout-pr15
 Current authoritative SHA: external final acceptance evidence
 Last accepted SHA: 7f3fade6fd71892266ad18a178dab9d503b5ce77
 Current source digest: 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826

@@ -10,9 +10,9 @@
     "hosted_ci": "PASS_EXACT_MAIN: Windows CI run 36964266890 completed successfully on merged main 7f3fade6fd71892266ad18a178dab9d503b5ce77 after PR #15.",
     "lint": "PASS_LOCAL_NO_WARNINGS",
     "npm_tree": "PASS_LOCAL",
-    "owner_runtime": "BOUNDED_RESOURCE_DIAGNOSTICS_PASS; full Owner Optimizer acceptance NOT_PROVEN",
+    "owner_runtime": "FULL_LONG_OWNER_OPTIMIZER_ATTEMPTED_NOT_ACCEPTED: CUSTOM requested 6/resolved 5 and process cap held, but low virtual-memory/commit pressure developed and MAX ended with OPTIMIZER_RESOURCE_PROCESS_QUERY_FAILED; downstream Challenger/Champion/backtest not reached.",
     "pip_check": "PASS_LOCAL",
-    "real_mt5_resource_safety": "PASS_LOCAL_REAL_MT5: Stage C 9/9 parsed passes at frozen 3/3 agents; Stage D 17D Fast Genetic raw-cardinality context 18,259,010,497,728,000 produced 512 report rows at frozen 2/2 agents; both rc=0 and SAFE.",
+    "real_mt5_resource_safety": "PARTIAL_OWNER_RUNTIME_REPAIR_REQUIRED: bounded Stage C/D and browser control diagnostics passed, and a later CUSTOM 6→5 run confirmed local-agent cap enforcement; however the later Owner run exposed low virtual-memory/commit pressure not prevented by the current physical-RAM admission model.",
     "resource_preflight_latency": "PASS_LOCAL_LIVE: cold forced hardware preflight 1826.583 ms; warm cached median 16.083 ms, p95 31.184 ms; current median 20.346 ms; detail 5.851 ms; qualified page 8.238 ms.",
     "schema_version": 15,
     "sequence": "PASS_LOCAL: 8/8 DURING/CURRENT sessions; canonical actual graphs regenerated from current source digest 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826.",
@@ -20,8 +20,8 @@
     "source_only_scan": "PASS_EXACT_MAIN: Source-only policy and exact-tree secret scan passed on 7f3fade6fd71892266ad18a178dab9d503b5ce77; 247 tracked text files scanned, 0 detected plaintext-secret matches.",
     "synthetic_optimizer_profile": "PASS_LOCAL: 750-candidate synthetic profile, 12 requests/endpoint; actual qualified-page median 23.651 ms/p95 68.983 ms, 61,462-byte response. Separate Windows process profile measured CPU/RSS/read/write I/O with the qualified route mocked. No real MT5 or Owner DB used; temporary test DB/evidence cleanup was rejected by shell policy."
   },
-  "current_phase_status": "ACCEPTED",
-  "evidence_boundary": "Accepted source authority is exact maxqstudio/max-trading-agent main 7f3fade6fd71892266ad18a178dab9d503b5ce77 after merged PR #15. Post-merge Windows CI run 36964266890 passed on that exact main, including Source-only policy, exact-tree secret scan (247 tracked text files, 0 detected plaintext-secret matches), pinned Skill Workflow selftests/governance, backend tests, frontend tests/lint/build, and dependency checks. Previously recorded bounded Owner-PC MT5/browser diagnostics remain provenance for resource-control behavior only; this governance closeout produces no new runtime evidence. Full production-scale/long-range Optimizer → Challenger → Champion → real MT5 backtest acceptance remains NOT_PROVEN. Fresh R00-R11 Research remains NOT_STARTED / PAUSED and roadmap-gated.",
+  "current_phase_status": "IN_PROGRESS",
+  "evidence_boundary": "Accepted source authority remains exact maxqstudio/max-trading-agent main 7f3fade6fd71892266ad18a178dab9d503b5ce77 after merged PR #15, with post-merge Windows CI run 36964266890 PASS. Previously recorded bounded Owner-PC MT5/browser diagnostics remain valid for the tested process-cap/control cases. Newer Owner runtime evidence supersedes the prior assumption that full-length runtime was merely NOT_RUN: a real Owner Optimizer attempt used CUSTOM requested 6/resolved 5 with Core 01-05 active, then Windows Event ID 2004 reported low virtual-memory/commit pressure and MAX surfaced OPTIMIZER_RESOURCE_PROCESS_QUERY_FAILED. Observed terminal64 working set was about 13.8 GiB and MetaTester processes about 12.0 GiB and 7.1 GiB; recorded commit limit was about 48 GiB with about 13.1 GiB pagefile. Current source records virtual-memory telemetry but admission decisions use available physical RAM, and the approximately 2.86 GiB per-agent estimate was materially below observed usage. Therefore process-cap enforcement is proven, commit-pressure safety is not, the full Owner Optimizer attempt is ATTEMPTED_NOT_ACCEPTED, and downstream Optimizer → Challenger → Champion → real MT5 backtest remains NOT_PROVEN. No new Owner-PC or MT5 execution is performed by this governance-only repair. Fresh R00-R11 Research remains NOT_STARTED / PAUSED and roadmap-gated.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
     "How does important data flow through the system?": "PASS",
@@ -93,10 +93,10 @@
       "status": "PASS_EXACT_MAIN"
     },
     {
-      "evidence": "Bounded real-MT5 resource diagnostics passed; full normal Owner Optimizer workflow remains deferred and NOT_PROVEN.",
+      "evidence": "Newer Owner runtime after PR #15: CUSTOM requested 6/resolved 5 and the process cap held with Core 01-05 active, but Event ID 2004 low virtual-memory/commit pressure developed and MAX ended with OPTIMIZER_RESOURCE_PROCESS_QUERY_FAILED. The full Owner Optimizer did not complete and downstream Challenger/Champion/backtest was not reached.",
       "id": "OWNER-RUNTIME-01",
       "requirement": "Bounded repair diagnostics may prove resource-control behavior, but full Owner Strategy Optimizer/Challenger/Champion runtime acceptance remains a separate post-source gate.",
-      "status": "NOT_PROVEN"
+      "status": "FAIL_OWNER_RUNTIME"
     },
     {
       "evidence": "backend/max_backend/optimizer_draft.py; backend/tests/test_optimizer_draft.py; backend/max_backend/optimizer_jobs.py::start_optimizer",
@@ -135,10 +135,10 @@
       "status": "PASS_LOCAL"
     },
     {
-      "evidence": "optimizer_resources.py; optimizer_resource_runtime.py; optimizer_worker.py; optimizer_jobs.py; test_optimizer_resources.py; test_optimizer_runtime.py; real Stage C/D bounded MT5 diagnostics.",
+      "evidence": "Bounded Stage C/D and browser diagnostics proved local-agent process-cap behavior. Newer Owner runtime confirmed CUSTOM 6→5 cap enforcement but exposed low virtual-memory/commit pressure; current source records virtual-memory telemetry while admission and frozen re-admission gate on available physical RAM, and the Owner-hardware per-agent estimate (~2.86 GiB) materially underestimated observed MT5 usage.",
       "id": "OPT-RESOURCE-01",
       "requirement": "Optimizer resource admission is hardware-aware and fail-closed, freezes an execution concurrency cap without shrinking scientific search space, enforces the cap on owned local MT5 processes, records runtime pressure, and supports controlled RESOURCE_STOPPED recovery.",
-      "status": "PASS_LOCAL_REAL_MT5_BOUNDED"
+      "status": "FAIL_OWNER_RUNTIME"
     }
   ],
   "results": {
@@ -168,8 +168,8 @@
         "resource_preflight_cold_ms": 1826.583,
         "resource_preflight_warm_median_ms": 16.083
       },
-      "mt5": "PASS_BOUNDED_RESOURCE_DIAGNOSTICS; full normal Owner workflow NOT_PROVEN",
-      "owner_pc": "BOUNDED_RESOURCE_DIAGNOSTICS_AND_REAL_BROWSER_CONTROL_FLOW_PASS; FULL_LONG_OWNER_ACCEPTANCE_NOT_RUN"
+      "mt5": "FULL_LONG_OWNER_OPTIMIZER_ATTEMPTED_NOT_ACCEPTED: bounded diagnostics passed and later CUSTOM 6→5 process cap held, but low virtual-memory/commit pressure ended the run with OPTIMIZER_RESOURCE_PROCESS_QUERY_FAILED; downstream flow NOT_PROVEN.",
+      "owner_pc": "NEW_OWNER_RUNTIME_EVIDENCE_RECORDED: process-cap enforcement PROVEN for CUSTOM 6→5; full long Optimizer FAILED/NOT_ACCEPTED under commit pressure; no new Owner-PC execution in this governance repair."
     },
     "schema_version": 15,
     "scientific_state": {
@@ -271,10 +271,13 @@
     "PASS_BOUNDED: real MT5 Stage C resource-control diagnostic, 2 dimensions / 9 passes, parsed 9, frozen/observed agents 3/3, rc=0, SAFE.",
     "PASS_BOUNDED: real MT5 Stage D queue-stress diagnostic, 17 dimensions, raw Cartesian context 18,259,010,497,728,000, 512 report rows, frozen/observed agents 2/2, rc=0, SAFE.",
     "PASS_BOUNDED_REAL_BROWSER: live frontend/backend draft persistence across page/backend restart, native MT5 START/STOP, observed 2/2 agent cap, clean STOP, authoritative final UI resource evidence, and Owner draft restoration.",
-    "NOT_RUN: full production-scale/long-range Owner Optimizer → Challenger → Champion → backtest workflow.",
+    "FAIL_OWNER_RUNTIME: later full-length Owner Optimizer attempt used CUSTOM requested 6/resolved 5 with Core 01-05 active, then Windows Event ID 2004 low virtual-memory/commit pressure developed and MAX surfaced OPTIMIZER_RESOURCE_PROCESS_QUERY_FAILED. Process-cap enforcement is proven; commit-pressure safety and successful completion are not.",
+    "OBSERVED_OWNER_RUNTIME: terminal64 working set ~13.8 GiB; MetaTester processes ~12.0 GiB and ~7.1 GiB; recorded commit limit ~48 GiB and pagefile ~13.1 GiB. Current source records available virtual memory but admission gates on available physical RAM; per-agent estimate ~2.86 GiB was below observed usage.",
+    "NOT_PROVEN: Challenger selection, Champion promotion, and real MT5 backtest after a successful full Owner Optimizer.",
+    "NOT_PROVEN: mixed-DIMM topology, hardware instability, or antivirus as root cause; no WHEA, Memory Diagnostic, or Defender evidence established those causes.",
     "NOT_RUN: real R00-R11 Research execution, model training, ONNX, Research Challenger creation, or Champion mutation."
   ],
-  "runtime_status": "BOUNDED_REAL_MT5_RESOURCE_DIAGNOSTICS_PASS_FULL_OWNER_ACCEPTANCE_REQUIRED",
+  "runtime_status": "OWNER_RUNTIME_REPAIR_REQUIRED_COMMIT_PRESSURE_ADMISSION_GAP",
   "schema_version": 1,
   "sequence_mode": "DURING",
   "sequence_session": "FLOW-OPTIMIZER-DURABILITY-PERFORMANCE",

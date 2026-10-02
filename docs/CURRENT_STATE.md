@@ -8,13 +8,13 @@ Governance profile: strict
 
 ## Current phase
 Phase: STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING
-Status: ACCEPTED
+Status: IN_PROGRESS
 Roadmap phase: STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING
 ROADMAP_SYNC: PASS
 
 ## Source
 Repository: maxqstudio/max-trading-agent
-Branch: main
+Branch: work/governance-closeout-pr15
 Authoritative SHA: external final acceptance evidence
 Last accepted SHA: 7f3fade6fd71892266ad18a178dab9d503b5ce77
 Current candidate SHA: external final acceptance evidence
@@ -22,7 +22,7 @@ Current source digest: 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
-Runtime status: BOUNDED_REAL_MT5_RESOURCE_DIAGNOSTICS_PASS_FULL_OWNER_ACCEPTANCE_REQUIRED
+Runtime status: OWNER_RUNTIME_REPAIR_REQUIRED_COMMIT_PRESSURE_ADMISSION_GAP
 
 ## Documentation governance
 Documentation root: docs/
@@ -39,34 +39,37 @@ Current sequence session: FLOW-OPTIMIZER-DURABILITY-PERFORMANCE
 SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826.
 
 ## Proven
-- Accepted main authority after PR #15 is 7f3fade6fd71892266ad18a178dab9d503b5ce77; PR #15 is MERGED and post-merge Windows CI run 36964266890 passed on that exact main SHA.
+- Accepted main source authority after PR #15 remains 7f3fade6fd71892266ad18a178dab9d503b5ce77; PR #15 is MERGED and post-merge Windows CI run 36964266890 passed on that exact main SHA.
 - Exact-main Source-only policy passed; the exact-tree secret scan on 7f3fade6fd71892266ad18a178dab9d503b5ce77 scanned 247 tracked text files with 0 detected plaintext-secret matches.
-- Accepted starting floor before Optimizer hardening: backend 410 passed, frontend 46 passed across 8 files, schema 14; Skill Workflow authority is 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8.
-- Current Skill_Workflow authority remains pinned at 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 and exact-main CI verified the vendored tool provenance plus strict/project-truth selftests.
-- Optimizer draft, launch/recovery identity, atomic evidence, read-model, frontend request lifecycle, visible action feedback, and MT5 resource admission/resource-stop controls are accepted source behavior at the merged main authority.
-- Source tests and 750-candidate API profile used synthetic SQLite/evidence only; actual qualified-candidate endpoint median was 23.651 ms, p95 68.983 ms, with a 61,462-byte page; no additional runtime evidence is created by this governance closeout.
-- A separate Windows process-counter run measured CPU 1.0781 s, peak working set 64,405,504 bytes, read I/O 6,060,864 bytes and write I/O 0 over 108 requests; qualified route was mocked in that resource run.
-- Bounded real-MT5 Stage C passed: native Slow Complete, 2 optimized dimensions / 9 passes, AUTO_SAFE resolved cap 3, actual max 3 agents, 9 parsed passes, MT5 return code 0, resource state SAFE.
-- Bounded real-MT5 Stage D passed: native Fast Genetic with all 17 optimizer dimensions and raw Cartesian context 18,259,010,497,728,000; MT5 produced 512 report rows while AUTO_SAFE resolved cap 2 and actual max remained 2, return code 0, resource state SAFE.
-- Previously recorded real headless Chrome click-through against live Vite + live backend passed: draft persisted across reload and backend restart; bounded native MT5 START observed 2/2 local agents; STOP reached STOPPED, no MT5/tester processes remained, final UI refreshed authoritative 2/2 resource evidence; original 17D Fast Genetic Owner draft was restored.
+- Current Skill_Workflow authority remains pinned at 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 and exact-main CI verified vendored tool provenance plus strict/project-truth selftests.
+- PR #15 bounded real-MT5 diagnostics remain valid evidence that the process-concurrency controller works in those tested cases: Stage C completed at 3/3 agents and Stage D produced 512 report rows at 2/2 agents with rc=0 and SAFE physical-RAM headroom.
+- Previously recorded real browser START/STOP evidence remains valid for draft persistence, bounded 2/2 local-agent enforcement, clean STOP, authoritative UI resource evidence, and Owner draft restoration.
+- Newer Owner runtime evidence after PR #15 shows CUSTOM requested 6 local agents and MAX resolved the run to 5; MT5 Core 01-05 were active, so the local-agent process cap itself remained enforced.
+- The same newer Owner runtime evidence recorded Windows Event ID 2004 low virtual-memory/commit pressure; observed terminal64 working set was about 13.8 GiB and MetaTester processes about 12.0 GiB and 7.1 GiB before MAX surfaced OPTIMIZER_RESOURCE_PROCESS_QUERY_FAILED.
+- The newer diagnosis recorded an approximately 48 GiB commit limit and approximately 13.1 GiB pagefile. The current source captures total/available virtual-memory telemetry but resolve_resource_preflight and frozen_resource_admission make admission decisions from available_ram_bytes; on the Owner hardware the configured per-agent estimate was about 2.86 GiB, materially below the observed MT5 process usage.
+- Three mixed DIMMs / 32 GiB asymmetric memory configuration is only a secondary risk signal, not a proven root cause; no WHEA, Windows Memory Diagnostic, or Defender evidence established hardware or antivirus as the cause.
 
 ## Not proven
-- Full production-scale/long-range Owner Strategy Optimizer execution, Challenger selection, Champion promotion, real MT5 backtest, and end-to-end runtime acceptance.
+- A successful full production-scale/long-range Owner Strategy Optimizer completion after PR #15; the newer attempt ran but failed under virtual-memory/commit pressure.
+- Challenger selection, Champion promotion, real MT5 backtest, and end-to-end runtime acceptance after a successful full Owner Optimizer.
+- That mixed-DIMM topology, antivirus, or hardware instability caused the observed failure.
 - Fresh R00-R11 Research execution, model training, ONNX, Research Challenger creation, or Champion mutation.
 
 ## Known blockers
-- Full production-scale/long-range Owner Strategy Optimizer → Challenger → Champion → real MT5 backtest acceptance remains NOT_PROVEN; only the previously recorded bounded resource-safety diagnostics are proven.
+- OPEN defect OPTIMIZER-MT5-COMMIT-PRESSURE-ADMISSION-GAP: newer Owner runtime evidence shows the local-agent process cap held, but low virtual-memory/commit pressure still developed and MAX ended with OPTIMIZER_RESOURCE_PROCESS_QUERY_FAILED; current admission records virtual-memory telemetry but gates capacity using available physical RAM.
+- Full production-scale/long-range Owner Strategy Optimizer completion and Optimizer → Challenger → Champion → real MT5 backtest acceptance remain NOT_PROVEN; the later full-length attempt was attempted but NOT_ACCEPTED.
 - REAL_MT5_BACKTEST_SAMPLE_READY has not been declared; fresh R00-R11 Research remains NOT_STARTED / PAUSED and roadmap-gated.
 
 ## Known defects
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Owner may manually run the normal full Strategy Optimizer → Challenger selection → Champion promotion → real MT5 backtest/sample workflow; the bounded diagnostics do not substitute for that acceptance.
-- Fresh R00-R11 remains blocked until a real MT5 backtest/sample is Owner-declared READY and Control Room separately authorizes the next source phase.
-- No automatic Optimizer, MT5, Research, or Champion mutation is authorized by this governance closeout.
+- Keep PR #16 governance-only and represent the newer Owner runtime failure accurately; do not merge until Control Room audits the repaired governance.
+- A separate product repair must address commit-aware/virtual-memory admission, realistic MT5 memory budgeting, and process-query failure handling before another full Owner Optimizer acceptance attempt is treated as authorized evidence.
+- Fresh R00-R11 remains blocked until a successful real MT5 backtest/sample is Owner-declared READY and Control Room separately authorizes the next source phase.
+- No automatic Optimizer, MT5, Research, or Champion mutation is authorized by this governance repair.
 
 ## Explicitly blocked
-- Automatic or unattended real Optimizer execution, or treating the bounded resource-safety diagnostics as full Owner Optimizer acceptance.
+- Further unattended or full-length Owner Optimizer execution until the OPEN commit-pressure admission gap is repaired and separately re-accepted; bounded diagnostics and the later failed Owner attempt do not establish safe long-run acceptance.
 - Fresh R00-R11 Research execution, real model training, Research dataset creation, ONNX, Research Challenger creation, and Champion mutation; Research remains paused and roadmap-gated until REAL_MT5_BACKTEST_SAMPLE_READY and separate Control Room authorization.
 - Unrelated roadmap or product-scope expansion.
