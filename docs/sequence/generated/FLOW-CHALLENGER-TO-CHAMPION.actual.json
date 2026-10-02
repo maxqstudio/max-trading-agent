@@ -3133,7 +3133,7 @@
       "locator": "backend/tests/test_m01_recovery.py::good_pass"
     }
   ],
-  "observed_head": "80efac39312218ff8bd6ba05269791c69a3b9061",
+  "observed_head": "2bfedd15e7553356c679bc801ca90df96c910f64",
   "schema_version": 1,
-  "source_digest": "6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa"
+  "source_digest": "123761d665d2fff6c17825997cb3ebea852d574474d159927b691437c1841ce2"
 }

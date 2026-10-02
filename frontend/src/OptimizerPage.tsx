@@ -805,8 +805,21 @@ export default function OptimizerPage() {
       })
       const body = await response.json()
       if (!response.ok) throw new Error(ownerErrorMessage(body.detail, 'Optimizer action could not be completed'))
+      let authoritativeBody = body
+      const detailResponse = await fetch('/api/optimizer/jobs/' + job.job_id, { signal: controller.signal })
+      if (detailResponse.ok) {
+        const detail = await detailResponse.json()
+        if (detail?.job_id === job.job_id) authoritativeBody = detail
+      } else {
+        setError('Optimizer action completed, but final job detail could not be refreshed.')
+      }
       setJob((current) => current?.job_id === job.job_id
-        ? { ...current, ...body, rounds: body.rounds ?? current.rounds, request: body.request ?? current.request } as Job
+        ? {
+            ...current,
+            ...authoritativeBody,
+            rounds: authoritativeBody.rounds ?? current.rounds,
+            request: authoritativeBody.request ?? current.request,
+          } as Job
         : current)
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : String(reason))

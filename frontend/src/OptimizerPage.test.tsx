@@ -1152,6 +1152,49 @@ describe('M08 qualified candidate control', () => {
     expect(screen.getByText('The previous execution needs process reconciliation.')).toBeInTheDocument()
   })
 
+  it('refreshes authoritative resource evidence after STOP before terminal polling ends', async () => {
+    const staleRuntime = {
+      resource_state: 'SAFE', resolved_max_local_agents: 2, actual_max_active_agents: 0,
+      min_available_ram_bytes: 16 * 1024 ** 3, peak_mt5_working_set_bytes: 80 * 1024 ** 2,
+    }
+    const finalRuntime = {
+      resource_state: 'SAFE', resolved_max_local_agents: 2, actual_max_active_agents: 2,
+      min_available_ram_bytes: 14 * 1024 ** 3, peak_mt5_working_set_bytes: 900 * 1024 ** 2,
+    }
+    const running = {
+      ...terminalJob, status: 'MT5_RUNNING', active: true, winner: null,
+      request: { ...terminalJob.request, resource_policy: safeResourcePreflight() },
+      rounds: [{ ...terminalJob.rounds[0], phase: 'MT5_PROCESS_CONFIRMED', state: { optimizer_run_nonce: 123, resource_runtime: staleRuntime } }],
+    }
+    const stopped = {
+      ...running, status: 'STOPPED', active: false, message: 'Stopped by Owner',
+      rounds: [{ ...running.rounds[0], state: { optimizer_run_nonce: 123, resource_runtime: finalRuntime } }],
+    }
+    let detailCalls = 0
+    vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
+      const url = String(input)
+      if (url.endsWith('/api/optimizer/contract')) return Promise.resolve({ ok: true, json: async () => contract() } as Response)
+      if (url.endsWith('/api/optimizer/current')) return Promise.resolve({ ok: true, json: async () => running } as Response)
+      if (url.endsWith('/api/optimizer/draft')) return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      if (url.endsWith('/api/optimizer/preview')) return Promise.resolve({ ok: true, json: async () => ({ status: 'VALID', trade_sample: { timeframe: 'H1', scaled_trades_per_month: 20, calendar_months: 1, minimum_trades: 20 }, search_space_cardinality: { raw_complete_grid_combinations: 10, authority: 'SYNTHETIC_TEST' }, resource_preflight: safeResourcePreflight() }) } as Response)
+      if (url.endsWith('/api/optimizer/jobs/JOB1/stop')) return Promise.resolve({ ok: true, json: async () => ({ job_id: 'JOB1', status: 'STOPPED', active: false }) } as Response)
+      if (url.endsWith('/api/optimizer/jobs/JOB1')) {
+        detailCalls += 1
+        return Promise.resolve({ ok: true, json: async () => stopped } as Response)
+      }
+      throw new Error('unexpected fetch ' + url)
+    }))
+
+    render(<OptimizerPage />)
+    const stop = await screen.findByRole('button', { name: 'STOP' })
+    expect(stop).toBeEnabled()
+    expect(screen.getByText('0 / 2')).toBeInTheDocument()
+    fireEvent.click(stop)
+    await waitFor(() => expect(screen.getByText('2 / 2')).toBeInTheDocument())
+    expect(detailCalls).toBe(1)
+    expect(screen.getByText('Stopped')).toBeInTheDocument()
+  })
+
   it('debounces candidate search and ignores a stale response after the newer filter wins', async () => {
     const stale = deferred<Response>()
     const currentJob = {

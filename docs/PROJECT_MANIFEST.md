@@ -13,7 +13,7 @@ Repository: maxqstudio/max-trading-agent
 Active branch: work/optimizer-mt5-resource-safety
 Current authoritative SHA: external final acceptance evidence
 Last accepted SHA: 80efac39312218ff8bd6ba05269791c69a3b9061
-Current source digest: 6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa
+Current source digest: 123761d665d2fff6c17825997cb3ebea852d574474d159927b691437c1841ce2
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.

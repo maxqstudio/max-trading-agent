@@ -6,7 +6,7 @@
       "backend/max_backend/promotion_service.py::promote_strategy_challenger"
     ],
     "graph": "docs/sequence/generated/FLOW-CHALLENGER-TO-CHAMPION.actual.json",
-    "source_digest": "6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa"
+    "source_digest": "123761d665d2fff6c17825997cb3ebea852d574474d159927b691437c1841ce2"
   },
   "critical": true,
   "implementation_base_sha": "eb6192873eb518b9fe4c7f15d03600ca4ac1e73d",

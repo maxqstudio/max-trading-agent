@@ -20,6 +20,20 @@
       "lines": 61
     },
     {
+      "directory": "artifacts/optimizer/20261002_024535_f0337108/round_01/committed",
+      "file": "artifacts/optimizer/20261002_024535_f0337108/round_01/committed/Max_MTF.xml",
+      "is_test": false,
+      "language": "XML",
+      "lines": 179
+    },
+    {
+      "directory": "artifacts/optimizer/20261002_024535_f0337108/round_01/committed",
+      "file": "artifacts/optimizer/20261002_024535_f0337108/round_01/committed/raw_Max_MTF.xml",
+      "is_test": false,
+      "language": "XML",
+      "lines": 179
+    },
+    {
       "directory": "backend/max_backend",
       "file": "backend/max_backend/__init__.py",
       "is_test": false,
@@ -619,14 +633,14 @@
       "file": "frontend/src/OptimizerPage.test.tsx",
       "is_test": true,
       "language": "TypeScript/React",
-      "lines": 1223
+      "lines": 1266
     },
     {
       "directory": "frontend/src",
       "file": "frontend/src/OptimizerPage.tsx",
       "is_test": false,
       "language": "TypeScript/React",
-      "lines": 1377
+      "lines": 1390
     },
     {
       "directory": "frontend/src",
@@ -72810,16 +72824,17 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa",
+  "source_digest": "123761d665d2fff6c17825997cb3ebea852d574474d159927b691437c1841ce2",
   "source_summary": {
-    "files": 116,
+    "files": 118,
     "languages": {
       "PowerShell": 2,
       "Python": 94,
       "TypeScript": 3,
-      "TypeScript/React": 17
+      "TypeScript/React": 17,
+      "XML": 2
     },
-    "lines": 52971,
+    "lines": 53385,
     "test_files": 38
   },
   "tests": [

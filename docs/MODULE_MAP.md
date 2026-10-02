@@ -3,12 +3,14 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa
+Source digest: 123761d665d2fff6c17825997cb3ebea852d574474d159927b691437c1841ce2
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
 |---|---|---:|---|---|
 | INSTALL.ps1 | PowerShell | 61 | . | NO |
+| artifacts/optimizer/20261002_024535_f0337108/round_01/committed/Max_MTF.xml | XML | 179 | artifacts/optimizer/20261002_024535_f0337108/round_01/committed | NO |
+| artifacts/optimizer/20261002_024535_f0337108/round_01/committed/raw_Max_MTF.xml | XML | 179 | artifacts/optimizer/20261002_024535_f0337108/round_01/committed | NO |
 | backend/max_backend/__init__.py | Python | 1 | backend/max_backend | NO |
 | backend/max_backend/artifact_api.py | Python | 151 | backend/max_backend | NO |
 | backend/max_backend/artifact_control.py | Python | 1957 | backend/max_backend | NO |
@@ -94,8 +96,8 @@ Generated/refreshed: current compiler run
 | frontend/src/ChampionPage.tsx | TypeScript/React | 175 | frontend/src | NO |
 | frontend/src/DataTable.test.tsx | TypeScript/React | 74 | frontend/src | YES |
 | frontend/src/DataTable.tsx | TypeScript/React | 113 | frontend/src | NO |
-| frontend/src/OptimizerPage.test.tsx | TypeScript/React | 1223 | frontend/src | YES |
-| frontend/src/OptimizerPage.tsx | TypeScript/React | 1377 | frontend/src | NO |
+| frontend/src/OptimizerPage.test.tsx | TypeScript/React | 1266 | frontend/src | YES |
+| frontend/src/OptimizerPage.tsx | TypeScript/React | 1390 | frontend/src | NO |
 | frontend/src/ScientistPage.test.tsx | TypeScript/React | 479 | frontend/src | YES |
 | frontend/src/ScientistPage.tsx | TypeScript/React | 476 | frontend/src | NO |
 | frontend/src/SettingsPage.test.tsx | TypeScript/React | 159 | frontend/src | YES |

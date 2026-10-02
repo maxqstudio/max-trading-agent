@@ -3,20 +3,21 @@
   "current_phase_results": {
     "backend_full": "PASS_LOCAL: 456 passed, 0 skipped, 0 failed in 530.11s after resource-safety repair and final Scientist knowledge regeneration.",
     "backend_targeted": "PASS_LOCAL: resource/runtime focused gates include callback forwarding, RSS detection, resource-stop fault injection, resume admission, and existing optimizer reliability suites.",
-    "browser_e2e": "PASS_LOCAL_CRITICAL_CONTROL_SMOKE_WITH_MOCKED_APIS; not a live backend or Owner-PC E2E",
+    "browser_e2e": "PASS_LOCAL_REAL_BROWSER_OWNER_PC: headless Chrome against live Vite + live backend; draft reload/backend-restart persistence PASS; native MT5 START observed 2/2 agents; UI STOP reached STOPPED; final resource evidence refreshed to 2/2; Owner 17D draft restored.",
     "build": "PASS_LOCAL",
-    "frontend": "52 passed / 8 files",
-    "frontend_targeted": "18 Optimizer UI tests passed / 1 file",
+    "frontend": "PASS_LOCAL: 53 passed / 8 files",
+    "frontend_targeted": "PASS_LOCAL: 19 Optimizer UI tests / 1 file including terminal resource-evidence refresh",
     "hosted_ci": "NOT_RUN",
     "lint": "PASS_LOCAL_NO_WARNINGS",
     "npm_tree": "PASS_LOCAL",
     "owner_runtime": "BOUNDED_RESOURCE_DIAGNOSTICS_PASS; full Owner Optimizer acceptance NOT_PROVEN",
     "pip_check": "PASS_LOCAL",
     "real_mt5_resource_safety": "PASS_LOCAL_REAL_MT5: Stage C 9/9 parsed passes at frozen 3/3 agents; Stage D 17D Fast Genetic raw-cardinality context 18,259,010,497,728,000 produced 512 report rows at frozen 2/2 agents; both rc=0 and SAFE.",
+    "resource_preflight_latency": "PASS_LOCAL_LIVE: cold forced hardware preflight 1826.583 ms; warm cached median 16.083 ms, p95 31.184 ms; current median 20.346 ms; detail 5.851 ms; qualified page 8.238 ms.",
     "schema_version": 15,
     "sequence": "PASS_LOCAL: 8/8 DURING/CURRENT sessions; canonical actual graphs regenerated from current source digest 6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa.",
     "skill_workflow_current_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
-    "source_only_scan": "PASS_EXACT_TREE: 94b7c394f00ed69e97fed2ed86b1413b4c791efb; 247 tracked text files; 0 secret matches; no tracked credential/DPAPI settings.",
+    "source_only_scan": "NOT_RUN_FINAL_HEAD: rerun after final source/governance commit",
     "synthetic_optimizer_profile": "PASS_LOCAL: 750-candidate synthetic profile, 12 requests/endpoint; actual qualified-page median 23.651 ms/p95 68.983 ms, 61,462-byte response. Separate Windows process profile measured CPU/RSS/read/write I/O with the qualified route mocked. No real MT5 or Owner DB used; temporary test DB/evidence cleanup was rejected by shell policy."
   },
   "current_phase_status": "IN_PROGRESS",
@@ -80,7 +81,7 @@
       "status": "PASS_LOCAL"
     },
     {
-      "evidence": "Backend 456/456, frontend 52/52, lint/build/npm/pip PASS, governance validators PASS, sequence 8/8, exact-tree secret scan PASS on 94b7c394f00ed69e97fed2ed86b1413b4c791efb.",
+      "evidence": "Backend 456/456; frontend 53/53 across 8 files; lint 0 warnings/errors; build/npm/pip PASS. Final source-only and governance are rerun after candidate commit.",
       "id": "REGRESSION-01",
       "requirement": "Full current backend/frontend regressions, dependency checks, build, governance validators, and exact-tree source-only scan pass without unexplained skips or failures.",
       "status": "PASS_LOCAL"
@@ -122,7 +123,7 @@
       "status": "PASS_LOCAL"
     },
     {
-      "evidence": "frontend/src/OptimizerPage.tsx; frontend/src/OptimizerPage.test.tsx; frontend/src/ChallengersPage.test.tsx",
+      "evidence": "frontend/src/OptimizerPage.tsx; frontend/src/OptimizerPage.test.tsx; real headless Chrome live frontend/backend START/STOP resource-evidence refresh.",
       "id": "OPT-UI-01",
       "requirement": "Optimizer requests cancel/reject stale responses, debounce draft writes, bound/adapt polling, and show visible loading/block/success/failure feedback.",
       "status": "PASS_LOCAL"
@@ -151,17 +152,24 @@
       "backend_targeted": 51,
       "build": "PASS_LOCAL",
       "frontend_files": 8,
-      "frontend_status": "PASS_LOCAL: 52 passed / 8 files",
-      "frontend_tests": 52,
+      "frontend_status": "PASS_LOCAL: 53 passed / 8 files",
+      "frontend_tests": 53,
       "lint": "PASS_LOCAL_NO_WARNINGS",
       "npm_ls_all": "PASS_LOCAL",
       "pip_check": "PASS_LOCAL",
       "resource_targeted": "PASS_LOCAL: focused resource/runtime tests passed including real Windows RSS detection and controlled guard/re-admission cases"
     },
     "runtime": {
-      "browser_e2e": "PASS_LOCAL_CRITICAL_CONTROL_SMOKE_WITH_MOCKED_APIS; no live backend or Owner-PC E2E",
+      "browser_e2e": "PASS_LOCAL_REAL_BROWSER_OWNER_PC: headless Chrome against live Vite + live backend; draft reload/backend-restart persistence PASS; native MT5 START observed 2/2 agents; UI STOP reached STOPPED; final resource evidence refreshed to 2/2; Owner 17D draft restored.",
+      "live_api_latency": {
+        "current_median_ms": 20.346,
+        "detail_median_ms": 5.851,
+        "qualified_median_ms": 8.238,
+        "resource_preflight_cold_ms": 1826.583,
+        "resource_preflight_warm_median_ms": 16.083
+      },
       "mt5": "PASS_BOUNDED_RESOURCE_DIAGNOSTICS; full normal Owner workflow NOT_PROVEN",
-      "owner_pc": "BOUNDED_RESOURCE_DIAGNOSTICS_PASS; FULL_ACCEPTANCE_NOT_PROVEN"
+      "owner_pc": "BOUNDED_RESOURCE_DIAGNOSTICS_AND_REAL_BROWSER_CONTROL_FLOW_PASS; FULL_LONG_OWNER_ACCEPTANCE_NOT_RUN"
     },
     "schema_version": 15,
     "scientific_state": {
@@ -178,10 +186,10 @@
     },
     "skill_authority_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
     "source_only_scan": {
-      "candidate_sha": "94b7c394f00ed69e97fed2ed86b1413b4c791efb",
-      "matches": 0,
-      "status": "PASS",
-      "tracked_text_files": 247
+      "candidate_sha": null,
+      "matches": null,
+      "status": "NOT_RUN_FINAL_HEAD",
+      "tracked_text_files": null
     },
     "synthetic_optimizer_profile": {
       "baseline_from_prechange_terminal_evidence": {
@@ -254,7 +262,7 @@
     "targeted": {
       "backend_tests": 51,
       "frontend_files": 1,
-      "frontend_tests": 9,
+      "frontend_tests": 19,
       "status": "PASS_LOCAL",
       "tested_worktree_base": "e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d"
     }
@@ -262,6 +270,7 @@
   "runtime_checks": [
     "PASS_BOUNDED: real MT5 Stage C resource-control diagnostic, 2 dimensions / 9 passes, parsed 9, frozen/observed agents 3/3, rc=0, SAFE.",
     "PASS_BOUNDED: real MT5 Stage D queue-stress diagnostic, 17 dimensions, raw Cartesian context 18,259,010,497,728,000, 512 report rows, frozen/observed agents 2/2, rc=0, SAFE.",
+    "PASS_BOUNDED_REAL_BROWSER: live frontend/backend draft persistence across page/backend restart, native MT5 START/STOP, observed 2/2 agent cap, clean STOP, authoritative final UI resource evidence, and Owner draft restoration.",
     "NOT_RUN: full production-scale/long-range Owner Optimizer \u2192 Challenger \u2192 Champion \u2192 backtest workflow.",
     "NOT_RUN: real R00-R11 Research execution, model training, ONNX, Research Challenger creation, or Champion mutation."
   ],

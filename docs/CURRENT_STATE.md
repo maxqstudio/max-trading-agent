@@ -18,7 +18,7 @@ Branch: work/optimizer-mt5-resource-safety
 Authoritative SHA: external final acceptance evidence
 Last accepted SHA: 80efac39312218ff8bd6ba05269791c69a3b9061
 Current candidate SHA: external final acceptance evidence
-Current source digest: 6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa
+Current source digest: 123761d665d2fff6c17825997cb3ebea852d574474d159927b691437c1841ce2
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
@@ -47,6 +47,7 @@ SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs an
 - Starting source authority for this repair is exact main 80efac39312218ff8bd6ba05269791c69a3b9061; work is isolated on work/optimizer-mt5-resource-safety.
 - Bounded real-MT5 Stage C passed: native Slow Complete, 2 optimized dimensions / 9 passes, AUTO_SAFE resolved cap 3, actual max 3 agents, 9 parsed passes, MT5 return code 0, resource state SAFE.
 - Bounded real-MT5 Stage D passed: native Fast Genetic with all 17 optimizer dimensions and raw Cartesian context 18,259,010,497,728,000; MT5 produced 512 report rows while AUTO_SAFE resolved cap 2 and actual max remained 2, return code 0, resource state SAFE.
+- Real headless Chrome click-through against live Vite + live backend passed: draft persisted across reload and backend restart; bounded native MT5 START observed 2/2 local agents; STOP reached STOPPED, no MT5/tester processes remained, final UI refreshed authoritative 2/2 resource evidence; original 17D Fast Genetic Owner draft was restored.
 
 ## Not proven
 - Exact branch/PR/main Windows CI and external final-SHA acceptance under D-012.
