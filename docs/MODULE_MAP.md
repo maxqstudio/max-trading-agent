@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682
+Source digest: 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -94,8 +94,8 @@ Generated/refreshed: current compiler run
 | frontend/src/ChampionPage.tsx | TypeScript/React | 175 | frontend/src | NO |
 | frontend/src/DataTable.test.tsx | TypeScript/React | 74 | frontend/src | YES |
 | frontend/src/DataTable.tsx | TypeScript/React | 113 | frontend/src | NO |
-| frontend/src/OptimizerPage.test.tsx | TypeScript/React | 1266 | frontend/src | YES |
-| frontend/src/OptimizerPage.tsx | TypeScript/React | 1390 | frontend/src | NO |
+| frontend/src/OptimizerPage.test.tsx | TypeScript/React | 1263 | frontend/src | YES |
+| frontend/src/OptimizerPage.tsx | TypeScript/React | 1394 | frontend/src | NO |
 | frontend/src/ScientistPage.test.tsx | TypeScript/React | 479 | frontend/src | YES |
 | frontend/src/ScientistPage.tsx | TypeScript/React | 476 | frontend/src | NO |
 | frontend/src/SettingsPage.test.tsx | TypeScript/React | 159 | frontend/src | YES |

@@ -7,7 +7,7 @@
 Starting authority is exact maxqstudio/max-trading-agent main 80efac39312218ff8bd6ba05269791c69a3b9061 on work/optimizer-mt5-resource-safety. Source/unit/UI acceptance uses local tests. In addition, Owner-authorized bounded real-MT5 diagnostics were executed only to prove the resource controller: Stage C used a 2D/9-pass Slow Complete workload; Stage D used all 17 dimensions with Fast Genetic and a short cheap interval. These diagnostics prove bounded local-agent concurrency and RAM safety behavior, not full production-scale Optimizer/Challenger/Champion acceptance. Fresh R00-R11 remain roadmap-gated.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682
+Current source digest: 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
@@ -64,7 +64,7 @@ ROADMAP_SYNC: PASS
 
 Sequence mode for this phase/session: DURING
 Sequence session contract: FLOW-OPTIMIZER-DURABILITY-PERFORMANCE
-SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682.
+SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826.
 
 ## Project Truth Compiler evidence
 

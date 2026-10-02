@@ -619,14 +619,14 @@
       "file": "frontend/src/OptimizerPage.test.tsx",
       "is_test": true,
       "language": "TypeScript/React",
-      "lines": 1266
+      "lines": 1263
     },
     {
       "directory": "frontend/src",
       "file": "frontend/src/OptimizerPage.tsx",
       "is_test": false,
       "language": "TypeScript/React",
-      "lines": 1390
+      "lines": 1394
     },
     {
       "directory": "frontend/src",
@@ -72810,7 +72810,7 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682",
+  "source_digest": "05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826",
   "source_summary": {
     "files": 116,
     "languages": {
@@ -72819,7 +72819,7 @@
       "TypeScript": 3,
       "TypeScript/React": 17
     },
-    "lines": 53027,
+    "lines": 53028,
     "test_files": 38
   },
   "tests": [

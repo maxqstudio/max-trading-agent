@@ -18,7 +18,7 @@ Branch: work/optimizer-mt5-resource-safety
 Authoritative SHA: external final acceptance evidence
 Last accepted SHA: 80efac39312218ff8bd6ba05269791c69a3b9061
 Current candidate SHA: external final acceptance evidence
-Current source digest: 7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682
+Current source digest: 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
@@ -36,7 +36,7 @@ PROJECT_DOCS_SYNC: PASS
 Sequence policy: REQUIRED
 Current sequence mode: DURING
 Current sequence session: FLOW-OPTIMIZER-DURABILITY-PERFORMANCE
-SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682.
+SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826.
 
 ## Proven
 - Accepted starting floor: backend 410 passed, frontend 46 passed across 8 files, schema 14; Skill Workflow authority is 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8.

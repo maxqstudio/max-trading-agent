@@ -15,7 +15,7 @@
     "real_mt5_resource_safety": "PASS_LOCAL_REAL_MT5: Stage C 9/9 parsed passes at frozen 3/3 agents; Stage D 17D Fast Genetic raw-cardinality context 18,259,010,497,728,000 produced 512 report rows at frozen 2/2 agents; both rc=0 and SAFE.",
     "resource_preflight_latency": "PASS_LOCAL_LIVE: cold forced hardware preflight 1826.583 ms; warm cached median 16.083 ms, p95 31.184 ms; current median 20.346 ms; detail 5.851 ms; qualified page 8.238 ms.",
     "schema_version": 15,
-    "sequence": "PASS_LOCAL: 8/8 DURING/CURRENT sessions; canonical actual graphs regenerated from current source digest 7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682.",
+    "sequence": "PASS_LOCAL: 8/8 DURING/CURRENT sessions; canonical actual graphs regenerated from current source digest 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826.",
     "skill_workflow_current_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
     "source_only_scan": "NOT_RUN_FINAL_HEAD: rerun after final source/governance commit",
     "synthetic_optimizer_profile": "PASS_LOCAL: 750-candidate synthetic profile, 12 requests/endpoint; actual qualified-page median 23.651 ms/p95 68.983 ms, 61,462-byte response. Separate Windows process profile measured CPU/RSS/read/write I/O with the qualified route mocked. No real MT5 or Owner DB used; temporary test DB/evidence cleanup was rejected by shell policy."
@@ -278,7 +278,7 @@
   "schema_version": 1,
   "sequence_mode": "DURING",
   "sequence_session": "FLOW-OPTIMIZER-DURABILITY-PERFORMANCE",
-  "sequence_sync_status": "PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682.",
+  "sequence_sync_status": "PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826.",
   "test_commands": [
     ".venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_resources.py backend/tests/test_optimizer_runtime.py backend/tests/test_optimizer_reliability.py -q -o addopts=",
     ".venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_draft.py backend/tests/test_optimizer_reliability.py backend/tests/test_optimizer_runtime_durability.py backend/tests/test_m01_jobs.py backend/tests/test_m01_recovery.py backend/tests/test_m08_strategy_results.py -q -o addopts=",
