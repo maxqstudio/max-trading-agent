@@ -47,10 +47,11 @@ SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs an
 - A separate Windows process-counter run measured CPU 1.0781 s, peak working set 64,405,504 bytes, read I/O 6,060,864 bytes and write I/O 0 over 108 requests; qualified route was mocked in that resource run.
 - Historical PR15 bounded Stage C/D tests and Optimizer UI control-flow evidence remain accepted as historical evidence; they did not represent the later Owner-reported long-range commit-memory failure and do not prove V2 behavior.
 - V2 targeted optimizer/resource regression passes 171/171; full backend passes 474 tests with zero skips/failures; frontend passes 53 tests, with lint, build, npm tree and pip check passing. Canonical Scientist knowledge was rebuilt after the first full-suite run exposed stale source hashes.
+- Exact-tree source-only scan and exact PR-head Windows Actions passed; final SHA/run identity is external per D-012. PR #17 is open for Control Room audit; PR #16 is closed and marked superseded.
 - Read-only active-job check found zero active Optimizer jobs and zero terminal/tester processes. Frozen V2 preflight safely returned BLOCKED at 12.71 GiB commit headroom versus 32 GiB required for one bounded agent; no MT5 process was launched and no Owner draft or OS setting was changed.
 
 ## Not proven
-- Final source-only scan and hosted CI were not run. Bounded real-MT5 diagnostics are blocked by commit preflight. Exact replacement-PR Windows CI and external acceptance remain unproven.
+- Owner runtime acceptance remains NOT_PROVEN because the V2 diagnostic was blocked before launch by commit preflight; exact final SHA/run identity remains external per D-012.
 - Full production-scale/long-range Owner Strategy Optimizer execution, Challenger selection, Champion promotion, MT5 backtest, and end-to-end runtime acceptance.
 - Fresh R00-R11 Research execution, model training, ONNX, Research Challenger creation, or Champion mutation.
 
@@ -62,8 +63,8 @@ SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs an
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Complete local governance and regression gates with the resolved Git-aware source inventory. Run the exact-tree source-only/security scan only after a final candidate commit. Retry a bounded MT5 diagnostic only after a fresh read-only active-job check and frozen resource preflight return SAFE; current commit headroom is insufficient and must not be bypassed.
-- Open a replacement PR after local gates; keep PR #16 open until replacement PR exists, then mark PR #16 SUPERSEDED. Require green exact PR-head Windows CI and stop before merge for Control Room review.
+- Submit PR #17 to Control Room for audit; do not merge before explicit Control Room/Owner authorization.
+- Retry a bounded MT5 diagnostic only after a fresh read-only active-job check and frozen resource preflight return SAFE; current commit headroom is insufficient and must not be bypassed.
 - Any bounded live diagnostic must not overwrite Owner draft/evidence, change OS/pagefile settings, or run past 20 minutes; normal full Strategy Optimizer completion remains deferred.
 - Fresh R00-R11 remains blocked until a real MT5 sample is Owner-declared READY and Control Room separately authorizes the next source phase.
 
