@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from types import SimpleNamespace
-
 import pytest
 
 import max_backend.optimizer_jobs as jobs
@@ -17,15 +15,28 @@ def active_job(pid: int = 1234, status: str = "MT5_RUNNING") -> dict:
 
 
 def test_stop_refuses_unrelated_process_owner(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(jobs, "get_job", lambda job_id: active_job())
+    job = active_job()
+    job["launch_token"] = "token-1"
+    job["worker_identity"] = {
+        "pid": 1234,
+        "job_id": "JOB1",
+        "launch_token": "token-1",
+        "worker_module": "max_backend.optimizer_worker",
+        "worker_executable_path": r"D:\MAX_REBUILD\.venv\Scripts\python.exe",
+        "identity_protocol": "named-pipe-hmac-v1",
+        "startup_identity": "a" * 64,
+        "executable_path": r"D:\MAX_REBUILD\.venv\Scripts\python.exe",
+        "creation_time": "created",
+    }
+    monkeypatch.setattr(jobs, "get_job", lambda job_id, **_kwargs: job)
+    monkeypatch.setattr(jobs, "update_job", lambda _job_id, **changes: changes)
     monkeypatch.setattr(
         jobs,
         "_process_identity",
         lambda pid: {
             "pid": pid,
-            "executable_path": r"D:\MAX_REBUILD\.venv\Scripts\python.exe",
-            "command_line": "python.exe unrelated_script.py",
-            "creation_time": "created",
+            "executable_path": r"D:\Other\python.exe",
+            "creation_time": "other-process",
         },
     )
 
@@ -36,25 +47,37 @@ def test_stop_refuses_unrelated_process_owner(monkeypatch: pytest.MonkeyPatch) -
 def test_stop_kills_only_verified_optimizer_process_tree(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setattr(jobs, "get_job", lambda job_id: active_job())
     identity = {
         "pid": 1234,
+        "job_id": "JOB1",
+        "launch_token": "token-1",
+        "worker_module": "max_backend.optimizer_worker",
+        "worker_executable_path": r"D:\MAX_REBUILD\.venv\Scripts\python.exe",
+        "identity_protocol": "named-pipe-hmac-v1",
+        "startup_identity": "a" * 64,
         "executable_path": r"D:\MAX_REBUILD\.venv\Scripts\python.exe",
-        "command_line": (
-            r"D:\MAX_REBUILD\.venv\Scripts\python.exe "
-            "-m max_backend.optimizer_worker --job-id JOB1"
-        ),
         "creation_time": "created",
     }
-    identities = iter([identity, identity, None])
-    monkeypatch.setattr(jobs, "_process_identity", lambda _pid: next(identities))
-    calls: list[list[str]] = []
+    job = active_job()
+    job["launch_token"] = "token-1"
+    job["worker_identity"] = identity
+    monkeypatch.setattr(jobs, "get_job", lambda job_id, **_kwargs: job)
+    monkeypatch.setattr(
+        jobs,
+        "_process_identity",
+        lambda _pid: {
+            "pid": identity["pid"],
+            "executable_path": identity["executable_path"],
+            "creation_time": identity["creation_time"],
+        },
+    )
+    terminated: list[tuple[int, dict]] = []
 
-    def fake_run(command, **kwargs):
-        calls.append(command)
-        return SimpleNamespace(returncode=0, stdout="SUCCESS", stderr="")
+    def fake_terminate(pid: int, *, expected: dict, **_kwargs: object) -> bool:
+        terminated.append((pid, expected))
+        return True
 
-    monkeypatch.setattr(jobs.subprocess, "run", fake_run)
+    monkeypatch.setattr(jobs, "terminate_process_verified", fake_terminate)
     updated: dict = {}
 
     def fake_update(job_id: str, **kwargs):
@@ -65,7 +88,7 @@ def test_stop_kills_only_verified_optimizer_process_tree(
 
     result = jobs.stop_optimizer("JOB1")
 
-    assert calls == [["taskkill", "/PID", "1234", "/F"]]
+    assert terminated == [(1234, identity)]
     assert updated["status"] == "STOPPED"
     assert updated["active"] is False
     assert updated["terminal_result"] == "STOPPED"
@@ -75,12 +98,29 @@ def test_stop_kills_only_verified_optimizer_process_tree(
 def test_resume_refuses_while_verified_worker_is_alive(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    job = active_job(status="WAITING_FOR_REPORT")
+    job["launch_token"] = "token-1"
+    job["worker_identity"] = {
+        "pid": job["worker_pid"],
+        "job_id": job["job_id"],
+        "launch_token": "token-1",
+        "worker_module": "max_backend.optimizer_worker",
+        "worker_executable_path": r"D:\MAX_REBUILD\.venv\Scripts\python.exe",
+        "identity_protocol": "named-pipe-hmac-v1",
+        "startup_identity": "a" * 64,
+        "executable_path": r"D:\MAX_REBUILD\.venv\Scripts\python.exe",
+        "creation_time": "created",
+    }
+    monkeypatch.setattr(jobs, "get_job", lambda job_id, **_kwargs: job)
     monkeypatch.setattr(
         jobs,
-        "get_job",
-        lambda job_id: active_job(status="WAITING_FOR_REPORT"),
+        "_process_identity",
+        lambda _pid: {
+            "pid": job["worker_pid"],
+            "executable_path": job["worker_identity"]["executable_path"],
+            "creation_time": job["worker_identity"]["creation_time"],
+        },
     )
-    monkeypatch.setattr(jobs, "_worker_is_alive", lambda job_id, pid, **_kwargs: True)
 
     with pytest.raises(RuntimeError, match="still running"):
         jobs.resume_optimizer("JOB1")

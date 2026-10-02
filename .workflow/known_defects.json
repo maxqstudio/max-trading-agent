@@ -173,6 +173,19 @@
       "status": "FIXED/ACCEPTED_CANDIDATE",
       "summary": "MT5 Strategy Tester could enqueue excessive local-agent work without MAX-owned hardware-aware admission, causing CPU/RAM pressure and optimizer failure.",
       "evidence": "Owner-PC bounded native MT5 diagnostics on build 5.0.0.6231 proved AUTO_SAFE preflight plus Windows Job Object ActiveProcessLimit: accepted 9-pass run completed rc=0 with 3/3 agents and 9 parsed passes; 17D Fast Genetic queue stress produced 512 report rows with 2/2 agents and SAFE RAM headroom; real browser START/STOP later observed 2/2 agents and clean process shutdown. Full long Owner Optimizer remains NOT_RUN."
+    },
+    {
+      "id": "OPTIMIZER-COMMIT-MEMORY-EXHAUSTION",
+      "status": "IN_PROGRESS",
+      "summary": "Long-range Fast Genetic Optimizer exhausted Windows commit memory despite prior physical-RAM and local-agent admission.",
+      "evidence": "Owner-reported full-range 17D Fast Genetic crash remains the V2 repair trigger. The PR #17 V2 source candidate passed full local regression (483 backend tests, zero skips/failures; frontend 53/8; lint/build/npm tree/pip check), governance, exact-tree/secret scan, and both Windows push and PR-head CI. The separate OPTIMIZER-WORKER-IDENTITY-CIM-TIMEOUT exposed by baseline CI was repaired with deterministic authenticated handshake/native process identity, repeated real venv tests, and both hosted CI triggers passing. REAL V2 MT5 remains NOT_PROVEN because the bounded diagnostic was blocked before launch by commit headroom; FULL OWNER OPTIMIZER remains NOT_PROVEN; Research R00-R11 remains PAUSED. Exact candidate SHA/run identities remain external per D-012. Historical Stage C/D bounded results remain valid but do not prove current V2 runtime safety."
+    },
+    {
+      "id": "OPTIMIZER-WORKER-IDENTITY-CIM-TIMEOUT",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Optimizer worker launch identity discovery depends on PowerShell/CIM global process enumeration with a fixed 8-second timeout.",
+      "evidence": "Baseline GitHub Windows push run 37004211038 attempt 1 failed test_windows_venv_worker_resolution_finds_actual_child_process with subprocess.TimeoutExpired in optimizer_jobs._find_worker_by_token while powershell.exe/Get-CimInstance enumerated Win32_Process; reruns of that same baseline did not close the defect. The repair source candidate passed 32 focused identity/recovery/stop tests, 3 repeated real Windows venv tests covering 15/15 worker lifecycles, full backend (483 passed, 0 skipped, 0 failed), governance, exact-tree/secret scanning, and both push and PR-head Windows CI across all three jobs. Exact final SHA and CI run identities are external evidence per D-012.",
+      "resolution": "PowerShell/CIM worker discovery is replaced by a deterministic authenticated one-use named-pipe handshake and native actual-peer PID, executable-path, process-creation-identity, and verified-termination checks. Source and hosted acceptance gates pass on the repair candidate. This remains an unmerged candidate; phase closure and Owner runtime are not claimed."
     }
   ],
   "schema_version": 1

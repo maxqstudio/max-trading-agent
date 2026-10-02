@@ -78,14 +78,33 @@ type ResourcePreflight = {
     logical_processors: number
     total_ram_bytes: number
     available_ram_bytes: number
+    commit_charge_bytes: number
+    commit_limit_bytes: number
+    commit_headroom_bytes: number
     configured_local_agent_capacity: number
+    local_agent_capacity_source?: string
     mt5_build: string
   }
   minimum_free_ram_bytes: number
   safe_mt5_ram_budget_bytes: number
+  protected_system_commit_reserve_bytes: number
+  minimum_commit_headroom_bytes: number
+  safe_job_commit_budget_bytes: number
+  terminal_commit_budget_bytes: number
+  per_agent_commit_budget_bytes: number
+  terminal_memory_budget_bytes: number
+  per_agent_memory_budget_bytes: number
   cpu_reserve_logical: number
+  requested_max_local_agents: number
+  safe_agent_cap: number
   resolved_max_local_agents: number
+  calibration_status: 'NONE' | 'MEASURED'
+  estimation_source: 'CONSERVATIVE_FALLBACK' | 'MEASURED'
   workload: {
+    compatibility_key: string
+    symbol: string
+    period: string
+    history_span_bucket: string
     optimization_name: string
     optimized_parameter_count: number
     raw_complete_grid_combinations: number
@@ -161,7 +180,17 @@ type Job = {
         resolved_max_local_agents: number
         actual_max_active_agents: number
         min_available_ram_bytes: number
+        min_commit_headroom_bytes?: number
+        peak_commit_charge_bytes?: number
+        commit_limit_bytes?: number
+        peak_terminal_private_bytes?: number
+        peak_terminal_working_set_bytes?: number
+        peak_tester_private_bytes?: number
+        peak_single_tester_private_bytes?: number
+        peak_tester_working_set_bytes?: number
         peak_mt5_working_set_bytes: number
+        telemetry_failure_count?: number
+        sample_count?: number
         stop_reason?: string | null
       }
     }
@@ -323,6 +352,21 @@ function ownerOperationalStatus(value?: string) {
   }
   if (!value) return 'Not available'
   return labels[value] ?? 'Review required'
+}
+
+function resourceStateLabel(value?: string) {
+  const labels: Record<string, string> = {
+    SAFE: 'Within resource limits',
+    PHYSICAL_PRESSURE: 'Physical RAM pressure',
+    COMMIT_PRESSURE: 'Windows commit pressure',
+    CRITICAL_PHYSICAL: 'Critical physical RAM · stopping',
+    CRITICAL_COMMIT: 'Critical Windows commit · stopping',
+    TELEMETRY_UNAVAILABLE: 'Resource telemetry unavailable · stopping',
+    RESOURCE_STOP_REQUESTED: 'Stop requested · verifying process exit',
+    RESOURCE_STOPPED: 'Stopped · process exit verified',
+    RESOURCE_RECONCILIATION_REQUIRED: 'Stop could not be verified · reconciliation required',
+  }
+  return value ? labels[value] ?? 'Resource state needs review' : 'Not available'
 }
 
 function candidateKey(row: { round: number; pass: number }) {
@@ -1007,12 +1051,17 @@ export default function OptimizerPage() {
               <div><dt>Status</dt><dd><strong>{visiblePreview.resource_preflight.status === 'SAFE' ? 'SAFE TO START' : 'BLOCKED'}</strong></dd></div>
               <div><dt>CPU</dt><dd>{visiblePreview.resource_preflight.detected.physical_cores} physical / {visiblePreview.resource_preflight.detected.logical_processors} logical</dd></div>
               <div><dt>RAM</dt><dd>{gibibytes(visiblePreview.resource_preflight.detected.total_ram_bytes)} total / {gibibytes(visiblePreview.resource_preflight.detected.available_ram_bytes)} available</dd></div>
+              <div><dt>Windows commit</dt><dd>{gibibytes(visiblePreview.resource_preflight.detected.commit_charge_bytes)} charged / {gibibytes(visiblePreview.resource_preflight.detected.commit_limit_bytes)} limit / {gibibytes(visiblePreview.resource_preflight.detected.commit_headroom_bytes)} headroom</dd></div>
               <div><dt>Protected reserve</dt><dd>{gibibytes(visiblePreview.resource_preflight.minimum_free_ram_bytes)}</dd></div>
+              <div><dt>Protected commit headroom</dt><dd>{gibibytes(visiblePreview.resource_preflight.minimum_commit_headroom_bytes)}</dd></div>
               <div><dt>MT5 budget</dt><dd>{gibibytes(visiblePreview.resource_preflight.safe_mt5_ram_budget_bytes)}</dd></div>
-              <div><dt>Resolved local agents</dt><dd>{visiblePreview.resource_preflight.resolved_max_local_agents}</dd></div>
+              <div><dt>Commit estimates</dt><dd>Terminal {gibibytes(visiblePreview.resource_preflight.terminal_commit_budget_bytes)} + {gibibytes(visiblePreview.resource_preflight.per_agent_commit_budget_bytes)} per agent</dd></div>
+              <div><dt>Agent limit</dt><dd>{visiblePreview.resource_preflight.resolved_max_local_agents} resolved / {visiblePreview.resource_preflight.requested_max_local_agents} requested · hard safe cap {visiblePreview.resource_preflight.safe_agent_cap}</dd></div>
+              <div><dt>MT5 local-agent ceiling</dt><dd>{visiblePreview.resource_preflight.detected.configured_local_agent_capacity} · {visiblePreview.resource_preflight.detected.local_agent_capacity_source === 'MT5_AGENT_DIRECTORIES' ? 'existing local agent directories' : 'logical-processor upper bound; Job Object enforces the frozen cap'}</dd></div>
               <div><dt>CPU reserve</dt><dd>{visiblePreview.resource_preflight.cpu_reserve_logical} logical processor(s)</dd></div>
-              <div><dt>Workload</dt><dd>{visiblePreview.resource_preflight.workload.optimization_name} · {visiblePreview.resource_preflight.workload.optimized_parameter_count} optimized parameters</dd></div>
+              <div><dt>Workload</dt><dd>{visiblePreview.resource_preflight.workload.symbol} {visiblePreview.resource_preflight.workload.period} · {visiblePreview.resource_preflight.workload.history_span_bucket} · {visiblePreview.resource_preflight.workload.optimization_name} · {visiblePreview.resource_preflight.workload.optimized_parameter_count} optimized parameters</dd></div>
               <div><dt>Date / tick model</dt><dd>{visiblePreview.resource_preflight.workload.from_date} → {visiblePreview.resource_preflight.workload.to_date} · {visiblePreview.resource_preflight.workload.tick_model_name}</dd></div>
+              <div><dt>Memory estimate</dt><dd>{visiblePreview.resource_preflight.estimation_source === 'MEASURED' ? 'Compatible local high-water calibration with safety margin' : 'Conservative workload-based fallback'} · {visiblePreview.resource_preflight.calibration_status === 'MEASURED' ? 'compatible history found' : 'no compatible history'}</dd></div>
               <div><dt>Raw Cartesian context</dt><dd>{visiblePreview.resource_preflight.workload.raw_complete_grid_combinations.toLocaleString()} · not MT5 genetic pass count</dd></div>
             </dl>
             {visiblePreview.resource_preflight.reason && <p role="alert" className="error">{visiblePreview.resource_preflight.reason}</p>}
@@ -1156,10 +1205,15 @@ export default function OptimizerPage() {
             <div><dt>Scheduling</dt><dd>MT5 owns native pass/task scheduling; MAX caps active local agents</dd></div>
             {job.request.resource_policy && <div><dt>Resource mode</dt><dd>{job.request.resource_policy.mode}</dd></div>}
             {job.request.resource_policy && <div><dt>Frozen local-agent cap</dt><dd>{job.request.resource_policy.resolved_max_local_agents}</dd></div>}
-            {currentResourceRuntime && <div><dt>Resource state</dt><dd><strong>{currentResourceRuntime.resource_state}</strong></dd></div>}
+            {currentResourceRuntime && <div><dt>Resource state</dt><dd><strong>{resourceStateLabel(currentResourceRuntime.resource_state)}</strong></dd></div>}
             {currentResourceRuntime && <div><dt>Max active agents observed</dt><dd>{currentResourceRuntime.actual_max_active_agents} / {currentResourceRuntime.resolved_max_local_agents}</dd></div>}
             {currentResourceRuntime && <div><dt>Minimum free RAM observed</dt><dd>{gibibytes(currentResourceRuntime.min_available_ram_bytes)}</dd></div>}
+            {currentResourceRuntime?.min_commit_headroom_bytes !== undefined && <div><dt>Minimum Windows commit headroom</dt><dd>{gibibytes(currentResourceRuntime.min_commit_headroom_bytes)}</dd></div>}
+            {currentResourceRuntime?.peak_commit_charge_bytes !== undefined && <div><dt>Peak system commit charge</dt><dd>{gibibytes(currentResourceRuntime.peak_commit_charge_bytes)} / {gibibytes(currentResourceRuntime.commit_limit_bytes)}</dd></div>}
+            {currentResourceRuntime?.peak_terminal_private_bytes !== undefined && <div><dt>Peak terminal private memory</dt><dd>{gibibytes(currentResourceRuntime.peak_terminal_private_bytes)}</dd></div>}
+            {currentResourceRuntime?.peak_tester_private_bytes !== undefined && <div><dt>Peak tester private memory</dt><dd>{gibibytes(currentResourceRuntime.peak_tester_private_bytes)} total / {gibibytes(currentResourceRuntime.peak_single_tester_private_bytes)} per agent</dd></div>}
             {currentResourceRuntime && <div><dt>Peak MT5 working set</dt><dd>{gibibytes(currentResourceRuntime.peak_mt5_working_set_bytes)}</dd></div>}
+            {currentResourceRuntime?.sample_count !== undefined && <div><dt>Resource samples</dt><dd>{currentResourceRuntime.sample_count} · telemetry failures {currentResourceRuntime.telemetry_failure_count ?? 0}</dd></div>}
             {currentResourceRuntime?.stop_reason && <div><dt>Resource stop reason</dt><dd className="error-text">{currentResourceRuntime.stop_reason}</dd></div>}
             {job.first_blocker && <div><dt>Constraint</dt><dd className="error-text">Optimizer evidence requires review before continuing.</dd></div>}
             <div><dt>Scientist advisory</dt><dd>{job.request.scientist_assist ? 'Enabled' : 'Disabled'}</dd></div>

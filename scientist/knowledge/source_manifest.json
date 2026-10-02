@@ -9,7 +9,7 @@
   },
   {
     "path": "docs/ROADMAP.md",
-    "sha256": "44b04b63d7d7b5d30e37cf616d27d797cf9aae10a67904bc5db550fa463c613c"
+    "sha256": "458d5b1dad6f9d4587e14fc76fb620524b965a07a59b11ed36ca8ced213be072"
   },
   {
     "path": "docs/ARCHITECTURE_PHASE1.md",
@@ -45,23 +45,23 @@
   },
   {
     "path": "backend/max_backend/optimizer_core.py",
-    "sha256": "f7f25689daba93aa42e63496d0a07b4a39fbf980cfe6b16adc404425c3e559f8"
+    "sha256": "596300441eae2eb2376cbb113d4617c98fe68a643e7d11f2febe5f84f383fe6b"
   },
   {
     "path": "backend/max_backend/optimizer_resources.py",
-    "sha256": "c0ac4329afdc97c30659caa0d295a4bb7d2802beffc831ec2d323e3f2e483600"
+    "sha256": "754435f65919b9df144d84726e88f83af4b2ebd11b0061904f14048ea54269ca"
   },
   {
     "path": "backend/max_backend/optimizer_resource_runtime.py",
-    "sha256": "8c13da40d4f2045a82d1a7b950770fa7633587a6e85de3ee53b0b03e68d3f051"
+    "sha256": "957af2d1f3250bfd3fa413aab152710cf63b206c1c9c78ba6cc483851e5a01da"
   },
   {
     "path": "backend/max_backend/optimizer_store.py",
-    "sha256": "1ef0727a3f4602e4b10dba4174f216e9016cec09424432a2fda0bd7b9d21528d"
+    "sha256": "3c71901e2d3d7095221e8f081b7d2f5085af0a736accce0f1773e71e64295236"
   },
   {
     "path": "backend/max_backend/optimizer_worker.py",
-    "sha256": "3cf32f1c0331a75c7cc4048c1fc99836f1d47ca8583dc621b71e6435aa6c60e6"
+    "sha256": "cc5a58eae928243701686ee3d5ce6fc5d7d27963ea12a974fa4e3c25c9d6bb86"
   },
   {
     "path": "backend/max_backend/optimizer_api.py",

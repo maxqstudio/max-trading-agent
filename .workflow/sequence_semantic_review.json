@@ -3,7 +3,7 @@
   "mode": "DURING",
   "scope": "CURRENT",
   "result": "PASS",
-  "skill_authority_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
+  "skill_authority_sha": "64836990609cd1ab22f9517be5aaffc14ad19ea9",
   "generation_anchor_policy": {
     "meaning": "The observed head is a pre-commit generation anchor. Final hosted source SHA and CI identity remain external acceptance evidence; real MT5 and Owner-PC runtime remain deferred.",
     "observed_head": "073e69044c03f4296849dd5bc02516f30b9439b1",
@@ -175,7 +175,7 @@
       "mode": "DURING",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "purpose": "Persist editable Optimizer drafts independently from immutable job requests, reconcile worker/MT5 identity safely after interruption, atomically publish verified round evidence before database commit, and serve candidate reads from a bounded projection without weakening canonical mutation checks.",
+      "purpose": "Persist editable Optimizer drafts independently from immutable requests, reconcile worker/MT5 identity safely, revalidate frozen physical-RAM/Windows-commit budgets before launch, monitor exact Job Object process PrivateUsage with native telemetry, stop or require reconciliation fail-closed, atomically publish evidence, and serve bounded candidate reads.",
       "declared_entries": [
         "frontend/src/OptimizerPage.tsx::<module>",
         "backend/max_backend/optimizer_draft.py::get_optimizer_draft",
@@ -184,8 +184,13 @@
         "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
         "backend/max_backend/optimizer_jobs.py::stop_optimizer",
         "backend/max_backend/optimizer_jobs.py::resume_optimizer",
+        "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+        "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+        "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+        "backend/max_backend/optimizer_resource_runtime.py::_job_process_rows",
         "backend/max_backend/optimizer_store.py::claim_initial_worker_launch",
         "backend/max_backend/optimizer_store.py::confirm_worker_launch",
+        "backend/max_backend/optimizer_store.py::load_resource_calibration",
         "backend/max_backend/optimizer_worker.py::run_job",
         "backend/max_backend/optimizer_runtime.py::commit_round_evidence",
         "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
@@ -198,6 +203,7 @@
         "backend/tests/test_optimizer_draft.py",
         "backend/tests/test_optimizer_reliability.py",
         "backend/tests/test_optimizer_runtime_durability.py",
+        "backend/tests/test_optimizer_resources.py",
         "backend/tests/test_m01_jobs.py",
         "backend/tests/test_m01_recovery.py",
         "backend/tests/test_m08_strategy_results.py",
@@ -205,7 +211,7 @@
         "frontend/src/ChallengersPage.test.tsx"
       ],
       "unresolved_bindings": [],
-      "runtime_evidence_boundary": "Synthetic temporary databases/evidence and mocked or isolated process boundaries only; no real Owner Optimizer/MT5 execution or scientific result is claimed."
+      "runtime_evidence_boundary": "Historical bounded Stage C/D MT5 evidence remains accepted. The later Owner-reported full-range 17D attempt crashed under Windows commit-memory exhaustion; current V2 work uses synthetic tests and any new Owner diagnostic remains limited to 20 minutes, may not complete the full optimization, and must not run while an Owner job is already active. No scientific result is claimed."
     }
   ],
   "parse_failure_boundary": {

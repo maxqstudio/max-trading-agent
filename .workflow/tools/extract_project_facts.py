@@ -39,7 +39,11 @@ def call_name(node: ast.AST) -> str:
         return node.id
     if isinstance(node, ast.Attribute):
         left = call_name(node.value)
-        return f"{left}.{node.attr}" if left else node.attr
+        # Keep call facts conservative. An attribute on an unresolved
+        # expression receiver (for example Path(...).resolve()) is not a
+        # project symbol locator and must not degrade into the global leaf
+        # token "resolve".
+        return f"{left}.{node.attr}" if left else ""
     return ""
 
 

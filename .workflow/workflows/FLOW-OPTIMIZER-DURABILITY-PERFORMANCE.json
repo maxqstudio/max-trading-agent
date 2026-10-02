@@ -1,12 +1,17 @@
 {
-  "authority": "SQLite job/draft state, verified immutable round bundle, and exact Optimizer worker/MT5 process identity",
+  "authority": "SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen V2 resource policy and current Windows system/Job Object telemetry",
   "critical": true,
-  "entry_condition": "Owner opens or edits the Optimizer draft, requests preview/start, or MAX starts/restarts while a known Optimizer job is active.",
+  "entry_condition": "Owner opens or edits the Optimizer draft, requests preview/start, MAX starts/restarts a known job, or a bounded MT5 process is monitored for resource safety.",
   "failure_behavior": [
     "Draft validation and revision checks fail closed; a stale save cannot overwrite newer edits or mutate any job.",
     "A STARTED request is immutable even when the current editable draft later changes.",
     "Startup reconciliation inspects only known active jobs and exact worker/launch identity; uncertain MT5 launch is blocked rather than blindly relaunched.",
     "MAX never terminates an MT5 process unless the process identity is uniquely bound to the Optimizer job/launch token.",
+    "Resource admission binds physical RAM, current Windows commit charge/headroom, CPU and local-agent count to the frozen EA/build/symbol/timeframe/history/tick/search workload; the worker refreshes admission immediately before LAUNCH_INTENT.",
+    "Resource monitoring uses native Windows system APIs and exact Job Object membership; each owned process is identity-checked and sampled for PrivateUsage and working set, with every process handle closed after sampling.",
+    "Telemetry loss or resource pressure requests termination of only the owned Job Object. RESOURCE_STOPPED means process exit and empty Job Object were verified; otherwise RECONCILIATION_REQUIRED blocks resume and new work.",
+    "Compatible calibration is a read-only bounded query of existing inactive optimizer rounds; no schema/table or mutable Owner draft is changed by calibration lookup.",
+    "No system/pagefile setting, scientific parameter value, search-space dimension, report outcome, Challenger or Champion authority is changed by resource safety.",
     "Partial evidence staging is never authoritative; committed files are verified before the database references the round, and missing/tampered committed evidence fails closed.",
     "Candidate projections accelerate reads only; Challenger registration revalidates canonical retained evidence."
   ],
@@ -19,10 +24,10 @@
     "Raw report bytes and derived files are staged, verified, hashed and atomically published before database commit.",
     "Ordinary candidate reads use bounded indexed SQLite projections; canonical evidence remains mutation authority.",
     "UI disables unavailable/duplicate operations with a visible reason and reports pending, success, failure or recovery-required status.",
-    "Tests use synthetic temporary databases, evidence and mocked external process boundaries; real Owner MT5 execution remains NOT_PROVEN and deferred.",
+    "Tests use synthetic temporary databases, evidence and mocked external process boundaries. Any Owner-PC resource diagnostic is separate, at most 20 minutes, must not complete the full optimization, and must not touch an already active Owner run.",
     "No automatic Challenger registration, Champion mutation, Research execution or live trading follows Optimizer completion."
   ],
-  "purpose": "Make editable Optimizer state durable, future Strategy Optimizer jobs recoverable without duplicate execution, evidence publication atomic, and ordinary Owner reads/actions bounded and explicit.",
+  "purpose": "Make editable Optimizer state durable, jobs recoverable without duplicate execution, evidence publication atomic, ordinary Owner reads/actions bounded, and Windows physical-RAM/commit-memory use fail-closed under a frozen workload identity.",
   "restart_behavior": [
     "On backend startup, reconcile only persisted active Optimizer jobs against durable worker token/PID/process identity, round launch state and committed evidence.",
     "A worker lost before any MT5 launch may be claimed once through a conditional durable launch transition.",
@@ -31,6 +36,7 @@
   ],
   "rollback_behavior": [
     "Unpublished staging remains isolated and may be discarded/rebuilt without changing committed authority.",
+    "A verified resource stop retains the immutable request and evidence; resume is permitted only after fresh frozen-policy admission. An unverified stop remains reconciliation-required and is never automatically relaunched.",
     "If atomic evidence publication completed but the database did not advance, verify the manifest and replay the same commit identity without rerunning MT5.",
     "If the database claims committed evidence but files are missing, changed or unverifiable, block the job and preserve evidence for diagnosis; do not manufacture results.",
     "A failed launch or stop never kills a process whose Optimizer ownership cannot be proven."
@@ -45,8 +51,13 @@
     "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
     "backend/max_backend/optimizer_jobs.py::stop_optimizer",
     "backend/max_backend/optimizer_jobs.py::resume_optimizer",
+    "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
+    "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
+    "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
+    "backend/max_backend/optimizer_resource_runtime.py::_job_process_rows",
     "backend/max_backend/optimizer_store.py::claim_initial_worker_launch",
     "backend/max_backend/optimizer_store.py::confirm_worker_launch",
+    "backend/max_backend/optimizer_store.py::load_resource_calibration",
     "backend/max_backend/optimizer_worker.py::run_job",
     "backend/max_backend/optimizer_runtime.py::commit_round_evidence",
     "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
@@ -74,6 +85,14 @@
     "EVIDENCE_BUNDLE_COMMITTED",
     "CANDIDATE_PROJECTION_COMMITTED",
     "ROUND_COMPLETE",
+    "FROZEN_RESOURCE_POLICY_V2",
+    "PRELAUNCH_RESOURCE_RECHECK",
+    "PHYSICAL_PRESSURE",
+    "COMMIT_PRESSURE",
+    "TELEMETRY_UNAVAILABLE",
+    "RESOURCE_STOP_REQUESTED",
+    "RESOURCE_STOPPED",
+    "RESOURCE_RECONCILIATION_REQUIRED",
     "STOPPED",
     "FAILED",
     "RECOVERY_REQUIRED",
@@ -83,11 +102,13 @@
     "backend/tests/test_optimizer_draft.py",
     "backend/tests/test_optimizer_reliability.py",
     "backend/tests/test_optimizer_runtime_durability.py",
+    "backend/tests/test_optimizer_resources.py",
     "backend/tests/test_m01_jobs.py",
     "backend/tests/test_m01_recovery.py",
     "backend/tests/test_m08_strategy_results.py",
     "frontend/src/OptimizerPage.test.tsx",
-    "frontend/src/ChallengersPage.test.tsx"
+    "frontend/src/ChallengersPage.test.tsx",
+    "frontend/src/OptimizerPage.test.tsx"
   ],
   "title": "Durable Strategy Optimizer draft, recovery, evidence and bounded reads",
   "transitions": [
@@ -122,10 +143,28 @@
       "to": "COMPILING_EA"
     },
     {
-      "action": "Persist round preparation and launch intent before starting MT5; confirm exact child identity before treating execution as started.",
+      "action": "Refresh physical RAM and Windows commit telemetry against the immutable V2 resource policy before creating any MT5 process; a changed or unverifiable preflight blocks launch.",
       "from": "ROUND_PREPARED",
-      "side_effects": ["durable launch journal"],
+      "side_effects": [],
+      "to": "PRELAUNCH_RESOURCE_RECHECK"
+    },
+    {
+      "action": "Persist launch intent only after the fresh resource admission is SAFE, then confirm exact Job Object-owned terminal identity before treating MT5 execution as started.",
+      "from": "PRELAUNCH_RESOURCE_RECHECK",
+      "side_effects": ["durable launch journal", "frozen Job Object process cap"],
       "to": "LAUNCH_INTENT"
+    },
+    {
+      "action": "Sample native system commit/physical metrics and exact Job Object-owned terminal/tester process PrivateUsage/working set; retain bounded high-water summaries and fail closed on pressure or telemetry loss.",
+      "from": "MT5_PROCESS_CONFIRMED",
+      "side_effects": ["resource_runtime round checkpoint"],
+      "to": "COMMIT_PRESSURE"
+    },
+    {
+      "action": "Request termination only for the owned Job Object and verify terminal exit plus empty membership. A verified stop records RESOURCE_STOPPED; uncertainty records RECONCILIATION_REQUIRED and blocks resume.",
+      "from": "RESOURCE_STOP_REQUESTED",
+      "side_effects": ["verified resource stop or reconciliation-required checkpoint"],
+      "to": "RESOURCE_STOPPED"
     },
     {
       "action": "Observe owned MT5 exit and freeze a fresh matching report; uncertain launch/process state enters RECOVERY_REQUIRED without relaunch.",

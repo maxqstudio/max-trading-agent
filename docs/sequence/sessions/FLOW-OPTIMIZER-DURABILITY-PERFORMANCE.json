@@ -7,6 +7,11 @@
       "backend/max_backend/optimizer_draft.py::get_optimizer_draft",
       "backend/max_backend/optimizer_draft.py::put_optimizer_draft",
       "backend/max_backend/optimizer_jobs.py::start_optimizer",
+      "backend/max_backend/optimizer_jobs.py::_spawn_worker",
+      "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
+      "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.receive",
+      "backend/max_backend/optimizer_worker_identity.py::terminate_process_verified",
+      "backend/max_backend/optimizer_worker.py::main",
       "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
       "backend/max_backend/optimizer_jobs.py::stop_optimizer",
       "backend/max_backend/optimizer_jobs.py::resume_optimizer",
@@ -18,7 +23,7 @@
       "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration"
     ],
     "graph": "docs/sequence/generated/FLOW-OPTIMIZER-DURABILITY-PERFORMANCE.actual.json",
-    "source_digest": "05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826"
+    "source_digest": "fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b"
   },
   "critical": true,
   "implementation_base_sha": "5a30097d76a46ad077bed8dfd978eb6b27f83264",
@@ -44,6 +49,7 @@
   "tests": [
     "backend/tests/test_optimizer_draft.py",
     "backend/tests/test_optimizer_reliability.py",
+    "backend/tests/test_optimizer_worker_identity.py",
     "backend/tests/test_optimizer_runtime_durability.py",
     "backend/tests/test_m01_jobs.py",
     "backend/tests/test_m01_recovery.py",

@@ -151,3 +151,14 @@ Type: source_hardening
 - Add frontend draft persistence, stale-request rejection, debounced search/adaptive polling, and visible blocked/in-flight/completed/error feedback.
 - Local candidate regression: backend 435 passed with zero skips/failures; frontend 52 passed across 8 files; lint, build, pip check and npm tree passed. Synthetic 750-candidate endpoint latency/payload and Windows process counters are recorded in acceptance.json; exact Windows hosted validation remains pending.
 - No real Owner Optimizer/MT5 execution, Research activity, Champion mutation or live trading is claimed.
+
+## 2026-10-02 — Optimizer Windows commit-memory resource-safety repair V2
+
+Type: source_repair_in_progress
+
+- The Owner reported a full-range 17D Fast Genetic crash under Windows commit-memory exhaustion; the previously accepted bounded Stage C/D diagnostics remain historical evidence and do not close this defect.
+- Add current Windows system commit charge/headroom to physical-memory preflight, immutable workload compatibility identity, bounded compatible high-water reuse from existing optimizer round state, and an immediate fresh prelaunch admission check.
+- Replace runtime PowerShell/CIM process polling with native system commit telemetry and exact Job Object PID ownership; sample terminal/tester PrivateUsage and working set, fail closed on telemetry loss, and require verified termination or explicit reconciliation.
+- Expose commit headroom, estimates, calibration source, live peaks and stop/reconciliation status through the existing Optimizer visual language; keep Job Object process cap and immutable request semantics.
+- Keep schema 15 unchanged. No pagefile/OS changes, search-space reduction, Research/scientific changes, real full-run completion, or Champion mutation is authorized.
+- Adopt inspected Skill Workflow main 64836990609cd1ab22f9517be5aaffc14ad19ea9 and vendor its 21 applicable tools byte-identically; full regression, bounded runtime evidence and hosted CI remain pending until proven.

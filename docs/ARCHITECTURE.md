@@ -2,7 +2,7 @@
 
 # ARCHITECTURE
 
-Current source digest: 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826
+Current source digest: fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b
 
 ## Components
 
@@ -10,7 +10,7 @@ Current source digest: 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de
 |---|---|---|---|---|
 | owner-ui | Owner React Control Surface | Present semantic Strategy, Artifact and Settings state with explicit feedback for blocked, running and completed Owner actions. | frontend/src/App.tsx::App, frontend/src/OptimizerPage.tsx::OptimizerPage, frontend/src/ChallengersPage.tsx::ChallengersPage, frontend/src/ChampionPage.tsx::ChampionPage, frontend/src/ScientistPage.tsx::ScientistPage | FastAPI semantic APIs |
 | strategy-domain | Strategy lifecycle domain | Own optimizer qualification, Challenger registration/lifecycle and Champion promotion/tenure semantics. | backend/max_backend/optimizer_candidates.py::qualified_candidates_page, backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration, backend/max_backend/challenger_selection.py::create_selected_challengers, backend/max_backend/challenger_store.py::consumed_source_identities, backend/max_backend/challenger_registry.py::challenger_detail, backend/max_backend/challenger_operations.py::retire_challenger, backend/max_backend/champion_store.py::commit_promotion_authority, backend/max_backend/promotion_service.py::promote_strategy_challenger | SQLite, immutable Challenger/optimizer evidence, MT5/MetaEditor |
-| optimizer-orchestration | Optimizer job orchestration and read model | Persist editable draft separately from immutable job requests, reconcile exact worker/MT5 launch identity, atomically publish round evidence, and serve paginated candidate projections without weakening canonical mutation verification. | backend/max_backend/optimizer_draft.py, backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup, backend/max_backend/optimizer_worker.py, backend/max_backend/optimizer_store.py::persist_candidate_projection, backend/max_backend/optimizer_candidates.py::qualified_candidates_page | SQLite operational state, immutable round evidence, MT5/MetaEditor execution boundary |
+| optimizer-orchestration | Optimizer job orchestration and read model | Persist editable draft separately from immutable job/resource requests, reconcile exact worker/MT5 launch identity, revalidate Windows RAM and commit headroom before launch, monitor only Job Object-owned process PrivateUsage, fail closed on pressure/telemetry loss, atomically publish round evidence, and serve bounded candidate projections without weakening canonical mutation verification. | backend/max_backend/optimizer_draft.py, backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup, backend/max_backend/optimizer_resources.py, backend/max_backend/optimizer_resource_runtime.py, backend/max_backend/optimizer_worker.py, backend/max_backend/optimizer_store.py::load_resource_calibration, backend/max_backend/optimizer_store.py::persist_candidate_projection, backend/max_backend/optimizer_candidates.py::qualified_candidates_page | SQLite operational state, immutable round evidence, MT5/MetaEditor execution boundary |
 | scientist | Scientist advisory subsystem | Expose hash-verified static knowledge and bounded committed runtime context to an advisory LLM/chat workflow. | backend/max_backend/scientist_knowledge.py::load_knowledge, backend/max_backend/scientist_api.py::get_status, frontend/src/ScientistPage.tsx::ScientistPage | scientist/knowledge/source_manifest.json, Scientist store/provider settings |
 | backend-runtime | FastAPI runtime | Start migrations/recovery, route semantic APIs and expose overview/readiness. | backend/max_backend/main.py::lifespan, backend/max_backend/main.py::overview, backend/max_backend/main.py::app | domain services, SQLite, MT5 detection |
 | launcher | Windows launcher/readiness | Verify or start canonical backend/frontend instances, reject invalid occupied ports and emit MAX_READY only after authority/readiness checks. | RUN_MAX.cmd, scripts/run_max.ps1 | backend /api/overview, frontend proxy/root, Scientist status, ports 8000/5173 |
@@ -18,7 +18,7 @@ Current source digest: 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de
 | operational-state | SQLite operational state | Persist mutable Strategy/Scientist operational state through owning stores and transactions. | state/max.db | backend store modules |
 | artifact-control-recovery | Artifact control and safe state recovery | Keep ordinary artifact reads non-mutating and separate cleanup/reset/recovery into explicit, preflighted, ownership-bounded flows with visible UI state. | backend/max_backend/artifact_control.py::artifact_page, backend/max_backend/artifact_control.py::reconcile_artifacts, backend/max_backend/strategy_reset.py::strategy_reset_preflight, backend/max_backend/strategy_reset.py::reset_strategy_workspace, backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database, frontend/src/ArtifactsPage.tsx::ArtifactsPage, frontend/src/App.tsx::RecoveryRequiredPage | SQLite operational state, owned artifact paths, FastAPI artifact/recovery routes |
 | immutable-evidence | Immutable evidence/artifact layer | Represent runtime scientific/execution lineage owned by domain contracts; evidence/ and artifacts/ are runtime-only and intentionally absent from the public source repository. | artifacts/, evidence/, docs/audits/ | domain services and artifact registry |
-| governance | Current project governance | Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth for the GitHub-hosted workflow. | PROJECT_PROFILE.yaml, .workflow/*.json, .workflow/workflows/*.json, .workflow/tools/*.py, docs/sequence/sessions/*.json, docs/sequence/generated/*.actual.json, docs/sequence/generated/*.actual.mmd | Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8, GitHub Actions windows-latest hosted validation |
+| governance | Current project governance | Compile semantic specs plus code facts into reproducible canonical docs/ projections and validate sequence/project truth for the GitHub-hosted workflow. | PROJECT_PROFILE.yaml, .workflow/*.json, .workflow/workflows/*.json, .workflow/tools/*.py, docs/sequence/sessions/*.json, docs/sequence/generated/*.actual.json, docs/sequence/generated/*.actual.mmd | Skill Workflow 964481ed1609f87904ba9e08890bffc0a10c3fd4, GitHub Actions windows-latest hosted validation |
 
 ## Data flow
 
@@ -43,9 +43,9 @@ Current source digest: 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de
 
 ## Observed implementation inventory
 
-Source files: 116
-Source lines: 53028
-Languages: PowerShell=2, Python=94, TypeScript=3, TypeScript/React=17
+Source files: 118
+Source lines: 54778
+Languages: PowerShell=2, Python=96, TypeScript=3, TypeScript/React=17
 
 Structural facts come from the code extractor. Component meaning comes from
 .workflow/architecture.json.
