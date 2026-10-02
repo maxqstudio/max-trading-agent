@@ -10,9 +10,9 @@ Governance profile: strict
 
 ## Repositories
 Repository: maxqstudio/max-trading-agent
-Active branch: work/optimizer-mt5-resource-safety
+Active branch: main
 Current authoritative SHA: external final acceptance evidence
-Last accepted SHA: 80efac39312218ff8bd6ba05269791c69a3b9061
+Last accepted SHA: 7f3fade6fd71892266ad18a178dab9d503b5ce77
 Current source digest: 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826
 
 ## Authorities

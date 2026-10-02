@@ -7,7 +7,7 @@
     "build": "PASS_LOCAL",
     "frontend": "PASS_LOCAL: 53 passed / 8 files",
     "frontend_targeted": "PASS_LOCAL: 19 Optimizer UI tests / 1 file including terminal resource-evidence refresh",
-    "hosted_ci": "NOT_RUN",
+    "hosted_ci": "PASS_EXACT_MAIN: Windows CI run 36964266890 completed successfully on merged main 7f3fade6fd71892266ad18a178dab9d503b5ce77 after PR #15.",
     "lint": "PASS_LOCAL_NO_WARNINGS",
     "npm_tree": "PASS_LOCAL",
     "owner_runtime": "BOUNDED_RESOURCE_DIAGNOSTICS_PASS; full Owner Optimizer acceptance NOT_PROVEN",
@@ -17,11 +17,11 @@
     "schema_version": 15,
     "sequence": "PASS_LOCAL: 8/8 DURING/CURRENT sessions; canonical actual graphs regenerated from current source digest 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826.",
     "skill_workflow_current_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
-    "source_only_scan": "NOT_RUN_FINAL_HEAD: rerun after final source/governance commit",
+    "source_only_scan": "PASS_EXACT_MAIN: Source-only policy and exact-tree secret scan passed on 7f3fade6fd71892266ad18a178dab9d503b5ce77; 247 tracked text files scanned, 0 detected plaintext-secret matches.",
     "synthetic_optimizer_profile": "PASS_LOCAL: 750-candidate synthetic profile, 12 requests/endpoint; actual qualified-page median 23.651 ms/p95 68.983 ms, 61,462-byte response. Separate Windows process profile measured CPU/RSS/read/write I/O with the qualified route mocked. No real MT5 or Owner DB used; temporary test DB/evidence cleanup was rejected by shell policy."
   },
-  "current_phase_status": "IN_PROGRESS",
-  "evidence_boundary": "Starting authority is exact maxqstudio/max-trading-agent main 80efac39312218ff8bd6ba05269791c69a3b9061 on work/optimizer-mt5-resource-safety. Source/unit/UI acceptance uses local tests. In addition, Owner-authorized bounded real-MT5 diagnostics were executed only to prove the resource controller: Stage C used a 2D/9-pass Slow Complete workload; Stage D used all 17 dimensions with Fast Genetic and a short cheap interval. These diagnostics prove bounded local-agent concurrency and RAM safety behavior, not full production-scale Optimizer/Challenger/Champion acceptance. Fresh R00-R11 remain roadmap-gated.",
+  "current_phase_status": "ACCEPTED",
+  "evidence_boundary": "Accepted source authority is exact maxqstudio/max-trading-agent main 7f3fade6fd71892266ad18a178dab9d503b5ce77 after merged PR #15. Post-merge Windows CI run 36964266890 passed on that exact main, including Source-only policy, exact-tree secret scan (247 tracked text files, 0 detected plaintext-secret matches), pinned Skill Workflow selftests/governance, backend tests, frontend tests/lint/build, and dependency checks. Previously recorded bounded Owner-PC MT5/browser diagnostics remain provenance for resource-control behavior only; this governance closeout produces no new runtime evidence. Full production-scale/long-range Optimizer → Challenger → Champion → real MT5 backtest acceptance remains NOT_PROVEN. Fresh R00-R11 Research remains NOT_STARTED / PAUSED and roadmap-gated.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
     "How does important data flow through the system?": "PASS",
@@ -81,16 +81,16 @@
       "status": "PASS_LOCAL"
     },
     {
-      "evidence": "Backend 456/456; frontend 53/53 across 8 files; lint 0 warnings/errors; build/npm/pip PASS. Final source-only and governance are rerun after candidate commit.",
+      "evidence": "Exact merged-main Windows CI run 36964266890 passed Backend and Skill Workflow, Frontend, Source-only policy, dependency checks, and governance on 7f3fade6fd71892266ad18a178dab9d503b5ce77; backend 456/456 passed in hosted CI.",
       "id": "REGRESSION-01",
       "requirement": "Full current backend/frontend regressions, dependency checks, build, governance validators, and exact-tree source-only scan pass without unexplained skips or failures.",
-      "status": "PASS_LOCAL"
+      "status": "PASS_EXACT_MAIN"
     },
     {
-      "evidence": "External GitHub Actions run bound to exact candidate SHA.",
+      "evidence": "PR #15 is merged; Windows CI run 36964266890 completed SUCCESS on exact merged main 7f3fade6fd71892266ad18a178dab9d503b5ce77.",
       "id": "HOSTED-01",
       "requirement": "Windows GitHub Actions passes on the exact PR head and exact merged main before phase closure.",
-      "status": "NOT_PROVEN"
+      "status": "PASS_EXACT_MAIN"
     },
     {
       "evidence": "Bounded real-MT5 resource diagnostics passed; full normal Owner Optimizer workflow remains deferred and NOT_PROVEN.",
@@ -143,9 +143,9 @@
   ],
   "results": {
     "hosted_ci": {
-      "run_id": null,
-      "status": "NOT_PROVEN",
-      "tested_sha": null
+      "run_id": 36964266890,
+      "status": "PASS",
+      "tested_sha": "7f3fade6fd71892266ad18a178dab9d503b5ce77"
     },
     "regression": {
       "backend_full_status": "PASS_LOCAL: 456 passed, 0 skipped, 0 failed in 530.11s",
@@ -186,10 +186,10 @@
     },
     "skill_authority_sha": "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
     "source_only_scan": {
-      "candidate_sha": null,
-      "matches": null,
-      "status": "NOT_RUN_FINAL_HEAD",
-      "tracked_text_files": null
+      "candidate_sha": "7f3fade6fd71892266ad18a178dab9d503b5ce77",
+      "matches": 0,
+      "status": "PASS",
+      "tracked_text_files": 247
     },
     "synthetic_optimizer_profile": {
       "baseline_from_prechange_terminal_evidence": {
@@ -271,7 +271,7 @@
     "PASS_BOUNDED: real MT5 Stage C resource-control diagnostic, 2 dimensions / 9 passes, parsed 9, frozen/observed agents 3/3, rc=0, SAFE.",
     "PASS_BOUNDED: real MT5 Stage D queue-stress diagnostic, 17 dimensions, raw Cartesian context 18,259,010,497,728,000, 512 report rows, frozen/observed agents 2/2, rc=0, SAFE.",
     "PASS_BOUNDED_REAL_BROWSER: live frontend/backend draft persistence across page/backend restart, native MT5 START/STOP, observed 2/2 agent cap, clean STOP, authoritative final UI resource evidence, and Owner draft restoration.",
-    "NOT_RUN: full production-scale/long-range Owner Optimizer \u2192 Challenger \u2192 Champion \u2192 backtest workflow.",
+    "NOT_RUN: full production-scale/long-range Owner Optimizer → Challenger → Champion → backtest workflow.",
     "NOT_RUN: real R00-R11 Research execution, model training, ONNX, Research Challenger creation, or Champion mutation."
   ],
   "runtime_status": "BOUNDED_REAL_MT5_RESOURCE_DIAGNOSTICS_PASS_FULL_OWNER_ACCEPTANCE_REQUIRED",

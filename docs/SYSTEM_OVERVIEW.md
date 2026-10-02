@@ -164,7 +164,7 @@ Authority: SQLite integrity/recovery status plus exact Owner confirmation and ve
 
 Current phase: STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING
 
-Current status: IN_PROGRESS
+Current status: ACCEPTED
 
 See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 
@@ -252,40 +252,37 @@ compiler does not infer them from implementation names.
 ## Current project state
 
 Next authorized actions:
-- Complete only STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING resource-safety repair; finish governance/security scans and exact local acceptance.
-- Push work/optimizer-mt5-resource-safety, require green Windows CI on the exact PR head, and stop before merge for Control Room review.
-- After source acceptance, Owner may run the normal full Strategy Optimizer workflow; the bounded diagnostics here do not substitute for that acceptance.
-- Fresh R00-R11 remains blocked until a real MT5 sample is Owner-declared READY and Control Room separately authorizes the next source phase.
+- Owner may manually run the normal full Strategy Optimizer → Challenger selection → Champion promotion → real MT5 backtest/sample workflow; the bounded diagnostics do not substitute for that acceptance.
+- Fresh R00-R11 remains blocked until a real MT5 backtest/sample is Owner-declared READY and Control Room separately authorizes the next source phase.
+- No automatic Optimizer, MT5, Research, or Champion mutation is authorized by this governance closeout.
 
 Blocked actions:
-- Further production-scale or long-running real MT5 Optimizer execution beyond the bounded resource-safety diagnostics completed for this repair; full Owner acceptance remains deferred until hosted source acceptance.
-- Automatic or unattended real Optimizer execution; the completed Stage C/D real-MT5 runs were explicit bounded repair diagnostics only.
-- Fresh R00-R11 Research execution, real model training, Research dataset creation, ONNX, Research Challenger creation, and Champion mutation; Research remains paused and roadmap-gated.
-- Strategy Challenger selection/promotion and live MT5 backtest during this source implementation phase.
+- Automatic or unattended real Optimizer execution, or treating the bounded resource-safety diagnostics as full Owner Optimizer acceptance.
+- Fresh R00-R11 Research execution, real model training, Research dataset creation, ONNX, Research Challenger creation, and Champion mutation; Research remains paused and roadmap-gated until REAL_MT5_BACKTEST_SAMPLE_READY and separate Control Room authorization.
 - Unrelated roadmap or product-scope expansion.
 
 Known blockers:
-- Exact hosted PR/main Windows CI acceptance for this resource-safety candidate is not yet proven.
-- Full Owner Strategy Optimizer workflow and production-scale runtime acceptance remain NOT_PROVEN; only bounded resource-safety diagnostics are proven.
+- Full production-scale/long-range Owner Strategy Optimizer → Challenger → Champion → real MT5 backtest acceptance remains NOT_PROVEN; only the previously recorded bounded resource-safety diagnostics are proven.
+- REAL_MT5_BACKTEST_SAMPLE_READY has not been declared; fresh R00-R11 Research remains NOT_STARTED / PAUSED and roadmap-gated.
 
 ## Proven vs not proven
 
 ### Proven
 
-- Accepted starting floor: backend 410 passed, frontend 46 passed across 8 files, schema 14; Skill Workflow authority is 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8.
-- Current Skill_Workflow/main was fetched and verified unchanged at 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8; no newer tools or validator patches were adopted.
-- Optimizer draft, launch/recovery identity, atomic evidence, read-model, frontend request lifecycle, and visible action feedback are under the authorized source-hardening scope.
-- Source tests and 750-candidate API profile used synthetic SQLite/evidence only; actual qualified-candidate endpoint median was 23.651 ms, p95 68.983 ms, with a 61,462-byte page; no real MT5 or market data was used.
+- Accepted main authority after PR #15 is 7f3fade6fd71892266ad18a178dab9d503b5ce77; PR #15 is MERGED and post-merge Windows CI run 36964266890 passed on that exact main SHA.
+- Exact-main Source-only policy passed; the exact-tree secret scan on 7f3fade6fd71892266ad18a178dab9d503b5ce77 scanned 247 tracked text files with 0 detected plaintext-secret matches.
+- Accepted starting floor before Optimizer hardening: backend 410 passed, frontend 46 passed across 8 files, schema 14; Skill Workflow authority is 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8.
+- Current Skill_Workflow authority remains pinned at 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 and exact-main CI verified the vendored tool provenance plus strict/project-truth selftests.
+- Optimizer draft, launch/recovery identity, atomic evidence, read-model, frontend request lifecycle, visible action feedback, and MT5 resource admission/resource-stop controls are accepted source behavior at the merged main authority.
+- Source tests and 750-candidate API profile used synthetic SQLite/evidence only; actual qualified-candidate endpoint median was 23.651 ms, p95 68.983 ms, with a 61,462-byte page; no additional runtime evidence is created by this governance closeout.
 - A separate Windows process-counter run measured CPU 1.0781 s, peak working set 64,405,504 bytes, read I/O 6,060,864 bytes and write I/O 0 over 108 requests; qualified route was mocked in that resource run.
-- Starting source authority for this repair is exact main 80efac39312218ff8bd6ba05269791c69a3b9061; work is isolated on work/optimizer-mt5-resource-safety.
 - Bounded real-MT5 Stage C passed: native Slow Complete, 2 optimized dimensions / 9 passes, AUTO_SAFE resolved cap 3, actual max 3 agents, 9 parsed passes, MT5 return code 0, resource state SAFE.
 - Bounded real-MT5 Stage D passed: native Fast Genetic with all 17 optimizer dimensions and raw Cartesian context 18,259,010,497,728,000; MT5 produced 512 report rows while AUTO_SAFE resolved cap 2 and actual max remained 2, return code 0, resource state SAFE.
-- Real headless Chrome click-through against live Vite + live backend passed: draft persisted across reload and backend restart; bounded native MT5 START observed 2/2 local agents; STOP reached STOPPED, no MT5/tester processes remained, final UI refreshed authoritative 2/2 resource evidence; original 17D Fast Genetic Owner draft was restored.
+- Previously recorded real headless Chrome click-through against live Vite + live backend passed: draft persisted across reload and backend restart; bounded native MT5 START observed 2/2 local agents; STOP reached STOPPED, no MT5/tester processes remained, final UI refreshed authoritative 2/2 resource evidence; original 17D Fast Genetic Owner draft was restored.
 
 ### Not proven
 
-- Exact branch/PR/main Windows CI and external final-SHA acceptance under D-012.
-- Full production-scale/long-range Owner Strategy Optimizer execution, Challenger selection, Champion promotion, MT5 backtest, and end-to-end runtime acceptance.
+- Full production-scale/long-range Owner Strategy Optimizer execution, Challenger selection, Champion promotion, real MT5 backtest, and end-to-end runtime acceptance.
 - Fresh R00-R11 Research execution, model training, ONNX, Research Challenger creation, or Champion mutation.
 
 ## Important limitations
