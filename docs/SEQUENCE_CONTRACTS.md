@@ -16,14 +16,14 @@ Status: CURRENT
 
 | Flow | Mode | Critical | Sequence session | Status |
 |---|---|---|---|---|
-| FLOW-ARTIFACT-CONTROL | DURING | YES | docs/sequence/sessions/FLOW-ARTIFACT-CONTROL.json | PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa. |
-| FLOW-CHALLENGER-CONSUMPTION | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-CONSUMPTION.json | PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa. |
-| FLOW-CHALLENGER-DETAIL | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-DETAIL.json | PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa. |
-| FLOW-CHALLENGER-TO-CHAMPION | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-TO-CHAMPION.json | PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa. |
-| FLOW-OPTIMIZER-DURABILITY-PERFORMANCE | DURING | YES | docs/sequence/sessions/FLOW-OPTIMIZER-DURABILITY-PERFORMANCE.json | PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa. |
-| FLOW-OPTIMIZER-TO-CHALLENGER | DURING | YES | docs/sequence/sessions/FLOW-OPTIMIZER-TO-CHALLENGER.json | PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa. |
-| FLOW-SCIENTIST-KNOWLEDGE | DURING | YES | docs/sequence/sessions/FLOW-SCIENTIST-KNOWLEDGE.json | PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa. |
-| FLOW-STRATEGY-RESET-RECOVERY | DURING | YES | docs/sequence/sessions/FLOW-STRATEGY-RESET-RECOVERY.json | PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 6a5fa55de80a7b95ab1c23dd514218ef7bf99e615cfdfe7b37fcbb5a182ae7aa. |
+| FLOW-ARTIFACT-CONTROL | DURING | YES | docs/sequence/sessions/FLOW-ARTIFACT-CONTROL.json | PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682. |
+| FLOW-CHALLENGER-CONSUMPTION | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-CONSUMPTION.json | PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682. |
+| FLOW-CHALLENGER-DETAIL | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-DETAIL.json | PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682. |
+| FLOW-CHALLENGER-TO-CHAMPION | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-TO-CHAMPION.json | PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682. |
+| FLOW-OPTIMIZER-DURABILITY-PERFORMANCE | DURING | YES | docs/sequence/sessions/FLOW-OPTIMIZER-DURABILITY-PERFORMANCE.json | PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682. |
+| FLOW-OPTIMIZER-TO-CHALLENGER | DURING | YES | docs/sequence/sessions/FLOW-OPTIMIZER-TO-CHALLENGER.json | PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682. |
+| FLOW-SCIENTIST-KNOWLEDGE | DURING | YES | docs/sequence/sessions/FLOW-SCIENTIST-KNOWLEDGE.json | PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682. |
+| FLOW-STRATEGY-RESET-RECOVERY | DURING | YES | docs/sequence/sessions/FLOW-STRATEGY-RESET-RECOVERY.json | PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682. |
 
 ## Mismatch handling
 

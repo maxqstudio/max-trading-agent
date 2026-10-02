@@ -7,7 +7,7 @@
       "backend/max_backend/scientist_api.py::get_status"
     ],
     "graph": "docs/sequence/generated/FLOW-SCIENTIST-KNOWLEDGE.actual.json",
-    "source_digest": "123761d665d2fff6c17825997cb3ebea852d574474d159927b691437c1841ce2"
+    "source_digest": "7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682"
   },
   "critical": true,
   "implementation_base_sha": "eb6192873eb518b9fe4c7f15d03600ca4ac1e73d",

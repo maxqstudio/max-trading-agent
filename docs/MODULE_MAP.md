@@ -3,14 +3,12 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 123761d665d2fff6c17825997cb3ebea852d574474d159927b691437c1841ce2
+Source digest: 7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
 |---|---|---:|---|---|
 | INSTALL.ps1 | PowerShell | 61 | . | NO |
-| artifacts/optimizer/20261002_024535_f0337108/round_01/committed/Max_MTF.xml | XML | 179 | artifacts/optimizer/20261002_024535_f0337108/round_01/committed | NO |
-| artifacts/optimizer/20261002_024535_f0337108/round_01/committed/raw_Max_MTF.xml | XML | 179 | artifacts/optimizer/20261002_024535_f0337108/round_01/committed | NO |
 | backend/max_backend/__init__.py | Python | 1 | backend/max_backend | NO |
 | backend/max_backend/artifact_api.py | Python | 151 | backend/max_backend | NO |
 | backend/max_backend/artifact_control.py | Python | 1957 | backend/max_backend | NO |

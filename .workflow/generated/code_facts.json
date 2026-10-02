@@ -20,20 +20,6 @@
       "lines": 61
     },
     {
-      "directory": "artifacts/optimizer/20261002_024535_f0337108/round_01/committed",
-      "file": "artifacts/optimizer/20261002_024535_f0337108/round_01/committed/Max_MTF.xml",
-      "is_test": false,
-      "language": "XML",
-      "lines": 179
-    },
-    {
-      "directory": "artifacts/optimizer/20261002_024535_f0337108/round_01/committed",
-      "file": "artifacts/optimizer/20261002_024535_f0337108/round_01/committed/raw_Max_MTF.xml",
-      "is_test": false,
-      "language": "XML",
-      "lines": 179
-    },
-    {
       "directory": "backend/max_backend",
       "file": "backend/max_backend/__init__.py",
       "is_test": false,
@@ -72824,17 +72810,16 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "123761d665d2fff6c17825997cb3ebea852d574474d159927b691437c1841ce2",
+  "source_digest": "7753aa8d1fe440e85928e93447d3b6d474232ebc7a7dccfc76163c692e853682",
   "source_summary": {
-    "files": 118,
+    "files": 116,
     "languages": {
       "PowerShell": 2,
       "Python": 94,
       "TypeScript": 3,
-      "TypeScript/React": 17,
-      "XML": 2
+      "TypeScript/React": 17
     },
-    "lines": 53385,
+    "lines": 53027,
     "test_files": 38
   },
   "tests": [
