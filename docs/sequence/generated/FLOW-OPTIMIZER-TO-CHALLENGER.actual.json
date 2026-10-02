@@ -2179,8 +2179,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::_float",
       "language": "Python",
-      "line_end": 899,
-      "line_start": 886,
+      "line_end": 903,
+      "line_start": 890,
       "locator": "backend/max_backend/optimizer_core.py::_float"
     },
     {
@@ -2188,8 +2188,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::_int",
       "language": "Python",
-      "line_end": 906,
-      "line_start": 902,
+      "line_end": 910,
+      "line_start": 906,
       "locator": "backend/max_backend/optimizer_core.py::_int"
     },
     {
@@ -2215,8 +2215,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::_parse_frame_inputs",
       "language": "Python",
-      "line_end": 946,
-      "line_start": 927,
+      "line_end": 950,
+      "line_start": 931,
       "locator": "backend/max_backend/optimizer_core.py::_parse_frame_inputs"
     },
     {
@@ -2224,8 +2224,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::_row_values",
       "language": "Python",
-      "line_end": 883,
-      "line_start": 878,
+      "line_end": 887,
+      "line_start": 882,
       "locator": "backend/max_backend/optimizer_core.py::_row_values"
     },
     {
@@ -2233,8 +2233,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::_strip_ns",
       "language": "Python",
-      "line_end": 875,
-      "line_start": 874,
+      "line_end": 879,
+      "line_start": 878,
       "locator": "backend/max_backend/optimizer_core.py::_strip_ns"
     },
     {
@@ -2242,8 +2242,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::apply_frozen_gates",
       "language": "Python",
-      "line_end": 1448,
-      "line_start": 1440,
+      "line_end": 1452,
+      "line_start": 1444,
       "locator": "backend/max_backend/optimizer_core.py::apply_frozen_gates"
     },
     {
@@ -2251,8 +2251,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::eligibility_audit",
       "language": "Python",
-      "line_end": 1527,
-      "line_start": 1477,
+      "line_end": 1531,
+      "line_start": 1481,
       "locator": "backend/max_backend/optimizer_core.py::eligibility_audit"
     },
     {
@@ -2269,8 +2269,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::optimization_report_identity",
       "language": "Python",
-      "line_end": 1141,
-      "line_start": 1117,
+      "line_end": 1145,
+      "line_start": 1121,
       "locator": "backend/max_backend/optimizer_core.py::optimization_report_identity"
     },
     {
@@ -2314,8 +2314,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::parameter_signature",
       "language": "Python",
-      "line_end": 924,
-      "line_start": 909,
+      "line_end": 928,
+      "line_start": 913,
       "locator": "backend/max_backend/optimizer_core.py::parameter_signature"
     },
     {
@@ -2323,8 +2323,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::parse_optimization_xml",
       "language": "Python",
-      "line_end": 1438,
-      "line_start": 1159,
+      "line_end": 1442,
+      "line_start": 1163,
       "locator": "backend/max_backend/optimizer_core.py::parse_optimization_xml"
     },
     {
@@ -2332,8 +2332,8 @@
       "kind": "method",
       "label": "backend/max_backend/optimizer_core.py::parse_optimization_xml.at",
       "language": "Python",
-      "line_end": 1242,
-      "line_start": 1241,
+      "line_end": 1246,
+      "line_start": 1245,
       "locator": "backend/max_backend/optimizer_core.py::parse_optimization_xml.at"
     },
     {
@@ -2341,8 +2341,8 @@
       "kind": "method",
       "label": "backend/max_backend/optimizer_core.py::parse_optimization_xml.column",
       "language": "Python",
-      "line_end": 1213,
-      "line_start": 1209,
+      "line_end": 1217,
+      "line_start": 1213,
       "locator": "backend/max_backend/optimizer_core.py::parse_optimization_xml.column"
     },
     {
@@ -2350,8 +2350,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv",
       "language": "Python",
-      "line_end": 1115,
-      "line_start": 949,
+      "line_end": 1119,
+      "line_start": 953,
       "locator": "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv"
     },
     {
@@ -2359,8 +2359,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::parse_set_optimizer_entries",
       "language": "Python",
-      "line_end": 834,
-      "line_start": 809,
+      "line_end": 838,
+      "line_start": 813,
       "locator": "backend/max_backend/optimizer_core.py::parse_set_optimizer_entries"
     },
     {
@@ -2377,8 +2377,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::report_matches_request",
       "language": "Python",
-      "line_end": 1156,
-      "line_start": 1144,
+      "line_end": 1160,
+      "line_start": 1148,
       "locator": "backend/max_backend/optimizer_core.py::report_matches_request"
     },
     {
@@ -2386,8 +2386,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::select_winner",
       "language": "Python",
-      "line_end": 1474,
-      "line_start": 1459,
+      "line_end": 1478,
+      "line_start": 1463,
       "locator": "backend/max_backend/optimizer_core.py::select_winner"
     },
     {
@@ -2395,8 +2395,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_core.py::unresolved_weighted_contenders",
       "language": "Python",
-      "line_end": 1456,
-      "line_start": 1451,
+      "line_end": 1460,
+      "line_start": 1455,
       "locator": "backend/max_backend/optimizer_core.py::unresolved_weighted_contenders"
     },
     {
@@ -2652,7 +2652,7 @@
       "locator": "backend/tests/test_m01_recovery.py::good_pass"
     }
   ],
-  "observed_head": "26cd11724719e7f220042c6ae164f34b4aa83f8f",
+  "observed_head": "7f3fade6fd71892266ad18a178dab9d503b5ce77",
   "schema_version": 1,
-  "source_digest": "05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826"
+  "source_digest": "00f0ef0b45150135315cd619f2976a134579c4e63c9e75527bc4f15d33267af2"
 }

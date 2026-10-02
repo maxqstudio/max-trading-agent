@@ -27,7 +27,11 @@
         "Round raw evidence is frozen and verified; derived evidence publishes as one immutable bundle before database authority advances; replay is deterministic and partial staging cannot masquerade as committed evidence.",
         "Qualified-candidate reads use a bounded SQLite projection with server-side pagination; Challenger mutation still verifies retained canonical evidence.",
         "Frontend preview/search/poll/mutation requests cancel or reject stale responses, are bounded/adaptive, and display immediate pending/block/success/error feedback.",
-        "Synthetic performance/resource measurements and regression tests show ordinary reads do not reparse or rehash retained MT5 evidence; no real Optimizer or MT5 execution is used as CI evidence.",
+        "Resource preflight and immediate prelaunch revalidation account for current Windows commit headroom as well as physical RAM, CPU and local-agent capacity; Custom settings cannot lower hard safety floors.",
+        "Native bounded runtime telemetry identifies only the exact Job Object-owned terminal/tester processes, records PrivateUsage and working-set high-water values, and fail-closes to verified stop or RECONCILIATION_REQUIRED on pressure/telemetry loss.",
+        "Compatible workload calibration is read-only and reuses bounded existing round state without a schema bump; workload identity binds EA SHA, MT5 build, symbol/timeframe/history, tick model, optimization mode and search-space size.",
+        "Synthetic resource/runtime regressions show bounded memory-state storage, no PowerShell/CIM hot-loop polling, complete process-handle closure, commit-pressure stop behavior, and prelaunch re-admission; real Owner diagnostics are separate, explicitly bounded and never run to full completion.",
+        "Historical PR15 bounded Stage C/D successes remain recorded but do not override the subsequent Owner-reported long-range commit-memory crash; no research/scientific semantics or search-space dimensions change.",
         "Backend/frontend regression, zero-warning lint, build, dependency checks, source-only/security, governance and exact Windows CI pass; Owner runtime remains NOT_PROVEN."
       ]
     },

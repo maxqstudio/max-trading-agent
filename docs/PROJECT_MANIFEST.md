@@ -10,10 +10,10 @@ Governance profile: strict
 
 ## Repositories
 Repository: maxqstudio/max-trading-agent
-Active branch: work/optimizer-mt5-resource-safety
+Active branch: work/optimizer-commit-memory-resource-safety-v2
 Current authoritative SHA: external final acceptance evidence
-Last accepted SHA: 80efac39312218ff8bd6ba05269791c69a3b9061
-Current source digest: 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826
+Last accepted SHA: 7f3fade6fd71892266ad18a178dab9d503b5ce77
+Current source digest: 00f0ef0b45150135315cd619f2976a134579c4e63c9e75527bc4f15d33267af2
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.
@@ -76,4 +76,4 @@ Generated from PROJECT_PROFILE.yaml.
 - Optimizer read projections may accelerate ordinary listing only; candidate-to-Challenger mutations still revalidate retained canonical evidence.
 - Builder verification uses synthetic temporary databases/evidence and mocked or isolated process boundaries; it does not run a real Owner MT5 optimization or touch the Owner operational database.
 - Destructive Strategy reset requires explicit confirmation, verified backup and ownership-scoped cleanup; ordinary cleanup remains a distinct action.
-- Current governance method is Skill Workflow exact SHA 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 with roadmap authority, generated documentation and DURING sequence evidence.
+- Current governance method is Skill Workflow exact SHA 64836990609cd1ab22f9517be5aaffc14ad19ea9 with roadmap authority, generated documentation and DURING sequence evidence.

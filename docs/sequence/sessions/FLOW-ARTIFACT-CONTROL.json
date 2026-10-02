@@ -16,7 +16,7 @@
       "backend/max_backend/artifact_control.py::clean_generated_data"
     ],
     "graph": "docs/sequence/generated/FLOW-ARTIFACT-CONTROL.actual.json",
-    "source_digest": "05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826"
+    "source_digest": "00f0ef0b45150135315cd619f2976a134579c4e63c9e75527bc4f15d33267af2"
   },
   "critical": true,
   "implementation_base_sha": "e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d",

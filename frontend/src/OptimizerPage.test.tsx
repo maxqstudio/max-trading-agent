@@ -151,10 +151,11 @@ function defaultDraft() {
 
 function safeResourcePreflight() {
   return {
-    schema: 'MAX_OPTIMIZER_RESOURCE_POLICY_V1', mode: 'AUTO_SAFE', status: 'SAFE', reason: null,
-    detected: { physical_cores: 6, logical_processors: 12, total_ram_bytes: 34359738368, available_ram_bytes: 21474836480, configured_local_agent_capacity: 12, mt5_build: '5.0.0.6231' },
-    minimum_free_ram_bytes: 6442450944, safe_mt5_ram_budget_bytes: 12884901888, cpu_reserve_logical: 2, resolved_max_local_agents: 2,
-    workload: { optimization_name: 'Fast Genetic', optimized_parameter_count: 17, raw_complete_grid_combinations: 10, from_date: '2021.01.01', to_date: '2024.12.31', tick_model_name: '1 minute OHLC' },
+    schema: 'MAX_OPTIMIZER_RESOURCE_POLICY_V2', mode: 'AUTO_SAFE', status: 'SAFE', reason: null,
+    detected: { physical_cores: 6, logical_processors: 12, total_ram_bytes: 34359738368, available_ram_bytes: 21474836480, commit_charge_bytes: 12884901888, commit_limit_bytes: 68719476736, commit_headroom_bytes: 55834574848, configured_local_agent_capacity: 12, local_agent_capacity_source: 'MT5_AGENT_DIRECTORIES', mt5_build: '5.0.0.6231' },
+    minimum_free_ram_bytes: 6442450944, safe_mt5_ram_budget_bytes: 12884901888, protected_system_commit_reserve_bytes: 6871947673, minimum_commit_headroom_bytes: 9022998521, safe_job_commit_budget_bytes: 46815143527, terminal_commit_budget_bytes: 15032385536, per_agent_commit_budget_bytes: 12884901888, terminal_memory_budget_bytes: 6442450944, per_agent_memory_budget_bytes: 4294967296,
+    cpu_reserve_logical: 2, requested_max_local_agents: 2, safe_agent_cap: 2, resolved_max_local_agents: 2, calibration_status: 'NONE', estimation_source: 'CONSERVATIVE_FALLBACK',
+    workload: { compatibility_key: 'a'.repeat(64), symbol: 'XAUUSD.m', period: 'H1', history_span_bucket: '3Y+', optimization_name: 'Fast Genetic', optimized_parameter_count: 17, raw_complete_grid_combinations: 10, from_date: '2021.01.01', to_date: '2024.12.31', tick_model_name: '1 minute OHLC' },
   }
 }
 
@@ -1069,6 +1070,11 @@ describe('M08 qualified candidate control', () => {
     render(<OptimizerPage />)
     const start = await screen.findByRole('button', { name: 'START OPTIMIZER' })
     await waitFor(() => expect(start).toBeEnabled(), { timeout: 1500 })
+    expect(screen.getByText('Windows commit')).toBeInTheDocument()
+    expect(screen.getByText('Commit estimates')).toBeInTheDocument()
+    expect(screen.getByText('Agent limit')).toBeInTheDocument()
+    expect(screen.getByText('MT5 local-agent ceiling')).toBeInTheDocument()
+    expect(screen.getByText(/Conservative workload-based fallback/)).toBeInTheDocument()
     act(() => {
       start.click()
       start.click()

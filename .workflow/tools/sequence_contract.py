@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import subprocess
 from pathlib import Path
@@ -52,11 +53,55 @@ def git_head(root: Path) -> str:
 
 
 def source_files(root: Path) -> list[Path]:
+    root = root.resolve()
+    try:
+        repo_root = Path(git(root, "rev-parse", "--show-toplevel")).resolve()
+    except (OSError, subprocess.CalledProcessError):
+        repo_root = None
+
+    if repo_root is not None:
+        try:
+            root.relative_to(repo_root / ".git")
+            inside_git_metadata = True
+        except ValueError:
+            inside_git_metadata = False
+
+    if repo_root is not None and not inside_git_metadata:
+        try:
+            indexed_paths = subprocess.check_output(
+                [
+                    "git",
+                    "-C",
+                    str(root),
+                    "ls-files",
+                    "--cached",
+                    "--others",
+                    "--exclude-standard",
+                    "-z",
+                ],
+                stderr=subprocess.STDOUT,
+            )
+            candidates = (
+                root / Path(os.fsdecode(item))
+                for item in indexed_paths.split(b"\0")
+                if item
+            )
+        except (OSError, subprocess.CalledProcessError) as exc:
+            raise RuntimeError("SOURCE_INVENTORY_GIT_QUERY_FAILED") from exc
+    else:
+        # Project Truth self-tests and ad-hoc fixtures may live outside a Git
+        # worktree. Preserve filesystem discovery there; repository builds use
+        # Git's tracked + non-ignored untracked paths for reproducibility.
+        candidates = root.rglob("*")
+
     result: list[Path] = []
-    for path in root.rglob("*"):
+    for path in candidates:
         if not path.is_file() or path.suffix.lower() not in SOURCE_EXTENSIONS:
             continue
-        rel = path.relative_to(root)
+        try:
+            rel = path.relative_to(root)
+        except ValueError:
+            continue
         if any(part in SOURCE_EXCLUDED_PARTS for part in rel.parts):
             continue
         result.append(path)
@@ -64,12 +109,14 @@ def source_files(root: Path) -> list[Path]:
 
 
 def compute_source_digest(root: Path) -> str:
+    root = root.resolve()
     digest = hashlib.sha256()
     for path in source_files(root):
         rel = path.relative_to(root).as_posix().encode("utf-8")
         digest.update(rel)
         digest.update(b"\0")
-        digest.update(path.read_bytes())
+        # Windows Git checkouts may materialize canonical LF files as CRLF.
+        digest.update(path.read_bytes().replace(b"\r\n", b"\n"))
         digest.update(b"\0")
     return digest.hexdigest()
 

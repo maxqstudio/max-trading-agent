@@ -44,6 +44,7 @@ from .optimizer_runtime import (
     write_state_snapshot,
 )
 from .optimizer_resource_runtime import ResourceGuardTriggered
+from .optimizer_resources import frozen_resource_admission
 from .workflow_contract import (
     OPTIMIZER_TERMINAL_QUALIFIED_POOL,
     optimizer_uses_owner_selection,
@@ -217,6 +218,15 @@ def execute_round(
     if phase == "PREPARED":
         if sha256_file(EA_BASELINE) != request["ea"]["sha256"]:
             raise RuntimeError("EA_CHANGED_AFTER_REQUEST_FREEZE")
+        admission = frozen_resource_admission(
+            request.get("resource_policy") or {},
+            mt5=request.get("mt5") or {},
+        )
+        if admission.get("status") != "SAFE":
+            raise RuntimeError(
+                "RESOURCE_PREFLIGHT_BLOCKED: "
+                + str(admission.get("reason") or "Current physical RAM or Windows commit is unsafe.")
+            )
         prelaunch = snapshot_compatible_reports(request)
         clear_stale_sidecar(state)
         state = _save_phase(
@@ -265,22 +275,41 @@ def execute_round(
                 on_resource=record_resource,
             )
         except ResourceGuardTriggered as exc:
+            reconciliation_required = (
+                exc.summary.get("resource_state") == "RESOURCE_RECONCILIATION_REQUIRED"
+            )
+            terminal_status = (
+                "RECONCILIATION_REQUIRED" if reconciliation_required else "RESOURCE_STOPPED"
+            )
+            terminal_phase = (
+                "RESOURCE_RECONCILIATION_REQUIRED"
+                if reconciliation_required
+                else "RESOURCE_STOPPED"
+            )
             state = _save_phase(
                 job_id,
                 round_no,
                 state,
-                "RESOURCE_STOPPED",
+                terminal_phase,
                 resource_runtime=exc.summary,
                 resource_stop_reason=exc.reason,
             )
             update_job(
                 job_id,
-                status="RESOURCE_STOPPED",
+                status=terminal_status,
                 active=False,
                 current_round=round_no,
-                message="Optimizer stopped by the resource safety guard; resume is allowed after resources recover.",
-                first_blocker="OPTIMIZER_RESOURCE_GUARD",
-                terminal_result="RESOURCE_STOPPED",
+                message=(
+                    "Optimizer stop could not be verified; execution is blocked pending process reconciliation."
+                    if reconciliation_required
+                    else "Optimizer stopped by the verified resource safety guard; resume requires fresh admission."
+                ),
+                first_blocker=(
+                    "OPTIMIZER_RESOURCE_STOP_UNVERIFIED"
+                    if reconciliation_required
+                    else "OPTIMIZER_RESOURCE_GUARD"
+                ),
+                terminal_result=terminal_status,
             )
             raise
         state = _save_phase(

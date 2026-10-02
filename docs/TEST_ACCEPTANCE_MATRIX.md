@@ -4,10 +4,10 @@
 
 ## Evidence boundary
 
-Starting authority is exact maxqstudio/max-trading-agent main 80efac39312218ff8bd6ba05269791c69a3b9061 on work/optimizer-mt5-resource-safety. Source/unit/UI acceptance uses local tests. In addition, Owner-authorized bounded real-MT5 diagnostics were executed only to prove the resource controller: Stage C used a 2D/9-pass Slow Complete workload; Stage D used all 17 dimensions with Fast Genetic and a short cheap interval. These diagnostics prove bounded local-agent concurrency and RAM safety behavior, not full production-scale Optimizer/Challenger/Champion acceptance. Fresh R00-R11 remain roadmap-gated.
+Starting authority is exact maxqstudio/max-trading-agent main 7f3fade6fd71892266ad18a178dab9d503b5ce77 on work/optimizer-commit-memory-resource-safety-v2. Historical Stage C/D bounded MT5 tests and browser evidence remain accepted, but the Owner subsequently reported a crash during the full-range 17D Fast Genetic attempt from Windows commit-memory exhaustion. V2 source gates pass locally; the read-only active-job check found zero active jobs, but no V2 MT5 process was launched because current commit headroom was 12.71 GiB versus the frozen one-agent requirement of 32 GiB. No OS/pagefile settings or Owner draft were changed. Full Optimizer completion, R00-R11 execution, and scientific acceptance remain unproven/blocked.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826
+Current source digest: 00f0ef0b45150135315cd619f2976a134579c4e63c9e75527bc4f15d33267af2
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
@@ -18,7 +18,7 @@ Current source digest: 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de
 | STRAT-UI-FEEDBACK-01 | Safety-blocked controls are disabled with a visible reason; callbacks also fail closed, and asynchronous actions display progress and a result/error. | frontend/src/ArtifactsPage.tsx; frontend/src/ChallengersPage.tsx; frontend/src/App.tsx; frontend/src/ArtifactsPage.test.tsx; frontend/src/ChallengersPage.test.tsx | PASS_LOCAL |
 | RESEARCH-PURGE-01 | The rejected active Research APIs, backend modules, pages, active sequence sessions, persistence tables, metadata keys, and runtime dependencies are removed; the schema migration preserves Strategy authority. | backend/max_backend/schema.py; backend/max_backend/workflow_store.py; backend/tests/test_retired_subsystem_migration.py | PASS_LOCAL |
 | RESEARCH-GATE-01 | Fresh R00-R11 remain planned and blocked until the Owner declares REAL_MT5_BACKTEST_SAMPLE_READY and Control Room issues separate authorization. | .workflow/roadmap.json; .workflow/state.json | PASS_LOCAL |
-| REGRESSION-01 | Full current backend/frontend regressions, dependency checks, build, governance validators, and exact-tree source-only scan pass without unexplained skips or failures. | Backend 456/456; frontend 53/53 across 8 files; lint 0 warnings/errors; build/npm/pip PASS. Final source-only and governance are rerun after candidate commit. | PASS_LOCAL |
+| REGRESSION-01 | Full current backend/frontend regressions, dependency checks, build, governance validators, and exact-tree source-only scan pass without unexplained skips or failures. | Backend 474 passed, 0 skipped, 0 failed; frontend 53/53 across 8 files; lint, build, npm tree, and pip check PASS. Governance and exact-tree source-only scan remain pending. | NOT_PROVEN |
 | HOSTED-01 | Windows GitHub Actions passes on the exact PR head and exact merged main before phase closure. | External GitHub Actions run bound to exact candidate SHA. | NOT_PROVEN |
 | OWNER-RUNTIME-01 | Bounded repair diagnostics may prove resource-control behavior, but full Owner Strategy Optimizer/Challenger/Champion runtime acceptance remains a separate post-source gate. | Bounded real-MT5 resource diagnostics passed; full normal Owner Optimizer workflow remains deferred and NOT_PROVEN. | NOT_PROVEN |
 | OPT-DRAFT-01 | Editable Optimizer draft persists with stale-revision rejection and stays separate from immutable per-job request snapshots. | backend/max_backend/optimizer_draft.py; backend/tests/test_optimizer_draft.py; backend/max_backend/optimizer_jobs.py::start_optimizer | PASS_LOCAL |
@@ -28,12 +28,14 @@ Current source digest: 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de
 | OPT-UI-01 | Optimizer requests cancel/reject stale responses, debounce draft writes, bound/adapt polling, and show visible loading/block/success/failure feedback. | frontend/src/OptimizerPage.tsx; frontend/src/OptimizerPage.test.tsx; real headless Chrome live frontend/backend START/STOP resource-evidence refresh. | PASS_LOCAL |
 | OPT-PERFORMANCE-01 | Record reproducible synthetic request latency/payload and practical CPU/RAM/disk observations without substituting real Owner runtime measurements. | Actual synthetic 750-row qualified page median 23.651 ms/p95 68.983 ms/61,462 bytes. Separate 108-request Windows process profile excluding actual qualified SQL measured CPU 1.0781 s, peak working set 64,405,504 bytes, read I/O 6,060,864 bytes, write I/O 0, and tracemalloc peak 569,928 bytes. | PASS_LOCAL |
 | OPT-RESOURCE-01 | Optimizer resource admission is hardware-aware and fail-closed, freezes an execution concurrency cap without shrinking scientific search space, enforces the cap on owned local MT5 processes, records runtime pressure, and supports controlled RESOURCE_STOPPED recovery. | optimizer_resources.py; optimizer_resource_runtime.py; optimizer_worker.py; optimizer_jobs.py; test_optimizer_resources.py; test_optimizer_runtime.py; real Stage C/D bounded MT5 diagnostics. | PASS_LOCAL_REAL_MT5_BOUNDED |
+| OPT-RESOURCE-02 | Resource preflight and immediate prelaunch admission use current Windows commit headroom plus physical RAM, CPU and MT5 local-agent limits, workload-compatible high-water calibration and immutable workload identity. Native monitoring samples exact Job Object-owned MT5 processes and PrivateUsage without PowerShell/CIM hot-loop calls; resource pressure or telemetry loss requests verified termination, and unverified termination requires reconciliation. CUSTOM cannot bypass hard floors; no pagefile mutation, schema bump, search-space change or scientific acceptance change is allowed. | backend/max_backend/optimizer_resources.py; backend/max_backend/optimizer_resource_runtime.py; backend/max_backend/optimizer_store.py; backend/max_backend/optimizer_worker.py; backend/tests/test_optimizer_resources.py; frontend/src/OptimizerPage.tsx. Local V2 code/tests pass; real bounded MT5 acceptance is NOT_PROVEN because frozen admission safely blocked launch at 12.71 GiB commit headroom versus 32 GiB required for one agent. | NOT_PROVEN |
 
 ## Test commands
 
 - .venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_resources.py backend/tests/test_optimizer_runtime.py backend/tests/test_optimizer_reliability.py -q -o addopts=
 - .venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_draft.py backend/tests/test_optimizer_reliability.py backend/tests/test_optimizer_runtime_durability.py backend/tests/test_m01_jobs.py backend/tests/test_m01_recovery.py backend/tests/test_m08_strategy_results.py -q -o addopts=
-- .venv/Scripts/python.exe -m pytest backend/tests -q -o addopts= --basetemp .venv/pytest-optimizer-full-rerun-20261001
+- .venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_resources.py backend/tests/test_m01_optimizer_core.py backend/tests/test_m01_optimizer_store.py backend/tests/test_m01_jobs.py backend/tests/test_m01_recovery.py backend/tests/test_optimizer_reliability.py backend/tests/test_optimizer_runtime_durability.py -q -o addopts= --basetemp .pytest-codex-resource-targeted
+- .venv/Scripts/python.exe -m pytest backend/tests -q -o addopts= --basetemp .pytest-codex-full-backend-r2
 - cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all
 - .venv/Scripts/python.exe -m pip check
 - .venv/Scripts/python.exe scripts/scan_m05_candidate_tree.py --candidate-sha HEAD
@@ -52,6 +54,7 @@ Current source digest: 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de
 - PASS_BOUNDED: real MT5 Stage C resource-control diagnostic, 2 dimensions / 9 passes, parsed 9, frozen/observed agents 3/3, rc=0, SAFE.
 - PASS_BOUNDED: real MT5 Stage D queue-stress diagnostic, 17 dimensions, raw Cartesian context 18,259,010,497,728,000, 512 report rows, frozen/observed agents 2/2, rc=0, SAFE.
 - PASS_BOUNDED_REAL_BROWSER: live frontend/backend draft persistence across page/backend restart, native MT5 START/STOP, observed 2/2 agent cap, clean STOP, authoritative final UI resource evidence, and Owner draft restoration.
+- BLOCKED_CURRENT_V2: read-only active-job check found zero active jobs/processes; frozen admission returned BLOCKED before any MT5 process started because commit headroom was 12.71 GiB versus 32 GiB required for one agent. Owner draft and OS/pagefile settings were not changed.
 - NOT_RUN: full production-scale/long-range Owner Optimizer → Challenger → Champion → backtest workflow.
 - NOT_RUN: real R00-R11 Research execution, model training, ONNX, Research Challenger creation, or Champion mutation.
 
@@ -64,7 +67,7 @@ ROADMAP_SYNC: PASS
 
 Sequence mode for this phase/session: DURING
 Sequence session contract: FLOW-OPTIMIZER-DURABILITY-PERFORMANCE
-SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match 05eb2f9df348313bbfafabff336ae9a7944f93009f3c92688500d99de668f826.
+SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match Git-aware inventory digest 00f0ef0b45150135315cd619f2976a134579c4e63c9e75527bc4f15d33267af2. Git-ignored Owner Optimizer artifacts are excluded and unchanged.
 
 ## Project Truth Compiler evidence
 

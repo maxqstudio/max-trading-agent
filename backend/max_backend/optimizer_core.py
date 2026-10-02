@@ -21,7 +21,7 @@ from .mtf_geometry import (
     resolve_strategy_geometry,
 )
 from .optimizer_scientist import route_config_from_environment, scientist_route_status
-from .optimizer_resources import build_resource_preflight, default_resource_settings
+from .optimizer_resources import build_resource_preflight, default_resource_settings, history_span_bucket
 from .workflow_contract import (
     OPTIMIZER_REQUEST_SCHEMA_CURRENT,
     OPTIMIZER_WORKFLOW_OWNER_EXPLICIT,
@@ -675,6 +675,10 @@ def freeze_request(raw: dict[str, Any], *, force_resource_refresh: bool = False)
             "optimization_name": OPTIMIZATION_MODES[optimization],
             "optimized_parameter_count": len(selected),
             "raw_complete_grid_combinations": cardinality["raw_complete_grid_combinations"],
+            "symbol": symbol,
+            "period": period,
+            "ea_sha256": ea_sha,
+            "history_span_bucket": history_span_bucket(from_date, to_date),
             "from_date": from_date,
             "to_date": to_date,
             "tick_model": model,

@@ -268,7 +268,7 @@ Rationale: Without durable attempt state, a crash after fitting but before termi
 
 ## D-034 — Adopt current Skill Workflow sequence and symbol-resolution repairs
 
-Status: CURRENT
+Status: SUPERSEDED
 
 MAX adopts Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8 and vendors its governance tools byte-identically. Relative to c1d7e58a0fcadc606c8cf75c6283a17278f99259, this update adds Python class-method path::symbol resolution, preserves HTTP route predecessor nodes in generated actual sequence graphs, and adds STRICT regressions for both. Windows CI verifies this exact upstream commit; no product behavior or database schema changes are introduced by the Skill update.
 
@@ -297,3 +297,19 @@ Status: CURRENT
 Persist one bounded mutable Optimizer draft separately from every immutable started-job request. A durable job/launch token and exact process identity govern startup reconciliation, STOP and recovery; uncertain MT5 launch is never blindly repeated. Freeze raw reports, stage and verify derived round evidence, publish one immutable bundle atomically before database commit, and derive the indexed qualified-candidate read model only from committed evidence. Ordinary list reads may use the projection, but Challenger registration continues strict canonical evidence verification. Builder tests and profiles use synthetic temporary databases/evidence; no real Owner MT5 optimization or scientific result is claimed in this source phase.
 
 Rationale: The Owner-authorized Strategy Optimizer hardening repairs durable drafts, crash windows, process ownership, partial evidence publication and expensive candidate reads while keeping MT5 as execution truth and preserving the existing Challenger/Champion authority boundary.
+
+## D-038 — Adopt Skill Workflow SW2-00 governance regressions
+
+Status: CURRENT
+
+MAX adopts Skill_Workflow main 64836990609cd1ab22f9517be5aaffc14ad19ea9 after inspecting the exact delta from 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8. Vendor its 21 applicable scripts byte-identically, verify exact upstream provenance in Windows CI, and run its new sequence call-resolution and cross-document regression selftests. Do not adopt Skill Workflow sample project state or unrelated workflows.
+
+Rationale: The Owner requested the updated Skill Workflow. Its current delta prevents false static sequence edges from unresolved expression receivers, projects claim backlinks, scopes path-symbol checks away from templates, and adds direct regression coverage without MAX-local validator patches.
+
+## D-039 — Fail closed on Windows commit-memory pressure
+
+Status: CURRENT
+
+Resource admission considers both physical RAM and current Windows commit headroom. The frozen Optimizer workload identity includes EA SHA, MT5 build, symbol, timeframe, history-duration bucket, tick model, optimization mode, parameter count and search-space size. Native monitoring reads system commit and exact Job Object-owned terminal/tester processes, including PrivateUsage; compatible bounded high-water observations reuse existing round state read-only. A verified resource stop remains resumable only after fresh admission; failed termination or telemetry persistence enters RECONCILIATION_REQUIRED and is not resumable. AUTO_SAFE and CUSTOM remain subject to the same physical/commit hard floors and Job Object active-process cap. No pagefile mutation, schema bump, search-space shrink, or scientific acceptance change is permitted.
+
+Rationale: The Owner-reported full-range 17D Fast Genetic attempt crashed under Windows commit-memory exhaustion despite historical bounded RAM/concurrency checks. Current commit charge and process private bytes must therefore gate capacity and trigger explicit, verified stop/reconciliation behavior before system exhaustion.

@@ -51,7 +51,7 @@
     {
       "authority": "MT5 optimizer reports/sidecars plus Python canonical revalidation",
       "concern": "optimizer",
-      "meaning": "MT5 executes optimization; the immutable started-job snapshot, launch token and process identity govern recovery; Python verifies retained report identity/hashes/gates. SQLite candidate projections serve reads only and canonical evidence is revalidated before mutation.",
+      "meaning": "MT5 executes optimization; the immutable started-job and V2 resource-policy snapshot, launch token, Windows physical/commit telemetry, exact Job Object process identity and fresh prelaunch admission govern execution/recovery. Native runtime samples PrivateUsage and working set, then requires a verified resource stop or explicit reconciliation. Python verifies retained report identity/hashes/gates. SQLite candidate projections serve reads only and canonical evidence is revalidated before mutation.",
       "mutable": true
     },
     {
@@ -109,7 +109,7 @@
       "mutable": true
     },
     {
-      "authority": ".workflow semantic specs + Project Truth Compiler at Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
+      "authority": ".workflow semantic specs + Project Truth Compiler at Skill Workflow 964481ed1609f87904ba9e08890bffc0a10c3fd4",
       "concern": "documentation",
       "meaning": "Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden.",
       "mutable": true
@@ -121,7 +121,7 @@
       "mutable": true
     },
     {
-      "authority": ".workflow/tools vendored byte-identically from Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
+      "authority": ".workflow/tools vendored byte-identically from Skill Workflow 964481ed1609f87904ba9e08890bffc0a10c3fd4",
       "concern": "governance_tools",
       "meaning": "Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed.",
       "mutable": false

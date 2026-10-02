@@ -173,6 +173,12 @@
       "status": "FIXED/ACCEPTED_CANDIDATE",
       "summary": "MT5 Strategy Tester could enqueue excessive local-agent work without MAX-owned hardware-aware admission, causing CPU/RAM pressure and optimizer failure.",
       "evidence": "Owner-PC bounded native MT5 diagnostics on build 5.0.0.6231 proved AUTO_SAFE preflight plus Windows Job Object ActiveProcessLimit: accepted 9-pass run completed rc=0 with 3/3 agents and 9 parsed passes; 17D Fast Genetic queue stress produced 512 report rows with 2/2 agents and SAFE RAM headroom; real browser START/STOP later observed 2/2 agents and clean process shutdown. Full long Owner Optimizer remains NOT_RUN."
+    },
+    {
+      "id": "OPTIMIZER-COMMIT-MEMORY-EXHAUSTION",
+      "status": "IN_PROGRESS",
+      "summary": "Long-range Fast Genetic Optimizer exhausted Windows commit memory despite prior physical-RAM and local-agent admission.",
+      "evidence": "Owner-reported full-range 17D Fast Genetic crash is the current V2 repair trigger. Historical Stage C/D bounded results remain valid but do not prove commit-pressure safety for this workload. Exact new bounded-runtime validation, local full regression and hosted PR CI are pending."
     }
   ],
   "schema_version": 1

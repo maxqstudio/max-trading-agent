@@ -64,7 +64,7 @@ jobs:
       - name: Verify Skill Workflow tool provenance
         shell: pwsh
         run: |
-          $skillSha = "024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8"
+          $skillSha = "964481ed1609f87904ba9e08890bffc0a10c3fd4"
           $skillDir = Join-Path $env:RUNNER_TEMP "Skill_Workflow"
           if (Test-Path $skillDir) { Remove-Item -Recurse -Force $skillDir }
           git clone --quiet https://github.com/maxqstudio/Skill_Workflow.git $skillDir
@@ -72,7 +72,7 @@ jobs:
           Add-Content -Path $env:GITHUB_ENV -Value "SKILL_WORKFLOW_DIR=$skillDir"
           $exclude = @("initialize_project_truth.py", "selftest_project_truth_compiler.py")
           $upstream = Get-ChildItem (Join-Path $skillDir "scripts/*.py") | Where-Object { $_.Name -notin $exclude }
-          if ($upstream.Count -ne 18) { throw "Unexpected Skill Workflow tool count: $($upstream.Count)" }
+          if ($upstream.Count -ne 21) { throw "Unexpected Skill Workflow tool count: $($upstream.Count)" }
           foreach ($file in $upstream) {
             $local = Join-Path ".workflow/tools" $file.Name
             if (-not (Test-Path $local)) { throw "Missing vendored tool: $($file.Name)" }
@@ -88,6 +88,12 @@ jobs:
       - name: Skill Workflow project truth compiler selftest
         shell: pwsh
         run: python "$env:SKILL_WORKFLOW_DIR\scripts\selftest_project_truth_compiler.py"
+      - name: Skill Workflow sequence call resolution regression
+        shell: pwsh
+        run: python "$env:SKILL_WORKFLOW_DIR\scripts\selftest_sequence_call_resolution.py"
+      - name: Skill Workflow cross-document regressions
+        shell: pwsh
+        run: python "$env:SKILL_WORKFLOW_DIR\scripts\selftest_cross_document_regressions.py"
       - name: Validate project governance
         shell: pwsh
         run: |

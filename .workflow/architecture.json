@@ -46,11 +46,14 @@
       "owns": [
         "backend/max_backend/optimizer_draft.py",
         "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
+        "backend/max_backend/optimizer_resources.py",
+        "backend/max_backend/optimizer_resource_runtime.py",
         "backend/max_backend/optimizer_worker.py",
+        "backend/max_backend/optimizer_store.py::load_resource_calibration",
         "backend/max_backend/optimizer_store.py::persist_candidate_projection",
         "backend/max_backend/optimizer_candidates.py::qualified_candidates_page"
       ],
-      "purpose": "Persist editable draft separately from immutable job requests, reconcile exact worker/MT5 launch identity, atomically publish round evidence, and serve paginated candidate projections without weakening canonical mutation verification."
+      "purpose": "Persist editable draft separately from immutable job/resource requests, reconcile exact worker/MT5 launch identity, revalidate Windows RAM and commit headroom before launch, monitor only Job Object-owned process PrivateUsage, fail closed on pressure/telemetry loss, atomically publish round evidence, and serve bounded candidate projections without weakening canonical mutation verification."
     },
     {
       "depends_on": [
@@ -153,7 +156,7 @@
     },
     {
       "depends_on": [
-        "Skill Workflow 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8",
+        "Skill Workflow 964481ed1609f87904ba9e08890bffc0a10c3fd4",
         "GitHub Actions windows-latest hosted validation"
       ],
       "id": "governance",
