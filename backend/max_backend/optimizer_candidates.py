@@ -24,6 +24,8 @@ from .optimizer_core import (
 from .optimizer_store import (
     attach_rounds,
     get_job,
+    optimizer_candidate_identities,
+    optimizer_candidate_identity,
     persist_candidate_projection,
 )
 from .optimizer_runtime import committed_round_dir, verify_committed_round_bundle
@@ -371,13 +373,15 @@ def candidate_projection_payload(
     bundle_path: str | Path,
     request_path: str | Path,
     run_nonce: int,
+    existing_candidate_identities: set[str] | None = None,
 ) -> dict[str, Any]:
     bundle = Path(bundle_path)
     report = _resolve_project_path(report_path)
     sidecar = _resolve_project_path(sidecar_path)
     if not report.is_file() or not sidecar.is_file():
         raise RuntimeError("OPTIMIZER_PROJECTION_SOURCE_EVIDENCE_MISSING")
-    candidates: list[dict[str, Any]] = []
+    candidates_by_identity: dict[str, dict[str, Any]] = {}
+    already_projected = existing_candidate_identities or set()
     for payload in passes_payload:
         if not isinstance(payload, dict):
             raise RuntimeError("OPTIMIZER_PROJECTION_PASS_INVALID")
@@ -401,11 +405,14 @@ def candidate_projection_payload(
             "request_path": str(request_path),
             "run_nonce": int(run_nonce),
         }
+        candidate_identity = optimizer_candidate_identity(candidate)
+        if candidate_identity in already_projected:
+            continue
         search_text = (
             f"{int(round_no)} {int(candidate['pass'])} "
             + json.dumps(candidate["params"], sort_keys=True, separators=(",", ":"))
         ).casefold()
-        candidates.append({
+        projected_candidate = {
             "pass": int(candidate["pass"]),
             "mean_r": float(candidate["mean_r"]),
             "custom_fitness": candidate.get("custom_fitness"),
@@ -416,7 +423,16 @@ def candidate_projection_payload(
             "required_trades": int(candidate["required_trades"]),
             "search_text": search_text,
             "candidate": candidate,
-        })
+        }
+        previous = candidates_by_identity.get(candidate_identity)
+        if previous is None or int(projected_candidate["pass"]) < int(
+            previous["pass"]
+        ):
+            candidates_by_identity[candidate_identity] = projected_candidate
+    candidates = sorted(
+        candidates_by_identity.values(),
+        key=lambda item: int(item["pass"]),
+    )
     content = json.dumps(candidates, sort_keys=True, separators=(",", ":"))
     return {
         "report_sha256": str(report_sha256),
@@ -457,6 +473,9 @@ def _ensure_candidate_projection(
             bundle_path=evidence["root"],
             request_path=_job_root(job) / "request.json",
             run_nonce=int((record.get("state") or {}).get("optimizer_run_nonce") or 0),
+            existing_candidate_identities=optimizer_candidate_identities(
+                str(job["job_id"]), path=path
+            ),
         )
         persist_candidate_projection(
             str(job["job_id"]), round_no, projection, path=path
@@ -537,6 +556,11 @@ def qualified_candidates_page(
             "WHERE job_id=? AND phase='PARSED'",
             (job_id,),
         ).fetchone()["n"])
+        eligible_pass_count = int(conn.execute(
+            "SELECT COALESCE(SUM(eligible_passes),0) AS n FROM optimizer_rounds "
+            "WHERE job_id=? AND phase='PARSED'",
+            (job_id,),
+        ).fetchone()["n"])
         historical_qualified_count = int(conn.execute(
             "SELECT COUNT(*) AS n FROM optimizer_candidate_projection WHERE job_id=?",
             (job_id,),
@@ -572,7 +596,8 @@ def qualified_candidates_page(
         "qualified_count": qualified_count,
         "historical_qualified_count": historical_qualified_count,
         "consumed_count": historical_qualified_count - qualified_count,
-        "rejected_count": raw_count - historical_qualified_count,
+        "deduplicated_count": max(0, eligible_pass_count - historical_qualified_count),
+        "rejected_count": raw_count - eligible_pass_count,
         "page": bounded_page,
         "page_size": size,
         "pages": pages,

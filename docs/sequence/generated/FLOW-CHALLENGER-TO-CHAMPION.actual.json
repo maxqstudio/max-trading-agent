@@ -93,20 +93,6 @@
       "to": "backend/max_backend/promotion_service.py::_sha"
     },
     {
-      "action": "ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/promotion_service.py::_relative",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "path.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/promotion_service.py::_relative",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
       "action": "_restore_file",
       "evidence": "STATIC",
       "from": "backend/max_backend/promotion_service.py::_restore_before_state",
@@ -345,15 +331,6 @@
   "generated_by": "generate_sequence_actual.py",
   "nodes": [
     {
-      "id": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve",
-      "kind": "function",
-      "label": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve",
-      "language": "Python",
-      "line_end": 28,
-      "line_start": 26,
-      "locator": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
       "id": "backend/max_backend/challenger_registry.py::_metric_equal",
       "kind": "function",
       "label": "backend/max_backend/challenger_registry.py::_metric_equal",
@@ -385,8 +362,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_runtime.py::compile_summary",
       "language": "Python",
-      "line_end": 121,
-      "line_start": 105,
+      "line_end": 120,
+      "line_start": 104,
       "locator": "backend/max_backend/optimizer_runtime.py::compile_summary"
     },
     {
@@ -588,7 +565,7 @@
       "locator": "backend/max_backend/promotion_service.py::verify_current_strategy_champion"
     }
   ],
-  "observed_head": "b167d2a6df432ed6c146f1fabe100521cc7feefc",
+  "observed_head": "312cd4b2d88a63f8cd0e6d1e873ae08fdc3d3f60",
   "schema_version": 1,
-  "source_digest": "fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b"
+  "source_digest": "c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048"
 }

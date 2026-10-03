@@ -177,25 +177,11 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
-      "action": "item.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::_clear_generated_strategy_history_root",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
       "action": "_is_protected_strategy_history_entry",
       "evidence": "STATIC",
       "from": "backend/max_backend/artifact_control.py::_clear_generated_strategy_history_root",
       "resolver": "python_ast",
       "to": "backend/max_backend/artifact_control.py::_is_protected_strategy_history_entry"
-    },
-    {
-      "action": "item.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::_clear_owned_root",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "_is_protected_strategy_history_entry",
@@ -261,48 +247,6 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
-      "action": "BACKTEST_ARTIFACT_ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "CHALLENGER_ARTIFACT_ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "OPTIMIZER_ARTIFACT_ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "STRATEGY_HISTORY_ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "aux_root.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
       "action": "_current_champion_id",
       "evidence": "STATIC",
       "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
@@ -350,13 +294,6 @@
       "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
-    },
-    {
-      "action": "item.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::_reconcile_runtime",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "_extract_backtest_id",
@@ -434,34 +371,6 @@
       "from": "backend/max_backend/artifact_control.py::_register_tree_files",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
-    },
-    {
-      "action": "raw.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::_resolved_project_path",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::_storage",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "PROMOTION_RECOVERY_ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "STRATEGY_HISTORY_ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "_baseline_authority_snapshot",
@@ -548,13 +457,6 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
-      "action": "OPTIMIZER_ARTIFACT_ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::delete_optimizer_job",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/artifact_control.py::delete_optimizer_job",
@@ -574,34 +476,6 @@
       "from": "backend/max_backend/artifact_control.py::get_artifact",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
-    },
-    {
-      "action": "BACKTEST_ARTIFACT_ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::global_cleanup_preflight",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "CHALLENGER_ARTIFACT_ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::global_cleanup_preflight",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "LEGACY_M06_BACKTEST_EVIDENCE_ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::global_cleanup_preflight",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "OPTIMIZER_ARTIFACT_ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/artifact_control.py::global_cleanup_preflight",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "_current_champion_id",
@@ -679,13 +553,6 @@
       "from": "backend/max_backend/artifact_control.py::register_artifact",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
-    },
-    {
-      "action": "terminal.parent.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/mt5.py::detect_mt5",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "_auto_terminal_candidates",
@@ -956,15 +823,6 @@
   "generated": true,
   "generated_by": "generate_sequence_actual.py",
   "nodes": [
-    {
-      "id": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve",
-      "kind": "function",
-      "label": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve",
-      "language": "Python",
-      "line_end": 28,
-      "line_start": 26,
-      "locator": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
     {
       "id": "HTTP /action",
       "kind": "external",
@@ -1623,7 +1481,7 @@
       "locator": "frontend/src/ArtifactsPage.tsx::<module>"
     }
   ],
-  "observed_head": "b167d2a6df432ed6c146f1fabe100521cc7feefc",
+  "observed_head": "312cd4b2d88a63f8cd0e6d1e873ae08fdc3d3f60",
   "schema_version": 1,
-  "source_digest": "fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b"
+  "source_digest": "c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048"
 }

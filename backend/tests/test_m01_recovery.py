@@ -137,6 +137,11 @@ def patch_harness(monkeypatch: pytest.MonkeyPatch, harness: Harness) -> None:
     monkeypatch.setattr(worker, "commit_round_evidence", harness.commit)
     monkeypatch.setattr(
         worker,
+        "optimizer_candidate_identities",
+        lambda *_args, **_kwargs: set(),
+    )
+    monkeypatch.setattr(
+        worker,
         "candidate_projection_payload",
         lambda **_kwargs: {"projection_sha256": "projectionsha", "items": []},
     )

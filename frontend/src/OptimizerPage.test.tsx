@@ -813,7 +813,8 @@ describe('M08 qualified candidate control', () => {
             qualified_count: 3,
             historical_qualified_count: 3,
             consumed_count: 0,
-            rejected_count: 2,
+            deduplicated_count: 1,
+            rejected_count: 1,
             page,
             page_size: Number(params.get('page_size') ?? 25),
             pages: 2,
@@ -841,7 +842,8 @@ describe('M08 qualified candidate control', () => {
       expect(summary).toHaveTextContent('Raw Passes5')
       expect(summary).toHaveTextContent('Available qualified3')
       expect(summary).toHaveTextContent('Already used0')
-      expect(summary).toHaveTextContent('Rejected2')
+      expect(summary).toHaveTextContent('Exact duplicates removed1')
+      expect(summary).toHaveTextContent('Rejected1')
     })
     expect(screen.queryByText('ELIGIBLE WINNER')).not.toBeInTheDocument()
     expect(screen.queryByText('Historical optimizer pass evidence')).not.toBeInTheDocument()
@@ -942,6 +944,7 @@ describe('M08 qualified candidate control', () => {
             qualified_count: 0,
             historical_qualified_count: 0,
             consumed_count: 0,
+            deduplicated_count: 0,
             rejected_count: 4,
             page: 1,
             page_size: 25,
@@ -1192,6 +1195,7 @@ describe('M08 qualified candidate control', () => {
       qualified_count: 2,
       historical_qualified_count: 2,
       consumed_count: 0,
+      deduplicated_count: 0,
       rejected_count: 0,
       page: 1,
       page_size: 25,

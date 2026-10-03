@@ -18,12 +18,18 @@
       "backend/max_backend/optimizer_store.py::claim_initial_worker_launch",
       "backend/max_backend/optimizer_store.py::confirm_worker_launch",
       "backend/max_backend/optimizer_worker.py::run_job",
+      "backend/max_backend/optimizer_runtime.py::launch_mt5",
+      "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv",
       "backend/max_backend/optimizer_runtime.py::commit_round_evidence",
+      "backend/max_backend/optimizer_candidates.py::candidate_projection_payload",
+      "backend/max_backend/optimizer_store.py::optimizer_candidate_identity",
+      "backend/max_backend/optimizer_store.py::optimizer_candidate_identities",
+      "backend/max_backend/optimizer_store.py::persist_candidate_projection",
       "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
       "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration"
     ],
     "graph": "docs/sequence/generated/FLOW-OPTIMIZER-DURABILITY-PERFORMANCE.actual.json",
-    "source_digest": "fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b"
+    "source_digest": "c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048"
   },
   "critical": true,
   "implementation_base_sha": "5a30097d76a46ad077bed8dfd978eb6b27f83264",
@@ -51,9 +57,11 @@
     "backend/tests/test_optimizer_reliability.py",
     "backend/tests/test_optimizer_worker_identity.py",
     "backend/tests/test_optimizer_runtime_durability.py",
+    "backend/tests/test_m01_optimizer_core.py",
     "backend/tests/test_m01_jobs.py",
     "backend/tests/test_m01_recovery.py",
     "backend/tests/test_m08_strategy_results.py",
+    "backend/tests/test_optimizer_resources.py",
     "frontend/src/OptimizerPage.test.tsx",
     "frontend/src/ChallengersPage.test.tsx"
   ]

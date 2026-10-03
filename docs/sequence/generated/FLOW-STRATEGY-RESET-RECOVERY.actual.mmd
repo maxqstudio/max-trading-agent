@@ -1,148 +1,158 @@
 %% GENERATED FILE - DO NOT EDIT
-%% SOURCE_DIGEST: fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b
-%% OBSERVED_HEAD: b167d2a6df432ed6c146f1fabe100521cc7feefc
+%% SOURCE_DIGEST: c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048
+%% OBSERVED_HEAD: 312cd4b2d88a63f8cd0e6d1e873ae08fdc3d3f60
 %% GENERATED_BY: generate_sequence_actual.py
 sequenceDiagram
-    participant _pytest_worker_identity_full_r2_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_0 as .pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state
-    participant _pytest_worker_identity_full_r2_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__overview_1 as .pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview
-    participant _pytest_worker_identity_full_r2_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__recovery_status_2 as .pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status
-    participant _pytest_worker_identity_full_r2_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__reset_corrupt_state_3 as .pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state
-    participant _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_4 as .pytest_cache/r2t/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state
-    participant _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__overview_5 as .pytest_cache/r2t/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview
-    participant _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__recovery_status_6 as .pytest_cache/r2t/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status
-    participant _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__reset_corrupt_state_7 as .pytest_cache/r2t/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state
-    participant _tmp_skill_workflow_pinned_scripts_validate_sequence_contract_py__resolve_8 as .tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve
-    participant HTTP__api_artifacts_9 as HTTP /api/artifacts
-    participant HTTP__api_artifacts__10 as HTTP /api/artifacts/
-    participant HTTP__api_artifacts_action_11 as HTTP /api/artifacts/action
-    participant HTTP__api_artifacts_cleanup_12 as HTTP /api/artifacts/cleanup
-    participant HTTP__api_artifacts_cleanup_preflight_13 as HTTP /api/artifacts/cleanup/preflight
-    participant HTTP__api_artifacts_preflight_14 as HTTP /api/artifacts/preflight
-    participant HTTP__api_artifacts_reconcile_15 as HTTP /api/artifacts/reconcile
-    participant HTTP__api_artifacts_strategy_reset_16 as HTTP /api/artifacts/strategy-reset
-    participant HTTP__api_artifacts_strategy_reset_preflight_17 as HTTP /api/artifacts/strategy-reset/preflight
-    participant HTTP__api_overview_18 as HTTP /api/overview
-    participant HTTP__api_recovery_reset_19 as HTTP /api/recovery/reset
-    participant HTTP__api_recovery_status_20 as HTTP /api/recovery/status
-    participant HTTP__api_scientist_provider_settings_21 as HTTP /api/scientist/provider-settings
-    participant HTTP__api_scientist_ui_settings_22 as HTTP /api/scientist/ui-settings
-    participant backend_max_backend_db_py__connect_23 as backend/max_backend/db.py::connect
-    participant backend_max_backend_db_py__ensure_baseline_registered_24 as backend/max_backend/db.py::ensure_baseline_registered
-    participant backend_max_backend_db_py__initialize_database_25 as backend/max_backend/db.py::initialize_database
-    participant backend_max_backend_db_py__read_baseline_26 as backend/max_backend/db.py::read_baseline
-    participant backend_max_backend_ea_py__load_manifest_27 as backend/max_backend/ea.py::load_manifest
-    participant backend_max_backend_ea_py__sha256_file_28 as backend/max_backend/ea.py::sha256_file
-    participant backend_max_backend_ea_py__verify_baseline_snapshot_29 as backend/max_backend/ea.py::verify_baseline_snapshot
-    participant backend_max_backend_main_py___foundation_state_30 as backend/max_backend/main.py::_foundation_state
-    participant backend_max_backend_main_py__overview_31 as backend/max_backend/main.py::overview
-    participant backend_max_backend_main_py__recovery_required_gate_32 as backend/max_backend/main.py::recovery_required_gate
-    participant backend_max_backend_main_py__recovery_status_33 as backend/max_backend/main.py::recovery_status
-    participant backend_max_backend_main_py__reset_corrupt_state_34 as backend/max_backend/main.py::reset_corrupt_state
-    participant backend_max_backend_mt5_py___auto_terminal_candidates_35 as backend/max_backend/mt5.py::_auto_terminal_candidates
-    participant backend_max_backend_mt5_py___data_roots_36 as backend/max_backend/mt5.py::_data_roots
-    participant backend_max_backend_mt5_py___read_origin_37 as backend/max_backend/mt5.py::_read_origin
-    participant backend_max_backend_mt5_py___unavailable_38 as backend/max_backend/mt5.py::_unavailable
-    participant backend_max_backend_mt5_py__detect_mt5_39 as backend/max_backend/mt5.py::detect_mt5
-    participant backend_max_backend_optimizer_worker_identity_py__WorkerIdentityServer_close_40 as backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close
-    participant backend_max_backend_strategy_reset_py__StrategyResetError_41 as backend/max_backend/strategy_reset.py::StrategyResetError
-    participant backend_max_backend_strategy_reset_py___bootstrap_database_42 as backend/max_backend/strategy_reset.py::_bootstrap_database
-    participant backend_max_backend_strategy_reset_py___connect_43 as backend/max_backend/strategy_reset.py::_connect
-    participant backend_max_backend_strategy_reset_py___count_44 as backend/max_backend/strategy_reset.py::_count
-    participant backend_max_backend_strategy_reset_py___delete_rows_45 as backend/max_backend/strategy_reset.py::_delete_rows
-    participant backend_max_backend_strategy_reset_py___hash_file_46 as backend/max_backend/strategy_reset.py::_hash_file
-    participant backend_max_backend_strategy_reset_py___make_database_backup_47 as backend/max_backend/strategy_reset.py::_make_database_backup
-    participant backend_max_backend_strategy_reset_py___owned_paths_48 as backend/max_backend/strategy_reset.py::_owned_paths
-    participant backend_max_backend_strategy_reset_py___read_counts_49 as backend/max_backend/strategy_reset.py::_read_counts
-    participant backend_max_backend_strategy_reset_py___runtime_paths_50 as backend/max_backend/strategy_reset.py::_runtime_paths
-    participant backend_max_backend_strategy_reset_py___settings_fingerprint_51 as backend/max_backend/strategy_reset.py::_settings_fingerprint
-    participant backend_max_backend_strategy_reset_py___tables_52 as backend/max_backend/strategy_reset.py::_tables
-    participant backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_53 as backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database
-    participant backend_max_backend_strategy_reset_py__database_recovery_status_54 as backend/max_backend/strategy_reset.py::database_recovery_status
-    participant backend_max_backend_strategy_reset_py__reset_strategy_workspace_55 as backend/max_backend/strategy_reset.py::reset_strategy_workspace
-    participant backend_max_backend_strategy_reset_py__strategy_reset_preflight_56 as backend/max_backend/strategy_reset.py::strategy_reset_preflight
-    participant frontend_src_App_tsx___module__57 as frontend/src/App.tsx::<module>
-    participant frontend_src_ArtifactsPage_tsx___module__58 as frontend/src/ArtifactsPage.tsx::<module>
-    _pytest_worker_identity_full_r2_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_0->>backend_max_backend_db_py__read_baseline_26: read_baseline [STATIC]
-    _pytest_worker_identity_full_r2_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_0->>backend_max_backend_mt5_py__detect_mt5_39: detect_mt5 [STATIC]
-    _pytest_worker_identity_full_r2_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__overview_1->>_pytest_worker_identity_full_r2_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_0: _foundation_state [STATIC]
-    _pytest_worker_identity_full_r2_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__recovery_status_2->>backend_max_backend_strategy_reset_py__database_recovery_status_54: database_recovery_status [STATIC]
-    _pytest_worker_identity_full_r2_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__reset_corrupt_state_3->>backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_53: backup_and_reset_corrupt_database [STATIC]
-    _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_4->>backend_max_backend_db_py__read_baseline_26: read_baseline [STATIC]
-    _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_4->>backend_max_backend_mt5_py__detect_mt5_39: detect_mt5 [STATIC]
-    _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__overview_5->>_pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_4: _foundation_state [STATIC]
-    _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__recovery_status_6->>backend_max_backend_strategy_reset_py__database_recovery_status_54: database_recovery_status [STATIC]
-    _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__reset_corrupt_state_7->>backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_53: backup_and_reset_corrupt_database [STATIC]
-    HTTP__api_overview_18->>_pytest_worker_identity_full_r2_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__overview_1: GET route [STATIC]
-    HTTP__api_overview_18->>_pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__overview_5: GET route [STATIC]
-    HTTP__api_overview_18->>backend_max_backend_main_py__overview_31: GET route [STATIC]
-    HTTP__api_recovery_reset_19->>_pytest_worker_identity_full_r2_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__reset_corrupt_state_3: POST route [STATIC]
-    HTTP__api_recovery_reset_19->>_pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__reset_corrupt_state_7: POST route [STATIC]
-    HTTP__api_recovery_reset_19->>backend_max_backend_main_py__reset_corrupt_state_34: POST route [STATIC]
-    HTTP__api_recovery_status_20->>_pytest_worker_identity_full_r2_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__recovery_status_2: GET route [STATIC]
-    HTTP__api_recovery_status_20->>_pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__recovery_status_6: GET route [STATIC]
-    HTTP__api_recovery_status_20->>backend_max_backend_main_py__recovery_status_33: GET route [STATIC]
-    backend_max_backend_db_py__ensure_baseline_registered_24->>backend_max_backend_db_py__connect_23: connect [STATIC]
-    backend_max_backend_db_py__ensure_baseline_registered_24->>backend_max_backend_db_py__initialize_database_25: initialize_database [STATIC]
-    backend_max_backend_db_py__ensure_baseline_registered_24->>backend_max_backend_ea_py__verify_baseline_snapshot_29: verify_baseline_snapshot [STATIC]
-    backend_max_backend_db_py__initialize_database_25->>backend_max_backend_db_py__connect_23: connect [STATIC]
-    backend_max_backend_db_py__initialize_database_25->>backend_max_backend_ea_py__verify_baseline_snapshot_29: verify_baseline_snapshot [STATIC]
-    backend_max_backend_db_py__read_baseline_26->>backend_max_backend_db_py__connect_23: connect [STATIC]
-    backend_max_backend_ea_py__verify_baseline_snapshot_29->>backend_max_backend_ea_py__load_manifest_27: load_manifest [STATIC]
-    backend_max_backend_ea_py__verify_baseline_snapshot_29->>backend_max_backend_ea_py__sha256_file_28: sha256_file [STATIC]
-    backend_max_backend_main_py___foundation_state_30->>backend_max_backend_db_py__read_baseline_26: read_baseline [STATIC]
-    backend_max_backend_main_py___foundation_state_30->>backend_max_backend_mt5_py__detect_mt5_39: detect_mt5 [STATIC]
-    backend_max_backend_main_py__overview_31->>backend_max_backend_main_py___foundation_state_30: _foundation_state [STATIC]
-    backend_max_backend_main_py__recovery_status_33->>backend_max_backend_strategy_reset_py__database_recovery_status_54: database_recovery_status [STATIC]
-    backend_max_backend_main_py__reset_corrupt_state_34->>backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_53: backup_and_reset_corrupt_database [STATIC]
-    backend_max_backend_mt5_py__detect_mt5_39->>_tmp_skill_workflow_pinned_scripts_validate_sequence_contract_py__resolve_8: terminal.parent.resolve [STATIC]
-    backend_max_backend_mt5_py__detect_mt5_39->>backend_max_backend_mt5_py___auto_terminal_candidates_35: _auto_terminal_candidates [STATIC]
-    backend_max_backend_mt5_py__detect_mt5_39->>backend_max_backend_mt5_py___data_roots_36: _data_roots [STATIC]
-    backend_max_backend_mt5_py__detect_mt5_39->>backend_max_backend_mt5_py___read_origin_37: _read_origin [STATIC]
-    backend_max_backend_mt5_py__detect_mt5_39->>backend_max_backend_mt5_py___unavailable_38: _unavailable [STATIC]
-    backend_max_backend_strategy_reset_py___bootstrap_database_42->>backend_max_backend_db_py__ensure_baseline_registered_24: ensure_baseline_registered [STATIC]
-    backend_max_backend_strategy_reset_py___bootstrap_database_42->>backend_max_backend_db_py__initialize_database_25: initialize_database [STATIC]
-    backend_max_backend_strategy_reset_py___bootstrap_database_42->>backend_max_backend_strategy_reset_py__StrategyResetError_41: StrategyResetError [STATIC]
-    backend_max_backend_strategy_reset_py___bootstrap_database_42->>backend_max_backend_strategy_reset_py___connect_43: _connect [STATIC]
-    backend_max_backend_strategy_reset_py___connect_43->>backend_max_backend_db_py__connect_23: sqlite3.connect [STATIC]
-    backend_max_backend_strategy_reset_py___make_database_backup_47->>backend_max_backend_db_py__connect_23: sqlite3.connect [STATIC]
-    backend_max_backend_strategy_reset_py___make_database_backup_47->>backend_max_backend_optimizer_worker_identity_py__WorkerIdentityServer_close_40: target.close [STATIC]
-    backend_max_backend_strategy_reset_py___make_database_backup_47->>backend_max_backend_strategy_reset_py__StrategyResetError_41: StrategyResetError [STATIC]
-    backend_max_backend_strategy_reset_py___make_database_backup_47->>backend_max_backend_strategy_reset_py___hash_file_46: _hash_file [STATIC]
-    backend_max_backend_strategy_reset_py___owned_paths_48->>backend_max_backend_mt5_py__detect_mt5_39: detect_mt5 [STATIC]
-    backend_max_backend_strategy_reset_py___owned_paths_48->>backend_max_backend_strategy_reset_py___runtime_paths_50: _runtime_paths [STATIC]
-    backend_max_backend_strategy_reset_py___read_counts_49->>backend_max_backend_strategy_reset_py__StrategyResetError_41: StrategyResetError [STATIC]
-    backend_max_backend_strategy_reset_py___read_counts_49->>backend_max_backend_strategy_reset_py___connect_43: _connect [STATIC]
-    backend_max_backend_strategy_reset_py___read_counts_49->>backend_max_backend_strategy_reset_py___count_44: _count [STATIC]
-    backend_max_backend_strategy_reset_py___read_counts_49->>backend_max_backend_strategy_reset_py___hash_file_46: _hash_file [STATIC]
-    backend_max_backend_strategy_reset_py___read_counts_49->>backend_max_backend_strategy_reset_py___owned_paths_48: _owned_paths [STATIC]
-    backend_max_backend_strategy_reset_py___read_counts_49->>backend_max_backend_strategy_reset_py___tables_52: _tables [STATIC]
-    backend_max_backend_strategy_reset_py___settings_fingerprint_51->>backend_max_backend_strategy_reset_py___hash_file_46: _hash_file [STATIC]
-    backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_53->>backend_max_backend_strategy_reset_py__StrategyResetError_41: StrategyResetError [STATIC]
-    backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_53->>backend_max_backend_strategy_reset_py___bootstrap_database_42: _bootstrap_database [STATIC]
-    backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_53->>backend_max_backend_strategy_reset_py___hash_file_46: _hash_file [STATIC]
-    backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_53->>backend_max_backend_strategy_reset_py___settings_fingerprint_51: _settings_fingerprint [STATIC]
-    backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_53->>backend_max_backend_strategy_reset_py__database_recovery_status_54: database_recovery_status [STATIC]
-    backend_max_backend_strategy_reset_py__database_recovery_status_54->>backend_max_backend_strategy_reset_py___connect_43: _connect [STATIC]
-    backend_max_backend_strategy_reset_py__reset_strategy_workspace_55->>backend_max_backend_optimizer_worker_identity_py__WorkerIdentityServer_close_40: conn.close [STATIC]
-    backend_max_backend_strategy_reset_py__reset_strategy_workspace_55->>backend_max_backend_strategy_reset_py__StrategyResetError_41: StrategyResetError [STATIC]
-    backend_max_backend_strategy_reset_py__reset_strategy_workspace_55->>backend_max_backend_strategy_reset_py___connect_43: _connect [STATIC]
-    backend_max_backend_strategy_reset_py__reset_strategy_workspace_55->>backend_max_backend_strategy_reset_py___delete_rows_45: _delete_rows [STATIC]
-    backend_max_backend_strategy_reset_py__reset_strategy_workspace_55->>backend_max_backend_strategy_reset_py___hash_file_46: _hash_file [STATIC]
-    backend_max_backend_strategy_reset_py__reset_strategy_workspace_55->>backend_max_backend_strategy_reset_py___make_database_backup_47: _make_database_backup [STATIC]
-    backend_max_backend_strategy_reset_py__reset_strategy_workspace_55->>backend_max_backend_strategy_reset_py___read_counts_49: _read_counts [STATIC]
-    backend_max_backend_strategy_reset_py__reset_strategy_workspace_55->>backend_max_backend_strategy_reset_py___settings_fingerprint_51: _settings_fingerprint [STATIC]
-    backend_max_backend_strategy_reset_py__strategy_reset_preflight_56->>backend_max_backend_strategy_reset_py___read_counts_49: _read_counts [STATIC]
-    frontend_src_App_tsx___module__57->>HTTP__api_overview_18: FETCH request [STATIC]
-    frontend_src_App_tsx___module__57->>HTTP__api_recovery_reset_19: FETCH request [STATIC]
-    frontend_src_App_tsx___module__57->>HTTP__api_recovery_status_20: FETCH request [STATIC]
-    frontend_src_App_tsx___module__57->>HTTP__api_scientist_provider_settings_21: FETCH request [STATIC]
-    frontend_src_App_tsx___module__57->>HTTP__api_scientist_ui_settings_22: FETCH request [STATIC]
-    frontend_src_ArtifactsPage_tsx___module__58->>HTTP__api_artifacts_9: FETCH request [STATIC]
-    frontend_src_ArtifactsPage_tsx___module__58->>HTTP__api_artifacts__10: FETCH request [STATIC]
-    frontend_src_ArtifactsPage_tsx___module__58->>HTTP__api_artifacts_action_11: FETCH request [STATIC]
-    frontend_src_ArtifactsPage_tsx___module__58->>HTTP__api_artifacts_cleanup_12: FETCH request [STATIC]
-    frontend_src_ArtifactsPage_tsx___module__58->>HTTP__api_artifacts_cleanup_preflight_13: FETCH request [STATIC]
-    frontend_src_ArtifactsPage_tsx___module__58->>HTTP__api_artifacts_preflight_14: FETCH request [STATIC]
-    frontend_src_ArtifactsPage_tsx___module__58->>HTTP__api_artifacts_reconcile_15: FETCH request [STATIC]
-    frontend_src_ArtifactsPage_tsx___module__58->>HTTP__api_artifacts_strategy_reset_16: FETCH request [STATIC]
-    frontend_src_ArtifactsPage_tsx___module__58->>HTTP__api_artifacts_strategy_reset_preflight_17: FETCH request [STATIC]
+    participant _pytest_tmp_full_optimizer_dedup_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_0 as .pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state
+    participant _pytest_tmp_full_optimizer_dedup_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__overview_1 as .pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview
+    participant _pytest_tmp_full_optimizer_dedup_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__recovery_status_2 as .pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status
+    participant _pytest_tmp_full_optimizer_dedup_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__reset_corrupt_state_3 as .pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state
+    participant _pytest_tmp_scientist_refresh_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_4 as .pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state
+    participant _pytest_tmp_scientist_refresh_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__overview_5 as .pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview
+    participant _pytest_tmp_scientist_refresh_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__recovery_status_6 as .pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status
+    participant _pytest_tmp_scientist_refresh_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__reset_corrupt_state_7 as .pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state
+    participant _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_8 as .pytest_cache/r2t/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state
+    participant _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__overview_9 as .pytest_cache/r2t/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview
+    participant _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__recovery_status_10 as .pytest_cache/r2t/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status
+    participant _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__reset_corrupt_state_11 as .pytest_cache/r2t/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state
+    participant HTTP__api_artifacts_12 as HTTP /api/artifacts
+    participant HTTP__api_artifacts__13 as HTTP /api/artifacts/
+    participant HTTP__api_artifacts_action_14 as HTTP /api/artifacts/action
+    participant HTTP__api_artifacts_cleanup_15 as HTTP /api/artifacts/cleanup
+    participant HTTP__api_artifacts_cleanup_preflight_16 as HTTP /api/artifacts/cleanup/preflight
+    participant HTTP__api_artifacts_preflight_17 as HTTP /api/artifacts/preflight
+    participant HTTP__api_artifacts_reconcile_18 as HTTP /api/artifacts/reconcile
+    participant HTTP__api_artifacts_strategy_reset_19 as HTTP /api/artifacts/strategy-reset
+    participant HTTP__api_artifacts_strategy_reset_preflight_20 as HTTP /api/artifacts/strategy-reset/preflight
+    participant HTTP__api_overview_21 as HTTP /api/overview
+    participant HTTP__api_recovery_reset_22 as HTTP /api/recovery/reset
+    participant HTTP__api_recovery_status_23 as HTTP /api/recovery/status
+    participant HTTP__api_scientist_provider_settings_24 as HTTP /api/scientist/provider-settings
+    participant HTTP__api_scientist_ui_settings_25 as HTTP /api/scientist/ui-settings
+    participant backend_max_backend_db_py__connect_26 as backend/max_backend/db.py::connect
+    participant backend_max_backend_db_py__ensure_baseline_registered_27 as backend/max_backend/db.py::ensure_baseline_registered
+    participant backend_max_backend_db_py__initialize_database_28 as backend/max_backend/db.py::initialize_database
+    participant backend_max_backend_db_py__read_baseline_29 as backend/max_backend/db.py::read_baseline
+    participant backend_max_backend_ea_py__load_manifest_30 as backend/max_backend/ea.py::load_manifest
+    participant backend_max_backend_ea_py__sha256_file_31 as backend/max_backend/ea.py::sha256_file
+    participant backend_max_backend_ea_py__verify_baseline_snapshot_32 as backend/max_backend/ea.py::verify_baseline_snapshot
+    participant backend_max_backend_main_py___foundation_state_33 as backend/max_backend/main.py::_foundation_state
+    participant backend_max_backend_main_py__overview_34 as backend/max_backend/main.py::overview
+    participant backend_max_backend_main_py__recovery_required_gate_35 as backend/max_backend/main.py::recovery_required_gate
+    participant backend_max_backend_main_py__recovery_status_36 as backend/max_backend/main.py::recovery_status
+    participant backend_max_backend_main_py__reset_corrupt_state_37 as backend/max_backend/main.py::reset_corrupt_state
+    participant backend_max_backend_mt5_py___auto_terminal_candidates_38 as backend/max_backend/mt5.py::_auto_terminal_candidates
+    participant backend_max_backend_mt5_py___data_roots_39 as backend/max_backend/mt5.py::_data_roots
+    participant backend_max_backend_mt5_py___read_origin_40 as backend/max_backend/mt5.py::_read_origin
+    participant backend_max_backend_mt5_py___unavailable_41 as backend/max_backend/mt5.py::_unavailable
+    participant backend_max_backend_mt5_py__detect_mt5_42 as backend/max_backend/mt5.py::detect_mt5
+    participant backend_max_backend_optimizer_worker_identity_py__WorkerIdentityServer_close_43 as backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close
+    participant backend_max_backend_strategy_reset_py__StrategyResetError_44 as backend/max_backend/strategy_reset.py::StrategyResetError
+    participant backend_max_backend_strategy_reset_py___bootstrap_database_45 as backend/max_backend/strategy_reset.py::_bootstrap_database
+    participant backend_max_backend_strategy_reset_py___connect_46 as backend/max_backend/strategy_reset.py::_connect
+    participant backend_max_backend_strategy_reset_py___count_47 as backend/max_backend/strategy_reset.py::_count
+    participant backend_max_backend_strategy_reset_py___delete_rows_48 as backend/max_backend/strategy_reset.py::_delete_rows
+    participant backend_max_backend_strategy_reset_py___hash_file_49 as backend/max_backend/strategy_reset.py::_hash_file
+    participant backend_max_backend_strategy_reset_py___make_database_backup_50 as backend/max_backend/strategy_reset.py::_make_database_backup
+    participant backend_max_backend_strategy_reset_py___owned_paths_51 as backend/max_backend/strategy_reset.py::_owned_paths
+    participant backend_max_backend_strategy_reset_py___read_counts_52 as backend/max_backend/strategy_reset.py::_read_counts
+    participant backend_max_backend_strategy_reset_py___runtime_paths_53 as backend/max_backend/strategy_reset.py::_runtime_paths
+    participant backend_max_backend_strategy_reset_py___settings_fingerprint_54 as backend/max_backend/strategy_reset.py::_settings_fingerprint
+    participant backend_max_backend_strategy_reset_py___tables_55 as backend/max_backend/strategy_reset.py::_tables
+    participant backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_56 as backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database
+    participant backend_max_backend_strategy_reset_py__database_recovery_status_57 as backend/max_backend/strategy_reset.py::database_recovery_status
+    participant backend_max_backend_strategy_reset_py__reset_strategy_workspace_58 as backend/max_backend/strategy_reset.py::reset_strategy_workspace
+    participant backend_max_backend_strategy_reset_py__strategy_reset_preflight_59 as backend/max_backend/strategy_reset.py::strategy_reset_preflight
+    participant frontend_src_App_tsx___module__60 as frontend/src/App.tsx::<module>
+    participant frontend_src_ArtifactsPage_tsx___module__61 as frontend/src/ArtifactsPage.tsx::<module>
+    _pytest_tmp_full_optimizer_dedup_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_0->>backend_max_backend_db_py__read_baseline_29: read_baseline [STATIC]
+    _pytest_tmp_full_optimizer_dedup_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_0->>backend_max_backend_mt5_py__detect_mt5_42: detect_mt5 [STATIC]
+    _pytest_tmp_full_optimizer_dedup_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__overview_1->>_pytest_tmp_full_optimizer_dedup_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_0: _foundation_state [STATIC]
+    _pytest_tmp_full_optimizer_dedup_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__recovery_status_2->>backend_max_backend_strategy_reset_py__database_recovery_status_57: database_recovery_status [STATIC]
+    _pytest_tmp_full_optimizer_dedup_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__reset_corrupt_state_3->>backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_56: backup_and_reset_corrupt_database [STATIC]
+    _pytest_tmp_scientist_refresh_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_4->>backend_max_backend_db_py__read_baseline_29: read_baseline [STATIC]
+    _pytest_tmp_scientist_refresh_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_4->>backend_max_backend_mt5_py__detect_mt5_42: detect_mt5 [STATIC]
+    _pytest_tmp_scientist_refresh_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__overview_5->>_pytest_tmp_scientist_refresh_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_4: _foundation_state [STATIC]
+    _pytest_tmp_scientist_refresh_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__recovery_status_6->>backend_max_backend_strategy_reset_py__database_recovery_status_57: database_recovery_status [STATIC]
+    _pytest_tmp_scientist_refresh_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__reset_corrupt_state_7->>backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_56: backup_and_reset_corrupt_database [STATIC]
+    _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_8->>backend_max_backend_db_py__read_baseline_29: read_baseline [STATIC]
+    _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_8->>backend_max_backend_mt5_py__detect_mt5_42: detect_mt5 [STATIC]
+    _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__overview_9->>_pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py___foundation_state_8: _foundation_state [STATIC]
+    _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__recovery_status_10->>backend_max_backend_strategy_reset_py__database_recovery_status_57: database_recovery_status [STATIC]
+    _pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__reset_corrupt_state_11->>backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_56: backup_and_reset_corrupt_database [STATIC]
+    HTTP__api_overview_21->>_pytest_tmp_full_optimizer_dedup_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__overview_1: GET route [STATIC]
+    HTTP__api_overview_21->>_pytest_tmp_scientist_refresh_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__overview_5: GET route [STATIC]
+    HTTP__api_overview_21->>_pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__overview_9: GET route [STATIC]
+    HTTP__api_overview_21->>backend_max_backend_main_py__overview_34: GET route [STATIC]
+    HTTP__api_recovery_reset_22->>_pytest_tmp_full_optimizer_dedup_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__reset_corrupt_state_3: POST route [STATIC]
+    HTTP__api_recovery_reset_22->>_pytest_tmp_scientist_refresh_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__reset_corrupt_state_7: POST route [STATIC]
+    HTTP__api_recovery_reset_22->>_pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__reset_corrupt_state_11: POST route [STATIC]
+    HTTP__api_recovery_reset_22->>backend_max_backend_main_py__reset_corrupt_state_37: POST route [STATIC]
+    HTTP__api_recovery_status_23->>_pytest_tmp_full_optimizer_dedup_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__recovery_status_2: GET route [STATIC]
+    HTTP__api_recovery_status_23->>_pytest_tmp_scientist_refresh_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__recovery_status_6: GET route [STATIC]
+    HTTP__api_recovery_status_23->>_pytest_cache_r2t_test_knowledge_is_current_and_0_root_backend_max_backend_main_py__recovery_status_10: GET route [STATIC]
+    HTTP__api_recovery_status_23->>backend_max_backend_main_py__recovery_status_36: GET route [STATIC]
+    backend_max_backend_db_py__ensure_baseline_registered_27->>backend_max_backend_db_py__connect_26: connect [STATIC]
+    backend_max_backend_db_py__ensure_baseline_registered_27->>backend_max_backend_db_py__initialize_database_28: initialize_database [STATIC]
+    backend_max_backend_db_py__ensure_baseline_registered_27->>backend_max_backend_ea_py__verify_baseline_snapshot_32: verify_baseline_snapshot [STATIC]
+    backend_max_backend_db_py__initialize_database_28->>backend_max_backend_db_py__connect_26: connect [STATIC]
+    backend_max_backend_db_py__initialize_database_28->>backend_max_backend_ea_py__verify_baseline_snapshot_32: verify_baseline_snapshot [STATIC]
+    backend_max_backend_db_py__read_baseline_29->>backend_max_backend_db_py__connect_26: connect [STATIC]
+    backend_max_backend_ea_py__verify_baseline_snapshot_32->>backend_max_backend_ea_py__load_manifest_30: load_manifest [STATIC]
+    backend_max_backend_ea_py__verify_baseline_snapshot_32->>backend_max_backend_ea_py__sha256_file_31: sha256_file [STATIC]
+    backend_max_backend_main_py___foundation_state_33->>backend_max_backend_db_py__read_baseline_29: read_baseline [STATIC]
+    backend_max_backend_main_py___foundation_state_33->>backend_max_backend_mt5_py__detect_mt5_42: detect_mt5 [STATIC]
+    backend_max_backend_main_py__overview_34->>backend_max_backend_main_py___foundation_state_33: _foundation_state [STATIC]
+    backend_max_backend_main_py__recovery_status_36->>backend_max_backend_strategy_reset_py__database_recovery_status_57: database_recovery_status [STATIC]
+    backend_max_backend_main_py__reset_corrupt_state_37->>backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_56: backup_and_reset_corrupt_database [STATIC]
+    backend_max_backend_mt5_py__detect_mt5_42->>backend_max_backend_mt5_py___auto_terminal_candidates_38: _auto_terminal_candidates [STATIC]
+    backend_max_backend_mt5_py__detect_mt5_42->>backend_max_backend_mt5_py___data_roots_39: _data_roots [STATIC]
+    backend_max_backend_mt5_py__detect_mt5_42->>backend_max_backend_mt5_py___read_origin_40: _read_origin [STATIC]
+    backend_max_backend_mt5_py__detect_mt5_42->>backend_max_backend_mt5_py___unavailable_41: _unavailable [STATIC]
+    backend_max_backend_strategy_reset_py___bootstrap_database_45->>backend_max_backend_db_py__ensure_baseline_registered_27: ensure_baseline_registered [STATIC]
+    backend_max_backend_strategy_reset_py___bootstrap_database_45->>backend_max_backend_db_py__initialize_database_28: initialize_database [STATIC]
+    backend_max_backend_strategy_reset_py___bootstrap_database_45->>backend_max_backend_strategy_reset_py__StrategyResetError_44: StrategyResetError [STATIC]
+    backend_max_backend_strategy_reset_py___bootstrap_database_45->>backend_max_backend_strategy_reset_py___connect_46: _connect [STATIC]
+    backend_max_backend_strategy_reset_py___connect_46->>backend_max_backend_db_py__connect_26: sqlite3.connect [STATIC]
+    backend_max_backend_strategy_reset_py___make_database_backup_50->>backend_max_backend_db_py__connect_26: sqlite3.connect [STATIC]
+    backend_max_backend_strategy_reset_py___make_database_backup_50->>backend_max_backend_optimizer_worker_identity_py__WorkerIdentityServer_close_43: target.close [STATIC]
+    backend_max_backend_strategy_reset_py___make_database_backup_50->>backend_max_backend_strategy_reset_py__StrategyResetError_44: StrategyResetError [STATIC]
+    backend_max_backend_strategy_reset_py___make_database_backup_50->>backend_max_backend_strategy_reset_py___hash_file_49: _hash_file [STATIC]
+    backend_max_backend_strategy_reset_py___owned_paths_51->>backend_max_backend_mt5_py__detect_mt5_42: detect_mt5 [STATIC]
+    backend_max_backend_strategy_reset_py___owned_paths_51->>backend_max_backend_strategy_reset_py___runtime_paths_53: _runtime_paths [STATIC]
+    backend_max_backend_strategy_reset_py___read_counts_52->>backend_max_backend_strategy_reset_py__StrategyResetError_44: StrategyResetError [STATIC]
+    backend_max_backend_strategy_reset_py___read_counts_52->>backend_max_backend_strategy_reset_py___connect_46: _connect [STATIC]
+    backend_max_backend_strategy_reset_py___read_counts_52->>backend_max_backend_strategy_reset_py___count_47: _count [STATIC]
+    backend_max_backend_strategy_reset_py___read_counts_52->>backend_max_backend_strategy_reset_py___hash_file_49: _hash_file [STATIC]
+    backend_max_backend_strategy_reset_py___read_counts_52->>backend_max_backend_strategy_reset_py___owned_paths_51: _owned_paths [STATIC]
+    backend_max_backend_strategy_reset_py___read_counts_52->>backend_max_backend_strategy_reset_py___tables_55: _tables [STATIC]
+    backend_max_backend_strategy_reset_py___settings_fingerprint_54->>backend_max_backend_strategy_reset_py___hash_file_49: _hash_file [STATIC]
+    backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_56->>backend_max_backend_strategy_reset_py__StrategyResetError_44: StrategyResetError [STATIC]
+    backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_56->>backend_max_backend_strategy_reset_py___bootstrap_database_45: _bootstrap_database [STATIC]
+    backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_56->>backend_max_backend_strategy_reset_py___hash_file_49: _hash_file [STATIC]
+    backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_56->>backend_max_backend_strategy_reset_py___settings_fingerprint_54: _settings_fingerprint [STATIC]
+    backend_max_backend_strategy_reset_py__backup_and_reset_corrupt_database_56->>backend_max_backend_strategy_reset_py__database_recovery_status_57: database_recovery_status [STATIC]
+    backend_max_backend_strategy_reset_py__database_recovery_status_57->>backend_max_backend_strategy_reset_py___connect_46: _connect [STATIC]
+    backend_max_backend_strategy_reset_py__reset_strategy_workspace_58->>backend_max_backend_optimizer_worker_identity_py__WorkerIdentityServer_close_43: conn.close [STATIC]
+    backend_max_backend_strategy_reset_py__reset_strategy_workspace_58->>backend_max_backend_strategy_reset_py__StrategyResetError_44: StrategyResetError [STATIC]
+    backend_max_backend_strategy_reset_py__reset_strategy_workspace_58->>backend_max_backend_strategy_reset_py___connect_46: _connect [STATIC]
+    backend_max_backend_strategy_reset_py__reset_strategy_workspace_58->>backend_max_backend_strategy_reset_py___delete_rows_48: _delete_rows [STATIC]
+    backend_max_backend_strategy_reset_py__reset_strategy_workspace_58->>backend_max_backend_strategy_reset_py___hash_file_49: _hash_file [STATIC]
+    backend_max_backend_strategy_reset_py__reset_strategy_workspace_58->>backend_max_backend_strategy_reset_py___make_database_backup_50: _make_database_backup [STATIC]
+    backend_max_backend_strategy_reset_py__reset_strategy_workspace_58->>backend_max_backend_strategy_reset_py___read_counts_52: _read_counts [STATIC]
+    backend_max_backend_strategy_reset_py__reset_strategy_workspace_58->>backend_max_backend_strategy_reset_py___settings_fingerprint_54: _settings_fingerprint [STATIC]
+    backend_max_backend_strategy_reset_py__strategy_reset_preflight_59->>backend_max_backend_strategy_reset_py___read_counts_52: _read_counts [STATIC]
+    frontend_src_App_tsx___module__60->>HTTP__api_overview_21: FETCH request [STATIC]
+    frontend_src_App_tsx___module__60->>HTTP__api_recovery_reset_22: FETCH request [STATIC]
+    frontend_src_App_tsx___module__60->>HTTP__api_recovery_status_23: FETCH request [STATIC]
+    frontend_src_App_tsx___module__60->>HTTP__api_scientist_provider_settings_24: FETCH request [STATIC]
+    frontend_src_App_tsx___module__60->>HTTP__api_scientist_ui_settings_25: FETCH request [STATIC]
+    frontend_src_ArtifactsPage_tsx___module__61->>HTTP__api_artifacts_12: FETCH request [STATIC]
+    frontend_src_ArtifactsPage_tsx___module__61->>HTTP__api_artifacts__13: FETCH request [STATIC]
+    frontend_src_ArtifactsPage_tsx___module__61->>HTTP__api_artifacts_action_14: FETCH request [STATIC]
+    frontend_src_ArtifactsPage_tsx___module__61->>HTTP__api_artifacts_cleanup_15: FETCH request [STATIC]
+    frontend_src_ArtifactsPage_tsx___module__61->>HTTP__api_artifacts_cleanup_preflight_16: FETCH request [STATIC]
+    frontend_src_ArtifactsPage_tsx___module__61->>HTTP__api_artifacts_preflight_17: FETCH request [STATIC]
+    frontend_src_ArtifactsPage_tsx___module__61->>HTTP__api_artifacts_reconcile_18: FETCH request [STATIC]
+    frontend_src_ArtifactsPage_tsx___module__61->>HTTP__api_artifacts_strategy_reset_19: FETCH request [STATIC]
+    frontend_src_ArtifactsPage_tsx___module__61->>HTTP__api_artifacts_strategy_reset_preflight_20: FETCH request [STATIC]

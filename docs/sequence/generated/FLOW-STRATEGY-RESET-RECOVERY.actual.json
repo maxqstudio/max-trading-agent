@@ -18,35 +18,70 @@
     {
       "action": "read_baseline",
       "evidence": "STATIC",
-      "from": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "from": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::read_baseline"
     },
     {
       "action": "detect_mt5",
       "evidence": "STATIC",
-      "from": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "from": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
       "resolver": "python_ast",
       "to": "backend/max_backend/mt5.py::detect_mt5"
     },
     {
       "action": "_foundation_state",
       "evidence": "STATIC",
-      "from": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "from": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
       "resolver": "python_ast",
-      "to": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
+      "to": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
     },
     {
       "action": "database_recovery_status",
       "evidence": "STATIC",
-      "from": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "from": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
       "resolver": "python_ast",
       "to": "backend/max_backend/strategy_reset.py::database_recovery_status"
     },
     {
       "action": "backup_and_reset_corrupt_database",
       "evidence": "STATIC",
-      "from": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "from": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
+    },
+    {
+      "action": "read_baseline",
+      "evidence": "STATIC",
+      "from": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::read_baseline"
+    },
+    {
+      "action": "detect_mt5",
+      "evidence": "STATIC",
+      "from": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::detect_mt5"
+    },
+    {
+      "action": "_foundation_state",
+      "evidence": "STATIC",
+      "from": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "resolver": "python_ast",
+      "to": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
+    },
+    {
+      "action": "database_recovery_status",
+      "evidence": "STATIC",
+      "from": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::database_recovery_status"
+    },
+    {
+      "action": "backup_and_reset_corrupt_database",
+      "evidence": "STATIC",
+      "from": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
       "resolver": "python_ast",
       "to": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
     },
@@ -90,7 +125,14 @@
       "evidence": "STATIC",
       "from": "HTTP /api/overview",
       "resolver": "python_route_decorator",
-      "to": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+      "to": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/overview",
+      "resolver": "python_route_decorator",
+      "to": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
     },
     {
       "action": "GET route",
@@ -111,7 +153,14 @@
       "evidence": "STATIC",
       "from": "HTTP /api/recovery/reset",
       "resolver": "python_route_decorator",
-      "to": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
+      "to": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
+    },
+    {
+      "action": "POST route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/recovery/reset",
+      "resolver": "python_route_decorator",
+      "to": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
     },
     {
       "action": "POST route",
@@ -132,7 +181,14 @@
       "evidence": "STATIC",
       "from": "HTTP /api/recovery/status",
       "resolver": "python_route_decorator",
-      "to": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+      "to": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/recovery/status",
+      "resolver": "python_route_decorator",
+      "to": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
     },
     {
       "action": "GET route",
@@ -238,13 +294,6 @@
       "from": "backend/max_backend/main.py::reset_corrupt_state",
       "resolver": "python_ast",
       "to": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
-    },
-    {
-      "action": "terminal.parent.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/mt5.py::detect_mt5",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "_auto_terminal_candidates",
@@ -619,40 +668,76 @@
   "generated_by": "generate_sequence_actual.py",
   "nodes": [
     {
-      "id": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "id": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
       "kind": "function",
-      "label": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "label": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
       "language": "Python",
       "line_end": 157,
       "line_start": 130,
-      "locator": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
+      "locator": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
     },
     {
-      "id": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "id": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
       "kind": "function",
-      "label": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "label": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
       "language": "Python",
       "line_end": 198,
       "line_start": 191,
-      "locator": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+      "locator": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
     },
     {
-      "id": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "id": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
       "kind": "function",
-      "label": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "label": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
       "language": "Python",
       "line_end": 111,
       "line_start": 99,
-      "locator": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+      "locator": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
     },
     {
-      "id": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "id": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
       "kind": "function",
-      "label": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "label": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
       "language": "Python",
       "line_end": 127,
       "line_start": 115,
-      "locator": ".pytest-worker-identity-full-r2/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
+      "locator": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
+    },
+    {
+      "id": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "kind": "function",
+      "label": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "language": "Python",
+      "line_end": 157,
+      "line_start": 130,
+      "locator": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
+    },
+    {
+      "id": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "kind": "function",
+      "label": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "language": "Python",
+      "line_end": 198,
+      "line_start": 191,
+      "locator": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+    },
+    {
+      "id": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "kind": "function",
+      "label": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "language": "Python",
+      "line_end": 111,
+      "line_start": 99,
+      "locator": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+    },
+    {
+      "id": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "kind": "function",
+      "label": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "language": "Python",
+      "line_end": 127,
+      "line_start": 115,
+      "locator": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
     },
     {
       "id": ".pytest_cache/r2t/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
@@ -689,15 +774,6 @@
       "line_end": 127,
       "line_start": 115,
       "locator": ".pytest_cache/r2t/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
-    },
-    {
-      "id": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve",
-      "kind": "function",
-      "label": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve",
-      "language": "Python",
-      "line_end": 28,
-      "line_start": 26,
-      "locator": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "id": "HTTP /api/artifacts",
@@ -1118,7 +1194,7 @@
       "locator": "frontend/src/ArtifactsPage.tsx::<module>"
     }
   ],
-  "observed_head": "b167d2a6df432ed6c146f1fabe100521cc7feefc",
+  "observed_head": "312cd4b2d88a63f8cd0e6d1e873ae08fdc3d3f60",
   "schema_version": 1,
-  "source_digest": "fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b"
+  "source_digest": "c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048"
 }

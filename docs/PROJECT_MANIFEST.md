@@ -10,10 +10,10 @@ Governance profile: strict
 
 ## Repositories
 Repository: maxqstudio/max-trading-agent
-Active branch: work/optimizer-commit-memory-resource-safety-v2
+Active branch: codex/restore-mt5-native-agent-execution
 Current authoritative SHA: external final acceptance evidence
-Last accepted SHA: 7f3fade6fd71892266ad18a178dab9d503b5ce77
-Current source digest: fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b
+Last accepted SHA: ac2787c0fe46bfa83267b0ceebb9d8f3f1d44c5c
+Current source digest: c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.

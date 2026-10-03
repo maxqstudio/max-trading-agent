@@ -221,6 +221,7 @@ type QualifiedPage = {
   qualified_count: number
   historical_qualified_count: number
   consumed_count: number
+  deduplicated_count: number
   rejected_count: number
   page: number
   page_size: number
@@ -1151,6 +1152,7 @@ export default function OptimizerPage() {
               <div><span>Raw Passes</span><strong>{qualified?.raw_count ?? '—'}</strong></div>
               <div><span>Available qualified</span><strong>{qualified?.qualified_count ?? '—'}</strong></div>
               <div><span>Already used</span><strong>{qualified?.consumed_count ?? '—'}</strong></div>
+              <div><span>Exact duplicates removed</span><strong>{qualified?.deduplicated_count ?? '—'}</strong></div>
               <div><span>Rejected</span><strong>{qualified?.rejected_count ?? '—'}</strong></div>
             </div>
 

@@ -175,7 +175,7 @@
       "mode": "DURING",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "purpose": "Persist editable Optimizer drafts independently from immutable requests, reconcile worker/MT5 identity safely, revalidate frozen physical-RAM/Windows-commit budgets before launch, monitor exact Job Object process PrivateUsage with native telemetry, stop or require reconciliation fail-closed, atomically publish evidence, and serve bounded candidate reads.",
+      "purpose": "Persist editable Optimizer drafts independently from immutable requests, reconcile worker/MT5 identity safely, restore native terminal64.exe /config launch and Owner-controlled tester agents, parse frozen reports without rejecting identical repeated metric vectors, atomically publish evidence, and prevent exact duplicate candidate identities from entering SQLite.",
       "declared_entries": [
         "frontend/src/OptimizerPage.tsx::<module>",
         "backend/max_backend/optimizer_draft.py::get_optimizer_draft",
@@ -184,26 +184,28 @@
         "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
         "backend/max_backend/optimizer_jobs.py::stop_optimizer",
         "backend/max_backend/optimizer_jobs.py::resume_optimizer",
-        "backend/max_backend/optimizer_resources.py::resolve_resource_preflight",
-        "backend/max_backend/optimizer_resources.py::frozen_resource_admission",
-        "backend/max_backend/optimizer_resource_runtime.py::launch_bounded_mt5",
-        "backend/max_backend/optimizer_resource_runtime.py::_job_process_rows",
         "backend/max_backend/optimizer_store.py::claim_initial_worker_launch",
         "backend/max_backend/optimizer_store.py::confirm_worker_launch",
-        "backend/max_backend/optimizer_store.py::load_resource_calibration",
         "backend/max_backend/optimizer_worker.py::run_job",
+        "backend/max_backend/optimizer_runtime.py::launch_mt5",
         "backend/max_backend/optimizer_runtime.py::commit_round_evidence",
+        "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv",
+        "backend/max_backend/optimizer_store.py::optimizer_candidate_identity",
+        "backend/max_backend/optimizer_store.py::optimizer_candidate_identities",
+        "backend/max_backend/optimizer_store.py::persist_candidate_projection",
+        "backend/max_backend/optimizer_candidates.py::candidate_projection_payload",
         "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
         "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration"
       ],
-      "generated_nodes": 249,
-      "generated_edges": 479,
-      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
+      "generated_nodes": 126,
+      "generated_edges": 186,
+      "source_digest": "c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048",
       "tests": [
         "backend/tests/test_optimizer_draft.py",
         "backend/tests/test_optimizer_reliability.py",
         "backend/tests/test_optimizer_runtime_durability.py",
         "backend/tests/test_optimizer_resources.py",
+        "backend/tests/test_m01_optimizer_core.py",
         "backend/tests/test_m01_jobs.py",
         "backend/tests/test_m01_recovery.py",
         "backend/tests/test_m08_strategy_results.py",
@@ -211,7 +213,7 @@
         "frontend/src/ChallengersPage.test.tsx"
       ],
       "unresolved_bindings": [],
-      "runtime_evidence_boundary": "Historical bounded Stage C/D MT5 evidence remains accepted. The later Owner-reported full-range 17D attempt crashed under Windows commit-memory exhaustion; current V2 work uses synthetic tests and any new Owner diagnostic remains limited to 20 minutes, may not complete the full optimization, and must not run while an Owner job is already active. No scientific result is claimed."
+      "runtime_evidence_boundary": "Historical Stage C/D MT5 diagnostics remain historical only. This source candidate has not run MT5 or a real Optimizer; the reported long-range run ended in FAILED during result parsing after MT5 returned exit code 0. Frozen evidence was replayed offline without database writes. Owner runtime remains NOT_PROVEN; no scientific result is claimed."
     }
   ],
   "parse_failure_boundary": {

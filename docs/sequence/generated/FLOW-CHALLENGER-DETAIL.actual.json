@@ -41,7 +41,7 @@
       "locator": "backend/max_backend/challenger_registry.py::challenger_detail"
     }
   ],
-  "observed_head": "b167d2a6df432ed6c146f1fabe100521cc7feefc",
+  "observed_head": "312cd4b2d88a63f8cd0e6d1e873ae08fdc3d3f60",
   "schema_version": 1,
-  "source_digest": "fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b"
+  "source_digest": "c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048"
 }

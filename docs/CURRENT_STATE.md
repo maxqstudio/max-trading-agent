@@ -3,7 +3,7 @@
 # CURRENT STATE
 
 Last updated: generated from current specs
-Authority verified at SHA: 7f3fade6fd71892266ad18a178dab9d503b5ce77
+Authority verified at SHA: ac2787c0fe46bfa83267b0ceebb9d8f3f1d44c5c
 Governance profile: strict
 
 ## Current phase
@@ -14,15 +14,15 @@ ROADMAP_SYNC: PASS
 
 ## Source
 Repository: maxqstudio/max-trading-agent
-Branch: work/optimizer-commit-memory-resource-safety-v2
+Branch: codex/restore-mt5-native-agent-execution
 Authoritative SHA: external final acceptance evidence
-Last accepted SHA: 7f3fade6fd71892266ad18a178dab9d503b5ce77
+Last accepted SHA: ac2787c0fe46bfa83267b0ceebb9d8f3f1d44c5c
 Current candidate SHA: external final acceptance evidence
-Current source digest: fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b
+Current source digest: c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
-Runtime status: CURRENT_V2_BOUNDED_MT5_DIAGNOSTIC_BLOCKED_BY_COMMIT_PREFLIGHT; HISTORICAL_STAGE_C_D_PASS; FULL_OWNER_ACCEPTANCE_NOT_PROVEN
+Runtime status: CURRENT_CANDIDATE_MT5_NOT_RUN; OWNER_OPTIMIZER_NOT_PROVEN; HISTORICAL_STAGE_C_D_ONLY; RESEARCH_PAUSED
 
 ## Documentation governance
 Documentation root: docs/
@@ -36,12 +36,12 @@ PROJECT_DOCS_SYNC: PASS
 Sequence policy: REQUIRED
 Current sequence mode: DURING
 Current sequence session: FLOW-OPTIMIZER-DURABILITY-PERFORMANCE
-SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs and session source digests match Git-aware inventory digest fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b. Git-ignored Owner Optimizer artifacts are excluded and unchanged.
+SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions and generated actual graphs validated at source digest c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048.
 
 ## Proven
-- Accepted starting authority: maxqstudio/max-trading-agent main 7f3fade6fd71892266ad18a178dab9d503b5ce77; baseline backend 456 passed, frontend 53 passed across 8 files, schema 15.
+- Accepted starting authority: maxqstudio/max-trading-agent main ac2787c0fe46bfa83267b0ceebb9d8f3f1d44c5c; current branch candidate base verified from origin/main.
 - Current Skill_Workflow/main was fetched and verified at 964481ed1609f87904ba9e08890bffc0a10c3fd4; its exact governance-tool delta was inspected and the applicable tools are vendored byte-identically, with no local validator patch.
-- The Git-aware source inventory excludes Git-ignored Owner Optimizer XML artifacts without modifying them; all 8 DURING/CURRENT sessions and generated actual graphs were regenerated and validate at digest fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b.
+- The Git-aware source inventory excludes Git-ignored Owner Optimizer XML artifacts without modifying them; all 8 DURING/CURRENT sessions use the current source digest c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048; the Optimizer actual graph now includes native launch, duplicate-vector parsing, and transactional candidate deduplication.
 - Optimizer draft, launch/recovery identity, atomic evidence, read-model, frontend request lifecycle, and visible action feedback are under the authorized source-hardening scope.
 - Source tests and 750-candidate API profile used synthetic SQLite/evidence only; actual qualified-candidate endpoint median was 23.651 ms, p95 68.983 ms, with a 61,462-byte page; no real MT5 or market data was used.
 - A separate Windows process-counter run measured CPU 1.0781 s, peak working set 64,405,504 bytes, read I/O 6,060,864 bytes and write I/O 0 over 108 requests; qualified route was mocked in that resource run.
@@ -49,24 +49,25 @@ SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions, 0 failed; actual graphs an
 - V2 targeted optimizer/resource regression passes 171/171; full backend passes 474 tests with zero skips/failures; frontend passes 53 tests, with lint, build, npm tree and pip check passing. Canonical Scientist knowledge was rebuilt after the first full-suite run exposed stale source hashes.
 - The baseline PR #17 head b167d2a6df432ed6c146f1fabe100521cc7feefc had one push attempt fail the actual venv worker identity test with an 8-second PowerShell/CIM TimeoutExpired; its passing reruns did not resolve the defect. The repair source candidate removed that production dependency, passed 32 focused identity/recovery/stop tests, passed 3 repeated venv runs (15/15 actual worker lifecycles), passed full backend (483, zero skips/failures), and passed both push and PR-head Windows CI across all three jobs. Exact final SHA/run identities are external per D-012. PR #17 remains open and unmerged; PR #16 is closed and superseded.
 - Worker identity is now proven on the repair source candidate: deterministic authenticated named-pipe handshake; exact job/token/peer PID/executable/process-creation binding; verified-only termination; 483 full backend tests passed; repeated real Windows venv tests passed 15/15; both push and PR-head CI passed. The current task adds only final governance status after this evidence; no Owner runtime or MT5 process was used.
-- Read-only active-job check found zero active Optimizer jobs and zero terminal/tester processes. Frozen V2 preflight safely returned BLOCKED at 12.71 GiB commit headroom versus 32 GiB required for one bounded agent; no MT5 process was launched and no Owner draft or OS setting was changed.
+- Read-only DB inspection found job 20261003_012101_e65a942d status FAILED, active=0, round phase REPORT_READY, no candidate rows; offline replay parsed 7,115 report rows and 3,239 unique eligible candidates without writing to SQLite or launching MT5.
+- Local source candidate deduplicates only semantically exact candidate identities before transactional SQLite projection persistence and collapses repeated sidecar vectors only when every semantic metric agrees; current local backend/frontend gates passed before governance regeneration.
 
 ## Not proven
-- Owner runtime acceptance remains NOT_PROVEN because the V2 diagnostic was blocked before launch by commit preflight; exact final SHA/run identity remains external per D-012.
-- Control Room has not yet accepted PR #17; no merge or phase closure is claimed. Exact final SHA and CI run identities remain external evidence per D-012.
+- Owner runtime acceptance remains NOT_PROVEN; this source candidate has not launched MT5 or performed a real Optimizer run.
+- PR #18 candidate updates have not passed hosted CI; no merge or phase closure is claimed. Exact final SHA and CI run identities remain external evidence per D-012.
 - Full production-scale/long-range Owner Strategy Optimizer execution, Challenger selection, Champion promotion, MT5 backtest, and end-to-end runtime acceptance.
 - Fresh R00-R11 Research execution, model training, ONNX, Research Challenger creation, or Champion mutation.
 
 ## Known blockers
-- The authorized bounded V2 MT5 diagnostic is blocked before launch: current Windows commit headroom is 12.71 GiB, below the frozen one-agent requirement of 32 GiB. Do not bypass the resource guard or change OS/pagefile settings.
+- The latest Owner optimizer job 20261003_012101_e65a942d is inactive and FAILED during PARSING_RESULTS after MT5 returned exit code 0; its frozen report/sidecar contain repeated parameter vectors and no candidate rows were committed. The source repair must remain offline/synthetic until Owner starts a new run.
 - Owner-reported full-range 17D Fast Genetic attempt crashed under Windows commit-memory exhaustion; exact final Owner Optimizer/runtime acceptance remains NOT_PROVEN.
-- The final governance-only PR #17 branch head must pass exact push and PR-head CI before it is returned to Control Room for audit; do not merge.
+- The native-launch/parser/dedup source candidate is not yet committed or hosted-CI validated; preserve PR #18 and stop before merge.
 
 ## Known defects
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- After exact push and PR-head Windows CI pass on the final governance-only PR #17 head, stop and return it to Control Room for audit. Do not merge.
+- After local gates pass, update PR #18 with this source repair, wait for exact push and PR-head Windows CI, then stop for Control Room audit. Do not merge.
 - Owner-PC runtime, real MT5 diagnostics, and all R00-R11 Research remain out of scope for this repair; runtime stays NOT_PROVEN and Research remains PAUSED.
 
 ## Explicitly blocked

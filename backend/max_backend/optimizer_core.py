@@ -968,6 +968,33 @@ def parse_optimizer_metrics_csv(
 
     result: dict[tuple[tuple[str, int | float], ...], dict[str, Any]] = {}
     frame_ids: set[int] = set()
+
+    def retain_metric(
+        signature: tuple[tuple[str, int | float], ...],
+        record: dict[str, Any],
+    ) -> None:
+        previous = result.get(signature)
+        if previous is None:
+            result[signature] = record
+            return
+
+        previous_metrics = {
+            key: value for key, value in previous.items() if key != "frame_pass_id"
+        }
+        current_metrics = {
+            key: value for key, value in record.items() if key != "frame_pass_id"
+        }
+        if previous_metrics != current_metrics:
+            raise ValueError(
+                "Conflicting optimizer parameter-vector metrics evidence"
+            )
+
+        # MT5 may emit repeated frames for one genetic-search vector. The report
+        # joins by vector, so identical metric evidence is safe to collapse. Keep
+        # a stable representative frame identity for deterministic replay.
+        if int(record["frame_pass_id"]) < int(previous["frame_pass_id"]):
+            result[signature] = record
+
     with source.open("r", encoding="utf-8-sig", errors="strict", newline="") as handle:
         reader = csv.DictReader(handle)
         fields = {str(name).strip() for name in (reader.fieldnames or [])}
@@ -1017,8 +1044,6 @@ def parse_optimizer_metrics_csv(
             frame_ids.add(frame_pass_id)
 
             signature = parameter_signature(params)
-            if signature in result:
-                raise ValueError("Duplicate optimizer parameter-vector metrics evidence")
 
             expected_alpha: float | None = None
             if fitness_contract is not None:
@@ -1042,7 +1067,7 @@ def parse_optimizer_metrics_csv(
 
                 if _is_v2_zero_trade_sentinel(record):
                     record["accounting_valid"] = False
-                    result[signature] = record
+                    retain_metric(signature, record)
                     continue
 
             if record["accounting_errors"] != 0:
@@ -1089,7 +1114,7 @@ def parse_optimizer_metrics_csv(
                 ):
                     raise ValueError(f"Optimizer fitness arithmetic mismatch in frame {frame_pass_id}")
 
-            result[signature] = record
+            retain_metric(signature, record)
 
     if not result:
         raise ValueError("Optimizer Weighted-R sidecar contains no rows")

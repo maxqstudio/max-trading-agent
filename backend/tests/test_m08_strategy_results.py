@@ -46,7 +46,14 @@ from max_backend.optimizer_core import (
 )
 from max_backend.optimizer_jobs import job_detail
 from max_backend.optimizer_runtime import commit_round_evidence
-from max_backend.optimizer_store import create_job, update_job, upsert_round
+from max_backend.optimizer_store import (
+    create_job,
+    optimizer_candidate_identity,
+    optimizer_candidate_identities,
+    persist_candidate_projection,
+    update_job,
+    upsert_round,
+)
 from max_backend.path_safety import assert_owned_path, remove_owned_path
 from max_backend.workflow_contract import (
     OPTIMIZER_REQUEST_SCHEMA_CURRENT,
@@ -443,6 +450,130 @@ def test_qualified_endpoint_uses_projection_and_strict_mutation_revalidates(
             int(page["items"][0]["pass"]),
             path=db,
         )
+
+
+def test_exact_duplicate_candidates_are_removed_before_database_persistence(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    first = pass_row(1)
+    duplicate = pass_row(2)
+    duplicate["params"] = deepcopy(first["params"])
+    db, job, request, _evidence_root = build_optimizer_fixture(
+        tmp_path,
+        monkeypatch,
+        [first, duplicate],
+    )
+
+    page = qualified_candidates_page(job["job_id"], path=db)
+
+    assert page["raw_count"] == 2
+    assert page["qualified_count"] == 1
+    assert page["historical_qualified_count"] == 1
+    assert page["deduplicated_count"] == 1
+    assert page["rejected_count"] == 0
+    assert [item["pass"] for item in page["items"]] == [1]
+    with pytest.raises(
+        ValueError,
+        match="OPTIMIZER_CANDIDATE_IDENTITY_INVALID",
+    ):
+        optimizer_candidate_identity({"params": page["items"][0]["params"]})
+    with connect(db) as conn:
+        assert conn.execute(
+            "SELECT COUNT(*) FROM optimizer_candidate_projection WHERE job_id=?",
+            (job["job_id"],),
+        ).fetchone()[0] == 1
+        assert conn.execute(
+            "SELECT candidate_count FROM optimizer_candidate_projection_rounds "
+            "WHERE job_id=? AND round_no=1",
+            (job["job_id"],),
+        ).fetchone()[0] == 1
+
+    existing = optimizer_candidate_identities(job["job_id"], path=db)
+    assert len(existing) == 1
+    source = page["items"][0]
+    passes_path = Path(source["passes_path"])
+    passes_payload = json.loads(passes_path.read_text(encoding="utf-8"))["passes"]
+    next_round_projection = optimizer_candidates.candidate_projection_payload(
+        job_id=job["job_id"],
+        request=request,
+        round_no=2,
+        passes_payload=passes_payload,
+        report_path=source["report_path"],
+        sidecar_path=source["sidecar_path"],
+        report_sha256=source["report_sha256"],
+        sidecar_sha256=source["sidecar_sha256"],
+        bundle_path=passes_path.parent,
+        request_path=source["request_path"],
+        run_nonce=424242,
+        existing_candidate_identities=existing,
+    )
+    assert next_round_projection["candidates"] == []
+
+    upsert_round(
+        job["job_id"],
+        2,
+        phase="PARSED",
+        state={"optimizer_run_nonce": 424242},
+        parsed_passes=2,
+        eligible_passes=2,
+        path=db,
+    )
+    duplicate_candidate = {**source, "pass": 2, "round": 2}
+    duplicate_item = {
+        "pass": 2,
+        "mean_r": duplicate_candidate["mean_r"],
+        "custom_fitness": duplicate_candidate["custom_fitness"],
+        "weighted_r": duplicate_candidate["weighted_r"],
+        "profit_factor": duplicate_candidate["profit_factor"],
+        "recovery_factor": duplicate_candidate["recovery_factor"],
+        "trades": duplicate_candidate["trades"],
+        "required_trades": duplicate_candidate["required_trades"],
+        "search_text": "duplicate candidate fixture",
+        "candidate": duplicate_candidate,
+    }
+    duplicate_projection = {
+        "report_sha256": "round-two-report",
+        "sidecar_sha256": "round-two-sidecar",
+        "projection_sha256": "round-two-projection",
+        "candidates": [duplicate_item],
+    }
+    duplicate_projection["candidates"] = [
+        duplicate_item,
+        deepcopy(duplicate_item),
+    ]
+    with pytest.raises(
+        ValueError,
+        match="OPTIMIZER_DUPLICATE_CANDIDATE_IN_PROJECTION",
+    ):
+        persist_candidate_projection(
+            job["job_id"],
+            2,
+            duplicate_projection,
+            path=db,
+        )
+
+    duplicate_projection["candidates"] = [duplicate_item]
+    with pytest.raises(
+        RuntimeError,
+        match="OPTIMIZER_DUPLICATE_CANDIDATE_ALREADY_PERSISTED",
+    ):
+        persist_candidate_projection(
+            job["job_id"],
+            2,
+            duplicate_projection,
+            path=db,
+        )
+    with connect(db) as conn:
+        assert conn.execute(
+            "SELECT COUNT(*) FROM optimizer_candidate_projection WHERE job_id=?",
+            (job["job_id"],),
+        ).fetchone()[0] == 1
+        assert conn.execute(
+            "SELECT COUNT(*) FROM optimizer_candidate_projection_rounds "
+            "WHERE job_id=? AND round_no=2",
+            (job["job_id"],),
+        ).fetchone()[0] == 0
 
 
 def test_new_optimizer_terminal_never_auto_registers_challenger(

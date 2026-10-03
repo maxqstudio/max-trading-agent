@@ -45,15 +45,15 @@
   },
   {
     "path": "backend/max_backend/optimizer_core.py",
-    "sha256": "357473dd423273c50bfdd6a23fde56520b1ac96ab6f61f6d6da28003135603d2"
+    "sha256": "ede3f87efc0e3d1385867601b390e79b17008135b5a02ffc8ae6ff146cc79589"
   },
   {
     "path": "backend/max_backend/optimizer_store.py",
-    "sha256": "1284c8ff6b54947292b683a62b594bf05212fdf0790ebcc546ca2c2f732521fa"
+    "sha256": "698addfb68153873b958f7747153e09a5578f87a7c193ade3f87689067c63f3e"
   },
   {
     "path": "backend/max_backend/optimizer_worker.py",
-    "sha256": "d96fdafb0288f92cfd68615f5190b52bd4581f6e1ba8057facfe11be072f7c51"
+    "sha256": "61b7e0eb86e0f8428f0b94909d4c2672729533d41375c263630ded15781fa26d"
   },
   {
     "path": "backend/max_backend/optimizer_api.py",
@@ -61,7 +61,7 @@
   },
   {
     "path": "backend/max_backend/optimizer_candidates.py",
-    "sha256": "5112c410bb5fc0e9e70ba4925bf0ca07a5c89e44588f9a60979f379dd533df40"
+    "sha256": "3d3cad5284e827f703a8b27e73512eb8a684d3450fe80262268264c895705fca"
   },
   {
     "path": "backend/max_backend/challenger_selection.py",

@@ -556,6 +556,15 @@ def _persist_candidate_projection(
     rows = projection.get("candidates")
     if not isinstance(rows, list):
         raise ValueError("OPTIMIZER_CANDIDATE_PROJECTION_INVALID")
+    candidate_identities: set[str] = set()
+    for item in rows:
+        if not isinstance(item, dict):
+            raise ValueError("OPTIMIZER_CANDIDATE_PROJECTION_INVALID")
+        candidate_identity = optimizer_candidate_identity(item.get("candidate"))
+        if candidate_identity in candidate_identities:
+            raise ValueError("OPTIMIZER_DUPLICATE_CANDIDATE_IN_PROJECTION")
+        candidate_identities.add(candidate_identity)
+
     identity = (
         str(projection.get("report_sha256") or ""),
         str(projection.get("sidecar_sha256") or ""),
@@ -572,6 +581,25 @@ def _persist_candidate_projection(
         if current != identity:
             raise RuntimeError("OPTIMIZER_CANDIDATE_PROJECTION_REPLAY_MISMATCH")
         return
+
+    persisted_rows = conn.execute(
+        "SELECT candidate_json FROM optimizer_candidate_projection WHERE job_id=?",
+        (job_id,),
+    ).fetchall()
+    persisted_identities: set[str] = set()
+    for row in persisted_rows:
+        try:
+            persisted_candidate = json.loads(str(row["candidate_json"]))
+        except json.JSONDecodeError as exc:
+            raise RuntimeError("OPTIMIZER_CANDIDATE_PROJECTION_CORRUPT") from exc
+        try:
+            persisted_identities.add(
+                optimizer_candidate_identity(persisted_candidate)
+            )
+        except ValueError as exc:
+            raise RuntimeError("OPTIMIZER_CANDIDATE_PROJECTION_CORRUPT") from exc
+    if candidate_identities.intersection(persisted_identities):
+        raise RuntimeError("OPTIMIZER_DUPLICATE_CANDIDATE_ALREADY_PERSISTED")
 
     conn.execute(
         """
@@ -641,6 +669,65 @@ def _persist_candidate_projection(
         """,
         (job_id, job_id),
     )
+
+
+_OPTIMIZER_CANDIDATE_IDENTITY_FIELDS = (
+    "params",
+    "mean_r",
+    "custom_fitness",
+    "weighted_r",
+    "profit_factor",
+    "recovery_factor",
+    "trades",
+    "required_trades",
+    "hard_gates",
+    "strategy_contract",
+    "strategy_geometry",
+    "ea_sha256",
+)
+
+
+def optimizer_candidate_identity(candidate: Any) -> str:
+    """Return the exact strategy-and-result identity, excluding pass provenance."""
+    if (
+        not isinstance(candidate, dict)
+        or not isinstance(candidate.get("params"), dict)
+        or any(field not in candidate for field in _OPTIMIZER_CANDIDATE_IDENTITY_FIELDS)
+    ):
+        raise ValueError("OPTIMIZER_CANDIDATE_IDENTITY_INVALID")
+    identity = {
+        field: candidate.get(field)
+        for field in _OPTIMIZER_CANDIDATE_IDENTITY_FIELDS
+    }
+    try:
+        return json.dumps(
+            identity,
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        )
+    except (TypeError, ValueError, OverflowError) as exc:
+        raise ValueError("OPTIMIZER_CANDIDATE_IDENTITY_INVALID") from exc
+
+
+def optimizer_candidate_identities(
+    job_id: str,
+    *,
+    path: Path = DATABASE_PATH,
+) -> set[str]:
+    with connect(path) as conn:
+        rows = conn.execute(
+            "SELECT candidate_json FROM optimizer_candidate_projection WHERE job_id=?",
+            (str(job_id),),
+        ).fetchall()
+    identities: set[str] = set()
+    for row in rows:
+        try:
+            candidate = json.loads(str(row["candidate_json"]))
+            identities.add(optimizer_candidate_identity(candidate))
+        except (json.JSONDecodeError, ValueError) as exc:
+            raise RuntimeError("OPTIMIZER_CANDIDATE_PROJECTION_CORRUPT") from exc
+    return identities
 
 
 def persist_candidate_projection(

@@ -51,6 +51,7 @@ from .workflow_contract import (
 from .optimizer_store import (
     get_job,
     get_round,
+    optimizer_candidate_identities,
     update_job,
     upsert_round,
 )
@@ -406,6 +407,7 @@ def execute_round(
         bundle_path=evidence["bundle_path"],
         request_path=job_evidence_dir(job_id) / "request.json",
         run_nonce=int(state["optimizer_run_nonce"]),
+        existing_candidate_identities=optimizer_candidate_identities(job_id),
     )
     _save_phase(
         job_id,

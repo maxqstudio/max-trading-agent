@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b
+Source digest: c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -30,18 +30,16 @@ Generated/refreshed: current compiler run
 | backend/max_backend/main.py | Python | 198 | backend/max_backend | NO |
 | backend/max_backend/mt5.py | Python | 104 | backend/max_backend | NO |
 | backend/max_backend/mtf_geometry.py | Python | 203 | backend/max_backend | NO |
-| backend/max_backend/optimizer_api.py | Python | 170 | backend/max_backend | NO |
-| backend/max_backend/optimizer_candidates.py | Python | 679 | backend/max_backend | NO |
-| backend/max_backend/optimizer_core.py | Python | 1652 | backend/max_backend | NO |
-| backend/max_backend/optimizer_draft.py | Python | 211 | backend/max_backend | NO |
-| backend/max_backend/optimizer_jobs.py | Python | 931 | backend/max_backend | NO |
-| backend/max_backend/optimizer_resource_runtime.py | Python | 474 | backend/max_backend | NO |
-| backend/max_backend/optimizer_resources.py | Python | 600 | backend/max_backend | NO |
-| backend/max_backend/optimizer_runtime.py | Python | 794 | backend/max_backend | NO |
+| backend/max_backend/optimizer_api.py | Python | 169 | backend/max_backend | NO |
+| backend/max_backend/optimizer_candidates.py | Python | 704 | backend/max_backend | NO |
+| backend/max_backend/optimizer_core.py | Python | 1653 | backend/max_backend | NO |
+| backend/max_backend/optimizer_draft.py | Python | 204 | backend/max_backend | NO |
+| backend/max_backend/optimizer_jobs.py | Python | 915 | backend/max_backend | NO |
+| backend/max_backend/optimizer_runtime.py | Python | 782 | backend/max_backend | NO |
 | backend/max_backend/optimizer_scientist.py | Python | 767 | backend/max_backend | NO |
 | backend/max_backend/optimizer_scientist_transition.py | Python | 670 | backend/max_backend | NO |
-| backend/max_backend/optimizer_store.py | Python | 786 | backend/max_backend | NO |
-| backend/max_backend/optimizer_worker.py | Python | 835 | backend/max_backend | NO |
+| backend/max_backend/optimizer_store.py | Python | 790 | backend/max_backend | NO |
+| backend/max_backend/optimizer_worker.py | Python | 773 | backend/max_backend | NO |
 | backend/max_backend/optimizer_worker_identity.py | Python | 428 | backend/max_backend | NO |
 | backend/max_backend/path_safety.py | Python | 98 | backend/max_backend | NO |
 | backend/max_backend/promotion_service.py | Python | 1178 | backend/max_backend | NO |
@@ -49,7 +47,7 @@ Generated/refreshed: current compiler run
 | backend/max_backend/scientist_api.py | Python | 270 | backend/max_backend | NO |
 | backend/max_backend/scientist_chat.py | Python | 449 | backend/max_backend | NO |
 | backend/max_backend/scientist_context.py | Python | 625 | backend/max_backend | NO |
-| backend/max_backend/scientist_knowledge.py | Python | 170 | backend/max_backend | NO |
+| backend/max_backend/scientist_knowledge.py | Python | 168 | backend/max_backend | NO |
 | backend/max_backend/scientist_provider.py | Python | 993 | backend/max_backend | NO |
 | backend/max_backend/scientist_store.py | Python | 594 | backend/max_backend | NO |
 | backend/max_backend/strategy_reset.py | Python | 504 | backend/max_backend | NO |
@@ -57,13 +55,13 @@ Generated/refreshed: current compiler run
 | backend/max_backend/workflow_store.py | Python | 586 | backend/max_backend | NO |
 | backend/tests/conftest.py | Python | 17 | backend/tests | YES |
 | backend/tests/test_m00_foundation.py | Python | 326 | backend/tests | YES |
-| backend/tests/test_m01_fail_closed.py | Python | 468 | backend/tests | YES |
+| backend/tests/test_m01_fail_closed.py | Python | 446 | backend/tests | YES |
 | backend/tests/test_m01_jobs.py | Python | 126 | backend/tests | YES |
 | backend/tests/test_m01_lifecycle.py | Python | 193 | backend/tests | YES |
-| backend/tests/test_m01_optimizer_core.py | Python | 1265 | backend/tests | YES |
+| backend/tests/test_m01_optimizer_core.py | Python | 1277 | backend/tests | YES |
 | backend/tests/test_m01_optimizer_store.py | Python | 218 | backend/tests | YES |
-| backend/tests/test_m01_recovery.py | Python | 386 | backend/tests | YES |
-| backend/tests/test_m02_scientist.py | Python | 1074 | backend/tests | YES |
+| backend/tests/test_m01_recovery.py | Python | 390 | backend/tests | YES |
+| backend/tests/test_m02_scientist.py | Python | 1069 | backend/tests | YES |
 | backend/tests/test_m02_store.py | Python | 116 | backend/tests | YES |
 | backend/tests/test_m03_challenger.py | Python | 486 | backend/tests | YES |
 | backend/tests/test_m03_store.py | Python | 287 | backend/tests | YES |
@@ -77,11 +75,11 @@ Generated/refreshed: current compiler run
 | backend/tests/test_m06_challenger_operations.py | Python | 1199 | backend/tests | YES |
 | backend/tests/test_m07_epoch_reset.py | Python | 316 | backend/tests | YES |
 | backend/tests/test_m07_launcher_authority.py | Python | 180 | backend/tests | YES |
-| backend/tests/test_m07_true_mtf.py | Python | 257 | backend/tests | YES |
-| backend/tests/test_m08_strategy_results.py | Python | 2018 | backend/tests | YES |
-| backend/tests/test_optimizer_draft.py | Python | 144 | backend/tests | YES |
+| backend/tests/test_m07_true_mtf.py | Python | 245 | backend/tests | YES |
+| backend/tests/test_m08_strategy_results.py | Python | 2144 | backend/tests | YES |
+| backend/tests/test_optimizer_draft.py | Python | 146 | backend/tests | YES |
 | backend/tests/test_optimizer_reliability.py | Python | 846 | backend/tests | YES |
-| backend/tests/test_optimizer_resources.py | Python | 596 | backend/tests | YES |
+| backend/tests/test_optimizer_resources.py | Python | 112 | backend/tests | YES |
 | backend/tests/test_optimizer_runtime_durability.py | Python | 83 | backend/tests | YES |
 | backend/tests/test_optimizer_worker_identity.py | Python | 361 | backend/tests | YES |
 | backend/tests/test_retired_subsystem_migration.py | Python | 98 | backend/tests | YES |
@@ -96,8 +94,8 @@ Generated/refreshed: current compiler run
 | frontend/src/ChampionPage.tsx | TypeScript/React | 175 | frontend/src | NO |
 | frontend/src/DataTable.test.tsx | TypeScript/React | 74 | frontend/src | YES |
 | frontend/src/DataTable.tsx | TypeScript/React | 113 | frontend/src | NO |
-| frontend/src/OptimizerPage.test.tsx | TypeScript/React | 1269 | frontend/src | YES |
-| frontend/src/OptimizerPage.tsx | TypeScript/React | 1448 | frontend/src | NO |
+| frontend/src/OptimizerPage.test.tsx | TypeScript/React | 1251 | frontend/src | YES |
+| frontend/src/OptimizerPage.tsx | TypeScript/React | 1319 | frontend/src | NO |
 | frontend/src/ScientistPage.test.tsx | TypeScript/React | 479 | frontend/src | YES |
 | frontend/src/ScientistPage.tsx | TypeScript/React | 476 | frontend/src | NO |
 | frontend/src/SettingsPage.test.tsx | TypeScript/React | 159 | frontend/src | YES |

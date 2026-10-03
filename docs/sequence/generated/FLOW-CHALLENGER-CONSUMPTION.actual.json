@@ -16,20 +16,6 @@
   },
   "edges": [
     {
-      "action": "CHALLENGER_ARTIFACT_ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations.py::_bundle_paths",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "LEGACY_CHALLENGER_ARTIFACT_ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations.py::_bundle_paths",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
       "action": "_read_text_flexible",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_operations.py::_compile_retained_challenger",
@@ -65,46 +51,11 @@
       "to": "backend/max_backend/mt5.py::detect_mt5"
     },
     {
-      "action": "ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations.py::retire_challenger",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "evidence.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations.py::retire_challenger",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
       "action": "_write_json",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_operations.py::retire_challenger",
       "resolver": "python_ast",
       "to": "backend/max_backend/challenger_operations.py::_write_json"
-    },
-    {
-      "action": "ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "evidence.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "staged_report.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "_build_backtest_ini",
@@ -177,13 +128,6 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
-      "action": "terminal.parent.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/mt5.py::detect_mt5",
-      "resolver": "python_ast",
-      "to": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
       "action": "_auto_terminal_candidates",
       "evidence": "STATIC",
       "from": "backend/max_backend/mt5.py::detect_mt5",
@@ -220,15 +164,6 @@
   "generated": true,
   "generated_by": "generate_sequence_actual.py",
   "nodes": [
-    {
-      "id": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve",
-      "kind": "function",
-      "label": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve",
-      "language": "Python",
-      "line_end": 28,
-      "line_start": 26,
-      "locator": ".tmp-skill-workflow-pinned/scripts/validate_sequence_contract.py::resolve"
-    },
     {
       "id": "backend/max_backend/challenger_operations.py::_build_backtest_ini",
       "kind": "function",
@@ -414,12 +349,12 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_runtime.py::compile_summary",
       "language": "Python",
-      "line_end": 121,
-      "line_start": 105,
+      "line_end": 120,
+      "line_start": 104,
       "locator": "backend/max_backend/optimizer_runtime.py::compile_summary"
     }
   ],
-  "observed_head": "b167d2a6df432ed6c146f1fabe100521cc7feefc",
+  "observed_head": "312cd4b2d88a63f8cd0e6d1e873ae08fdc3d3f60",
   "schema_version": 1,
-  "source_digest": "fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b"
+  "source_digest": "c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048"
 }
