@@ -102,16 +102,6 @@ def raw_request(**overrides):
 
 def freeze(monkeypatch: pytest.MonkeyPatch, **overrides):
     monkeypatch.setattr(core, "detect_mt5", fake_mt5)
-    monkeypatch.setattr(
-        core,
-        "build_resource_preflight",
-        lambda *_args, **_kwargs: {
-            "schema": "MAX_OPTIMIZER_RESOURCE_POLICY_V1",
-            "mode": "AUTO_SAFE",
-            "status": "SAFE",
-            "resolved_max_local_agents": 1,
-        },
-    )
     return freeze_request(raw_request(**overrides))
 
 

@@ -111,7 +111,6 @@ def patch_harness(monkeypatch: pytest.MonkeyPatch, harness: Harness) -> None:
     monkeypatch.setattr(worker, "get_round", harness.get_round)
     monkeypatch.setattr(worker, "upsert_round", harness.upsert_round)
     monkeypatch.setattr(worker, "update_job", harness.update_job)
-    monkeypatch.setattr(worker, "frozen_resource_admission", lambda *_args, **_kwargs: {"status": "SAFE"})
     monkeypatch.setattr(worker, "write_state_snapshot", lambda *args, **kwargs: None)
     monkeypatch.setattr(worker, "sha256_file", lambda *args, **kwargs: "sha")
     monkeypatch.setattr(

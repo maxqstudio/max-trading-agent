@@ -45,27 +45,19 @@
   },
   {
     "path": "backend/max_backend/optimizer_core.py",
-    "sha256": "596300441eae2eb2376cbb113d4617c98fe68a643e7d11f2febe5f84f383fe6b"
-  },
-  {
-    "path": "backend/max_backend/optimizer_resources.py",
-    "sha256": "754435f65919b9df144d84726e88f83af4b2ebd11b0061904f14048ea54269ca"
-  },
-  {
-    "path": "backend/max_backend/optimizer_resource_runtime.py",
-    "sha256": "957af2d1f3250bfd3fa413aab152710cf63b206c1c9c78ba6cc483851e5a01da"
+    "sha256": "357473dd423273c50bfdd6a23fde56520b1ac96ab6f61f6d6da28003135603d2"
   },
   {
     "path": "backend/max_backend/optimizer_store.py",
-    "sha256": "3c71901e2d3d7095221e8f081b7d2f5085af0a736accce0f1773e71e64295236"
+    "sha256": "1284c8ff6b54947292b683a62b594bf05212fdf0790ebcc546ca2c2f732521fa"
   },
   {
     "path": "backend/max_backend/optimizer_worker.py",
-    "sha256": "cc5a58eae928243701686ee3d5ce6fc5d7d27963ea12a974fa4e3c25c9d6bb86"
+    "sha256": "d96fdafb0288f92cfd68615f5190b52bd4581f6e1ba8057facfe11be072f7c51"
   },
   {
     "path": "backend/max_backend/optimizer_api.py",
-    "sha256": "7e106c9c167daa273c0db40bb69db17152d2db850f08fef2183d2e3846d34962"
+    "sha256": "fcb1868197e18eed309e75c5530a92ff9f1914bb7470ad52d2fb1fc08f03b90f"
   },
   {
     "path": "backend/max_backend/optimizer_candidates.py",
@@ -141,7 +133,7 @@
   },
   {
     "path": "backend/max_backend/scientist_knowledge.py",
-    "sha256": "5c8aec5927d86f90d58dfd504129f1cb47871cba2052989dd62fb010c70eecc3"
+    "sha256": "3b938e8ac029d7f0a224e77aa3dc9dc9fe6ea55968910838967d502fed651bd0"
   },
   {
     "path": "backend/max_backend/scientist_context.py",
