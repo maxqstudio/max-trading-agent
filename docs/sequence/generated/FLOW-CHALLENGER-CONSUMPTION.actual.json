@@ -16,18 +16,109 @@
   },
   "edges": [
     {
-      "action": "_read_text_flexible",
+      "action": "_deployment_paths",
       "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations.py::_compile_retained_challenger",
+      "from": "backend/max_backend/challenger_deployment.py::challenger_deployment_directory",
       "resolver": "python_ast",
-      "to": "backend/max_backend/challenger_operations.py::_read_text_flexible"
+      "to": "backend/max_backend/challenger_deployment.py::_deployment_paths"
     },
     {
-      "action": "compile_summary",
+      "action": "challenger_deployment_directory",
       "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations.py::_compile_retained_challenger",
+      "from": "backend/max_backend/challenger_deployment.py::inspect_challenger_deployment",
       "resolver": "python_ast",
-      "to": "backend/max_backend/optimizer_runtime.py::compile_summary"
+      "to": "backend/max_backend/challenger_deployment.py::challenger_deployment_directory"
+    },
+    {
+      "action": "verify_challenger_deployment",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_deployment.py::inspect_challenger_deployment",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::verify_challenger_deployment"
+    },
+    {
+      "action": "_deployment_paths",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_deployment.py::quarantine_challenger_deployment",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::_deployment_paths"
+    },
+    {
+      "action": "verify_challenger_deployment",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_deployment.py::quarantine_challenger_deployment",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::verify_challenger_deployment"
+    },
+    {
+      "action": "_path_identity",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_deployment.py::resolve_frozen_mt5_expert_root",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::_path_identity"
+    },
+    {
+      "action": "cleanup_challenger_staging_root",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_remove_retired_runtime_ea",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::cleanup_challenger_staging_root"
+    },
+    {
+      "action": "inspect_challenger_deployment",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_remove_retired_runtime_ea",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::inspect_challenger_deployment"
+    },
+    {
+      "action": "quarantine_challenger_deployment",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_remove_retired_runtime_ea",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::quarantine_challenger_deployment"
+    },
+    {
+      "action": "resolve_frozen_mt5_expert_root",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_remove_retired_runtime_ea",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::resolve_frozen_mt5_expert_root"
+    },
+    {
+      "action": "verify_challenger_deployment",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_remove_retired_runtime_ea",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::verify_challenger_deployment"
+    },
+    {
+      "action": "_retirement_runtime_state",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_remove_retired_runtime_ea",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations.py::_retirement_runtime_state"
+    },
+    {
+      "action": "inspect_challenger_deployment",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_retirement_runtime_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::inspect_challenger_deployment"
+    },
+    {
+      "action": "new_challenger_staging_root",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_retirement_runtime_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::new_challenger_staging_root"
+    },
+    {
+      "action": "resolve_frozen_mt5_expert_root",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_retirement_runtime_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::resolve_frozen_mt5_expert_root"
     },
     {
       "action": "_format_set_value",
@@ -51,11 +142,53 @@
       "to": "backend/max_backend/mt5.py::detect_mt5"
     },
     {
+      "action": "cleanup_challenger_staging_root",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::retire_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::cleanup_challenger_staging_root"
+    },
+    {
+      "action": "_remove_retired_runtime_ea",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::retire_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations.py::_remove_retired_runtime_ea"
+    },
+    {
+      "action": "_retirement_runtime_state",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::retire_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations.py::_retirement_runtime_state"
+    },
+    {
       "action": "_write_json",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_operations.py::retire_challenger",
       "resolver": "python_ast",
       "to": "backend/max_backend/challenger_operations.py::_write_json"
+    },
+    {
+      "action": "inspect_challenger_deployment",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::inspect_challenger_deployment"
+    },
+    {
+      "action": "resolve_frozen_mt5_expert_root",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::resolve_frozen_mt5_expert_root"
+    },
+    {
+      "action": "verify_challenger_deployment",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::verify_challenger_deployment"
     },
     {
       "action": "_build_backtest_ini",
@@ -70,13 +203,6 @@
       "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
       "resolver": "python_ast",
       "to": "backend/max_backend/challenger_operations.py::_bundle_paths"
-    },
-    {
-      "action": "_compile_retained_challenger",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/challenger_operations.py::_compile_retained_challenger"
     },
     {
       "action": "_runtime_set_text",
@@ -165,12 +291,93 @@
   "generated_by": "generate_sequence_actual.py",
   "nodes": [
     {
+      "id": "backend/max_backend/challenger_deployment.py::_deployment_paths",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_deployment.py::_deployment_paths",
+      "language": "Python",
+      "line_end": 109,
+      "line_start": 96,
+      "locator": "backend/max_backend/challenger_deployment.py::_deployment_paths"
+    },
+    {
+      "id": "backend/max_backend/challenger_deployment.py::_path_identity",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_deployment.py::_path_identity",
+      "language": "Python",
+      "line_end": 30,
+      "line_start": 23,
+      "locator": "backend/max_backend/challenger_deployment.py::_path_identity"
+    },
+    {
+      "id": "backend/max_backend/challenger_deployment.py::challenger_deployment_directory",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_deployment.py::challenger_deployment_directory",
+      "language": "Python",
+      "line_end": 118,
+      "line_start": 112,
+      "locator": "backend/max_backend/challenger_deployment.py::challenger_deployment_directory"
+    },
+    {
+      "id": "backend/max_backend/challenger_deployment.py::cleanup_challenger_staging_root",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_deployment.py::cleanup_challenger_staging_root",
+      "language": "Python",
+      "line_end": 554,
+      "line_start": 548,
+      "locator": "backend/max_backend/challenger_deployment.py::cleanup_challenger_staging_root"
+    },
+    {
+      "id": "backend/max_backend/challenger_deployment.py::inspect_challenger_deployment",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_deployment.py::inspect_challenger_deployment",
+      "language": "Python",
+      "line_end": 148,
+      "line_start": 121,
+      "locator": "backend/max_backend/challenger_deployment.py::inspect_challenger_deployment"
+    },
+    {
+      "id": "backend/max_backend/challenger_deployment.py::new_challenger_staging_root",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_deployment.py::new_challenger_staging_root",
+      "language": "Python",
+      "line_end": 545,
+      "line_start": 526,
+      "locator": "backend/max_backend/challenger_deployment.py::new_challenger_staging_root"
+    },
+    {
+      "id": "backend/max_backend/challenger_deployment.py::quarantine_challenger_deployment",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_deployment.py::quarantine_challenger_deployment",
+      "language": "Python",
+      "line_end": 501,
+      "line_start": 443,
+      "locator": "backend/max_backend/challenger_deployment.py::quarantine_challenger_deployment"
+    },
+    {
+      "id": "backend/max_backend/challenger_deployment.py::resolve_frozen_mt5_expert_root",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_deployment.py::resolve_frozen_mt5_expert_root",
+      "language": "Python",
+      "line_end": 93,
+      "line_start": 73,
+      "locator": "backend/max_backend/challenger_deployment.py::resolve_frozen_mt5_expert_root"
+    },
+    {
+      "id": "backend/max_backend/challenger_deployment.py::verify_challenger_deployment",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_deployment.py::verify_challenger_deployment",
+      "language": "Python",
+      "line_end": 260,
+      "line_start": 193,
+      "locator": "backend/max_backend/challenger_deployment.py::verify_challenger_deployment"
+    },
+    {
       "id": "backend/max_backend/challenger_operations.py::_build_backtest_ini",
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::_build_backtest_ini",
       "language": "Python",
-      "line_end": 456,
-      "line_start": 428,
+      "line_end": 740,
+      "line_start": 712,
       "locator": "backend/max_backend/challenger_operations.py::_build_backtest_ini"
     },
     {
@@ -178,26 +385,17 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::_bundle_paths",
       "language": "Python",
-      "line_end": 99,
-      "line_start": 86,
+      "line_end": 89,
+      "line_start": 76,
       "locator": "backend/max_backend/challenger_operations.py::_bundle_paths"
-    },
-    {
-      "id": "backend/max_backend/challenger_operations.py::_compile_retained_challenger",
-      "kind": "function",
-      "label": "backend/max_backend/challenger_operations.py::_compile_retained_challenger",
-      "language": "Python",
-      "line_end": 539,
-      "line_start": 459,
-      "locator": "backend/max_backend/challenger_operations.py::_compile_retained_challenger"
     },
     {
       "id": "backend/max_backend/challenger_operations.py::_format_set_value",
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::_format_set_value",
       "language": "Python",
-      "line_end": 371,
-      "line_start": 366,
+      "line_end": 655,
+      "line_start": 650,
       "locator": "backend/max_backend/challenger_operations.py::_format_set_value"
     },
     {
@@ -205,26 +403,35 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::_parse_date",
       "language": "Python",
-      "line_end": 260,
-      "line_start": 255,
+      "line_end": 516,
+      "line_start": 511,
       "locator": "backend/max_backend/challenger_operations.py::_parse_date"
     },
     {
-      "id": "backend/max_backend/challenger_operations.py::_read_text_flexible",
+      "id": "backend/max_backend/challenger_operations.py::_remove_retired_runtime_ea",
       "kind": "function",
-      "label": "backend/max_backend/challenger_operations.py::_read_text_flexible",
+      "label": "backend/max_backend/challenger_operations.py::_remove_retired_runtime_ea",
       "language": "Python",
-      "line_end": 83,
-      "line_start": 69,
-      "locator": "backend/max_backend/challenger_operations.py::_read_text_flexible"
+      "line_end": 282,
+      "line_start": 195,
+      "locator": "backend/max_backend/challenger_operations.py::_remove_retired_runtime_ea"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations.py::_retirement_runtime_state",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations.py::_retirement_runtime_state",
+      "language": "Python",
+      "line_end": 192,
+      "line_start": 145,
+      "locator": "backend/max_backend/challenger_operations.py::_retirement_runtime_state"
     },
     {
       "id": "backend/max_backend/challenger_operations.py::_runtime_set_text",
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::_runtime_set_text",
       "language": "Python",
-      "line_end": 425,
-      "line_start": 374,
+      "line_end": 709,
+      "line_start": 658,
       "locator": "backend/max_backend/challenger_operations.py::_runtime_set_text"
     },
     {
@@ -232,8 +439,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::_wait_for_report",
       "language": "Python",
-      "line_end": 563,
-      "line_start": 542,
+      "line_end": 764,
+      "line_start": 743,
       "locator": "backend/max_backend/challenger_operations.py::_wait_for_report"
     },
     {
@@ -241,8 +448,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::_write_json",
       "language": "Python",
-      "line_end": 66,
-      "line_start": 58,
+      "line_end": 73,
+      "line_start": 65,
       "locator": "backend/max_backend/challenger_operations.py::_write_json"
     },
     {
@@ -250,8 +457,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::freeze_backtest_request",
       "language": "Python",
-      "line_end": 363,
-      "line_start": 263,
+      "line_end": 647,
+      "line_start": 519,
       "locator": "backend/max_backend/challenger_operations.py::freeze_backtest_request"
     },
     {
@@ -259,8 +466,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::retire_challenger",
       "language": "Python",
-      "line_end": 252,
-      "line_start": 126,
+      "line_end": 508,
+      "line_start": 336,
       "locator": "backend/max_backend/challenger_operations.py::retire_challenger"
     },
     {
@@ -268,8 +475,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
       "language": "Python",
-      "line_end": 748,
-      "line_start": 566,
+      "line_end": 980,
+      "line_start": 767,
       "locator": "backend/max_backend/challenger_operations.py::run_challenger_backtest"
     },
     {
@@ -343,18 +550,9 @@
       "line_end": 104,
       "line_start": 45,
       "locator": "backend/max_backend/mt5.py::detect_mt5"
-    },
-    {
-      "id": "backend/max_backend/optimizer_runtime.py::compile_summary",
-      "kind": "function",
-      "label": "backend/max_backend/optimizer_runtime.py::compile_summary",
-      "language": "Python",
-      "line_end": 120,
-      "line_start": 104,
-      "locator": "backend/max_backend/optimizer_runtime.py::compile_summary"
     }
   ],
-  "observed_head": "312cd4b2d88a63f8cd0e6d1e873ae08fdc3d3f60",
+  "observed_head": "87e5b0ef9ee777b39da480b8f9cbfd06d404fc80",
   "schema_version": 1,
-  "source_digest": "c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048"
+  "source_digest": "f556ab64dacce983ba82b327d8a5318a35b80b85f2abb6cf1033bd1f4a02c0b7"
 }

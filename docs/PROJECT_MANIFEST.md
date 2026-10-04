@@ -13,7 +13,7 @@ Repository: maxqstudio/max-trading-agent
 Active branch: codex/restore-mt5-native-agent-execution
 Current authoritative SHA: external final acceptance evidence
 Last accepted SHA: ac2787c0fe46bfa83267b0ceebb9d8f3f1d44c5c
-Current source digest: c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048
+Current source digest: f556ab64dacce983ba82b327d8a5318a35b80b85f2abb6cf1033bd1f4a02c0b7
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.

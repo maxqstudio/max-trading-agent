@@ -128,6 +128,20 @@
       "to": "backend/max_backend/optimizer_candidates.py::_load_json"
     },
     {
+      "action": "_load_json",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_revalidate_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::_load_json"
+    },
+    {
+      "action": "qualified_candidate",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_revalidate_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_candidates.py::qualified_candidate"
+    },
+    {
       "action": "_job_root",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_candidates.py::_round_lineage",
@@ -254,18 +268,11 @@
       "to": "backend/max_backend/optimizer_candidates.py::_load_job"
     },
     {
-      "action": "_load_json",
+      "action": "_revalidate_candidate",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
       "resolver": "python_ast",
-      "to": "backend/max_backend/optimizer_candidates.py::_load_json"
-    },
-    {
-      "action": "qualified_candidate",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/optimizer_candidates.py::qualified_candidate"
+      "to": "backend/max_backend/optimizer_candidates.py::_revalidate_candidate"
     },
     {
       "action": "_float",
@@ -1525,6 +1532,15 @@
       "locator": "backend/max_backend/optimizer_candidates.py::_resolve_project_path"
     },
     {
+      "id": "backend/max_backend/optimizer_candidates.py::_revalidate_candidate",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_candidates.py::_revalidate_candidate",
+      "language": "Python",
+      "line_end": 723,
+      "line_start": 636,
+      "locator": "backend/max_backend/optimizer_candidates.py::_revalidate_candidate"
+    },
+    {
       "id": "backend/max_backend/optimizer_candidates.py::_round_lineage",
       "kind": "function",
       "label": "backend/max_backend/optimizer_candidates.py::_round_lineage",
@@ -1592,8 +1608,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration",
       "language": "Python",
-      "line_end": 704,
-      "line_start": 636,
+      "line_end": 739,
+      "line_start": 726,
       "locator": "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration"
     },
     {
@@ -1772,8 +1788,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_ensure_request_snapshot",
       "language": "Python",
-      "line_end": 682,
-      "line_start": 672,
+      "line_end": 688,
+      "line_start": 678,
       "locator": "backend/max_backend/optimizer_jobs.py::_ensure_request_snapshot"
     },
     {
@@ -1781,8 +1797,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_mark_reconciliation_required",
       "language": "Python",
-      "line_end": 183,
-      "line_start": 168,
+      "line_end": 189,
+      "line_start": 174,
       "locator": "backend/max_backend/optimizer_jobs.py::_mark_reconciliation_required"
     },
     {
@@ -1790,8 +1806,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_mark_unverified_worker_launch",
       "language": "Python",
-      "line_end": 211,
-      "line_start": 186,
+      "line_end": 217,
+      "line_start": 192,
       "locator": "backend/max_backend/optimizer_jobs.py::_mark_unverified_worker_launch"
     },
     {
@@ -1799,8 +1815,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_process_identity",
       "language": "Python",
-      "line_end": 66,
-      "line_start": 65,
+      "line_end": 72,
+      "line_start": 71,
       "locator": "backend/max_backend/optimizer_jobs.py::_process_identity"
     },
     {
@@ -1808,8 +1824,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_public_job",
       "language": "Python",
-      "line_end": 239,
-      "line_start": 235,
+      "line_end": 245,
+      "line_start": 241,
       "locator": "backend/max_backend/optimizer_jobs.py::_public_job"
     },
     {
@@ -1817,8 +1833,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_reconcile_uncertain_round",
       "language": "Python",
-      "line_end": 669,
-      "line_start": 618,
+      "line_end": 675,
+      "line_start": 624,
       "locator": "backend/max_backend/optimizer_jobs.py::_reconcile_uncertain_round"
     },
     {
@@ -1826,8 +1842,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_revoke_unconfirmed_worker_launch",
       "language": "Python",
-      "line_end": 232,
-      "line_start": 214,
+      "line_end": 238,
+      "line_start": 220,
       "locator": "backend/max_backend/optimizer_jobs.py::_revoke_unconfirmed_worker_launch"
     },
     {
@@ -1835,8 +1851,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_round_has_mt5_launch_authority",
       "language": "Python",
-      "line_end": 421,
-      "line_start": 409,
+      "line_end": 427,
+      "line_start": 415,
       "locator": "backend/max_backend/optimizer_jobs.py::_round_has_mt5_launch_authority"
     },
     {
@@ -1844,8 +1860,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_spawn_worker",
       "language": "Python",
-      "line_end": 382,
-      "line_start": 242,
+      "line_end": 388,
+      "line_start": 248,
       "locator": "backend/max_backend/optimizer_jobs.py::_spawn_worker"
     },
     {
@@ -1853,8 +1869,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_stop_verified_optimizer_mt5",
       "language": "Python",
-      "line_end": 471,
-      "line_start": 424,
+      "line_end": 477,
+      "line_start": 430,
       "locator": "backend/max_backend/optimizer_jobs.py::_stop_verified_optimizer_mt5"
     },
     {
@@ -1862,8 +1878,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_terminate_verified_worker",
       "language": "Python",
-      "line_end": 140,
-      "line_start": 121,
+      "line_end": 146,
+      "line_start": 127,
       "locator": "backend/max_backend/optimizer_jobs.py::_terminate_verified_worker"
     },
     {
@@ -1871,8 +1887,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
       "language": "Python",
-      "line_end": 165,
-      "line_start": 143,
+      "line_end": 171,
+      "line_start": 149,
       "locator": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity"
     },
     {
@@ -1880,8 +1896,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::_worker_identity_matches",
       "language": "Python",
-      "line_end": 118,
-      "line_start": 69,
+      "line_end": 124,
+      "line_start": 75,
       "locator": "backend/max_backend/optimizer_jobs.py::_worker_identity_matches"
     },
     {
@@ -1889,8 +1905,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
       "language": "Python",
-      "line_end": 784,
-      "line_start": 685,
+      "line_end": 790,
+      "line_start": 691,
       "locator": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup"
     },
     {
@@ -1898,8 +1914,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::resume_optimizer",
       "language": "Python",
-      "line_end": 615,
-      "line_start": 558,
+      "line_end": 621,
+      "line_start": 564,
       "locator": "backend/max_backend/optimizer_jobs.py::resume_optimizer"
     },
     {
@@ -1907,8 +1923,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::start_optimizer",
       "language": "Python",
-      "line_end": 406,
-      "line_start": 385,
+      "line_end": 412,
+      "line_start": 391,
       "locator": "backend/max_backend/optimizer_jobs.py::start_optimizer"
     },
     {
@@ -1916,8 +1932,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_jobs.py::stop_optimizer",
       "language": "Python",
-      "line_end": 555,
-      "line_start": 474,
+      "line_end": 561,
+      "line_start": 480,
       "locator": "backend/max_backend/optimizer_jobs.py::stop_optimizer"
     },
     {
@@ -2468,7 +2484,7 @@
       "locator": "frontend/src/OptimizerPage.tsx::<module>"
     }
   ],
-  "observed_head": "312cd4b2d88a63f8cd0e6d1e873ae08fdc3d3f60",
+  "observed_head": "87e5b0ef9ee777b39da480b8f9cbfd06d404fc80",
   "schema_version": 1,
-  "source_digest": "c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048"
+  "source_digest": "f556ab64dacce983ba82b327d8a5318a35b80b85f2abb6cf1033bd1f4a02c0b7"
 }

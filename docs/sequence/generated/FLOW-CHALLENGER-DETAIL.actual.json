@@ -27,8 +27,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::challenger_registry_page",
       "language": "Python",
-      "line_end": 123,
-      "line_start": 102,
+      "line_end": 142,
+      "line_start": 121,
       "locator": "backend/max_backend/challenger_operations.py::challenger_registry_page"
     },
     {
@@ -41,7 +41,7 @@
       "locator": "backend/max_backend/challenger_registry.py::challenger_detail"
     }
   ],
-  "observed_head": "312cd4b2d88a63f8cd0e6d1e873ae08fdc3d3f60",
+  "observed_head": "87e5b0ef9ee777b39da480b8f9cbfd06d404fc80",
   "schema_version": 1,
-  "source_digest": "c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048"
+  "source_digest": "f556ab64dacce983ba82b327d8a5318a35b80b85f2abb6cf1033bd1f4a02c0b7"
 }

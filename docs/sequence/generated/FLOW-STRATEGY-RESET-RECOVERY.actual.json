@@ -18,76 +18,6 @@
     {
       "action": "read_baseline",
       "evidence": "STATIC",
-      "from": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::read_baseline"
-    },
-    {
-      "action": "detect_mt5",
-      "evidence": "STATIC",
-      "from": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/mt5.py::detect_mt5"
-    },
-    {
-      "action": "_foundation_state",
-      "evidence": "STATIC",
-      "from": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
-      "resolver": "python_ast",
-      "to": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
-    },
-    {
-      "action": "database_recovery_status",
-      "evidence": "STATIC",
-      "from": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::database_recovery_status"
-    },
-    {
-      "action": "backup_and_reset_corrupt_database",
-      "evidence": "STATIC",
-      "from": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
-    },
-    {
-      "action": "read_baseline",
-      "evidence": "STATIC",
-      "from": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::read_baseline"
-    },
-    {
-      "action": "detect_mt5",
-      "evidence": "STATIC",
-      "from": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/mt5.py::detect_mt5"
-    },
-    {
-      "action": "_foundation_state",
-      "evidence": "STATIC",
-      "from": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
-      "resolver": "python_ast",
-      "to": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
-    },
-    {
-      "action": "database_recovery_status",
-      "evidence": "STATIC",
-      "from": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::database_recovery_status"
-    },
-    {
-      "action": "backup_and_reset_corrupt_database",
-      "evidence": "STATIC",
-      "from": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
-    },
-    {
-      "action": "read_baseline",
-      "evidence": "STATIC",
       "from": ".pytest_cache/r2t/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::read_baseline"
@@ -121,18 +51,39 @@
       "to": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
     },
     {
-      "action": "GET route",
+      "action": "read_baseline",
       "evidence": "STATIC",
-      "from": "HTTP /api/overview",
-      "resolver": "python_route_decorator",
-      "to": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+      "from": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::read_baseline"
     },
     {
-      "action": "GET route",
+      "action": "detect_mt5",
       "evidence": "STATIC",
-      "from": "HTTP /api/overview",
-      "resolver": "python_route_decorator",
-      "to": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+      "from": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::detect_mt5"
+    },
+    {
+      "action": "_foundation_state",
+      "evidence": "STATIC",
+      "from": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "resolver": "python_ast",
+      "to": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
+    },
+    {
+      "action": "database_recovery_status",
+      "evidence": "STATIC",
+      "from": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::database_recovery_status"
+    },
+    {
+      "action": "backup_and_reset_corrupt_database",
+      "evidence": "STATIC",
+      "from": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
     },
     {
       "action": "GET route",
@@ -146,21 +97,49 @@
       "evidence": "STATIC",
       "from": "HTTP /api/overview",
       "resolver": "python_route_decorator",
+      "to": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/overview",
+      "resolver": "python_route_decorator",
       "to": "backend/max_backend/main.py::overview"
     },
     {
-      "action": "POST route",
+      "action": "GET route",
       "evidence": "STATIC",
-      "from": "HTTP /api/recovery/reset",
+      "from": "HTTP /api/overview",
       "resolver": "python_route_decorator",
-      "to": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
+      "to": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
     },
     {
-      "action": "POST route",
+      "action": "GET route",
       "evidence": "STATIC",
-      "from": "HTTP /api/recovery/reset",
+      "from": "HTTP /api/overview",
       "resolver": "python_route_decorator",
-      "to": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
+      "to": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/overview",
+      "resolver": "python_route_decorator",
+      "to": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/overview",
+      "resolver": "python_route_decorator",
+      "to": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/overview",
+      "resolver": "python_route_decorator",
+      "to": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
     },
     {
       "action": "POST route",
@@ -174,21 +153,49 @@
       "evidence": "STATIC",
       "from": "HTTP /api/recovery/reset",
       "resolver": "python_route_decorator",
+      "to": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
+    },
+    {
+      "action": "POST route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/recovery/reset",
+      "resolver": "python_route_decorator",
       "to": "backend/max_backend/main.py::reset_corrupt_state"
     },
     {
-      "action": "GET route",
+      "action": "POST route",
       "evidence": "STATIC",
-      "from": "HTTP /api/recovery/status",
+      "from": "HTTP /api/recovery/reset",
       "resolver": "python_route_decorator",
-      "to": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+      "to": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
     },
     {
-      "action": "GET route",
+      "action": "POST route",
       "evidence": "STATIC",
-      "from": "HTTP /api/recovery/status",
+      "from": "HTTP /api/recovery/reset",
       "resolver": "python_route_decorator",
-      "to": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+      "to": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
+    },
+    {
+      "action": "POST route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/recovery/reset",
+      "resolver": "python_route_decorator",
+      "to": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
+    },
+    {
+      "action": "POST route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/recovery/reset",
+      "resolver": "python_route_decorator",
+      "to": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
+    },
+    {
+      "action": "POST route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/recovery/reset",
+      "resolver": "python_route_decorator",
+      "to": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
     },
     {
       "action": "GET route",
@@ -202,7 +209,49 @@
       "evidence": "STATIC",
       "from": "HTTP /api/recovery/status",
       "resolver": "python_route_decorator",
+      "to": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/recovery/status",
+      "resolver": "python_route_decorator",
       "to": "backend/max_backend/main.py::recovery_status"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/recovery/status",
+      "resolver": "python_route_decorator",
+      "to": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/recovery/status",
+      "resolver": "python_route_decorator",
+      "to": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/recovery/status",
+      "resolver": "python_route_decorator",
+      "to": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/recovery/status",
+      "resolver": "python_route_decorator",
+      "to": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/recovery/status",
+      "resolver": "python_route_decorator",
+      "to": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
     },
     {
       "action": "connect",
@@ -651,6 +700,181 @@
       "from": "frontend/src/ArtifactsPage.tsx::<module>",
       "resolver": "js_http_scan",
       "to": "HTTP /api/artifacts/strategy-reset/preflight"
+    },
+    {
+      "action": "read_baseline",
+      "evidence": "STATIC",
+      "from": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::read_baseline"
+    },
+    {
+      "action": "detect_mt5",
+      "evidence": "STATIC",
+      "from": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::detect_mt5"
+    },
+    {
+      "action": "_foundation_state",
+      "evidence": "STATIC",
+      "from": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "resolver": "python_ast",
+      "to": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
+    },
+    {
+      "action": "database_recovery_status",
+      "evidence": "STATIC",
+      "from": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::database_recovery_status"
+    },
+    {
+      "action": "backup_and_reset_corrupt_database",
+      "evidence": "STATIC",
+      "from": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
+    },
+    {
+      "action": "read_baseline",
+      "evidence": "STATIC",
+      "from": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::read_baseline"
+    },
+    {
+      "action": "detect_mt5",
+      "evidence": "STATIC",
+      "from": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::detect_mt5"
+    },
+    {
+      "action": "_foundation_state",
+      "evidence": "STATIC",
+      "from": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "resolver": "python_ast",
+      "to": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
+    },
+    {
+      "action": "database_recovery_status",
+      "evidence": "STATIC",
+      "from": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::database_recovery_status"
+    },
+    {
+      "action": "backup_and_reset_corrupt_database",
+      "evidence": "STATIC",
+      "from": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
+    },
+    {
+      "action": "read_baseline",
+      "evidence": "STATIC",
+      "from": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::read_baseline"
+    },
+    {
+      "action": "detect_mt5",
+      "evidence": "STATIC",
+      "from": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::detect_mt5"
+    },
+    {
+      "action": "_foundation_state",
+      "evidence": "STATIC",
+      "from": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "resolver": "python_ast",
+      "to": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
+    },
+    {
+      "action": "database_recovery_status",
+      "evidence": "STATIC",
+      "from": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::database_recovery_status"
+    },
+    {
+      "action": "backup_and_reset_corrupt_database",
+      "evidence": "STATIC",
+      "from": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
+    },
+    {
+      "action": "read_baseline",
+      "evidence": "STATIC",
+      "from": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::read_baseline"
+    },
+    {
+      "action": "detect_mt5",
+      "evidence": "STATIC",
+      "from": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::detect_mt5"
+    },
+    {
+      "action": "_foundation_state",
+      "evidence": "STATIC",
+      "from": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "resolver": "python_ast",
+      "to": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
+    },
+    {
+      "action": "database_recovery_status",
+      "evidence": "STATIC",
+      "from": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::database_recovery_status"
+    },
+    {
+      "action": "backup_and_reset_corrupt_database",
+      "evidence": "STATIC",
+      "from": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
+    },
+    {
+      "action": "read_baseline",
+      "evidence": "STATIC",
+      "from": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::read_baseline"
+    },
+    {
+      "action": "detect_mt5",
+      "evidence": "STATIC",
+      "from": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/mt5.py::detect_mt5"
+    },
+    {
+      "action": "_foundation_state",
+      "evidence": "STATIC",
+      "from": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "resolver": "python_ast",
+      "to": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
+    },
+    {
+      "action": "database_recovery_status",
+      "evidence": "STATIC",
+      "from": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::database_recovery_status"
+    },
+    {
+      "action": "backup_and_reset_corrupt_database",
+      "evidence": "STATIC",
+      "from": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
     }
   ],
   "entries": [
@@ -667,78 +891,6 @@
   "generated": true,
   "generated_by": "generate_sequence_actual.py",
   "nodes": [
-    {
-      "id": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
-      "kind": "function",
-      "label": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
-      "language": "Python",
-      "line_end": 157,
-      "line_start": 130,
-      "locator": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
-    },
-    {
-      "id": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
-      "kind": "function",
-      "label": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
-      "language": "Python",
-      "line_end": 198,
-      "line_start": 191,
-      "locator": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
-    },
-    {
-      "id": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
-      "kind": "function",
-      "label": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
-      "language": "Python",
-      "line_end": 111,
-      "line_start": 99,
-      "locator": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
-    },
-    {
-      "id": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
-      "kind": "function",
-      "label": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
-      "language": "Python",
-      "line_end": 127,
-      "line_start": 115,
-      "locator": ".pytest-tmp-full-optimizer-dedup/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
-    },
-    {
-      "id": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
-      "kind": "function",
-      "label": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
-      "language": "Python",
-      "line_end": 157,
-      "line_start": 130,
-      "locator": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
-    },
-    {
-      "id": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
-      "kind": "function",
-      "label": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
-      "language": "Python",
-      "line_end": 198,
-      "line_start": 191,
-      "locator": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
-    },
-    {
-      "id": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
-      "kind": "function",
-      "label": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
-      "language": "Python",
-      "line_end": 111,
-      "line_start": 99,
-      "locator": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
-    },
-    {
-      "id": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
-      "kind": "function",
-      "label": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
-      "language": "Python",
-      "line_end": 127,
-      "line_start": 115,
-      "locator": ".pytest-tmp-scientist-refresh/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
-    },
     {
       "id": ".pytest_cache/r2t/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
       "kind": "function",
@@ -774,6 +926,42 @@
       "line_end": 127,
       "line_start": 115,
       "locator": ".pytest_cache/r2t/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
+    },
+    {
+      "id": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "kind": "function",
+      "label": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "language": "Python",
+      "line_end": 157,
+      "line_start": 130,
+      "locator": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
+    },
+    {
+      "id": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "kind": "function",
+      "label": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "language": "Python",
+      "line_end": 198,
+      "line_start": 191,
+      "locator": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+    },
+    {
+      "id": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "kind": "function",
+      "label": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "language": "Python",
+      "line_end": 111,
+      "line_start": 99,
+      "locator": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+    },
+    {
+      "id": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "kind": "function",
+      "label": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "language": "Python",
+      "line_end": 127,
+      "line_start": 115,
+      "locator": ".pytest_cache/scientist-run-20261003/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
     },
     {
       "id": "HTTP /api/artifacts",
@@ -941,8 +1129,8 @@
       "kind": "function",
       "label": "backend/max_backend/main.py::_foundation_state",
       "language": "Python",
-      "line_end": 157,
-      "line_start": 130,
+      "line_end": 159,
+      "line_start": 132,
       "locator": "backend/max_backend/main.py::_foundation_state"
     },
     {
@@ -950,8 +1138,8 @@
       "kind": "function",
       "label": "backend/max_backend/main.py::overview",
       "language": "Python",
-      "line_end": 198,
-      "line_start": 191,
+      "line_end": 200,
+      "line_start": 193,
       "locator": "backend/max_backend/main.py::overview"
     },
     {
@@ -959,8 +1147,8 @@
       "kind": "async_function",
       "label": "backend/max_backend/main.py::recovery_required_gate",
       "language": "Python",
-      "line_end": 95,
-      "line_start": 82,
+      "line_end": 97,
+      "line_start": 84,
       "locator": "backend/max_backend/main.py::recovery_required_gate"
     },
     {
@@ -968,8 +1156,8 @@
       "kind": "function",
       "label": "backend/max_backend/main.py::recovery_status",
       "language": "Python",
-      "line_end": 111,
-      "line_start": 99,
+      "line_end": 113,
+      "line_start": 101,
       "locator": "backend/max_backend/main.py::recovery_status"
     },
     {
@@ -977,8 +1165,8 @@
       "kind": "function",
       "label": "backend/max_backend/main.py::reset_corrupt_state",
       "language": "Python",
-      "line_end": 127,
-      "line_start": 115,
+      "line_end": 129,
+      "line_start": 117,
       "locator": "backend/max_backend/main.py::reset_corrupt_state"
     },
     {
@@ -1192,9 +1380,189 @@
       "label": "frontend/src/ArtifactsPage.tsx::<module>",
       "language": "JavaScript/TypeScript",
       "locator": "frontend/src/ArtifactsPage.tsx::<module>"
+    },
+    {
+      "id": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "kind": "function",
+      "label": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "language": "Python",
+      "line_end": 159,
+      "line_start": 132,
+      "locator": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
+    },
+    {
+      "id": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "kind": "function",
+      "label": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "language": "Python",
+      "line_end": 200,
+      "line_start": 193,
+      "locator": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+    },
+    {
+      "id": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "kind": "function",
+      "label": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "language": "Python",
+      "line_end": 113,
+      "line_start": 101,
+      "locator": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+    },
+    {
+      "id": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "kind": "function",
+      "label": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "language": "Python",
+      "line_end": 129,
+      "line_start": 117,
+      "locator": "state/pt-codex-final-20261004/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
+    },
+    {
+      "id": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "kind": "function",
+      "label": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "language": "Python",
+      "line_end": 159,
+      "line_start": 132,
+      "locator": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
+    },
+    {
+      "id": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "kind": "function",
+      "label": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "language": "Python",
+      "line_end": 200,
+      "line_start": 193,
+      "locator": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+    },
+    {
+      "id": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "kind": "function",
+      "label": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "language": "Python",
+      "line_end": 113,
+      "line_start": 101,
+      "locator": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+    },
+    {
+      "id": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "kind": "function",
+      "label": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "language": "Python",
+      "line_end": 129,
+      "line_start": 117,
+      "locator": "state/pt-codex-full-backend-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
+    },
+    {
+      "id": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "kind": "function",
+      "label": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "language": "Python",
+      "line_end": 159,
+      "line_start": 132,
+      "locator": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
+    },
+    {
+      "id": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "kind": "function",
+      "label": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "language": "Python",
+      "line_end": 200,
+      "line_start": 193,
+      "locator": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+    },
+    {
+      "id": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "kind": "function",
+      "label": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "language": "Python",
+      "line_end": 113,
+      "line_start": 101,
+      "locator": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+    },
+    {
+      "id": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "kind": "function",
+      "label": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "language": "Python",
+      "line_end": 129,
+      "line_start": 117,
+      "locator": "state/pt-codex-scientist-rerun-20261005-01/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
+    },
+    {
+      "id": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "kind": "function",
+      "label": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "language": "Python",
+      "line_end": 157,
+      "line_start": 130,
+      "locator": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
+    },
+    {
+      "id": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "kind": "function",
+      "label": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "language": "Python",
+      "line_end": 198,
+      "line_start": 191,
+      "locator": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+    },
+    {
+      "id": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "kind": "function",
+      "label": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "language": "Python",
+      "line_end": 111,
+      "line_start": 99,
+      "locator": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+    },
+    {
+      "id": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "kind": "function",
+      "label": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "language": "Python",
+      "line_end": 127,
+      "line_start": 115,
+      "locator": "state/pytest-stability-final-3d3c798e4b1244d19e301efbdac81522/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
+    },
+    {
+      "id": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "kind": "function",
+      "label": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
+      "language": "Python",
+      "line_end": 157,
+      "line_start": 130,
+      "locator": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
+    },
+    {
+      "id": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "kind": "function",
+      "label": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
+      "language": "Python",
+      "line_end": 198,
+      "line_start": 191,
+      "locator": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+    },
+    {
+      "id": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "kind": "function",
+      "label": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
+      "language": "Python",
+      "line_end": 111,
+      "line_start": 99,
+      "locator": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+    },
+    {
+      "id": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "kind": "function",
+      "label": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
+      "language": "Python",
+      "line_end": 127,
+      "line_start": 115,
+      "locator": "state/pytest-stability-scientist-68a28bb012a7467bb96a72edc0d52dd1/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
     }
   ],
-  "observed_head": "312cd4b2d88a63f8cd0e6d1e873ae08fdc3d3f60",
+  "observed_head": "87e5b0ef9ee777b39da480b8f9cbfd06d404fc80",
   "schema_version": 1,
-  "source_digest": "c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048"
+  "source_digest": "f556ab64dacce983ba82b327d8a5318a35b80b85f2abb6cf1033bd1f4a02c0b7"
 }
