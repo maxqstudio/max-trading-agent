@@ -315,7 +315,11 @@ def test_knowledge_is_current_and_corruption_fails_closed(tmp_path: Path) -> Non
 
 
 def test_static_classification_contract_is_exact() -> None:
-    snapshot = load_knowledge()
+    snapshot = json.loads(
+        (ROOT / "scientist" / "knowledge" / "phase1_knowledge.json").read_text(
+            encoding="utf-8"
+        )
+    )
     assert set(snapshot["classification_legend"]) == {
         "EXISTING",
         "EXTENSION",
@@ -325,6 +329,12 @@ def test_static_classification_contract_is_exact() -> None:
         "OUTSIDE_CURRENT_CONTRACT",
     }
     assert "OUTSIDE_CURRENT_SCOPE" not in json.dumps(snapshot)
+    contracts = {item["ref"]: item["facts"] for item in snapshot["contracts"]}
+    replacement_facts = " ".join(contracts["contract:champion-replacement"])
+    assert "source Challenger automatically returns to the active Challenger registry" in replacement_facts
+    assert "does not automatically return to the active Challenger pool" not in replacement_facts
+    operations_facts = " ".join(contracts["contract:m06-challenger-ops"])
+    assert "Retirement and Archive apply only to Challenger registry entries" in operations_facts
 
 
 def test_context_resolves_current_authority_and_exact_entities(tmp_path: Path) -> None:

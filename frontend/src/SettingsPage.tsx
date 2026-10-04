@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
+import { ActionButton, ActionProgress } from './ActionControls'
 
 export type ProviderSettings = {
   provider_key: string
@@ -146,32 +147,35 @@ function ModelPicker({
             <span>{model}</span>
             {ordered && (
               <>
-                <button
+                <ActionButton
                   type="button"
                   aria-label={'Move ' + model + ' up'}
                   onClick={() => move(index, -1)}
                   disabled={disabled || index === 0}
+                  blockedReason={disabled ? 'Wait for the provider settings operation to finish.' : 'This model is already first in the fallback order.'}
                 >
                   ↑
-                </button>
-                <button
+                </ActionButton>
+                <ActionButton
                   type="button"
                   aria-label={'Move ' + model + ' down'}
                   onClick={() => move(index, 1)}
                   disabled={disabled || index === selected.length - 1}
+                  blockedReason={disabled ? 'Wait for the provider settings operation to finish.' : 'This model is already last in the fallback order.'}
                 >
                   ↓
-                </button>
+                </ActionButton>
               </>
             )}
-            <button
+            <ActionButton
               type="button"
               aria-label={'Remove ' + model}
               onClick={() => remove(model)}
               disabled={disabled}
+              blockedReason="Wait for the provider settings operation to finish."
             >
               ×
-            </button>
+            </ActionButton>
           </span>
         ))}
         {selected.length === 0 && <span className="model-empty">{emptyHint}</span>}
@@ -215,6 +219,7 @@ export default function SettingsPage({ chatModel = '', onSaved }: SettingsPagePr
   const [apiKey, setApiKey] = useState('')
   const [connection, setConnection] = useState<ConnectionResult | null>(null)
   const [busy, setBusy] = useState(false)
+  const [busyAction, setBusyAction] = useState<'connect' | 'save' | ''>('')
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
 
@@ -315,6 +320,7 @@ export default function SettingsPage({ chatModel = '', onSaved }: SettingsPagePr
     const body = requestBody()
     if (!current || !body || busy) return
     setBusy(true)
+    setBusyAction('connect')
     setError('')
     setMessage('')
     setConnection(null)
@@ -355,6 +361,7 @@ export default function SettingsPage({ chatModel = '', onSaved }: SettingsPagePr
       setError((reason as Error).message)
     } finally {
       setBusy(false)
+      setBusyAction('')
     }
   }
 
@@ -363,6 +370,7 @@ export default function SettingsPage({ chatModel = '', onSaved }: SettingsPagePr
     const body = requestBody()
     if (!body || busy) return
     setBusy(true)
+    setBusyAction('save')
     setError('')
     setMessage('')
     try {
@@ -381,6 +389,7 @@ export default function SettingsPage({ chatModel = '', onSaved }: SettingsPagePr
       setError((reason as Error).message)
     } finally {
       setBusy(false)
+      setBusyAction('')
     }
   }
 
@@ -513,9 +522,9 @@ export default function SettingsPage({ chatModel = '', onSaved }: SettingsPagePr
             </div>
 
             <div className="settings-connect-row">
-              <button type="button" onClick={connect} disabled={busy}>
-                {busy ? 'Working…' : 'Connect'}
-              </button>
+              <ActionButton type="button" onClick={connect} disabled={busy} blockedReason="Wait for the current provider operation to finish.">
+                <ActionProgress active={busyAction === 'connect'} idle="Connect" pending="Connecting…" />
+              </ActionButton>
               <span>
                 {connection
                   ? 'Connected · ' + connection.model_count + ' models · ' + connection.latency_ms + ' ms'
@@ -575,16 +584,17 @@ export default function SettingsPage({ chatModel = '', onSaved }: SettingsPagePr
           <section className="settings-section settings-actions-section" aria-labelledby="settings-actions">
             <h3 id="settings-actions">Actions</h3>
             <div className="settings-actions">
-              <button type="submit" className="settings-save" disabled={busy || !draft.primary_model}>
-                Save
-              </button>
-              <button
+              <ActionButton type="submit" className="settings-save" disabled={busy || !draft.primary_model} blockedReason={busy ? 'Wait for the current provider operation to finish.' : 'Connect and select a primary model before saving settings.'}>
+                <ActionProgress active={busyAction === 'save'} idle="Save" pending="Saving…" />
+              </ActionButton>
+              <ActionButton
                 type="button"
                 disabled={busy || !saved}
+                blockedReason={busy ? 'Wait for the current provider operation to finish.' : 'Settings are not loaded yet; there is no saved configuration to restore.'}
                 onClick={() => saved && applySettings(saved)}
               >
                 Cancel
-              </button>
+              </ActionButton>
             </div>
           </section>
         </form>

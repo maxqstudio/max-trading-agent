@@ -12,6 +12,7 @@ from .challenger_operations_store import (
     migrate_m06,
     recover_incomplete_backtests,
 )
+from .challenger_operations import recover_retired_challenger_deployments
 from .champion_api import router as champion_router
 from .champion_store import champion_database_status, current_champion, migrate_m04
 from .config import MILESTONE, PROJECT_NAME, PROJECT_PHASE
@@ -58,6 +59,7 @@ async def lifespan(_: FastAPI):
         recover_unconfirmed_requests()
         migrate_m06()
         recover_incomplete_backtests()
+        recover_retired_challenger_deployments()
         migrate_current()
         reconcile_optimizer_startup()
     except Exception:

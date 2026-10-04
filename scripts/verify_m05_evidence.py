@@ -257,11 +257,16 @@ def validate_query_two_lifecycle_answer(answer: str) -> None:
     require("FORMER" in upper, "Query 2 FORMER lifecycle state missing")
     require(
         "PROMOTED" in upper or "HISTORICAL" in upper,
-        "Query 2 historical promoted source state missing",
+        "Query 2 former Champion tenure history missing",
+    )
+    source_returns_to_active = re.search(
+        r"\bSOURCE\b.{0,80}\b(?:RETURNS?|BECOMES|REACTIVATES?)\b"
+        r".{0,40}\bACTIVE CHALLENGER\b",
+        upper,
     )
     require(
-        "ACTIVE CHALLENGER" not in upper,
-        "Query 2 must not reactivate former Champion as active Challenger",
+        source_returns_to_active is not None,
+        "Query 2 former Champion source must return to active Challenger",
     )
     new_champion = (
         "CURRENT" in upper

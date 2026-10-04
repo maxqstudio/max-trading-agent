@@ -28,7 +28,7 @@ def current_authority() -> dict:
         "project": PROJECT_NAME,
         "schema_version": CURRENT_SCHEMA_VERSION,
         "ea_version": EA_VERSION,
-        "ea_sha256": "827c4caddedbe37081353e08bba35eac5f01e96314dd8650d7ea17ad109ae725",
+        "ea_sha256": "10fadcd986a93cc075e13a6a383f1b00ee5c097c2a70d6edee315668111d5e20",
         "baseline_status": "BASELINE_NOT_CHAMPION",
         "strategy_contract": STRATEGY_CONTRACT,
     }

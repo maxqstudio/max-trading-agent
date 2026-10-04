@@ -36,17 +36,17 @@ def test_query_three_classification_gate_is_strict_existing() -> None:
     )
 
 
-def test_query_two_lifecycle_gate_preserves_former_source_as_historical() -> None:
+def test_query_two_lifecycle_gate_returns_former_source_to_active_challengers() -> None:
     verifier.validate_query_two_lifecycle_answer(
-        "The prior Champion tenure becomes FORMER, its source remains PROMOTED "
-        "historical authority, and the selected strategy becomes the new "
-        "Strategy Champion."
+        "The prior Champion tenure becomes FORMER historical authority, its "
+        "source returns as an ACTIVE CHALLENGER, and the selected strategy "
+        "becomes the new Strategy Champion."
     )
-    with pytest.raises(verifier.EvidenceError, match="must not reactivate"):
+    with pytest.raises(verifier.EvidenceError, match="must return to active Challenger"):
         verifier.validate_query_two_lifecycle_answer(
-            "The FORMER Champion source remains PROMOTED historical authority "
-            "but also becomes an ACTIVE CHALLENGER, and the selected strategy "
-            "becomes the new Champion."
+            "The prior Champion tenure becomes FORMER historical authority, "
+            "its source remains PROMOTED but is not an ACTIVE CHALLENGER, and "
+            "the selected strategy becomes the new Champion."
         )
 
 

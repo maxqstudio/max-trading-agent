@@ -1443,6 +1443,275 @@ def parse_optimization_xml(
         raise ValueError("Weighted-R sidecar contains parameter vector not present in XML")
     return parsed
 
+
+def parse_optimizer_report_preview(
+    path: str | Path,
+    *,
+    round_no: int,
+    request: dict[str, Any],
+    metrics_path: str | Path,
+    expected_nonce: int,
+    limit: int = 25,
+) -> dict[str, Any]:
+    """Read hash-verified raw report rows without granting optimizer eligibility."""
+    if isinstance(limit, bool) or int(limit) < 1 or int(limit) > 100:
+        raise ValueError("optimizer report preview limit must be between 1 and 100")
+    source = Path(path)
+    if not source.is_file() or source.stat().st_size < 50:
+        raise FileNotFoundError("MT5 optimization report missing/empty")
+    try:
+        root = ET.parse(source).getroot()
+    except ET.ParseError as exc:
+        raise ValueError("Malformed MT5 optimization XML") from exc
+
+    schema = str(request.get("schema") or "")
+    parameter_bounds = optimizer_parameter_bounds_for_schema(schema)
+    fitness_contract = optimizer_fitness_for_request(request)
+    if fitness_contract is None:
+        raise ValueError("Raw report preview requires the frozen V2 fitness contract")
+    selected = set(
+        normalize_optimize_params(
+            request.get("optimize_params"), bounds=parameter_bounds
+        )
+    )
+    fixed = request.get("fixed_param_values")
+    if not isinstance(fixed, dict):
+        raise ValueError("Frozen optimizer parameters are unavailable")
+    space = validate_search_space(request.get("search_space"))
+    if set(space) != set(parameter_bounds):
+        raise ValueError("Frozen optimizer search-space universe mismatch")
+
+    metrics: dict[tuple[tuple[str, int | float], ...], dict[str, Any]] = {}
+    sidecar_valid = False
+    try:
+        metrics = parse_optimizer_metrics_csv(
+            metrics_path,
+            expected_nonce=int(expected_nonce),
+            optimizer_fitness=fitness_contract,
+            parameter_bounds=parameter_bounds,
+        )
+        sidecar_valid = True
+    except (OSError, UnicodeError, ValueError, csv.Error):
+        # The XML can still be inspected, but invalid sidecar data is never trusted.
+        metrics = {}
+
+    rows = [
+        _row_values(row)
+        for row in root.iter()
+        if _strip_ns(row.tag) == "Row"
+    ]
+    rows = [row for row in rows if row]
+    header_index = next(
+        (
+            index
+            for index, row in enumerate(rows)
+            if "pass" in [value.strip().lower() for value in row]
+            and "profit factor" in [value.strip().lower() for value in row]
+        ),
+        None,
+    )
+    if header_index is None:
+        raise ValueError("MT5 XML header not recognized")
+    headers = rows[header_index]
+    normalized = {
+        re.sub(r"\s+", " ", value.strip().lower()): index
+        for index, value in enumerate(headers)
+    }
+
+    def column(*names: str) -> int | None:
+        for name in names:
+            if name.lower() in normalized:
+                return normalized[name.lower()]
+        return None
+
+    pass_col = column("pass")
+    custom_col = column("custom")
+    result_col = column("result")
+    profit_col = column("profit")
+    pf_col = column("profit factor")
+    rf_col = column("recovery factor")
+    trades_col = column("trades", "total trades")
+    drawdown_col = column("equity dd %", "equity drawdown %")
+    if any(value is None for value in (pass_col, profit_col, pf_col, rf_col, trades_col)):
+        raise ValueError("MT5 XML lacks required optimizer report columns")
+    if custom_col is None and result_col is None:
+        raise ValueError("MT5 XML lacks Custom/Result column")
+
+    preview_rows: list[dict[str, Any]] = []
+    signatures: set[tuple[tuple[str, int | float], ...]] = set()
+    pass_ids: set[int] = set()
+    verified_r_passes = 0
+    mismatched_r_passes = 0
+    for row in rows[header_index + 1 :]:
+        if pass_col is None or pass_col >= len(row):
+            continue
+        pass_no = _int(row[pass_col], -1)
+        if pass_no < 0:
+            continue
+        if pass_no in pass_ids:
+            raise ValueError(f"Duplicate pass identity in MT5 XML: {pass_no}")
+        pass_ids.add(pass_no)
+
+        params: dict[str, Any] = {}
+        for name, (hard_min, hard_max, _step, kind) in parameter_bounds.items():
+            index = normalized.get(name.lower())
+            if index is None:
+                index = normalized.get(name.replace("Inp", "").lower())
+            if index is not None and index < len(row):
+                value = _int(row[index]) if kind == "int" else _float(row[index])
+                params[name] = value
+            elif name not in selected and name in fixed:
+                params[name] = fixed[name]
+            else:
+                raise ValueError(
+                    f"MT5 XML row {pass_no} missing optimizer parameter {name}"
+                )
+            numeric = float(params[name])
+            if not math.isfinite(numeric) or numeric < hard_min - 1e-9 or numeric > hard_max + 1e-9:
+                raise ValueError(
+                    f"MT5 XML row {pass_no} has out-of-bounds optimizer parameter {name}"
+                )
+            if name in selected:
+                spec = space[name]
+                offset = (numeric - float(spec["start"])) / float(spec["step"])
+                if (
+                    numeric < float(spec["start"]) - 1e-8
+                    or numeric > float(spec["stop"]) + 1e-8
+                    or not math.isclose(offset, round(offset), rel_tol=0.0, abs_tol=1e-6)
+                ):
+                    raise ValueError(
+                        f"MT5 XML row {pass_no} is outside frozen search space for {name}"
+                    )
+            else:
+                expected = float(fixed[name])
+                if not math.isclose(numeric, expected, rel_tol=0.0, abs_tol=1e-9):
+                    raise ValueError(
+                        f"MT5 XML row {pass_no} conflicts with frozen parameter {name}"
+                    )
+
+        signature = parameter_signature(params)
+        signatures.add(signature)
+        metric = metrics.get(signature)
+
+        def cell(index: int | None) -> str:
+            return row[index] if index is not None and index < len(row) else ""
+
+        custom = _float(cell(custom_col if custom_col is not None else result_col))
+        if not math.isfinite(custom) and result_col is not None:
+            custom = _float(cell(result_col))
+        profit = _float(cell(profit_col))
+        profit_factor = _float(cell(pf_col))
+        recovery_factor = _float(cell(rf_col))
+        trades = _int(cell(trades_col), -1)
+        drawdown = _float(cell(drawdown_col)) if drawdown_col is not None else None
+        if trades < 0 or not all(
+            math.isfinite(value)
+            for value in (custom, profit, profit_factor, recovery_factor)
+        ):
+            raise ValueError(f"MT5 XML row {pass_no} contains invalid report metrics")
+
+        implied_mean_r: float | None = None
+        if trades > 0 and not _is_fail_closed_sentinel(custom):
+            candidate_mean_r = custom / math.pow(
+                float(trades), float(fitness_contract["trade_exponent_alpha"])
+            )
+            if math.isfinite(candidate_mean_r):
+                implied_mean_r = candidate_mean_r
+
+        r_metrics: dict[str, Any] | None = None
+        r_status = "MISSING"
+        if metric is not None:
+            metric_matches = (
+                int(metric["mt5_trades"]) == trades
+                and abs(float(metric["sum_net"]) - profit) <= 0.011
+                and math.isclose(
+                    float(metric["custom_fitness"]), custom,
+                    rel_tol=5e-6, abs_tol=5e-6,
+                )
+            )
+            if metric_matches and metric.get("accounting_valid") is not False:
+                metric_matches = implied_mean_r is not None and math.isclose(
+                    float(metric["mean_expectancy_r"]),
+                    implied_mean_r,
+                    rel_tol=5e-6,
+                    abs_tol=5e-6,
+                )
+            if metric_matches:
+                verified_r_passes += 1
+                r_status = "VERIFIED_SIDECAR"
+                r_metrics = {
+                    "mean_r": float(metric["mean_expectancy_r"]),
+                    "weighted_r": float(metric["weighted_r"]),
+                    "r_accounted_trades": int(metric["r_accounted_trades"]),
+                    "sum_initial_risk": float(metric["sum_initial_risk"]),
+                }
+            else:
+                mismatched_r_passes += 1
+                r_status = "SIDECAR_MISMATCH"
+        elif implied_mean_r is not None:
+            r_status = "MEAN_R_DERIVED_WEIGHTED_R_MISSING"
+
+        preview_rows.append(
+            {
+                "pass_no": pass_no,
+                "custom_fitness": custom,
+                "profit": profit,
+                "profit_factor": profit_factor,
+                "recovery_factor": recovery_factor,
+                "equity_drawdown_pct": drawdown if drawdown is not None and math.isfinite(drawdown) else None,
+                "trades": trades,
+                "params": params,
+                "r_evidence_status": r_status,
+                "implied_mean_r": implied_mean_r,
+                "r_metrics": r_metrics,
+            }
+        )
+
+    if not preview_rows:
+        raise ValueError("MT5 optimization report contains zero parseable passes")
+    if set(metrics) - signatures:
+        metrics = {}
+        verified_r_passes = 0
+        mismatched_r_passes = 0
+        for item in preview_rows:
+            if item["r_evidence_status"] == "VERIFIED_SIDECAR":
+                item["r_evidence_status"] = "SIDECAR_MISMATCH"
+                item["r_metrics"] = None
+        mismatched_r_passes = sum(
+            item["r_evidence_status"] == "SIDECAR_MISMATCH"
+            for item in preview_rows
+        )
+
+    total = len(preview_rows)
+    missing = total - verified_r_passes - mismatched_r_passes
+    sidecar_state = (
+        "INVALID"
+        if not sidecar_valid or mismatched_r_passes
+        else "COMPLETE"
+        if verified_r_passes == total
+        else "PARTIAL"
+    )
+    preview_rows.sort(
+        key=lambda item: (
+            -float(item["custom_fitness"]),
+            -float(item["profit_factor"]),
+            -float(item["recovery_factor"]),
+            int(item["pass_no"]),
+        )
+    )
+    return {
+        "status": "RAW_REPORT_ONLY_UNVERIFIED",
+        "eligibility_authority": False,
+        "qualified_pool_authority": False,
+        "total_report_passes": total,
+        "verified_r_evidence_passes": verified_r_passes,
+        "missing_r_evidence_passes": missing,
+        "mismatched_r_evidence_passes": mismatched_r_passes,
+        "sidecar_state": sidecar_state,
+        "displayed_count": min(total, int(limit)),
+        "rows": preview_rows[: int(limit)],
+    }
+
 def apply_frozen_gates(rows: list[OptimizationPass], request: dict[str, Any]) -> None:
     sample = request["trade_sample"]
     kpi = request["kpi"]

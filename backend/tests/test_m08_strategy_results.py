@@ -3,16 +3,21 @@ from __future__ import annotations
 import csv
 import json
 import inspect
+import subprocess
+from types import SimpleNamespace
 from copy import deepcopy
 from pathlib import Path
 
 import pytest
 
 import max_backend.artifact_control as artifact_control
+import max_backend.champion_bundle as champion_bundle
+import max_backend.challenger_deployment as challenger_deployment
 import max_backend.optimizer_candidates as optimizer_candidates
 import max_backend.backtest_control as backtest_control
 import max_backend.challenger_selection as selection
 import max_backend.challenger_operations as challenger_operations
+import max_backend.promotion_service as promotion_service
 import max_backend.workflow_contract as workflow_contract
 import max_backend.optimizer_core as core
 import max_backend.optimizer_runtime as runtime
@@ -25,6 +30,7 @@ from max_backend.challenger_operations_store import (
     update_backtest,
 )
 from max_backend.challenger_store import get_challenger
+from max_backend.champion_store import current_champion
 from max_backend.db import connect, ensure_baseline_registered, initialize_database
 from max_backend.workflow_store import get_batch, migrate_current
 from max_backend.optimizer_candidates import (
@@ -32,6 +38,7 @@ from max_backend.optimizer_candidates import (
     qualified_candidate,
     qualified_candidates_page,
     revalidate_candidate_for_registration,
+    revalidate_candidate_for_promotion,
 )
 from max_backend.optimizer_core import (
     ABSOLUTE_BOUNDS,
@@ -254,8 +261,33 @@ def build_optimizer_fixture(
     editor = tmp_path / "metaeditor64.exe"
     terminal.write_bytes(b"terminal")
     editor.write_bytes(b"metaeditor")
-    (tmp_path / "mt5").mkdir()
+    (tmp_path / "mt5" / "MQL5").mkdir(parents=True)
     monkeypatch.setattr(core, "detect_mt5", lambda: fake_mt5(tmp_path))
+    monkeypatch.setattr(
+        challenger_deployment,
+        "detect_mt5",
+        lambda: fake_mt5(tmp_path),
+    )
+
+    def compile_synthetic(command, **_kwargs):
+        source_arg = next(
+            item for item in command if str(item).startswith("/compile:")
+        )
+        source = Path(str(source_arg).split(":", 1)[1])
+        source.with_suffix(".ex5").write_bytes(
+            b"synthetic-ex5:" + sha256_file(source).encode("ascii")
+        )
+        source.with_suffix(".log").write_text(
+            "Result: 0 errors, 0 warnings\n",
+            encoding="utf-8",
+        )
+        return subprocess.CompletedProcess(command, 0, "", "")
+
+    monkeypatch.setattr(
+        challenger_deployment,
+        "subprocess",
+        SimpleNamespace(run=compile_synthetic),
+    )
     request = freeze_request(raw_request())
     assert request["schema"] == OPTIMIZER_REQUEST_SCHEMA_CURRENT
 
@@ -628,6 +660,50 @@ def test_new_optimizer_terminal_never_auto_registers_challenger(
     assert updates[-1]["active"] is False
 
 
+def test_owner_selection_compiles_each_challenger_into_its_mt5_expert_folder(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    rows = [
+        pass_row(1, mean_r=0.31, weighted_r=0.11),
+        pass_row(2, mean_r=0.29, weighted_r=0.12),
+        pass_row(3, mean_r=0.27, weighted_r=0.13),
+    ]
+    db, job, _request, _root = build_optimizer_fixture(
+        tmp_path, monkeypatch, rows
+    )
+
+    result = selection.create_selected_challengers(
+        job["job_id"],
+        [
+            {"round": 1, "pass": 1},
+            {"round": 1, "pass": 2},
+            {"round": 1, "pass": 3},
+        ],
+        path=db,
+        artifact_root=tmp_path / "artifacts" / "challengers",
+        project_root=tmp_path,
+    )
+
+    deployed_root = tmp_path / "mt5" / "MQL5" / "Experts" / "MaxMTF" / "Challengers"
+    assert len(result["challengers"]) == 3
+    assert len(result["mt5_deployments"]) == 3
+    assert all(item["status"] == "VERIFIED" for item in result["mt5_deployments"])
+    for challenger in result["challengers"]:
+        expert_dir = deployed_root / challenger["challenger_id"]
+        stem = f"Max_Challenger_{challenger['challenger_id']}"
+        assert (expert_dir / f"{stem}.mq5").is_file()
+        assert (expert_dir / f"{stem}.ex5").is_file()
+        assert (expert_dir / f"{stem}.set").is_file()
+        assert (expert_dir / "deployment.json").is_file()
+        assert sha256_file(expert_dir / f"{stem}.mq5") == challenger["challenger_ea_sha256"]
+        assert sha256_file(expert_dir / f"{stem}.set") == challenger["set_sha256"]
+    with connect(db) as conn:
+        assert conn.execute(
+            "SELECT COUNT(*) FROM strategy_challenger_backtests"
+        ).fetchone()[0] == 0
+
+
 def test_owner_selection_creates_independent_challengers_and_retry_is_idempotent(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
@@ -784,10 +860,62 @@ def test_batch_prevalidation_failure_registers_zero_and_recovery_retry_no_duplic
         project_root=tmp_path,
     )
     assert again["state"] == "COMMITTED"
+    assert len(again["mt5_deployments"]) == 2
+    assert all(
+        item["status"] in {"VERIFIED", "VERIFIED_EXISTING"}
+        for item in again["mt5_deployments"]
+    )
     with connect(db) as conn:
         assert conn.execute(
             "SELECT COUNT(*) AS n FROM strategy_challengers"
         ).fetchone()["n"] == 2
+
+
+def test_mt5_compile_failure_does_not_publish_challenger_rows_or_files(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    db, job, _request, _root = build_optimizer_fixture(
+        tmp_path,
+        monkeypatch,
+        [pass_row(1, mean_r=0.31, weighted_r=0.11)],
+    )
+
+    def compile_failure(command, **_kwargs):
+        source_arg = next(
+            item for item in command if str(item).startswith("/compile:")
+        )
+        source = Path(str(source_arg).split(":", 1)[1])
+        source.with_suffix(".log").write_text(
+            "Result: 1 errors, 0 warnings\n",
+            encoding="utf-8",
+        )
+        return subprocess.CompletedProcess(command, 1, "", "compile error")
+
+    monkeypatch.setattr(
+        challenger_deployment.subprocess,
+        "run",
+        compile_failure,
+    )
+    artifact_root = tmp_path / "artifacts" / "challengers"
+    with pytest.raises(RuntimeError, match="CHALLENGER_METAEDITOR_COMPILE_NOT_CLEAN"):
+        selection.create_selected_challengers(
+            job["job_id"],
+            [{"round": 1, "pass": 1}],
+            path=db,
+            artifact_root=artifact_root,
+            project_root=tmp_path,
+        )
+
+    with connect(db) as conn:
+        assert conn.execute(
+            "SELECT COUNT(*) FROM strategy_challengers"
+        ).fetchone()[0] == 0
+        assert conn.execute(
+            "SELECT state FROM strategy_challenger_batches"
+        ).fetchone()[0] == "FAILED"
+    deployed_root = tmp_path / "mt5" / "MQL5" / "Experts" / "MaxMTF" / "Challengers"
+    assert not deployed_root.exists() or not any(deployed_root.iterdir())
 
 
 def test_historical_optimizer_job_keeps_legacy_pass_evidence(
@@ -1041,6 +1169,63 @@ def test_runtime_cleanup_preserves_result_then_backtest_delete_is_physical(
     )
     assert challenger_deleted["status"] == "DELETED"
     assert get_challenger(challenger["challenger_id"], path=db) is None
+
+
+def test_backtest_runtime_cleanup_never_deletes_shared_promoted_challenger_ea(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    db, challenger, record, evidence, runtime_paths = create_completed_backtest_fixture(
+        tmp_path,
+        monkeypatch,
+    )
+    mt5 = record["request"]["mt5"]
+    shared_dir = (
+        Path(mt5["data_root"])
+        / "MQL5"
+        / "Experts"
+        / "MaxMTF"
+        / "Challengers"
+        / challenger["challenger_id"]
+    )
+    shared_ex5 = shared_dir / f"Max_Challenger_{challenger['challenger_id']}.ex5"
+    assert shared_ex5.is_file()
+    shared_ex5_before = shared_ex5.read_bytes()
+
+    reused_result = deepcopy(record["result"])
+    reused_result["deployment_reused"] = True
+    reused_result["runtime"].update({
+        "expert_dir": str(shared_dir),
+        "expert_reused": True,
+        "challenger_id": challenger["challenger_id"],
+    })
+    record = update_backtest(
+        record["backtest_id"],
+        state="COMPLETED",
+        result=reused_result,
+        path=db,
+    )
+
+    inventory = backtest_control.runtime_inventory(record["backtest_id"], path=db)
+    expert_item = next(item for item in inventory["items"] if item["type"] == "EXPERT_DEPLOYMENT_REUSED")
+    assert expert_item["exists"] is True
+    assert expert_item["removable"] is False
+
+    cleaned = backtest_control.clean_backtest_runtime(record["backtest_id"], path=db)
+    assert cleaned["runtime_status"] == "CLEANED"
+    assert shared_ex5.read_bytes() == shared_ex5_before
+    assert runtime_paths["tester_set"].exists() is False
+    assert runtime_paths["runtime_report"].exists() is False
+    assert runtime_paths["retained_report"].is_file()
+
+    deleted = backtest_control.delete_backtest(
+        record["backtest_id"],
+        confirmed=True,
+        path=db,
+    )
+    assert deleted["status"] == "DELETED"
+    assert shared_ex5.read_bytes() == shared_ex5_before
+    assert evidence.exists() is False
 
 
 
@@ -2092,6 +2277,142 @@ def test_consumed_optimizer_source_never_returns_to_active_candidate_pool(
             1,
             path=db,
         )
+
+
+def test_promotion_revalidates_consumed_source_only_for_its_exact_active_challenger(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    rows = [
+        pass_row(1, mean_r=0.31, weighted_r=0.11),
+        pass_row(2, mean_r=0.29, weighted_r=0.12),
+    ]
+    db, job, _request, _root = build_optimizer_fixture(
+        tmp_path,
+        monkeypatch,
+        rows,
+    )
+    created = selection.create_selected_challengers(
+        job["job_id"],
+        [{"round": 1, "pass": 1}],
+        path=db,
+        artifact_root=tmp_path / "artifacts" / "challengers",
+        project_root=tmp_path,
+    )
+    challenger_id = created["challengers"][0]["challenger_id"]
+
+    candidate = revalidate_candidate_for_promotion(
+        job["job_id"],
+        1,
+        1,
+        challenger_id=challenger_id,
+        path=db,
+    )
+    assert candidate["pass"] == 1
+
+    with pytest.raises(
+        RuntimeError,
+        match="QUALIFIED_CANDIDATE_CONSUMER_MISMATCH",
+    ):
+        revalidate_candidate_for_promotion(
+            job["job_id"],
+            1,
+            1,
+            challenger_id="STRAT-NOT-THE-SOURCE-OWNER",
+            path=db,
+        )
+
+
+def test_owner_selected_consumed_challenger_completes_synthetic_promotion(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    db, job, _request, _evidence_root = build_optimizer_fixture(
+        tmp_path,
+        monkeypatch,
+        [pass_row(1, mean_r=0.31, weighted_r=0.11)],
+    )
+    selected = selection.create_selected_challengers(
+        job["job_id"],
+        [{"round": 1, "pass": 1}],
+        path=db,
+        artifact_root=tmp_path / "artifacts" / "challengers",
+        project_root=tmp_path,
+    )
+    challenger_id = selected["challengers"][0]["challenger_id"]
+    challenger = get_challenger(challenger_id, path=db)
+    assert challenger is not None
+    assert challenger["role_origin"] == ROLE_OWNER_SELECTED_QUALIFIED_CANDIDATE
+
+    baseline_source = Path(__file__).resolve().parents[2] / "ea" / "baseline" / "Max_MTF.mq5"
+    baseline = tmp_path / "ea" / "baseline" / "Max_MTF.mq5"
+    baseline.parent.mkdir(parents=True)
+    baseline.write_bytes(baseline_source.read_bytes())
+    monkeypatch.setattr(promotion_service, "ROOT", tmp_path)
+    monkeypatch.setattr(promotion_service, "EA_BASELINE", baseline)
+    monkeypatch.setattr(
+        promotion_service,
+        "CHAMPION_CURRENT_ROOT",
+        tmp_path / "ea" / "champion" / "current",
+    )
+    monkeypatch.setattr(
+        promotion_service,
+        "STRATEGY_HISTORY_ROOT",
+        tmp_path / "artifacts" / "strategy_history",
+    )
+    monkeypatch.setattr(
+        promotion_service,
+        "PROMOTION_RECOVERY_ROOT",
+        tmp_path / "state" / "promotion_recovery",
+    )
+    monkeypatch.setattr(champion_bundle, "EA_BASELINE", baseline)
+    monkeypatch.setattr(
+        promotion_service,
+        "verify_challenger_bundle",
+        lambda *_args, **_kwargs: {
+            "status": "VERIFIED",
+            "manifest_sha256": challenger["manifest_sha256"],
+            "champion_mutation": "NONE",
+        },
+    )
+
+    def fake_compile(**kwargs):
+        compile_temp = tmp_path / "compile-temp" / kwargs["promotion_id"]
+        compile_temp.mkdir(parents=True)
+        ex5 = compile_temp / "Max_MTF.ex5"
+        ex5.write_bytes(b"synthetic-compiled-ea")
+        return {
+            "status": "PASS",
+            "compile_summary": {"found": True, "errors": 0, "warnings": 0},
+            "fresh_ex5": True,
+            "compiled_ex5": str(ex5),
+            "compile_temp_dir": str(compile_temp),
+            "ex5_sha256": sha256_file(ex5),
+        }
+
+    monkeypatch.setattr(promotion_service, "_compile_champion", fake_compile)
+    result = promotion_service.promote_strategy_challenger(
+        challenger_id,
+        expected_challenger_manifest_sha256=challenger["manifest_sha256"],
+        expected_current_champion_id=None,
+        confirmed=True,
+        path=db,
+    )
+
+    assert result["status"] == "COMMITTED"
+    assert result["new_champion"] == challenger_id
+    assert result["champion_integrity"]["status"] == "VERIFIED"
+    assert current_champion(path=db)["strategy_id"] == challenger_id
+    deployed = tmp_path / "mt5" / "MQL5" / "Experts" / "MaxMTF"
+    assert (deployed / "Max_MTF.mq5").is_file()
+    assert (deployed / "Max_MTF.ex5").is_file()
+    assert _ea_input_number(
+        (deployed / "Max_MTF.mq5").read_text(encoding="utf-8"),
+        "InpEntryThreshold",
+    ) == pytest.approx(challenger["params"]["InpEntryThreshold"])
+    assert sha256_file(Path(promotion_service.EA_BASELINE)) == challenger[
+        "baseline_ea_sha256"
+    ]
 
 
 def test_committed_batch_keeps_source_consumed_after_challenger_row_delete(

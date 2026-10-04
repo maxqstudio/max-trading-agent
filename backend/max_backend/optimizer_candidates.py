@@ -8,7 +8,7 @@ from typing import Any
 
 from .config import DATABASE_PATH, ROOT
 from .db import connect
-from .challenger_store import consumed_source_identities
+from .challenger_store import consumed_source_identities, get_challenger_by_source
 from .mtf_geometry import STRATEGY_CONTRACT, assert_geometry_matches_main
 from .optimizer_core import (
     ABSOLUTE_BOUNDS,
@@ -633,17 +633,36 @@ def qualified_candidate(
     return {**match, "request": job["request"]}
 
 
-def revalidate_candidate_for_registration(
+def _revalidate_candidate(
     job_id: str,
     round_no: int,
     pass_no: int,
     *,
     path: Path = DATABASE_PATH,
+    allowed_existing_challenger_id: str | None = None,
 ) -> dict[str, Any]:
     """Reparse canonical MT5 evidence and reapply all frozen gates."""
     consumed = consumed_source_identities(job_id, path=path)
-    if (int(round_no), int(pass_no)) in consumed:
-        raise RuntimeError("QUALIFIED_CANDIDATE_ALREADY_CONSUMED")
+    identity = (int(round_no), int(pass_no))
+    if identity in consumed:
+        if allowed_existing_challenger_id is None:
+            raise RuntimeError("QUALIFIED_CANDIDATE_ALREADY_CONSUMED")
+        consumer = get_challenger_by_source(
+            job_id,
+            round_no,
+            pass_no,
+            path=path,
+        )
+        if (
+            consumer is None
+            or str(consumer["challenger_id"])
+            != str(allowed_existing_challenger_id)
+        ):
+            raise RuntimeError("QUALIFIED_CANDIDATE_CONSUMER_MISMATCH")
+        if str(consumer["status"]) != "CHALLENGER":
+            raise RuntimeError("QUALIFIED_CANDIDATE_CONSUMER_NOT_ACTIVE")
+    elif allowed_existing_challenger_id is not None:
+        raise RuntimeError("QUALIFIED_CANDIDATE_CONSUMER_MISMATCH")
     candidate = qualified_candidate(job_id, round_no, pass_no, path=path)
     request = candidate["request"]
     if not optimizer_uses_owner_selection(request):
@@ -702,3 +721,47 @@ def revalidate_candidate_for_registration(
     if str(provenance.get("sidecar_sha256") or "") != candidate["sidecar_sha256"]:
         raise RuntimeError("QUALIFIED_CANDIDATE_PROVENANCE_SIDECAR_HASH_MISMATCH")
     return candidate
+
+
+def revalidate_candidate_for_registration(
+    job_id: str,
+    round_no: int,
+    pass_no: int,
+    *,
+    path: Path = DATABASE_PATH,
+) -> dict[str, Any]:
+    """Revalidate an unconsumed candidate before creating its Challenger row."""
+    return _revalidate_candidate(
+        job_id,
+        round_no,
+        pass_no,
+        path=path,
+    )
+
+
+def revalidate_candidate_for_promotion(
+    job_id: str,
+    round_no: int,
+    pass_no: int,
+    *,
+    challenger_id: str,
+    path: Path = DATABASE_PATH,
+) -> dict[str, Any]:
+    """Deep-revalidate only the exact active Challenger owning this source."""
+    consumer = get_challenger_by_source(
+        job_id,
+        round_no,
+        pass_no,
+        path=path,
+    )
+    if consumer is None or str(consumer["challenger_id"]) != str(challenger_id):
+        raise RuntimeError("QUALIFIED_CANDIDATE_CONSUMER_MISMATCH")
+    if str(consumer["status"]) != "CHALLENGER":
+        raise RuntimeError("QUALIFIED_CANDIDATE_CONSUMER_NOT_ACTIVE")
+    return _revalidate_candidate(
+        job_id,
+        round_no,
+        pass_no,
+        path=path,
+        allowed_existing_challenger_id=challenger_id,
+    )

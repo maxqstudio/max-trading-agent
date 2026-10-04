@@ -454,7 +454,7 @@ def test_request_freeze_and_ea_hash(monkeypatch: pytest.MonkeyPatch) -> None:
     assert request["schema"] == "MAX_REBUILD_OPTIMIZER_REQUEST_V6"
     assert request["fixed_execution_authority"]["InpMaxDailyLossPct"] == 5.0
     assert request["fixed_execution_authority"]["risk_pct_upper_bound"] == 5.0
-    assert request["ea"]["sha256"] == "827c4caddedbe37081353e08bba35eac5f01e96314dd8650d7ea17ad109ae725"
+    assert request["ea"]["sha256"] == "10fadcd986a93cc075e13a6a383f1b00ee5c097c2a70d6edee315668111d5e20"
     assert request["optimizer_fitness"] == optimizer_fitness_contract(0.5)
     assert request["mt5_optimization_criterion"]["code"] == 6
     assert request["mt5_optimization_criterion"]["fitness"] == OPTIMIZER_FITNESS_SCHEMA

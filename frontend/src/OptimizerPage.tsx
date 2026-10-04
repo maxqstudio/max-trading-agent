@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Pagination, SortHeader } from './DataTable'
+import { ActionButton, ActionProgress } from './ActionControls'
 import { compactNumber } from './tableFormat'
 
 type ParameterContract = {
@@ -138,6 +139,33 @@ type Job = {
         sample_count?: number
         stop_reason?: string | null
       }
+    }
+    report_preview?: {
+      status: string
+      message: string
+      total_report_passes?: number
+      verified_r_evidence_passes?: number
+      missing_r_evidence_passes?: number
+      mismatched_r_evidence_passes?: number
+      sidecar_state?: string
+      rows?: {
+        pass_no: number
+        custom_fitness: number
+        profit: number
+        profit_factor: number
+        recovery_factor: number
+        equity_drawdown_pct: number | null
+        trades: number
+        params: Record<string, number>
+        r_evidence_status: string
+        implied_mean_r: number | null
+        r_metrics: {
+          mean_r: number
+          weighted_r: number
+          r_accounted_trades: number
+          sum_initial_risk: number
+        } | null
+      }[]
     }
     scientist_decision?: {
       mode: string
@@ -351,23 +379,6 @@ function normalizeOptimizerDraft(contract: Contract, saved: any) {
 
 type DraftStatus = 'LOADING' | 'SAVED' | 'DIRTY' | 'SAVING' | 'RECOVERY_REQUIRED' | 'SAVE_FAILED' | 'CONFLICT'
 
-function ActionProgress({
-  active,
-  idle,
-  pending,
-}: {
-  active: boolean
-  idle: string
-  pending: string
-}) {
-  return (
-    <>
-      {active && <span className="button-spinner" aria-hidden="true" />}
-      <span>{active ? pending : idle}</span>
-    </>
-  )
-}
-
 export default function OptimizerPage() {
   const [contract, setContract] = useState<Contract | null>(null)
   const [job, setJob] = useState<Job | null>(null)
@@ -384,6 +395,7 @@ export default function OptimizerPage() {
   const [qualifiedLoading, setQualifiedLoading] = useState(true)
   const [candidateSort, setCandidateSort] = useState('mean_r')
   const [candidateOrder, setCandidateOrder] = useState<'asc' | 'desc'>('desc')
+  const [candidateListAction, setCandidateListAction] = useState('')
   const [candidatePage, setCandidatePage] = useState(1)
   const [candidatePageSize, setCandidatePageSize] = useState(25)
   const [candidateQuery, setCandidateQuery] = useState('')
@@ -392,6 +404,8 @@ export default function OptimizerPage() {
   const [candidateSelection, setCandidateSelection] = useState<Set<string>>(new Set())
   const [candidateRefresh, setCandidateRefresh] = useState(0)
   const [promotionMessage, setPromotionMessage] = useState('')
+  const [reportCopyMessage, setReportCopyMessage] = useState('')
+  const [reportCopyingPass, setReportCopyingPass] = useState<number | null>(null)
 
   const initializedRef = useRef(false)
   const autosaveEnabledRef = useRef(false)
@@ -404,6 +418,23 @@ export default function OptimizerPage() {
   const previewSequenceRef = useRef(0)
   const qualifiedSequenceRef = useRef(0)
   const qualifiedControllerRef = useRef<AbortController | null>(null)
+
+  async function copyReportParameters(passNo: number, params: Record<string, number>) {
+    setReportCopyMessage('')
+    setReportCopyingPass(passNo)
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable')
+      const text = Object.entries(params)
+        .map(([name, value]) => `${name}=${value}`)
+        .join('\n')
+      await navigator.clipboard.writeText(text)
+      setReportCopyMessage(`Pass ${passNo} inputs copied. They remain unqualified.`)
+    } catch {
+      setReportCopyMessage('Copy was blocked. Expand the input list and copy it manually.')
+    } finally {
+      setReportCopyingPass(null)
+    }
+  }
 
   async function persistDraft(value: any) {
     const sequence = ++draftSaveSequenceRef.current
@@ -560,7 +591,10 @@ export default function OptimizerPage() {
         if (sequence === qualifiedSequenceRef.current && !controller.signal.aborted) setQualifiedError(reason.message)
       })
       .finally(() => {
-        if (sequence === qualifiedSequenceRef.current && !controller.signal.aborted) setQualifiedLoading(false)
+        if (sequence === qualifiedSequenceRef.current && !controller.signal.aborted) {
+          setQualifiedLoading(false)
+          setCandidateListAction('')
+        }
       })
     return () => {
       controller.abort()
@@ -676,6 +710,15 @@ export default function OptimizerPage() {
   const canStart = !busy && !startBlockedByJob && !startBlockedByDraft && !startBlockedByPreview
   const canStop = Boolean(job && (job.active || recoverableStatuses.includes(job.status)))
   const canResume = Boolean(job && !job.active && resumableStatuses.includes(job.status))
+  const startBlockReason = busy
+    ? 'Another Optimizer action is running.'
+    : startBlockedByDraft
+      ? 'Save or recover the Optimizer configuration before starting.'
+      : startBlockedByPreview
+        ? 'Wait for a valid configuration preview before starting.'
+        : startBlockedByJob
+          ? 'An active or uncertain Optimizer job must be stopped or resumed first.'
+          : ''
   const currentResourceRuntime = job?.rounds.find((round) => round.round_no === job.current_round)?.state.resource_runtime
 
   function markDraftDirty() {
@@ -825,6 +868,8 @@ export default function OptimizerPage() {
   }
 
   function changeCandidateSort(field: string, nextOrder: 'asc' | 'desc') {
+    setCandidateListAction('sort:' + field)
+    setQualifiedLoading(true)
     setCandidateSort(field)
     setCandidateOrder(nextOrder)
     setCandidatePage(1)
@@ -879,9 +924,19 @@ export default function OptimizerPage() {
       })
       const body = await response.json()
       if (!response.ok) throw new Error(ownerErrorMessage(body.detail, 'Strategy Challenger creation could not be completed'))
+      const deployments = body.mt5_deployments
+      if (
+        !Array.isArray(deployments)
+        || deployments.length !== selections.length
+        || deployments.some((item: { status?: string }) =>
+          !['VERIFIED', 'VERIFIED_EXISTING'].includes(String(item?.status ?? '')),
+        )
+      ) {
+        throw new Error('Challenger creation did not confirm every compiled MT5 EA. Review the batch status before retrying.')
+      }
       setPromotionMessage(
-        String(body.result?.count ?? body.challengers?.length ?? selections.length)
-        + ' qualified candidate(s) created as independent Strategy Challengers.',
+        String(deployments.length)
+        + ' qualified candidate(s) created as Strategy Challengers and compiled into MT5.',
       )
       setCandidateSelection(new Set())
       setQualifiedLoading(true)
@@ -1035,18 +1090,41 @@ export default function OptimizerPage() {
       <section aria-labelledby="optimizer-actions">
         <h2 id="optimizer-actions">Owner actions</h2>
         <div className="actions">
-          <button onClick={saveDraftExplicitly} disabled={busy || draftStatus === 'SAVING' || !config}>
+          <ActionButton
+            type="button"
+            onClick={saveDraftExplicitly}
+            disabled={busy || draftStatus === 'SAVING' || !config}
+            blockedReason={busy || draftStatus === 'SAVING'
+              ? 'Wait for the current configuration save or Optimizer action to finish.'
+              : !config ? 'Optimizer configuration has not loaded.' : undefined}
+          >
             <ActionProgress active={draftStatus === 'SAVING'} idle="SAVE DRAFT" pending="Saving draft…" />
-          </button>
-          <button onClick={start} disabled={!canStart}>
+          </ActionButton>
+          <ActionButton type="button" onClick={start} disabled={!canStart} blockedReason={startBlockReason}>
             <ActionProgress active={busyAction === 'start'} idle="START OPTIMIZER" pending="Starting..." />
-          </button>
-          <button onClick={() => action('stop')} disabled={busy || !canStop}>
+          </ActionButton>
+          <ActionButton
+            type="button"
+            onClick={() => action('stop')}
+            disabled={busy || !canStop}
+            blockedReason={busy
+              ? 'Wait for the current Optimizer action to finish.'
+              : !job ? 'No Optimizer job is selected.'
+                : 'This job is not in a state that can be safely stopped.'}
+          >
             <ActionProgress active={busyAction === 'stop'} idle="STOP" pending="Stopping..." />
-          </button>
-          <button onClick={() => action('resume')} disabled={busy || !canResume}>
+          </ActionButton>
+          <ActionButton
+            type="button"
+            onClick={() => action('resume')}
+            disabled={busy || !canResume}
+            blockedReason={busy
+              ? 'Wait for the current Optimizer action to finish.'
+              : !job ? 'No Optimizer job is selected.'
+                : 'This job has no resumable checkpoint.'}
+          >
             <ActionProgress active={busyAction === 'resume'} idle="RESUME" pending="Resuming..." />
-          </button>
+          </ActionButton>
         </div>
         {!canStart && (
           <p role="status" className="loading">
@@ -1145,6 +1223,80 @@ export default function OptimizerPage() {
             </div>
           ))}
 
+          {job.rounds.map((round) => round.report_preview && (
+            <div className="results-control raw-report-preview" key={'raw-report-' + round.round_no}>
+              <h2>Round {round.round_no} · retained MT5 report</h2>
+              {round.report_preview.status === 'UNAVAILABLE' ? (
+                <p role="alert" className="error">{round.report_preview.message}</p>
+              ) : (
+                <>
+                  <p role="alert" className="error">
+                    {round.report_preview.message} The run remains failed; this view does not change its status.
+                  </p>
+                  <div className="result-summary" aria-label="Retained report coverage">
+                    <div><span>Reported passes</span><strong>{round.report_preview.total_report_passes ?? '—'}</strong></div>
+                    <div><span>Passes with verified R</span><strong>{round.report_preview.verified_r_evidence_passes ?? '—'}</strong></div>
+                    <div><span>R evidence missing</span><strong>{round.report_preview.missing_r_evidence_passes ?? '—'}</strong></div>
+                    <div><span>R evidence mismatches</span><strong>{round.report_preview.mismatched_r_evidence_passes ?? '—'}</strong></div>
+                  </div>
+                  {(round.report_preview.rows?.length ?? 0) > 0 && (
+                    <div className="table-wrap data-table-wrap">
+                      <table>
+                        <thead>
+                          <tr><th>Pass</th><th>Custom fitness</th><th>Mean R</th><th>Weighted R</th><th>Profit</th><th>PF</th><th>RF</th><th>Trades</th><th>Inputs</th></tr>
+                        </thead>
+                        <tbody>
+                          {round.report_preview.rows?.map((row) => (
+                            <tr key={row.pass_no}>
+                              <td>{row.pass_no}</td>
+                              <td>{compactNumber(row.custom_fitness, 4)}</td>
+                              <td>
+                                {row.r_metrics
+                                  ? compactNumber(row.r_metrics.mean_r, 4)
+                                  : row.implied_mean_r === null
+                                    ? 'Missing'
+                                    : `≈${compactNumber(row.implied_mean_r, 4)} from Custom`}
+                              </td>
+                              <td>{row.r_metrics ? compactNumber(row.r_metrics.weighted_r, 4) : 'Missing'}</td>
+                              <td>{compactNumber(row.profit, 2)}</td>
+                              <td>{compactNumber(row.profit_factor, 4)}</td>
+                              <td>{compactNumber(row.recovery_factor, 4)}</td>
+                              <td>{row.trades}</td>
+                              <td>
+                                <details>
+                                  <summary>View inputs</summary>
+                                  <dl className="raw-report-inputs">
+                                    {Object.entries(row.params).map(([name, value]) => (
+                                      <div key={name}><dt>{name}</dt><dd>{value}</dd></div>
+                                    ))}
+                                  </dl>
+                                  <ActionButton
+                                    type="button"
+                                    onClick={() => copyReportParameters(row.pass_no, row.params)}
+                                    disabled={reportCopyingPass === row.pass_no}
+                                    blockedReason="A parameter copy is still in progress."
+                                  >
+                                    <ActionProgress
+                                      active={reportCopyingPass === row.pass_no}
+                                      idle="Copy inputs"
+                                      pending="Copying…"
+                                    />
+                                  </ActionButton>
+                                </details>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                  {reportCopyMessage && <p role="status" className="loading">{reportCopyMessage}</p>}
+                  <p className="subtle">Mean R marked “from Custom” is reconstructed from the frozen fitness formula, not a stored R sidecar. Weighted R is unavailable unless the row has verified sidecar evidence.</p>
+                </>
+              )}
+            </div>
+          ))}
+
           {currentQualifiedWorkflow ? (
           <div className="results-control">
             <h2>Qualified candidates</h2>
@@ -1164,6 +1316,7 @@ export default function OptimizerPage() {
                 onChange={(event) => {
                   qualifiedControllerRef.current?.abort()
                   setQualifiedLoading(true)
+                  setCandidateListAction('')
                   setCandidateSearch(event.target.value)
                   setCandidatePage(1)
                 }}
@@ -1174,6 +1327,7 @@ export default function OptimizerPage() {
                 onChange={(event) => {
                   qualifiedControllerRef.current?.abort()
                   setQualifiedLoading(true)
+                  setCandidateListAction('')
                   setCandidateRound(event.target.value)
                   setCandidatePage(1)
                 }}
@@ -1183,30 +1337,41 @@ export default function OptimizerPage() {
                   <option key={round.round_no} value={round.round_no}>Round {round.round_no}</option>
                 ))}
               </select>
-              <button type="button" onClick={toggleCurrentPage} disabled={!qualified?.items.length || busy}>
+              <ActionButton
+                type="button"
+                onClick={toggleCurrentPage}
+                disabled={!qualified?.items.length || busy || qualifiedLoading}
+                blockedReason={busy ? 'Wait for the current Optimizer action.' : qualifiedLoading ? 'Wait for qualified candidate data to finish loading.' : 'There are no qualified candidates on this page.'}
+              >
                 Select current page
-              </button>
-              <button type="button" onClick={() => setCandidateSelection(new Set())} disabled={!candidateSelection.size || busy}>
+              </ActionButton>
+              <ActionButton
+                type="button"
+                onClick={() => setCandidateSelection(new Set())}
+                disabled={!candidateSelection.size || busy || qualifiedLoading}
+                blockedReason={busy ? 'Wait for the current Optimizer action.' : qualifiedLoading ? 'Wait for qualified candidate data to finish loading.' : 'No candidates are selected.'}
+              >
                 Clear selection
-              </button>
+              </ActionButton>
               <span>{candidateSelection.size} selected</span>
-              <button
+              <ActionButton
                 type="button"
                 onClick={promoteSelectedCandidates}
-                disabled={busy || candidateSelection.size === 0}
+                disabled={busy || qualifiedLoading || candidateSelection.size === 0}
+                blockedReason={busy ? 'Wait for the current Optimizer action.' : qualifiedLoading ? 'Wait for qualified candidate data to finish loading.' : 'Select one or more qualified candidates first.'}
               >
                 <ActionProgress
                   active={busyAction === 'promote-selected'}
                   idle="Promote Selected to Challengers"
-                  pending="Promoting..."
+                  pending="Creating and compiling..."
                 />
-              </button>
+              </ActionButton>
             </div>
 
             {promotionMessage && <p role="status" className="success">{promotionMessage}</p>}
             {qualifiedError && <p role="alert" className="error">{qualifiedError}</p>}
             {qualifiedLoading && <p role="status" className="loading">Loading qualified candidates…</p>}
-            {!qualifiedLoading && qualified && (
+            {qualified && (
               <>
                 {qualified.items.length === 0 && (
                   <p className="empty-state">No qualified candidates match the current filter.</p>
@@ -1236,6 +1401,9 @@ export default function OptimizerPage() {
                             sort={candidateSort}
                             order={candidateOrder}
                             onSort={changeCandidateSort}
+                            loading={qualifiedLoading || busy}
+                            blockedReason={busy ? 'Wait for the current Optimizer action.' : 'Wait for qualified candidate data to finish loading.'}
+                            pending={candidateListAction === 'sort:' + field}
                           />
                         ))}
                       </tr>
@@ -1248,7 +1416,7 @@ export default function OptimizerPage() {
                               aria-label={'Select candidate R' + row.round + ' P' + row.pass}
                               type="checkbox"
                               checked={candidateSelection.has(candidateKey(row))}
-                              disabled={busy}
+                              disabled={busy || qualifiedLoading}
                               onChange={() => toggleCandidate(row)}
                             />
                           </td>
@@ -1273,7 +1441,14 @@ export default function OptimizerPage() {
                   pages={qualified.pages}
                   pageSize={qualified.page_size}
                   total={qualified.total}
-                  onPage={setCandidatePage}
+                  loading={qualifiedLoading || busy}
+                  blockedReason={busy ? 'Wait for the current Optimizer action.' : 'Wait for qualified candidate data to finish loading.'}
+                  pendingDirection={candidateListAction === 'page-previous' ? 'previous' : candidateListAction === 'page-next' ? 'next' : ''}
+                  onPage={(next, direction) => {
+                    setCandidateListAction('page-' + direction)
+                    setQualifiedLoading(true)
+                    setCandidatePage(next)
+                  }}
                   onPageSize={(size) => { setCandidatePageSize(size); setCandidatePage(1) }}
                 />
               </>

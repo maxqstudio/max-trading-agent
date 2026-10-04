@@ -666,6 +666,18 @@ def commit_promotion_authority(
                 raise RuntimeError(
                     "PREVIOUS_CHAMPION_SOURCE_LINEAGE_INVALID"
                 )
+            cursor = conn.execute(
+                """
+                UPDATE strategy_challengers
+                SET status='CHALLENGER', updated_utc=?
+                WHERE challenger_id=? AND status='PROMOTED'
+                """,
+                (promoted_utc, previous_challenger_id),
+            )
+            if cursor.rowcount != 1:
+                raise RuntimeError(
+                    "PREVIOUS_CHAMPION_SOURCE_REACTIVATION_FAILED"
+                )
 
         conn.execute(
             """

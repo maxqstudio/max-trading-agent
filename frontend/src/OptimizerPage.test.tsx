@@ -264,6 +264,75 @@ describe('M01 Optimizer UI', () => {
     expect(document.body.textContent).not.toContain('abcdef1234567890')
   })
 
+  it('shows failed raw report rows as unqualified and confirms copied parameters', async () => {
+    const clipboardWrite = vi.fn().mockResolvedValue(undefined)
+    const originalClipboard = Object.getOwnPropertyDescriptor(navigator, 'clipboard')
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText: clipboardWrite },
+    })
+    const rawJob = {
+      ...terminalJob,
+      job_id: 'JOBFAIL',
+      status: 'FAILED',
+      active: false,
+      first_blocker: 'OPTIMIZER_RUNTIME_FAILURE',
+      message: 'Optimizer stopped because report evidence was incomplete.',
+      winner: null,
+      rounds: [{
+        ...terminalJob.rounds[0],
+        phase: 'REPORT_READY',
+        passes: [],
+        report_preview: {
+          status: 'RAW_REPORT_ONLY_UNVERIFIED',
+          message: 'MT5 report rows are retained for review. R evidence is incomplete; these rows are not validated candidates and cannot be promoted.',
+          total_report_passes: 6623,
+          verified_r_evidence_passes: 21,
+          missing_r_evidence_passes: 6602,
+          mismatched_r_evidence_passes: 0,
+          sidecar_state: 'PARTIAL',
+          rows: [{
+            pass_no: 6614,
+            custom_fitness: 11.858764234328444,
+            profit: 20636.94,
+            profit_factor: 1.455572,
+            recovery_factor: 6.272226,
+            equity_drawdown_pct: 11.9624,
+            trades: 222,
+            params: { InpRiskPct: 2, InpEntryThreshold: 0.6 },
+            r_evidence_status: 'MEAN_R_DERIVED_WEIGHTED_R_MISSING',
+            implied_mean_r: 0.27014215048125884,
+            r_metrics: null,
+          }],
+        },
+      }],
+    }
+    vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
+      const url = String(input)
+      if (url.endsWith('/api/optimizer/draft')) return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      if (url.endsWith('/api/optimizer/contract')) return Promise.resolve({ ok: true, json: async () => contract() } as Response)
+      if (url.endsWith('/api/optimizer/current')) return Promise.resolve({ ok: true, json: async () => rawJob } as Response)
+      throw new Error('unexpected fetch ' + url)
+    }))
+
+    try {
+      render(<OptimizerPage />)
+      expect(await screen.findByText('Round 1 · retained MT5 report')).toBeInTheDocument()
+      expect(screen.getByText(/The run remains failed/)).toBeInTheDocument()
+      expect(screen.getByText('6602')).toBeInTheDocument()
+      expect(screen.getByText('≈0.2701 from Custom')).toBeInTheDocument()
+      expect(screen.getByText('Missing')).toBeInTheDocument()
+      fireEvent.click(screen.getByText('View inputs'))
+      fireEvent.click(screen.getByRole('button', { name: 'Copy inputs' }))
+      expect(await screen.findByText('Pass 6614 inputs copied. They remain unqualified.')).toBeInTheDocument()
+      expect(clipboardWrite).toHaveBeenCalledWith('InpRiskPct=2\nInpEntryThreshold=0.6')
+      expect(screen.queryByText('ELIGIBLE WINNER')).not.toBeInTheDocument()
+    } finally {
+      if (originalClipboard) Object.defineProperty(navigator, 'clipboard', originalClipboard)
+      else Reflect.deleteProperty(navigator, 'clipboard')
+    }
+  })
+
   it('shows owner-readable risk controls and fixed daily loss authority', async () => {
     vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
       const url = String(input)
@@ -886,7 +955,7 @@ describe('M08 qualified candidate control', () => {
         { round: 1, pass: 3 },
       ],
     })
-    const pendingPromotion = screen.getByRole('button', { name: 'Promoting...' })
+    const pendingPromotion = screen.getByRole('button', { name: 'Creating and compiling...' })
     expect(pendingPromotion).toBeDisabled()
     fireEvent.click(pendingPromotion)
     expect(promoteCalls).toBe(1)
@@ -896,10 +965,14 @@ describe('M08 qualified candidate control', () => {
       json: async () => ({
         state: 'COMMITTED',
         result: { count: promotedBody.selections.length },
+        mt5_deployments: promotedBody.selections.map((selection: { round: number; pass: number }) => ({
+          challenger_id: `STRAT-R${selection.round}-P${selection.pass}`,
+          status: 'VERIFIED',
+        })),
       }),
     } as Response)
 
-    expect(await screen.findByText(/3 qualified candidate\(s\) created/)).toBeInTheDocument()
+    expect(await screen.findByText(/3 qualified candidate\(s\) created as Strategy Challengers and compiled into MT5/)).toBeInTheDocument()
     expect(screen.getByText('0 selected')).toBeInTheDocument()
   })
 
@@ -1241,7 +1314,8 @@ describe('M08 qualified candidate control', () => {
     fireEvent.change(screen.getByLabelText('Search qualified candidates'), { target: { value: 'first' } })
     await waitFor(() => expect(requests.some((url) => new URL(url, 'http://local').searchParams.get('q') === 'first')).toBe(true), { timeout: 1500 })
     fireEvent.change(screen.getByLabelText('Search qualified candidates'), { target: { value: 'latest' } })
-    expect(await screen.findByLabelText('Select candidate R1 P77')).toBeInTheDocument()
+    await waitFor(() => expect(requests.filter((url) => new URL(url, 'http://local').searchParams.get('q') === 'latest')).toHaveLength(1), { timeout: 1500 })
+    await waitFor(() => expect(screen.queryByText('Loading qualified candidates…')).not.toBeInTheDocument())
     stale.resolve({ ok: true, json: async () => page(11, 'first') } as Response)
     await new Promise((resolve) => window.setTimeout(resolve, 20))
     expect(screen.getByLabelText('Select candidate R1 P77')).toBeInTheDocument()

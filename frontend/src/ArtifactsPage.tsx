@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Pagination, SortHeader } from './DataTable'
+import { ActionButton, ActionProgress } from './ActionControls'
 
 type Artifact = {
   artifact_id: string
@@ -102,7 +103,9 @@ export default function ArtifactsPage() {
   const [resetPreflight, setResetPreflight] = useState<StrategyResetPreflight | null>(null)
   const [resetConfirmation, setResetConfirmation] = useState('')
   const [operationBusy, setOperationBusy] = useState('')
+  const [tableAction, setTableAction] = useState('')
   const [trace, setTrace] = useState<any>(null)
+  const [traceLoadingId, setTraceLoadingId] = useState('')
   const [message, setMessage] = useState('')
   const inventoryRequestSequence = useRef(0)
   const inventoryRequestKey = JSON.stringify([
@@ -143,6 +146,7 @@ export default function ArtifactsPage() {
       .finally(() => {
         if (!controller.signal.aborted && sequence === inventoryRequestSequence.current) {
           setLoadedInventoryKey(inventoryRequestKey)
+          setTableAction('')
         }
       })
     return () => controller.abort()
@@ -155,6 +159,7 @@ export default function ArtifactsPage() {
   )
 
   function changeSort(field: string, nextOrder: 'asc' | 'desc') {
+    setTableAction('sort:' + field)
     setSort(field)
     setOrder(nextOrder)
     setPage(1)
@@ -193,6 +198,8 @@ export default function ArtifactsPage() {
     }
     setError('')
     setMessage('')
+    setPendingAction(action)
+    setPendingIds(uniqueIds)
     setOperationBusy('preflight')
     setMessage('Checking artifact safety and dependencies…')
     try {
@@ -423,6 +430,7 @@ export default function ArtifactsPage() {
     }
     setError('')
     setOperationBusy('trace')
+    setTraceLoadingId(item.artifact_id)
     setMessage('Loading artifact lineage…')
     try {
       const response = await fetch('/api/artifacts/' + item.artifact_id + '/trace')
@@ -434,6 +442,7 @@ export default function ArtifactsPage() {
       setError(reason instanceof Error ? reason.message : String(reason))
       setMessage('')
     } finally {
+      setTraceLoadingId('')
       setOperationBusy('')
     }
   }
@@ -446,15 +455,15 @@ export default function ArtifactsPage() {
           <h1>Artifacts</h1>
         </div>
           <div className="button-row">
-            <button type="button" onClick={reconcileInventory} disabled={loading || Boolean(operationBusy)}>
-              {operationBusy === 'reconcile' ? 'Reconciling…' : 'Reconcile Inventory'}
-            </button>
-            <button type="button" onClick={prepareGlobalCleanup} disabled={loading || Boolean(operationBusy)}>
-              {operationBusy === 'cleanup-preflight' ? 'Checking cleanup safety…' : 'Clean Generated Data'}
-            </button>
-            <button type="button" onClick={prepareStrategyReset} disabled={loading || Boolean(operationBusy)}>
-              {operationBusy === 'reset-preflight' ? 'Checking reset safety…' : 'Reset Strategy Workspace'}
-            </button>
+            <ActionButton type="button" onClick={reconcileInventory} disabled={loading || Boolean(operationBusy)} blockedReason={loading ? 'Wait for artifact inventory to finish loading.' : 'Wait for the current artifact operation to finish.'}>
+              <ActionProgress active={operationBusy === 'reconcile'} idle="Reconcile Inventory" pending="Reconciling…" />
+            </ActionButton>
+            <ActionButton type="button" onClick={prepareGlobalCleanup} disabled={loading || Boolean(operationBusy)} blockedReason={loading ? 'Wait for artifact inventory to finish loading.' : 'Wait for the current artifact operation to finish.'}>
+              <ActionProgress active={operationBusy === 'cleanup-preflight'} idle="Clean Generated Data" pending="Checking cleanup safety…" />
+            </ActionButton>
+            <ActionButton type="button" onClick={prepareStrategyReset} disabled={loading || Boolean(operationBusy)} blockedReason={loading ? 'Wait for artifact inventory to finish loading.' : 'Wait for the current artifact operation to finish.'}>
+              <ActionProgress active={operationBusy === 'reset-preflight'} idle="Reset Strategy Workspace" pending="Checking reset safety…" />
+            </ActionButton>
           </div>
       </header>
 
@@ -530,11 +539,11 @@ export default function ArtifactsPage() {
                 value={status}
                 onChange={(event) => { setStatus(event.target.value); setPage(1) }}
               />
-              <button type="button" onClick={togglePage} disabled={loading || Boolean(operationBusy)}>{allPageSelected ? 'Clear current page' : 'Select current page'}</button>
-              <button type="button" disabled={!selection.size || loading || Boolean(operationBusy)} onClick={() => setSelection(new Set())}>Clear selection</button>
+              <ActionButton type="button" onClick={togglePage} disabled={loading || Boolean(operationBusy)} blockedReason={loading ? 'Wait for artifact inventory to finish loading.' : 'Wait for the current artifact operation to finish.'}>{allPageSelected ? 'Clear current page' : 'Select current page'}</ActionButton>
+              <ActionButton type="button" disabled={!selection.size || loading || Boolean(operationBusy)} blockedReason={!selection.size ? 'Select at least one artifact first.' : loading ? 'Wait for artifact inventory to finish loading.' : 'Wait for the current artifact operation to finish.'} onClick={() => setSelection(new Set())}>Clear selection</ActionButton>
               <span>{selection.size} selected</span>
-              <button type="button" disabled={!selection.size || loading || Boolean(operationBusy)} onClick={() => prepare('clean', Array.from(selection))}>Clean Selected Runtime</button>
-              <button type="button" disabled={!selection.size || loading || Boolean(operationBusy)} onClick={() => prepare('delete', Array.from(selection))}>Delete Selected</button>
+              <ActionButton type="button" disabled={!selection.size || loading || Boolean(operationBusy)} blockedReason={!selection.size ? 'Select artifacts before requesting a cleanup safety check.' : loading ? 'Wait for artifact inventory to finish loading.' : 'Wait for the current artifact operation to finish.'} onClick={() => prepare('clean', Array.from(selection))}><ActionProgress active={operationBusy === 'preflight' && pendingAction === 'clean'} idle="Clean Selected Generated Files" pending="Checking cleanup safety…" /></ActionButton>
+              <ActionButton type="button" disabled={!selection.size || loading || Boolean(operationBusy)} blockedReason={!selection.size ? 'Select artifacts before requesting a deletion safety check.' : loading ? 'Wait for artifact inventory to finish loading.' : 'Wait for the current artifact operation to finish.'} onClick={() => prepare('delete', Array.from(selection))}><ActionProgress active={operationBusy === 'preflight' && pendingAction === 'delete'} idle="Delete Selected" pending="Checking safety…" /></ActionButton>
             </div>
             {selection.size === 0 && <p className="subtle">Select one or more artifact rows to enable selected cleanup or deletion.</p>}
 
@@ -561,6 +570,9 @@ export default function ArtifactsPage() {
                             sort={sort}
                             order={order}
                             onSort={changeSort}
+                            loading={loading || Boolean(operationBusy)}
+                            blockedReason={loading ? 'Wait for artifact inventory to finish loading.' : 'Wait for the current artifact operation to finish.'}
+                            pending={tableAction === 'sort:' + field}
                           />
                         ))}
                         <th>Owner / Source</th>
@@ -596,9 +608,29 @@ export default function ArtifactsPage() {
                           <td>{item.in_use ? 'YES' : 'NO'}</td>
                           <td>
                             <div className="row-actions">
-                              <button type="button" disabled={Boolean(operationBusy) || loading} onClick={() => openTrace(item)}>Trace</button>
-                              {item.cleanable && <button type="button" disabled={Boolean(operationBusy) || loading} onClick={() => prepare('clean', [item.artifact_id])}>Clean</button>}
-                              {item.deletable && <button type="button" disabled={Boolean(operationBusy) || loading} onClick={() => prepare('delete', [item.artifact_id])}>Delete</button>}
+                              <ActionButton type="button" disabled={Boolean(operationBusy) || loading} blockedReason={loading ? 'Wait for artifact inventory to finish loading.' : 'Wait for the current artifact operation to finish.'} onClick={() => openTrace(item)}><ActionProgress active={traceLoadingId === item.artifact_id} idle="Trace" pending="Loading…" /></ActionButton>
+                              <ActionButton
+                                type="button"
+                                disabled={!item.cleanable || Boolean(operationBusy) || loading}
+                                blockedReason={!item.cleanable
+                                  ? item.dependencies[0] ?? 'This artifact is not eligible for runtime cleanup.'
+                                  : loading ? 'Wait for artifact inventory to finish loading.'
+                                    : 'Wait for the current artifact operation to finish.'}
+                                onClick={() => prepare('clean', [item.artifact_id])}
+                              >
+                                <ActionProgress active={operationBusy === 'preflight' && pendingAction === 'clean' && pendingIds.includes(item.artifact_id)} idle="Clean" pending="Checking…" />
+                              </ActionButton>
+                              <ActionButton
+                                type="button"
+                                disabled={!item.deletable || Boolean(operationBusy) || loading}
+                                blockedReason={!item.deletable
+                                  ? item.dependencies[0] ?? 'This artifact is protected by retention or active-use policy.'
+                                  : loading ? 'Wait for artifact inventory to finish loading.'
+                                    : 'Wait for the current artifact operation to finish.'}
+                                onClick={() => prepare('delete', [item.artifact_id])}
+                              >
+                                <ActionProgress active={operationBusy === 'preflight' && pendingAction === 'delete' && pendingIds.includes(item.artifact_id)} idle="Delete" pending="Checking…" />
+                              </ActionButton>
                             </div>
                             {item.dependencies.length > 0 && <div className="error-text">{item.dependencies.join(', ')}</div>}
                           </td>
@@ -613,7 +645,10 @@ export default function ArtifactsPage() {
               pages={data.pages}
               pageSize={data.page_size}
               total={data.total}
-              onPage={setPage}
+              loading={loading || Boolean(operationBusy)}
+              blockedReason={loading ? 'Wait for artifact inventory to finish loading.' : 'Wait for the current artifact operation to finish.'}
+              pendingDirection={tableAction === 'page-previous' ? 'previous' : tableAction === 'page-next' ? 'next' : ''}
+              onPage={(next, direction) => { setTableAction('page-' + direction); setPage(next) }}
               onPageSize={(size) => { setPageSize(size); setPage(1) }}
             />
           </section>
@@ -623,7 +658,7 @@ export default function ArtifactsPage() {
       {preflight && pendingAction && (
         <div className="modal-backdrop" role="presentation">
           <div className="modal" role="dialog" aria-modal="true" aria-label="Artifact action preflight">
-            <h2>{pendingAction === 'clean' ? 'Clean Selected Runtime' : 'Delete Selected'}</h2>
+            <h2>{pendingAction === 'clean' ? 'Clean Selected Generated Files' : 'Delete Selected'}</h2>
             <dl className="facts compact">
               <div><dt>Selected</dt><dd>{preflight.selected}</dd></div>
               <div><dt>Deletable</dt><dd>{preflight.deletable}</dd></div>
@@ -640,10 +675,10 @@ export default function ArtifactsPage() {
               </ul>
             )}
             <div className="actions">
-              <button type="button" disabled={loading} onClick={() => { setPreflight(null); setPendingAction(null); setPendingIds([]) }}>Cancel</button>
-              <button type="button" disabled={preflight.blocked > 0 || loading} onClick={executePending}>
-                {loading ? 'Working…' : 'CONFIRM ' + pendingAction.toUpperCase()}
-              </button>
+              <ActionButton type="button" disabled={loading} blockedReason="Wait for the current artifact operation to finish." onClick={() => { setPreflight(null); setPendingAction(null); setPendingIds([]) }}>Cancel</ActionButton>
+              <ActionButton type="button" disabled={preflight.blocked > 0 || loading} blockedReason={preflight.blocked > 0 ? 'Safety preflight blocked one or more selected artifacts; nothing will be changed.' : 'Wait for the current artifact operation to finish.'} onClick={executePending}>
+                <ActionProgress active={operationLoading} idle={'CONFIRM ' + (pendingAction ?? '').toUpperCase()} pending="Working…" />
+              </ActionButton>
             </div>
           </div>
         </div>
@@ -663,10 +698,10 @@ export default function ArtifactsPage() {
               <p className="error">Blocked: {globalPreflight.blockers.join(', ')}</p>
             )}
             <div className="actions">
-              <button type="button" disabled={loading} onClick={() => setGlobalPreflight(null)}>Cancel</button>
-              <button type="button" disabled={globalPreflight.status !== 'READY' || loading} onClick={executeGlobalCleanup}>
-                {loading ? 'Cleaning…' : 'CONFIRM CLEAN GENERATED DATA'}
-              </button>
+              <ActionButton type="button" disabled={loading} blockedReason="Wait for the cleanup operation to finish." onClick={() => setGlobalPreflight(null)}>Cancel</ActionButton>
+              <ActionButton type="button" disabled={globalPreflight.status !== 'READY' || loading} blockedReason={globalPreflight.status !== 'READY' ? 'Global cleanup safety preflight is not READY; no data will be changed.' : 'Wait for the cleanup operation to finish.'} onClick={executeGlobalCleanup}>
+                <ActionProgress active={operationBusy === 'global-cleanup'} idle="CONFIRM CLEAN GENERATED DATA" pending="Cleaning…" />
+              </ActionButton>
             </div>
           </div>
         </div>
@@ -709,16 +744,21 @@ export default function ArtifactsPage() {
               <p role="status">Reset is disabled until the exact confirmation is entered.</p>
             )}
             <div className="actions">
-              <button type="button" disabled={Boolean(operationBusy)} onClick={() => setResetPreflight(null)}>Cancel</button>
-              <button
+              <ActionButton type="button" disabled={Boolean(operationBusy)} blockedReason="Wait for the workspace reset operation to finish." onClick={() => setResetPreflight(null)}>Cancel</ActionButton>
+              <ActionButton
                 type="button"
                 disabled={resetPreflight.status !== 'READY'
                   || resetConfirmation !== resetPreflight.confirmation_required
                   || Boolean(operationBusy)}
+                blockedReason={resetPreflight.status !== 'READY'
+                  ? 'Reset safety preflight is blocked; no data will be changed.'
+                  : resetConfirmation !== resetPreflight.confirmation_required
+                    ? 'Enter the exact confirmation phrase shown above to enable reset.'
+                    : 'Wait for the current operation to finish.'}
                 onClick={executeStrategyReset}
               >
-                {operationBusy === 'strategy-reset' ? 'Backing up and resetting…' : 'CONFIRM RESET STRATEGY WORKSPACE'}
-              </button>
+                <ActionProgress active={operationBusy === 'strategy-reset'} idle="CONFIRM RESET STRATEGY WORKSPACE" pending="Backing up and resetting…" />
+              </ActionButton>
             </div>
           </div>
         </div>

@@ -4,7 +4,6 @@ import json
 import os
 import re
 import shutil
-import subprocess
 import time
 import uuid
 from datetime import datetime, timezone
@@ -13,6 +12,14 @@ from typing import Any
 
 from .backtest_report import parse_mt5_backtest_report
 from .challenger_bundle import verify_challenger_bundle, verify_geometry_set
+from .challenger_deployment import (
+    cleanup_challenger_staging_root,
+    inspect_challenger_deployment,
+    new_challenger_staging_root,
+    quarantine_challenger_deployment,
+    resolve_frozen_mt5_expert_root,
+    verify_challenger_deployment,
+)
 from .challenger_operations_store import (
     create_backtest_record,
     get_backtest,
@@ -47,7 +54,7 @@ from .mtf_geometry import (
     STRATEGY_CONTRACT,
     assert_geometry_matches_main,
 )
-from .optimizer_runtime import compile_summary, launch_mt5
+from .optimizer_runtime import launch_mt5
 from .optimizer_store import active_job, utc_now
 
 BACKTEST_EVIDENCE_ROOT = BACKTEST_ARTIFACT_ROOT
@@ -66,23 +73,6 @@ def _write_json(path: Path, payload: Any) -> None:
     )
 
 
-def _read_text_flexible(path: Path) -> str:
-    if not path.is_file():
-        return ""
-    raw = path.read_bytes()
-    if raw.startswith((b"\xff\xfe", b"\xfe\xff")):
-        try:
-            return raw.decode("utf-16")
-        except UnicodeError:
-            pass
-    for encoding in ("utf-8-sig", "utf-8", "cp1252"):
-        try:
-            return raw.decode(encoding)
-        except UnicodeError:
-            continue
-    return raw.decode("utf-8", errors="replace")
-
-
 def _bundle_paths(row: dict[str, Any]) -> tuple[Path, Path, Path]:
     bundle = (ROOT / str(row["bundle_path"])).resolve()
     roots = (
@@ -97,6 +87,35 @@ def _bundle_paths(row: dict[str, Any]) -> tuple[Path, Path, Path]:
     if not bundle.is_dir() or not ea.is_file() or not set_path.is_file():
         raise RuntimeError("CHALLENGER_RETAINED_ARTIFACTS_MISSING")
     return bundle, ea, set_path
+
+
+def challenger_bundle_artifact_path(
+    challenger_id: str,
+    artifact: str,
+    *,
+    path: Path = DATABASE_PATH,
+) -> Path:
+    row = get_challenger(challenger_id, path=path)
+    if row is None:
+        raise FileNotFoundError(challenger_id)
+    if row["status"] not in {"CHALLENGER", "RETIRED"}:
+        raise RuntimeError("CHALLENGER_NOT_ACTIVE")
+    integrity = verify_challenger_bundle(
+        challenger_id,
+        allow_retired=row["status"] == "RETIRED",
+        path=path,
+    )
+    if integrity["status"] != "VERIFIED":
+        raise RuntimeError("CHALLENGER_INTEGRITY_NOT_VERIFIED")
+    bundle, ea, set_path = _bundle_paths(row)
+    artifacts = {"ea": ea, "set": set_path}
+    selected = artifacts.get(str(artifact))
+    if selected is None:
+        raise ValueError("CHALLENGER_ARTIFACT_UNSUPPORTED")
+    resolved = selected.resolve()
+    if not resolved.is_relative_to(bundle.resolve()) or not resolved.is_file():
+        raise RuntimeError("CHALLENGER_RETAINED_ARTIFACTS_MISSING")
+    return resolved
 
 
 def challenger_registry_page(
@@ -121,6 +140,197 @@ def challenger_registry_page(
     for item in result["items"]:
         item["integrity"] = "NOT_CHECKED"
     return result
+
+
+def _retirement_runtime_state(
+    row: dict[str, Any],
+    integrity: dict[str, Any],
+    *,
+    operation_id: str,
+) -> dict[str, Any]:
+    source_identity = {
+        "job_id": str(row["source_job_id"]),
+        "round": int(row["source_round"]),
+        "pass": int(row["source_pass"]),
+    }
+    source_sha256 = str(
+        integrity.get("ea_sha256") or row["challenger_ea_sha256"]
+    )
+    set_sha256 = str(integrity.get("set_sha256") or row["set_sha256"])
+    authority = resolve_frozen_mt5_expert_root(row["source_request"])
+    observed = inspect_challenger_deployment(
+        challenger_id=str(row["challenger_id"]),
+        source_identity=source_identity,
+        bundle_manifest_sha256=str(integrity["manifest_sha256"]),
+        source_sha256=source_sha256,
+        set_sha256=set_sha256,
+        authority=authority,
+    )
+    runtime: dict[str, Any] = {
+        "status": "PRESENT" if observed["present"] else "NOT_PRESENT",
+        "challenger_id": str(row["challenger_id"]),
+        "source_identity": source_identity,
+        "bundle_manifest_sha256": str(integrity["manifest_sha256"]),
+        "source_sha256": source_sha256,
+        "set_sha256": set_sha256,
+        "mt5": {
+            key: str(value)
+            for key, value in row["source_request"]["mt5"].items()
+            if key in {"terminal", "metaeditor", "data_root"}
+        },
+        "final_dir": str(observed["final_dir"]),
+        "staging_root": None,
+        "quarantine_dir": None,
+    }
+    if observed["present"]:
+        staging_root = new_challenger_staging_root(
+            expert_root=authority["expert_root"],
+            operation_id=operation_id,
+        )
+        runtime["staging_root"] = str(staging_root)
+        runtime["quarantine_dir"] = str(staging_root / "retired-challenger")
+    return runtime
+
+
+def _remove_retired_runtime_ea(
+    row: dict[str, Any],
+    integrity: dict[str, Any],
+    runtime: dict[str, Any] | None,
+    *,
+    operation_id: str,
+) -> str:
+    # Old retirement journals predate runtime EA tracking. Reconstruct only
+    # from the verified retained bundle and exact frozen MT5 location.
+    if runtime is None:
+        runtime = _retirement_runtime_state(
+            row,
+            integrity,
+            operation_id=operation_id,
+        )
+    expected_identity = {
+        "challenger_id": str(row["challenger_id"]),
+        "source_identity": {
+            "job_id": str(row["source_job_id"]),
+            "round": int(row["source_round"]),
+            "pass": int(row["source_pass"]),
+        },
+        "bundle_manifest_sha256": str(integrity["manifest_sha256"]),
+        "source_sha256": str(
+            integrity.get("ea_sha256") or row["challenger_ea_sha256"]
+        ),
+        "set_sha256": str(integrity.get("set_sha256") or row["set_sha256"]),
+    }
+    if any(runtime.get(key) != value for key, value in expected_identity.items()):
+        raise RuntimeError("CHALLENGER_RETIREMENT_RUNTIME_AUTHORITY_MISMATCH")
+    authority = resolve_frozen_mt5_expert_root({"mt5": runtime.get("mt5")})
+    observed = inspect_challenger_deployment(
+        challenger_id=str(row["challenger_id"]),
+        source_identity=expected_identity["source_identity"],
+        bundle_manifest_sha256=expected_identity["bundle_manifest_sha256"],
+        source_sha256=expected_identity["source_sha256"],
+        set_sha256=expected_identity["set_sha256"],
+        authority=authority,
+    )
+    if os.path.normcase(str(observed["final_dir"])) != os.path.normcase(
+        str(runtime.get("final_dir") or "")
+    ):
+        raise RuntimeError("CHALLENGER_RETIREMENT_RUNTIME_PATH_MISMATCH")
+    staging_value = runtime.get("staging_root")
+    quarantine_value = runtime.get("quarantine_dir")
+    if runtime.get("status") == "NOT_PRESENT":
+        if observed["present"]:
+            raise RuntimeError("CHALLENGER_RETIREMENT_UNOWNED_RUNTIME_EA_PRESENT")
+        return "NOT_PRESENT"
+    if runtime.get("status") != "PRESENT" or not staging_value or not quarantine_value:
+        raise RuntimeError("CHALLENGER_RETIREMENT_RUNTIME_STATE_INVALID")
+
+    staging_root = Path(str(staging_value)).resolve()
+    quarantine_dir = Path(str(quarantine_value)).resolve()
+    if quarantine_dir.parent != staging_root:
+        raise RuntimeError("CHALLENGER_RETIREMENT_QUARANTINE_PATH_INVALID")
+    if observed["present"] and quarantine_dir.exists():
+        raise RuntimeError("CHALLENGER_RETIREMENT_DUPLICATE_RUNTIME_EA")
+    if observed["present"]:
+        quarantine_challenger_deployment(
+            challenger_id=str(row["challenger_id"]),
+            source_identity=expected_identity["source_identity"],
+            bundle_manifest_sha256=expected_identity["bundle_manifest_sha256"],
+            source_sha256=expected_identity["source_sha256"],
+            set_sha256=expected_identity["set_sha256"],
+            authority=authority,
+            staging_root=staging_root,
+            quarantine_path=quarantine_dir,
+        )
+    elif quarantine_dir.exists():
+        verify_challenger_deployment(
+            quarantine_dir,
+            challenger_id=str(row["challenger_id"]),
+            source_identity=expected_identity["source_identity"],
+            bundle_manifest_sha256=expected_identity["bundle_manifest_sha256"],
+            source_sha256=expected_identity["source_sha256"],
+            set_sha256=expected_identity["set_sha256"],
+        )
+
+    if quarantine_dir.exists():
+        shutil.rmtree(quarantine_dir)
+        if quarantine_dir.exists():
+            raise RuntimeError("CHALLENGER_RETIREMENT_RUNTIME_EA_DELETE_INCOMPLETE")
+    if staging_root.exists():
+        if any(staging_root.iterdir()):
+            raise RuntimeError("CHALLENGER_RETIREMENT_STAGING_NOT_EMPTY")
+        cleanup_challenger_staging_root(staging_root)
+    return "REMOVED"
+
+
+def recover_retired_challenger_deployments(
+    *, path: Path = DATABASE_PATH
+) -> list[dict[str, str]]:
+    """Finish exact, journaled Challenger EA removals after process restart."""
+    recovered: list[dict[str, str]] = []
+    first = list_registry_page(view="retired", page=1, page_size=100, path=path)
+    for page_no in range(1, int(first["pages"]) + 1):
+        page = first if page_no == 1 else list_registry_page(
+            view="retired",
+            page=page_no,
+            page_size=100,
+            path=path,
+        )
+        for item in page["items"]:
+            row = get_challenger(str(item["challenger_id"]), path=path)
+            if row is None or row["status"] != "RETIRED":
+                raise RuntimeError("CHALLENGER_RETIREMENT_RECOVERY_ROW_CHANGED")
+            integrity = verify_challenger_bundle(
+                row["challenger_id"],
+                allow_retired=True,
+                path=path,
+            )
+            if integrity.get("status") != "VERIFIED":
+                raise RuntimeError("CHALLENGER_RETIREMENT_RECOVERY_BUNDLE_INVALID")
+            journals = list_retirements(row["challenger_id"], path=path)
+            committed = next(
+                (entry for entry in journals if entry["state"] == "COMMITTED"),
+                None,
+            )
+            if committed is None:
+                raise RuntimeError("CHALLENGER_RETIRED_WITHOUT_RETIREMENT_JOURNAL")
+            runtime_state = committed["before_state"].get("runtime_ea")
+            if runtime_state is None:
+                # Legacy retirement predates managed Challenger Experts files.
+                continue
+            runtime_ea = _remove_retired_runtime_ea(
+                row,
+                integrity,
+                runtime_state,
+                operation_id=str(committed["retirement_id"]),
+            )
+            recovered.append(
+                {
+                    "challenger_id": str(row["challenger_id"]),
+                    "retirement_id": str(committed["retirement_id"]),
+                    "runtime_ea": runtime_ea,
+                }
+            )
+    return recovered
 
 
 def retire_challenger(
@@ -156,14 +366,24 @@ def retire_challenger(
         )
         if committed is None:
             raise RuntimeError("CHALLENGER_RETIRED_WITHOUT_RETIREMENT_JOURNAL")
+        runtime_ea = _remove_retired_runtime_ea(
+            row,
+            integrity,
+            committed["before_state"].get("runtime_ea"),
+            operation_id=str(committed["retirement_id"]),
+        )
         return {
             **row,
             "retirement_id": committed["retirement_id"],
             "retirement_state": committed["state"],
             "retirement_evidence_path": committed["evidence_path"],
+            "retirement_before_status": committed["before_status"],
+            "retirement_after_status": committed["after_status"],
             "artifact_integrity": "VERIFIED",
-            "retirement": "NON_DESTRUCTIVE",
+            "retirement": "COMPILED_EA_REMOVED_BUNDLE_PRESERVED",
+            "runtime_ea": runtime_ea,
             "bundle_preserved": True,
+            "parameters_preserved": True,
             "backtest_history_preserved": len(
                 list_backtests(challenger_id, path=path)
             ),
@@ -178,40 +398,64 @@ def retire_challenger(
     evidence = RETIREMENT_EVIDENCE_ROOT / retirement_id
     evidence.mkdir(parents=True, exist_ok=False)
     relative_evidence = evidence.resolve().relative_to(ROOT.resolve()).as_posix()
-    _write_json(
-        evidence / "request.json",
-        {
-            "schema": "MAX_REBUILD_CHALLENGER_RETIREMENT_REQUEST_V1",
-            "retirement_id": retirement_id,
-            "challenger_id": challenger_id,
-            "expected_manifest_sha256": expected_manifest_sha256,
-            "confirmation": "OWNER_EXPLICIT_RETIREMENT_CONFIRMATION",
-            "requested_utc": utc_now(),
-        },
-    )
-    _write_json(
-        evidence / "preflight.json",
-        {
-            "schema": "MAX_REBUILD_CHALLENGER_RETIREMENT_PREFLIGHT_V1",
-            "challenger_id": challenger_id,
-            "status": row["status"],
-            "artifact_integrity": integrity["status"],
-            "manifest_sha256": integrity["manifest_sha256"],
-            "bundle_path": integrity["bundle_path"],
-            "retirement": "NON_DESTRUCTIVE",
-        },
-    )
-
+    runtime_state: dict[str, Any] | None = None
+    db_committed = False
     try:
+        runtime_state = _retirement_runtime_state(
+            row,
+            integrity,
+            operation_id=retirement_id,
+        )
+        _write_json(
+            evidence / "request.json",
+            {
+                "schema": "MAX_REBUILD_CHALLENGER_RETIREMENT_REQUEST_V1",
+                "retirement_id": retirement_id,
+                "challenger_id": challenger_id,
+                "expected_manifest_sha256": expected_manifest_sha256,
+                "confirmation": "OWNER_EXPLICIT_RETIREMENT_CONFIRMATION",
+                "requested_utc": utc_now(),
+            },
+        )
+        _write_json(
+            evidence / "preflight.json",
+            {
+                "schema": "MAX_REBUILD_CHALLENGER_RETIREMENT_PREFLIGHT_V1",
+                "challenger_id": challenger_id,
+                "status": row["status"],
+                "artifact_integrity": integrity["status"],
+                "manifest_sha256": integrity["manifest_sha256"],
+                "bundle_path": integrity["bundle_path"],
+                "compiled_ea": runtime_state["status"],
+                "retirement": "COMPILED_EA_REMOVED_BUNDLE_PRESERVED",
+            },
+        )
+        before_state = {
+            "challenger_id": str(challenger_id),
+            "status": "CHALLENGER",
+            "manifest_sha256": str(row["manifest_sha256"]),
+            "bundle_path": str(row["bundle_path"]),
+            "active_backtest": None,
+            "active_promotion": None,
+            "runtime_ea": runtime_state,
+        }
         committed = retire_registry_row(
             challenger_id,
             retirement_id=retirement_id,
             expected_manifest_sha256=expected_manifest_sha256,
             evidence_path=relative_evidence,
+            before_state=before_state,
             path=path,
         )
+        db_committed = True
         retired = committed["challenger"]
         journal = committed["retirement"]
+        runtime_ea = _remove_retired_runtime_ea(
+            row,
+            integrity,
+            journal["before_state"].get("runtime_ea"),
+            operation_id=retirement_id,
+        )
         result = {
             **retired,
             "retirement_id": journal["retirement_id"],
@@ -220,8 +464,10 @@ def retire_challenger(
             "retirement_before_status": journal["before_status"],
             "retirement_after_status": journal["after_status"],
             "artifact_integrity": "VERIFIED",
-            "retirement": "NON_DESTRUCTIVE",
+            "retirement": "COMPILED_EA_REMOVED_BUNDLE_PRESERVED",
+            "runtime_ea": runtime_ea,
             "bundle_preserved": True,
+            "parameters_preserved": True,
             "backtest_history_preserved": len(
                 list_backtests(challenger_id, path=path)
             ),
@@ -236,6 +482,12 @@ def retire_challenger(
         )
         return result
     except Exception as exc:
+        if not db_committed and runtime_state is not None:
+            staging_value = runtime_state.get("staging_root")
+            if staging_value:
+                staging_root = Path(str(staging_value)).resolve()
+                if staging_root.is_dir() and not any(staging_root.iterdir()):
+                    cleanup_challenger_staging_root(staging_root)
         try:
             _write_json(
                 evidence / "diagnostic.json",
@@ -249,6 +501,10 @@ def retire_challenger(
             )
         except Exception:
             pass
+        if db_committed:
+            raise RuntimeError(
+                f"CHALLENGER_RETIRED_RUNTIME_EA_REMOVAL_PENDING:{retirement_id}"
+            ) from exc
         raise
 
 
@@ -292,6 +548,10 @@ def freeze_backtest_request(
         "strategy_contract": str(source.get("strategy_contract") or ""),
         "strategy_geometry": dict(source.get("strategy_geometry") or {}),
     }
+    optimizer_source_date_range = {
+        "from_date": retained["from_date"],
+        "to_date": retained["to_date"],
+    }
 
     if not retained["symbol"] or not retained["relative_symbol"]:
         raise ValueError("retained source symbols are required")
@@ -323,6 +583,24 @@ def freeze_backtest_request(
     ):
         raise ValueError("retained source from_date must be earlier than to_date")
 
+    try:
+        selected_from_date = _parse_date(
+            supplied.get("from_date", optimizer_source_date_range["from_date"])
+        )
+        selected_to_date = _parse_date(
+            supplied.get("to_date", optimizer_source_date_range["to_date"])
+        )
+    except (TypeError, ValueError, OverflowError) as exc:
+        raise ValueError("BACKTEST_DATE_RANGE_INVALID: use YYYY.MM.DD") from exc
+    if datetime.strptime(selected_from_date, "%Y.%m.%d") >= datetime.strptime(
+        selected_to_date, "%Y.%m.%d"
+    ):
+        raise ValueError(
+            "BACKTEST_DATE_RANGE_INVALID: from_date must be earlier than to_date"
+        )
+    retained["from_date"] = selected_from_date
+    retained["to_date"] = selected_to_date
+
     normalizers = {
         "symbol": lambda value: str(value).strip(),
         "relative_symbol": lambda value: str(value).strip(),
@@ -348,6 +626,12 @@ def freeze_backtest_request(
         "challenger_id": row["challenger_id"],
         "strategy_source": "RETAINED_CHALLENGER_BUNDLE",
         "contract_authority": "RETAINED_SOURCE_REQUEST",
+        "date_range_authority": (
+            "OWNER_SELECTED_BACKTEST_RANGE"
+            if "from_date" in supplied or "to_date" in supplied
+            else "RETAINED_SOURCE_REQUEST"
+        ),
+        "optimizer_source_date_range": optimizer_source_date_range,
         "source_manifest_sha256": row["manifest_sha256"],
         **retained,
         "tick_model_name": TICK_MODELS[retained["model"]],
@@ -456,89 +740,6 @@ def _build_backtest_ini(
     )
 
 
-def _compile_retained_challenger(
-    *,
-    row: dict[str, Any],
-    request: dict[str, Any],
-    source_ea: Path,
-    evidence: Path,
-    backtest_id: str,
-) -> dict[str, Any]:
-    data_root = Path(request["mt5"]["data_root"])
-    metaeditor = Path(request["mt5"]["metaeditor"])
-    if not metaeditor.is_file():
-        raise FileNotFoundError("METAEDITOR_UNAVAILABLE")
-
-    expert_dir = (
-        data_root
-        / "MQL5"
-        / "Experts"
-        / "MaxMTF"
-        / "ChallengerBacktests"
-        / backtest_id
-    )
-    expert_dir.mkdir(parents=True, exist_ok=True)
-    deployed = expert_dir / source_ea.name
-    shutil.copy2(source_ea, deployed)
-    if sha256_file(deployed) != sha256_file(source_ea):
-        raise RuntimeError("CHALLENGER_BACKTEST_EA_DEPLOYMENT_HASH_MISMATCH")
-
-    ex5 = deployed.with_suffix(".ex5")
-    log_path = deployed.with_suffix(".log")
-    for stale in (ex5, log_path):
-        if stale.exists():
-            stale.unlink()
-    command = [str(metaeditor), f"/compile:{deployed}", "/log"]
-    (evidence / "compile_command.txt").write_text(
-        subprocess.list2cmdline(command) + "\n",
-        encoding="utf-8",
-    )
-    process = subprocess.run(
-        command,
-        capture_output=True,
-        text=True,
-        timeout=180,
-    )
-    log_text = _read_text_flexible(log_path)
-    if not log_text:
-        log_text = (process.stdout or "") + (process.stderr or "")
-    evidence_log = evidence / "metaeditor_compile.log"
-    evidence_log.write_text(log_text, encoding="utf-8")
-    summary = compile_summary(log_text)
-    if not summary["found"]:
-        raise RuntimeError("METAEDITOR_COMPILE_SUMMARY_MISSING")
-    if int(summary["errors"]) != 0:
-        raise RuntimeError(f"METAEDITOR_COMPILE_ERRORS:{summary['errors']}")
-    if int(summary["warnings"]) != 0:
-        raise RuntimeError(f"METAEDITOR_COMPILE_WARNINGS:{summary['warnings']}")
-    if not ex5.is_file():
-        raise RuntimeError("METAEDITOR_EX5_MISSING")
-
-    compiled_copy = evidence / "compiled_challenger.ex5"
-    shutil.copy2(ex5, compiled_copy)
-    return {
-        "status": "PASS",
-        "compile_summary": summary,
-        "process_returncode": process.returncode,
-        "returncode_authority": "DIAGNOSTIC_ONLY",
-        "metaeditor": str(metaeditor),
-        "metaeditor_sha256": sha256_file(metaeditor),
-        "compile_command": subprocess.list2cmdline(command),
-        "compile_log_sha256": sha256_file(evidence_log),
-        "source_mq5_sha256": sha256_file(source_ea),
-        "deployed_mq5": str(deployed),
-        "deployed_mq5_sha256": sha256_file(deployed),
-        "compiled_ex5": str(ex5),
-        "ex5_sha256": sha256_file(ex5),
-        "expert_name": (
-            "MaxMTF\\ChallengerBacktests\\"
-            + backtest_id
-            + "\\"
-            + source_ea.stem
-        ),
-    }
-
-
 def _wait_for_report(path: Path, timeout_sec: int = 60) -> Path:
     candidates = [path]
     if path.suffix.lower() == ".html":
@@ -610,14 +811,43 @@ def run_challenger_backtest(
     mt5_returned = False
 
     try:
-        compile_result = _compile_retained_challenger(
-            row=row,
-            request=request,
-            source_ea=source_ea,
-            evidence=evidence,
-            backtest_id=backtest_id,
+        source_identity = {
+            "job_id": str(row["source_job_id"]),
+            "round": int(row["source_round"]),
+            "pass": int(row["source_pass"]),
+        }
+        expert_authority = resolve_frozen_mt5_expert_root(request)
+        deployment = inspect_challenger_deployment(
+            challenger_id=challenger_id,
+            source_identity=source_identity,
+            bundle_manifest_sha256=str(integrity["manifest_sha256"]),
+            source_sha256=str(integrity.get("ea_sha256") or row["challenger_ea_sha256"]),
+            set_sha256=str(integrity.get("set_sha256") or row["set_sha256"]),
+            authority=expert_authority,
         )
-        _write_json(evidence / "compile.json", compile_result)
+        if not deployment["present"]:
+            raise RuntimeError("CHALLENGER_DEPLOYED_EA_NOT_FOUND_PROMOTE_CHALLENGER_FIRST")
+        expert_dir = Path(deployment["final_dir"])
+        deployment_integrity = verify_challenger_deployment(
+            expert_dir,
+            challenger_id=challenger_id,
+            source_identity=source_identity,
+            bundle_manifest_sha256=str(integrity["manifest_sha256"]),
+            source_sha256=str(integrity.get("ea_sha256") or row["challenger_ea_sha256"]),
+            set_sha256=str(integrity.get("set_sha256") or row["set_sha256"]),
+        )
+        _write_json(
+            evidence / "deployment_reuse.json",
+            {
+                "schema": "MAX_REBUILD_CHALLENGER_BACKTEST_DEPLOYMENT_REUSE_V1",
+                "challenger_id": challenger_id,
+                "source_identity": source_identity,
+                "deployment_dir": str(expert_dir),
+                "expert_name": deployment_integrity["expert_name"],
+                "ex5_sha256": deployment_integrity["compiled_ex5_sha256"],
+                "reuse_verified_deployment": True,
+            },
+        )
 
         data_root = Path(request["mt5"]["data_root"])
         tester_dir = data_root / "MQL5" / "Profiles" / "Tester"
@@ -647,7 +877,7 @@ def run_challenger_backtest(
         ini.write_text(
             _build_backtest_ini(
                 request,
-                expert_name=compile_result["expert_name"],
+                expert_name=deployment_integrity["expert_name"],
                 set_name=set_name,
                 report_name=report_relative,
             ),
@@ -656,7 +886,7 @@ def run_challenger_backtest(
         update_backtest(
             backtest_id,
             state="RUNNING",
-            ex5_sha256=compile_result["ex5_sha256"],
+            ex5_sha256=deployment_integrity["compiled_ex5_sha256"],
             path=path,
         )
         terminal = Path(request["mt5"]["terminal"])
@@ -690,11 +920,11 @@ def run_challenger_backtest(
             "strategy_geometry": request["strategy_geometry"],
             "retained_ea_sha256": integrity["ea_sha256"],
             "retained_set_sha256": integrity["set_sha256"],
-            "compiled_ex5_sha256": compile_result["ex5_sha256"],
+            "compiled_ex5_sha256": deployment_integrity["compiled_ex5_sha256"],
             "runtime_set_sha256": sha256_file(evidence / "runtime_backtest.set"),
             "tester_ini_sha256": sha256_file(ini),
-            "metaeditor_sha256": compile_result["metaeditor_sha256"],
-            "compile_log_sha256": compile_result["compile_log_sha256"],
+            "deployment_reused": True,
+            "deployment_manifest_sha256": sha256_file(expert_dir / "deployment.json"),
             "terminal_sha256": terminal_sha256,
             "mt5_returncode": returncode,
             "report_file": staged_report.name,
@@ -705,7 +935,9 @@ def run_challenger_backtest(
             "metrics": parsed_report["metrics"],
             "available_metrics": parsed_report["available_metrics"],
             "runtime": {
-                "expert_dir": str(Path(compile_result["deployed_mq5"]).parent),
+                "expert_dir": str(expert_dir),
+                "expert_reused": True,
+                "challenger_id": challenger_id,
                 "tester_set": str(runtime_set),
                 "source_report": str(source_report),
             },
@@ -717,7 +949,7 @@ def run_challenger_backtest(
         completed = update_backtest(
             backtest_id,
             state="COMPLETED",
-            ex5_sha256=compile_result["ex5_sha256"],
+            ex5_sha256=deployment_integrity["compiled_ex5_sha256"],
             report_path=staged_report.resolve().relative_to(ROOT.resolve()).as_posix(),
             report_sha256=report_sha,
             result=result,

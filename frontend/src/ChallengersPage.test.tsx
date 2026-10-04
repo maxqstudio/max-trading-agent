@@ -177,7 +177,9 @@ describe('M06 Strategy Challenger operations UI', () => {
     expect(screen.getByPlaceholderText('Search Challenger evidence')).toBeInTheDocument()
     const backtestButton = screen.getByRole('button', { name: 'Run Backtest' })
     expect(backtestButton).toBeDisabled()
-    expect(backtestButton).toHaveAttribute('title', 'Backtest history is still loading.')
+    const blockedReasonId = backtestButton.getAttribute('aria-describedby')
+    expect(blockedReasonId).toBeTruthy()
+    expect(document.getElementById(blockedReasonId!)).toHaveTextContent('Backtest history is still loading.')
     expect(screen.getByRole('status')).toHaveTextContent('Loading Backtest history')
     expect(screen.getByRole('button', { name: 'Retire / Archive' })).toBeEnabled()
     expect(await screen.findByText('No retained Challenger backtest history.')).toBeInTheDocument()
@@ -186,6 +188,13 @@ describe('M06 Strategy Challenger operations UI', () => {
     expect(screen.getAllByLabelText('Rows per page')).toHaveLength(2)
 
     expect(screen.getByText('Retained qualified Optimizer evidence')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Download Challenger EA source' }))
+      .toHaveAttribute('href', '/api/challengers/' + challengerId + '/ea')
+    expect(screen.getByRole('link', { name: 'Download Challenger parameter preset' }))
+      .toHaveAttribute('href', '/api/challengers/' + challengerId + '/set')
+    expect(screen.getByText(
+      'Compiled when this Challenger is created; Backtests reuse the verified executable. Promotion installs it as Champion.',
+    )).toBeInTheDocument()
     expect(screen.queryByText('challenger-ea-sha')).not.toBeInTheDocument()
     expect(screen.queryByText('set-sha')).not.toBeInTheDocument()
     expect(screen.getAllByText('Verified').length).toBeGreaterThanOrEqual(8)
@@ -297,7 +306,7 @@ describe('M06 Strategy Challenger operations UI', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
-  it('retires non-destructively with exact manifest confirmation', async () => {
+  it('retires the Challenger EA while preserving its database bundle and history', async () => {
     let retired = false
     const fetchMock = vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
       const url = String(input)
@@ -318,7 +327,9 @@ describe('M06 Strategy Challenger operations UI', () => {
         return ok({
           challenger_id: challengerId,
           status: 'RETIRED',
+          runtime_ea: 'REMOVED',
           bundle_preserved: true,
+          parameters_preserved: true,
           backtest_history_preserved: 0,
         })
       }
@@ -328,16 +339,18 @@ describe('M06 Strategy Challenger operations UI', () => {
 
     render(<ChallengersPage />)
     fireEvent.click(await screen.findByRole('button', { name: 'Retire / Archive' }))
-    expect(screen.getByText('Delete files').parentElement).toHaveTextContent('No')
-    fireEvent.click(screen.getByRole('button', { name: 'CONFIRM RETIRE / ARCHIVE' }))
+    expect(screen.getByText('Runtime MT5 EA').parentElement).toHaveTextContent('Will be removed if verified')
+    expect(screen.getByText('Saved parameters / source').parentElement).toHaveTextContent('Preserved')
+    fireEvent.click(screen.getByRole('button', { name: 'CONFIRM RETIRE + REMOVE MT5 EA' }))
 
-    expect(await screen.findByText(/Challenger retired non-destructively/)).toBeInTheDocument()
+    expect(await screen.findByText(/compiled MT5 EA was removed/)).toBeInTheDocument()
     expect(await screen.findByText('No active Strategy Challenger.')).toBeInTheDocument()
   })
 
   it('runs MT5 backtest from the selected Challenger contract and retains history', async () => {
     const backtestId = 'BT-20260923-150000-deadbeef'
     let completed = false
+    let backtestRequests = 0
     const history = {
       backtest_id: backtestId,
       challenger_id: challengerId,
@@ -371,13 +384,14 @@ describe('M06 Strategy Challenger operations UI', () => {
         return ok(completed ? [history] : [])
       }
       if (url.endsWith('/api/challengers/' + challengerId + '/backtest') && init?.method === 'POST') {
+        backtestRequests += 1
         const body = JSON.parse(String(init.body))
         expect(body).toEqual({
           symbol: 'XAUUSD.m',
           relative_symbol: 'EURUSD.m',
           period: 'H4',
-          from_date: '2026.08.01',
-          to_date: '2026.09.15',
+          from_date: '2020.01.01',
+          to_date: '2025.01.01',
         })
         completed = true
         return ok(history)
@@ -389,6 +403,27 @@ describe('M06 Strategy Challenger operations UI', () => {
     render(<ChallengersPage />)
     const runBacktestButton = await screen.findByRole('button', { name: 'Run Backtest' })
     await waitFor(() => expect(runBacktestButton).toBeEnabled())
+
+    expect(screen.getByText(
+      'The Backtest date range is independent of the Optimizer run dates. Candidate identity, symbols, timeframe, and parameters stay fixed.',
+    )).toBeInTheDocument()
+    expect(screen.getByLabelText('Main Symbol')).toHaveAttribute('readonly')
+    expect(screen.getByLabelText('Timeframe')).toHaveAttribute('readonly')
+
+    fireEvent.change(screen.getByLabelText('Backtest From'), { target: { value: '2026.09.30' } })
+    fireEvent.click(runBacktestButton)
+    expect(await screen.findByText(
+      'Action blocked: Use valid YYYY.MM.DD dates, with Backtest From earlier than Backtest To. No Backtest was started.',
+    )).toBeInTheDocument()
+    expect(backtestRequests).toBe(0)
+
+    fireEvent.change(screen.getByLabelText('Backtest From'), { target: { value: '2026.02.30' } })
+    fireEvent.change(screen.getByLabelText('Backtest To'), { target: { value: '2026.03.01' } })
+    fireEvent.click(runBacktestButton)
+    expect(backtestRequests).toBe(0)
+
+    fireEvent.change(screen.getByLabelText('Backtest From'), { target: { value: '2020.01.01' } })
+    fireEvent.change(screen.getByLabelText('Backtest To'), { target: { value: '2025.01.01' } })
     fireEvent.click(runBacktestButton)
 
     expect(await screen.findByText(/Backtest request returned status: Completed/)).toBeInTheDocument()
@@ -397,6 +432,7 @@ describe('M06 Strategy Challenger operations UI', () => {
     })
     expect(screen.getByRole('button', { name: 'Open Report' })).toBeEnabled()
     expect(screen.getByRole('button', { name: 'Delete Backtest' })).toBeEnabled()
+    expect(backtestRequests).toBe(1)
   })
 
   it('shows retained archive history without exposing active operations', async () => {
@@ -441,7 +477,107 @@ describe('M06 Strategy Challenger operations UI', () => {
     expect(screen.getAllByText('2026-09-23T16:00:00+00:00').length).toBeGreaterThanOrEqual(2)
     expect(screen.queryByRole('button', { name: 'Promote to Champion' })).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Run Backtest' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'CONFIRM RETIRE / ARCHIVE' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'CONFIRM RETIRE + REMOVE MT5 EA' })).not.toBeInTheDocument()
+  })
+
+  it('runs all verified active Challengers sequentially after explicit confirmation', async () => {
+    const secondId = 'STRAT-20260922-101450-R01-P8'
+    const secondItem = { ...listItem, challenger_id: secondId, source_pass: 8 }
+    const activeItems = [listItem, secondItem]
+    const runOrder: string[] = []
+    const fetchMock = vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input)
+      if (url.includes('/api/challengers/registry?')) {
+        const params = new URL(url, window.location.origin).searchParams
+        return ok({
+          ...registry(activeItems),
+          page_size: Number(params.get('page_size') ?? '25'),
+        })
+      }
+      if (url.endsWith('/api/champion/summary')) return ok(championNone)
+      if (url.startsWith('/api/challengers/backtests?')) {
+        return Promise.resolve({ ok: false, status: 404, json: async () => ({ detail: 'Not found' }) } as Response)
+      }
+      for (const item of activeItems) {
+        if (url.endsWith('/api/challengers/' + item.challenger_id + '/backtests')) return ok([])
+        if (url.endsWith('/api/challengers/' + item.challenger_id) && !init?.method) {
+          return ok({ ...detail, ...item, challenger_id: item.challenger_id })
+        }
+        if (url.endsWith('/api/challengers/' + item.challenger_id + '/backtest') && init?.method === 'POST') {
+          expect(JSON.parse(String(init.body))).toEqual({
+            from_date: '2025.01.01',
+            to_date: '2026.09.30',
+          })
+          runOrder.push(item.challenger_id)
+          return ok({
+            backtest_id: 'BT-' + item.source_pass,
+            challenger_id: item.challenger_id,
+            state: 'COMPLETED',
+            request: { from_date: '2025.01.01', to_date: '2026.09.30' },
+            result: { metrics: { total_net_profit: 125, profit_factor: 1.7, total_trades: 31 } },
+          })
+        }
+      }
+      throw new Error('unexpected fetch ' + url)
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    render(<ChallengersPage />)
+    const runAll = await screen.findByRole('button', { name: 'Run Backtest All Active' })
+    await waitFor(() => expect(runAll).toBeEnabled())
+    fireEvent.change(screen.getByLabelText('Backtest From'), { target: { value: '2025.01.01' } })
+    fireEvent.change(screen.getByLabelText('Backtest To'), { target: { value: '2026.09.30' } })
+    fireEvent.click(runAll)
+
+    const dialog = await screen.findByRole('dialog', { name: 'Run all active Challenger Backtests' })
+    expect(dialog).toHaveTextContent('2 active Challengers')
+    expect(dialog).toHaveTextContent('one at a time')
+    expect(runOrder).toEqual([])
+    fireEvent.click(within(dialog).getByRole('button', { name: 'RUN ALL BACKTESTS' }))
+
+    expect(await screen.findByText('Completed Backtests for 2 of 2 active Challengers.'))
+      .toBeInTheDocument()
+    expect(runOrder).toEqual([challengerId, secondId])
+    expect(screen.getByRole('heading', { name: 'All-active Backtest results' })).toBeInTheDocument()
+    expect(screen.getAllByText('125').length).toBeGreaterThanOrEqual(2)
+    expect(screen.getAllByText('1.7').length).toBeGreaterThanOrEqual(2)
+  })
+
+  it('blocks bulk Backtests before the first run if any active Challenger fails integrity preflight', async () => {
+    const secondId = 'STRAT-20260922-101450-R01-P8'
+    const secondItem = { ...listItem, challenger_id: secondId, source_pass: 8 }
+    let backtestCalls = 0
+    const fetchMock = vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input)
+      if (url.includes('/api/challengers/registry?')) return ok(registry([listItem, secondItem]))
+      if (url.endsWith('/api/champion/summary')) return ok(championNone)
+      if (url.startsWith('/api/challengers/backtests?')) {
+        return Promise.resolve({ ok: false, status: 404, json: async () => ({ detail: 'Not found' }) } as Response)
+      }
+      if (url.endsWith('/api/challengers/' + challengerId + '/backtests')) return ok([])
+      if (url.endsWith('/api/challengers/' + challengerId) && !init?.method) return ok(detail)
+      if (url.endsWith('/api/challengers/' + secondId)) {
+        return ok({ ...detail, ...secondItem, artifact_integrity: { status: 'INTEGRITY_FAIL' } })
+      }
+      if (url.endsWith('/backtest') && init?.method === 'POST') {
+        backtestCalls += 1
+        return ok({ state: 'COMPLETED' })
+      }
+      throw new Error('unexpected fetch ' + url)
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    render(<ChallengersPage />)
+    const runAll = await screen.findByRole('button', { name: 'Run Backtest All Active' })
+    await waitFor(() => expect(runAll).toBeEnabled())
+    fireEvent.click(runAll)
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'No Backtests were started because at least one active Challenger failed integrity verification.',
+    )
+    expect(screen.queryByRole('dialog', { name: 'Run all active Challenger Backtests' }))
+      .not.toBeInTheDocument()
+    expect(backtestCalls).toBe(0)
   })
 })
 
@@ -450,6 +586,7 @@ describe('M08 Backtest result control UI', () => {
     const backtestId = 'BT-20260924-081500-deadbeef'
     let deleted = false
     let cleaned = false
+    let cleanupCalls = 0
     const detailGate = deferred<Response>()
     const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null)
 
@@ -575,6 +712,7 @@ describe('M08 Backtest result control UI', () => {
         return detailGate.promise
       }
       if (url.endsWith('/api/challengers/backtests/' + backtestId + '/clean-runtime') && method === 'POST') {
+        cleanupCalls += 1
         cleaned = true
         return ok({ backtest_id: backtestId, runtime_status: 'CLEANED', removed_bytes: 4096 })
       }
@@ -596,7 +734,7 @@ describe('M08 Backtest result control UI', () => {
     expect(screen.getByText('0.81%')).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'View Details' }))
-    expect(screen.getByRole('status')).toHaveTextContent('Loading retained Backtest details…')
+    expect(screen.getAllByRole('status').some((status) => status.textContent?.includes('Loading retained Backtest details…'))).toBe(true)
     expect(screen.getByRole('button', { name: 'Loading details…' })).toBeDisabled()
     detailGate.resolve({
       ok: true,
@@ -626,11 +764,19 @@ describe('M08 Backtest result control UI', () => {
     )
     expect(screen.getByRole('status')).toHaveTextContent(/Report opened in a new tab if allowed by the browser/)
 
-    fireEvent.click(screen.getByRole('button', { name: 'Clean Runtime' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Clean Backtest Files' }))
+    const cleanupDialog = await screen.findByRole('dialog', { name: 'Clean Backtest Files?' })
+    expect(cleanupDialog).toHaveTextContent('temporary preset and source MT5 report')
+    expect(cleanupDialog).toHaveTextContent('retained Backtest record, metrics, archived report, and shared deployed Challenger EA are preserved')
+    expect(cleanupCalls).toBe(0)
+    fireEvent.click(screen.getByRole('button', { name: 'CONFIRM CLEAN BACKTEST FILES' }))
     expect(await screen.findByText(/Runtime cleaned · removed/)).toBeInTheDocument()
     await waitFor(() => {
       expect(screen.getByText('Runtime cleaned')).toBeInTheDocument()
     })
+    expect(cleanupCalls).toBe(1)
+    expect(screen.getByRole('button', { name: 'Clean Backtest Files' })).toBeDisabled()
+    expect(screen.getByRole('note')).toHaveTextContent('the deployed Challenger EA is unchanged')
 
     fireEvent.click(screen.getByRole('button', { name: 'Delete Backtest' }))
     expect(await screen.findByRole('dialog', { name: /Delete Backtest/i })).toHaveTextContent('Selected retained Backtest')

@@ -540,6 +540,7 @@ def retire_registry_row(
     retirement_id: str,
     expected_manifest_sha256: str,
     evidence_path: str,
+    before_state: dict[str, Any] | None = None,
     path: Path = DATABASE_PATH,
 ) -> dict[str, Any]:
     migrate_m06(path)
@@ -622,7 +623,7 @@ def retire_registry_row(
         if active_retirement is not None:
             raise RuntimeError("CHALLENGER_RETIREMENT_ALREADY_ACTIVE")
 
-        before_state = {
+        journal_before_state = {
             "challenger_id": str(challenger_id),
             "status": "CHALLENGER",
             "manifest_sha256": actual_manifest,
@@ -630,6 +631,15 @@ def retire_registry_row(
             "active_backtest": None,
             "active_promotion": None,
         }
+        if before_state is not None:
+            if not isinstance(before_state, dict):
+                raise RuntimeError("CHALLENGER_RETIREMENT_BEFORE_STATE_INVALID")
+            for key, expected in journal_before_state.items():
+                if before_state.get(key) != expected:
+                    raise RuntimeError(
+                        f"CHALLENGER_RETIREMENT_BEFORE_STATE_MISMATCH:{key}"
+                    )
+            journal_before_state.update(before_state)
         conn.execute(
             """
             INSERT INTO strategy_challenger_retirements(
@@ -645,7 +655,7 @@ def retire_registry_row(
                 actual_manifest,
                 now,
                 str(evidence_path),
-                json.dumps(before_state, sort_keys=True),
+                json.dumps(journal_before_state, sort_keys=True),
             ),
         )
 

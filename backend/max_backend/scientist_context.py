@@ -325,7 +325,7 @@ def build_scientist_context(
             "included": len(retired_recent),
             "limit": RETIRED_CHALLENGER_LIMIT,
             "recent": retired_recent,
-            "retirement": "NON_DESTRUCTIVE",
+            "retirement": "RUNTIME_EA_REMOVED; PARAMETERS_AND_SOURCE_BUNDLE_PRESERVED",
         },
     }
 

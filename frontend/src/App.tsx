@@ -7,6 +7,7 @@ import OptimizerPage from './OptimizerPage'
 import ScientistPage from './ScientistPage'
 import SettingsPage from './SettingsPage'
 import type { ProviderSettings } from './SettingsPage'
+import { ActionButton, ActionProgress } from './ActionControls'
 
 type Overview = {
   project: string
@@ -114,9 +115,18 @@ function RecoveryRequiredPage({
             onChange={(event) => setConfirmation(event.target.value)}
             disabled={busy}
           />
-          <button type="button" disabled={!canReset} onClick={backupAndReset}>
-            {busy ? 'Backing up and rebuilding…' : 'Backup and Reset Operational State'}
-          </button>
+          <ActionButton
+            type="button"
+            disabled={!canReset}
+            blockedReason={state.status !== 'RECOVERY_REQUIRED'
+              ? 'Recovery status is not verified; reset is intentionally disabled.'
+              : !state.reset_confirmation ? 'The server did not provide a recovery confirmation token.'
+                : confirmation !== state.reset_confirmation ? 'Enter the exact confirmation text shown above.'
+                  : 'Recovery is already in progress.'}
+            onClick={backupAndReset}
+          >
+            <ActionProgress active={busy} idle="Backup and Reset Operational State" pending="Backing up and rebuilding…" />
+          </ActionButton>
           {!canReset && !busy && <p role="status">Recovery is blocked until the exact confirmation is entered.</p>}
         </section>
       ) : (

@@ -2156,9 +2156,11 @@ string StrategyOptimizerFrameInputsBlob(const ulong pass,bool &ok)
    return blob;
   }
 
-void StrategyOptimizerProcessMetricFrames()
+bool StrategyOptimizerProcessMetricFrames(int &written_count)
   {
-   if(g_optimizerMetricsHandle==INVALID_HANDLE) return;
+   written_count=0;
+   if(g_optimizerMetricsHandle==INVALID_HANDLE) return false;
+   bool complete=true;
    ulong pass=0;
    string name="";
    long id=0;
@@ -2170,6 +2172,7 @@ void StrategyOptimizerProcessMetricFrames()
       if(ArraySize(data)<9)
         {
          PrintFormat("MAX_OPTIMIZER_FRAME_SCHEMA_FAIL pass=%I64u size=%d",pass,ArraySize(data));
+         complete=false;
          continue;
         }
       bool inputs_ok=false;
@@ -2177,29 +2180,110 @@ void StrategyOptimizerProcessMetricFrames()
       if(!inputs_ok || StringLen(frame_inputs)==0)
         {
          PrintFormat("MAX_OPTIMIZER_FRAME_INPUTS_FAIL pass=%I64u error=%d",pass,GetLastError());
+         complete=false;
          continue;
         }
       // FrameNext pass is an opaque ulong identity in real MT5 genetic runs.
       // Preserve it as text; never cast it through signed long/double. Python joins
       // sidecar evidence to SpreadsheetML by the exact FrameInputs parameter vector.
-      FileWrite(g_optimizerMetricsHandle,
-                "MAX_OPTIMIZER_METRICS_V2",
-                "MAX_OPTIMIZER_FITNESS_V2",
-                StringFormat("%I64u",pass),
-                frame_inputs,
-                value,    // custom_fitness (FrameAdd scalar)
-                data[8],  // trade_exponent_alpha
-                data[0],  // mean_expectancy_r
-                data[1],  // weighted_r
-                (long)data[2], // mt5_trades
-                (long)data[3], // r_accounted_trades
-                data[4],  // sum_r
-                data[5],  // sum_net
-                data[6],  // sum_initial_risk
-                (long)data[7], // accounting_errors
-                id);
-      FileFlush(g_optimizerMetricsHandle);
+      ResetLastError();
+      uint bytes_written=FileWrite(g_optimizerMetricsHandle,
+                                   "MAX_OPTIMIZER_METRICS_V2",
+                                   "MAX_OPTIMIZER_FITNESS_V2",
+                                   StringFormat("%I64u",pass),
+                                   frame_inputs,
+                                   value,    // custom_fitness (FrameAdd scalar)
+                                   data[8],  // trade_exponent_alpha
+                                   data[0],  // mean_expectancy_r
+                                   data[1],  // weighted_r
+                                   (long)data[2], // mt5_trades
+                                   (long)data[3], // r_accounted_trades
+                                   data[4],  // sum_r
+                                   data[5],  // sum_net
+                                   data[6],  // sum_initial_risk
+                                   (long)data[7], // accounting_errors
+                                   id);
+      if(bytes_written==0)
+        {
+         PrintFormat("MAX_OPTIMIZER_METRICS_WRITE_FAIL pass=%I64u error=%d",pass,GetLastError());
+         complete=false;
+         continue;
+        }
+      written_count++;
      }
+   FileFlush(g_optimizerMetricsHandle);
+   return complete;
+  }
+
+bool StrategyOptimizerResetMetricSidecar()
+  {
+   if(g_optimizerMetricsHandle!=INVALID_HANDLE)
+     {
+      FileFlush(g_optimizerMetricsHandle);
+      FileClose(g_optimizerMetricsHandle);
+      g_optimizerMetricsHandle=INVALID_HANDLE;
+     }
+   if(StringLen(InpOptimizerMetricsFile)==0)
+     {
+      Print("MAX_OPTIMIZER_METRICS_RESET_FAIL reason=EMPTY_PATH");
+      return false;
+     }
+   ResetLastError();
+   if(FileIsExist(InpOptimizerMetricsFile) && !FileDelete(InpOptimizerMetricsFile))
+     {
+      PrintFormat("MAX_OPTIMIZER_METRICS_RESET_FAIL file=%s error=%d",InpOptimizerMetricsFile,GetLastError());
+      return false;
+     }
+   ResetLastError();
+   g_optimizerMetricsHandle=FileOpen(InpOptimizerMetricsFile,FILE_WRITE|FILE_CSV|FILE_ANSI,",");
+   if(g_optimizerMetricsHandle==INVALID_HANDLE)
+     {
+      PrintFormat("MAX_OPTIMIZER_METRICS_RESET_FAIL file=%s error=%d",InpOptimizerMetricsFile,GetLastError());
+      return false;
+     }
+   ResetLastError();
+   uint header_bytes=FileWrite(g_optimizerMetricsHandle,
+                               "evidence_schema","fitness_schema","frame_pass_id","frame_inputs",
+                               "custom_fitness","trade_exponent_alpha","mean_expectancy_r","weighted_r",
+                               "mt5_trades","r_accounted_trades","sum_r","sum_net","sum_initial_risk",
+                               "accounting_errors","run_nonce");
+   if(header_bytes==0)
+     {
+      PrintFormat("MAX_OPTIMIZER_METRICS_RESET_FAIL header_write_error=%d",GetLastError());
+      FileClose(g_optimizerMetricsHandle);
+      g_optimizerMetricsHandle=INVALID_HANDLE;
+      return false;
+     }
+   FileFlush(g_optimizerMetricsHandle);
+   return true;
+  }
+
+bool StrategyOptimizerFinalizeMetricFrames()
+  {
+   if(!StrategyOptimizerResetMetricSidecar()) return false;
+   ResetLastError();
+   if(!FrameFirst())
+     {
+      PrintFormat("MAX_OPTIMIZER_FRAME_REPLAY_FAIL reason=FRAME_FIRST error=%d",GetLastError());
+      FileClose(g_optimizerMetricsHandle);
+      g_optimizerMetricsHandle=INVALID_HANDLE;
+      return false;
+     }
+   int written_count=0;
+   bool complete=StrategyOptimizerProcessMetricFrames(written_count);
+   if(!complete || written_count==0)
+     {
+      PrintFormat("MAX_OPTIMIZER_FRAME_REPLAY_FAIL complete=%s written=%d",
+                  (complete?"TRUE":"FALSE"),written_count);
+      FileFlush(g_optimizerMetricsHandle);
+      FileClose(g_optimizerMetricsHandle);
+      g_optimizerMetricsHandle=INVALID_HANDLE;
+      return false;
+     }
+   FileClose(g_optimizerMetricsHandle);
+   g_optimizerMetricsHandle=INVALID_HANDLE;
+   PrintFormat("MAX_OPTIMIZER_FRAME_REPLAY_COMPLETE rows=%d",written_count);
+   return true;
   }
 
 int OnTesterInit()
@@ -2208,36 +2292,20 @@ int OnTesterInit()
    if(!MathIsValidNumber(InpOptimizerTradeExponent) ||
       InpOptimizerTradeExponent<0.0 || InpOptimizerTradeExponent>1.0)
       return INIT_PARAMETERS_INCORRECT;
-   FileDelete(InpOptimizerMetricsFile);
-   g_optimizerMetricsHandle=FileOpen(InpOptimizerMetricsFile,FILE_WRITE|FILE_CSV|FILE_ANSI,",");
-   if(g_optimizerMetricsHandle==INVALID_HANDLE)
-     {
-      PrintFormat("MAX_OPTIMIZER_METRICS_OPEN_FAIL file=%s error=%d",InpOptimizerMetricsFile,GetLastError());
-      return INIT_FAILED;
-     }
-   FileWrite(g_optimizerMetricsHandle,
-             "evidence_schema","fitness_schema","frame_pass_id","frame_inputs",
-             "custom_fitness","trade_exponent_alpha","mean_expectancy_r","weighted_r",
-             "mt5_trades","r_accounted_trades","sum_r","sum_net","sum_initial_risk",
-             "accounting_errors","run_nonce");
-   FileFlush(g_optimizerMetricsHandle);
+   if(!StrategyOptimizerResetMetricSidecar()) return INIT_FAILED;
    return INIT_SUCCEEDED;
   }
 
 void OnTesterPass()
   {
-   StrategyOptimizerProcessMetricFrames();
+   int written_count=0;
+   if(!StrategyOptimizerProcessMetricFrames(written_count))
+      Print("MAX_OPTIMIZER_FRAME_EVENT_PROCESS_INCOMPLETE");
   }
 
 void OnTesterDeinit()
   {
-   StrategyOptimizerProcessMetricFrames();
-   if(g_optimizerMetricsHandle!=INVALID_HANDLE)
-     {
-      FileFlush(g_optimizerMetricsHandle);
-      FileClose(g_optimizerMetricsHandle);
-      g_optimizerMetricsHandle=INVALID_HANDLE;
-     }
+   StrategyOptimizerFinalizeMetricFrames();
   }
 
 double OnTester()

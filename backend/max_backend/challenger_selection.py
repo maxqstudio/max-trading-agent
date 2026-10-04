@@ -12,6 +12,13 @@ from .challenger_bundle import (
     _verify_manifest,
     current_baseline_sha256,
 )
+from .challenger_deployment import (
+    cleanup_challenger_staging_root,
+    commit_challenger_deployment,
+    new_challenger_staging_root,
+    prepare_challenger_deployment,
+    resolve_mt5_authority,
+)
 from .challenger_registry import challenger_id_for_source
 from .challenger_store import get_challenger_by_source
 from .config import CHALLENGER_ARTIFACT_ROOT, DATABASE_PATH, ROOT
@@ -169,7 +176,12 @@ def create_selected_challengers(
     batch_id = _batch_id(job_id, normalized)
     existing_batch = get_batch(batch_id, path=path)
     if existing_batch is not None and existing_batch["state"] == "COMMITTED":
-        return existing_batch
+        deployments = (existing_batch.get("result") or {}).get("mt5_deployments")
+        if not isinstance(deployments, list) or len(deployments) != len(
+            existing_batch.get("items") or []
+        ):
+            raise RuntimeError("CHALLENGER_BATCH_MT5_DEPLOYMENT_EVIDENCE_MISSING")
+        return {**existing_batch, "mt5_deployments": deployments}
 
     candidates: list[dict[str, Any]] = []
     challenger_ids: list[str] = []
@@ -203,6 +215,14 @@ def create_selected_challengers(
         candidates.append(candidate)
         challenger_ids.append(cid)
 
+    frozen_mt5 = candidates[0]["request"].get("mt5")
+    if not isinstance(frozen_mt5, dict) or any(
+        candidate["request"].get("mt5") != frozen_mt5
+        for candidate in candidates[1:]
+    ):
+        raise RuntimeError("CHALLENGER_BATCH_MT5_AUTHORITY_MISMATCH")
+    mt5_authority = resolve_mt5_authority(candidates[0]["request"])
+
     batch = prepare_batch(
         batch_id,
         job_id=job_id,
@@ -220,6 +240,9 @@ def create_selected_challengers(
     staging_root.mkdir(parents=True, exist_ok=True)
 
     rows: list[dict[str, Any]] = []
+    deployment_staging_root: Path | None = None
+    deployments: list[dict[str, Any]] = []
+    prepared_deployments: list[dict[str, Any]] = []
     final_committed = any(
         (artifact_root / challenger_id).exists()
         for challenger_id in challenger_ids
@@ -289,6 +312,39 @@ def create_selected_challengers(
                 }
             )
 
+        deployment_staging_root = new_challenger_staging_root(
+            expert_root=mt5_authority["expert_root"],
+            operation_id=batch_id,
+        )
+        for candidate, challenger_id, row in zip(
+            candidates,
+            challenger_ids,
+            rows,
+            strict=True,
+        ):
+            final_bundle = artifact_root / challenger_id
+            bundle_dir = (
+                final_bundle
+                if final_bundle.is_dir()
+                else staging_root / challenger_id
+            )
+            prepared_deployments.append(
+                prepare_challenger_deployment(
+                    challenger_id=challenger_id,
+                    source_request=candidate["request"],
+                    source_identity={
+                        "job_id": job_id,
+                        "round": int(candidate["round"]),
+                        "pass": int(candidate["pass"]),
+                    },
+                    bundle_manifest_sha256=str(row["manifest_sha256"]),
+                    source_ea=bundle_dir / f"Max_Challenger_{challenger_id}.mq5",
+                    source_set=bundle_dir / f"Max_Challenger_{challenger_id}.set",
+                    authority=mt5_authority,
+                    staging_root=deployment_staging_root,
+                )
+            )
+
         update_batch(batch_id, "STAGED", item_state="STAGED", path=path)
 
         # Phase 2: commit all prepared directories before one atomic DB mutation.
@@ -316,7 +372,19 @@ def create_selected_challengers(
                 candidate=candidate,
             )
 
-        challengers = insert_challenger_batch_rows(batch_id, rows, path=path)
+        if any(item.get("staged_dir") is not None for item in prepared_deployments):
+            # A failure after this point can leave an exact candidate EA installed,
+            # so the batch must be recoverable rather than marked simply FAILED.
+            final_committed = True
+        for prepared in prepared_deployments:
+            deployments.append(commit_challenger_deployment(prepared))
+
+        challengers = insert_challenger_batch_rows(
+            batch_id,
+            rows,
+            mt5_deployments=deployments,
+            path=path,
+        )
         shutil.rmtree(staging_root, ignore_errors=True)
         parent = staging_root.parent
         if parent.is_dir() and not any(parent.iterdir()):
@@ -327,6 +395,7 @@ def create_selected_challengers(
         return {
             **result,
             "challengers": challengers,
+            "mt5_deployments": deployments,
         }
     except Exception as exc:
         state = "RECOVERY_REQUIRED" if final_committed else "FAILED"
@@ -337,3 +406,5 @@ def create_selected_challengers(
         if not final_committed:
             shutil.rmtree(staging_root, ignore_errors=True)
         raise
+    finally:
+        cleanup_challenger_staging_root(deployment_staging_root)

@@ -83,7 +83,7 @@ def test_existing_database_missing_epoch_is_not_silently_backfilled(
 
 def test_ea_snapshot_hash_parity() -> None:
     manifest = verify_baseline_snapshot()
-    assert manifest["snapshot_sha256"] == "827c4caddedbe37081353e08bba35eac5f01e96314dd8650d7ea17ad109ae725"
+    assert manifest["snapshot_sha256"] == "10fadcd986a93cc075e13a6a383f1b00ee5c097c2a70d6edee315668111d5e20"
     assert EA_BASELINE.is_file()
 
 
@@ -281,7 +281,7 @@ def test_health_and_overview_contract(monkeypatch: pytest.MonkeyPatch) -> None:
     }
     ready_baseline = {
         "ea_version": "2.11",
-        "sha256": "827c4caddedbe37081353e08bba35eac5f01e96314dd8650d7ea17ad109ae725",
+        "sha256": "10fadcd986a93cc075e13a6a383f1b00ee5c097c2a70d6edee315668111d5e20",
         "status": "BASELINE_NOT_CHAMPION",
     }
     ready_mt5 = {
