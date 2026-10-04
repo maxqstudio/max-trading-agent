@@ -79,11 +79,25 @@
       "to": "backend/max_backend/artifact_api.py::_error"
     },
     {
+      "action": "execute_artifact_action",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::act",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::execute_artifact_action"
+    },
+    {
       "action": "_error",
       "evidence": "STATIC",
       "from": "backend/max_backend/artifact_api.py::cleanup",
       "resolver": "python_ast",
       "to": "backend/max_backend/artifact_api.py::_error"
+    },
+    {
+      "action": "clean_generated_data",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::cleanup",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::clean_generated_data"
     },
     {
       "action": "_error",
@@ -93,11 +107,25 @@
       "to": "backend/max_backend/artifact_api.py::_error"
     },
     {
+      "action": "global_cleanup_preflight",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::cleanup_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::global_cleanup_preflight"
+    },
+    {
       "action": "_error",
       "evidence": "STATIC",
       "from": "backend/max_backend/artifact_api.py::list_artifacts",
       "resolver": "python_ast",
       "to": "backend/max_backend/artifact_api.py::_error"
+    },
+    {
+      "action": "artifact_page",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::list_artifacts",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::artifact_page"
     },
     {
       "action": "_error",
@@ -107,11 +135,25 @@
       "to": "backend/max_backend/artifact_api.py::_error"
     },
     {
+      "action": "artifact_preflight",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::artifact_preflight"
+    },
+    {
       "action": "_error",
       "evidence": "STATIC",
       "from": "backend/max_backend/artifact_api.py::reconcile",
       "resolver": "python_ast",
       "to": "backend/max_backend/artifact_api.py::_error"
+    },
+    {
+      "action": "reconcile_artifacts",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::reconcile",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::reconcile_artifacts"
     },
     {
       "action": "_error",
@@ -149,6 +191,13 @@
       "to": "backend/max_backend/artifact_api.py::_error"
     },
     {
+      "action": "artifact_trace",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_api.py::trace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::artifact_trace"
+    },
+    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/artifact_control.py::_baseline_authority_snapshot",
@@ -182,6 +231,20 @@
       "from": "backend/max_backend/artifact_control.py::_clear_generated_strategy_history_root",
       "resolver": "python_ast",
       "to": "backend/max_backend/artifact_control.py::_is_protected_strategy_history_entry"
+    },
+    {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_clear_generated_strategy_history_root",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_clear_owned_root",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
     },
     {
       "action": "_is_protected_strategy_history_entry",
@@ -224,6 +287,13 @@
       "from": "backend/max_backend/artifact_control.py::_orphan_delete",
       "resolver": "python_ast",
       "to": "backend/max_backend/mt5.py::detect_mt5"
+    },
+    {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_orphan_delete",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
     },
     {
       "action": "connect",
@@ -289,6 +359,20 @@
       "to": "backend/max_backend/artifact_control.py::register_artifact"
     },
     {
+      "action": "challenger_delete_preflight",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::challenger_delete_preflight"
+    },
+    {
+      "action": "runtime_inventory",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::runtime_inventory"
+    },
+    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/artifact_control.py::_reconcile_project_objects",
@@ -331,6 +415,13 @@
       "to": "backend/max_backend/mt5.py::detect_mt5"
     },
     {
+      "action": "assert_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::_reconcile_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::assert_owned_path"
+    },
+    {
       "action": "register_artifact",
       "evidence": "STATIC",
       "from": "backend/max_backend/artifact_control.py::_register_backtest_runtime_items",
@@ -369,6 +460,48 @@
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/artifact_control.py::_register_tree_files",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_decode",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::artifact_page",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_decode"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::artifact_page",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "get_artifact",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::artifact_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::get_artifact"
+    },
+    {
+      "action": "assert_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::artifact_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::assert_owned_path"
+    },
+    {
+      "action": "get_artifact",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::artifact_trace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::get_artifact"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::artifact_trace",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
     },
@@ -450,6 +583,20 @@
       "to": "backend/max_backend/artifact_control.py::reconcile_artifacts"
     },
     {
+      "action": "delete_backtest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::delete_backtest"
+    },
+    {
+      "action": "delete_challenger",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::delete_challenger"
+    },
+    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/artifact_control.py::clean_generated_data",
@@ -457,11 +604,81 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
+      "action": "purge_chat",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::clean_generated_data",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_store.py::purge_chat"
+    },
+    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/artifact_control.py::delete_optimizer_job",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::delete_optimizer_job",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::delete_optimizer_job",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "action": "_orphan_delete",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::execute_artifact_action",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::_orphan_delete"
+    },
+    {
+      "action": "artifact_preflight",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::execute_artifact_action",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::artifact_preflight"
+    },
+    {
+      "action": "delete_optimizer_job",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::execute_artifact_action",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/artifact_control.py::delete_optimizer_job"
+    },
+    {
+      "action": "clean_backtest_runtime",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::execute_artifact_action",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::clean_backtest_runtime"
+    },
+    {
+      "action": "delete_backtest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::execute_artifact_action",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::delete_backtest"
+    },
+    {
+      "action": "delete_challenger",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::execute_artifact_action",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::delete_challenger"
     },
     {
       "action": "_decode",
@@ -476,6 +693,13 @@
       "from": "backend/max_backend/artifact_control.py::get_artifact",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::get_artifact",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
     },
     {
       "action": "_current_champion_id",
@@ -513,6 +737,13 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::global_cleanup_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
       "action": "_reconcile_db_objects",
       "evidence": "STATIC",
       "from": "backend/max_backend/artifact_control.py::reconcile_artifacts",
@@ -534,6 +765,13 @@
       "to": "backend/max_backend/artifact_control.py::_reconcile_runtime"
     },
     {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::reconcile_artifacts",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
       "action": "artifact_id",
       "evidence": "STATIC",
       "from": "backend/max_backend/artifact_control.py::register_artifact",
@@ -551,6 +789,356 @@
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/artifact_control.py::register_artifact",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "file_size_tree",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::register_artifact",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::file_size_tree"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/artifact_control.py::register_artifact",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "action": "challenger_deployment_directory",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::_runtime_paths",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::challenger_deployment_directory"
+    },
+    {
+      "action": "resolve_frozen_mt5_expert_root",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::_runtime_paths",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::resolve_frozen_mt5_expert_root"
+    },
+    {
+      "action": "_project_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::challenger_delete_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::_project_path"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::challenger_delete_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "file_size_tree",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::challenger_delete_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::file_size_tree"
+    },
+    {
+      "action": "_runtime_paths",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::_runtime_paths"
+    },
+    {
+      "action": "runtime_inventory",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::runtime_inventory"
+    },
+    {
+      "action": "verified_retained_report",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::verified_retained_report"
+    },
+    {
+      "action": "get_backtest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::get_backtest"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
+      "action": "set_backtest_runtime_status",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::set_backtest_runtime_status"
+    },
+    {
+      "action": "_project_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::_project_path"
+    },
+    {
+      "action": "clean_backtest_runtime",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::clean_backtest_runtime"
+    },
+    {
+      "action": "get_backtest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::get_backtest"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
+      "action": "delete_backtest_row",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::delete_backtest_row"
+    },
+    {
+      "action": "challenger_delete_preflight",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::challenger_delete_preflight"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
+      "action": "delete_challenger_row",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::delete_challenger",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::delete_challenger_row"
+    },
+    {
+      "action": "_runtime_paths",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::runtime_inventory",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::_runtime_paths"
+    },
+    {
+      "action": "get_backtest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::runtime_inventory",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::get_backtest"
+    },
+    {
+      "action": "assert_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::runtime_inventory",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::assert_owned_path"
+    },
+    {
+      "action": "file_size_tree",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::runtime_inventory",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::file_size_tree"
+    },
+    {
+      "action": "_project_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::verified_retained_report",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/backtest_control.py::_project_path"
+    },
+    {
+      "action": "get_backtest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/backtest_control.py::verified_retained_report",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::get_backtest"
+    },
+    {
+      "action": "_deployment_paths",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_deployment.py::challenger_deployment_directory",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::_deployment_paths"
+    },
+    {
+      "action": "_path_identity",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_deployment.py::resolve_frozen_mt5_expert_root",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_deployment.py::_path_identity"
+    },
+    {
+      "action": "_backtest_schema_ready",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready"
+    },
+    {
+      "action": "_challenger_schema_ready",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready"
+    },
+    {
+      "action": "_decode_backtest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::get_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::_decode_backtest"
+    },
+    {
+      "action": "migrate_m06",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::get_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::migrate_m06"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::get_backtest",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_create_m06_tables",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::_create_m06_tables"
+    },
+    {
+      "action": "_upgrade_backtest_schema",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema"
+    },
+    {
+      "action": "_upgrade_challenger_registry",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_m05",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_store.py::migrate_m05"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_store.py::migrate_m03",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_m02",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_store.py::migrate_m03",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_store.py::migrate_m02"
+    },
+    {
+      "action": "_challenger_table_supports_promoted",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted"
+    },
+    {
+      "action": "_create_champion_tenure_table",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_create_champion_tenure_table"
+    },
+    {
+      "action": "migrate_m03",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_store.py::migrate_m03"
+    },
+    {
+      "action": "_upgrade_challenger_status_constraint",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint"
+    },
+    {
+      "action": "_upgrade_champion_tenure_schema",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
     },
@@ -581,6 +1169,69 @@
       "from": "backend/max_backend/mt5.py::detect_mt5",
       "resolver": "python_ast",
       "to": "backend/max_backend/mt5.py::_unavailable"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_m01",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_store.py::migrate_m01"
+    },
+    {
+      "action": "_is_reparse",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/path_safety.py::assert_owned_path",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::_is_reparse"
+    },
+    {
+      "action": "assert_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/path_safety.py::remove_owned_path",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::assert_owned_path"
+    },
+    {
+      "action": "migrate_m04",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_store.py::migrate_m05",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/champion_store.py::migrate_m04"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_store.py::migrate_m05",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_store.py::purge_chat",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_m05",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_store.py::purge_chat",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/scientist_store.py::migrate_m05"
     },
     {
       "action": "sqlite3.connect",
@@ -625,11 +1276,25 @@
       "to": "backend/max_backend/mt5.py::detect_mt5"
     },
     {
+      "action": "file_size_tree",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::_owned_paths",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::file_size_tree"
+    },
+    {
       "action": "_runtime_paths",
       "evidence": "STATIC",
       "from": "backend/max_backend/strategy_reset.py::_owned_paths",
       "resolver": "python_ast",
       "to": "backend/max_backend/strategy_reset.py::_runtime_paths"
+    },
+    {
+      "action": "assert_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::_read_counts",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::assert_owned_path"
     },
     {
       "action": "StrategyResetError",
@@ -688,6 +1353,20 @@
       "to": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
     },
     {
+      "action": "assert_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::assert_owned_path"
+    },
+    {
+      "action": "remove_owned_path",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
       "action": "StrategyResetError",
       "evidence": "STATIC",
       "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
@@ -742,6 +1421,90 @@
       "from": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
       "resolver": "python_ast",
       "to": "backend/max_backend/strategy_reset.py::_read_counts"
+    },
+    {
+      "action": "_challenger_role_schema_ready",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::_challenger_role_schema_ready"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::delete_backtest_row",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::delete_backtest_row",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::delete_challenger_row",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::delete_challenger_row",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "action": "migrate_m06",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::migrate_current",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/challenger_operations_store.py::migrate_m06"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::migrate_current",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "_ensure_backtest_runtime_status",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::migrate_current",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::_ensure_backtest_runtime_status"
+    },
+    {
+      "action": "_purge_research_authority",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::migrate_current",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::_purge_research_authority"
+    },
+    {
+      "action": "_upgrade_challenger_roles",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::migrate_current",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::set_backtest_runtime_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "migrate_current",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::set_backtest_runtime_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/workflow_store.py::migrate_current"
     },
     {
       "action": "FETCH request",
@@ -1240,6 +2003,33 @@
       "locator": "backend/max_backend/artifact_control.py::artifact_id"
     },
     {
+      "id": "backend/max_backend/artifact_control.py::artifact_page",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::artifact_page",
+      "language": "Python",
+      "line_end": 1143,
+      "line_start": 1005,
+      "locator": "backend/max_backend/artifact_control.py::artifact_page"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::artifact_preflight",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::artifact_preflight",
+      "language": "Python",
+      "line_end": 1355,
+      "line_start": 1312,
+      "locator": "backend/max_backend/artifact_control.py::artifact_preflight"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::artifact_trace",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::artifact_trace",
+      "language": "Python",
+      "line_end": 1212,
+      "line_start": 1146,
+      "locator": "backend/max_backend/artifact_control.py::artifact_trace"
+    },
+    {
       "id": "backend/max_backend/artifact_control.py::clean_generated_data",
       "kind": "function",
       "label": "backend/max_backend/artifact_control.py::clean_generated_data",
@@ -1256,6 +2046,15 @@
       "line_end": 1309,
       "line_start": 1247,
       "locator": "backend/max_backend/artifact_control.py::delete_optimizer_job"
+    },
+    {
+      "id": "backend/max_backend/artifact_control.py::execute_artifact_action",
+      "kind": "function",
+      "label": "backend/max_backend/artifact_control.py::execute_artifact_action",
+      "language": "Python",
+      "line_end": 1436,
+      "line_start": 1358,
+      "locator": "backend/max_backend/artifact_control.py::execute_artifact_action"
     },
     {
       "id": "backend/max_backend/artifact_control.py::get_artifact",
@@ -1292,6 +2091,240 @@
       "line_end": 159,
       "line_start": 76,
       "locator": "backend/max_backend/artifact_control.py::register_artifact"
+    },
+    {
+      "id": "backend/max_backend/backtest_control.py::_project_path",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_control.py::_project_path",
+      "language": "Python",
+      "line_end": 29,
+      "line_start": 27,
+      "locator": "backend/max_backend/backtest_control.py::_project_path"
+    },
+    {
+      "id": "backend/max_backend/backtest_control.py::_runtime_paths",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_control.py::_runtime_paths",
+      "language": "Python",
+      "line_end": 129,
+      "line_start": 58,
+      "locator": "backend/max_backend/backtest_control.py::_runtime_paths"
+    },
+    {
+      "id": "backend/max_backend/backtest_control.py::challenger_delete_preflight",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_control.py::challenger_delete_preflight",
+      "language": "Python",
+      "line_end": 331,
+      "line_start": 252,
+      "locator": "backend/max_backend/backtest_control.py::challenger_delete_preflight"
+    },
+    {
+      "id": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_control.py::clean_backtest_runtime",
+      "language": "Python",
+      "line_end": 204,
+      "line_start": 170,
+      "locator": "backend/max_backend/backtest_control.py::clean_backtest_runtime"
+    },
+    {
+      "id": "backend/max_backend/backtest_control.py::delete_backtest",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_control.py::delete_backtest",
+      "language": "Python",
+      "line_end": 249,
+      "line_start": 207,
+      "locator": "backend/max_backend/backtest_control.py::delete_backtest"
+    },
+    {
+      "id": "backend/max_backend/backtest_control.py::delete_challenger",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_control.py::delete_challenger",
+      "language": "Python",
+      "line_end": 365,
+      "line_start": 334,
+      "locator": "backend/max_backend/backtest_control.py::delete_challenger"
+    },
+    {
+      "id": "backend/max_backend/backtest_control.py::runtime_inventory",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_control.py::runtime_inventory",
+      "language": "Python",
+      "line_end": 167,
+      "line_start": 132,
+      "locator": "backend/max_backend/backtest_control.py::runtime_inventory"
+    },
+    {
+      "id": "backend/max_backend/backtest_control.py::verified_retained_report",
+      "kind": "function",
+      "label": "backend/max_backend/backtest_control.py::verified_retained_report",
+      "language": "Python",
+      "line_end": 55,
+      "line_start": 32,
+      "locator": "backend/max_backend/backtest_control.py::verified_retained_report"
+    },
+    {
+      "id": "backend/max_backend/challenger_deployment.py::_deployment_paths",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_deployment.py::_deployment_paths",
+      "language": "Python",
+      "line_end": 109,
+      "line_start": 96,
+      "locator": "backend/max_backend/challenger_deployment.py::_deployment_paths"
+    },
+    {
+      "id": "backend/max_backend/challenger_deployment.py::_path_identity",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_deployment.py::_path_identity",
+      "language": "Python",
+      "line_end": 30,
+      "line_start": 23,
+      "locator": "backend/max_backend/challenger_deployment.py::_path_identity"
+    },
+    {
+      "id": "backend/max_backend/challenger_deployment.py::challenger_deployment_directory",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_deployment.py::challenger_deployment_directory",
+      "language": "Python",
+      "line_end": 118,
+      "line_start": 112,
+      "locator": "backend/max_backend/challenger_deployment.py::challenger_deployment_directory"
+    },
+    {
+      "id": "backend/max_backend/challenger_deployment.py::resolve_frozen_mt5_expert_root",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_deployment.py::resolve_frozen_mt5_expert_root",
+      "language": "Python",
+      "line_end": 93,
+      "line_start": 73,
+      "locator": "backend/max_backend/challenger_deployment.py::resolve_frozen_mt5_expert_root"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready",
+      "language": "Python",
+      "line_end": 162,
+      "line_start": 155,
+      "locator": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready",
+      "language": "Python",
+      "line_end": 46,
+      "line_start": 37,
+      "locator": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations_store.py::_create_m06_tables",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::_create_m06_tables",
+      "language": "Python",
+      "line_end": 295,
+      "line_start": 223,
+      "locator": "backend/max_backend/challenger_operations_store.py::_create_m06_tables"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations_store.py::_decode_backtest",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::_decode_backtest",
+      "language": "Python",
+      "line_end": 867,
+      "line_start": 860,
+      "locator": "backend/max_backend/challenger_operations_store.py::_decode_backtest"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema",
+      "language": "Python",
+      "line_end": 220,
+      "line_start": 165,
+      "locator": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry",
+      "language": "Python",
+      "line_end": 152,
+      "line_start": 49,
+      "locator": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations_store.py::get_backtest",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::get_backtest",
+      "language": "Python",
+      "line_end": 881,
+      "line_start": 870,
+      "locator": "backend/max_backend/challenger_operations_store.py::get_backtest"
+    },
+    {
+      "id": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "language": "Python",
+      "line_end": 316,
+      "line_start": 298,
+      "locator": "backend/max_backend/challenger_operations_store.py::migrate_m06"
+    },
+    {
+      "id": "backend/max_backend/challenger_store.py::migrate_m03",
+      "kind": "function",
+      "label": "backend/max_backend/challenger_store.py::migrate_m03",
+      "language": "Python",
+      "line_end": 75,
+      "line_start": 18,
+      "locator": "backend/max_backend/challenger_store.py::migrate_m03"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted",
+      "language": "Python",
+      "line_end": 38,
+      "line_start": 34,
+      "locator": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_create_champion_tenure_table",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_create_champion_tenure_table",
+      "language": "Python",
+      "line_end": 153,
+      "line_start": 99,
+      "locator": "backend/max_backend/champion_store.py::_create_champion_tenure_table"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint",
+      "language": "Python",
+      "line_end": 95,
+      "line_start": 41,
+      "locator": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
+      "language": "Python",
+      "line_end": 198,
+      "line_start": 156,
+      "locator": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema"
+    },
+    {
+      "id": "backend/max_backend/champion_store.py::migrate_m04",
+      "kind": "function",
+      "label": "backend/max_backend/champion_store.py::migrate_m04",
+      "language": "Python",
+      "line_end": 261,
+      "line_start": 200,
+      "locator": "backend/max_backend/champion_store.py::migrate_m04"
     },
     {
       "id": "backend/max_backend/db.py::connect",
@@ -1348,6 +2381,24 @@
       "locator": "backend/max_backend/mt5.py::detect_mt5"
     },
     {
+      "id": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "language": "Python",
+      "line_end": 111,
+      "line_start": 46,
+      "locator": "backend/max_backend/optimizer_store.py::migrate_m01"
+    },
+    {
+      "id": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "language": "Python",
+      "line_end": 134,
+      "line_start": 114,
+      "locator": "backend/max_backend/optimizer_store.py::migrate_m02"
+    },
+    {
       "id": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close",
       "kind": "method",
       "label": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close",
@@ -1355,6 +2406,60 @@
       "line_end": 428,
       "line_start": 421,
       "locator": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
+    },
+    {
+      "id": "backend/max_backend/path_safety.py::_is_reparse",
+      "kind": "function",
+      "label": "backend/max_backend/path_safety.py::_is_reparse",
+      "language": "Python",
+      "line_end": 19,
+      "line_start": 11,
+      "locator": "backend/max_backend/path_safety.py::_is_reparse"
+    },
+    {
+      "id": "backend/max_backend/path_safety.py::assert_owned_path",
+      "kind": "function",
+      "label": "backend/max_backend/path_safety.py::assert_owned_path",
+      "language": "Python",
+      "line_end": 62,
+      "line_start": 22,
+      "locator": "backend/max_backend/path_safety.py::assert_owned_path"
+    },
+    {
+      "id": "backend/max_backend/path_safety.py::file_size_tree",
+      "kind": "function",
+      "label": "backend/max_backend/path_safety.py::file_size_tree",
+      "language": "Python",
+      "line_end": 98,
+      "line_start": 88,
+      "locator": "backend/max_backend/path_safety.py::file_size_tree"
+    },
+    {
+      "id": "backend/max_backend/path_safety.py::remove_owned_path",
+      "kind": "function",
+      "label": "backend/max_backend/path_safety.py::remove_owned_path",
+      "language": "Python",
+      "line_end": 85,
+      "line_start": 65,
+      "locator": "backend/max_backend/path_safety.py::remove_owned_path"
+    },
+    {
+      "id": "backend/max_backend/scientist_store.py::migrate_m05",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_store.py::migrate_m05",
+      "language": "Python",
+      "line_end": 92,
+      "line_start": 28,
+      "locator": "backend/max_backend/scientist_store.py::migrate_m05"
+    },
+    {
+      "id": "backend/max_backend/scientist_store.py::purge_chat",
+      "kind": "function",
+      "label": "backend/max_backend/scientist_store.py::purge_chat",
+      "language": "Python",
+      "line_end": 594,
+      "line_start": 561,
+      "locator": "backend/max_backend/scientist_store.py::purge_chat"
     },
     {
       "id": "backend/max_backend/strategy_reset.py::StrategyResetError",
@@ -1474,6 +2579,78 @@
       "locator": "backend/max_backend/strategy_reset.py::strategy_reset_preflight"
     },
     {
+      "id": "backend/max_backend/workflow_store.py::_challenger_role_schema_ready",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_store.py::_challenger_role_schema_ready",
+      "language": "Python",
+      "line_end": 28,
+      "line_start": 24,
+      "locator": "backend/max_backend/workflow_store.py::_challenger_role_schema_ready"
+    },
+    {
+      "id": "backend/max_backend/workflow_store.py::_ensure_backtest_runtime_status",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_store.py::_ensure_backtest_runtime_status",
+      "language": "Python",
+      "line_end": 134,
+      "line_start": 124,
+      "locator": "backend/max_backend/workflow_store.py::_ensure_backtest_runtime_status"
+    },
+    {
+      "id": "backend/max_backend/workflow_store.py::_purge_research_authority",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_store.py::_purge_research_authority",
+      "language": "Python",
+      "line_end": 180,
+      "line_start": 137,
+      "locator": "backend/max_backend/workflow_store.py::_purge_research_authority"
+    },
+    {
+      "id": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles",
+      "language": "Python",
+      "line_end": 121,
+      "line_start": 31,
+      "locator": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles"
+    },
+    {
+      "id": "backend/max_backend/workflow_store.py::delete_backtest_row",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_store.py::delete_backtest_row",
+      "language": "Python",
+      "line_end": 583,
+      "line_start": 574,
+      "locator": "backend/max_backend/workflow_store.py::delete_backtest_row"
+    },
+    {
+      "id": "backend/max_backend/workflow_store.py::delete_challenger_row",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_store.py::delete_challenger_row",
+      "language": "Python",
+      "line_end": 595,
+      "line_start": 586,
+      "locator": "backend/max_backend/workflow_store.py::delete_challenger_row"
+    },
+    {
+      "id": "backend/max_backend/workflow_store.py::migrate_current",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_store.py::migrate_current",
+      "language": "Python",
+      "line_end": 309,
+      "line_start": 183,
+      "locator": "backend/max_backend/workflow_store.py::migrate_current"
+    },
+    {
+      "id": "backend/max_backend/workflow_store.py::set_backtest_runtime_status",
+      "kind": "function",
+      "label": "backend/max_backend/workflow_store.py::set_backtest_runtime_status",
+      "language": "Python",
+      "line_end": 571,
+      "line_start": 556,
+      "locator": "backend/max_backend/workflow_store.py::set_backtest_runtime_status"
+    },
+    {
       "id": "frontend/src/ArtifactsPage.tsx::<module>",
       "kind": "module",
       "label": "frontend/src/ArtifactsPage.tsx::<module>",
@@ -1481,7 +2658,7 @@
       "locator": "frontend/src/ArtifactsPage.tsx::<module>"
     }
   ],
-  "observed_head": "87e5b0ef9ee777b39da480b8f9cbfd06d404fc80",
+  "observed_head": "e6046334eee94fd6812a5434a6c4e2828a77e2a4",
   "schema_version": 1,
-  "source_digest": "f556ab64dacce983ba82b327d8a5318a35b80b85f2abb6cf1033bd1f4a02c0b7"
+  "source_digest": "7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f"
 }

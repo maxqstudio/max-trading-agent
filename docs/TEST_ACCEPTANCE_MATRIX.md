@@ -7,7 +7,7 @@
 Starting authority is maxqstudio/max-trading-agent main ac2787c0fe46bfa83267b0ceebb9d8f3f1d44c5c on codex/restore-mt5-native-agent-execution, PR #18. The latest Owner job 20261003_012101_e65a942d is FAILED/inactive after MT5 returned exit code 0; its frozen raw report and sidecar were parsed offline with candidate code (7,115 report rows; 3,239 eligible unique candidates), with no database writes. Root cause: exact repeated parameter-vector metrics rows were rejected as a duplicate. Current source collapses only identical semantic metric rows and prevents exact duplicate candidate identities from reaching the SQLite projection. The existing failed job remains unchanged with zero candidate rows. Local backend/frontend/dependency/build gates pass; current-candidate source-only scan and hosted CI are NOT_RUN. The phase remains IN_PROGRESS; PR #18 is not merged. Real MT5/Owner runtime and full Optimizer acceptance remain NOT_PROVEN; Research remains PAUSED. No DB, Owner draft, pagefile setting, or MT5 runtime was modified by this repair.
 
 Final tested source: external final acceptance evidence.
-Current source digest: f556ab64dacce983ba82b327d8a5318a35b80b85f2abb6cf1033bd1f4a02c0b7
+Current source digest: 7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|

@@ -18,7 +18,7 @@ Branch: codex/restore-mt5-native-agent-execution
 Authoritative SHA: external final acceptance evidence
 Last accepted SHA: ac2787c0fe46bfa83267b0ceebb9d8f3f1d44c5c
 Current candidate SHA: external final acceptance evidence
-Current source digest: f556ab64dacce983ba82b327d8a5318a35b80b85f2abb6cf1033bd1f4a02c0b7
+Current source digest: 7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
