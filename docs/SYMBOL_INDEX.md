@@ -3,7 +3,7 @@
 # SYMBOL INDEX
 
 Authority SHA: external final acceptance evidence
-Source digest: 5480ce47bb11ea70e78d812b3aa6db03f6b17d71b5c185289e4786d3f05ffb17
+Source digest: 5f95d01d5d0a3bc99ad45729cc24e53be926ba50e0d3b0815e3f0d5b8643fa19
 Status: CURRENT
 
 | File | Symbol | Kind | Lines@SHA | Responsibility | Reads/Writes | Called By | Tests |
@@ -1178,6 +1178,13 @@ Status: CURRENT
 | backend/tests/test_m08_strategy_results.py | test_owner_selected_consumed_challenger_completes_synthetic_promotion | function | 2326-2415 | Observed Python symbol | | | |
 | backend/tests/test_m08_strategy_results.py | test_owner_selected_consumed_challenger_completes_synthetic_promotion.fake_compile | method | 2379-2391 | Observed Python symbol | | | |
 | backend/tests/test_m08_strategy_results.py | test_committed_batch_keeps_source_consumed_after_challenger_row_delete | function | 2418-2465 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | _json | function | 8-9 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | _edge_exists | function | 12-17 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | _reachable_states | function | 20-37 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect | function | 40-78 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain | function | 81-147 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | test_model_lab_expectancy_values_are_proposals_not_executable_kpi_gates | function | 150-188 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | test_frozen_onnx_v1_scientific_contract_is_preserved | function | 191-245 | Observed Python symbol | | | |
 | backend/tests/test_optimizer_draft.py | make_database | function | 14-18 | Observed Python symbol | | | |
 | backend/tests/test_optimizer_draft.py | test_optimizer_draft_survives_database_reopen_and_stores_all_parameter_ranges | function | 21-44 | Observed Python symbol | | | |
 | backend/tests/test_optimizer_draft.py | test_optimizer_draft_rejects_stale_save_without_overwriting_newer_values | function | 47-60 | Observed Python symbol | | | |

@@ -504,6 +504,13 @@
     },
     {
       "directory": "backend/tests",
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "is_test": true,
+      "language": "Python",
+      "lines": 245
+    },
+    {
+      "directory": "backend/tests",
       "file": "backend/tests/test_optimizer_draft.py",
       "is_test": true,
       "language": "Python",
@@ -46902,6 +46909,306 @@
       "target_token": "revalidate_candidate_for_registration"
     },
     {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_json",
+      "target_token": "json.loads"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "transition.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "transition.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "transition.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "edges.setdefault"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "edges.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "pending.pop"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "reached.add"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "pending.append"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "target_token": "required.lower"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "target_token": "next"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_reachable_states"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_edge_exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_edge_exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_edge_exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_reachable_states"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_edge_exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_edge_exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "zip"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_edge_exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "next"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_edge_exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_edge_exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "next"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "next"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "flow.index"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_model_lab_expectancy_values_are_proposals_not_executable_kpi_gates",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_model_lab_expectancy_values_are_proposals_not_executable_kpi_gates",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_model_lab_expectancy_values_are_proposals_not_executable_kpi_gates",
+      "target_token": "human.lower"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_model_lab_expectancy_values_are_proposals_not_executable_kpi_gates",
+      "target_token": "human.lower"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "requirement.lower"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "requirement.lower"
+    },
+    {
       "caller": "backend/tests/test_optimizer_draft.py::make_database",
       "target_token": "initialize_database"
     },
@@ -70730,6 +71037,62 @@
       "symbol": "test_committed_batch_keeps_source_consumed_after_challenger_row_delete"
     },
     {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 9,
+      "line_start": 8,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::_json",
+      "symbol": "_json"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 17,
+      "line_start": 12,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "symbol": "_edge_exists"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 37,
+      "line_start": 20,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "symbol": "_reachable_states"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 78,
+      "line_start": 40,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "symbol": "test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 147,
+      "line_start": 81,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "symbol": "test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 188,
+      "line_start": 150,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::test_model_lab_expectancy_values_are_proposals_not_executable_kpi_gates",
+      "symbol": "test_model_lab_expectancy_values_are_proposals_not_executable_kpi_gates"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 245,
+      "line_start": 191,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "symbol": "test_frozen_onnx_v1_scientific_contract_is_preserved"
+    },
+    {
       "file": "backend/tests/test_optimizer_draft.py",
       "kind": "function",
       "line_end": 18,
@@ -72907,17 +73270,17 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "5480ce47bb11ea70e78d812b3aa6db03f6b17d71b5c185289e4786d3f05ffb17",
+  "source_digest": "5f95d01d5d0a3bc99ad45729cc24e53be926ba50e0d3b0815e3f0d5b8643fa19",
   "source_summary": {
-    "files": 121,
+    "files": 122,
     "languages": {
       "PowerShell": 2,
-      "Python": 97,
+      "Python": 98,
       "TypeScript": 3,
       "TypeScript/React": 19
     },
-    "lines": 57134,
-    "test_files": 42
+    "lines": 57379,
+    "test_files": 43
   },
   "tests": [
     "backend/tests/conftest.py",
@@ -72944,6 +73307,7 @@
     "backend/tests/test_m07_launcher_authority.py",
     "backend/tests/test_m07_true_mtf.py",
     "backend/tests/test_m08_strategy_results.py",
+    "backend/tests/test_onnx00_governance_contracts.py",
     "backend/tests/test_optimizer_draft.py",
     "backend/tests/test_optimizer_frame_finalization.py",
     "backend/tests/test_optimizer_reliability.py",

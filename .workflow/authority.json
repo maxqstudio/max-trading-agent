@@ -49,9 +49,9 @@
       "mutable": true
     },
     {
-      "authority": "MT5 optimizer reports/sidecars plus Python canonical revalidation",
+      "authority": "Merged PR #18 at maxqstudio/max-trading-agent main 203f6ab3dc618e3edd247841aa25e1fa0951a19a plus MT5 optimizer reports/sidecars and Python canonical revalidation",
       "concern": "optimizer",
-      "meaning": "MT5 executes optimization through terminal64.exe with its native /config behavior and Owner-selected tester-agent settings; MAX does not impose an external tester-agent cap or estimated-memory admission gate. The immutable started-job request, worker/MT5 identity, frozen report and sidecar hashes, and Python canonical revalidation govern evidence recovery. Identical repeated sidecar vectors are collapsed deterministically only when all semantic metrics match; conflicting evidence fails closed. Exact duplicate candidate identities are removed before SQLite projection persistence. Candidate projections serve reads only and canonical evidence is revalidated before mutation.",
+      "meaning": "Current execution authority is merged PR #18 at main SHA 203f6ab3dc618e3edd247841aa25e1fa0951a19a: launch terminal64.exe through subprocess.Popen with the frozen /config INI and let MT5 manage its configured local tester agents. MAX must not impose an external active-process cap or estimated-memory START gate unless a new explicit Owner decision authorizes it. This supersedes D-039 as current execution policy, not as historical rationale. The reported Windows commit-memory exhaustion remains unresolved/NOT_PROVEN; restoring native scheduling does not prove the runtime memory issue eliminated. Preserve the immutable started-job request, worker/MT5 identity, frozen report and sidecar hashes, Python canonical revalidation, deterministic identical-row collapse, conflicting-evidence rejection, exact candidate deduplication, and projection-read-only boundary.",
       "mutable": true
     },
     {

@@ -18,7 +18,7 @@ Branch: codex/onnx-00-scientific-authority
 Authoritative SHA: external final acceptance evidence
 Last accepted SHA: 203f6ab3dc618e3edd247841aa25e1fa0951a19a
 Current candidate SHA: external final acceptance evidence
-Current source digest: 5480ce47bb11ea70e78d812b3aa6db03f6b17d71b5c185289e4786d3f05ffb17
+Current source digest: 5f95d01d5d0a3bc99ad45729cc24e53be926ba50e0d3b0815e3f0d5b8643fa19
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md

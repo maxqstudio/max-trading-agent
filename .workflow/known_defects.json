@@ -198,6 +198,24 @@
       "status": "FIXED/ACCEPTED",
       "summary": "Exact duplicate optimizer candidate identities could be inserted into the SQLite candidate projection.",
       "evidence": "Duplicate candidate identities are removed before SQLite projection persistence and rechecked transactionally. The repair is included in accepted main 203f6ab3dc618e3edd247841aa25e1fa0951a19a; exact Windows CI run 37964999480 passed on that SHA. Runtime acceptance remains separate."
+    },
+    {
+      "id": "ONNX00-STALE-OPTIMIZER-RESOURCE-AUTHORITY",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "D-039 was incorrectly marked CURRENT after merged PR #18 restored native MT5 execution without a MAX-owned active-process cap or estimated-memory START gate.",
+      "evidence": "D-039 is retained as SUPERSEDED by current D-042, which binds the policy to PR #18/main 203f6ab3dc618e3edd247841aa25e1fa0951a19a. The reported commit-memory exhaustion remains IN_PROGRESS/NOT_PROVEN. Focused contract test: backend/tests/test_onnx00_governance_contracts.py."
+    },
+    {
+      "id": "ONNX00-CHALLENGER-ADMISSION-ORDER",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Forward PASS could be represented as Challenger-ready before final fit, ONNX export/parity, runtime manifest validation, and registration.",
+      "evidence": "The state authority now requires the per-candidate SCIENTIFICALLY_QUALIFIED → FINAL_PERMITTED_FIT → ONNX_EXPORT → ONNX_PARITY → RUNTIME_MANIFEST_VALIDATION → CHALLENGER_REGISTRATION → CHALLENGER_READY chain; runtime-only repair reuses science seals and failures are candidate-scoped. Focused negative-path contract test: backend/tests/test_onnx00_governance_contracts.py."
+    },
+    {
+      "id": "ONNX00-KPI-AUTHORIZATION-GAP",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "ModelLab V3 expectancy reference values were represented as executable MAX hard gates without explicit Owner KPI authorization.",
+      "evidence": "The 0.00R values remain labeled scientific reference proposals only, with executable hard gates disabled. ONNX-03 is blocked until a complete, versioned KPI contract is explicitly Owner-authorized and frozen before cycle start. Focused contract test: backend/tests/test_onnx00_governance_contracts.py."
     }
   ],
   "schema_version": 1

@@ -308,9 +308,9 @@ Rationale: The Owner requested the updated Skill Workflow. Its current delta pre
 
 ## D-039 — Fail closed on Windows commit-memory pressure
 
-Status: CURRENT
+Status: SUPERSEDED
 
-Resource admission considers both physical RAM and current Windows commit headroom. The frozen Optimizer workload identity includes EA SHA, MT5 build, symbol, timeframe, history-duration bucket, tick model, optimization mode, parameter count and search-space size. Native monitoring reads system commit and exact Job Object-owned terminal/tester processes, including PrivateUsage; compatible bounded high-water observations reuse existing round state read-only. A verified resource stop remains resumable only after fresh admission; failed termination or telemetry persistence enters RECONCILIATION_REQUIRED and is not resumable. AUTO_SAFE and CUSTOM remain subject to the same physical/commit hard floors and Job Object active-process cap. No pagefile mutation, schema bump, search-space shrink, or scientific acceptance change is permitted.
+Historical policy, superseded by D-042: resource admission considered physical RAM and Windows commit headroom. The frozen Optimizer workload identity included EA SHA, MT5 build, symbol, timeframe, history-duration bucket, tick model, optimization mode, parameter count and search-space size. Native monitoring read system commit and exact Job Object-owned terminal/tester processes, including PrivateUsage; compatible bounded high-water observations reused existing round state read-only. A verified resource stop remained resumable only after fresh admission; failed termination or telemetry persistence entered RECONCILIATION_REQUIRED and was not resumable. AUTO_SAFE and CUSTOM were subject to physical/commit floors and a Job Object active-process cap. No pagefile mutation, schema bump, search-space shrink, or scientific acceptance change was part of that historical decision.
 
 Rationale: The Owner-reported full-range 17D Fast Genetic attempt crashed under Windows commit-memory exhaustion despite historical bounded RAM/concurrency checks. Current commit charge and process private bytes must therefore gate capacity and trigger explicit, verified stop/reconciliation behavior before system exhaustion.
 
@@ -329,3 +329,11 @@ Status: CURRENT
 The latest Skill_Workflow/main SHA 3b3289681cf2cec8d3d132895e0848be64bb54b1 was fetched and its normative guidance applied to ONNX-00. MAX's executable Windows CI and vendored validator provenance remain pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4. The toolchain is not claimed byte-identical to 3b328968 and is not migrated in this planning-only phase; a separate reviewed migration is required before changing the CI pin.
 
 Rationale: The Owner requested use of the updated Skill Workflow. Preserve verifiable current CI provenance while making the non-adoption boundary explicit instead of representing older tools as the new SHA.
+
+## D-042 — Restore native MT5 tester-agent execution authority
+
+Status: CURRENT
+
+The current Optimizer execution authority is merged PR #18 at accepted main SHA 203f6ab3dc618e3edd247841aa25e1fa0951a19a: launch terminal64.exe through subprocess.Popen with the frozen /config INI and let MT5 manage its configured local tester agents. MAX must not impose an external active-process cap or estimated-memory START gate. Reintroducing either control requires a new explicit Owner decision. D-039 is superseded as current execution policy; the historical Windows commit-memory exhaustion remains unresolved and NOT_PROVEN.
+
+Rationale: PR #18 restored the Owner-authorized native MT5 launch and Owner-selected agent behavior. Removing the MAX-owned cap and memory-estimate gate does not prove the reported memory exhaustion is eliminated; source behavior and runtime evidence remain separate.

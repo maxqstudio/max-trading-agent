@@ -286,10 +286,13 @@
     "TOURNAMENT",
     "MONTE_CARLO",
     "FORWARD_VALIDATION",
+    "SCIENTIFICALLY_QUALIFIED",
     "FINAL_PERMITTED_FIT",
     "ONNX_EXPORT",
     "ONNX_PARITY",
-    "CHALLENGER",
+    "RUNTIME_MANIFEST_VALIDATION",
+    "CHALLENGER_REGISTRATION",
+    "CHALLENGER_READY",
     "EXPLICIT_OWNER_PROMOTION",
     "CHAMPION"
   ],
@@ -307,7 +310,12 @@
       "candidate_mutation_between_folds": false,
       "result": ["WFA_PASS", "WFA_FAIL"],
       "ranking_scope": "WFA_PASS peers only",
-      "adapted_model_lab_hard_floor": "Full-WFA/CV aggregate expectancy >= 0.00R."
+      "reference_proposal_only": {
+        "source": "ModelLab V3 reference",
+        "aggregate_expectancy_min_r": 0.0,
+        "max_owner_authorized": false,
+        "executable_hard_gate": false
+      }
     },
     "qualified_pool": {
       "maximum": 12,
@@ -330,7 +338,12 @@
       "purge_at_least_effective_label_horizon": true,
       "embargo_at_least_effective_label_horizon": true,
       "candidate_mutation_or_threshold_tuning": false,
-      "adapted_model_lab_hard_floor": "CPCV worst aggregate expectancy >= 0.00R.",
+      "reference_proposal_only": {
+        "source": "ModelLab V3 reference",
+        "worst_aggregate_expectancy_min_r": 0.0,
+        "max_owner_authorized": false,
+        "executable_hard_gate": false
+      },
       "temporal_or_hybrid_confirmation_seed_order": [42, 11, 77],
       "temporal_or_hybrid_seed_policy": "All three ordered confirmations are mandatory and must PASS; do not reduce for compute. Exact aggregation evidence is sealed."
     },
@@ -355,10 +368,20 @@
       "mandatory": true,
       "allowed_results": ["PASS", "FAIL", "INSUFFICIENT_SAMPLE"],
       "tuning_or_parameter_changes": false,
-      "challenger_runtime_eligibility": "PASS only"
+      "challenger_runtime_eligibility": "PASS is necessary to enter this candidate's post-Forward pipeline; it is not sufficient for CHALLENGER_READY or promotion."
     },
     "challenger": {
       "contains_forward_as_first_admission_section": true,
+      "readiness_requires_ordered_candidate_runtime_pipeline": [
+        "SCIENTIFICALLY_QUALIFIED",
+        "FINAL_PERMITTED_FIT",
+        "ONNX_EXPORT",
+        "ONNX_PARITY",
+        "RUNTIME_MANIFEST_VALIDATION",
+        "CHALLENGER_REGISTRATION",
+        "CHALLENGER_READY"
+      ],
+      "runtime_failure_scope": "CANDIDATE_ONLY; other eligible candidates continue independently.",
       "retained_authority": [
         "cycle and dataset lineage",
         "exact CandidateSpec and fingerprints",
@@ -367,7 +390,8 @@
         "ONNX artifact hash and parity evidence",
         "runtime manifest and registry identity"
       ],
-      "runtime_conversion_or_parity_failure": "RUNTIME_BLOCKED; repair runtime only, do not rerun Discovery."
+      "readiness_rule": "Forward PASS alone never creates Challenger readiness; verify exact ONNX hash, parity, runtime manifest, registry identity, Forward evidence and all upstream stage seals before committing CHALLENGER_READY.",
+      "runtime_failure": "Candidate-scoped RUNTIME_BLOCKED; runtime-only repair reuses all sealed science evidence and cannot rerun Discovery, WFA, CPCV, Tournament, Monte Carlo, or Forward. Unrecoverable failure becomes RUNTIME_BLOCKED_UNRECOVERABLE for that candidate only."
     },
     "champion": {
       "promotion": "Explicit Owner action only; no automatic promotion.",
@@ -390,13 +414,35 @@
   "kpi_authority": {
     "freeze_before_cycle_start": true,
     "cheap_screen_is_qualification": false,
-    "known_adapted_model_lab_thresholds": {
-      "full_wfa_aggregate_expectancy_min_r": 0.0,
-      "cpcv_worst_aggregate_expectancy_min_r": 0.0
+    "reference_proposals": {
+      "model_lab_v3": {
+        "source": "Frozen ModelLab V3 reference inspected for ONNX-00",
+        "authority_status": "SCIENTIFIC_REFERENCE_ONLY_NOT_MAX_OWNER_AUTHORITY",
+        "max_owner_authorized": false,
+        "executable_hard_gates": false,
+        "values": {
+          "full_wfa_aggregate_expectancy_min_r": 0.0,
+          "cpcv_worst_aggregate_expectancy_min_r": 0.0
+        }
+      }
     },
-    "additional_stage_metric_definitions_and_thresholds": "OPEN_AUTHORITY_GAP; must be explicitly frozen before ONNX-03 execution.",
-    "monte_carlo_thresholds": "No new thresholds are invented in ONNX-00; frozen KPI definition is required before execution.",
-    "tournament_and_forward_thresholds": "OPEN_AUTHORITY_GAP; must be explicitly frozen before execution.",
+    "executable_contract_status": "NOT_AUTHORIZED_NOT_FROZEN",
+    "authorized_executable_thresholds": {},
+    "required_metric_families": [
+      "expectancy_mean_r",
+      "profit_factor",
+      "recovery_factor",
+      "drawdown",
+      "sample_adequacy_and_trade_count",
+      "temporal_stability",
+      "out_of_sample_performance",
+      "monte_carlo_tail_risk"
+    ],
+    "complete_versioned_contract_required_before": "ONNX-03",
+    "contract_freeze": "Explicit Owner authorization and a complete versioned definition/aggregation/threshold contract are required before ONNX-03 execution; freeze it before cycle start and do not change it within a cycle.",
+    "additional_stage_metric_definitions_and_thresholds": "OPEN_AUTHORITY_GAP; no executable threshold is authorized until the complete versioned contract is Owner-approved before ONNX-03.",
+    "monte_carlo_thresholds": "NOT_AUTHORIZED; specify in the complete versioned Owner-approved KPI contract before ONNX-03.",
+    "tournament_and_forward_thresholds": "OPEN_AUTHORITY_GAP; no executable threshold is authorized until the complete versioned contract is Owner-approved before ONNX-03.",
     "model_lab_legacy_kpi_profiles": "NOT_IMPORTED_WITHOUT_EXPLICIT_ADOPTION"
   },
   "cycle_immutability": {
@@ -446,7 +492,7 @@
     "onnx_parity_numeric_tolerances": "Must be versioned and approved before ONNX-07; ONNX-00 does not invent them.",
     "runtime_manifest_schema": "Must be frozen before ONNX-07.",
     "final_fit_row_boundary": "Must be frozen before Forward is opened; Forward outcomes never enter fit.",
-    "scientific_metrics_beyond_known_expectancy_floors": "Must be frozen before ONNX-03."
+    "scientific_metrics_beyond_reference_proposals": "A complete versioned KPI contract must be explicitly Owner-authorized and frozen before ONNX-03; the ModelLab V3 expectancy values remain references only."
   },
   "state_machine": {
     "initial": "NO_CYCLE",
@@ -467,8 +513,8 @@
       "FORWARD_RUNNING",
       "FORWARD_INSUFFICIENT_SAMPLE",
       "FORWARD_NO_SURVIVOR",
-      "RUNTIME_BLOCKED",
-      "CHALLENGER_READY",
+      "CANDIDATE_RUNTIME_PIPELINE",
+      "RUNTIME_NO_SURVIVOR",
       "PROMOTION_PENDING_OWNER",
       "CHAMPION_ACTIVE",
       "PAUSED_AT_SAFE_BOUNDARY",
@@ -481,6 +527,7 @@
       "MONTE_CARLO_NO_SURVIVOR",
       "FORWARD_INSUFFICIENT_SAMPLE",
       "FORWARD_NO_SURVIVOR",
+      "RUNTIME_NO_SURVIVOR",
       "CHAMPION_ACTIVE"
     ],
     "transitions": [
@@ -500,21 +547,57 @@
       {"from": "MONTE_CARLO_RUNNING", "to": "FORWARD_RUNNING", "guard": "At least one Tournament survivor passes Monte Carlo under its exact frozen configuration and seed."},
       {"from": "FORWARD_RUNNING", "to": "FORWARD_INSUFFICIENT_SAMPLE", "guard": "No candidate passes Forward and at least one candidate is INSUFFICIENT_SAMPLE; this state is not eligible for Challenger admission."},
       {"from": "FORWARD_RUNNING", "to": "FORWARD_NO_SURVIVOR", "guard": "All Forward candidates have terminal results, none passes, and none is INSUFFICIENT_SAMPLE."},
-      {"from": "FORWARD_RUNNING", "to": "CHALLENGER_READY", "guard": "At least one candidate passes untouched Forward; only PASS candidates proceed, each with complete sealed lineage and evidence."},
-      {"from": "CHALLENGER_READY", "to": "RUNTIME_BLOCKED", "guard": "The same Forward-passing candidate fails final-fit packaging, ONNX conversion/parity, or runtime-manifest validation; science evidence remains sealed and no Discovery rerun is allowed."},
-      {"from": "CHALLENGER_READY", "to": "PROMOTION_PENDING_OWNER", "guard": "Forward evidence, final permitted fit, ONNX hash/parity, runtime manifest, registry identity, and all stage seals are verified and presented for explicit Owner decision."},
-      {"from": "PROMOTION_PENDING_OWNER", "to": "CHAMPION_ACTIVE", "guard": "Owner approves one exact candidate identity; promotion and prior Champion archive commit atomically."},
+      {"from": "FORWARD_RUNNING", "to": "CANDIDATE_RUNTIME_PIPELINE", "guard": "At least one candidate passes untouched Forward. Only each exact PASS candidate enters its independent post-Forward candidate pipeline; Forward PASS alone does not mean scientifically qualified, runtime-ready, Challenger-ready, or promotion-eligible."},
+      {"from": "CANDIDATE_RUNTIME_PIPELINE", "to": "PROMOTION_PENDING_OWNER", "guard": "At least one exact candidate reaches CHALLENGER_READY through every candidate-level fit/export/parity/manifest/registration gate. A blocked candidate does not invalidate or block another ready candidate; present only individually ready identities to the Owner."},
+      {"from": "CANDIDATE_RUNTIME_PIPELINE", "to": "RUNTIME_NO_SURVIVOR", "guard": "Every Forward-PASS candidate is terminally RUNTIME_BLOCKED_UNRECOVERABLE and none reached CHALLENGER_READY; preserve all candidate failures and do not relax any gate."},
+      {"from": "PROMOTION_PENDING_OWNER", "to": "CHAMPION_ACTIVE", "guard": "Owner explicitly selects one exact CHALLENGER_READY candidate identity; all stage seals, artifact hash/parity, manifest and registry identity are reverified, then promotion and prior Champion archive commit atomically."},
       {"from": "PROMOTION_PENDING_OWNER", "to": "NO_CYCLE", "guard": "Owner explicitly declines or closes promotion; no Champion mutation occurs."},
       {"from": "CHAMPION_ACTIVE", "to": "NO_CYCLE", "guard": "Promotion transaction and prior-Champion archival are verified; this cycle is closed."},
-      {"from": ["NO_QUALIFIED_CANDIDATE", "CPCV_NO_SURVIVOR", "TOURNAMENT_NO_SURVIVOR", "MONTE_CARLO_NO_SURVIVOR", "FORWARD_INSUFFICIENT_SAMPLE", "FORWARD_NO_SURVIVOR"], "to": "NO_CYCLE", "guard": "Terminal stage evidence and cycle closure are committed; a later cycle requires a new explicit Owner start."},
-      {"from": ["DISCOVERY_RUNNING", "CPCV_RUNNING", "TOURNAMENT_RUNNING", "MONTE_CARLO_RUNNING", "FORWARD_RUNNING"], "to": "PAUSED_AT_SAFE_BOUNDARY", "guard": "Cooperative pause reaches a safe boundary and atomically commits a valid checkpoint for the same cycle and stage."},
-      {"from": "PAUSED_AT_SAFE_BOUNDARY", "to_one_of": ["DISCOVERY_RUNNING", "CPCV_RUNNING", "TOURNAMENT_RUNNING", "MONTE_CARLO_RUNNING", "FORWARD_RUNNING"], "guard": "Owner resumes the same cycle only after the newest valid checkpoint is verified; target stage must equal the checkpointed stage and completed exposures are not repeated."},
-      {"from": ["DATA_PREFLIGHT", "DATA_READY", "CYCLE_FROZEN", "DISCOVERY_RUNNING", "NO_QUALIFIED_CANDIDATE", "QUALIFIED_POOL_FROZEN", "CPCV_RUNNING", "CPCV_NO_SURVIVOR", "TOURNAMENT_RUNNING", "TOURNAMENT_NO_SURVIVOR", "MONTE_CARLO_RUNNING", "MONTE_CARLO_NO_SURVIVOR", "FORWARD_RUNNING", "FORWARD_INSUFFICIENT_SAMPLE", "FORWARD_NO_SURVIVOR", "RUNTIME_BLOCKED", "CHALLENGER_READY", "PROMOTION_PENDING_OWNER", "CHAMPION_ACTIVE", "PAUSED_AT_SAFE_BOUNDARY"], "to": "RECOVERY_REQUIRED", "guard": "Authority, checkpoint, process ownership, or durable-write integrity is uncertain; fail closed and do not advance or retrain."},
+      {"from": ["NO_QUALIFIED_CANDIDATE", "CPCV_NO_SURVIVOR", "TOURNAMENT_NO_SURVIVOR", "MONTE_CARLO_NO_SURVIVOR", "FORWARD_INSUFFICIENT_SAMPLE", "FORWARD_NO_SURVIVOR", "RUNTIME_NO_SURVIVOR"], "to": "NO_CYCLE", "guard": "Terminal stage evidence and cycle closure are committed; a later cycle requires a new explicit Owner start."},
+      {"from": ["DISCOVERY_RUNNING", "CPCV_RUNNING", "TOURNAMENT_RUNNING", "MONTE_CARLO_RUNNING", "FORWARD_RUNNING", "CANDIDATE_RUNTIME_PIPELINE"], "to": "PAUSED_AT_SAFE_BOUNDARY", "guard": "Cooperative pause reaches a safe boundary and atomically commits a valid checkpoint for the same cycle/stage and all active candidate runtime cursors."},
+      {"from": "PAUSED_AT_SAFE_BOUNDARY", "to_one_of": ["DISCOVERY_RUNNING", "CPCV_RUNNING", "TOURNAMENT_RUNNING", "MONTE_CARLO_RUNNING", "FORWARD_RUNNING", "CANDIDATE_RUNTIME_PIPELINE"], "guard": "Owner resumes the same cycle only after the newest valid checkpoint is verified; target stage and each candidate cursor match committed state and completed exposures are not repeated."},
+      {"from": ["DATA_PREFLIGHT", "DATA_READY", "CYCLE_FROZEN", "DISCOVERY_RUNNING", "NO_QUALIFIED_CANDIDATE", "QUALIFIED_POOL_FROZEN", "CPCV_RUNNING", "CPCV_NO_SURVIVOR", "TOURNAMENT_RUNNING", "TOURNAMENT_NO_SURVIVOR", "MONTE_CARLO_RUNNING", "MONTE_CARLO_NO_SURVIVOR", "FORWARD_RUNNING", "FORWARD_INSUFFICIENT_SAMPLE", "FORWARD_NO_SURVIVOR", "CANDIDATE_RUNTIME_PIPELINE", "RUNTIME_NO_SURVIVOR", "PROMOTION_PENDING_OWNER", "CHAMPION_ACTIVE", "PAUSED_AT_SAFE_BOUNDARY"], "to": "RECOVERY_REQUIRED", "guard": "Cycle authority, checkpoint, process ownership, candidate cursor, or durable-write integrity is uncertain; fail closed and do not advance or retrain."},
       {"from": "RECOVERY_REQUIRED", "to": "PAUSED_AT_SAFE_BOUNDARY", "guard": "A valid committed checkpoint and same-cycle lineage are verified; resume remains an explicit Owner action."},
-      {"from": "RECOVERY_REQUIRED", "to": "NO_CYCLE", "guard": "No scientific work is silently restarted; Owner explicitly abandons the unresolved cycle after preserving its failure evidence."},
-      {"from": "RUNTIME_BLOCKED", "to": "CHALLENGER_READY", "guard": "Runtime-only conversion/parity defect is repaired for the same exact candidate and lineage; previously sealed science stages are reused without Discovery rerun."}
+      {"from": "RECOVERY_REQUIRED", "to": "NO_CYCLE", "guard": "No scientific work is silently restarted; Owner explicitly abandons the unresolved cycle after preserving its failure evidence."}
     ],
-    "transition_law": "A state advances only after its hard gate and committed evidence pass. Failed upstream authority is terminal for the affected candidate/cycle; ranking cannot rescue it. A new cycle is never automatic. Recovery resumes only from a valid committed checkpoint."
+    "candidate_runtime_pipeline": {
+      "scope": "PER_CANDIDATE_ID",
+      "initial": "AWAITING_FORWARD_PASS",
+      "states": [
+        "AWAITING_FORWARD_PASS",
+        "SCIENTIFICALLY_QUALIFIED",
+        "FINAL_PERMITTED_FIT",
+        "ONNX_EXPORT",
+        "ONNX_PARITY",
+        "RUNTIME_MANIFEST_VALIDATION",
+        "CHALLENGER_REGISTRATION",
+        "CHALLENGER_READY",
+        "RUNTIME_BLOCKED",
+        "RUNTIME_BLOCKED_UNRECOVERABLE"
+      ],
+      "final_permitted_fit": {
+        "boundary": "The exact permitted fit boundary and rows are frozen before Forward is opened.",
+        "forbidden_training_inputs": ["Forward outcomes", "Forward targets", "Forward-derived preprocessing state", "Forward-driven candidate or threshold changes"]
+      },
+      "transitions": [
+        {"from": "AWAITING_FORWARD_PASS", "to": "SCIENTIFICALLY_QUALIFIED", "guard": "This exact candidate passes WFA, CPCV, independent Tournament, mandatory Monte Carlo, and untouched Forward; every upstream evidence set and stage seal verifies. Forward PASS is necessary, not sufficient for runtime or Challenger readiness."},
+        {"from": "SCIENTIFICALLY_QUALIFIED", "to": "FINAL_PERMITTED_FIT", "guard": "Run only the exact fit permitted by the pre-frozen row boundary; never train, preprocess, tune, or select using Forward outcomes."},
+        {"from": "FINAL_PERMITTED_FIT", "to": "ONNX_EXPORT", "guard": "Permitted fit completes and its candidate-bound fit evidence is committed and sealed."},
+        {"from": "ONNX_EXPORT", "to": "ONNX_PARITY", "guard": "Export completes; exact ONNX bytes, canonical hash, source fit identity, and export evidence are committed."},
+        {"from": "ONNX_PARITY", "to": "RUNTIME_MANIFEST_VALIDATION", "guard": "Parity passes under the pre-frozen approved tolerance; artifact hash and parity evidence are sealed."},
+        {"from": "RUNTIME_MANIFEST_VALIDATION", "to": "CHALLENGER_REGISTRATION", "guard": "Versioned runtime manifest validates against exact model hash, input/output contract, candidate identity, dataset lineage, and all upstream stage seals."},
+        {"from": "CHALLENGER_REGISTRATION", "to": "CHALLENGER_READY", "guard": "Durable registry entry binds the exact candidate, verified ONNX hash/parity, runtime manifest, Forward PASS and every upstream seal; readiness is committed only after readback verification."},
+        {"from": "FINAL_PERMITTED_FIT", "to": "RUNTIME_BLOCKED", "guard": "Fit/package failure is recorded against this exact candidate and last valid runtime checkpoint; no other candidate or sealed science evidence is invalidated."},
+        {"from": "ONNX_EXPORT", "to": "RUNTIME_BLOCKED", "guard": "Export failure is recorded against this exact candidate and last valid runtime checkpoint; no other candidate or sealed science evidence is invalidated."},
+        {"from": "ONNX_PARITY", "to": "RUNTIME_BLOCKED", "guard": "Parity failure is recorded against this exact candidate and last valid runtime checkpoint; no other candidate or sealed science evidence is invalidated."},
+        {"from": "RUNTIME_MANIFEST_VALIDATION", "to": "RUNTIME_BLOCKED", "guard": "Manifest validation failure is recorded against this exact candidate and last valid runtime checkpoint; no other candidate or sealed science evidence is invalidated."},
+        {"from": "CHALLENGER_REGISTRATION", "to": "RUNTIME_BLOCKED", "guard": "Registration or readback failure is recorded against this exact candidate and last valid runtime checkpoint; no other candidate or sealed science evidence is invalidated."},
+        {"from": "RUNTIME_BLOCKED", "to_one_of": ["FINAL_PERMITTED_FIT", "ONNX_EXPORT", "ONNX_PARITY", "RUNTIME_MANIFEST_VALIDATION", "CHALLENGER_REGISTRATION"], "guard": "After bounded runtime-only repair, resume the same candidate at its last valid runtime checkpoint, revalidate downstream artifacts, and reuse all sealed science evidence without rerunning Discovery, WFA, CPCV, Tournament, Monte Carlo, or Forward."},
+        {"from": "RUNTIME_BLOCKED", "to": "RUNTIME_BLOCKED_UNRECOVERABLE", "guard": "If authority or artifacts cannot be safely repaired, preserve failure evidence and permanently exclude only this candidate for the cycle; fail closed without blocking other candidates."}
+      ],
+      "terminal_states": ["CHALLENGER_READY", "RUNTIME_BLOCKED_UNRECOVERABLE"]
+    },
+    "transition_law": "Cycle transitions advance only on committed stage evidence. Post-Forward states are per-candidate and require the ordered fit/export/parity/manifest/registration chain. Candidate runtime failure cannot invalidate another candidate. Recovery resumes only from a valid committed checkpoint; a new cycle is never automatic."
   },
   "ui_and_api_ownership": {
     "top_level_navigation": ["Strategy", "ONNX", "Artifacts", "Settings"],

@@ -205,6 +205,20 @@
       "to": "backend/max_backend/optimizer_core.py::optimizer_parameter_bounds_for_keys"
     },
     {
+      "action": "CHALLENGER_ARTIFACT_ROOT.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle",
+      "resolver": "python_ast",
+      "to": ".tmp-skill-workflow-964481ed/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
+      "action": "LEGACY_CHALLENGER_ARTIFACT_ROOT.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle",
+      "resolver": "python_ast",
+      "to": ".tmp-skill-workflow-964481ed/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
       "action": "_json",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle",
@@ -772,6 +786,13 @@
       "to": "backend/max_backend/ea.py::sha256_file"
     },
     {
+      "action": "terminal.parent.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/mt5.py::detect_mt5",
+      "resolver": "python_ast",
+      "to": ".tmp-skill-workflow-964481ed/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
       "action": "_auto_terminal_candidates",
       "evidence": "STATIC",
       "from": "backend/max_backend/mt5.py::detect_mt5",
@@ -924,6 +945,13 @@
       "from": "backend/max_backend/optimizer_candidates.py::_load_job",
       "resolver": "python_ast",
       "to": "backend/max_backend/optimizer_store.py::attach_rounds"
+    },
+    {
+      "action": "raw.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_candidates.py::_resolve_project_path",
+      "resolver": "python_ast",
+      "to": ".tmp-skill-workflow-964481ed/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "consumed_source_identities",
@@ -2039,6 +2067,13 @@
       "to": "backend/max_backend/optimizer_jobs.py::_terminate_verified_worker"
     },
     {
+      "action": "terminal.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_runtime.py::_matching_terminal_pids",
+      "resolver": "python_ast",
+      "to": ".tmp-skill-workflow-964481ed/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
       "action": "optimization_report_identity",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_runtime.py::commit_round_evidence",
@@ -2081,6 +2116,13 @@
       "to": "backend/max_backend/optimizer_runtime.py::round_evidence_dir"
     },
     {
+      "action": "path.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_runtime.py::compatible_reports",
+      "resolver": "python_ast",
+      "to": ".tmp-skill-workflow-964481ed/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
       "action": "report_matches_request",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_runtime.py::compatible_reports",
@@ -2093,6 +2135,13 @@
       "from": "backend/max_backend/optimizer_runtime.py::compatible_reports",
       "resolver": "python_ast",
       "to": "backend/max_backend/optimizer_runtime.py::_report_roots"
+    },
+    {
+      "action": "EA_BASELINE.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_runtime.py::compile_ea",
+      "resolver": "python_ast",
+      "to": ".tmp-skill-workflow-964481ed/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "_read_text_flexible",
@@ -2151,6 +2200,13 @@
       "to": "backend/max_backend/optimizer_runtime.py::report_fingerprint"
     },
     {
+      "action": "terminal.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_runtime.py::launch_mt5",
+      "resolver": "python_ast",
+      "to": ".tmp-skill-workflow-964481ed/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
       "action": "_matching_terminal_pids",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_runtime.py::launch_mt5",
@@ -2191,6 +2247,20 @@
       "from": "backend/max_backend/optimizer_runtime.py::prepare_round",
       "resolver": "python_ast",
       "to": "backend/max_backend/optimizer_runtime.py::write_json"
+    },
+    {
+      "action": "path.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_runtime.py::report_fingerprint",
+      "resolver": "python_ast",
+      "to": ".tmp-skill-workflow-964481ed/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
+      "action": "published_path.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_runtime.py::report_fingerprint_for_publication",
+      "resolver": "python_ast",
+      "to": ".tmp-skill-workflow-964481ed/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "job_evidence_dir",
@@ -3285,6 +3355,20 @@
       "to": "backend/max_backend/optimizer_worker_identity.py::get_process_identity"
     },
     {
+      "action": "path.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/path_safety.py::assert_owned_path",
+      "resolver": "python_ast",
+      "to": ".tmp-skill-workflow-964481ed/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
+      "action": "raw_match.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/path_safety.py::assert_owned_path",
+      "resolver": "python_ast",
+      "to": ".tmp-skill-workflow-964481ed/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
       "action": "_is_reparse",
       "evidence": "STATIC",
       "from": "backend/max_backend/path_safety.py::assert_owned_path",
@@ -3643,6 +3727,15 @@
   "generated": true,
   "generated_by": "generate_sequence_actual.py",
   "nodes": [
+    {
+      "id": ".tmp-skill-workflow-964481ed/scripts/validate_sequence_contract.py::resolve",
+      "kind": "function",
+      "label": ".tmp-skill-workflow-964481ed/scripts/validate_sequence_contract.py::resolve",
+      "language": "Python",
+      "line_end": 28,
+      "line_start": 26,
+      "locator": ".tmp-skill-workflow-964481ed/scripts/validate_sequence_contract.py::resolve"
+    },
     {
       "id": "HTTP /api/optimizer/contract",
       "kind": "external",
@@ -6042,7 +6135,7 @@
       "locator": "frontend/src/OptimizerPage.tsx::<module>"
     }
   ],
-  "observed_head": "862c8c7067c20e41c1d26f3960f93f0aa2273bdd",
+  "observed_head": "da3894aa3787e03c445132d140bc2dd9cf2604ed",
   "schema_version": 1,
-  "source_digest": "5480ce47bb11ea70e78d812b3aa6db03f6b17d71b5c185289e4786d3f05ffb17"
+  "source_digest": "5f95d01d5d0a3bc99ad45729cc24e53be926ba50e0d3b0815e3f0d5b8643fa19"
 }
