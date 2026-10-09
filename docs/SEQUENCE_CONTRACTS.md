@@ -16,14 +16,14 @@ Status: CURRENT
 
 | Flow | Mode | Critical | Sequence session | Status |
 |---|---|---|---|---|
-| FLOW-ARTIFACT-CONTROL | DURING | YES | docs/sequence/sessions/FLOW-ARTIFACT-CONTROL.json | PASS_LOCAL: 8 DURING/CURRENT sessions and generated actual graphs validated at source digest c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048. |
-| FLOW-CHALLENGER-CONSUMPTION | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-CONSUMPTION.json | PASS_LOCAL: 8 DURING/CURRENT sessions and generated actual graphs validated at source digest c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048. |
-| FLOW-CHALLENGER-DETAIL | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-DETAIL.json | PASS_LOCAL: 8 DURING/CURRENT sessions and generated actual graphs validated at source digest c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048. |
-| FLOW-CHALLENGER-TO-CHAMPION | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-TO-CHAMPION.json | PASS_LOCAL: 8 DURING/CURRENT sessions and generated actual graphs validated at source digest c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048. |
-| FLOW-OPTIMIZER-DURABILITY-PERFORMANCE | DURING | YES | docs/sequence/sessions/FLOW-OPTIMIZER-DURABILITY-PERFORMANCE.json | PASS_LOCAL: 8 DURING/CURRENT sessions and generated actual graphs validated at source digest c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048. |
-| FLOW-OPTIMIZER-TO-CHALLENGER | DURING | YES | docs/sequence/sessions/FLOW-OPTIMIZER-TO-CHALLENGER.json | PASS_LOCAL: 8 DURING/CURRENT sessions and generated actual graphs validated at source digest c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048. |
-| FLOW-SCIENTIST-KNOWLEDGE | DURING | YES | docs/sequence/sessions/FLOW-SCIENTIST-KNOWLEDGE.json | PASS_LOCAL: 8 DURING/CURRENT sessions and generated actual graphs validated at source digest c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048. |
-| FLOW-STRATEGY-RESET-RECOVERY | DURING | YES | docs/sequence/sessions/FLOW-STRATEGY-RESET-RECOVERY.json | PASS_LOCAL: 8 DURING/CURRENT sessions and generated actual graphs validated at source digest c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048. |
+| FLOW-ARTIFACT-CONTROL | DURING | YES | docs/sequence/sessions/FLOW-ARTIFACT-CONTROL.json | PASS: all 8 existing DURING/CURRENT source-grounded sessions validated; ONNX-00 is planning-only and introduces no runtime sequence. |
+| FLOW-CHALLENGER-CONSUMPTION | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-CONSUMPTION.json | PASS: all 8 existing DURING/CURRENT source-grounded sessions validated; ONNX-00 is planning-only and introduces no runtime sequence. |
+| FLOW-CHALLENGER-DETAIL | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-DETAIL.json | PASS: all 8 existing DURING/CURRENT source-grounded sessions validated; ONNX-00 is planning-only and introduces no runtime sequence. |
+| FLOW-CHALLENGER-TO-CHAMPION | DURING | YES | docs/sequence/sessions/FLOW-CHALLENGER-TO-CHAMPION.json | PASS: all 8 existing DURING/CURRENT source-grounded sessions validated; ONNX-00 is planning-only and introduces no runtime sequence. |
+| FLOW-OPTIMIZER-DURABILITY-PERFORMANCE | DURING | YES | docs/sequence/sessions/FLOW-OPTIMIZER-DURABILITY-PERFORMANCE.json | PASS: all 8 existing DURING/CURRENT source-grounded sessions validated; ONNX-00 is planning-only and introduces no runtime sequence. |
+| FLOW-OPTIMIZER-TO-CHALLENGER | DURING | YES | docs/sequence/sessions/FLOW-OPTIMIZER-TO-CHALLENGER.json | PASS: all 8 existing DURING/CURRENT source-grounded sessions validated; ONNX-00 is planning-only and introduces no runtime sequence. |
+| FLOW-SCIENTIST-KNOWLEDGE | DURING | YES | docs/sequence/sessions/FLOW-SCIENTIST-KNOWLEDGE.json | PASS: all 8 existing DURING/CURRENT source-grounded sessions validated; ONNX-00 is planning-only and introduces no runtime sequence. |
+| FLOW-STRATEGY-RESET-RECOVERY | DURING | YES | docs/sequence/sessions/FLOW-STRATEGY-RESET-RECOVERY.json | PASS: all 8 existing DURING/CURRENT source-grounded sessions validated; ONNX-00 is planning-only and introduces no runtime sequence. |
 
 ## Mismatch handling
 

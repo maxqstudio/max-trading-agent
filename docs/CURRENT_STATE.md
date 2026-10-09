@@ -3,26 +3,26 @@
 # CURRENT STATE
 
 Last updated: generated from current specs
-Authority verified at SHA: ac2787c0fe46bfa83267b0ceebb9d8f3f1d44c5c
+Authority verified at SHA: 203f6ab3dc618e3edd247841aa25e1fa0951a19a
 Governance profile: strict
 
 ## Current phase
-Phase: STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING
+Phase: ONNX-00
 Status: IN_PROGRESS
-Roadmap phase: STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING
+Roadmap phase: ONNX-00
 ROADMAP_SYNC: PASS
 
 ## Source
 Repository: maxqstudio/max-trading-agent
-Branch: codex/restore-mt5-native-agent-execution
+Branch: codex/onnx-00-scientific-authority
 Authoritative SHA: external final acceptance evidence
-Last accepted SHA: ac2787c0fe46bfa83267b0ceebb9d8f3f1d44c5c
+Last accepted SHA: 203f6ab3dc618e3edd247841aa25e1fa0951a19a
 Current candidate SHA: external final acceptance evidence
 Current source digest: 7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
-Runtime status: CURRENT_CANDIDATE_MT5_NOT_RUN; OWNER_OPTIMIZER_NOT_PROVEN; HISTORICAL_STAGE_C_D_ONLY; RESEARCH_PAUSED
+Runtime status: ONNX_RUNTIME_NOT_IMPLEMENTED; REAL_RESEARCH_NOT_STARTED; OWNER_PC_AND_MT5_NOT_RUN; STRATEGY_RUNTIME_NOT_PROVEN
 
 ## Documentation governance
 Documentation root: docs/
@@ -35,44 +35,36 @@ PROJECT_DOCS_SYNC: PASS
 ## Sequence governance
 Sequence policy: REQUIRED
 Current sequence mode: DURING
-Current sequence session: FLOW-OPTIMIZER-DURABILITY-PERFORMANCE
-SEQUENCE_SYNC: PASS_LOCAL: 8 DURING/CURRENT sessions and generated actual graphs validated at source digest c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048.
+Current sequence session: ONNX-00-PLANNING_ONLY_NO_RUNTIME_SEQUENCE
+SEQUENCE_SYNC: PASS: all 8 existing DURING/CURRENT source-grounded sessions validated; ONNX-00 is planning-only and introduces no runtime sequence.
 
 ## Proven
-- Accepted starting authority: maxqstudio/max-trading-agent main ac2787c0fe46bfa83267b0ceebb9d8f3f1d44c5c; current branch candidate base verified from origin/main.
-- Current Skill_Workflow/main was fetched and verified at 964481ed1609f87904ba9e08890bffc0a10c3fd4; its exact governance-tool delta was inspected and the applicable tools are vendored byte-identically, with no local validator patch.
-- The Git-aware source inventory excludes Git-ignored Owner Optimizer XML artifacts without modifying them; all 8 DURING/CURRENT sessions use the current source digest c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048; the Optimizer actual graph now includes native launch, duplicate-vector parsing, and transactional candidate deduplication.
-- Optimizer draft, launch/recovery identity, atomic evidence, read-model, frontend request lifecycle, and visible action feedback are under the authorized source-hardening scope.
-- Source tests and 750-candidate API profile used synthetic SQLite/evidence only; actual qualified-candidate endpoint median was 23.651 ms, p95 68.983 ms, with a 61,462-byte page; no real MT5 or market data was used.
-- A separate Windows process-counter run measured CPU 1.0781 s, peak working set 64,405,504 bytes, read I/O 6,060,864 bytes and write I/O 0 over 108 requests; qualified route was mocked in that resource run.
-- Historical PR15 bounded Stage C/D tests and Optimizer UI control-flow evidence remain accepted as historical evidence; they did not represent the later Owner-reported long-range commit-memory failure and do not prove V2 behavior.
-- V2 targeted optimizer/resource regression passes 171/171; full backend passes 474 tests with zero skips/failures; frontend passes 53 tests, with lint, build, npm tree and pip check passing. Canonical Scientist knowledge was rebuilt after the first full-suite run exposed stale source hashes.
-- The baseline PR #17 head b167d2a6df432ed6c146f1fabe100521cc7feefc had one push attempt fail the actual venv worker identity test with an 8-second PowerShell/CIM TimeoutExpired; its passing reruns did not resolve the defect. The repair source candidate removed that production dependency, passed 32 focused identity/recovery/stop tests, passed 3 repeated venv runs (15/15 actual worker lifecycles), passed full backend (483, zero skips/failures), and passed both push and PR-head Windows CI across all three jobs. Exact final SHA/run identities are external per D-012. PR #17 remains open and unmerged; PR #16 is closed and superseded.
-- Worker identity is now proven on the repair source candidate: deterministic authenticated named-pipe handshake; exact job/token/peer PID/executable/process-creation binding; verified-only termination; 483 full backend tests passed; repeated real Windows venv tests passed 15/15; both push and PR-head CI passed. The current task adds only final governance status after this evidence; no Owner runtime or MT5 process was used.
-- Read-only DB inspection found job 20261003_012101_e65a942d status FAILED, active=0, round phase REPORT_READY, no candidate rows; offline replay parsed 7,115 report rows and 3,239 unique eligible candidates without writing to SQLite or launching MT5.
-- Local source candidate deduplicates only semantically exact candidate identities before transactional SQLite projection persistence and collapses repeated sidecar vectors only when every semantic metric agrees; current local backend/frontend gates passed before governance regeneration.
+- Starting GitHub main is 203f6ab3dc618e3edd247841aa25e1fa0951a19a; Windows CI run 37964999480 completed with conclusion success on that exact SHA.
+- Latest maxqstudio/max_research_agent main was fetched at 883ebeb1ca2e70f6255e0889358ba7c822ac52f5; the 19 authorities listed in the Owner prompt were inspected at that commit.
+- Latest Skill_Workflow/main guidance was fetched at 3b3289681cf2cec8d3d132895e0848be64bb54b1 and applied as normative guidance. MAX executable Windows CI and vendored validator provenance remain pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4; no byte-identity with 3b328968 is claimed.
+- The Owner-frozen ONNX V1 universe is six standalone plus eight exact hybrid families, total 14; excluded families are explicitly recorded in .workflow/onnx_v1_authority.json.
+- ONNX-00 is planning/governance only. No Owner PC, MT5, real data, model fitting, or ONNX runtime execution has occurred.
 
 ## Not proven
-- Owner runtime acceptance remains NOT_PROVEN; this source candidate has not launched MT5 or performed a real Optimizer run.
-- PR #18 candidate updates have not passed hosted CI; no merge or phase closure is claimed. Exact final SHA and CI run identities remain external evidence per D-012.
-- Full production-scale/long-range Owner Strategy Optimizer execution, Challenger selection, Champion promotion, MT5 backtest, and end-to-end runtime acceptance.
-- Fresh R00-R11 Research execution, model training, ONNX, Research Challenger creation, or Champion mutation.
+- ONNX runtime, scientific data readiness, model training, GPU execution, ONNX conversion/parity, Research Challenger, or Champion behavior.
+- Owner-PC Strategy Optimizer and real MT5 runtime acceptance; this planning phase does not claim that unresolved source/runtime behavior is solved.
+- The complete numeric KPI contract and ONNX runtime/parity contracts required before later implementation phases.
 
 ## Known blockers
-- The latest Owner optimizer job 20261003_012101_e65a942d is inactive and FAILED during PARSING_RESULTS after MT5 returned exit code 0; its frozen report/sidecar contain repeated parameter vectors and no candidate rows were committed. The source repair must remain offline/synthetic until Owner starts a new run.
-- Owner-reported full-range 17D Fast Genetic attempt crashed under Windows commit-memory exhaustion; exact final Owner Optimizer/runtime acceptance remains NOT_PROVEN.
-- The native-launch/parser/dedup source candidate is not yet committed or hosted-CI validated; preserve PR #18 and stop before merge.
+- ONNX-00 planning PR and exact PR-head Windows CI are pending; phase remains IN_PROGRESS and must stop before merge for Control Room audit.
+- Complete numeric KPI definitions for WFA, Tournament, Monte Carlo, and Forward remain an explicit future execution prerequisite; ONNX-00 does not invent them.
+- ONNX parity tolerances, runtime-manifest schema, final-fit row boundary, verified MAX CP32 identity fields, and temporal compute-device policy require separate phase-specific authority before their implementation gates.
 
 ## Known defects
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- After local gates pass, update PR #18 with this source repair, wait for exact push and PR-head Windows CI, then stop for Control Room audit. Do not merge.
-- Owner-PC runtime, real MT5 diagnostics, and all R00-R11 Research remain out of scope for this repair; runtime stays NOT_PROVEN and Research remains PAUSED.
+- Finish ONNX-00 machine-readable and human-readable authority, regenerate canonical Project Truth, and run applicable local governance validators.
+- Commit and push the planning-only branch, wait for required Windows GitHub Actions on its exact head, and open a PR for Control Room audit.
+- STOP with the PR open and unmerged. Do not begin ONNX-01 or any runtime/model execution without separate authority.
 
 ## Explicitly blocked
-- Full/complete or unattended real MT5 Optimizer execution; only explicitly bounded diagnostics of at most 20 minutes are in scope, and a run must not be allowed to complete normally.
-- Mutating Windows pagefile/OS settings or changing the frozen 17D scientific search space to reduce memory use.
-- Fresh R00-R11 Research execution, real model training, Research dataset creation, ONNX, Research Challenger creation, and Champion mutation; Research remains paused and roadmap-gated.
-- Strategy Challenger selection/promotion and live MT5 backtest during this source implementation phase.
-- Unrelated roadmap or product-scope expansion.
+- Any ONNX runtime, real research execution, model training, ONNX export, ONNX Challenger creation, or scientific outcome production before separate Control Room authorization.
+- Any Owner PC access, MT5 launch, broker/data-root access, real Optimizer run, or real market-research execution during ONNX-00.
+- Any promotion or mutation of a Strategy or ONNX Champion from this planning-only phase.
+- Any expansion beyond the Owner-frozen V1 model allowlist or silent change to scientific gates, KPI thresholds, date windows, or CandidateSpec.

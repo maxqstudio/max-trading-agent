@@ -27,6 +27,8 @@ Canonical authority is declared in .workflow/authority.json.
 | documentation | .workflow semantic specs + Project Truth Compiler at Skill Workflow 964481ed1609f87904ba9e08890bffc0a10c3fd4 | Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden. | YES |
 | sequence | DURING-mode generated actual sequence graphs plus source/test/runtime semantic review | Existing implementation is reconstructed from current source; retrospective BEFORE plans are forbidden. | YES |
 | governance_tools | .workflow/tools vendored byte-identically from Skill Workflow 964481ed1609f87904ba9e08890bffc0a10c3fd4 | Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed. | NO |
+| onnx_scientific_planning | .workflow/onnx_v1_authority.json plus the explicit Owner ONNX-00 decisions | This is the planning-only source authority for the ONNX V1 family universe, candidate/parameter contracts, stage gates, data/checkpoint boundaries and roadmap. It grants no runtime, training, export, MT5 or promotion permission. | YES |
+| current_governance_guidance | Latest Skill_Workflow/main normative guidance at 3b3289681cf2cec8d3d132895e0848be64bb54b1 | Latest guidance is consulted for this planning phase. MAX's executable CI validator provenance remains explicitly pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4 until a separately reviewed toolchain migration. | NO |
 
 ## Invariants
 
@@ -37,7 +39,7 @@ Canonical authority is declared in .workflow/authority.json.
 - Historical retained Challenger evidence remains exact legacy 16D while current V6 is exact 17D including InpRiskPct; mixed/missing/extra universes fail closed.
 - Durable optimizer consumption survives Challenger promotion, retirement and later permitted physical deletion while registry or COMMITTED batch authority remains.
 - Former Champion tenure does not recreate active Challenger eligibility.
-- Fresh Research R00-R11 is inactive planned work until the Owner declares a real MT5 sample READY and Control Room separately authorizes the phase.
+- The legacy Research subsystem and legacy R00-R11 roadmap are RETIRED; ONNX is the only future model-research authority, and ONNX-00 is planning-only until Control Room separately authorizes implementation phases.
 - Strategy Artifact inventory GETs do not reconcile runtime state; destructive controls require fresh preflight and explicit confirmation.
 - Corrupt operational state fails closed and normal application actions remain disabled until explicit recovery is completed.
 - An uncertain prior MT5 launch is reconciled, never blindly relaunched; MAX stops a terminal only when Optimizer ownership is proven.

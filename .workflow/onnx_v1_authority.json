@@ -1,0 +1,572 @@
+{
+  "schema_version": 1,
+  "authority_id": "ONNX_V1_SCIENTIFIC_AUTHORITY",
+  "status": "PLANNING_ONLY_PROPOSED_FOR_CONTROL_ROOM_AUDIT",
+  "provenance": {
+    "owner_prompt": "ONNX-00 — Scientific Authority / Model Universe / Roadmap",
+    "max_main_parent_sha": "203f6ab3dc618e3edd247841aa25e1fa0951a19a",
+    "max_main_ci_run_id": 37964999480,
+    "model_lab_repository": "maxqstudio/max_research_agent",
+    "model_lab_main_sha": "883ebeb1ca2e70f6255e0889358ba7c822ac52f5",
+    "latest_skill_workflow_main_sha_reviewed": "3b3289681cf2cec8d3d132895e0848be64bb54b1"
+  },
+  "execution_boundary": {
+    "planning_only": true,
+    "runtime_implemented": false,
+    "runtime_authorized": false,
+    "model_training_executed": false,
+    "onnx_generation_executed": false,
+    "real_research_executed": false,
+    "owner_pc_access": "PROHIBITED",
+    "mt5": "NOT_RUN",
+    "synthetic_training_in_onnx_00": "NOT_AUTHORIZED",
+    "real_strategy_authority": "NOT_PROVEN"
+  },
+  "legacy_research": {
+    "status": "RETIRED",
+    "replacement": "ONNX-00..ONNX-09 governed roadmap",
+    "parallel_research_authorities_allowed": false
+  },
+  "model_universe": {
+    "version": "ONNX_V1",
+    "active_standalone_models": [
+      "lightgbm",
+      "xgboost",
+      "gru",
+      "tcn",
+      "transformer",
+      "patchtst"
+    ],
+    "active_hybrid_models": [
+      "hybrid::gru::lightgbm",
+      "hybrid::gru::xgboost",
+      "hybrid::tcn::lightgbm",
+      "hybrid::tcn::xgboost",
+      "hybrid::transformer::lightgbm",
+      "hybrid::transformer::xgboost",
+      "hybrid::patchtst::lightgbm",
+      "hybrid::patchtst::xgboost"
+    ],
+    "active_family_count": 14,
+    "excluded_from_v1": [
+      "random_forest",
+      "lstm",
+      "itransformer",
+      "tft",
+      "transformer_moe",
+      "all_other_hybrid_compositions"
+    ],
+    "admission_policy": "Explicit frozen allowlist only; no registry-driven dynamic family expansion or legacy aliases."
+  },
+  "compute_backend_authority": {
+    "lightgbm": "OpenCL GPU for future real runtime",
+    "xgboost": "CUDA GPU for future real runtime",
+    "synthetic_ci": "CPU execution may verify deterministic source behavior only and is not GPU/runtime evidence",
+    "temporal_models": "Device policy must be explicitly frozen before ONNX-03; CPU-only behavior must not be silently assumed",
+    "onnx_00_runtime_status": "NOT_IMPLEMENTED"
+  },
+  "parameter_authority": {
+    "resolution_order": [
+      "LEGAL_ENVELOPE",
+      "ACTIVE_SEARCH_ENVELOPE",
+      "EXACT_IMMUTABLE_CANDIDATE_SPEC"
+    ],
+    "active_envelope_resolution": "LEGAL_ENVELOPE intersected with hardware, dataset, resource, and scientific capacity",
+    "legal_envelope_semantics": "Broad technically supported limits governed separately; the ranges below are active V1 search ranges and are not permanent legal ceilings.",
+    "concrete_scientist_proposal_outside_effective_bounds": "REJECT_WITHOUT_CLAMPING",
+    "deterministic_auto_canonicalization": "Allowed only before candidate identity freeze and must be recorded.",
+    "candidate_spec_mutability_after_freeze": "IMMUTABLE",
+    "legal_numeric_bounds_status": "Must be versioned before runtime admission; ONNX-00 does not turn active ranges into legal maxima."
+  },
+  "active_search_envelopes": {
+    "lightgbm": {
+      "n_estimators": {"type": "integer", "min": 150, "max": 1500},
+      "learning_rate": {"type": "number", "min": 0.005, "max": 0.12, "distribution": "log"},
+      "num_leaves": {"type": "integer", "min": 8, "max": 128},
+      "max_depth": {"type": "integer", "min": 3, "max": 12},
+      "min_child_samples": {"type": "integer", "min": 10, "max": 500},
+      "subsample": {"type": "number", "min": 0.6, "max": 1.0},
+      "colsample_bytree": {"type": "number", "min": 0.6, "max": 1.0},
+      "reg_alpha": {"type": "number", "min": 0.0, "max": 20.0},
+      "reg_lambda": {"type": "number", "min": 0.01, "max": 100.0, "distribution": "log"},
+      "training_memory_months": {"type": "dynamic", "frozen_at_cycle_start": true}
+    },
+    "xgboost": {
+      "n_estimators": {"type": "integer", "min": 150, "max": 1500},
+      "max_depth": {"type": "integer", "min": 2, "max": 10},
+      "learning_rate": {"type": "number", "min": 0.005, "max": 0.12, "distribution": "log"},
+      "min_child_weight": {"type": "number", "min": 0.5, "max": 100.0, "distribution": "log"},
+      "subsample": {"type": "number", "min": 0.6, "max": 1.0},
+      "colsample_bytree": {"type": "number", "min": 0.6, "max": 1.0},
+      "reg_alpha": {"type": "number", "min": 0.0, "max": 20.0},
+      "reg_lambda": {"type": "number", "min": 0.01, "max": 100.0, "distribution": "log"},
+      "training_memory_months": {"type": "dynamic", "frozen_at_cycle_start": true}
+    },
+    "gru": {
+      "sequence_length": {"type": "integer", "min": 24, "max": 192},
+      "hidden_size": {"type": "integer", "min": 32, "max": 256},
+      "num_layers": {"type": "integer", "min": 1, "max": 3},
+      "dropout": {"type": "number", "min": 0.0, "max": 0.35},
+      "learning_rate": {"type": "number", "min": 0.0001, "max": 0.003, "distribution": "log"},
+      "batch_size": {"type": "integer", "min": 32, "max": 512},
+      "max_epochs": {"type": "integer", "min": 20, "max": 120},
+      "weight_decay": {"type": "number", "min": 0.000001, "max": 0.02, "distribution": "log"},
+      "training_memory_months": {"type": "dynamic", "frozen_at_cycle_start": true}
+    },
+    "tcn": {
+      "sequence_length": {"type": "integer", "min": 32, "max": 256},
+      "tcn_channels": {"type": "integer", "min": 32, "max": 192},
+      "tcn_blocks": {"type": "integer", "min": 2, "max": 6},
+      "kernel_size": {"type": "integer", "min": 2, "max": 5},
+      "dropout": {"type": "number", "min": 0.0, "max": 0.35},
+      "learning_rate": {"type": "number", "min": 0.0001, "max": 0.003, "distribution": "log"},
+      "batch_size": {"type": "integer", "min": 32, "max": 512},
+      "max_epochs": {"type": "integer", "min": 20, "max": 120},
+      "weight_decay": {"type": "number", "min": 0.000001, "max": 0.02, "distribution": "log"},
+      "training_memory_months": {"type": "dynamic", "frozen_at_cycle_start": true}
+    },
+    "transformer": {
+      "sequence_length": {"type": "integer", "min": 32, "max": 256},
+      "d_model": {"type": "integer", "min": 32, "max": 256},
+      "num_layers": {"type": "integer", "min": 1, "max": 4},
+      "attention_heads": {"type": "integer", "min": 1, "max": 8},
+      "ffn_mult": {"type": "integer", "min": 2, "max": 4},
+      "dropout": {"type": "number", "min": 0.05, "max": 0.35},
+      "learning_rate": {"type": "number", "min": 0.00005, "max": 0.002, "distribution": "log"},
+      "batch_size": {"type": "integer", "min": 16, "max": 256},
+      "max_epochs": {"type": "integer", "min": 20, "max": 100},
+      "weight_decay": {"type": "number", "min": 0.000001, "max": 0.02, "distribution": "log"},
+      "training_memory_months": {"type": "dynamic", "frozen_at_cycle_start": true},
+      "constraints": ["d_model % attention_heads == 0"]
+    },
+    "patchtst": {
+      "sequence_length": {"type": "integer", "min": 64, "max": 256},
+      "d_model": {"type": "integer", "min": 32, "max": 192},
+      "num_layers": {"type": "integer", "min": 1, "max": 4},
+      "attention_heads": {"type": "integer", "min": 1, "max": 8},
+      "ffn_mult": {"type": "integer", "min": 2, "max": 4},
+      "patch_len": {"type": "integer", "min": 8, "max": 48},
+      "patch_stride": {"type": "integer", "min": 4, "max": 24},
+      "dropout": {"type": "number", "min": 0.05, "max": 0.35},
+      "learning_rate": {"type": "number", "min": 0.00005, "max": 0.002, "distribution": "log"},
+      "batch_size": {"type": "integer", "min": 16, "max": 256},
+      "max_epochs": {"type": "integer", "min": 20, "max": 100},
+      "weight_decay": {"type": "number", "min": 0.000001, "max": 0.02, "distribution": "log"},
+      "training_memory_months": {"type": "dynamic", "frozen_at_cycle_start": true},
+      "constraints": [
+        "patch_stride <= patch_len",
+        "patch_len <= sequence_length",
+        "d_model % attention_heads == 0"
+      ]
+    }
+  },
+  "hybrid_contract": {
+    "single_candidate": true,
+    "temporal_component_allowlist": ["gru", "tcn", "transformer", "patchtst"],
+    "policy_component_allowlist": ["lightgbm", "xgboost"],
+    "shared_parameter": "training_memory_months",
+    "separate_component_training_memory_parameters": false,
+    "parameter_projection": {
+      "temporal_prefix": "temporal_",
+      "policy_prefix": "policy_",
+      "shared_unprefixed": ["training_memory_months"],
+      "inherit_component_envelopes": true
+    },
+    "stacking_authority": "TEMPORAL_TO_TREE_PURGED_OOF_STACKING",
+    "in_sample_temporal_predictions_for_policy_training": "FORBIDDEN",
+    "oof_requirements": [
+      "chronological inner folds within the permitted training region",
+      "purge inner training targets by at least the effective label horizon",
+      "fit temporal component only on each inner-train fold",
+      "generate temporal meta-features only for that fold's inner-validation rows",
+      "preserve original chronological row identity",
+      "combine legal OOF temporal features with permitted CP32 policy features",
+      "train LightGBM or XGBoost policy only on the assembled OOF rows",
+      "refit final temporal component only after qualification, under the final-fit contract"
+    ]
+  },
+  "temporal_training_contract": {
+    "families": ["gru", "tcn", "transformer", "patchtst"],
+    "optimizer": "AdamW",
+    "validation": "PURGED_CHRONOLOGICAL_INTERNAL_VALIDATION",
+    "random_train_validation_split": "FORBIDDEN",
+    "early_stop_metric": "FROZEN_CONTRACT_NOT_SCIENTIST_CONTROLLED",
+    "best_checkpoint": "RESTORE_MINIMUM_ACCEPTED_VALIDATION_LOSS",
+    "nonfinite_behavior": "FAIL_CLOSED",
+    "chronology_purge_embargo_and_checkpoint_integrity": "GOVERNED_NOT_SCIENTIST_CONTROLLED",
+    "preserve_original_row_identity": true,
+    "patience": {"gru": 6, "tcn": 8, "transformer": 8, "patchtst": 8},
+    "max_epochs_semantics": "Upper training budget; early stopping determines actual completed epochs.",
+    "gru_single_layer_rule": "If num_layers == 1, effective recurrent dropout is 0."
+  },
+  "candidate_identity": {
+    "candidate_spec_fields": [
+      "schema_version",
+      "model_family_or_exact_hybrid_composition",
+      "exact_component_parameters",
+      "training_seed",
+      "training_memory_months",
+      "output_class_contract",
+      "versioned_training_method_contract",
+      "any separately Owner-approved threshold or policy fields"
+    ],
+    "candidate_spec_hash": "SHA-256 of canonical immutable CandidateSpec bytes.",
+    "experiment_fingerprint_fields": [
+      "cycle_id",
+      "dataset_snapshot_sha256",
+      "Strategy geometry identity and hash",
+      "feature contract identity and hash",
+      "label contract identity and hash",
+      "three frozen windows",
+      "WFA/CPCV/Tournament/Monte Carlo/KPI contract hashes",
+      "parameter authority version and resolved active envelopes",
+      "candidate_spec_hash"
+    ],
+    "candidate_id": "Stable hash of cycle identity plus candidate_spec_hash.",
+    "canonical_serialization": "Versioned deterministic UTF-8 JSON with sorted object keys, fixed separators, normalized numeric types, and no non-finite values.",
+    "duplicate_exposure": "Exact experiment fingerprints are deduplicated; failures remain append-only evidence.",
+    "threshold_boundary": "Thresholds are not included as searchable params unless explicitly Owner-authorized and frozen before CandidateSpec identity."
+  },
+  "dataset_contract": {
+    "source_discovery": "Auto-discover canonical Max_MTF_Training.csv; Owner may override the path.",
+    "snapshot": "Writer-safe immutable byte snapshot with SHA-256 before any Discovery exposure.",
+    "cycle_scope": "One Strategy authority, one feature/label contract, one symbol, and one timeframe per cycle.",
+    "required_validation": [
+      "approved schema and CP32 feature contract",
+      "source identity and lineage",
+      "duplicate identity",
+      "NaN/nonfinite feature values",
+      "OHLC, ATR, and quote sanity",
+      "chronological discontinuities"
+    ],
+    "observed_gap_rule": "Observed timestamp discontinuity is not proof of missing broker data; broker reconciliation is required before declaring a true missing bar.",
+    "repair_rule": "Only source-backed missing bars may be generated through authority-preserving MT5/EA flow, then the complete dataset audit and snapshot hash are repeated.",
+    "forbidden_fill_methods": ["mean_fill", "forward_fill", "back_fill", "linear_interpolation", "synthetic_OHLC", "synthetic_CP32"],
+    "duplicate_rule": {
+      "exact_identical_same_identity": "deterministic backup, remove duplicate, verify, record before/after SHA-256",
+      "conflicting_same_identity": "FAIL_CLOSED"
+    },
+    "identity_key_note": "Use the approved CP32 source identity. ModelLab reference key is contract/symbol/period/signal_time; ONNX-02 must verify the actual MAX schema rather than assume that key."
+  },
+  "windows_contract": {
+    "exactly_three_windows": ["DISCOVERY", "TOURNAMENT", "FORWARD"],
+    "ordering": [
+      "DiscoveryFrom <= DiscoveryTo",
+      "DiscoveryTo < TournamentFrom",
+      "TournamentFrom <= TournamentTo",
+      "TournamentTo < ForwardFrom",
+      "ForwardFrom <= ForwardTo"
+    ],
+    "freeze_at_cycle_start": [
+      "dataset_snapshot_sha256",
+      "all three exact ranges",
+      "Strategy geometry",
+      "feature and label contracts",
+      "scientific contract"
+    ],
+    "forward_auto_newest": "May be previewed before START but must resolve to exact frozen timestamps at START and may not grow during the cycle."
+  },
+  "label_contract": {
+    "classes_in_order": ["SELL", "SKIP", "BUY"],
+    "causal": true,
+    "geometry_source": "Exact Strategy geometry from the source dataset/current promoted Strategy authority.",
+    "leakage_horizon": "Effective future label horizon is the purge and embargo authority.",
+    "ambiguous_outcome_handling": "Explicitly versioned; unresolved ambiguity fails closed.",
+    "context_only_rows": "May provide causal sequence context but are not supervised truth unless label eligibility says so.",
+    "holdout_label_tuning": "FORBIDDEN"
+  },
+  "scientific_flow": [
+    "DATA_INTAKE",
+    "CAUSAL_LABELING",
+    "DISCOVERY_PROPOSALS",
+    "CHEAP_SCREEN",
+    "FULL_3_FOLD_WFA",
+    "QUALIFIED_POOL_MAX_12",
+    "CPCV",
+    "TOURNAMENT",
+    "MONTE_CARLO",
+    "FORWARD_VALIDATION",
+    "FINAL_PERMITTED_FIT",
+    "ONNX_EXPORT",
+    "ONNX_PARITY",
+    "CHALLENGER",
+    "EXPLICIT_OWNER_PROMOTION",
+    "CHAMPION"
+  ],
+  "stage_authority": {
+    "cheap_screen": {
+      "purpose": "Compute allocation and obvious-broken-candidate rejection only.",
+      "qualification_authority": false,
+      "pass_means_scientific_pass": false,
+      "full_wfa": "Rerun the original exact CandidateSpec; never qualify a reduced-cost substitute."
+    },
+    "full_wfa": {
+      "folds": 3,
+      "chronological": true,
+      "purge_at_least_effective_label_horizon": true,
+      "candidate_mutation_between_folds": false,
+      "result": ["WFA_PASS", "WFA_FAIL"],
+      "ranking_scope": "WFA_PASS peers only",
+      "adapted_model_lab_hard_floor": "Full-WFA/CV aggregate expectancy >= 0.00R."
+    },
+    "qualified_pool": {
+      "maximum": 12,
+      "if_12_or_more_pass": "Freeze best 12 under ranking declared before Discovery.",
+      "if_1_to_11_pass": "Freeze all actual WFA_PASS candidates.",
+      "if_0_pass": "NO_QUALIFIED_CANDIDATE terminal cycle; do not lower gates, extend budget, or add families.",
+      "cheap_screen_promotion_to_pool": false
+    },
+    "cpcv": {
+      "groups": 6,
+      "test_groups": 2,
+      "combination_count": 15,
+      "test_group_pairs_zero_based": [
+        [0, 1], [0, 2], [0, 3], [0, 4], [0, 5],
+        [1, 2], [1, 3], [1, 4], [1, 5],
+        [2, 3], [2, 4], [2, 5],
+        [3, 4], [3, 5],
+        [4, 5]
+      ],
+      "purge_at_least_effective_label_horizon": true,
+      "embargo_at_least_effective_label_horizon": true,
+      "candidate_mutation_or_threshold_tuning": false,
+      "adapted_model_lab_hard_floor": "CPCV worst aggregate expectancy >= 0.00R.",
+      "temporal_or_hybrid_confirmation_seed_order": [42, 11, 77],
+      "temporal_or_hybrid_seed_policy": "All three ordered confirmations are mandatory and must PASS; do not reduce for compute. Exact aggregation evidence is sealed."
+    },
+    "tournament": {
+      "window": "TOURNAMENT only",
+      "candidates": "Every CPCV survivor",
+      "candidate_mutation_search_threshold_tuning_or_failure_feedback": false,
+      "pass": "Advance under frozen hard KPI contract.",
+      "fail": "Terminal for this cycle."
+    },
+    "monte_carlo": {
+      "candidates": "Every Tournament survivor",
+      "default_simulations_per_candidate": 10000,
+      "configuration": "Owner-configurable only before cycle freeze; exact configuration and simulation seed are persisted.",
+      "method": "Bootstrap with replacement over candidate trade outcomes.",
+      "training_or_parameter_changes": false,
+      "result": ["PASS", "FAIL"],
+      "numeric_acceptance_thresholds": "Must be explicit in the frozen KPI contract before execution; ONNX-00 adds none."
+    },
+    "forward": {
+      "window": "Untouched FORWARD only",
+      "mandatory": true,
+      "allowed_results": ["PASS", "FAIL", "INSUFFICIENT_SAMPLE"],
+      "tuning_or_parameter_changes": false,
+      "challenger_runtime_eligibility": "PASS only"
+    },
+    "challenger": {
+      "contains_forward_as_first_admission_section": true,
+      "retained_authority": [
+        "cycle and dataset lineage",
+        "exact CandidateSpec and fingerprints",
+        "all upstream stage evidence and seals",
+        "final permitted fit evidence",
+        "ONNX artifact hash and parity evidence",
+        "runtime manifest and registry identity"
+      ],
+      "runtime_conversion_or_parity_failure": "RUNTIME_BLOCKED; repair runtime only, do not rerun Discovery."
+    },
+    "champion": {
+      "promotion": "Explicit Owner action only; no automatic promotion.",
+      "preconditions": [
+        "verified dataset and cycle identity",
+        "exact candidate identity",
+        "WFA PASS",
+        "CPCV PASS",
+        "Tournament PASS",
+        "Monte Carlo PASS",
+        "Forward PASS",
+        "all stage seals",
+        "ONNX artifact hash and parity",
+        "runtime manifest"
+      ],
+      "commit": "Atomic promotion and archive of prior Champion lineage.",
+      "rollback": "Only from an archived artifact whose lineage, hash, and parity are verified."
+    }
+  },
+  "kpi_authority": {
+    "freeze_before_cycle_start": true,
+    "cheap_screen_is_qualification": false,
+    "known_adapted_model_lab_thresholds": {
+      "full_wfa_aggregate_expectancy_min_r": 0.0,
+      "cpcv_worst_aggregate_expectancy_min_r": 0.0
+    },
+    "additional_stage_metric_definitions_and_thresholds": "OPEN_AUTHORITY_GAP; must be explicitly frozen before ONNX-03 execution.",
+    "monte_carlo_thresholds": "No new thresholds are invented in ONNX-00; frozen KPI definition is required before execution.",
+    "tournament_and_forward_thresholds": "OPEN_AUTHORITY_GAP; must be explicitly frozen before execution.",
+    "model_lab_legacy_kpi_profiles": "NOT_IMPORTED_WITHOUT_EXPLICIT_ADOPTION"
+  },
+  "cycle_immutability": {
+    "freeze_at_start": [
+      "cycle_id",
+      "dataset SHA and immutable snapshot",
+      "Strategy geometry",
+      "feature contract",
+      "label contract",
+      "Discovery/Tournament/Forward ranges",
+      "V1 model universe",
+      "parameter authority version",
+      "resolved active envelopes",
+      "WFA configuration",
+      "CPCV configuration",
+      "Monte Carlo configuration",
+      "KPI authority",
+      "experiment budget",
+      "Scientist configuration",
+      "hardware/resource snapshot"
+    ],
+    "scientific_contract_change": "Requires a new cycle."
+  },
+  "evidence_and_checkpoint_contract": {
+    "canonical_authority": "LAST_VALID_COMMITTED_CHECKPOINT",
+    "checkpoint_fields": [
+      "cycle_id",
+      "dataset_snapshot_sha256",
+      "scientific_contract_hash",
+      "stage and stage state",
+      "candidate pool and exact candidate identities",
+      "tested fingerprints",
+      "experiment budget consumption",
+      "survivor identities",
+      "monotonic sequence number",
+      "payload SHA-256"
+    ],
+    "commit": "Atomic; only committed checkpoint advances scientific authority.",
+    "recovery": "Load newest valid checkpoint; if corrupt, verify and fall back to previous valid checkpoint; resume the same cycle.",
+    "uncommitted_work": "DISPOSABLE",
+    "duplicate_exposure": "Forbidden on resume.",
+    "pause": "Cooperative safe boundary.",
+    "force_stop": "Only if safe-boundary stop fails and process ownership is verified.",
+    "stage_seal": "Bind exact cycle/science hash, candidate identity, prior terminal seal, stage configuration, and hashes of immutable stage evidence."
+  },
+  "runtime_artifact_gaps": {
+    "onnx_parity_numeric_tolerances": "Must be versioned and approved before ONNX-07; ONNX-00 does not invent them.",
+    "runtime_manifest_schema": "Must be frozen before ONNX-07.",
+    "final_fit_row_boundary": "Must be frozen before Forward is opened; Forward outcomes never enter fit.",
+    "scientific_metrics_beyond_known_expectancy_floors": "Must be frozen before ONNX-03."
+  },
+  "state_machine": {
+    "initial": "NO_CYCLE",
+    "states": [
+      "NO_CYCLE",
+      "DATA_PREFLIGHT",
+      "DATA_READY",
+      "CYCLE_FROZEN",
+      "DISCOVERY_RUNNING",
+      "NO_QUALIFIED_CANDIDATE",
+      "QUALIFIED_POOL_FROZEN",
+      "CPCV_RUNNING",
+      "CPCV_NO_SURVIVOR",
+      "TOURNAMENT_RUNNING",
+      "TOURNAMENT_NO_SURVIVOR",
+      "MONTE_CARLO_RUNNING",
+      "MONTE_CARLO_NO_SURVIVOR",
+      "FORWARD_RUNNING",
+      "FORWARD_INSUFFICIENT_SAMPLE",
+      "FORWARD_NO_SURVIVOR",
+      "RUNTIME_BLOCKED",
+      "CHALLENGER_READY",
+      "PROMOTION_PENDING_OWNER",
+      "CHAMPION_ACTIVE",
+      "PAUSED_AT_SAFE_BOUNDARY",
+      "RECOVERY_REQUIRED"
+    ],
+    "cycle_terminal_states": [
+      "NO_QUALIFIED_CANDIDATE",
+      "CPCV_NO_SURVIVOR",
+      "TOURNAMENT_NO_SURVIVOR",
+      "MONTE_CARLO_NO_SURVIVOR",
+      "FORWARD_INSUFFICIENT_SAMPLE",
+      "FORWARD_NO_SURVIVOR",
+      "CHAMPION_ACTIVE"
+    ],
+    "transitions": [
+      {"from": "NO_CYCLE", "to": "DATA_PREFLIGHT", "guard": "Owner explicitly begins a new cycle and selects the authorized dataset source."},
+      {"from": "DATA_PREFLIGHT", "to": "DATA_READY", "guard": "Schema, lineage, finite-value, integrity, and data-quality checks pass; immutable snapshot SHA and all exact windows are recorded."},
+      {"from": ["DATA_PREFLIGHT", "DATA_READY"], "to": "NO_CYCLE", "guard": "Owner explicitly cancels before cycle freeze; no scientific execution or exposure has begun."},
+      {"from": "DATA_READY", "to": "CYCLE_FROZEN", "guard": "Owner START freezes exact dataset, Strategy, feature/label, model, parameter, window, stage, KPI, budget, Scientist, and hardware authorities."},
+      {"from": "CYCLE_FROZEN", "to": "DISCOVERY_RUNNING", "guard": "Initial checkpoint is atomically committed and verifies against the frozen cycle fingerprint."},
+      {"from": "DISCOVERY_RUNNING", "to": "NO_QUALIFIED_CANDIDATE", "guard": "Frozen Discovery budget is exhausted, every candidate has a terminal WFA result, and zero candidates pass WFA."},
+      {"from": "DISCOVERY_RUNNING", "to": "QUALIFIED_POOL_FROZEN", "guard": "Frozen Discovery budget is exhausted, every candidate has a terminal WFA result, and at least one candidate passes; freeze all passers up to the predeclared maximum 12."},
+      {"from": "QUALIFIED_POOL_FROZEN", "to": "CPCV_RUNNING", "guard": "Exact pool order and pool seal are committed."},
+      {"from": "CPCV_RUNNING", "to": "CPCV_NO_SURVIVOR", "guard": "All pool candidates have terminal CPCV evidence and zero survive all required combinations and seed confirmations."},
+      {"from": "CPCV_RUNNING", "to": "TOURNAMENT_RUNNING", "guard": "At least one candidate passes the complete frozen CPCV contract and its required confirmations."},
+      {"from": "TOURNAMENT_RUNNING", "to": "TOURNAMENT_NO_SURVIVOR", "guard": "Every CPCV survivor has a terminal Tournament result and zero pass the frozen hard KPI contract."},
+      {"from": "TOURNAMENT_RUNNING", "to": "MONTE_CARLO_RUNNING", "guard": "At least one CPCV survivor passes the independent Tournament window under the frozen KPI contract."},
+      {"from": "MONTE_CARLO_RUNNING", "to": "MONTE_CARLO_NO_SURVIVOR", "guard": "Every Tournament survivor has a terminal Monte Carlo result and zero pass the frozen KPI contract."},
+      {"from": "MONTE_CARLO_RUNNING", "to": "FORWARD_RUNNING", "guard": "At least one Tournament survivor passes Monte Carlo under its exact frozen configuration and seed."},
+      {"from": "FORWARD_RUNNING", "to": "FORWARD_INSUFFICIENT_SAMPLE", "guard": "No candidate passes Forward and at least one candidate is INSUFFICIENT_SAMPLE; this state is not eligible for Challenger admission."},
+      {"from": "FORWARD_RUNNING", "to": "FORWARD_NO_SURVIVOR", "guard": "All Forward candidates have terminal results, none passes, and none is INSUFFICIENT_SAMPLE."},
+      {"from": "FORWARD_RUNNING", "to": "CHALLENGER_READY", "guard": "At least one candidate passes untouched Forward; only PASS candidates proceed, each with complete sealed lineage and evidence."},
+      {"from": "CHALLENGER_READY", "to": "RUNTIME_BLOCKED", "guard": "The same Forward-passing candidate fails final-fit packaging, ONNX conversion/parity, or runtime-manifest validation; science evidence remains sealed and no Discovery rerun is allowed."},
+      {"from": "CHALLENGER_READY", "to": "PROMOTION_PENDING_OWNER", "guard": "Forward evidence, final permitted fit, ONNX hash/parity, runtime manifest, registry identity, and all stage seals are verified and presented for explicit Owner decision."},
+      {"from": "PROMOTION_PENDING_OWNER", "to": "CHAMPION_ACTIVE", "guard": "Owner approves one exact candidate identity; promotion and prior Champion archive commit atomically."},
+      {"from": "PROMOTION_PENDING_OWNER", "to": "NO_CYCLE", "guard": "Owner explicitly declines or closes promotion; no Champion mutation occurs."},
+      {"from": "CHAMPION_ACTIVE", "to": "NO_CYCLE", "guard": "Promotion transaction and prior-Champion archival are verified; this cycle is closed."},
+      {"from": ["NO_QUALIFIED_CANDIDATE", "CPCV_NO_SURVIVOR", "TOURNAMENT_NO_SURVIVOR", "MONTE_CARLO_NO_SURVIVOR", "FORWARD_INSUFFICIENT_SAMPLE", "FORWARD_NO_SURVIVOR"], "to": "NO_CYCLE", "guard": "Terminal stage evidence and cycle closure are committed; a later cycle requires a new explicit Owner start."},
+      {"from": ["DISCOVERY_RUNNING", "CPCV_RUNNING", "TOURNAMENT_RUNNING", "MONTE_CARLO_RUNNING", "FORWARD_RUNNING"], "to": "PAUSED_AT_SAFE_BOUNDARY", "guard": "Cooperative pause reaches a safe boundary and atomically commits a valid checkpoint for the same cycle and stage."},
+      {"from": "PAUSED_AT_SAFE_BOUNDARY", "to_one_of": ["DISCOVERY_RUNNING", "CPCV_RUNNING", "TOURNAMENT_RUNNING", "MONTE_CARLO_RUNNING", "FORWARD_RUNNING"], "guard": "Owner resumes the same cycle only after the newest valid checkpoint is verified; target stage must equal the checkpointed stage and completed exposures are not repeated."},
+      {"from": ["DATA_PREFLIGHT", "DATA_READY", "CYCLE_FROZEN", "DISCOVERY_RUNNING", "NO_QUALIFIED_CANDIDATE", "QUALIFIED_POOL_FROZEN", "CPCV_RUNNING", "CPCV_NO_SURVIVOR", "TOURNAMENT_RUNNING", "TOURNAMENT_NO_SURVIVOR", "MONTE_CARLO_RUNNING", "MONTE_CARLO_NO_SURVIVOR", "FORWARD_RUNNING", "FORWARD_INSUFFICIENT_SAMPLE", "FORWARD_NO_SURVIVOR", "RUNTIME_BLOCKED", "CHALLENGER_READY", "PROMOTION_PENDING_OWNER", "CHAMPION_ACTIVE", "PAUSED_AT_SAFE_BOUNDARY"], "to": "RECOVERY_REQUIRED", "guard": "Authority, checkpoint, process ownership, or durable-write integrity is uncertain; fail closed and do not advance or retrain."},
+      {"from": "RECOVERY_REQUIRED", "to": "PAUSED_AT_SAFE_BOUNDARY", "guard": "A valid committed checkpoint and same-cycle lineage are verified; resume remains an explicit Owner action."},
+      {"from": "RECOVERY_REQUIRED", "to": "NO_CYCLE", "guard": "No scientific work is silently restarted; Owner explicitly abandons the unresolved cycle after preserving its failure evidence."},
+      {"from": "RUNTIME_BLOCKED", "to": "CHALLENGER_READY", "guard": "Runtime-only conversion/parity defect is repaired for the same exact candidate and lineage; previously sealed science stages are reused without Discovery rerun."}
+    ],
+    "transition_law": "A state advances only after its hard gate and committed evidence pass. Failed upstream authority is terminal for the affected candidate/cycle; ranking cannot rescue it. A new cycle is never automatic. Recovery resumes only from a valid committed checkpoint."
+  },
+  "ui_and_api_ownership": {
+    "top_level_navigation": ["Strategy", "ONNX", "Artifacts", "Settings"],
+    "onnx_pages_exactly": [
+      "Overview",
+      "Data Intake",
+      "Discovery",
+      "CPCV",
+      "Tournament",
+      "Monte Carlo",
+      "Challenger",
+      "Champion"
+    ],
+    "separate_pool_page": false,
+    "separate_forward_page": false,
+    "pool_location": "Internal Discovery state.",
+    "forward_location": "First admission section of Challenger.",
+    "scientist": "Reusable advisory drawer; no authority to alter frozen science or promote.",
+    "frontend_owns": ["display", "requests", "confirmation", "progress", "evidence presentation", "errors"],
+    "backend_owns": [
+      "validation",
+      "state transitions",
+      "CandidateSpec and family/parameter admission",
+      "KPI and stage PASS/FAIL",
+      "checkpoint and evidence",
+      "promotion permission"
+    ],
+    "api_endpoints": "NOT_DEFINED_IN_ONNX_00; do not invent routes before implementation phase."
+  },
+  "roadmap": [
+    {"id": "ONNX-00", "title": "Scientific authority and roadmap", "status": "CURRENT", "runtime": false},
+    {"id": "ONNX-01", "title": "Eight-page workspace shell and API/state skeleton", "status": "PLANNED", "runtime": false},
+    {"id": "ONNX-02", "title": "Data Intake, data quality, windows, immutable snapshot", "status": "PLANNED", "exit": "DATA_READY evidence"},
+    {"id": "ONNX-03", "title": "Labels, 14-family Discovery, CandidateSpec, Cheap Screen, 3-fold WFA, max-12 pool", "status": "PLANNED"},
+    {"id": "ONNX-04", "title": "CPCV 6C2=15, purge/embargo, seed confirmation, candidate freeze and stage seal", "status": "PLANNED"},
+    {"id": "ONNX-05", "title": "Independent Tournament window, no tuning, hard KPI and stage seal", "status": "PLANNED"},
+    {"id": "ONNX-06", "title": "Monte Carlo, survivor gate and replayable sealed evidence", "status": "PLANNED"},
+    {"id": "ONNX-07", "title": "Untouched Forward, Challenger, final fit, ONNX conversion/parity/runtime manifest", "status": "PLANNED"},
+    {"id": "ONNX-08", "title": "Explicit Owner Champion promotion, archive and verified rollback", "status": "PLANNED"},
+    {"id": "ONNX-09", "title": "Cumulative E2E, negative/crash/resume/lineage/resource hardening and Owner acceptance package", "status": "PLANNED"}
+  ],
+  "later_phase_acceptance_law": [
+    "one-click acceptance runner",
+    "cumulative E2E and regression",
+    "negative-path tests",
+    "machine-readable evidence with first_failed_gate",
+    "exact candidate/source identity",
+    "crash/resume evidence where relevant",
+    "no unexplained skipped tests",
+    "Windows hosted CI",
+    "Project Truth and ROADMAP_SYNC",
+    "source-grounded DURING sequence documentation",
+    "Control Room audit before merge"
+  ]
+}

@@ -11,13 +11,13 @@ HEAD is recorded externally after the commit exists.
 
 | Gate | Status | Evidence / Notes |
 |---|---|---|
-| SOURCE_TESTS | PASS | |
+| SOURCE_TESTS | NOT_APPLICABLE | |
 | RUNTIME_E2E | NOT_PROVEN | |
 | PROVENANCE_SYNC | NOT_PROVEN | |
-| REFERENCE_SYNC | NOT_PROVEN | |
-| STRUCTURAL_SYNC | NOT_PROVEN | |
-| SEMANTIC_SYNC | NOT_PROVEN | |
-| BEHAVIORAL_SYNC | NOT_PROVEN | |
+| REFERENCE_SYNC | PASS | |
+| STRUCTURAL_SYNC | PASS | |
+| SEMANTIC_SYNC | PASS | |
+| BEHAVIORAL_SYNC | NOT_APPLICABLE | |
 | CROSS_DOCUMENT_CONSISTENCY | PASS | |
 | HUMAN_COMPREHENSION | PASS | |
 | SEQUENCE_SYNC | PASS | |
@@ -26,9 +26,9 @@ HEAD is recorded externally after the commit exists.
 | PROJECT_DOCS_NORMALIZED | PASS | |
 | DOC_READABILITY | PASS | |
 | PROJECT_DOCS_SYNC | PASS | |
-| DOC_SOURCE_TRACEABILITY | NOT_PROVEN | |
-| DOC_TEST_TRACEABILITY | NOT_PROVEN | |
-| TEST_RUNTIME_TRACEABILITY | NOT_PROVEN | |
+| DOC_SOURCE_TRACEABILITY | NOT_APPLICABLE | |
+| DOC_TEST_TRACEABILITY | NOT_APPLICABLE | |
+| TEST_RUNTIME_TRACEABILITY | NOT_APPLICABLE | |
 | PROJECT_STATE_SYNC | NOT_PROVEN | |
 
 ## Critical claim traceability
@@ -44,7 +44,8 @@ HEAD is recorded externally after the commit exists.
 | TRUTH-STRATEGY-RESET-001 | Strategy workspace reset is destructive only after current preflight, exact confirmation, verified database backup, and transactional revalidation; accepted EA baseline and unrelated provider settings remain protected. | PROJECT_TRUTH_SYNC.md | backend/max_backend/strategy_reset.py::strategy_reset_preflight; backend/max_backend/strategy_reset.py::reset_strategy_workspace; backend/max_backend/strategy_reset.py::_make_database_backup | backend/tests/test_strategy_workspace_reset.py | SYNTHETIC_DATABASES_ONLY; OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | PASS |
 | TRUTH-RECOVERY-001 | Unopenable or corrupt operational state is quarantined from ordinary operations; recovery requires explicit confirmation and a verified backup before rebuilding the Strategy workspace. | PROJECT_TRUTH_SYNC.md | backend/max_backend/main.py::recovery_required_gate; backend/max_backend/strategy_reset.py::database_recovery_status; backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database | backend/tests/test_strategy_workspace_reset.py; frontend/src/App.test.tsx | SYNTHETIC_DATABASES_ONLY; OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | PASS |
 | TRUTH-CONTROL-FEEDBACK-001 | Safety-blocked Strategy and artifact controls explain why an action is unavailable; asynchronous operations expose progress and a completed, blocked, or failed result rather than leaving a silent click. | PROJECT_TRUTH_SYNC.md | frontend/src/ArtifactsPage.tsx::ArtifactsPage; frontend/src/ChallengersPage.tsx::ChallengersPage | frontend/src/ArtifactsPage.test.tsx; frontend/src/ChallengersPage.test.tsx | SYNTHETIC_FRONTEND_TESTS_ONLY; OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | PASS |
-| TRUTH-RESEARCH-PURGE-001 | The rejected active Research subsystem is absent from the registered API routes and application UI; Research-prefixed persisted runtime tables and metadata are removed during the current database migration. Future R00-R11 work remains planned and blocked until real MT5 sample readiness and separate authorization. | PROJECT_TRUTH_SYNC.md | backend/max_backend/workflow_store.py::_purge_research_authority; backend/max_backend/workflow_store.py::migrate_current; backend/max_backend/main.py::app; frontend/src/App.tsx::App | backend/tests/test_retired_subsystem_migration.py | SYNTHETIC_DATABASES_ONLY; OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | PASS |
+| TRUTH-RESEARCH-PURGE-001 | The legacy Research subsystem is retired and absent from active API routes, application UI, runtime tables, metadata, and dependencies. The legacy R00-R11 roadmap is retired and replaced by the separately governed ONNX-00..ONNX-09 plan; ONNX-00 grants planning authority only, not runtime execution or model training. | PROJECT_TRUTH_SYNC.md | backend/max_backend/workflow_store.py::_purge_research_authority; backend/max_backend/workflow_store.py::migrate_current; backend/max_backend/main.py::app; frontend/src/App.tsx::App | backend/tests/test_retired_subsystem_migration.py | SYNTHETIC_DATABASES_ONLY; OWNER_PC_FINAL_ACCEPTANCE_REQUIRED | PASS |
+| TRUTH-ONNX-PLANNING-001 | ONNX-00 defines the future single model-research authority and exact 14-family V1 allowlist as planning-only contracts. No ONNX runtime, real research, model training, ONNX export, Research Challenger, MT5 access, or Champion mutation is implemented or authorized by this phase. | docs/onnx/ONNX_00_SCIENTIFIC_AUTHORITY.md | .workflow/onnx_v1_authority.json; .workflow/roadmap.json; .workflow/state.json |  | PLANNING_ONLY_NO_RUNTIME_CLAIM; OWNER_PC_AND_MT5_NOT_RUN | PASS |
 | TRUTH-OPTIMIZER-DURABILITY-001 | Strategy Optimizer preserves one revisioned editable draft separately from immutable started-job requests, reconciles known worker/MT5 execution by durable identity, atomically commits verified round bundles, and serves bounded candidate projections without weakening canonical Challenger mutation checks. Local tests use synthetic databases/evidence; real Owner MT5 behavior is NOT_PROVEN. | PROJECT_TRUTH_SYNC.md | backend/max_backend/optimizer_draft.py::get_optimizer_draft; backend/max_backend/optimizer_draft.py::put_optimizer_draft; backend/max_backend/optimizer_jobs.py::_spawn_worker; backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity; backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup; backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer; backend/max_backend/optimizer_worker_identity.py::terminate_process_verified; backend/max_backend/optimizer_worker.py::main; backend/max_backend/optimizer_runtime.py::commit_round_evidence; backend/max_backend/optimizer_candidates.py::qualified_candidates_page | backend/tests/test_optimizer_draft.py; backend/tests/test_optimizer_reliability.py; backend/tests/test_optimizer_worker_identity.py; backend/tests/test_optimizer_runtime_durability.py; backend/tests/test_m08_strategy_results.py | SYNTHETIC_DATABASES_AND_MOCKED_PROCESS_BOUNDARIES_ONLY; OWNER_PC_REAL_MT5_NOT_PROVEN | PASS |
 
 ## Claim relations

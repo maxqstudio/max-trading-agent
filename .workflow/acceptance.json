@@ -1,31 +1,23 @@
 {
-  "current_phase": "STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING",
+  "current_phase": "ONNX-00",
   "current_phase_results": {
-    "actual_failed_job_replay": "PASS_READ_ONLY: archived job 20261003_012101_e65a942d frozen report/sidecar replayed twice with candidate parser; each run returned 7,115 parsed rows and 3,239 eligible rows; identical results; SQLite opened mode=ro; no MT5 or DB writes.",
-    "backend_full": "PASS_LOCAL_CURRENT_CANDIDATE: 459 passed, 0 skipped, 0 failed in 503.57s after canonical Scientist knowledge regeneration.",
-    "backend_targeted": "PASS_LOCAL: prior 143 optimizer-targeted tests and 34 Scientist provenance tests; fresh focused run 12 passed, including duplicate-sidecar collapse/conflict, transactional candidate dedup, and recovery tests.",
-    "backend_worker_identity_repair": "PASS_LOCAL: 483 passed, 0 skipped, 0 failed in 488.70s after canonical Scientist knowledge regeneration; final repair candidate.",
-    "browser_e2e": "HISTORICAL_ONLY: prior live Vite/backend and MT5 START/STOP evidence predates the current native-launch/parser repair; it is not current-candidate runtime acceptance.",
-    "build": "PASS_LOCAL",
-    "frontend": "PASS_LOCAL: 53 passed / 8 files",
-    "frontend_targeted": "PASS_LOCAL: 19 Optimizer UI tests / 1 file including terminal resource-evidence refresh",
-    "hosted_ci": "HISTORICAL_ONLY: prior worker-identity repair runs passed on their exact PR #17 candidate. The current PR #18 parser/dedup/governance changes have not yet been pushed or tested by hosted CI.",
-    "lint": "PASS_LOCAL_NO_WARNINGS",
-    "npm_tree": "PASS_LOCAL",
-    "owner_runtime": "HISTORICAL bounded Stage C/D evidence only. The latest Owner optimizer job completed MT5 with exit code 0 but failed during parsing; this source candidate has not run MT5. Full Owner Optimizer acceptance remains NOT_PROVEN.",
-    "pip_check": "PASS_LOCAL",
-    "real_mt5_resource_safety": "HISTORICAL_ONLY: prior Stage C/D runs used the now-removed external cap; they do not prove the current native-launch candidate.",
-    "resource_preflight_latency": "HISTORICAL_ONLY: measurements describe the removed V2 preflight path and are not current launch-path evidence.",
-    "resource_safety_v2": "SUPERSEDED_BY_NATIVE_MT5_RESTORE: external tester-agent cap and estimated-memory START admission are removed per Owner direction; current candidate keeps durability/identity/evidence fixes and adds duplicate-safe parsing/projection. Full current regression passes locally; current hosted CI remains NOT_RUN.",
-    "schema_version": 15,
-    "sequence": "PASS_LOCAL: all 8 DURING/CURRENT sessions and generated actual graphs use source inventory digest c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048; current Optimizer actual graph includes native launch, parser, and duplicate-safe persistence.",
-    "skill_workflow_current_sha": "964481ed1609f87904ba9e08890bffc0a10c3fd4",
-    "source_only_scan": "NOT_RUN_ON_CURRENT_CANDIDATE: candidate includes uncommitted source/governance changes; exact-tree scan must be run after commit.",
-    "synthetic_optimizer_profile": "PASS_LOCAL: 750-candidate synthetic profile, 12 requests/endpoint; actual qualified-page median 23.651 ms/p95 68.983 ms, 61,462-byte response. Separate Windows process profile measured CPU/RSS/read/write I/O with the qualified route mocked. No real MT5 or Owner DB used; temporary test DB/evidence cleanup was rejected by shell policy.",
-    "worker_identity_reliability": "HISTORICAL_ACCEPTED_CANDIDATE: authenticated named-pipe identity repair remains in PR #18 base commit 312cd4b2d88a63f8cd0e6d1e873ae08fdc3d3f60; prior focused Windows worker tests and hosted CI belong to the earlier PR #17 candidate and are not rerun for this parser/dedup change."
+    "database_schema_version": 15,
+    "hosted_ci": "PENDING_EXACT_PR_HEAD",
+    "local_governance": "PASS: Project Truth Compiler, Project Docs, Doc Quality, Sequence Sessions/Contract, Handoff, Human Comprehension, Cross-document Consistency, Project Truth, and latest Skill Workflow strict/compiler/sequence/cross-document selftests at SHA 3b3289681cf2cec8d3d132895e0848be64bb54b1.",
+    "max_executable_validator_pin": "964481ed1609f87904ba9e08890bffc0a10c3fd4",
+    "model_lab_authorities_inspected": 19,
+    "model_lab_main": "883ebeb1ca2e70f6255e0889358ba7c822ac52f5",
+    "onnx_runtime": "NOT_IMPLEMENTED",
+    "owner_runtime": "NOT_PROVEN",
+    "product_source_changed": "NO",
+    "schema_changed": "NO",
+    "skill_workflow_latest_guidance": "3b3289681cf2cec8d3d132895e0848be64bb54b1",
+    "source_only_scan": "PENDING_EXACT_BRANCH_TREE",
+    "starting_main": "203f6ab3dc618e3edd247841aa25e1fa0951a19a",
+    "starting_main_windows_ci": "PASS: run 37964999480 on exact starting SHA"
   },
   "current_phase_status": "IN_PROGRESS",
-  "evidence_boundary": "Starting authority is maxqstudio/max-trading-agent main ac2787c0fe46bfa83267b0ceebb9d8f3f1d44c5c on codex/restore-mt5-native-agent-execution, PR #18. The latest Owner job 20261003_012101_e65a942d is FAILED/inactive after MT5 returned exit code 0; its frozen raw report and sidecar were parsed offline with candidate code (7,115 report rows; 3,239 eligible unique candidates), with no database writes. Root cause: exact repeated parameter-vector metrics rows were rejected as a duplicate. Current source collapses only identical semantic metric rows and prevents exact duplicate candidate identities from reaching the SQLite projection. The existing failed job remains unchanged with zero candidate rows. Local backend/frontend/dependency/build gates pass; current-candidate source-only scan and hosted CI are NOT_RUN. The phase remains IN_PROGRESS; PR #18 is not merged. Real MT5/Owner runtime and full Optimizer acceptance remain NOT_PROVEN; Research remains PAUSED. No DB, Owner draft, pagefile setting, or MT5 runtime was modified by this repair.",
+  "evidence_boundary": "ONNX-00 is planning/governance only on a work branch based on main 203f6ab3dc618e3edd247841aa25e1fa0951a19a. Exact starting-main Windows CI run 37964999480 passed. ModelLab main 883ebeb1ca2e70f6255e0889358ba7c822ac52f5 and all 19 Owner-listed authorities were inspected. The exact 14-family ONNX V1 and future stage/data/state/UI contracts are documented. No product source, schema, tests, Owner data, MT5 or runtime was changed or executed. Branch/PR-head CI remains pending; PR must stay unmerged for Control Room audit.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
     "How does important data flow through the system?": "PASS",
@@ -79,25 +71,25 @@
       "status": "PASS_LOCAL"
     },
     {
-      "evidence": ".workflow/roadmap.json; .workflow/state.json",
+      "evidence": ".workflow/roadmap.json; .workflow/state.json; .workflow/onnx_v1_authority.json",
       "id": "RESEARCH-GATE-01",
-      "requirement": "Fresh R00-R11 remain planned and blocked until the Owner declares REAL_MT5_BACKTEST_SAMPLE_READY and Control Room issues separate authorization.",
+      "requirement": "Legacy Research and R00-R11 are RETIRED; ONNX-00 is the current planning-only authority, and no ONNX runtime or scientific execution is authorized by this phase.",
       "status": "PASS_LOCAL"
     },
     {
-      "evidence": "Current local candidate backend 459 passed, 0 skipped, 0 failed; frontend 53/53 across 8 files; lint, build, npm tree and pip check PASS. Current-candidate source-only scan and hosted CI remain NOT_RUN.",
+      "evidence": "No product source or tests changed in ONNX-00. Starting main exact Windows CI run 37964999480 passed on SHA 203f6ab3dc618e3edd247841aa25e1fa0951a19a; current planning branch CI is pending.",
       "id": "REGRESSION-01",
       "requirement": "Full current backend/frontend regressions, dependency checks, build, governance validators, and exact-tree source-only scan pass without unexplained skips or failures.",
       "status": "NOT_PROVEN"
     },
     {
-      "evidence": "External GitHub Actions run bound to exact candidate SHA.",
+      "evidence": "Exact ONNX-00 PR-head Windows CI is pending; this task intentionally stops before merge.",
       "id": "HOSTED-01",
-      "requirement": "Windows GitHub Actions passes on the exact PR head and exact merged main before phase closure.",
+      "requirement": "Windows GitHub Actions passes on the exact ONNX-00 planning PR head. This handoff stops before merge; exact PR-head acceptance evidence is external and no merged-main claim is made.",
       "status": "NOT_PROVEN"
     },
     {
-      "evidence": "Current-candidate MT5 was not run. Historical bounded diagnostics used the removed external cap and do not prove the current native-launch candidate. Full Owner Optimizer runtime remains deferred and NOT_PROVEN.",
+      "evidence": "Owner PC and MT5 were not accessed; real Strategy Optimizer/Champion/backtest runtime remains NOT_PROVEN and outside ONNX-00.",
       "id": "OWNER-RUNTIME-01",
       "requirement": "Bounded repair diagnostics may prove resource-control behavior, but full Owner Strategy Optimizer/Challenger/Champion runtime acceptance remains a separate post-source gate.",
       "status": "NOT_PROVEN"
@@ -115,7 +107,7 @@
       "status": "PASS_LOCAL"
     },
     {
-      "evidence": "Baseline push run 37004211038 attempt 1 exposed the 8-second PowerShell/CIM timeout. The repair source candidate then passed the focused suite (32 tests), three repeated real Windows venv runs (15/15 worker lifecycles), full backend (483 passed, no skips/failures), and both push and PR-head Windows CI including all three jobs. Exact SHA and CI run identities are external per D-012; keep PR #17 unmerged until the final branch-head checks are green and Control Room audit is complete.",
+      "evidence": "The 37004211038 attempt-1 PowerShell/CIM timeout was closed by the authenticated named-pipe repair. That repair is included in accepted main 203f6ab3dc618e3edd247841aa25e1fa0951a19a, whose exact Windows CI run 37964999480 passed. Historical focused/repeated tests remain evidence for the earlier repair candidate; Owner MT5 runtime is not claimed.",
       "id": "OPT-WORKER-IDENTITY-01",
       "requirement": "Worker launch ownership is proven by a deterministic authenticated launch handshake bound to job ID, launch token, actual Windows pipe-client PID, executable path, and process creation identity, without PowerShell/WMI/CIM or global shell process enumeration. Ambiguous or missing proof fails closed.",
       "status": "PASS_LOCAL"
@@ -167,160 +159,111 @@
       "id": "OPT-CANDIDATE-DEDUP-01",
       "requirement": "Exact duplicate candidate identities are removed within the current round and across earlier rounds before SQLite writes; the transactional persistence boundary rejects duplicates and retains only one database candidate row.",
       "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": ".workflow/onnx_v1_authority.json; docs/onnx/ONNX_00_SCIENTIFIC_AUTHORITY.md",
+      "id": "ONNX-00-MODEL-AUTHORITY-01",
+      "requirement": "The exact Owner-frozen 14-family V1 universe, excluded models, active ranges, hybrid purged-OOF contract and temporal training contract are machine-readable and documented.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": ".workflow/onnx_v1_authority.json; docs/onnx/ONNX_00_SCIENTIFIC_AUTHORITY.md",
+      "id": "ONNX-00-SCIENCE-BOUNDARY-01",
+      "requirement": "Dataset/windows/labels, stage gates, WFA-only max-12 pool, CPCV, Tournament, Monte Carlo, Forward, Challenger/Champion, checkpoint, UI/API ownership and unresolved KPI/runtime contracts are explicit without implementing runtime.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": ".workflow/state.json; .workflow/roadmap.json; .workflow/claims.json; Project Truth Compiler and validators",
+      "id": "ONNX-00-GOVERNANCE-01",
+      "requirement": "Legacy Research and R00-R11 are retired; current state and roadmap point to ONNX-00; generated docs are synchronized by the canonical compiler; local governance validators pass.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": "External GitHub Actions evidence bound to exact PR head; no merge is authorized.",
+      "id": "ONNX-00-PR-CI-01",
+      "requirement": "Planning-only PR-head Windows CI passes on the exact candidate SHA and PR remains open/unmerged for Control Room audit.",
+      "status": "NOT_PROVEN"
     }
   ],
   "results": {
+    "historical_strategy_optimizer": {
+      "accepted_main": "203f6ab3dc618e3edd247841aa25e1fa0951a19a",
+      "exact_main_windows_ci": {
+        "run_id": "37964999480",
+        "status": "PASS"
+      },
+      "previous_candidate_regression": {
+        "backend": "483 passed, 0 skipped, 0 failed",
+        "build": "PASS",
+        "frontend": "53 passed / 8 files",
+        "lint": "PASS",
+        "npm_ls_all": "PASS",
+        "pip_check": "PASS"
+      },
+      "synthetic_optimizer_profile": {
+        "fixture": "750 synthetic candidate projections, 25-row page, TestClient, 12 requests per endpoint; separate process-counter profile mocked the qualified route.",
+        "limitation": "The process profile mocked the qualified-candidate route and is not real Owner runtime evidence. Earlier ignored synthetic test directories were retained after cleanup was rejected; no Owner data was involved.",
+        "process_profile_cpu_seconds": 1.0781,
+        "process_profile_peak_working_set_bytes": 64405504,
+        "process_profile_read_io_bytes": 6060864,
+        "process_profile_requests": 108,
+        "process_profile_write_io_bytes": 0,
+        "qualified_endpoint_median_ms": 23.651,
+        "qualified_endpoint_p95_ms": 68.983,
+        "qualified_endpoint_payload_bytes": 61462
+      }
+    },
     "hosted_ci": {
       "run_id": null,
-      "status": "NOT_RUN",
+      "status": "PENDING_PR_HEAD_CI",
       "tested_sha": null
     },
     "regression": {
-      "backend_full_status": "PASS_LOCAL: 459 passed, 0 skipped, 0 failed in 503.57s after canonical Scientist knowledge regeneration",
-      "backend_targeted": 143,
-      "build": "PASS_LOCAL",
-      "frontend_files": 8,
-      "frontend_status": "PASS_LOCAL: 53 passed / 8 files",
-      "frontend_tests": 53,
-      "lint": "PASS_LOCAL_NO_WARNINGS",
-      "npm_ls_all": "PASS_LOCAL",
-      "pip_check": "PASS_LOCAL",
-      "resource_targeted": "NOT_APPLICABLE: MAX-owned resource admission and process cap were removed; native launch/source regressions are covered in test_optimizer_resources.py"
+      "backend_full_status": "NOT_RUN_LOCAL_PRODUCT_SOURCE_UNCHANGED; starting main exact CI PASS, current PR CI pending",
+      "build": "NOT_RUN_LOCAL_PRODUCT_SOURCE_UNCHANGED",
+      "frontend_status": "NOT_RUN_LOCAL_PRODUCT_SOURCE_UNCHANGED; starting main exact CI PASS, current PR CI pending",
+      "lint": "NOT_RUN_LOCAL_PRODUCT_SOURCE_UNCHANGED",
+      "npm_ls_all": "NOT_RUN_LOCAL_PRODUCT_SOURCE_UNCHANGED",
+      "pip_check": "NOT_RUN_LOCAL_PRODUCT_SOURCE_UNCHANGED"
     },
     "runtime": {
-      "browser_e2e": "HISTORICAL_ONLY: prior live Vite/backend and MT5 START/STOP evidence predates current candidate and is not current-path runtime acceptance.",
-      "live_api_latency": {
-        "current_median_ms": 20.346,
-        "detail_median_ms": 5.851,
-        "qualified_median_ms": 8.238,
-        "resource_preflight_cold_ms": null,
-        "resource_preflight_warm_median_ms": null
-      },
-      "mt5": "NOT_RUN_ON_CURRENT_CANDIDATE. Historical Stage C/D cap diagnostics are not current-path evidence. Latest Owner job returned MT5 exit code 0, then failed parsing repeated identical sidecar vectors.",
-      "owner_pc": "NOT_PROVEN; latest failed job left unchanged, candidate source replay was offline/read-only, and no new Owner runtime was started"
+      "model_training": 0,
+      "mt5": "NOT_RUN_BY_SCOPE",
+      "onnx_export": 0,
+      "owner_pc": "NOT_PROVEN; not accessed",
+      "real_research": 0
     },
-    "schema_version": 15,
     "scientific_state": {
       "champion_mutation": 0,
-      "cheap_screen_real_runs": 0,
-      "current_research_project": "NONE_ACTIVE_SOURCE",
+      "current_onnx_phase": "ONNX-00_PLANNING_ONLY",
+      "legacy_research": "RETIRED",
       "model_training": 0,
       "onnx": 0,
-      "r00": "NOT STARTED",
-      "r01": "BLOCKED / NOT STARTED",
-      "r02": "BLOCKED / NOT STARTED",
-      "r03": "NOT STARTED",
+      "real_r00": "NOT STARTED",
+      "real_r01": "BLOCKED / NOT STARTED",
+      "real_r02": "BLOCKED / NOT STARTED",
       "research_challenger": 0
     },
-    "skill_authority_sha": "964481ed1609f87904ba9e08890bffc0a10c3fd4",
     "source_only_scan": {
       "candidate_sha": null,
       "matches": null,
-      "status": "NOT_RUN",
+      "status": "PENDING_EXACT_BRANCH_TREE",
       "tracked_text_files": null
-    },
-    "synthetic_optimizer_profile": {
-      "baseline_from_prechange_terminal_evidence": {
-        "comparability": "Indicative only: same synthetic 750-candidate workload reported in the Builder handoff, but its exact harness log is not preserved.",
-        "python_tracemalloc_peak_bytes": 19963840,
-        "qualified_candidates_median_ms": 1162.392,
-        "qualified_candidates_p95_ms": 1207.722,
-        "requests": 5,
-        "response_bytes": 68555
-      },
-      "cleanup": "Temporary SQLite/evidence directories remain under ignored .venv because auto-cleanup encountered a Windows SQLite file lock and explicit recursive cleanup was rejected by shell policy. Exact paths: D:/max/.venv/optimizer-after-profile-9rzldl__ and D:/max/.venv/optimizer-after-profile-d3nh0uvp. Synthetic only; no Owner data.",
-      "fixture": "750 synthetic candidate projections, 25-row page, TestClient, 12 requests per endpoint; test DB/evidence under ignored .venv. Actual current/job/draft/qualified DB paths in API latency run; preview/start/stop/resume mocked. Separate process-counter run used actual current/job/draft paths but mocked qualified route.",
-      "per_endpoint": {
-        "GET /api/optimizer/current": {
-          "median_ms": 13.389,
-          "median_payload_bytes": 7835,
-          "p95_ms": 33.449
-        },
-        "GET /api/optimizer/draft": {
-          "median_ms": 6.493,
-          "median_payload_bytes": 1731,
-          "p95_ms": 10.71
-        },
-        "GET /api/optimizer/jobs/{job_id}": {
-          "median_ms": 9.168,
-          "median_payload_bytes": 7835,
-          "p95_ms": 15.132
-        },
-        "GET /api/optimizer/jobs/{job_id}/qualified-candidates": {
-          "median_ms": 23.651,
-          "median_payload_bytes": 61462,
-          "p95_ms": 68.983
-        },
-        "POST /api/optimizer/jobs/{job_id}/resume": {
-          "median_ms": 3.458,
-          "median_payload_bytes": 69,
-          "p95_ms": 8.908
-        },
-        "POST /api/optimizer/jobs/{job_id}/stop": {
-          "median_ms": 3.241,
-          "median_payload_bytes": 67,
-          "p95_ms": 17.672
-        },
-        "POST /api/optimizer/preview": {
-          "median_ms": 4.708,
-          "median_payload_bytes": 116,
-          "p95_ms": 9.848
-        },
-        "POST /api/optimizer/start": {
-          "median_ms": 4.139,
-          "median_payload_bytes": 68,
-          "p95_ms": 13.085
-        },
-        "PUT /api/optimizer/draft": {
-          "median_ms": 10.266,
-          "median_payload_bytes": 1745,
-          "p95_ms": 20.371
-        }
-      },
-      "process_profile": {
-        "cpu_seconds": 1.0781,
-        "python_tracemalloc_peak_bytes": 569928,
-        "qualified_route": "MOCKED; process totals do not include the actual qualified-candidate SQLite query",
-        "read_io_bytes": 6060864,
-        "requests": 108,
-        "working_set_peak_bytes": 64405504,
-        "write_io_bytes": 0
-      }
-    },
-    "targeted": {
-      "backend_tests": 51,
-      "frontend_files": 1,
-      "frontend_tests": 19,
-      "status": "PASS_LOCAL",
-      "tested_worktree_base": "e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d"
     }
   },
   "runtime_checks": [
-    "HISTORICAL_ONLY: bounded MT5 Stage C resource-control diagnostic from the removed cap implementation.",
-    "HISTORICAL_ONLY: bounded MT5 Stage D queue-stress diagnostic from the removed cap implementation.",
-    "HISTORICAL_ONLY: prior live browser/MT5 START/STOP evidence predates this native-launch/parser candidate.",
-    "CURRENT_CANDIDATE_NOT_RUN: no Owner runtime, MT5, or Optimizer process was started. The failed job remains unmodified.",
-    "READ_ONLY_DIAGNOSIS: Owner job 20261003_012101_e65a942d is FAILED, active=0, round=1 phase REPORT_READY, after MT5 returncode 0; frozen report/sidecar hash verification passed; offline candidate parser emitted 7,115 rows and 3,239 eligible unique candidates, no database writes.",
-    "NOT_RUN: full production-scale/long-range Owner Optimizer \u2192 Challenger \u2192 Champion \u2192 backtest workflow.",
-    "NOT_RUN: real R00-R11 Research execution, model training, ONNX, Research Challenger creation, or Champion mutation."
+    "NOT_RUN_BY_SCOPE: ONNX runtime, real model training, ONNX export/parity, Research Challenger, Champion mutation.",
+    "NOT_RUN_BY_SCOPE: Owner PC, real MT5, broker reconciliation or real market research.",
+    "NOT_PROVEN: Owner Strategy Optimizer/Champion/backtest runtime."
   ],
-  "runtime_status": "CURRENT_CANDIDATE_MT5_NOT_RUN; OWNER_OPTIMIZER_NOT_PROVEN; HISTORICAL_STAGE_C_D_ONLY; RESEARCH_PAUSED",
+  "runtime_status": "ONNX_RUNTIME_NOT_IMPLEMENTED; REAL_RESEARCH_NOT_STARTED; OWNER_PC_AND_MT5_NOT_RUN; STRATEGY_RUNTIME_NOT_PROVEN",
   "schema_version": 1,
   "sequence_mode": "DURING",
-  "sequence_session": "FLOW-OPTIMIZER-DURABILITY-PERFORMANCE",
-  "sequence_sync_status": "PASS_LOCAL: 8 DURING/CURRENT sessions and generated actual graphs validated at source digest c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048.",
+  "sequence_session": "ONNX-00-PLANNING_ONLY_NO_RUNTIME_SEQUENCE",
+  "sequence_sync_status": "PASS: all 8 existing DURING/CURRENT source-grounded sessions validated; ONNX-00 is planning-only and introduces no runtime sequence.",
+  "skill_workflow_current_sha": "964481ed1609f87904ba9e08890bffc0a10c3fd4",
+  "skill_workflow_guidance_sha": "3b3289681cf2cec8d3d132895e0848be64bb54b1",
   "test_commands": [
-    ".venv/Scripts/python.exe -m pytest backend/tests/test_m01_optimizer_core.py::test_identical_duplicate_parameter_vector_metrics_are_deduplicated backend/tests/test_m01_optimizer_core.py::test_duplicate_parameter_vector_fails_closed backend/tests/test_m08_strategy_results.py::test_exact_duplicate_candidates_are_removed_before_database_persistence -q -o addopts=",
-    ".venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_worker_identity.py backend/tests/test_optimizer_reliability.py backend/tests/test_m01_jobs.py -q -o addopts= --basetemp .pytest-codex-worker-targeted-final",
-    "PowerShell loop (3 iterations): .venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_worker_identity.py::test_windows_venv_worker_identity_is_repeatedly_bound_to_real_pipe_peer -q -o addopts= --basetemp .pytest-codex-worker-identity-$i",
-    ".venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_resources.py backend/tests/test_optimizer_runtime.py backend/tests/test_optimizer_reliability.py -q -o addopts=",
-    ".venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_draft.py backend/tests/test_optimizer_reliability.py backend/tests/test_optimizer_runtime_durability.py backend/tests/test_m01_jobs.py backend/tests/test_m01_recovery.py backend/tests/test_m08_strategy_results.py -q -o addopts=",
-    ".venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_resources.py backend/tests/test_m01_optimizer_core.py backend/tests/test_m01_optimizer_store.py backend/tests/test_m01_jobs.py backend/tests/test_m01_recovery.py backend/tests/test_optimizer_reliability.py backend/tests/test_optimizer_runtime_durability.py -q -o addopts= --basetemp .pytest-codex-resource-targeted",
-    ".venv/Scripts/python.exe -m pytest backend/tests -q -o addopts= --basetemp .pytest-codex-full-backend-r2",
-    "cd frontend; npm test -- --run; npm run lint; npm run build; npm ls --all",
-    ".venv/Scripts/python.exe -m pip check",
-    ".venv/Scripts/python.exe scripts/scan_m05_candidate_tree.py --candidate-sha HEAD",
-    ".venv/Scripts/python.exe scripts/build_scientist_knowledge.py",
     ".venv/Scripts/python.exe .workflow/tools/sync_project_truth.py",
     ".venv/Scripts/python.exe .workflow/tools/validate_project_docs.py",
     ".venv/Scripts/python.exe .workflow/tools/validate_doc_quality.py",
@@ -328,27 +271,28 @@
     ".venv/Scripts/python.exe .workflow/tools/validate_handoff.py",
     ".venv/Scripts/python.exe .workflow/tools/validate_human_comprehension.py --require-pass",
     ".venv/Scripts/python.exe .workflow/tools/validate_cross_document_consistency.py --allow-dirty",
-    ".venv/Scripts/python.exe .workflow/tools/validate_project_truth.py --allow-dirty"
+    ".venv/Scripts/python.exe .workflow/tools/validate_project_truth.py --allow-dirty",
+    "GitHub Actions Windows CI on exact ONNX-00 PR head; source-only, backend, frontend, dependencies and governance"
   ],
   "truth_gates": {
-    "BEHAVIORAL_SYNC": "NOT_PROVEN",
+    "BEHAVIORAL_SYNC": "NOT_APPLICABLE",
     "CROSS_DOCUMENT_CONSISTENCY": "PASS",
     "DOC_LAYOUT": "PASS",
     "DOC_READABILITY": "PASS",
-    "DOC_SOURCE_TRACEABILITY": "NOT_PROVEN",
-    "DOC_TEST_TRACEABILITY": "NOT_PROVEN",
+    "DOC_SOURCE_TRACEABILITY": "NOT_APPLICABLE",
+    "DOC_TEST_TRACEABILITY": "NOT_APPLICABLE",
     "HUMAN_COMPREHENSION": "PASS",
     "PROJECT_DOCS_NORMALIZED": "PASS",
     "PROJECT_DOCS_SYNC": "PASS",
     "PROJECT_STATE_SYNC": "NOT_PROVEN",
     "PROVENANCE_SYNC": "NOT_PROVEN",
-    "REFERENCE_SYNC": "NOT_PROVEN",
+    "REFERENCE_SYNC": "PASS",
     "ROADMAP_SYNC": "PASS",
     "RUNTIME_E2E": "NOT_PROVEN",
-    "SEMANTIC_SYNC": "NOT_PROVEN",
+    "SEMANTIC_SYNC": "PASS",
     "SEQUENCE_SYNC": "PASS",
-    "SOURCE_TESTS": "PASS",
-    "STRUCTURAL_SYNC": "NOT_PROVEN",
-    "TEST_RUNTIME_TRACEABILITY": "NOT_PROVEN"
+    "SOURCE_TESTS": "NOT_APPLICABLE",
+    "STRUCTURAL_SYNC": "PASS",
+    "TEST_RUNTIME_TRACEABILITY": "NOT_APPLICABLE"
   }
 }

@@ -300,7 +300,7 @@ Rationale: The Owner-authorized Strategy Optimizer hardening repairs durable dra
 
 ## D-038 — Adopt Skill Workflow SW2-00 governance regressions
 
-Status: CURRENT
+Status: SUPERSEDED
 
 MAX adopts Skill_Workflow main 64836990609cd1ab22f9517be5aaffc14ad19ea9 after inspecting the exact delta from 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8. Vendor its 21 applicable scripts byte-identically, verify exact upstream provenance in Windows CI, and run its new sequence call-resolution and cross-document regression selftests. Do not adopt Skill Workflow sample project state or unrelated workflows.
 
@@ -313,3 +313,19 @@ Status: CURRENT
 Resource admission considers both physical RAM and current Windows commit headroom. The frozen Optimizer workload identity includes EA SHA, MT5 build, symbol, timeframe, history-duration bucket, tick model, optimization mode, parameter count and search-space size. Native monitoring reads system commit and exact Job Object-owned terminal/tester processes, including PrivateUsage; compatible bounded high-water observations reuse existing round state read-only. A verified resource stop remains resumable only after fresh admission; failed termination or telemetry persistence enters RECONCILIATION_REQUIRED and is not resumable. AUTO_SAFE and CUSTOM remain subject to the same physical/commit hard floors and Job Object active-process cap. No pagefile mutation, schema bump, search-space shrink, or scientific acceptance change is permitted.
 
 Rationale: The Owner-reported full-range 17D Fast Genetic attempt crashed under Windows commit-memory exhaustion despite historical bounded RAM/concurrency checks. Current commit charge and process private bytes must therefore gate capacity and trigger explicit, verified stop/reconciliation behavior before system exhaustion.
+
+## D-040 — ONNX-00 planning authority and frozen V1 universe
+
+Status: CURRENT
+
+The legacy Research subsystem and legacy R00-R11 roadmap are RETIRED. ONNX-00 establishes the sole future model-research authority as planning/governance only. V1 has exactly six standalone families (lightgbm, xgboost, gru, tcn, transformer, patchtst) and eight hybrids (each of gru, tcn, transformer, patchtst paired separately with lightgbm and xgboost); random_forest, lstm, itransformer, tft, transformer_moe and all other hybrids are excluded. This decision does not authorize ONNX runtime, scientific execution, model training, ONNX export, MT5, Research Challenger creation, or Champion mutation. The complete contracts and ONNX-00..ONNX-09 roadmap are in .workflow/onnx_v1_authority.json.
+
+Rationale: A single explicit Owner-fixed family universe and planning-only boundary prevent revival of the retired Research implementation or accidental expansion from ModelLab's dynamic legacy registry.
+
+## D-041 — Apply latest Skill Workflow guidance without silently changing MAX validator provenance
+
+Status: CURRENT
+
+The latest Skill_Workflow/main SHA 3b3289681cf2cec8d3d132895e0848be64bb54b1 was fetched and its normative guidance applied to ONNX-00. MAX's executable Windows CI and vendored validator provenance remain pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4. The toolchain is not claimed byte-identical to 3b328968 and is not migrated in this planning-only phase; a separate reviewed migration is required before changing the CI pin.
+
+Rationale: The Owner requested use of the updated Skill Workflow. Preserve verifiable current CI provenance while making the non-adoption boundary explicit instead of representing older tools as the new SHA.
