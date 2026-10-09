@@ -210,6 +210,73 @@ td input[type="checkbox"] {
   flex-wrap: wrap;
 }
 
+.action-control-wrap {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+  align-items: stretch;
+}
+
+.action-control-wrap:focus-visible {
+  outline: 2px solid #171a1f;
+  outline-offset: 3px;
+}
+
+.action-blocked-popout {
+  position: absolute;
+  z-index: 80;
+  top: calc(100% + 6px);
+  left: 0;
+  width: max-content;
+  max-width: min(22rem, 75vw);
+  padding: 8px 10px;
+  border: 1px solid #777f88;
+  border-radius: 2px;
+  background: #171a1f;
+  color: #fff;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-2px);
+  transition: opacity 100ms ease-out, transform 100ms ease-out;
+}
+
+.action-control-wrap:hover > .action-blocked-popout,
+.action-control-wrap:focus-within > .action-blocked-popout {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.action-blocked-popout-portal {
+  position: fixed;
+  z-index: 9999;
+  width: max-content;
+  max-width: min(22rem, 75vw);
+  opacity: 1;
+  pointer-events: none;
+  transform: none;
+}
+
+.action-progress {
+  display: inline-flex;
+  align-items: center;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .actions button {
   border: 1px solid #aeb5bd;
   background: #fff;
@@ -220,7 +287,8 @@ td input[type="checkbox"] {
   font-size: 12px;
 }
 
-.actions button:first-child {
+.actions > button:first-child,
+.actions > .action-control-wrap:first-child > button {
   background: #171a1f;
   color: #fff;
   border-color: #171a1f;
@@ -996,7 +1064,8 @@ td input[type="checkbox"] {
   white-space: nowrap;
 }
 
-.model-chip button {
+.model-chip button,
+.model-chip .action-control-wrap > button {
   border: 0;
   background: transparent;
   color: #59616b;
@@ -1006,7 +1075,8 @@ td input[type="checkbox"] {
   padding: 0 4px;
 }
 
-.model-chip button:disabled {
+.model-chip button:disabled,
+.model-chip .action-control-wrap > button:disabled {
   cursor: default;
   opacity: .35;
 }
@@ -1060,7 +1130,9 @@ td input[type="checkbox"] {
 }
 
 .settings-connect-row button,
-.settings-actions button {
+.settings-connect-row .action-control-wrap > button,
+.settings-actions button,
+.settings-actions .action-control-wrap > button {
   border: 1px solid #aeb5bd;
   background: #fff;
   padding: 8px 12px;
@@ -1074,7 +1146,8 @@ td input[type="checkbox"] {
 }
 
 .settings-actions .settings-save,
-.settings-connect-row button {
+.settings-connect-row button,
+.settings-connect-row .action-control-wrap > button {
   border-color: #171a1f;
   background: #171a1f;
   color: #fff;
@@ -1171,7 +1244,8 @@ td input[type="checkbox"] {
   flex-wrap: wrap;
 }
 
-.view-tabs button {
+.view-tabs button,
+.view-tabs .action-control-wrap > button {
   border: 1px solid #aeb5bd;
   background: #fff;
   color: #171a1f;
@@ -1182,7 +1256,8 @@ td input[type="checkbox"] {
   font-size: 12px;
 }
 
-.view-tabs button[aria-pressed="true"] {
+.view-tabs button[aria-pressed="true"],
+.view-tabs .action-control-wrap > button[aria-pressed="true"] {
   border-color: #171a1f;
   background: #171a1f;
   color: #fff;
@@ -1317,6 +1392,16 @@ td input[type="checkbox"] {
   line-height: 1;
 }
 
+.pagination-center > .action-control-wrap {
+  width: 30px;
+  height: 30px;
+}
+
+.pagination-center > .action-control-wrap > button {
+  width: 100%;
+  height: 100%;
+}
+
 .result-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(120px, 1fr));
@@ -1339,6 +1424,44 @@ td input[type="checkbox"] {
 
 .result-summary strong {
   font-size: 18px;
+}
+
+.raw-report-preview {
+  margin: 18px 0;
+  padding: 16px;
+  border: 1px solid #c8cdd3;
+  background: #f8f9fa;
+}
+
+.raw-report-preview > .error {
+  border-left-color: #a12d2d;
+  background: #fff;
+}
+
+.raw-report-inputs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(160px, 1fr));
+  gap: 4px 14px;
+  margin: 8px 0;
+}
+
+.raw-report-inputs > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.raw-report-inputs dt {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.raw-report-inputs dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+  .raw-report-inputs { grid-template-columns: 1fr; }
 }
 
 .artifact-summary {

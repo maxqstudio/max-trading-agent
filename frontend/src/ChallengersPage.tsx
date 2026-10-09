@@ -1,5 +1,6 @@
 import { type FormEvent, useEffect, useRef, useState } from 'react'
 import { Pagination, SortHeader } from './DataTable'
+import { ActionButton, ActionProgress } from './ActionControls'
 import { compactNumber } from './tableFormat'
 
 type KPI = {
@@ -200,8 +201,13 @@ type PendingBacktestDelete = {
   state: string
 }
 
+type BulkBacktestResult = {
+  candidate: ChallengerListItem
+  backtest: BacktestRecord
+}
+
 type View = 'active' | 'retired'
-type DialogMode = 'promotion' | 'retirement' | 'delete-challenger' | 'delete-backtest' | 'bulk-backtest' | null
+type DialogMode = 'promotion' | 'retirement' | 'delete-challenger' | 'delete-backtest' | 'clean-backtest-runtime' | 'bulk-backtest' | 'run-all-backtests' | null
 
 function n(value: number | string | null | undefined) {
   return value === undefined || value === null ? '—' : String(value)
@@ -215,6 +221,28 @@ function maxDrawdownPct(metrics?: BacktestMetrics) {
     metrics?.equity_drawdown_relative_pct,
   ].filter((value): value is number => value !== null && value !== undefined && Number.isFinite(value))
   return values.length ? Math.max(...values) : null
+}
+
+function backtestDateOrdinal(value: string) {
+  const match = /^(\d{4})\.(\d{2})\.(\d{2})$/.exec(value)
+  if (!match) return null
+  const [year, month, day] = match.slice(1).map(Number)
+  if (year < 1 || month < 1 || month > 12 || day < 1 || day > 31) return null
+  const date = new Date(0)
+  date.setUTCFullYear(year, month - 1, day)
+  date.setUTCHours(0, 0, 0, 0)
+  if (
+    date.getUTCFullYear() !== year
+    || date.getUTCMonth() !== month - 1
+    || date.getUTCDate() !== day
+  ) return null
+  return date.getTime()
+}
+
+function validBacktestDateRange(fromDate: string, toDate: string) {
+  const from = backtestDateOrdinal(fromDate)
+  const to = backtestDateOrdinal(toDate)
+  return from !== null && to !== null && from < to
 }
 
 function ownerOperationalStatus(value?: string) {
@@ -245,30 +273,22 @@ function IntegrityValue({ value }: { value?: string }) {
 }
 
 function blockerSummary(blockers?: string[]) {
-  return blockers?.length ? 'Protected by current authority or retained dependencies' : 'No blocking dependency'
+  if (!blockers?.length) return 'No blocking dependency.'
+  return blockers.map((blocker) => {
+    if (blocker.startsWith('ACTIVE_BACKTEST:')) return 'A Backtest is still active; wait for it to finish.'
+    if (blocker.startsWith('ACTIVE_PROMOTION:')) return 'A Champion promotion is still active; wait for it to finish.'
+    if (blocker === 'CURRENT_CHAMPION_DEPENDS_ON_CHALLENGER') return 'The current Champion still depends on this Challenger.'
+    if (blocker === 'BACKTEST_HISTORY_EXISTS_DELETE_BACKTESTS_FIRST') return 'Delete retained Backtest records first.'
+    if (blocker === 'PROMOTION_HISTORY_PROTECTED') return 'Promotion history protects this Challenger from deletion.'
+    if (blocker === 'LEGACY_OR_FOREIGN_CHALLENGER_ARTIFACT_PROTECTED') return 'The Challenger bundle is outside the deletable artifact authority.'
+    return blocker
+  }).join(' ')
 }
 
 function metricLabel(name: string) {
   return name
     .replaceAll('_', ' ')
     .replace(/\b\w/g, (value) => value.toUpperCase())
-}
-
-function ActionProgress({
-  active,
-  idle,
-  pending,
-}: {
-  active: boolean
-  idle: string
-  pending: string
-}) {
-  return (
-    <>
-      {active && <span className="button-spinner" aria-hidden="true" />}
-      <span>{active ? pending : idle}</span>
-    </>
-  )
 }
 
 function ownerErrorMessage(value: unknown, fallback: string) {
@@ -307,6 +327,23 @@ async function fetchRegistry(
   })
   const response = await fetch('/api/challengers/registry?' + params.toString(), { signal })
   return await jsonOrError(response) as RegistryPage
+}
+
+async function fetchAllActiveChallengers() {
+  const first = await fetchRegistry('active', '', 'created', 'desc', 1, 100)
+  const items = [...first.items]
+  for (let nextPage = 2; nextPage <= first.pages; nextPage += 1) {
+    const next = await fetchRegistry('active', '', 'created', 'desc', nextPage, 100)
+    if (next.total !== first.total || next.pages !== first.pages) {
+      throw new Error('The active Challenger registry changed during preflight. Refresh and try again.')
+    }
+    items.push(...next.items)
+  }
+  const ids = new Set(items.map((item) => item.challenger_id))
+  if (items.length !== first.total || ids.size !== items.length) {
+    throw new Error('The active Challenger registry changed during preflight. Refresh and try again.')
+  }
+  return items
 }
 
 async function fetchChampion(signal?: AbortSignal) {
@@ -393,17 +430,25 @@ export default function ChallengersPage() {
   const [backtestPageSize, setBacktestPageSize] = useState(25)
   const [backtestDetail, setBacktestDetail] = useState<BacktestRecord | null>(null)
   const [deletePreflight, setDeletePreflight] = useState<ChallengerDeletePreflight | null>(null)
+  const [pendingBacktestClean, setPendingBacktestClean] = useState<BacktestRecord | null>(null)
   const [pendingBacktestDelete, setPendingBacktestDelete] = useState<PendingBacktestDelete | null>(null)
   const [backtestSelection, setBacktestSelection] = useState<Set<string>>(new Set())
   const [backtestBulkPreflight, setBacktestBulkPreflight] = useState<BacktestBulkPreflight | null>(null)
   const [backtestBulkAction, setBacktestBulkAction] = useState<'clean' | 'delete' | null>(null)
+  const [pendingBulkBacktests, setPendingBulkBacktests] = useState<ChallengerListItem[]>([])
+  const [pendingBulkDateRange, setPendingBulkDateRange] = useState<{ from_date: string; to_date: string } | null>(null)
+  const [bulkBacktestResults, setBulkBacktestResults] = useState<BulkBacktestResult[]>([])
+  const [bulkRunIndex, setBulkRunIndex] = useState(0)
   const [champion, setChampion] = useState<ChampionAuthority | null>(null)
   const [dialogMode, setDialogMode] = useState<DialogMode>(null)
   const [busy, setBusy] = useState('')
+  const [registryAction, setRegistryAction] = useState('')
+  const [backtestListAction, setBacktestListAction] = useState('')
   const [operationResult, setOperationResult] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
   const [detailLoading, setDetailLoading] = useState(false)
+  const [detailLoadingId, setDetailLoadingId] = useState('')
   const [loadedBacktestKey, setLoadedBacktestKey] = useState('')
   const backtestRequestKey = JSON.stringify([
     detail?.challenger_id, backtestQuery, backtestState, backtestSort, backtestOrder, backtestPage, backtestPageSize,
@@ -419,6 +464,20 @@ export default function ChallengersPage() {
     to_date: '',
   })
 
+  useEffect(() => {
+    if (dialogMode !== 'run-all-backtests' || busy !== '') return
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setDialogMode(null)
+        setPendingBulkBacktests([])
+        setPendingBulkDateRange(null)
+        setOperationResult('Bulk Backtest cancelled. No Backtest was started.')
+      }
+    }
+    window.addEventListener('keydown', closeOnEscape)
+    return () => window.removeEventListener('keydown', closeOnEscape)
+  }, [dialogMode, busy])
+
   const applyDetail = (next: ChallengerDetail | null) => {
     setDetail(next)
     if (next) {
@@ -433,6 +492,11 @@ export default function ChallengersPage() {
   }
 
   const detailVerified = detail?.artifact_integrity.status === 'VERIFIED'
+  const registryControlsBlocked = loading || detailLoading || busy !== ''
+  const registryControlsBlockedReason = loading
+    ? 'Wait for the Challenger registry to finish loading.'
+    : detailLoading ? 'Wait for the selected Challenger details to finish loading.'
+      : 'Wait for the current Challenger operation to finish.'
 
   const blockAction = (reason: string) => {
     setOperationResult('Action blocked: ' + reason)
@@ -443,6 +507,7 @@ export default function ChallengersPage() {
     const controller = requestedController ?? new AbortController()
     detailController.current = controller
     setDetailLoading(true)
+    setDetailLoadingId(challengerId)
     setOperationResult('Loading selected Challenger and safety checks…')
     setError('')
     applyDetail(null)
@@ -466,6 +531,7 @@ export default function ChallengersPage() {
       if (!controller.signal.aborted) {
         setOperationResult('')
         setDetailLoading(false)
+        setDetailLoadingId('')
         if (detailController.current === controller) detailController.current = null
       }
     }
@@ -475,13 +541,17 @@ export default function ChallengersPage() {
     detailController.current?.abort()
     detailController.current = null
     setDetailLoading(false)
+    setDetailLoadingId('')
     applyDetail(null)
     setDeletePreflight(null)
     setBacktests(null)
     setBacktestSelection(new Set())
     setBacktestBulkPreflight(null)
     setBacktestBulkAction(null)
+    setPendingBulkBacktests([])
+    setPendingBulkDateRange(null)
     setBacktestDetail(null)
+    setPendingBacktestClean(null)
     setPendingBacktestDelete(null)
     setDialogMode(null)
     setOperationResult('')
@@ -561,7 +631,10 @@ export default function ChallengersPage() {
         if (active && !controller.signal.aborted) setError(reason.message)
       })
       .finally(() => {
-        if (active) setLoading(false)
+        if (active) {
+          setLoading(false)
+          setRegistryAction('')
+        }
       })
     return () => {
       active = false
@@ -598,6 +671,9 @@ export default function ChallengersPage() {
           setLoadedBacktestKey(backtestRequestKey)
         }
       })
+      .finally(() => {
+        if (active) setBacktestListAction('')
+      })
     return () => { active = false; controller.abort() }
   }, [
     detail?.challenger_id,
@@ -612,14 +688,39 @@ export default function ChallengersPage() {
 
   const searchRegistry = (event: FormEvent) => {
     event.preventDefault()
+    if (registryControlsBlocked) return blockAction(registryControlsBlockedReason)
+    const nextQuery = queryDraft.trim()
+    if (nextQuery === query && page === 1) {
+      setOperationResult('Search criteria are already applied; no new request was sent.')
+      return
+    }
+    setRegistryAction('search')
     invalidateSelectedDetail()
     setLoading(true)
     setError('')
     setPage(1)
-    setQuery(queryDraft.trim())
+    setQuery(nextQuery)
+  }
+
+  const clearRegistrySearch = () => {
+    if (registryControlsBlocked) return blockAction(registryControlsBlockedReason)
+    if (queryDraft.trim() === '' && query === '' && page === 1) {
+      setOperationResult('Search filters are already clear; no new request was sent.')
+      return
+    }
+    setRegistryAction('clear')
+    invalidateSelectedDetail()
+    setLoading(true)
+    setError('')
+    setQueryDraft('')
+    setQuery('')
+    setPage(1)
   }
 
   const switchView = (next: View) => {
+    if (registryControlsBlocked) return blockAction(registryControlsBlockedReason)
+    if (next === view) return
+    setRegistryAction(next)
     invalidateSelectedDetail()
     setDialogMode(null)
     setOperationResult('')
@@ -668,7 +769,7 @@ export default function ChallengersPage() {
     if (busy !== '' || detailLoading || loading) return blockAction('another authority operation is in progress; wait for it to finish.')
     setBusy('retirement')
     setError('')
-    setOperationResult('Submitting non-destructive retirement and refreshing Challenger authority…')
+    setOperationResult('Retiring Challenger, removing its compiled MT5 EA, and preserving its source parameters…')
     try {
       const response = await fetch(
         '/api/challengers/' + encodeURIComponent(detail.challenger_id) + '/retire',
@@ -682,9 +783,9 @@ export default function ChallengersPage() {
         },
       )
       const result = await jsonOrError(response)
-      const completion = result.backtest_history_preserved
-        ? 'Challenger retired non-destructively. Retained backtest history was preserved.'
-        : 'Challenger retired non-destructively.'
+      const completion = result.runtime_ea === 'REMOVED'
+        ? 'Challenger retired. Its compiled MT5 EA was removed; DB parameters, source bundle, and backtest history were preserved.'
+        : 'Challenger retired. No compiled MT5 EA was present; DB parameters, source bundle, and backtest history were preserved.'
       setOperationResult(completion)
       setDialogMode(null)
       await refresh(undefined, completion)
@@ -699,6 +800,11 @@ export default function ChallengersPage() {
     if (!detail) return blockAction('select and load a Challenger before starting a Backtest.')
     if (!detailVerified) return blockAction('Challenger evidence is not verified; no Backtest was submitted.')
     if (busy !== '' || detailLoading || backtestsLoading || loading) return blockAction('Challenger or Backtest authority is still loading, or another action is running.')
+    if (!validBacktestDateRange(backtestForm.from_date, backtestForm.to_date)) {
+      return blockAction(
+        'Use valid YYYY.MM.DD dates, with Backtest From earlier than Backtest To. No Backtest was started.',
+      )
+    }
     setBusy('backtest')
     setError('')
     setOperationResult('Submitting the request to MT5 Strategy Tester…')
@@ -725,7 +831,133 @@ export default function ChallengersPage() {
     }
   }
 
+  const prepareAllBacktests = async () => {
+    if (view !== 'active' || !detail || detail.status !== 'CHALLENGER') {
+      return blockAction('select a verified active Challenger before preparing the all-active Backtest.')
+    }
+    if (!detailVerified) return blockAction('Challenger evidence is not verified; no Backtest was prepared.')
+    if (busy !== '' || detailLoading || loading || backtestsLoading) {
+      return blockAction('wait for Challenger authority and Backtest history to finish loading.')
+    }
+    if (!validBacktestDateRange(backtestForm.from_date, backtestForm.to_date)) {
+      return blockAction('Use a valid Backtest date range before preparing the all-active run. No Backtests were started.')
+    }
+    const selectedDateRange = {
+      from_date: backtestForm.from_date,
+      to_date: backtestForm.to_date,
+    }
+    setBusy('bulk-backtest-preflight')
+    setError('')
+    setBulkBacktestResults([])
+    setOperationResult('Checking every active Challenger before any Backtest can start…')
+    try {
+      const candidates = await fetchAllActiveChallengers()
+      if (!candidates.length) {
+        throw new Error('No active Challengers are available for a bulk Backtest.')
+      }
+      const details = await Promise.all(
+        candidates.map((candidate) => fetchDetail(candidate.challenger_id)),
+      )
+      const allVerified = details.every((candidate, index) => (
+        candidate.challenger_id === candidates[index].challenger_id
+        && candidate.status === 'CHALLENGER'
+        && candidate.artifact_integrity.status === 'VERIFIED'
+      ))
+      if (!allVerified) {
+        throw new Error(
+          'No Backtests were started because at least one active Challenger failed integrity verification.',
+        )
+      }
+      setPendingBulkBacktests(candidates)
+      setPendingBulkDateRange(selectedDateRange)
+      setBulkRunIndex(0)
+      setDialogMode('run-all-backtests')
+      setOperationResult(
+        'Integrity preflight passed for ' + candidates.length + ' active Challengers. Review before starting.',
+      )
+    } catch (reason) {
+      setError((reason as Error).message)
+      setOperationResult('Bulk Backtest preflight stopped. No Backtests were started.')
+    } finally {
+      setBusy('')
+    }
+  }
+
+  const confirmAllBacktests = async () => {
+    if (view !== 'active' || pendingBulkBacktests.length === 0 || !pendingBulkDateRange) {
+      return blockAction('the verified active Challenger snapshot is missing; no Backtests were started.')
+    }
+    if (busy !== '') return blockAction('another authority operation is running; no bulk Backtest was started.')
+    const candidates = [...pendingBulkBacktests]
+    const dateRange = { ...pendingBulkDateRange }
+    setBusy('bulk-run-backtests')
+    setError('')
+
+    let completed = 0
+    let failure: { index: number; message: string } | null = null
+    for (let index = 0; index < candidates.length; index += 1) {
+      const candidate = candidates[index]
+      setBulkRunIndex(index + 1)
+      setOperationResult(
+        'Running Backtest ' + (index + 1) + ' of ' + candidates.length
+        + ' in MT5 Strategy Tester. Completed results are retained.',
+      )
+      try {
+        const response = await fetch(
+          '/api/challengers/' + encodeURIComponent(candidate.challenger_id) + '/backtest',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dateRange),
+          },
+        )
+        const result = await jsonOrError(response) as BacktestRecord
+        setBulkBacktestResults((current) => [...current, { candidate, backtest: result }])
+        if (result.state !== 'COMPLETED') {
+          throw new Error('The Backtest did not return a confirmed completed state.')
+        }
+        completed += 1
+      } catch (reason) {
+        failure = {
+          index,
+          message: (reason as Error).message || 'The Backtest response was not confirmed.',
+        }
+        break
+      }
+    }
+
+    setDialogMode(null)
+    setPendingBulkBacktests([])
+    setPendingBulkDateRange(null)
+    let refreshFailure = ''
+    try {
+      await refresh(detail?.challenger_id)
+    } catch {
+      refreshFailure = ' Challenger authority refresh did not complete.'
+    }
+    setBusy('')
+    setBulkRunIndex(0)
+
+    if (failure) {
+      const remaining = candidates.length - completed - 1
+      setError('Bulk Backtest stopped at candidate ' + (failure.index + 1) + ': ' + failure.message)
+      setOperationResult(
+        'Stopped after ' + completed + ' of ' + candidates.length + '. '
+        + remaining + ' remaining candidate(s) were not started. Check Backtest history before retrying; '
+        + 'the last request may have reached MT5.' + refreshFailure,
+      )
+      return
+    }
+
+    setOperationResult(
+      'Completed Backtests for ' + completed + ' of ' + candidates.length
+      + ' active Challengers.' + refreshFailure,
+    )
+    if (refreshFailure) setError(refreshFailure.trim())
+  }
+
   function changeRegistrySort(field: string, nextOrder: 'asc' | 'desc') {
+    setRegistryAction('sort:' + field)
     invalidateSelectedDetail()
     setSort(field)
     setOrder(nextOrder)
@@ -734,6 +966,7 @@ export default function ChallengersPage() {
   }
 
   function changeBacktestSort(field: string, nextOrder: 'asc' | 'desc') {
+    setBacktestListAction('sort:' + field)
     setBacktestSort(field)
     setBacktestOrder(nextOrder)
     setBacktestPage(1)
@@ -773,27 +1006,52 @@ export default function ChallengersPage() {
     setOperationResult('Report opened in a new tab if allowed by the browser. If no tab appeared, allow pop-ups for this site.')
   }
 
-  async function cleanBacktestRuntime(record: BacktestRecord) {
+  function prepareBacktestRuntimeClean(record: BacktestRecord) {
     if (busy !== '') return blockAction('another action is in progress; no runtime files were changed.')
     if (['PREPARED', 'RUNNING'].includes(record.state)) {
       return blockAction('runtime cleanup is blocked while this Backtest is active; no files were changed.')
     }
-    const busyKey = 'clean-backtest:' + record.backtest_id
+    if (record.runtime_status === 'CLEANED') {
+      return blockAction('this Backtest’s temporary files are already cleaned; retained results remain available and the shared Challenger EA is unchanged.')
+    }
+    setPendingBacktestClean(record)
+    setDialogMode('clean-backtest-runtime')
+    setOperationResult('Review the runtime files that will be removed before confirming cleanup.')
+  }
+
+  async function confirmBacktestRuntimeClean() {
+    if (!pendingBacktestClean) return blockAction('no Backtest runtime is selected for cleanup; no files were changed.')
+    if (busy !== '') return blockAction('another action is in progress; no runtime files were changed.')
+    if (pendingBacktestClean.challenger_id !== detail?.challenger_id) {
+      return blockAction('the selected Challenger changed; refresh history and run the safety check again.')
+    }
+    if (['PREPARED', 'RUNNING'].includes(pendingBacktestClean.state)) {
+      return blockAction('runtime cleanup is blocked while this Backtest is active; no files were changed.')
+    }
+    if (pendingBacktestClean.runtime_status === 'CLEANED') {
+      setPendingBacktestClean(null)
+      setDialogMode(null)
+      return blockAction('this Backtest runtime is already cleaned. No files were changed.')
+    }
+    const pending = pendingBacktestClean
+    const busyKey = 'clean-backtest:' + pending.backtest_id
     setBusy(busyKey)
     setError('')
-    setOperationResult('Cleaning registered runtime files for the selected Backtest…')
+    setOperationResult('Removing the confirmed Backtest runtime files; retained results will remain available…')
     try {
       const response = await fetch(
-        '/api/challengers/backtests/' + encodeURIComponent(record.backtest_id) + '/clean-runtime',
+        '/api/challengers/backtests/' + encodeURIComponent(pending.backtest_id) + '/clean-runtime',
         { method: 'POST' },
       )
       const result = await jsonOrError(response)
       setOperationResult(
-        'Runtime cleaned · removed ' + String(result.removed_bytes ?? 0) + ' bytes.',
+        'Runtime cleaned · removed ' + String(result.removed_bytes ?? 0) + ' bytes. Backtest results and retained report remain available.',
       )
-      await refreshBacktests(record.challenger_id)
-      if (detail?.challenger_id === record.challenger_id) {
-        setDeletePreflight(await fetchDeletePreflight(record.challenger_id))
+      setPendingBacktestClean(null)
+      setDialogMode(null)
+      await refreshBacktests(pending.challenger_id)
+      if (detail?.challenger_id === pending.challenger_id) {
+        setDeletePreflight(await fetchDeletePreflight(pending.challenger_id))
       }
     } catch (reason) {
       setError((reason as Error).message)
@@ -980,6 +1238,61 @@ export default function ChallengersPage() {
       {error && <p role="alert" className="error">Challenger authority unavailable: {error}</p>}
       {operationResult && <p role="status" className="notice">{operationResult}</p>}
 
+      {bulkBacktestResults.length > 0 && (
+        <section aria-labelledby="bulk-backtest-results">
+          <div className="section-head">
+            <div>
+              <h2 id="bulk-backtest-results">All-active Backtest results</h2>
+              <p className="subtle">
+                Each row is a retained MT5 result. Range: {bulkBacktestResults[0].backtest.request.from_date}
+                {' '}to {bulkBacktestResults[0].backtest.request.to_date}. The already-compiled Challenger EA was reused.
+              </p>
+            </div>
+          </div>
+          <div className="table-wrap data-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Challenger</th>
+                  <th>Backtest</th>
+                  <th>Net profit</th>
+                  <th>PF</th>
+                  <th>Trades</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bulkBacktestResults.map(({ candidate, backtest }) => (
+                  <tr key={backtest.backtest_id}>
+                    <td>Round {candidate.source_round} · Pass {candidate.source_pass}</td>
+                    <td>
+                      <strong>{ownerOperationalStatus(backtest.state)}</strong>
+                      <div><code>{backtest.backtest_id}</code></div>
+                      {backtest.error && <small role="note">{ownerErrorMessage(backtest.error, 'Review retained Backtest history for the failure.')}</small>}
+                    </td>
+                    <td>{compactNumber(backtest.result?.metrics?.total_net_profit)}</td>
+                    <td>{compactNumber(backtest.result?.metrics?.profit_factor)}</td>
+                    <td>{backtest.result?.metrics?.total_trades ?? '—'}</td>
+                    <td>
+                      <ActionButton
+                        type="button"
+                        disabled={!backtest.report_sha256 || busy !== ''}
+                        blockedReason={!backtest.report_sha256
+                          ? 'No retained report is available for this Backtest.'
+                          : 'Wait for the current Challenger operation.'}
+                        onClick={() => openBacktestReport(backtest.backtest_id, Boolean(backtest.report_sha256))}
+                      >
+                        Open Report
+                      </ActionButton>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
       <section aria-labelledby="challenger-registry">
         <div className="section-head">
           <div>
@@ -989,20 +1302,30 @@ export default function ChallengersPage() {
             </p>
           </div>
           <div className="view-tabs" aria-label="Challenger registry view">
-            <button
+            <ActionButton
               type="button"
               aria-pressed={view === 'active'}
               onClick={() => switchView('active')}
+              disabled={registryControlsBlocked || detailLoading || view === 'active'}
+              blockedReason={registryControlsBlocked
+                ? registryControlsBlockedReason
+                : detailLoading ? 'Wait for the selected Challenger details to finish loading.'
+                  : 'The Active view is already selected.'}
             >
-              Active
-            </button>
-            <button
+              <ActionProgress active={loading && registryAction === 'active'} idle="Active" pending="Loading Active…" />
+            </ActionButton>
+            <ActionButton
               type="button"
               aria-pressed={view === 'retired'}
               onClick={() => switchView('retired')}
+              disabled={registryControlsBlocked || detailLoading || view === 'retired'}
+              blockedReason={registryControlsBlocked
+                ? registryControlsBlockedReason
+                : detailLoading ? 'Wait for the selected Challenger details to finish loading.'
+                  : 'The Retired / Archive view is already selected.'}
             >
-              Retired / Archive
-            </button>
+              <ActionProgress active={loading && registryAction === 'retired'} idle="Retired / Archive" pending="Loading archive…" />
+            </ActionButton>
           </div>
         </div>
 
@@ -1049,25 +1372,31 @@ export default function ChallengersPage() {
             </select>
           </label>
           <div className="actions form-action">
-            <button type="submit">Search</button>
-            <button
-              type="button"
-              onClick={() => {
-                invalidateSelectedDetail()
-                setLoading(true)
-                setQueryDraft('')
-                setQuery('')
-                setPage(1)
-              }}
+            <ActionButton
+              type="submit"
+              disabled={registryControlsBlocked || (queryDraft.trim() === query && page === 1)}
+              blockedReason={registryControlsBlocked
+                ? registryControlsBlockedReason
+                : 'Search criteria are already applied; no new request would be sent.'}
             >
-              Clear
-            </button>
+              <ActionProgress active={loading && registryAction === 'search'} idle="Search" pending="Searching…" />
+            </ActionButton>
+            <ActionButton
+              type="button"
+              disabled={registryControlsBlocked || (queryDraft.trim() === '' && query === '' && page === 1)}
+              blockedReason={registryControlsBlocked
+                ? registryControlsBlockedReason
+                : 'Search filters are already clear; no new request would be sent.'}
+              onClick={clearRegistrySearch}
+            >
+              <ActionProgress active={loading && registryAction === 'clear'} idle="Clear" pending="Clearing…" />
+            </ActionButton>
           </div>
         </form>
 
         {loading && <p role="status" className="loading">Loading Challenger registry…</p>}
 
-        {!loading && registry && (
+        {registry && (
           <>
             <p className="subtle">
               {registry.total} {view === 'active' ? 'active' : 'retired'} Strategies
@@ -1076,19 +1405,19 @@ export default function ChallengersPage() {
               <table>
                 <thead>
                   <tr>
-                    <SortHeader label="Challenger" field="id" sort={sort} order={order} onSort={changeRegistrySort} />
+                    <SortHeader label="Challenger" field="id" sort={sort} order={order} onSort={changeRegistrySort} loading={registryControlsBlocked} blockedReason={registryControlsBlockedReason} pending={registryAction === 'sort:id'} />
                     <th>Status</th>
-                    <SortHeader label="Created" field="created" sort={sort} order={order} onSort={changeRegistrySort} />
+                    <SortHeader label="Created" field="created" sort={sort} order={order} onSort={changeRegistrySort} loading={registryControlsBlocked} blockedReason={registryControlsBlockedReason} pending={registryAction === 'sort:created'} />
                     {view === 'retired' && (
-                      <SortHeader label="Retired" field="retired" sort={sort} order={order} onSort={changeRegistrySort} />
+                      <SortHeader label="Retired" field="retired" sort={sort} order={order} onSort={changeRegistrySort} loading={registryControlsBlocked} blockedReason={registryControlsBlockedReason} pending={registryAction === 'sort:retired'} />
                     )}
-                    <SortHeader label="Source" field="source_job" sort={sort} order={order} onSort={changeRegistrySort} />
+                    <SortHeader label="Source" field="source_job" sort={sort} order={order} onSort={changeRegistrySort} loading={registryControlsBlocked} blockedReason={registryControlsBlockedReason} pending={registryAction === 'sort:source_job'} />
                     <th>Round</th><th>Pass</th>
-                    <SortHeader label="PF" field="profit_factor" sort={sort} order={order} onSort={changeRegistrySort} />
-                    <SortHeader label="RF" field="recovery_factor" sort={sort} order={order} onSort={changeRegistrySort} />
-                    <SortHeader label="Mean R" field="mean_r" sort={sort} order={order} onSort={changeRegistrySort} />
-                    <SortHeader label="Weighted R" field="weighted_r" sort={sort} order={order} onSort={changeRegistrySort} />
-                    <SortHeader label="Trades" field="trades" sort={sort} order={order} onSort={changeRegistrySort} />
+                    <SortHeader label="PF" field="profit_factor" sort={sort} order={order} onSort={changeRegistrySort} loading={registryControlsBlocked} blockedReason={registryControlsBlockedReason} pending={registryAction === 'sort:profit_factor'} />
+                    <SortHeader label="RF" field="recovery_factor" sort={sort} order={order} onSort={changeRegistrySort} loading={registryControlsBlocked} blockedReason={registryControlsBlockedReason} pending={registryAction === 'sort:recovery_factor'} />
+                    <SortHeader label="Mean R" field="mean_r" sort={sort} order={order} onSort={changeRegistrySort} loading={registryControlsBlocked} blockedReason={registryControlsBlockedReason} pending={registryAction === 'sort:mean_r'} />
+                    <SortHeader label="Weighted R" field="weighted_r" sort={sort} order={order} onSort={changeRegistrySort} loading={registryControlsBlocked} blockedReason={registryControlsBlockedReason} pending={registryAction === 'sort:weighted_r'} />
+                    <SortHeader label="Trades" field="trades" sort={sort} order={order} onSort={changeRegistrySort} loading={registryControlsBlocked} blockedReason={registryControlsBlockedReason} pending={registryAction === 'sort:trades'} />
                     <th>Integrity</th>
                   </tr>
                 </thead>
@@ -1105,14 +1434,21 @@ export default function ChallengersPage() {
                   {registry.items.map((item) => (
                     <tr key={item.challenger_id}>
                       <td>
-                        <button
+                        <ActionButton
                           className="text-button mono"
                           onClick={() => loadDetail(item.challenger_id)}
                           disabled={loading || detailLoading || busy !== ''}
-                          title={busy !== '' ? 'Wait for the current action to finish before changing the selected Challenger.' : undefined}
+                          blockedReason={busy !== ''
+                            ? 'Wait for the current Challenger action to finish before changing the selected item.'
+                            : loading ? 'Wait for the Challenger list to finish loading.'
+                              : 'Wait for the selected Challenger details to finish loading.'}
                         >
-                          Round {item.source_round} · Pass {item.source_pass}
-                        </button>
+                          <ActionProgress
+                            active={detailLoadingId === item.challenger_id}
+                            idle={'Round ' + item.source_round + ' · Pass ' + item.source_pass}
+                            pending="Loading Challenger…"
+                          />
+                        </ActionButton>
                       </td>
                       <td><strong>{ownerOperationalStatus(item.status)}</strong></td>
                       <td>{item.created_utc}</td>
@@ -1136,7 +1472,10 @@ export default function ChallengersPage() {
               pages={registry.pages}
               pageSize={registry.page_size}
               total={registry.total}
-              onPage={(next) => { invalidateSelectedDetail(); setLoading(true); setPage(next) }}
+              loading={registryControlsBlocked}
+              blockedReason={registryControlsBlockedReason}
+              pendingDirection={registryAction === 'page-previous' ? 'previous' : registryAction === 'page-next' ? 'next' : ''}
+              onPage={(next, direction) => { setRegistryAction('page-' + direction); invalidateSelectedDetail(); setLoading(true); setPage(next) }}
               onPageSize={(size) => { invalidateSelectedDetail(); setPageSize(size); setPage(1); setLoading(true) }}
             />
           </>
@@ -1150,28 +1489,40 @@ export default function ChallengersPage() {
               <h2 id="challenger-identity">Candidate identity</h2>
               {isActive && (
                 <div className="actions">
-                  <button
+                  <ActionButton
                     type="button"
                     onClick={() => setDialogMode('promotion')}
                     disabled={!detailVerified || busy !== '' || detailLoading}
+                    blockedReason={!detailVerified
+                      ? 'Promotion is blocked until this Challenger’s complete artifact evidence is verified.'
+                      : busy !== '' ? 'Wait for the current Challenger operation.'
+                        : 'Wait for the Challenger details to finish loading.'}
                   >
                     Promote to Champion
-                  </button>
-                  <button
+                  </ActionButton>
+                  <ActionButton
                     type="button"
                     onClick={() => setDialogMode('retirement')}
                     disabled={!detailVerified || busy !== '' || detailLoading}
+                    blockedReason={!detailVerified
+                      ? 'Retirement is blocked until this Challenger’s complete artifact evidence is verified.'
+                      : busy !== '' ? 'Wait for the current Challenger operation.'
+                        : 'Wait for the Challenger details to finish loading.'}
                   >
                     Retire / Archive
-                  </button>
-                  <button
+                  </ActionButton>
+                  <ActionButton
                     type="button"
                     onClick={() => setDialogMode('delete-challenger')}
                     disabled={!deletePreflight?.deletable || busy !== '' || detailLoading}
-                    title={deletePreflight?.blockers.length ? 'Deletion is protected by current authority' : 'Delete generated Challenger'}
+                    blockedReason={busy !== ''
+                      ? 'Wait for the current Challenger operation.'
+                      : detailLoading ? 'Wait for the Challenger details to finish loading.'
+                        : !deletePreflight ? 'Deletion safety check has not completed.'
+                          : blockerSummary(deletePreflight.blockers)}
                   >
                     Delete Challenger
-                  </button>
+                  </ActionButton>
                 </div>
               )}
             </div>
@@ -1194,6 +1545,21 @@ export default function ChallengersPage() {
               {detail.retired_utc && <div><dt>Retired</dt><dd>{detail.retired_utc}</dd></div>}
               <div><dt>Source</dt><dd>Retained qualified Optimizer evidence</dd></div>
               <div><dt>EA version</dt><dd>{detail.ea_version}</dd></div>
+              {detailVerified && (
+                <>
+                  <div><dt>Challenger EA</dt><dd>
+                    <a href={'/api/challengers/' + encodeURIComponent(detail.challenger_id) + '/ea'}>
+                      Download Challenger EA source
+                    </a>
+                  </dd></div>
+                  <div><dt>Parameter preset</dt><dd>
+                    <a href={'/api/challengers/' + encodeURIComponent(detail.challenger_id) + '/set'}>
+                      Download Challenger parameter preset
+                    </a>
+                  </dd></div>
+                  <div><dt>MT5 executable</dt><dd>Compiled when this Challenger is created; Backtests reuse the verified executable. Promotion installs it as Champion.</dd></div>
+                </>
+              )}
             </dl>
           </section>
 
@@ -1237,51 +1603,82 @@ export default function ChallengersPage() {
                   </p>
                 </div>
                 <div className="actions">
-                  <button
+                  <ActionButton
                     type="button"
                     onClick={runBacktest}
                     disabled={!detailVerified || busy !== '' || detailLoading || backtestsLoading}
-                    title={!detailVerified ? 'Backtest is blocked until Challenger evidence is verified.' : backtestsLoading ? 'Backtest history is still loading.' : busy !== '' ? 'Wait for the current operation to finish.' : undefined}
+                    blockedReason={!detailVerified
+                      ? 'Backtest is blocked until this Challenger’s complete artifact evidence is verified.'
+                      : busy !== '' ? 'Wait for the current operation to finish.'
+                        : detailLoading ? 'Wait for Challenger details to finish loading.'
+                          : 'Backtest history is still loading.'}
                   >
                     <ActionProgress
                       active={busy === 'backtest'}
                       idle="Run Backtest"
                       pending="Running..."
                     />
-                  </button>
+                  </ActionButton>
+                  <ActionButton
+                    type="button"
+                    onClick={prepareAllBacktests}
+                    disabled={!detailVerified || busy !== '' || detailLoading || backtestsLoading || loading}
+                    blockedReason={!detailVerified
+                      ? 'Bulk Backtest is blocked until the selected Challenger’s integrity is verified.'
+                      : busy !== '' ? 'Wait for the current operation to finish.'
+                        : detailLoading || backtestsLoading || loading
+                          ? 'Wait for current Challenger and Backtest data to finish loading.'
+                          : 'Bulk run preflights all active Challengers and uses the selected date range.'}
+                  >
+                    <ActionProgress
+                      active={busy === 'bulk-backtest-preflight' || busy === 'bulk-run-backtests'}
+                      idle="Run Backtest All Active"
+                      pending={busy === 'bulk-backtest-preflight'
+                        ? 'Checking all Challengers...'
+                        : 'Running ' + bulkRunIndex + ' of ' + pendingBulkBacktests.length + '...'}
+                    />
+                  </ActionButton>
                 </div>
               </div>
+              <p id="backtest-window-help" className="subtle">
+                The Backtest date range is independent of the Optimizer run dates. Candidate identity, symbols, timeframe, and parameters stay fixed.
+              </p>
               <div className="form-grid">
                 <label>Main Symbol
                   <input
                     value={backtestForm.symbol}
-                    onChange={(event) => setBacktestForm({ ...backtestForm, symbol: event.target.value })}
+                    readOnly
+                    title="Fixed by the retained Challenger source contract."
                   />
                 </label>
                 <label>Relative Symbol
                   <input
                     value={backtestForm.relative_symbol}
-                    onChange={(event) => setBacktestForm({ ...backtestForm, relative_symbol: event.target.value })}
+                    readOnly
+                    title="Fixed by the retained Challenger source contract."
                   />
                 </label>
                 <label>Timeframe
                   <input
                     value={backtestForm.period}
-                    onChange={(event) => setBacktestForm({ ...backtestForm, period: event.target.value.toUpperCase() })}
+                    readOnly
+                    title="Fixed by the retained Challenger source contract."
                   />
                 </label>
-                <label>From
+                <label>Backtest From
                   <input
                     value={backtestForm.from_date}
                     onChange={(event) => setBacktestForm({ ...backtestForm, from_date: event.target.value })}
                     placeholder="YYYY.MM.DD"
+                    aria-describedby="backtest-window-help"
                   />
                 </label>
-                <label>To
+                <label>Backtest To
                   <input
                     value={backtestForm.to_date}
                     onChange={(event) => setBacktestForm({ ...backtestForm, to_date: event.target.value })}
                     placeholder="YYYY.MM.DD"
+                    aria-describedby="backtest-window-help"
                   />
                 </label>
               </div>
@@ -1290,6 +1687,9 @@ export default function ChallengersPage() {
 
           <section aria-labelledby="backtest-history">
             <h2 id="backtest-history">Backtest history</h2>
+            <p className="subtle">
+              Clean Backtest Files removes only this run’s temporary Tester preset and source MT5 report. Delete Backtest removes the retained result and its evidence. Both preserve the shared deployed Challenger EA.
+            </p>
             {backtestsLoading && <p role="status" className="loading">Loading Backtest history; cleanup and bulk actions are temporarily disabled…</p>}
             <div className="table-toolbar">
               <input
@@ -1316,43 +1716,47 @@ export default function ChallengersPage() {
                 <option value="PREPARED">Prepared</option>
                 <option value="RUNNING">Running</option>
               </select>
-              <button
+              <ActionButton
                 type="button"
                 onClick={toggleBacktestPageSelection}
                 disabled={!backtests?.items.length || busy !== '' || backtestsLoading}
+                blockedReason={!backtests?.items.length ? 'There are no Backtest rows on this page to select.' : backtestsLoading ? 'Wait for Backtest history to finish loading.' : 'Wait for the current action to finish.'}
               >
                 Select current page
-              </button>
-              <button
+              </ActionButton>
+              <ActionButton
                 type="button"
                 onClick={() => setBacktestSelection(new Set())}
                 disabled={!backtestSelection.size || busy !== '' || backtestsLoading}
+                blockedReason={!backtestSelection.size ? 'Select at least one Backtest before clearing the selection.' : backtestsLoading ? 'Wait for Backtest history to finish loading.' : 'Wait for the current action to finish.'}
               >
                 Clear selection
-              </button>
+              </ActionButton>
               <span>{backtestSelection.size} selected</span>
-              <button
+              <ActionButton
                 type="button"
                 onClick={() => prepareBacktestBulk('clean')}
                 disabled={!backtestSelection.size || busy !== '' || backtestsLoading}
+                blockedReason={!backtestSelection.size ? 'Select at least one Backtest to preflight runtime cleanup.' : backtestsLoading ? 'Wait for Backtest history to finish loading.' : 'Wait for the current action to finish.'}
               >
                 <ActionProgress
                   active={busy === 'bulk-preflight-clean'}
-                  idle="Clean Selected Runtime"
+                  idle="Clean Selected Backtest Files"
                   pending="Checking safety..."
                 />
-              </button>
-              <button
+              </ActionButton>
+              <ActionButton
                 type="button"
                 onClick={() => prepareBacktestBulk('delete')}
                 disabled={!backtestSelection.size || busy !== '' || backtestsLoading}
+                blockedReason={!backtestSelection.size ? 'Select at least one Backtest to preflight deletion.' : backtestsLoading ? 'Wait for Backtest history to finish loading.' : 'Wait for the current action to finish.'}
               >
                 <ActionProgress
                   active={busy === 'bulk-preflight-delete'}
                   idle="Delete Selected"
                   pending="Checking safety..."
                 />
-              </button>
+              </ActionButton>
             </div>
             {!backtestsLoading && backtestSelection.size === 0 && backtests?.items.length !== 0 && (
               <p className="subtle">Select one or more retained Backtests to enable bulk cleanup or deletion.</p>
@@ -1368,19 +1772,19 @@ export default function ChallengersPage() {
                     <thead>
                       <tr>
                         <th>Select</th>
-                        <SortHeader label="Backtest" field="id" sort={backtestSort} order={backtestOrder} onSort={changeBacktestSort} />
-                        <SortHeader label="State" field="state" sort={backtestSort} order={backtestOrder} onSort={changeBacktestSort} />
+                        <SortHeader label="Backtest" field="id" sort={backtestSort} order={backtestOrder} onSort={changeBacktestSort} loading={backtestsLoading || busy !== ''} blockedReason={backtestsLoading ? 'Wait for Backtest history to finish loading.' : 'Wait for the current operation to finish.'} pending={backtestListAction === 'sort:id'} />
+                        <SortHeader label="State" field="state" sort={backtestSort} order={backtestOrder} onSort={changeBacktestSort} loading={backtestsLoading || busy !== ''} blockedReason={backtestsLoading ? 'Wait for Backtest history to finish loading.' : 'Wait for the current operation to finish.'} pending={backtestListAction === 'sort:state'} />
                         <th>Market</th>
                         <th>TF</th>
                         <th>Period</th>
-                        <SortHeader label="Net Profit" field="net_profit" sort={backtestSort} order={backtestOrder} onSort={changeBacktestSort} />
-                        <SortHeader label="PF" field="profit_factor" sort={backtestSort} order={backtestOrder} onSort={changeBacktestSort} />
-                        <SortHeader label="RF" field="recovery_factor" sort={backtestSort} order={backtestOrder} onSort={changeBacktestSort} />
-                        <SortHeader label="Sharpe" field="sharpe" sort={backtestSort} order={backtestOrder} onSort={changeBacktestSort} />
-                        <SortHeader label="Trades" field="trades" sort={backtestSort} order={backtestOrder} onSort={changeBacktestSort} />
+                        <SortHeader label="Net Profit" field="net_profit" sort={backtestSort} order={backtestOrder} onSort={changeBacktestSort} loading={backtestsLoading || busy !== ''} blockedReason={backtestsLoading ? 'Wait for Backtest history to finish loading.' : 'Wait for the current operation to finish.'} pending={backtestListAction === 'sort:net_profit'} />
+                        <SortHeader label="PF" field="profit_factor" sort={backtestSort} order={backtestOrder} onSort={changeBacktestSort} loading={backtestsLoading || busy !== ''} blockedReason={backtestsLoading ? 'Wait for Backtest history to finish loading.' : 'Wait for the current operation to finish.'} pending={backtestListAction === 'sort:profit_factor'} />
+                        <SortHeader label="RF" field="recovery_factor" sort={backtestSort} order={backtestOrder} onSort={changeBacktestSort} loading={backtestsLoading || busy !== ''} blockedReason={backtestsLoading ? 'Wait for Backtest history to finish loading.' : 'Wait for the current operation to finish.'} pending={backtestListAction === 'sort:recovery_factor'} />
+                        <SortHeader label="Sharpe" field="sharpe" sort={backtestSort} order={backtestOrder} onSort={changeBacktestSort} loading={backtestsLoading || busy !== ''} blockedReason={backtestsLoading ? 'Wait for Backtest history to finish loading.' : 'Wait for the current operation to finish.'} pending={backtestListAction === 'sort:sharpe'} />
+                        <SortHeader label="Trades" field="trades" sort={backtestSort} order={backtestOrder} onSort={changeBacktestSort} loading={backtestsLoading || busy !== ''} blockedReason={backtestsLoading ? 'Wait for Backtest history to finish loading.' : 'Wait for the current operation to finish.'} pending={backtestListAction === 'sort:trades'} />
                         <th>Win %</th>
                         <th>Max DD %</th>
-                        <SortHeader label="Created" field="created" sort={backtestSort} order={backtestOrder} onSort={changeBacktestSort} />
+                        <SortHeader label="Created" field="created" sort={backtestSort} order={backtestOrder} onSort={changeBacktestSort} loading={backtestsLoading || busy !== ''} blockedReason={backtestsLoading ? 'Wait for Backtest history to finish loading.' : 'Wait for the current operation to finish.'} pending={backtestListAction === 'sort:created'} />
                         <th>Runtime Status</th>
                         <th>Actions</th>
                       </tr>
@@ -1388,6 +1792,8 @@ export default function ChallengersPage() {
                     <tbody>
                       {backtests.items.map((record) => {
                         const metrics = record.result?.metrics
+                        const runtimeCleaned = record.runtime_status === 'CLEANED'
+                        const runtimeActive = ['PREPARED', 'RUNNING'].includes(record.state)
                         return (
                           <tr key={record.backtest_id}>
                             <td>
@@ -1415,37 +1821,46 @@ export default function ChallengersPage() {
                             <td>{ownerOperationalStatus(record.runtime_status)}</td>
                             <td>
                               <div className="row-actions">
-                                <button
+                                <ActionButton
                                   type="button"
                                   disabled={busy !== '' || backtestsLoading || backtestDetailLoadingId !== ''}
+                                  blockedReason={busy !== '' ? 'Wait for the current operation to finish.' : backtestsLoading ? 'Wait for Backtest history to finish loading.' : 'Another Backtest detail is loading.'}
                                   onClick={() => viewBacktest(record.backtest_id)}
                                 >
-                                  {backtestDetailLoadingId === record.backtest_id ? 'Loading details…' : 'View Details'}
-                                </button>
-                                <button
+                                  <ActionProgress active={backtestDetailLoadingId === record.backtest_id} idle="View Details" pending="Loading details…" />
+                                </ActionButton>
+                                <ActionButton
                                   type="button"
                                   disabled={!record.report_sha256 || busy !== '' || backtestsLoading}
-                                  title={!record.report_sha256 ? 'No retained report is available for this Backtest.' : undefined}
+                                  blockedReason={!record.report_sha256 ? 'No retained MT5 report is available for this Backtest.' : backtestsLoading ? 'Wait for Backtest history to finish loading.' : 'Wait for the current operation to finish.'}
                                   onClick={() => openBacktestReport(record.backtest_id, Boolean(record.report_sha256))}
                                 >
                                   Open Report
-                                </button>
-                                <button
+                                </ActionButton>
+                                <ActionButton
                                   type="button"
-                                  disabled={busy !== '' || backtestsLoading || ['PREPARED', 'RUNNING'].includes(record.state)}
-                                  title={['PREPARED', 'RUNNING'].includes(record.state) ? 'Runtime cleanup is blocked while the Backtest is active.' : undefined}
-                                  onClick={() => cleanBacktestRuntime(record)}
+                                  disabled={busy !== '' || backtestsLoading || runtimeActive || runtimeCleaned}
+                                  blockedReason={runtimeCleaned
+                                    ? 'Temporary files for this Backtest are already cleaned; retained metrics and reports remain available.'
+                                    : runtimeActive
+                                      ? 'Runtime cleanup is blocked while the Backtest is active.'
+                                      : backtestsLoading ? 'Wait for Backtest history to finish loading.'
+                                        : 'Wait for the current operation to finish.'}
+                                  onClick={() => prepareBacktestRuntimeClean(record)}
                                 >
                                   <ActionProgress
                                     active={busy === 'clean-backtest:' + record.backtest_id}
-                                    idle="Clean Runtime"
+                                    idle="Clean Backtest Files"
                                     pending="Cleaning..."
                                   />
-                                </button>
-                                <button
+                                </ActionButton>
+                                <ActionButton
                                   type="button"
                                   disabled={busy !== '' || backtestsLoading || ['PREPARED', 'RUNNING'].includes(record.state)}
-                                  title={['PREPARED', 'RUNNING'].includes(record.state) ? 'Deletion is blocked while the Backtest is active.' : undefined}
+                                  blockedReason={['PREPARED', 'RUNNING'].includes(record.state)
+                                    ? 'Deletion is blocked while this Backtest is active; no data was deleted.'
+                                    : backtestsLoading ? 'Wait for Backtest history to finish loading.'
+                                      : 'Wait for the current operation to finish.'}
                                   onClick={() => {
                                     if (['PREPARED', 'RUNNING'].includes(record.state)) {
                                       blockAction('deletion is blocked while this Backtest is active; no data was deleted.')
@@ -1460,8 +1875,9 @@ export default function ChallengersPage() {
                                   }}
                                 >
                                   Delete Backtest
-                                </button>
+                                </ActionButton>
                                 {['PREPARED', 'RUNNING'].includes(record.state) && <small role="note">Actions blocked while Backtest is active.</small>}
+                                {runtimeCleaned && <small role="note">This Backtest’s temporary files were cleaned. Retained metrics and reports remain available; the deployed Challenger EA is unchanged.</small>}
                               </div>
                             </td>
                           </tr>
@@ -1476,7 +1892,10 @@ export default function ChallengersPage() {
                   pages={backtests.pages}
                   pageSize={backtests.page_size}
                   total={backtests.total}
-                  onPage={setBacktestPage}
+                  loading={backtestsLoading || busy !== ''}
+                  blockedReason={backtestsLoading ? 'Wait for Backtest history to finish loading.' : 'Wait for the current operation to finish.'}
+                  pendingDirection={backtestListAction === 'page-previous' ? 'previous' : backtestListAction === 'page-next' ? 'next' : ''}
+                  onPage={(next, direction) => { setBacktestListAction('page-' + direction); setBacktestPage(next) }}
                   onPageSize={(size) => { setBacktestPageSize(size); setBacktestPage(1) }}
                 />
               </>
@@ -1526,12 +1945,12 @@ export default function ChallengersPage() {
                 </dl>
                 <p className="subtle">Strategy geometry, parameter lineage and runtime-file details remain available through retained evidence in Artifacts.</p>
                 <div className="actions">
-                  <button
+                  <ActionButton
                     type="button"
                     disabled={!backtestDetail.report_sha256}
-                    title={!backtestDetail.report_sha256 ? 'No retained report is available for this Backtest.' : undefined}
+                    blockedReason="No retained MT5 report is available for this Backtest."
                     onClick={() => openBacktestReport(backtestDetail.backtest_id, Boolean(backtestDetail.report_sha256))}
-                  >Open Report</button>
+                  >Open Report</ActionButton>
                   {!backtestDetail.report_sha256 && <small role="note">No retained report exists; opening a report is unavailable.</small>}
                   <button type="button" onClick={() => setBacktestDetail(null)}>Close</button>
                 </div>
@@ -1539,10 +1958,73 @@ export default function ChallengersPage() {
             </div>
           )}
 
+          {dialogMode === 'run-all-backtests' && pendingBulkBacktests.length > 0 && (
+            <section role="dialog" aria-modal="true" aria-labelledby="run-all-backtests-title" className="confirmation">
+              <h2 id="run-all-backtests-title">Run all active Challenger Backtests</h2>
+              <p>
+                {pendingBulkBacktests.length} active Challengers passed the integrity preflight. They will run one at a time
+                in MT5 Strategy Tester. The selected Backtest date range applies to all; each Challenger keeps its own
+                symbol, timeframe, parameter set, and verified precompiled EA.
+              </p>
+              {pendingBulkDateRange && (
+                <dl className="facts compact">
+                  <div><dt>Backtest From</dt><dd>{pendingBulkDateRange.from_date}</dd></div>
+                  <div><dt>Backtest To</dt><dd>{pendingBulkDateRange.to_date}</dd></div>
+                </dl>
+              )}
+              <p>
+                The sequence stops at the first unconfirmed result. Completed Backtests remain saved, remaining candidates
+                are not started, and there are no automatic retries.
+              </p>
+              <ul aria-label="Active Challengers queued for Backtest">
+                {pendingBulkBacktests.map((candidate) => (
+                  <li key={candidate.challenger_id}>
+                    Round {candidate.source_round}, pass {candidate.source_pass}
+                  </li>
+                ))}
+              </ul>
+              {busy === 'bulk-run-backtests' && (
+                <p role="status" className="notice">
+                  Running Backtest {bulkRunIndex} of {pendingBulkBacktests.length}. Keep MAX open; do not submit another run.
+                </p>
+              )}
+              <div className="actions">
+                  <ActionButton
+                    type="button"
+                    onClick={confirmAllBacktests}
+                    disabled={busy !== '' || view !== 'active' || !pendingBulkBacktests.length}
+                    blockedReason={view !== 'active'
+                      ? 'Bulk Backtest is only available in the Active Challenger view.'
+                      : !pendingBulkBacktests.length ? 'No verified active Challengers are queued.'
+                        : 'Wait for the current operation to finish.'}
+                  >
+                  <ActionProgress
+                    active={busy === 'bulk-run-backtests'}
+                    idle="RUN ALL BACKTESTS"
+                    pending={'RUNNING ' + bulkRunIndex + ' OF ' + pendingBulkBacktests.length}
+                  />
+                  </ActionButton>
+                  <ActionButton
+                    type="button"
+                  onClick={() => {
+                    setDialogMode(null)
+                    setPendingBulkBacktests([])
+                    setPendingBulkDateRange(null)
+                    setOperationResult('Bulk Backtest cancelled. No Backtest was started.')
+                    }}
+                    disabled={busy !== ''}
+                    blockedReason="The running Backtest batch must finish before it can be dismissed."
+                  >
+                    Cancel
+                  </ActionButton>
+              </div>
+            </section>
+          )}
+
           {dialogMode === 'bulk-backtest' && backtestBulkPreflight && backtestBulkAction && (
             <section role="dialog" aria-modal="true" aria-labelledby="backtest-bulk-confirmation" className="confirmation">
               <h2 id="backtest-bulk-confirmation">
-                {backtestBulkAction === 'clean' ? 'Clean Selected Runtime' : 'Delete Selected Backtests'}
+                {backtestBulkAction === 'clean' ? 'Clean Selected Backtest Files' : 'Delete Selected Backtests'}
               </h2>
               <p>All selected Backtests are preflighted before mutation. Any blocked selection prevents the batch from starting.</p>
               <dl className="facts compact">
@@ -1565,18 +2047,21 @@ export default function ChallengersPage() {
                 </p>
               )}
               <div className="actions">
-                <button
+                <ActionButton
                   type="button"
                   onClick={confirmBacktestBulk}
                   disabled={backtestBulkPreflight.blocked > 0 || busy !== ''}
+                  blockedReason={backtestBulkPreflight.blocked > 0
+                    ? 'Safety preflight blocked ' + backtestBulkPreflight.blocked + ' selected Backtest(s); no items will be changed.'
+                    : 'Wait for the current operation to finish.'}
                 >
                   <ActionProgress
                     active={busy === 'bulk-clean' || busy === 'bulk-delete'}
                     idle="CONFIRM"
                     pending={busy === 'bulk-clean' ? 'Cleaning...' : 'Deleting...'}
                   />
-                </button>
-                <button
+                </ActionButton>
+                <ActionButton
                   type="button"
                   onClick={() => {
                     setBacktestBulkPreflight(null)
@@ -1584,9 +2069,10 @@ export default function ChallengersPage() {
                     setDialogMode(null)
                   }}
                   disabled={busy !== ''}
+                  blockedReason="The cleanup/deletion batch must finish before this dialog can be dismissed."
                 >
                   Cancel
-                </button>
+                </ActionButton>
               </div>
             </section>
           )}
@@ -1607,16 +2093,25 @@ export default function ChallengersPage() {
               </dl>
               {!detailVerified && <p role="alert" className="error-text">Promotion is blocked until Challenger evidence is verified. No change has been submitted.</p>}
               <div className="actions">
-                <button type="button" onClick={confirmPromotion} disabled={!detailVerified || busy !== '' || detailLoading || loading}>
+                <ActionButton
+                  type="button"
+                  onClick={confirmPromotion}
+                  disabled={!detailVerified || busy !== '' || detailLoading || loading}
+                  blockedReason={!detailVerified
+                    ? 'Promotion is blocked because Challenger evidence is not verified. No change was submitted.'
+                    : busy !== '' ? 'Wait for the current Challenger operation to finish.'
+                      : detailLoading || loading ? 'Wait for Challenger details and registry checks to finish loading.'
+                        : undefined}
+                >
                   <ActionProgress
                     active={busy === 'promotion'}
                     idle="CONFIRM PROMOTION"
                     pending="Promoting..."
                   />
-                </button>
-                <button type="button" onClick={() => setDialogMode(null)} disabled={busy !== ''}>
+                </ActionButton>
+                <ActionButton type="button" onClick={() => setDialogMode(null)} disabled={busy !== ''} blockedReason="Promotion must finish before this dialog can be dismissed.">
                   Cancel
-                </button>
+                </ActionButton>
               </div>
             </section>
           )}
@@ -1634,14 +2129,19 @@ export default function ChallengersPage() {
                 <p role="alert" className="error-text">Deletion is blocked because its safety check is unavailable. Retry after the check succeeds; no deletion was submitted.</p>
               )}
               <div className="actions">
-                <button type="button" disabled={!deletePreflight?.deletable || busy !== ''} onClick={confirmChallengerDelete}>
+                <ActionButton
+                  type="button"
+                  disabled={!deletePreflight?.deletable || busy !== ''}
+                  blockedReason={busy !== '' ? 'Wait for the current Challenger operation to finish.' : blockerSummary(deletePreflight?.blockers)}
+                  onClick={confirmChallengerDelete}
+                >
                   <ActionProgress
                     active={busy === 'delete-challenger'}
                     idle="CONFIRM DELETE CHALLENGER"
                     pending="Deleting..."
                   />
-                </button>
-                <button type="button" onClick={() => setDialogMode(null)} disabled={busy !== ''}>Cancel</button>
+                </ActionButton>
+                <ActionButton type="button" onClick={() => setDialogMode(null)} disabled={busy !== ''} blockedReason="Deletion must finish before this dialog can be dismissed.">Cancel</ActionButton>
               </div>
             </section>
           )}
@@ -1655,42 +2155,76 @@ export default function ChallengersPage() {
                 <div><dt>Source</dt><dd>Retained Strategy Challenger</dd></div>
               </dl>
               <div className="actions">
-                <button type="button" disabled={busy !== ''} onClick={confirmBacktestDelete}>
+                <ActionButton type="button" disabled={busy !== ''} blockedReason="Another Backtest operation is running." onClick={confirmBacktestDelete}>
                   <ActionProgress
                     active={busy === 'delete-backtest:' + pendingBacktestDelete.backtest_id}
                     idle="CONFIRM DELETE BACKTEST"
                     pending="Deleting..."
                   />
-                </button>
-                <button type="button" onClick={() => { setPendingBacktestDelete(null); setDialogMode(null) }} disabled={busy !== ''}>Cancel</button>
+                </ActionButton>
+                <ActionButton type="button" onClick={() => { setPendingBacktestDelete(null); setDialogMode(null) }} disabled={busy !== ''} blockedReason="Deletion must finish before this dialog can be dismissed.">Cancel</ActionButton>
+              </div>
+            </section>
+          )}
+
+          {dialogMode === 'clean-backtest-runtime' && pendingBacktestClean && (
+            <section role="dialog" aria-modal="true" aria-labelledby="backtest-runtime-clean-confirmation" className="confirmation">
+              <h2 id="backtest-runtime-clean-confirmation">Clean Backtest Files?</h2>
+              <p>
+                This removes only this Backtest’s temporary preset and source MT5 report. The retained Backtest record, metrics, archived report, and shared deployed Challenger EA are preserved.
+              </p>
+              <dl className="facts compact">
+                <div><dt>Backtest</dt><dd>{pendingBacktestClean.backtest_id}</dd></div>
+                <div><dt>Runtime</dt><dd>{ownerOperationalStatus(pendingBacktestClean.runtime_status)}</dd></div>
+                <div><dt>Retained results</dt><dd>Preserved</dd></div>
+              </dl>
+              <div className="actions">
+                <ActionButton type="button" disabled={busy !== ''} blockedReason="Another Backtest operation is running." onClick={confirmBacktestRuntimeClean}>
+                  <ActionProgress
+                    active={busy === 'clean-backtest:' + pendingBacktestClean.backtest_id}
+                    idle="CONFIRM CLEAN BACKTEST FILES"
+                    pending="Cleaning..."
+                  />
+                </ActionButton>
+                <ActionButton type="button" onClick={() => { setPendingBacktestClean(null); setDialogMode(null); setOperationResult('Cleanup canceled; no runtime files were changed.') }} disabled={busy !== ''} blockedReason="Cleanup must finish before this dialog can be dismissed.">Cancel</ActionButton>
               </div>
             </section>
           )}
 
           {dialogMode === 'retirement' && (
             <section role="dialog" aria-modal="true" aria-labelledby="retirement-confirmation" className="confirmation">
-              <h2 id="retirement-confirmation">Confirm non-destructive retirement</h2>
+              <h2 id="retirement-confirmation">Confirm Challenger retirement</h2>
               <p>
-                This removes the Strategy from the Active Challenger view only. MQ5, SET, compiled EX5 evidence when present, manifest, optimizer lineage, promotion history and backtest history are preserved.
+                This removes the compiled Challenger deployment from MT5 Experts (MQ5, SET, and EX5). Its database parameters, retained source bundle, manifest, optimizer lineage, promotion history, and backtest history stay available. Only an active Challenger can be retired; the Champion is not touched.
               </p>
               <dl className="facts compact">
                 <div><dt>Challenger</dt><dd>Selected retained Strategy Challenger</dd></div>
                 <div><dt>Artifact integrity</dt><dd><IntegrityValue value={detail.artifact_integrity.status} /></dd></div>
                 <div><dt>Existing backtests</dt><dd>{backtests?.total ?? 0}</dd></div>
-                <div><dt>Delete files</dt><dd><strong>No</strong></dd></div>
+                <div><dt>Runtime MT5 EA</dt><dd><strong>Will be removed if verified</strong></dd></div>
+                <div><dt>Saved parameters / source</dt><dd><strong>Preserved</strong></dd></div>
               </dl>
               {!detailVerified && <p role="alert" className="error-text">Retirement is blocked until Challenger evidence is verified. No change has been submitted.</p>}
               <div className="actions">
-                <button type="button" onClick={confirmRetirement} disabled={!detailVerified || busy !== '' || detailLoading || loading}>
+                <ActionButton
+                  type="button"
+                  onClick={confirmRetirement}
+                  disabled={!detailVerified || busy !== '' || detailLoading || loading}
+                  blockedReason={!detailVerified
+                    ? 'Retirement is blocked because Challenger evidence is not verified. No EA or database rows were changed.'
+                    : busy !== '' ? 'Wait for the current operation to finish.'
+                      : detailLoading || loading ? 'Wait for Challenger safety checks to finish.'
+                        : undefined}
+                >
                   <ActionProgress
                     active={busy === 'retirement'}
-                    idle="CONFIRM RETIRE / ARCHIVE"
+                    idle="CONFIRM RETIRE + REMOVE MT5 EA"
                     pending="Retiring..."
                   />
-                </button>
-                <button type="button" onClick={() => setDialogMode(null)} disabled={busy !== ''}>
+                </ActionButton>
+                <ActionButton type="button" onClick={() => setDialogMode(null)} disabled={busy !== ''} blockedReason="Retirement must finish before this dialog can be dismissed.">
                   Cancel
-                </button>
+                </ActionButton>
               </div>
             </section>
           )}

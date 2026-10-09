@@ -556,6 +556,15 @@ def _persist_candidate_projection(
     rows = projection.get("candidates")
     if not isinstance(rows, list):
         raise ValueError("OPTIMIZER_CANDIDATE_PROJECTION_INVALID")
+    candidate_identities: set[str] = set()
+    for item in rows:
+        if not isinstance(item, dict):
+            raise ValueError("OPTIMIZER_CANDIDATE_PROJECTION_INVALID")
+        candidate_identity = optimizer_candidate_identity(item.get("candidate"))
+        if candidate_identity in candidate_identities:
+            raise ValueError("OPTIMIZER_DUPLICATE_CANDIDATE_IN_PROJECTION")
+        candidate_identities.add(candidate_identity)
+
     identity = (
         str(projection.get("report_sha256") or ""),
         str(projection.get("sidecar_sha256") or ""),
@@ -572,6 +581,25 @@ def _persist_candidate_projection(
         if current != identity:
             raise RuntimeError("OPTIMIZER_CANDIDATE_PROJECTION_REPLAY_MISMATCH")
         return
+
+    persisted_rows = conn.execute(
+        "SELECT candidate_json FROM optimizer_candidate_projection WHERE job_id=?",
+        (job_id,),
+    ).fetchall()
+    persisted_identities: set[str] = set()
+    for row in persisted_rows:
+        try:
+            persisted_candidate = json.loads(str(row["candidate_json"]))
+        except json.JSONDecodeError as exc:
+            raise RuntimeError("OPTIMIZER_CANDIDATE_PROJECTION_CORRUPT") from exc
+        try:
+            persisted_identities.add(
+                optimizer_candidate_identity(persisted_candidate)
+            )
+        except ValueError as exc:
+            raise RuntimeError("OPTIMIZER_CANDIDATE_PROJECTION_CORRUPT") from exc
+    if candidate_identities.intersection(persisted_identities):
+        raise RuntimeError("OPTIMIZER_DUPLICATE_CANDIDATE_ALREADY_PERSISTED")
 
     conn.execute(
         """
@@ -643,6 +671,65 @@ def _persist_candidate_projection(
     )
 
 
+_OPTIMIZER_CANDIDATE_IDENTITY_FIELDS = (
+    "params",
+    "mean_r",
+    "custom_fitness",
+    "weighted_r",
+    "profit_factor",
+    "recovery_factor",
+    "trades",
+    "required_trades",
+    "hard_gates",
+    "strategy_contract",
+    "strategy_geometry",
+    "ea_sha256",
+)
+
+
+def optimizer_candidate_identity(candidate: Any) -> str:
+    """Return the exact strategy-and-result identity, excluding pass provenance."""
+    if (
+        not isinstance(candidate, dict)
+        or not isinstance(candidate.get("params"), dict)
+        or any(field not in candidate for field in _OPTIMIZER_CANDIDATE_IDENTITY_FIELDS)
+    ):
+        raise ValueError("OPTIMIZER_CANDIDATE_IDENTITY_INVALID")
+    identity = {
+        field: candidate.get(field)
+        for field in _OPTIMIZER_CANDIDATE_IDENTITY_FIELDS
+    }
+    try:
+        return json.dumps(
+            identity,
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        )
+    except (TypeError, ValueError, OverflowError) as exc:
+        raise ValueError("OPTIMIZER_CANDIDATE_IDENTITY_INVALID") from exc
+
+
+def optimizer_candidate_identities(
+    job_id: str,
+    *,
+    path: Path = DATABASE_PATH,
+) -> set[str]:
+    with connect(path) as conn:
+        rows = conn.execute(
+            "SELECT candidate_json FROM optimizer_candidate_projection WHERE job_id=?",
+            (str(job_id),),
+        ).fetchall()
+    identities: set[str] = set()
+    for row in rows:
+        try:
+            candidate = json.loads(str(row["candidate_json"]))
+            identities.add(optimizer_candidate_identity(candidate))
+        except (json.JSONDecodeError, ValueError) as exc:
+            raise RuntimeError("OPTIMIZER_CANDIDATE_PROJECTION_CORRUPT") from exc
+    return identities
+
+
 def persist_candidate_projection(
     job_id: str,
     round_no: int,
@@ -698,89 +785,6 @@ def load_resource_calibration(
     *,
     path: Path = DATABASE_PATH,
 ) -> dict[str, Any] | None:
-    """Read bounded, compatible runtime high-water summaries from existing round state."""
-    if not isinstance(workload_key, str) or len(workload_key) != 64:
-        return None
-    try:
-        uri = path.resolve().as_uri() + "?mode=ro"
-        with sqlite3.connect(uri, uri=True) as conn:
-            conn.row_factory = sqlite3.Row
-            conn.execute("BEGIN")
-            rows = conn.execute(
-                """
-                SELECT j.request_json, r.state_json, r.updated_utc
-                FROM optimizer_jobs AS j
-                JOIN optimizer_rounds AS r ON r.job_id=j.job_id
-                WHERE j.active=0 AND j.status IN (
-                    'ELIGIBLE_WINNER_FOUND','STRATEGY_CHALLENGER_FOUND',
-                    'NO_ELIGIBLE_WINNER_MAX_ROUNDS','FAILED','STOPPED','RESOURCE_STOPPED'
-                )
-                ORDER BY r.updated_utc DESC, j.updated_utc DESC
-                LIMIT 100
-                """
-            ).fetchall()
-    except sqlite3.Error:
-        return None
-
-    metrics = (
-        "peak_terminal_private_bytes",
-        "peak_terminal_working_set_bytes",
-        "peak_tester_private_bytes",
-        "peak_single_tester_private_bytes",
-        "peak_tester_working_set_bytes",
-        "peak_single_tester_working_set_bytes",
-        "actual_max_active_agents",
-    )
-    maxima: dict[str, int] = {}
-    min_available: int | None = None
-    min_commit_headroom: int | None = None
-    latest_utc: str | None = None
-    compatible_runs = 0
-    for row in rows:
-        try:
-            request = json.loads(row["request_json"])
-            state = json.loads(row["state_json"])
-        except (TypeError, json.JSONDecodeError):
-            continue
-        policy = request.get("resource_policy") if isinstance(request, dict) else None
-        workload = policy.get("workload") if isinstance(policy, dict) else None
-        summary = state.get("resource_runtime") if isinstance(state, dict) else None
-        if (
-            not isinstance(workload, dict)
-            or workload.get("compatibility_key") != workload_key
-            or not isinstance(summary, dict)
-            or summary.get("workload_compatibility_key") != workload_key
-        ):
-            continue
-        try:
-            sample_count = int(summary.get("sample_count") or 0)
-            values = {name: int(summary[name]) for name in metrics}
-            available = int(summary["min_available_ram_bytes"])
-            commit_headroom = int(summary["min_commit_headroom_bytes"])
-            if sample_count <= 0 or min(*values.values(), available, commit_headroom) <= 0:
-                continue
-            if values["actual_max_active_agents"] <= 0:
-                continue
-        except (KeyError, TypeError, ValueError, OverflowError):
-            continue
-        compatible_runs += 1
-        for name, value in values.items():
-            maxima[name] = max(maxima.get(name, 0), value)
-        min_available = available if min_available is None else min(min_available, available)
-        min_commit_headroom = (
-            commit_headroom
-            if min_commit_headroom is None
-            else min(min_commit_headroom, commit_headroom)
-        )
-        if latest_utc is None:
-            latest_utc = str(row["updated_utc"] or "")
-    if compatible_runs == 0:
-        return None
-    return {
-        "workload_key": workload_key,
-        **maxima,
-        "min_available_ram_bytes": min_available,
-        "min_commit_headroom_bytes": min_commit_headroom,
-        "compatible_run_count": compatible_runs,
-        "latest_utc": latest_utc,
-    }
+    """Invalidate historical capped-run calibration without mutating operational data."""
+    del workload_key, path
+    return None

@@ -79,12 +79,6 @@ function contract() {
       min_weighted_r: 0,
       base_h1_trades_per_month: 20,
     },
-    default_resources: {
-      mode: 'AUTO_SAFE',
-      custom_max_local_agents: 1,
-      custom_min_free_ram_gb: 4,
-      custom_cpu_reserve_logical: 2,
-    },
     main_timeframes: ['M15', 'M20', 'M30', 'H1', 'H2', 'H3', 'H4', 'H6', 'H8', 'H12', 'D1'],
     role_timeframes: ['M1','M2','M3','M4','M5','M6','M10','M12','M15','M20','M30','H1','H2','H3','H4','H6','H8','H12','D1','W1','MN1'],
     strategy_contract: 'MAX_TRUE_MTF_DYNAMIC_V1',
@@ -145,17 +139,6 @@ function defaultDraft() {
     search_space: structuredClone(value.default_search_space),
     kpi: { ...value.default_kpi },
     scientist_assist: false,
-    resources: { ...value.default_resources },
-  }
-}
-
-function safeResourcePreflight() {
-  return {
-    schema: 'MAX_OPTIMIZER_RESOURCE_POLICY_V2', mode: 'AUTO_SAFE', status: 'SAFE', reason: null,
-    detected: { physical_cores: 6, logical_processors: 12, total_ram_bytes: 34359738368, available_ram_bytes: 21474836480, commit_charge_bytes: 12884901888, commit_limit_bytes: 68719476736, commit_headroom_bytes: 55834574848, configured_local_agent_capacity: 12, local_agent_capacity_source: 'MT5_AGENT_DIRECTORIES', mt5_build: '5.0.0.6231' },
-    minimum_free_ram_bytes: 6442450944, safe_mt5_ram_budget_bytes: 12884901888, protected_system_commit_reserve_bytes: 6871947673, minimum_commit_headroom_bytes: 9022998521, safe_job_commit_budget_bytes: 46815143527, terminal_commit_budget_bytes: 15032385536, per_agent_commit_budget_bytes: 12884901888, terminal_memory_budget_bytes: 6442450944, per_agent_memory_budget_bytes: 4294967296,
-    cpu_reserve_logical: 2, requested_max_local_agents: 2, safe_agent_cap: 2, resolved_max_local_agents: 2, calibration_status: 'NONE', estimation_source: 'CONSERVATIVE_FALLBACK',
-    workload: { compatibility_key: 'a'.repeat(64), symbol: 'XAUUSD.m', period: 'H1', history_span_bucket: '3Y+', optimization_name: 'Fast Genetic', optimized_parameter_count: 17, raw_complete_grid_combinations: 10, from_date: '2021.01.01', to_date: '2024.12.31', tick_model_name: '1 minute OHLC' },
   }
 }
 
@@ -281,6 +264,75 @@ describe('M01 Optimizer UI', () => {
     expect(document.body.textContent).not.toContain('abcdef1234567890')
   })
 
+  it('shows failed raw report rows as unqualified and confirms copied parameters', async () => {
+    const clipboardWrite = vi.fn().mockResolvedValue(undefined)
+    const originalClipboard = Object.getOwnPropertyDescriptor(navigator, 'clipboard')
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText: clipboardWrite },
+    })
+    const rawJob = {
+      ...terminalJob,
+      job_id: 'JOBFAIL',
+      status: 'FAILED',
+      active: false,
+      first_blocker: 'OPTIMIZER_RUNTIME_FAILURE',
+      message: 'Optimizer stopped because report evidence was incomplete.',
+      winner: null,
+      rounds: [{
+        ...terminalJob.rounds[0],
+        phase: 'REPORT_READY',
+        passes: [],
+        report_preview: {
+          status: 'RAW_REPORT_ONLY_UNVERIFIED',
+          message: 'MT5 report rows are retained for review. R evidence is incomplete; these rows are not validated candidates and cannot be promoted.',
+          total_report_passes: 6623,
+          verified_r_evidence_passes: 21,
+          missing_r_evidence_passes: 6602,
+          mismatched_r_evidence_passes: 0,
+          sidecar_state: 'PARTIAL',
+          rows: [{
+            pass_no: 6614,
+            custom_fitness: 11.858764234328444,
+            profit: 20636.94,
+            profit_factor: 1.455572,
+            recovery_factor: 6.272226,
+            equity_drawdown_pct: 11.9624,
+            trades: 222,
+            params: { InpRiskPct: 2, InpEntryThreshold: 0.6 },
+            r_evidence_status: 'MEAN_R_DERIVED_WEIGHTED_R_MISSING',
+            implied_mean_r: 0.27014215048125884,
+            r_metrics: null,
+          }],
+        },
+      }],
+    }
+    vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
+      const url = String(input)
+      if (url.endsWith('/api/optimizer/draft')) return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
+      if (url.endsWith('/api/optimizer/contract')) return Promise.resolve({ ok: true, json: async () => contract() } as Response)
+      if (url.endsWith('/api/optimizer/current')) return Promise.resolve({ ok: true, json: async () => rawJob } as Response)
+      throw new Error('unexpected fetch ' + url)
+    }))
+
+    try {
+      render(<OptimizerPage />)
+      expect(await screen.findByText('Round 1 · retained MT5 report')).toBeInTheDocument()
+      expect(screen.getByText(/The run remains failed/)).toBeInTheDocument()
+      expect(screen.getByText('6602')).toBeInTheDocument()
+      expect(screen.getByText('≈0.2701 from Custom')).toBeInTheDocument()
+      expect(screen.getByText('Missing')).toBeInTheDocument()
+      fireEvent.click(screen.getByText('View inputs'))
+      fireEvent.click(screen.getByRole('button', { name: 'Copy inputs' }))
+      expect(await screen.findByText('Pass 6614 inputs copied. They remain unqualified.')).toBeInTheDocument()
+      expect(clipboardWrite).toHaveBeenCalledWith('InpRiskPct=2\nInpEntryThreshold=0.6')
+      expect(screen.queryByText('ELIGIBLE WINNER')).not.toBeInTheDocument()
+    } finally {
+      if (originalClipboard) Object.defineProperty(navigator, 'clipboard', originalClipboard)
+      else Reflect.deleteProperty(navigator, 'clipboard')
+    }
+  })
+
   it('shows owner-readable risk controls and fixed daily loss authority', async () => {
     vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL) => {
       const url = String(input)
@@ -369,7 +421,6 @@ describe('M01 Optimizer UI', () => {
               raw_complete_grid_combinations: 10,
               authority: 'RAW_CARTESIAN_GRID_ONLY_NOT_MT5_GENETIC_TASK_COUNT',
             },
-            resource_preflight: safeResourcePreflight(),
           }),
         } as Response)
       }
@@ -831,7 +882,8 @@ describe('M08 qualified candidate control', () => {
             qualified_count: 3,
             historical_qualified_count: 3,
             consumed_count: 0,
-            rejected_count: 2,
+            deduplicated_count: 1,
+            rejected_count: 1,
             page,
             page_size: Number(params.get('page_size') ?? 25),
             pages: 2,
@@ -859,7 +911,8 @@ describe('M08 qualified candidate control', () => {
       expect(summary).toHaveTextContent('Raw Passes5')
       expect(summary).toHaveTextContent('Available qualified3')
       expect(summary).toHaveTextContent('Already used0')
-      expect(summary).toHaveTextContent('Rejected2')
+      expect(summary).toHaveTextContent('Exact duplicates removed1')
+      expect(summary).toHaveTextContent('Rejected1')
     })
     expect(screen.queryByText('ELIGIBLE WINNER')).not.toBeInTheDocument()
     expect(screen.queryByText('Historical optimizer pass evidence')).not.toBeInTheDocument()
@@ -902,7 +955,7 @@ describe('M08 qualified candidate control', () => {
         { round: 1, pass: 3 },
       ],
     })
-    const pendingPromotion = screen.getByRole('button', { name: 'Promoting...' })
+    const pendingPromotion = screen.getByRole('button', { name: 'Creating and compiling...' })
     expect(pendingPromotion).toBeDisabled()
     fireEvent.click(pendingPromotion)
     expect(promoteCalls).toBe(1)
@@ -912,10 +965,14 @@ describe('M08 qualified candidate control', () => {
       json: async () => ({
         state: 'COMMITTED',
         result: { count: promotedBody.selections.length },
+        mt5_deployments: promotedBody.selections.map((selection: { round: number; pass: number }) => ({
+          challenger_id: `STRAT-R${selection.round}-P${selection.pass}`,
+          status: 'VERIFIED',
+        })),
       }),
     } as Response)
 
-    expect(await screen.findByText(/3 qualified candidate\(s\) created/)).toBeInTheDocument()
+    expect(await screen.findByText(/3 qualified candidate\(s\) created as Strategy Challengers and compiled into MT5/)).toBeInTheDocument()
     expect(screen.getByText('0 selected')).toBeInTheDocument()
   })
 
@@ -960,6 +1017,7 @@ describe('M08 qualified candidate control', () => {
             qualified_count: 0,
             historical_qualified_count: 0,
             consumed_count: 0,
+            deduplicated_count: 0,
             rejected_count: 4,
             page: 1,
             page_size: 25,
@@ -1058,7 +1116,7 @@ describe('M08 qualified candidate control', () => {
         return Promise.resolve({ ok: true, json: async () => draftResponse(JSON.parse(String(init.body)).draft, JSON.parse(String(init.body)).revision) } as Response)
       }
       if (url.endsWith('/api/optimizer/draft')) return Promise.resolve({ ok: true, json: async () => draftResponse(saved, 3) } as Response)
-      if (url.endsWith('/api/optimizer/preview')) return Promise.resolve({ ok: true, json: async () => ({ status: 'VALID', trade_sample: { timeframe: 'H1', scaled_trades_per_month: 20, calendar_months: 1, minimum_trades: 20 }, search_space_cardinality: { raw_complete_grid_combinations: 10, authority: 'SYNTHETIC_TEST' }, resource_preflight: safeResourcePreflight() }) } as Response)
+      if (url.endsWith('/api/optimizer/preview')) return Promise.resolve({ ok: true, json: async () => ({ status: 'VALID', trade_sample: { timeframe: 'H1', scaled_trades_per_month: 20, calendar_months: 1, minimum_trades: 20 }, search_space_cardinality: { raw_complete_grid_combinations: 10, authority: 'SYNTHETIC_TEST' }, resource_preflight: { status: 'BLOCKED' } }) } as Response)
       if (url.endsWith('/api/optimizer/start')) {
         startCalls += 1
         return startGate.promise
@@ -1070,11 +1128,8 @@ describe('M08 qualified candidate control', () => {
     render(<OptimizerPage />)
     const start = await screen.findByRole('button', { name: 'START OPTIMIZER' })
     await waitFor(() => expect(start).toBeEnabled(), { timeout: 1500 })
-    expect(screen.getByText('Windows commit')).toBeInTheDocument()
-    expect(screen.getByText('Commit estimates')).toBeInTheDocument()
-    expect(screen.getByText('Agent limit')).toBeInTheDocument()
-    expect(screen.getByText('MT5 local-agent ceiling')).toBeInTheDocument()
-    expect(screen.getByText(/Conservative workload-based fallback/)).toBeInTheDocument()
+    expect(screen.getByText(/MT5 uses its configured tester agents/)).toBeInTheDocument()
+    expect(screen.queryByText('Agent limit')).not.toBeInTheDocument()
     act(() => {
       start.click()
       start.click()
@@ -1119,7 +1174,6 @@ describe('M08 qualified candidate control', () => {
         status: 'VALID',
         trade_sample: { timeframe: 'H1', scaled_trades_per_month: trades, calendar_months: 1, minimum_trades: trades },
         search_space_cardinality: { raw_complete_grid_combinations: 1, authority: 'SYNTHETIC_TEST' },
-        resource_preflight: safeResourcePreflight(),
       }),
     } as Response)
     later.resolve(preview(77))
@@ -1166,7 +1220,7 @@ describe('M08 qualified candidate control', () => {
     }
     const running = {
       ...terminalJob, status: 'MT5_RUNNING', active: true, winner: null,
-      request: { ...terminalJob.request, resource_policy: safeResourcePreflight() },
+      request: { ...terminalJob.request },
       rounds: [{ ...terminalJob.rounds[0], phase: 'MT5_PROCESS_CONFIRMED', state: { optimizer_run_nonce: 123, resource_runtime: staleRuntime } }],
     }
     const stopped = {
@@ -1179,7 +1233,7 @@ describe('M08 qualified candidate control', () => {
       if (url.endsWith('/api/optimizer/contract')) return Promise.resolve({ ok: true, json: async () => contract() } as Response)
       if (url.endsWith('/api/optimizer/current')) return Promise.resolve({ ok: true, json: async () => running } as Response)
       if (url.endsWith('/api/optimizer/draft')) return Promise.resolve({ ok: true, json: async () => draftResponse() } as Response)
-      if (url.endsWith('/api/optimizer/preview')) return Promise.resolve({ ok: true, json: async () => ({ status: 'VALID', trade_sample: { timeframe: 'H1', scaled_trades_per_month: 20, calendar_months: 1, minimum_trades: 20 }, search_space_cardinality: { raw_complete_grid_combinations: 10, authority: 'SYNTHETIC_TEST' }, resource_preflight: safeResourcePreflight() }) } as Response)
+      if (url.endsWith('/api/optimizer/preview')) return Promise.resolve({ ok: true, json: async () => ({ status: 'VALID', trade_sample: { timeframe: 'H1', scaled_trades_per_month: 20, calendar_months: 1, minimum_trades: 20 }, search_space_cardinality: { raw_complete_grid_combinations: 10, authority: 'SYNTHETIC_TEST' } }) } as Response)
       if (url.endsWith('/api/optimizer/jobs/JOB1/stop')) return Promise.resolve({ ok: true, json: async () => ({ job_id: 'JOB1', status: 'STOPPED', active: false }) } as Response)
       if (url.endsWith('/api/optimizer/jobs/JOB1')) {
         detailCalls += 1
@@ -1214,6 +1268,7 @@ describe('M08 qualified candidate control', () => {
       qualified_count: 2,
       historical_qualified_count: 2,
       consumed_count: 0,
+      deduplicated_count: 0,
       rejected_count: 0,
       page: 1,
       page_size: 25,
@@ -1259,7 +1314,8 @@ describe('M08 qualified candidate control', () => {
     fireEvent.change(screen.getByLabelText('Search qualified candidates'), { target: { value: 'first' } })
     await waitFor(() => expect(requests.some((url) => new URL(url, 'http://local').searchParams.get('q') === 'first')).toBe(true), { timeout: 1500 })
     fireEvent.change(screen.getByLabelText('Search qualified candidates'), { target: { value: 'latest' } })
-    expect(await screen.findByLabelText('Select candidate R1 P77')).toBeInTheDocument()
+    await waitFor(() => expect(requests.filter((url) => new URL(url, 'http://local').searchParams.get('q') === 'latest')).toHaveLength(1), { timeout: 1500 })
+    await waitFor(() => expect(screen.queryByText('Loading qualified candidates…')).not.toBeInTheDocument())
     stale.resolve({ ok: true, json: async () => page(11, 'first') } as Response)
     await new Promise((resolve) => window.setTimeout(resolve, 20))
     expect(screen.getByLabelText('Select candidate R1 P77')).toBeInTheDocument()

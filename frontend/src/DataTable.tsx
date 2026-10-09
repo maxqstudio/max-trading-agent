@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { ActionButton, ActionProgress } from './ActionControls'
 
 export type SortOrder = 'asc' | 'desc'
 
@@ -8,24 +9,39 @@ export function SortHeader({
   sort,
   order,
   onSort,
+  loading = false,
+  blockedReason = 'Wait for the current table refresh to finish.',
+  pending = false,
 }: {
   label: string
   field: string
   sort: string
   order: SortOrder
   onSort: (field: string, order: SortOrder) => void
+  loading?: boolean
+  blockedReason?: string
+  pending?: boolean
 }) {
   const active = sort === field
   const next: SortOrder = active && order === 'desc' ? 'asc' : 'desc'
+
   return (
     <th aria-sort={active ? (order === 'asc' ? 'ascending' : 'descending') : 'none'}>
-      <button
+      <ActionButton
         type="button"
         className="sort-header"
-        onClick={() => onSort(field, next)}
+        disabled={loading}
+        blockedReason={blockedReason}
+        onClick={() => {
+          onSort(field, next)
+        }}
       >
-        {label}<span aria-hidden="true">{active ? (order === 'asc' ? ' ↑' : ' ↓') : ''}</span>
-      </button>
+        <ActionProgress
+          active={loading && pending}
+          idle={<>{label}<span aria-hidden="true">{active ? (order === 'asc' ? ' ↑' : ' ↓') : ''}</span></>}
+          pending={<span className="visually-hidden">Sorting {label}…</span>}
+        />
+      </ActionButton>
     </th>
   )
 }
@@ -37,13 +53,19 @@ export function Pagination({
   total,
   onPage,
   onPageSize,
+  loading = false,
+  blockedReason = 'Wait for the current table refresh to finish.',
+  pendingDirection = '',
 }: {
   page: number
   pages: number
   pageSize: number
   total: number
-  onPage: (page: number) => void
+  onPage: (page: number, direction: 'previous' | 'next') => void
   onPageSize: (size: number) => void
+  loading?: boolean
+  blockedReason?: string
+  pendingDirection?: 'previous' | 'next' | ''
 }) {
   const pageCount = Math.max(1, pages)
   const currentPage = Math.min(Math.max(1, page), pageCount)
@@ -72,23 +94,33 @@ export function Pagination({
         </label>
       </div>
       <div className="pagination-center">
-        <button
+        <ActionButton
           type="button"
           aria-label="Previous page"
-          disabled={currentPage <= 1}
-          onClick={() => onPage(currentPage - 1)}
+          disabled={loading || currentPage <= 1}
+          blockedReason={loading ? blockedReason : 'You are already on the first page.'}
+          onClick={() => onPage(currentPage - 1, 'previous')}
         >
-          <span aria-hidden="true">‹</span>
-        </button>
+          <ActionProgress
+            active={loading && pendingDirection === 'previous'}
+            idle={<span aria-hidden="true">‹</span>}
+            pending={<span className="visually-hidden">Loading previous page…</span>}
+          />
+        </ActionButton>
         <span className="pagination-page-count">{currentPage} / {pageCount}</span>
-        <button
+        <ActionButton
           type="button"
           aria-label="Next page"
-          disabled={currentPage >= pageCount}
-          onClick={() => onPage(currentPage + 1)}
+          disabled={loading || currentPage >= pageCount}
+          blockedReason={loading ? blockedReason : 'You are already on the last page.'}
+          onClick={() => onPage(currentPage + 1, 'next')}
         >
-          <span aria-hidden="true">›</span>
-        </button>
+          <ActionProgress
+            active={loading && pendingDirection === 'next'}
+            idle={<span aria-hidden="true">›</span>}
+            pending={<span className="visually-hidden">Loading next page…</span>}
+          />
+        </ActionButton>
       </div>
       <div className="pagination-right">{range}</div>
     </div>

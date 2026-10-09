@@ -20,6 +20,7 @@ from .challenger_operations import (
     backtest_detail,
     backtest_registry_page,
     backtest_history,
+    challenger_bundle_artifact_path,
     challenger_registry_page,
     retire_challenger,
     run_challenger_backtest,
@@ -208,6 +209,34 @@ def get_challenger(challenger_id: str) -> dict:
         return challenger_detail(challenger_id)
     except FileNotFoundError as exc:
         raise HTTPException(status_code=404, detail="Strategy Challenger not found") from exc
+
+
+@router.get("/{challenger_id}/ea")
+def download_challenger_ea(challenger_id: str):
+    try:
+        artifact = challenger_bundle_artifact_path(challenger_id, "ea")
+        return FileResponse(
+            path=artifact,
+            media_type="application/octet-stream",
+            filename=artifact.name,
+            content_disposition_type="attachment",
+        )
+    except (FileNotFoundError, ValueError, RuntimeError) as exc:
+        raise _domain_error(exc) from exc
+
+
+@router.get("/{challenger_id}/set")
+def download_challenger_set(challenger_id: str):
+    try:
+        artifact = challenger_bundle_artifact_path(challenger_id, "set")
+        return FileResponse(
+            path=artifact,
+            media_type="application/octet-stream",
+            filename=artifact.name,
+            content_disposition_type="attachment",
+        )
+    except (FileNotFoundError, ValueError, RuntimeError) as exc:
+        raise _domain_error(exc) from exc
 
 
 @router.get("/{challenger_id}/backtests")

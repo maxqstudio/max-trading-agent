@@ -2,9 +2,9 @@
   "schema": "MAX_REBUILD_EA_BASELINE_V1",
   "source_project": "MAX Rebuild Post-M08 Optimizer Fitness V2",
   "source_candidate_build_id": "POST_M08_OPTIMIZER_FITNESS_V2_EA_2_11",
-  "source_tree_signature": "827c4caddedbe37081353e08bba35eac5f01e96314dd8650d7ea17ad109ae725",
+  "source_tree_signature": "10fadcd986a93cc075e13a6a383f1b00ee5c097c2a70d6edee315668111d5e20",
   "source_path": "ea/baseline/Max_MTF.mq5",
-  "source_sha256": "827c4caddedbe37081353e08bba35eac5f01e96314dd8650d7ea17ad109ae725",
+  "source_sha256": "10fadcd986a93cc075e13a6a383f1b00ee5c097c2a70d6edee315668111d5e20",
   "ea_version": "2.11",
   "strategy_contract": "MAX_TRUE_MTF_DYNAMIC_V1",
   "mtf_resolver_version": "TRUE_MTF_LOG_RATIO_V1",
@@ -16,7 +16,7 @@
     "accepted_source_sha": "3386bc4a58d3a805dd3a972a7188a8101ef87dd3"
   },
   "snapshot_relative_path": "ea/baseline/Max_MTF.mq5",
-  "snapshot_sha256": "827c4caddedbe37081353e08bba35eac5f01e96314dd8650d7ea17ad109ae725",
+  "snapshot_sha256": "10fadcd986a93cc075e13a6a383f1b00ee5c097c2a70d6edee315668111d5e20",
   "baseline_status": "BASELINE_NOT_CHAMPION",
   "imported_at_utc": "2026-09-23T13:20:00+00:00"
 }

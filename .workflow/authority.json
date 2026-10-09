@@ -51,7 +51,7 @@
     {
       "authority": "MT5 optimizer reports/sidecars plus Python canonical revalidation",
       "concern": "optimizer",
-      "meaning": "MT5 executes optimization; the immutable started-job and V2 resource-policy snapshot, launch token, Windows physical/commit telemetry, exact Job Object process identity and fresh prelaunch admission govern execution/recovery. Native runtime samples PrivateUsage and working set, then requires a verified resource stop or explicit reconciliation. Python verifies retained report identity/hashes/gates. SQLite candidate projections serve reads only and canonical evidence is revalidated before mutation.",
+      "meaning": "MT5 executes optimization through terminal64.exe with its native /config behavior and Owner-selected tester-agent settings; MAX does not impose an external tester-agent cap or estimated-memory admission gate. The immutable started-job request, worker/MT5 identity, frozen report and sidecar hashes, and Python canonical revalidation govern evidence recovery. Identical repeated sidecar vectors are collapsed deterministically only when all semantic metrics match; conflicting evidence fails closed. Exact duplicate candidate identities are removed before SQLite projection persistence. Candidate projections serve reads only and canonical evidence is revalidated before mutation.",
       "mutable": true
     },
     {

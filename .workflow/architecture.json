@@ -46,14 +46,15 @@
       "owns": [
         "backend/max_backend/optimizer_draft.py",
         "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
-        "backend/max_backend/optimizer_resources.py",
-        "backend/max_backend/optimizer_resource_runtime.py",
         "backend/max_backend/optimizer_worker.py",
-        "backend/max_backend/optimizer_store.py::load_resource_calibration",
+        "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv",
+        "backend/max_backend/optimizer_runtime.py::commit_round_evidence",
+        "backend/max_backend/optimizer_store.py::optimizer_candidate_identity",
         "backend/max_backend/optimizer_store.py::persist_candidate_projection",
+        "backend/max_backend/optimizer_candidates.py::candidate_projection_payload",
         "backend/max_backend/optimizer_candidates.py::qualified_candidates_page"
       ],
-      "purpose": "Persist editable draft separately from immutable job/resource requests, reconcile exact worker/MT5 launch identity, revalidate Windows RAM and commit headroom before launch, monitor only Job Object-owned process PrivateUsage, fail closed on pressure/telemetry loss, atomically publish round evidence, and serve bounded candidate projections without weakening canonical mutation verification."
+      "purpose": "Persist editable drafts separately from immutable job requests, reconcile exact worker/MT5 launch identity, run terminal64.exe through the native /config path while leaving tester-agent behavior to MT5 and Owner configuration, atomically publish verified round evidence, collapse only identical repeated metrics vectors, and reject exact duplicate candidate identities before SQLite persistence."
     },
     {
       "depends_on": [

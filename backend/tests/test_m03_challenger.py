@@ -22,7 +22,7 @@ from max_backend.optimizer_store import create_job
 from max_backend.mtf_geometry import STRATEGY_CONTRACT, resolve_strategy_geometry
 
 
-EA_SHA = "827c4caddedbe37081353e08bba35eac5f01e96314dd8650d7ea17ad109ae725"
+EA_SHA = "10fadcd986a93cc075e13a6a383f1b00ee5c097c2a70d6edee315668111d5e20"
 
 
 def _request() -> dict:

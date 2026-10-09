@@ -9,7 +9,7 @@
   },
   {
     "path": "docs/ROADMAP.md",
-    "sha256": "458d5b1dad6f9d4587e14fc76fb620524b965a07a59b11ed36ca8ced213be072"
+    "sha256": "3ff31f427c7f39c621e34614719420bdf3badae6b6b77df6a0c2a96ccb9632ef"
   },
   {
     "path": "docs/ARCHITECTURE_PHASE1.md",
@@ -21,7 +21,7 @@
   },
   {
     "path": "ea/baseline/manifest.json",
-    "sha256": "19217be34ee281c8f3cf33be5184b4bf60f3679b932e9f1f72de23ef3b26f0ce"
+    "sha256": "b1ac042d019a7a5e2b2d32ae533a1954b7adbbebd4a91e970b648e327af7d457"
   },
   {
     "path": "backend/max_backend/config.py",
@@ -37,7 +37,7 @@
   },
   {
     "path": "backend/max_backend/workflow_store.py",
-    "sha256": "11e327411be58543f82c6a53ce1b04f0d97b34c13169799d39891e7c8d65e129"
+    "sha256": "9d3e74cc6fc9bd8eb944b9f3ce47386d18fd83cc0a99d442d412d27bbda0c579"
   },
   {
     "path": "backend/max_backend/mtf_geometry.py",
@@ -45,35 +45,27 @@
   },
   {
     "path": "backend/max_backend/optimizer_core.py",
-    "sha256": "596300441eae2eb2376cbb113d4617c98fe68a643e7d11f2febe5f84f383fe6b"
-  },
-  {
-    "path": "backend/max_backend/optimizer_resources.py",
-    "sha256": "754435f65919b9df144d84726e88f83af4b2ebd11b0061904f14048ea54269ca"
-  },
-  {
-    "path": "backend/max_backend/optimizer_resource_runtime.py",
-    "sha256": "957af2d1f3250bfd3fa413aab152710cf63b206c1c9c78ba6cc483851e5a01da"
+    "sha256": "51fb5789c51980a8c47955b4b4d9d8ce0bf45def2c1b8f9ce695489c21c35136"
   },
   {
     "path": "backend/max_backend/optimizer_store.py",
-    "sha256": "3c71901e2d3d7095221e8f081b7d2f5085af0a736accce0f1773e71e64295236"
+    "sha256": "698addfb68153873b958f7747153e09a5578f87a7c193ade3f87689067c63f3e"
   },
   {
     "path": "backend/max_backend/optimizer_worker.py",
-    "sha256": "cc5a58eae928243701686ee3d5ce6fc5d7d27963ea12a974fa4e3c25c9d6bb86"
+    "sha256": "61b7e0eb86e0f8428f0b94909d4c2672729533d41375c263630ded15781fa26d"
   },
   {
     "path": "backend/max_backend/optimizer_api.py",
-    "sha256": "7e106c9c167daa273c0db40bb69db17152d2db850f08fef2183d2e3846d34962"
+    "sha256": "fcb1868197e18eed309e75c5530a92ff9f1914bb7470ad52d2fb1fc08f03b90f"
   },
   {
     "path": "backend/max_backend/optimizer_candidates.py",
-    "sha256": "5112c410bb5fc0e9e70ba4925bf0ca07a5c89e44588f9a60979f379dd533df40"
+    "sha256": "bdbc5ebd309a13630239ab40e4b8b1f6057788583719f2d0a8e40d9c98e14ae0"
   },
   {
     "path": "backend/max_backend/challenger_selection.py",
-    "sha256": "1ecd701980a6fe44e1ccd2b70cf53d2d23e9d6fcef36c12d62fa6757dc853de2"
+    "sha256": "b75ba23e0ab4d3edc920178499d77a97b6eac61dc020f16507896d7a179fc1c2"
   },
   {
     "path": "backend/max_backend/optimizer_scientist.py",
@@ -93,15 +85,15 @@
   },
   {
     "path": "backend/max_backend/challenger_operations_store.py",
-    "sha256": "f4395cc95063716228a5095396e1281aa156843729b91f3eab5754c8af43d91d"
+    "sha256": "6e7f27dbd4eb2a4f42f2d36173191e9d55d3ac956524784d66be4a1a3601fcc2"
   },
   {
     "path": "backend/max_backend/challenger_operations.py",
-    "sha256": "26235ca7e5491b4fe18e73559ee053d9fc4ea1e0f6497bf139ea83e5ab673bed"
+    "sha256": "279c46f669d0711e85fb948ac69053fe03586faae42bbf2a28f05c535654bc5d"
   },
   {
     "path": "backend/max_backend/challenger_api.py",
-    "sha256": "36fe1c364d59caa2db10095500fdc8a26bef4a3dd2706c4bef346f6fe2fb0b91"
+    "sha256": "9b3a7bb0442f5743b85096ec81b60ede7898ade6415e9baf13ffbd98548b4d31"
   },
   {
     "path": "backend/max_backend/backtest_report.py",
@@ -109,7 +101,7 @@
   },
   {
     "path": "backend/max_backend/backtest_control.py",
-    "sha256": "f46f36f712ee88b489d89c2c3d8b26432b608d857fd9daec053396f430aeb21c"
+    "sha256": "2b6ed3d83901cbdc356019f8f1c0bfeb137cb7ebedde9248f5a1f04737792140"
   },
   {
     "path": "backend/max_backend/path_safety.py",
@@ -125,7 +117,7 @@
   },
   {
     "path": "backend/max_backend/champion_store.py",
-    "sha256": "df86b6dc6132bd98834970de0c91ce42054342fbb1fda2547040f4a8aa829308"
+    "sha256": "d33a9634544f2629795b511f754742c9a30948b828f9ab3b64c0e89e54038ea1"
   },
   {
     "path": "backend/max_backend/champion_bundle.py",
@@ -133,19 +125,19 @@
   },
   {
     "path": "backend/max_backend/promotion_service.py",
-    "sha256": "56294ea60ec092257ca37797077f41e4ae048e6a92cc60d6199409caa874676f"
+    "sha256": "284612da016ad0579a6ce919e149b2b7664a3493245b3987e4fc77da80ceca13"
   },
   {
     "path": "backend/max_backend/main.py",
-    "sha256": "d9e24f269787b4c13387f832da61a9a094965987c84992f0e551eb2bc79fae56"
+    "sha256": "849c7dab8af31f8a3efb79ec5847f578981ea29f79cd1eac754598399ef3e4b0"
   },
   {
     "path": "backend/max_backend/scientist_knowledge.py",
-    "sha256": "5c8aec5927d86f90d58dfd504129f1cb47871cba2052989dd62fb010c70eecc3"
+    "sha256": "3b938e8ac029d7f0a224e77aa3dc9dc9fe6ea55968910838967d502fed651bd0"
   },
   {
     "path": "backend/max_backend/scientist_context.py",
-    "sha256": "2d6abb41a97de386b52ea81a847ec459ec51021ff3f94c5251b6ce0ef0612418"
+    "sha256": "86dd17b08c376e974532b32941dee5c0376e4edfe301415551dd2e03317c1734"
   },
   {
     "path": "backend/max_backend/scientist_store.py",

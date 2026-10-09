@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { ActionButton, ActionProgress } from './ActionControls'
 
 type ScientistStatus = {
   knowledge_status: string
@@ -319,6 +320,15 @@ export default function ScientistPage({
     : status
   const providerReady = effectiveStatus?.provider_status === 'READY'
   const knowledgeReady = effectiveStatus?.knowledge_status === 'READY'
+  const sendBlockedReason = sending
+    ? 'Wait for the current Scientist reply.'
+    : clearing ? 'Wait for chat clearing to finish.'
+      : !providerReady ? 'Scientist provider is not READY; check Settings before sending.'
+        : !knowledgeReady ? 'Scientist knowledge is not READY; the message was not sent.'
+          : !thread ? 'Scientist chat is still initializing.'
+            : !selectedModel ? 'Choose a Scientist model in Settings.'
+              : !draft.trim() ? 'Enter a message before sending.'
+                : undefined
   const visibleMessages = optimisticUser ? [...messages, optimisticUser] : messages
 
   return (
@@ -367,14 +377,15 @@ export default function ScientistPage({
 
       <div className="drawer-chat-actions">
         <span className="single-chat-label">Scientist Chat</span>
-        <button
+        <ActionButton
           type="button"
           className="drawer-clear-chat"
           onClick={clearChat}
           disabled={sending || clearing}
+          blockedReason={sending ? 'Wait for the current Scientist reply.' : 'Chat clearing is already in progress.'}
         >
-          {clearing ? 'Clearing…' : 'Clear Chat'}
-        </button>
+          <ActionProgress active={clearing} idle="Clear Chat" pending="Clearing…" />
+        </ActionButton>
       </div>
 
       {!loading && effectiveStatus && !providerReady && (
@@ -455,8 +466,9 @@ export default function ScientistPage({
         />
         <div className="composer-actions">
           <span>{contextLabel(contextScope)}</span>
-          <button
+          <ActionButton
             type="submit"
+            className="scientist-send-button"
             disabled={
               sending
               || clearing
@@ -466,9 +478,10 @@ export default function ScientistPage({
               || !selectedModel
               || !draft.trim()
             }
+            blockedReason={sendBlockedReason}
           >
-            Send
-          </button>
+            <ActionProgress active={sending} idle="Send" pending="Sending…" />
+          </ActionButton>
         </div>
       </form>
     </aside>

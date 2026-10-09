@@ -3,12 +3,15 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import re
 from pathlib import Path
 
 import pytest
 
 import max_backend.challenger_bundle as challenger_bundle
+import max_backend.challenger_deployment as challenger_deployment
 import max_backend.champion_bundle as champion_bundle
+import max_backend.challenger_operations as challenger_operations
 import max_backend.promotion_service as service
 from max_backend.challenger_store import (
     finalize_challenger,
@@ -16,6 +19,10 @@ from max_backend.challenger_store import (
     list_challengers,
     migrate_m03,
     reserve_challenger,
+)
+from max_backend.challenger_operations_store import (
+    list_registry_page,
+    retire_registry_row,
 )
 from max_backend.champion_store import (
     create_prepared_promotion,
@@ -29,6 +36,7 @@ from max_backend.db import ensure_baseline_registered, initialize_database
 from max_backend.optimizer_core import sha256_file
 from max_backend.optimizer_store import create_job, update_job
 from max_backend.mtf_geometry import STRATEGY_CONTRACT, resolve_strategy_geometry
+from types import SimpleNamespace
 
 
 REAL_ROOT = Path(__file__).resolve().parents[2]
@@ -37,7 +45,7 @@ M03_ID = "STRAT-20260922-120735-R01-P11"
 M03_BUNDLE = REAL_ROOT / "backend" / "tests" / "fixtures" / "m03_challenger"
 M03_REQUEST = M03_BUNDLE / "request.json"
 M03_META = M03_BUNDLE / "challenger.json"
-BASELINE_SHA = "827c4caddedbe37081353e08bba35eac5f01e96314dd8650d7ea17ad109ae725"
+BASELINE_SHA = "10fadcd986a93cc075e13a6a383f1b00ee5c097c2a70d6edee315668111d5e20"
 
 
 def sha(path: Path) -> str:
@@ -159,6 +167,32 @@ def fixture_env(
     monkeypatch.setattr(service, "PROMOTION_RECOVERY_ROOT", root / "state" / "promotion_recovery")
     monkeypatch.setattr(champion_bundle, "EA_BASELINE", baseline)
 
+    def fake_metaeditor_run(command, **_kwargs):
+        compile_arg = next(
+            item for item in command if str(item).startswith("/compile:")
+        )
+        compile_source = Path(str(compile_arg).split(":", 1)[1])
+        compile_source.with_suffix(".ex5").write_bytes(
+            b"fake-ex5:" + compile_source.read_bytes()
+        )
+        compile_source.with_suffix(".log").write_text(
+            "Result: 0 errors, 0 warnings\n",
+            encoding="utf-8",
+        )
+        return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+    monkeypatch.setattr(
+        challenger_deployment,
+        "detect_mt5",
+        lambda: {
+            "status": "READY_EXECUTABLE_AND_DATA_ROOT",
+            "terminal": str(terminal),
+            "metaeditor": str(metaeditor),
+            "data_root": str(data_root),
+        },
+    )
+    monkeypatch.setattr(challenger_deployment.subprocess, "run", fake_metaeditor_run)
+
     source = {
         "job_id": job["job_id"],
         "round": 1,
@@ -188,7 +222,7 @@ def fixture_env(
         temp = root / "compile-temp" / kwargs["promotion_id"]
         temp.mkdir(parents=True, exist_ok=True)
         ex5 = temp / "Max_MTF.ex5"
-        ex5.write_bytes(b"fresh-ex5-" + challenger_id.encode())
+        ex5.write_bytes(b"fresh-ex5-" + sha(kwargs["champion_ea"]).encode())
         compile_dir = evidence / "compile"
         compile_dir.mkdir(parents=True, exist_ok=True)
         (compile_dir / "metaeditor_compile.txt").write_text(
@@ -228,6 +262,43 @@ def fixture_env(
     }
 
 
+def install_runtime_challenger_ea(env: dict, challenger_id: str) -> Path:
+    row = get_challenger(challenger_id, path=env["db"])
+    assert row is not None
+    integrity = service.verify_challenger_bundle(
+        challenger_id,
+        allow_promoted=row["status"] == "PROMOTED",
+        path=env["db"],
+    )
+    bundle = env["root"] / row["bundle_path"]
+    authority = service.resolve_mt5_authority(row["source_request"])
+    staging = challenger_deployment.new_challenger_staging_root(
+        expert_root=authority["expert_root"],
+        operation_id=f"TEST-{challenger_id}",
+    )
+    try:
+        prepared = challenger_deployment.prepare_challenger_deployment(
+            challenger_id=challenger_id,
+            source_request=row["source_request"],
+            source_identity={
+                "job_id": row["source_job_id"],
+                "round": row["source_round"],
+                "pass": row["source_pass"],
+            },
+            bundle_manifest_sha256=integrity["manifest_sha256"],
+            source_ea=bundle / f"Max_Challenger_{challenger_id}.mq5",
+            source_set=bundle / f"Max_Challenger_{challenger_id}.set",
+            authority=authority,
+            staging_root=staging,
+        )
+        challenger_deployment.commit_challenger_deployment(prepared)
+    finally:
+        challenger_deployment.cleanup_challenger_staging_root(staging)
+    return (
+        authority["expert_root"] / "Challengers" / challenger_id
+    ).resolve()
+
+
 def promote(env: dict) -> dict:
     return service.promote_strategy_challenger(
         env["challenger_id"],
@@ -244,6 +315,7 @@ def test_owner_selected_promotion_source_uses_qualified_revalidation(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     challenger = {
+        "challenger_id": "STRAT-V5",
         "role_origin": "OWNER_SELECTED_QUALIFIED_CANDIDATE",
         "source_job_id": "JOB-V5",
         "source_round": 2,
@@ -267,7 +339,7 @@ def test_owner_selected_promotion_source_uses_qualified_revalidation(
         "required_trades": 324,
         "hard_gates": {"minimum_trades": 324},
     }
-    calls: list[tuple[str, int, int, Path]] = []
+    calls: list[tuple[str, int, int, str, Path]] = []
 
     monkeypatch.setattr(
         service,
@@ -277,18 +349,20 @@ def test_owner_selected_promotion_source_uses_qualified_revalidation(
         ),
     )
 
-    def revalidate(job_id, round_no, pass_no, *, path):
-        calls.append((job_id, round_no, pass_no, path))
+    def revalidate(job_id, round_no, pass_no, *, challenger_id, path):
+        calls.append((job_id, round_no, pass_no, challenger_id, path))
         return copy.deepcopy(candidate)
 
-    monkeypatch.setattr(service, "revalidate_candidate_for_registration", revalidate)
+    monkeypatch.setattr(service, "revalidate_candidate_for_promotion", revalidate)
 
     result = service._verify_challenger_optimizer_source(
         challenger,
         path=tmp_path / "state" / "max.db",
     )
 
-    assert calls == [("JOB-V5", 2, 17, tmp_path / "state" / "max.db")]
+    assert calls == [
+        ("JOB-V5", 2, 17, "STRAT-V5", tmp_path / "state" / "max.db")
+    ]
     assert result["job_id"] == "JOB-V5"
     assert result["round"] == 2
     assert result["pass"] == 17
@@ -374,7 +448,7 @@ def test_owner_selected_current_read_uses_retained_lineage_without_deep_reparse(
 
     monkeypatch.setattr(
         service,
-        "revalidate_candidate_for_registration",
+        "revalidate_candidate_for_promotion",
         lambda *_a, **_k: (_ for _ in ()).throw(
             AssertionError("current Champion read must not full-reparse optimizer evidence")
         ),
@@ -531,8 +605,33 @@ def test_precommit_crash_recovery_restores_old_file_state(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     env = fixture_env(tmp_path, monkeypatch)
+    runtime_dir = install_runtime_challenger_ea(env, env["challenger_id"])
     recovery = service.PROMOTION_RECOVERY_ROOT / "PROMOTE-CRASH"
     recovery.mkdir(parents=True)
+    authority = service.resolve_mt5_authority(env["source"]["request"])
+    runtime_staging = challenger_deployment.new_challenger_staging_root(
+        expert_root=authority["expert_root"],
+        operation_id="PROMOTE-CRASH",
+    )
+    challenger = get_challenger(env["challenger_id"], path=env["db"])
+    integrity = service.verify_challenger_bundle(
+        env["challenger_id"],
+        path=env["db"],
+    )
+    runtime_state = {
+        "mt5": {
+            key: str(authority[key])
+            for key in ("terminal", "metaeditor", "data_root")
+        },
+        "staging_root": str(runtime_staging),
+        "selected": service._promotion_runtime_spec(
+            challenger,
+            integrity,
+            authority=authority,
+            quarantine_dir=runtime_staging / "promoted-challenger",
+        ),
+        "previous": None,
+    }
     before = service._capture_before_state(
         promotion_id="PROMOTE-CRASH",
         source_request=env["source"]["request"],
@@ -540,6 +639,7 @@ def test_precommit_crash_recovery_restores_old_file_state(
         recovery=recovery,
         baseline_archive_final=None,
         former_archive_final=None,
+        challenger_runtime=runtime_state,
     )
     create_prepared_promotion(
         promotion_id="PROMOTE-CRASH",
@@ -550,6 +650,18 @@ def test_precommit_crash_recovery_restores_old_file_state(
         recovery_path=str(recovery),
         path=env["db"],
     )
+    selected = runtime_state["selected"]
+    service.quarantine_challenger_deployment(
+        challenger_id=selected["challenger_id"],
+        source_identity=selected["source_identity"],
+        bundle_manifest_sha256=selected["bundle_manifest_sha256"],
+        source_sha256=selected["source_sha256"],
+        set_sha256=selected["set_sha256"],
+        authority=authority,
+        staging_root=runtime_staging,
+        quarantine_path=Path(selected["quarantine_dir"]),
+    )
+    assert not runtime_dir.exists()
     update_promotion("PROMOTE-CRASH", state="FILES_COMMITTED", path=env["db"])
     env["old_source"].write_bytes(b"new-uncommitted")
     env["old_ex5"].write_bytes(b"new-ex5")
@@ -562,6 +674,8 @@ def test_precommit_crash_recovery_restores_old_file_state(
     assert env["old_ex5"].read_bytes() == env["old_ex5_bytes"]
     assert env["old_set"].read_bytes() == env["old_set_bytes"]
     assert current_champion(path=env["db"]) is None
+    assert runtime_dir.is_dir()
+    assert not runtime_staging.exists()
 
 
 def test_post_db_commit_crash_recovery_keeps_new_champion(
@@ -569,20 +683,29 @@ def test_post_db_commit_crash_recovery_keeps_new_champion(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     env = fixture_env(tmp_path, monkeypatch)
+    runtime_dir = install_runtime_challenger_ea(env, env["challenger_id"])
+    original_runtime_finalize = service._finalize_promotion_runtime_state
     original_finalize = service._finalize_committed_evidence
     monkeypatch.setattr(
         service,
-        "_finalize_committed_evidence",
-        lambda *_args, **_kwargs: (_ for _ in ()).throw(RuntimeError("CRASH_AFTER_DB_COMMIT")),
+        "_finalize_promotion_runtime_state",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            RuntimeError("CRASH_DURING_RUNTIME_EA_FINALIZE")
+        ),
     )
-    with pytest.raises(RuntimeError, match="CRASH_AFTER_DB_COMMIT"):
+    with pytest.raises(
+        RuntimeError,
+        match="PROMOTION_RUNTIME_COMMIT_RECONCILIATION_REQUIRED",
+    ):
         promote(env)
 
     champion = current_champion(path=env["db"])
     assert champion is not None
     assert champion["strategy_id"] == env["challenger_id"]
     assert get_challenger(env["challenger_id"], path=env["db"])["status"] == "PROMOTED"
+    assert not runtime_dir.exists()
 
+    monkeypatch.setattr(service, "_finalize_promotion_runtime_state", original_runtime_finalize)
     monkeypatch.setattr(service, "_finalize_committed_evidence", original_finalize)
     recovered = service.recover_incomplete_promotions(path=env["db"])
     assert recovered == []
@@ -590,6 +713,7 @@ def test_post_db_commit_crash_recovery_keeps_new_champion(
     promotion = get_promotion(champion["promotion_id"], path=env["db"])
     assert promotion["state"] == "COMMITTED"
     assert (env["root"] / promotion["evidence_path"] / "manifest.json").is_file()
+    assert not runtime_dir.exists()
 
 
 def test_tampered_or_nonactive_challenger_is_rejected_before_promotion(
@@ -655,6 +779,10 @@ def test_filesystem_commit_failure_rolls_back_deployed_files(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     env = fixture_env(tmp_path, monkeypatch)
+    challenger_runtime = install_runtime_challenger_ea(
+        env,
+        env["challenger_id"],
+    )
     original_copy = service._atomic_copy
     failed = {"done": False}
 
@@ -673,6 +801,7 @@ def test_filesystem_commit_failure_rolls_back_deployed_files(
     assert env["old_source"].read_bytes() == env["old_source_bytes"]
     assert env["old_ex5"].read_bytes() == env["old_ex5_bytes"]
     assert env["old_set"].read_bytes() == env["old_set_bytes"]
+    assert challenger_runtime.is_dir()
 
 
 def _add_second_service_challenger(
@@ -697,18 +826,13 @@ def _add_second_service_challenger(
     bundle = env["root"] / bundle_rel
     bundle.mkdir(parents=True)
     ea = bundle / f"Max_Challenger_{cid}.mq5"
-    source_ea = env["root"] / "artifacts" / "strategy_challengers" / env["challenger_id"] / f"Max_Challenger_{env['challenger_id']}.mq5"
-    ea.write_bytes(source_ea.read_bytes())
-    set_path = bundle / f"Max_Challenger_{cid}.set"
-    set_path.write_bytes(
-        (
-            env["root"]
-            / "artifacts"
-            / "strategy_challengers"
-            / env["challenger_id"]
-            / f"Max_Challenger_{env['challenger_id']}.set"
-        ).read_bytes()
+    params_b = copy.deepcopy(env["source"]["params"])
+    params_b["InpEntryThreshold"] = 0.21
+    challenger_bundle.apply_params_to_challenger_ea(
+        env["baseline"], ea, params_b, request
     )
+    set_path = bundle / f"Max_Challenger_{cid}.set"
+    challenger_bundle.write_challenger_set(set_path, params_b, request)
     reserve_challenger(
         {
             "challenger_id": cid,
@@ -719,7 +843,7 @@ def _add_second_service_challenger(
             "ea_version": "2.00",
             "baseline_ea_sha256": BASELINE_SHA,
             "bundle_path": bundle_rel.as_posix(),
-            "params": env["source"]["params"],
+            "params": params_b,
             "kpi": {**env["source"]["kpi"], "profit_factor": 3.2},
             "hard_gates": env["source"]["hard_gates"],
             "source_request": request,
@@ -743,7 +867,7 @@ def _add_second_service_challenger(
         "round": 1,
         "pass": 12,
         "request": request,
-        "params": copy.deepcopy(env["source"]["params"]),
+        "params": params_b,
         "kpi": {**env["source"]["kpi"], "profit_factor": 3.2},
         "hard_gates": copy.deepcopy(env["source"]["hard_gates"]),
     }
@@ -777,12 +901,15 @@ def test_later_promotion_service_preserves_former_champion_lineage(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     env = fixture_env(tmp_path, monkeypatch)
+    a_runtime = install_runtime_challenger_ea(env, env["challenger_id"])
     first = promote(env)
     assert first["status"] == "COMMITTED"
+    assert not a_runtime.exists()
     a = current_champion(path=env["db"])
     assert a is not None
 
     _job_b, b, _source_b = _add_second_service_challenger(env, monkeypatch)
+    b_runtime = install_runtime_challenger_ea(env, b)
     second = service.promote_strategy_challenger(
         b,
         expected_challenger_manifest_sha256="manifest-b",
@@ -791,6 +918,9 @@ def test_later_promotion_service_preserves_former_champion_lineage(
         path=env["db"],
     )
     assert second["status"] == "COMMITTED"
+    assert not b_runtime.exists()
+    assert a_runtime.is_dir()
+    assert (a_runtime / f"Max_Challenger_{a['strategy_id']}.ex5").is_file()
     assert second["previous_champion"] == a["strategy_id"]
     assert second["new_champion"] == b
     assert second["former_champion_archive"] is not None
@@ -799,12 +929,14 @@ def test_later_promotion_service_preserves_former_champion_lineage(
     old = service.get_champion(a["strategy_id"], path=env["db"])
     assert old is not None and old["status"] == "FORMER"
     assert old["replaced_by"] == b
-    assert get_challenger(a["strategy_id"], path=env["db"])["status"] == "PROMOTED"
+    assert get_challenger(a["strategy_id"], path=env["db"])["status"] == "CHALLENGER"
     assert get_challenger(b, path=env["db"])["status"] == "PROMOTED"
     persisted = get_promotion(second["promotion_id"], path=env["db"])
     assert persisted is not None
-    assert persisted["post_state"]["previous_challenger_final_status"] == "PROMOTED"
-    assert list_challengers(path=env["db"]) == []
+    assert persisted["post_state"]["previous_challenger_final_status"] == "CHALLENGER"
+    assert [row["challenger_id"] for row in list_challengers(path=env["db"])] == [
+        a["strategy_id"]
+    ]
 
 
 def test_later_promotion_failure_keeps_a_current_and_b_challenger(
@@ -816,15 +948,19 @@ def test_later_promotion_failure_keeps_a_current_and_b_challenger(
     a = current_champion(path=env["db"])
     assert a is not None
     _job_b, b, _source_b = _add_second_service_challenger(env, monkeypatch)
+    b_runtime = install_runtime_challenger_ea(env, b)
 
-    monkeypatch.setattr(
-        service,
-        "_compile_champion",
-        lambda **_kwargs: (_ for _ in ()).throw(
-            RuntimeError("REPLACEMENT_COMPILE_FAIL")
-        ),
-    )
-    with pytest.raises(RuntimeError, match="REPLACEMENT_COMPILE_FAIL"):
+    original_copy = service._atomic_copy
+    failed = {"done": False}
+
+    def fail_after_challenger_transition(source: Path, destination: Path) -> None:
+        if not failed["done"] and destination.name == "Max_MTF.ex5":
+            failed["done"] = True
+            raise RuntimeError("REPLACEMENT_FILESYSTEM_COMMIT_FAIL")
+        original_copy(source, destination)
+
+    monkeypatch.setattr(service, "_atomic_copy", fail_after_challenger_transition)
+    with pytest.raises(RuntimeError, match="REPLACEMENT_FILESYSTEM_COMMIT_FAIL"):
         service.promote_strategy_challenger(
             b,
             expected_challenger_manifest_sha256="manifest-b",
@@ -837,9 +973,11 @@ def test_later_promotion_failure_keeps_a_current_and_b_challenger(
     assert current is not None and current["strategy_id"] == a["strategy_id"]
     assert get_challenger(a["strategy_id"], path=env["db"])["status"] == "PROMOTED"
     assert get_challenger(b, path=env["db"])["status"] == "CHALLENGER"
+    assert b_runtime.is_dir()
+    assert not (b_runtime.parent / a["strategy_id"]).exists()
     assert service.get_champion(a["strategy_id"], path=env["db"])["status"] == "CURRENT"
 
-def test_service_former_champion_source_is_not_repromotable_active_candidate(
+def test_replaced_champion_returns_as_challenger_and_can_reenter_champion(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -859,6 +997,8 @@ def test_service_former_champion_source_is_not_repromotable_active_candidate(
     }
 
     assert promote(env)["status"] == "COMMITTED"
+    a_champion_set = env["old_set"].read_bytes()
+    assert b"InpEntryThreshold=0.18||0.18||0||0.18||N" in a_champion_set
     _job_b, b, _source_b = _add_second_service_challenger(env, monkeypatch)
     b_before = get_challenger(b, path=env["db"])
     assert b_before is not None
@@ -882,25 +1022,59 @@ def test_service_former_champion_source_is_not_repromotable_active_candidate(
         path=env["db"],
     )
     assert p2["status"] == "COMMITTED"
+    a_runtime = (
+        env["root"]
+        / "mt5"
+        / "MQL5"
+        / "Experts"
+        / "MaxMTF"
+        / "Challengers"
+        / env["challenger_id"]
+    )
+    b_runtime = a_runtime.parent / b
+    assert a_runtime.is_dir()
+    assert not b_runtime.exists()
     assert current_champion(path=env["db"])["strategy_id"] == b
-    assert get_challenger(env["challenger_id"], path=env["db"])["status"] == "PROMOTED"
+    assert get_challenger(env["challenger_id"], path=env["db"])["status"] == "CHALLENGER"
     assert get_challenger(b, path=env["db"])["status"] == "PROMOTED"
+    current_champion_set = env["old_set"].read_bytes()
+    assert b"InpEntryThreshold=0.21||0.21||0||0.21||N" in current_champion_set
+    assert re.search(
+        rb"(?m)^\s*input double\s+InpEntryThreshold\s*=\s*0\.21\s*;",
+        env["old_source"].read_bytes(),
+    )
+    assert env["old_ex5"].read_bytes() == b"fresh-ex5-" + sha(b_ea).encode()
+    assert (
+        service.CHAMPION_CURRENT_ROOT / "Max_MTF.set"
+    ).read_bytes() == current_champion_set
+    assert [row["challenger_id"] for row in list_challengers(path=env["db"])] == [
+        env["challenger_id"]
+    ]
 
-    with pytest.raises(RuntimeError, match="PROMOTION_CHALLENGER_NOT_ACTIVE"):
-        service.promote_strategy_challenger(
-            env["challenger_id"],
-            expected_challenger_manifest_sha256=env["manifest_sha"],
-            expected_current_champion_id=b,
-            confirmed=True,
-            path=env["db"],
-        )
+    p3 = service.promote_strategy_challenger(
+        env["challenger_id"],
+        expected_challenger_manifest_sha256=env["manifest_sha"],
+        expected_current_champion_id=b,
+        confirmed=True,
+        path=env["db"],
+    )
 
-    assert current_champion(path=env["db"])["strategy_id"] == b
+    assert p3["status"] == "COMMITTED"
+    assert not a_runtime.exists()
+    assert b_runtime.is_dir()
+    assert (b_runtime / f"Max_Challenger_{b}.ex5").is_file()
+    assert current_champion(path=env["db"])["strategy_id"] == env["challenger_id"]
     a_after = get_challenger(env["challenger_id"], path=env["db"])
     b_after = get_challenger(b, path=env["db"])
     assert a_after is not None and b_after is not None
     assert a_after["status"] == "PROMOTED"
-    assert b_after["status"] == "PROMOTED"
+    assert b_after["status"] == "CHALLENGER"
+    assert env["old_set"].read_bytes() == a_champion_set
+    assert re.search(
+        rb"(?m)^\s*input double\s+InpEntryThreshold\s*=\s*0\.18\s*;",
+        env["old_source"].read_bytes(),
+    )
+    assert env["old_ex5"].read_bytes() == b"fresh-ex5-" + sha(a_ea).encode()
     assert {
         "challenger_id": a_after["challenger_id"],
         "bundle_path": a_after["bundle_path"],
@@ -919,14 +1093,15 @@ def test_service_former_champion_source_is_not_repromotable_active_candidate(
     } == b_identity
 
     tenures = list_champions(path=env["db"])
-    assert len(tenures) == 2
+    assert len(tenures) == 3
     assert len([row for row in tenures if row["status"] == "CURRENT"]) == 1
+    assert len([row for row in tenures if row["status"] == "FORMER"]) == 2
     history = service.promotion_history(path=env["db"])
     committed = [row for row in history if row["state"] == "COMMITTED"]
-    assert len(committed) == 2
+    assert len(committed) == 3
 
 
-def test_blocked_former_champion_repromotion_never_reaches_compile(
+def test_archived_former_champion_stays_out_of_active_and_promotion_paths(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -941,14 +1116,33 @@ def test_blocked_former_champion_repromotion_never_reaches_compile(
         path=env["db"],
     )
     assert current_champion(path=env["db"])["strategy_id"] == b
-    assert get_challenger(env["challenger_id"], path=env["db"])["status"] == "PROMOTED"
+    with pytest.raises(RuntimeError, match="CHALLENGER_NOT_ACTIVE"):
+        challenger_operations.retire_challenger(
+            b,
+            expected_manifest_sha256="manifest-b",
+            confirmed=True,
+            path=env["db"],
+        )
+    former_source = get_challenger(env["challenger_id"], path=env["db"])
+    assert former_source is not None and former_source["status"] == "CHALLENGER"
+    retired = retire_registry_row(
+        env["challenger_id"],
+        retirement_id="RETIRE-FORMER-CHALLENGER",
+        expected_manifest_sha256=former_source["manifest_sha256"],
+        evidence_path="evidence/test/RETIRE-FORMER-CHALLENGER",
+        path=env["db"],
+    )
+    assert retired["challenger"]["status"] == "RETIRED"
+    assert [row["challenger_id"] for row in list_registry_page(
+        view="retired", path=env["db"]
+    )["items"]] == [env["challenger_id"]]
 
     tenure_count_before = len(list_champions(path=env["db"]))
     compile_calls = {"count": 0}
 
     def forbidden_compile(**_kwargs):
         compile_calls["count"] += 1
-        raise AssertionError("compile must not run for historical promoted source")
+        raise AssertionError("compile must not run for an archived Challenger")
 
     monkeypatch.setattr(service, "_compile_champion", forbidden_compile)
     with pytest.raises(RuntimeError, match="PROMOTION_CHALLENGER_NOT_ACTIVE"):
@@ -963,5 +1157,5 @@ def test_blocked_former_champion_repromotion_never_reaches_compile(
     assert compile_calls["count"] == 0
     assert current_champion(path=env["db"])["strategy_id"] == b
     assert get_challenger(b, path=env["db"])["status"] == "PROMOTED"
-    assert get_challenger(env["challenger_id"], path=env["db"])["status"] == "PROMOTED"
+    assert get_challenger(env["challenger_id"], path=env["db"])["status"] == "RETIRED"
     assert len(list_champions(path=env["db"])) == tenure_count_before

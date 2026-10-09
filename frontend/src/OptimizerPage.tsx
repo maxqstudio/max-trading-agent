@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Pagination, SortHeader } from './DataTable'
+import { ActionButton, ActionProgress } from './ActionControls'
 import { compactNumber } from './tableFormat'
 
 type ParameterContract = {
@@ -15,7 +16,6 @@ type Contract = {
   parameters: ParameterContract[]
   default_search_space: Record<string, { start: number; step: number; stop: number }>
   default_optimize_params: string[]
-  default_resources: ResourceSettings
   optimizer_parameter_count: number
   fixed_execution_authority: {
     InpMaxDailyLossPct: number
@@ -61,59 +61,6 @@ type Contract = {
   }
 }
 
-type ResourceSettings = {
-  mode: 'AUTO_SAFE' | 'CUSTOM'
-  custom_max_local_agents: number
-  custom_min_free_ram_gb: number
-  custom_cpu_reserve_logical: number
-}
-
-type ResourcePreflight = {
-  schema: string
-  mode: 'AUTO_SAFE' | 'CUSTOM'
-  status: 'SAFE' | 'BLOCKED'
-  reason?: string | null
-  detected: {
-    physical_cores: number
-    logical_processors: number
-    total_ram_bytes: number
-    available_ram_bytes: number
-    commit_charge_bytes: number
-    commit_limit_bytes: number
-    commit_headroom_bytes: number
-    configured_local_agent_capacity: number
-    local_agent_capacity_source?: string
-    mt5_build: string
-  }
-  minimum_free_ram_bytes: number
-  safe_mt5_ram_budget_bytes: number
-  protected_system_commit_reserve_bytes: number
-  minimum_commit_headroom_bytes: number
-  safe_job_commit_budget_bytes: number
-  terminal_commit_budget_bytes: number
-  per_agent_commit_budget_bytes: number
-  terminal_memory_budget_bytes: number
-  per_agent_memory_budget_bytes: number
-  cpu_reserve_logical: number
-  requested_max_local_agents: number
-  safe_agent_cap: number
-  resolved_max_local_agents: number
-  calibration_status: 'NONE' | 'MEASURED'
-  estimation_source: 'CONSERVATIVE_FALLBACK' | 'MEASURED'
-  workload: {
-    compatibility_key: string
-    symbol: string
-    period: string
-    history_span_bucket: string
-    optimization_name: string
-    optimized_parameter_count: number
-    raw_complete_grid_combinations: number
-    from_date: string
-    to_date: string
-    tick_model_name: string
-  }
-}
-
 type Job = {
   job_id: string
   status: string
@@ -151,7 +98,6 @@ type Job = {
       timeout_sec: number
     }
     ea: { sha256: string }
-    resource_policy?: ResourcePreflight
   }
   winner?: {
     round: number
@@ -193,6 +139,33 @@ type Job = {
         sample_count?: number
         stop_reason?: string | null
       }
+    }
+    report_preview?: {
+      status: string
+      message: string
+      total_report_passes?: number
+      verified_r_evidence_passes?: number
+      missing_r_evidence_passes?: number
+      mismatched_r_evidence_passes?: number
+      sidecar_state?: string
+      rows?: {
+        pass_no: number
+        custom_fitness: number
+        profit: number
+        profit_factor: number
+        recovery_factor: number
+        equity_drawdown_pct: number | null
+        trades: number
+        params: Record<string, number>
+        r_evidence_status: string
+        implied_mean_r: number | null
+        r_metrics: {
+          mean_r: number
+          weighted_r: number
+          r_accounted_trades: number
+          sum_initial_risk: number
+        } | null
+      }[]
     }
     scientist_decision?: {
       mode: string
@@ -255,7 +228,6 @@ type Preview = {
     formula: string
     trade_exponent_alpha: number
   }
-  resource_preflight: ResourcePreflight
 }
 
 type QualifiedCandidate = {
@@ -277,6 +249,7 @@ type QualifiedPage = {
   qualified_count: number
   historical_qualified_count: number
   consumed_count: number
+  deduplicated_count: number
   rejected_count: number
   page: number
   page_size: number
@@ -390,38 +363,21 @@ function defaultOptimizerDraft(contract: Contract) {
     search_space: structuredClone(contract.default_search_space),
     kpi: { ...contract.default_kpi },
     scientist_assist: false,
-    resources: { ...contract.default_resources },
   }
 }
 
 function normalizeOptimizerDraft(contract: Contract, saved: any) {
   const defaults = defaultOptimizerDraft(contract)
   if (!saved || typeof saved !== 'object') return defaults
+  const compatibleSaved = { ...saved }
+  delete compatibleSaved.resources
   return {
     ...defaults,
-    ...saved,
-    resources: { ...defaults.resources, ...(saved.resources ?? {}) },
+    ...compatibleSaved,
   }
 }
 
 type DraftStatus = 'LOADING' | 'SAVED' | 'DIRTY' | 'SAVING' | 'RECOVERY_REQUIRED' | 'SAVE_FAILED' | 'CONFLICT'
-
-function ActionProgress({
-  active,
-  idle,
-  pending,
-}: {
-  active: boolean
-  idle: string
-  pending: string
-}) {
-  return (
-    <>
-      {active && <span className="button-spinner" aria-hidden="true" />}
-      <span>{active ? pending : idle}</span>
-    </>
-  )
-}
 
 export default function OptimizerPage() {
   const [contract, setContract] = useState<Contract | null>(null)
@@ -439,6 +395,7 @@ export default function OptimizerPage() {
   const [qualifiedLoading, setQualifiedLoading] = useState(true)
   const [candidateSort, setCandidateSort] = useState('mean_r')
   const [candidateOrder, setCandidateOrder] = useState<'asc' | 'desc'>('desc')
+  const [candidateListAction, setCandidateListAction] = useState('')
   const [candidatePage, setCandidatePage] = useState(1)
   const [candidatePageSize, setCandidatePageSize] = useState(25)
   const [candidateQuery, setCandidateQuery] = useState('')
@@ -447,6 +404,8 @@ export default function OptimizerPage() {
   const [candidateSelection, setCandidateSelection] = useState<Set<string>>(new Set())
   const [candidateRefresh, setCandidateRefresh] = useState(0)
   const [promotionMessage, setPromotionMessage] = useState('')
+  const [reportCopyMessage, setReportCopyMessage] = useState('')
+  const [reportCopyingPass, setReportCopyingPass] = useState<number | null>(null)
 
   const initializedRef = useRef(false)
   const autosaveEnabledRef = useRef(false)
@@ -459,6 +418,23 @@ export default function OptimizerPage() {
   const previewSequenceRef = useRef(0)
   const qualifiedSequenceRef = useRef(0)
   const qualifiedControllerRef = useRef<AbortController | null>(null)
+
+  async function copyReportParameters(passNo: number, params: Record<string, number>) {
+    setReportCopyMessage('')
+    setReportCopyingPass(passNo)
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable')
+      const text = Object.entries(params)
+        .map(([name, value]) => `${name}=${value}`)
+        .join('\n')
+      await navigator.clipboard.writeText(text)
+      setReportCopyMessage(`Pass ${passNo} inputs copied. They remain unqualified.`)
+    } catch {
+      setReportCopyMessage('Copy was blocked. Expand the input list and copy it manually.')
+    } finally {
+      setReportCopyingPass(null)
+    }
+  }
 
   async function persistDraft(value: any) {
     const sequence = ++draftSaveSequenceRef.current
@@ -615,7 +591,10 @@ export default function OptimizerPage() {
         if (sequence === qualifiedSequenceRef.current && !controller.signal.aborted) setQualifiedError(reason.message)
       })
       .finally(() => {
-        if (sequence === qualifiedSequenceRef.current && !controller.signal.aborted) setQualifiedLoading(false)
+        if (sequence === qualifiedSequenceRef.current && !controller.signal.aborted) {
+          setQualifiedLoading(false)
+          setCandidateListAction('')
+        }
       })
     return () => {
       controller.abort()
@@ -727,10 +706,19 @@ export default function OptimizerPage() {
     job?.active || (job && recoverableStatuses.includes(job.status)),
   )
   const startBlockedByDraft = ['LOADING', 'RECOVERY_REQUIRED', 'SAVE_FAILED', 'CONFLICT'].includes(draftStatus)
-  const startBlockedByResource = previewStatus !== 'ready' || visiblePreview?.resource_preflight?.status !== 'SAFE'
-  const canStart = !busy && !startBlockedByJob && !startBlockedByDraft && !startBlockedByResource
+  const startBlockedByPreview = previewStatus !== 'ready'
+  const canStart = !busy && !startBlockedByJob && !startBlockedByDraft && !startBlockedByPreview
   const canStop = Boolean(job && (job.active || recoverableStatuses.includes(job.status)))
   const canResume = Boolean(job && !job.active && resumableStatuses.includes(job.status))
+  const startBlockReason = busy
+    ? 'Another Optimizer action is running.'
+    : startBlockedByDraft
+      ? 'Save or recover the Optimizer configuration before starting.'
+      : startBlockedByPreview
+        ? 'Wait for a valid configuration preview before starting.'
+        : startBlockedByJob
+          ? 'An active or uncertain Optimizer job must be stopped or resumed first.'
+          : ''
   const currentResourceRuntime = job?.rounds.find((round) => round.round_no === job.current_round)?.state.resource_runtime
 
   function markDraftDirty() {
@@ -880,6 +868,8 @@ export default function OptimizerPage() {
   }
 
   function changeCandidateSort(field: string, nextOrder: 'asc' | 'desc') {
+    setCandidateListAction('sort:' + field)
+    setQualifiedLoading(true)
     setCandidateSort(field)
     setCandidateOrder(nextOrder)
     setCandidatePage(1)
@@ -934,9 +924,19 @@ export default function OptimizerPage() {
       })
       const body = await response.json()
       if (!response.ok) throw new Error(ownerErrorMessage(body.detail, 'Strategy Challenger creation could not be completed'))
+      const deployments = body.mt5_deployments
+      if (
+        !Array.isArray(deployments)
+        || deployments.length !== selections.length
+        || deployments.some((item: { status?: string }) =>
+          !['VERIFIED', 'VERIFIED_EXISTING'].includes(String(item?.status ?? '')),
+        )
+      ) {
+        throw new Error('Challenger creation did not confirm every compiled MT5 EA. Review the batch status before retrying.')
+      }
       setPromotionMessage(
-        String(body.result?.count ?? body.challengers?.length ?? selections.length)
-        + ' qualified candidate(s) created as independent Strategy Challengers.',
+        String(deployments.length)
+        + ' qualified candidate(s) created as Strategy Challengers and compiled into MT5.',
       )
       setCandidateSelection(new Set())
       setQualifiedLoading(true)
@@ -996,82 +996,9 @@ export default function OptimizerPage() {
         </div>
       </section>
 
-      <section aria-labelledby="optimizer-resources">
-        <h2 id="optimizer-resources">Resource safety</h2>
-        <div className="form-grid">
-          <label>
-            Resource mode
-            <select
-              aria-label="Resource mode"
-              value={config.resources.mode}
-              onChange={(e) => updateConfig('resources', { ...config.resources, mode: e.target.value })}
-            >
-              <option value="AUTO_SAFE">AUTO_SAFE</option>
-              <option value="CUSTOM">CUSTOM</option>
-            </select>
-          </label>
-          <label>
-            Max local agents
-            <input
-              aria-label="Max local agents"
-              type="number"
-              min="1"
-              disabled={config.resources.mode !== 'CUSTOM'}
-              value={config.resources.custom_max_local_agents}
-              onChange={(e) => updateConfig('resources', { ...config.resources, custom_max_local_agents: Number(e.target.value) })}
-            />
-          </label>
-          <label>
-            Minimum free RAM (GiB)
-            <input
-              aria-label="Minimum free RAM"
-              type="number"
-              min="0.5"
-              step="0.5"
-              disabled={config.resources.mode !== 'CUSTOM'}
-              value={config.resources.custom_min_free_ram_gb}
-              onChange={(e) => updateConfig('resources', { ...config.resources, custom_min_free_ram_gb: Number(e.target.value) })}
-            />
-          </label>
-          <label>
-            CPU reserve (logical)
-            <input
-              aria-label="CPU reserve"
-              type="number"
-              min="0"
-              disabled={config.resources.mode !== 'CUSTOM'}
-              value={config.resources.custom_cpu_reserve_logical}
-              onChange={(e) => updateConfig('resources', { ...config.resources, custom_cpu_reserve_logical: Number(e.target.value) })}
-            />
-          </label>
-        </div>
-        {visiblePreview?.resource_preflight ? (
-          <>
-            <dl className="facts compact">
-              <div><dt>Status</dt><dd><strong>{visiblePreview.resource_preflight.status === 'SAFE' ? 'SAFE TO START' : 'BLOCKED'}</strong></dd></div>
-              <div><dt>CPU</dt><dd>{visiblePreview.resource_preflight.detected.physical_cores} physical / {visiblePreview.resource_preflight.detected.logical_processors} logical</dd></div>
-              <div><dt>RAM</dt><dd>{gibibytes(visiblePreview.resource_preflight.detected.total_ram_bytes)} total / {gibibytes(visiblePreview.resource_preflight.detected.available_ram_bytes)} available</dd></div>
-              <div><dt>Windows commit</dt><dd>{gibibytes(visiblePreview.resource_preflight.detected.commit_charge_bytes)} charged / {gibibytes(visiblePreview.resource_preflight.detected.commit_limit_bytes)} limit / {gibibytes(visiblePreview.resource_preflight.detected.commit_headroom_bytes)} headroom</dd></div>
-              <div><dt>Protected reserve</dt><dd>{gibibytes(visiblePreview.resource_preflight.minimum_free_ram_bytes)}</dd></div>
-              <div><dt>Protected commit headroom</dt><dd>{gibibytes(visiblePreview.resource_preflight.minimum_commit_headroom_bytes)}</dd></div>
-              <div><dt>MT5 budget</dt><dd>{gibibytes(visiblePreview.resource_preflight.safe_mt5_ram_budget_bytes)}</dd></div>
-              <div><dt>Commit estimates</dt><dd>Terminal {gibibytes(visiblePreview.resource_preflight.terminal_commit_budget_bytes)} + {gibibytes(visiblePreview.resource_preflight.per_agent_commit_budget_bytes)} per agent</dd></div>
-              <div><dt>Agent limit</dt><dd>{visiblePreview.resource_preflight.resolved_max_local_agents} resolved / {visiblePreview.resource_preflight.requested_max_local_agents} requested · hard safe cap {visiblePreview.resource_preflight.safe_agent_cap}</dd></div>
-              <div><dt>MT5 local-agent ceiling</dt><dd>{visiblePreview.resource_preflight.detected.configured_local_agent_capacity} · {visiblePreview.resource_preflight.detected.local_agent_capacity_source === 'MT5_AGENT_DIRECTORIES' ? 'existing local agent directories' : 'logical-processor upper bound; Job Object enforces the frozen cap'}</dd></div>
-              <div><dt>CPU reserve</dt><dd>{visiblePreview.resource_preflight.cpu_reserve_logical} logical processor(s)</dd></div>
-              <div><dt>Workload</dt><dd>{visiblePreview.resource_preflight.workload.symbol} {visiblePreview.resource_preflight.workload.period} · {visiblePreview.resource_preflight.workload.history_span_bucket} · {visiblePreview.resource_preflight.workload.optimization_name} · {visiblePreview.resource_preflight.workload.optimized_parameter_count} optimized parameters</dd></div>
-              <div><dt>Date / tick model</dt><dd>{visiblePreview.resource_preflight.workload.from_date} → {visiblePreview.resource_preflight.workload.to_date} · {visiblePreview.resource_preflight.workload.tick_model_name}</dd></div>
-              <div><dt>Memory estimate</dt><dd>{visiblePreview.resource_preflight.estimation_source === 'MEASURED' ? 'Compatible local high-water calibration with safety margin' : 'Conservative workload-based fallback'} · {visiblePreview.resource_preflight.calibration_status === 'MEASURED' ? 'compatible history found' : 'no compatible history'}</dd></div>
-              <div><dt>Raw Cartesian context</dt><dd>{visiblePreview.resource_preflight.workload.raw_complete_grid_combinations.toLocaleString()} · not MT5 genetic pass count</dd></div>
-            </dl>
-            {visiblePreview.resource_preflight.reason && <p role="alert" className="error">{visiblePreview.resource_preflight.reason}</p>}
-            {visiblePreview.resource_preflight.workload.optimized_parameter_count >= 12 && (
-              <p className="subtle">Large multidimensional native optimization. Resource admission limits active local agents without reducing the scientific search space.</p>
-            )}
-          </>
-        ) : (
-          <p role="status" className="loading">Resource preflight will appear after the configuration is valid.</p>
-        )}
+      <section aria-labelledby="mt5-agent-execution">
+        <h2 id="mt5-agent-execution">MT5 execution</h2>
+        <p>Optimizer launches the terminal with its tester INI. MT5 uses its configured tester agents; no external agent cap or memory-estimate admission gate is applied.</p>
       </section>
 
       <section aria-labelledby="scientist-advisory">
@@ -1163,25 +1090,48 @@ export default function OptimizerPage() {
       <section aria-labelledby="optimizer-actions">
         <h2 id="optimizer-actions">Owner actions</h2>
         <div className="actions">
-          <button onClick={saveDraftExplicitly} disabled={busy || draftStatus === 'SAVING' || !config}>
+          <ActionButton
+            type="button"
+            onClick={saveDraftExplicitly}
+            disabled={busy || draftStatus === 'SAVING' || !config}
+            blockedReason={busy || draftStatus === 'SAVING'
+              ? 'Wait for the current configuration save or Optimizer action to finish.'
+              : !config ? 'Optimizer configuration has not loaded.' : undefined}
+          >
             <ActionProgress active={draftStatus === 'SAVING'} idle="SAVE DRAFT" pending="Saving draft…" />
-          </button>
-          <button onClick={start} disabled={!canStart}>
+          </ActionButton>
+          <ActionButton type="button" onClick={start} disabled={!canStart} blockedReason={startBlockReason}>
             <ActionProgress active={busyAction === 'start'} idle="START OPTIMIZER" pending="Starting..." />
-          </button>
-          <button onClick={() => action('stop')} disabled={busy || !canStop}>
+          </ActionButton>
+          <ActionButton
+            type="button"
+            onClick={() => action('stop')}
+            disabled={busy || !canStop}
+            blockedReason={busy
+              ? 'Wait for the current Optimizer action to finish.'
+              : !job ? 'No Optimizer job is selected.'
+                : 'This job is not in a state that can be safely stopped.'}
+          >
             <ActionProgress active={busyAction === 'stop'} idle="STOP" pending="Stopping..." />
-          </button>
-          <button onClick={() => action('resume')} disabled={busy || !canResume}>
+          </ActionButton>
+          <ActionButton
+            type="button"
+            onClick={() => action('resume')}
+            disabled={busy || !canResume}
+            blockedReason={busy
+              ? 'Wait for the current Optimizer action to finish.'
+              : !job ? 'No Optimizer job is selected.'
+                : 'This job has no resumable checkpoint.'}
+          >
             <ActionProgress active={busyAction === 'resume'} idle="RESUME" pending="Resuming..." />
-          </button>
+          </ActionButton>
         </div>
         {!canStart && (
           <p role="status" className="loading">
             {startBlockedByDraft
               ? 'Save or recover the configuration above before starting.'
-              : startBlockedByResource
-                ? 'Resource preflight must report SAFE TO START before MT5 can launch.'
+              : startBlockedByPreview
+                ? 'Wait for a valid configuration preview before starting.'
                 : job?.active
                   ? 'A job is active. Use its live status before starting another job.'
                   : 'This job needs an explicit Resume or Stop decision before a new job can start.'}
@@ -1202,11 +1152,9 @@ export default function OptimizerPage() {
             <div><dt>Trade Weight α</dt><dd>{job.request.optimizer_fitness?.trade_exponent_alpha ?? 'Legacy Mean R'}</dd></div>
             <div><dt>Market</dt><dd>{job.request.symbol} / {job.request.relative_symbol} · {job.request.period} · {job.request.from_date} → {job.request.to_date}</dd></div>
             <div><dt>Started</dt><dd>{job.started_utc ?? job.created_utc}</dd></div>
-            <div><dt>Scheduling</dt><dd>MT5 owns native pass/task scheduling; MAX caps active local agents</dd></div>
-            {job.request.resource_policy && <div><dt>Resource mode</dt><dd>{job.request.resource_policy.mode}</dd></div>}
-            {job.request.resource_policy && <div><dt>Frozen local-agent cap</dt><dd>{job.request.resource_policy.resolved_max_local_agents}</dd></div>}
-            {currentResourceRuntime && <div><dt>Resource state</dt><dd><strong>{resourceStateLabel(currentResourceRuntime.resource_state)}</strong></dd></div>}
-            {currentResourceRuntime && <div><dt>Max active agents observed</dt><dd>{currentResourceRuntime.actual_max_active_agents} / {currentResourceRuntime.resolved_max_local_agents}</dd></div>}
+            <div><dt>Scheduling</dt><dd>MT5 owns native pass/task scheduling and uses its configured tester agents; MAX does not impose an external agent cap.</dd></div>
+            {currentResourceRuntime && <div><dt>Prior-version resource telemetry</dt><dd><strong>{resourceStateLabel(currentResourceRuntime.resource_state)}</strong> · historical only, not used to admit or limit this run.</dd></div>}
+            {currentResourceRuntime && <div><dt>Active agents observed (historical)</dt><dd>{currentResourceRuntime.actual_max_active_agents} / {currentResourceRuntime.resolved_max_local_agents}</dd></div>}
             {currentResourceRuntime && <div><dt>Minimum free RAM observed</dt><dd>{gibibytes(currentResourceRuntime.min_available_ram_bytes)}</dd></div>}
             {currentResourceRuntime?.min_commit_headroom_bytes !== undefined && <div><dt>Minimum Windows commit headroom</dt><dd>{gibibytes(currentResourceRuntime.min_commit_headroom_bytes)}</dd></div>}
             {currentResourceRuntime?.peak_commit_charge_bytes !== undefined && <div><dt>Peak system commit charge</dt><dd>{gibibytes(currentResourceRuntime.peak_commit_charge_bytes)} / {gibibytes(currentResourceRuntime.commit_limit_bytes)}</dd></div>}
@@ -1275,6 +1223,80 @@ export default function OptimizerPage() {
             </div>
           ))}
 
+          {job.rounds.map((round) => round.report_preview && (
+            <div className="results-control raw-report-preview" key={'raw-report-' + round.round_no}>
+              <h2>Round {round.round_no} · retained MT5 report</h2>
+              {round.report_preview.status === 'UNAVAILABLE' ? (
+                <p role="alert" className="error">{round.report_preview.message}</p>
+              ) : (
+                <>
+                  <p role="alert" className="error">
+                    {round.report_preview.message} The run remains failed; this view does not change its status.
+                  </p>
+                  <div className="result-summary" aria-label="Retained report coverage">
+                    <div><span>Reported passes</span><strong>{round.report_preview.total_report_passes ?? '—'}</strong></div>
+                    <div><span>Passes with verified R</span><strong>{round.report_preview.verified_r_evidence_passes ?? '—'}</strong></div>
+                    <div><span>R evidence missing</span><strong>{round.report_preview.missing_r_evidence_passes ?? '—'}</strong></div>
+                    <div><span>R evidence mismatches</span><strong>{round.report_preview.mismatched_r_evidence_passes ?? '—'}</strong></div>
+                  </div>
+                  {(round.report_preview.rows?.length ?? 0) > 0 && (
+                    <div className="table-wrap data-table-wrap">
+                      <table>
+                        <thead>
+                          <tr><th>Pass</th><th>Custom fitness</th><th>Mean R</th><th>Weighted R</th><th>Profit</th><th>PF</th><th>RF</th><th>Trades</th><th>Inputs</th></tr>
+                        </thead>
+                        <tbody>
+                          {round.report_preview.rows?.map((row) => (
+                            <tr key={row.pass_no}>
+                              <td>{row.pass_no}</td>
+                              <td>{compactNumber(row.custom_fitness, 4)}</td>
+                              <td>
+                                {row.r_metrics
+                                  ? compactNumber(row.r_metrics.mean_r, 4)
+                                  : row.implied_mean_r === null
+                                    ? 'Missing'
+                                    : `≈${compactNumber(row.implied_mean_r, 4)} from Custom`}
+                              </td>
+                              <td>{row.r_metrics ? compactNumber(row.r_metrics.weighted_r, 4) : 'Missing'}</td>
+                              <td>{compactNumber(row.profit, 2)}</td>
+                              <td>{compactNumber(row.profit_factor, 4)}</td>
+                              <td>{compactNumber(row.recovery_factor, 4)}</td>
+                              <td>{row.trades}</td>
+                              <td>
+                                <details>
+                                  <summary>View inputs</summary>
+                                  <dl className="raw-report-inputs">
+                                    {Object.entries(row.params).map(([name, value]) => (
+                                      <div key={name}><dt>{name}</dt><dd>{value}</dd></div>
+                                    ))}
+                                  </dl>
+                                  <ActionButton
+                                    type="button"
+                                    onClick={() => copyReportParameters(row.pass_no, row.params)}
+                                    disabled={reportCopyingPass === row.pass_no}
+                                    blockedReason="A parameter copy is still in progress."
+                                  >
+                                    <ActionProgress
+                                      active={reportCopyingPass === row.pass_no}
+                                      idle="Copy inputs"
+                                      pending="Copying…"
+                                    />
+                                  </ActionButton>
+                                </details>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                  {reportCopyMessage && <p role="status" className="loading">{reportCopyMessage}</p>}
+                  <p className="subtle">Mean R marked “from Custom” is reconstructed from the frozen fitness formula, not a stored R sidecar. Weighted R is unavailable unless the row has verified sidecar evidence.</p>
+                </>
+              )}
+            </div>
+          ))}
+
           {currentQualifiedWorkflow ? (
           <div className="results-control">
             <h2>Qualified candidates</h2>
@@ -1282,6 +1304,7 @@ export default function OptimizerPage() {
               <div><span>Raw Passes</span><strong>{qualified?.raw_count ?? '—'}</strong></div>
               <div><span>Available qualified</span><strong>{qualified?.qualified_count ?? '—'}</strong></div>
               <div><span>Already used</span><strong>{qualified?.consumed_count ?? '—'}</strong></div>
+              <div><span>Exact duplicates removed</span><strong>{qualified?.deduplicated_count ?? '—'}</strong></div>
               <div><span>Rejected</span><strong>{qualified?.rejected_count ?? '—'}</strong></div>
             </div>
 
@@ -1293,6 +1316,7 @@ export default function OptimizerPage() {
                 onChange={(event) => {
                   qualifiedControllerRef.current?.abort()
                   setQualifiedLoading(true)
+                  setCandidateListAction('')
                   setCandidateSearch(event.target.value)
                   setCandidatePage(1)
                 }}
@@ -1303,6 +1327,7 @@ export default function OptimizerPage() {
                 onChange={(event) => {
                   qualifiedControllerRef.current?.abort()
                   setQualifiedLoading(true)
+                  setCandidateListAction('')
                   setCandidateRound(event.target.value)
                   setCandidatePage(1)
                 }}
@@ -1312,30 +1337,41 @@ export default function OptimizerPage() {
                   <option key={round.round_no} value={round.round_no}>Round {round.round_no}</option>
                 ))}
               </select>
-              <button type="button" onClick={toggleCurrentPage} disabled={!qualified?.items.length || busy}>
+              <ActionButton
+                type="button"
+                onClick={toggleCurrentPage}
+                disabled={!qualified?.items.length || busy || qualifiedLoading}
+                blockedReason={busy ? 'Wait for the current Optimizer action.' : qualifiedLoading ? 'Wait for qualified candidate data to finish loading.' : 'There are no qualified candidates on this page.'}
+              >
                 Select current page
-              </button>
-              <button type="button" onClick={() => setCandidateSelection(new Set())} disabled={!candidateSelection.size || busy}>
+              </ActionButton>
+              <ActionButton
+                type="button"
+                onClick={() => setCandidateSelection(new Set())}
+                disabled={!candidateSelection.size || busy || qualifiedLoading}
+                blockedReason={busy ? 'Wait for the current Optimizer action.' : qualifiedLoading ? 'Wait for qualified candidate data to finish loading.' : 'No candidates are selected.'}
+              >
                 Clear selection
-              </button>
+              </ActionButton>
               <span>{candidateSelection.size} selected</span>
-              <button
+              <ActionButton
                 type="button"
                 onClick={promoteSelectedCandidates}
-                disabled={busy || candidateSelection.size === 0}
+                disabled={busy || qualifiedLoading || candidateSelection.size === 0}
+                blockedReason={busy ? 'Wait for the current Optimizer action.' : qualifiedLoading ? 'Wait for qualified candidate data to finish loading.' : 'Select one or more qualified candidates first.'}
               >
                 <ActionProgress
                   active={busyAction === 'promote-selected'}
                   idle="Promote Selected to Challengers"
-                  pending="Promoting..."
+                  pending="Creating and compiling..."
                 />
-              </button>
+              </ActionButton>
             </div>
 
             {promotionMessage && <p role="status" className="success">{promotionMessage}</p>}
             {qualifiedError && <p role="alert" className="error">{qualifiedError}</p>}
             {qualifiedLoading && <p role="status" className="loading">Loading qualified candidates…</p>}
-            {!qualifiedLoading && qualified && (
+            {qualified && (
               <>
                 {qualified.items.length === 0 && (
                   <p className="empty-state">No qualified candidates match the current filter.</p>
@@ -1365,6 +1401,9 @@ export default function OptimizerPage() {
                             sort={candidateSort}
                             order={candidateOrder}
                             onSort={changeCandidateSort}
+                            loading={qualifiedLoading || busy}
+                            blockedReason={busy ? 'Wait for the current Optimizer action.' : 'Wait for qualified candidate data to finish loading.'}
+                            pending={candidateListAction === 'sort:' + field}
                           />
                         ))}
                       </tr>
@@ -1377,7 +1416,7 @@ export default function OptimizerPage() {
                               aria-label={'Select candidate R' + row.round + ' P' + row.pass}
                               type="checkbox"
                               checked={candidateSelection.has(candidateKey(row))}
-                              disabled={busy}
+                              disabled={busy || qualifiedLoading}
                               onChange={() => toggleCandidate(row)}
                             />
                           </td>
@@ -1402,7 +1441,14 @@ export default function OptimizerPage() {
                   pages={qualified.pages}
                   pageSize={qualified.page_size}
                   total={qualified.total}
-                  onPage={setCandidatePage}
+                  loading={qualifiedLoading || busy}
+                  blockedReason={busy ? 'Wait for the current Optimizer action.' : 'Wait for qualified candidate data to finish loading.'}
+                  pendingDirection={candidateListAction === 'page-previous' ? 'previous' : candidateListAction === 'page-next' ? 'next' : ''}
+                  onPage={(next, direction) => {
+                    setCandidateListAction('page-' + direction)
+                    setQualifiedLoading(true)
+                    setCandidatePage(next)
+                  }}
                   onPageSize={(size) => { setCandidatePageSize(size); setCandidatePage(1) }}
                 />
               </>

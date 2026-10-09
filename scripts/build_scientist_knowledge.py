@@ -77,7 +77,7 @@ def main() -> int:
                 "V6 adds InpRiskPct as the 17th optimizer dimension at 0.5%..5.0% with exact 0.5% step; refinement may narrow the Owner grid but cannot shift its 0.5% origin or create off-grid values. New V6 jobs fix deterministic daily loss at 5.0% and InpMaxDailyLossPct is not optimized.",
                 "Historical V1-V5 16-parameter jobs remain readable and are not rewritten or migrated.",
                 "MAX_OPTIMIZER_FITNESS_V2 remains MeanR * Trades^alpha search guidance and is independent of the new risk dimension; Mean R and Weighted R remain independent hard-gate evidence.",
-                "AUTO_SAFE is the default Optimizer execution resource policy: MAX freezes the resolved policy at START, caps active local MT5 agents, reserves RAM/CPU headroom, blocks unsafe admission, and may stop owned execution under critical pressure without reducing the scientific search space.",
+                "Optimizer launches terminal64.exe with the frozen native tester INI through subprocess.Popen; MetaTrader manages tester agents using its configured settings. MAX does not impose an external active-agent cap or memory-estimate START admission gate.",
                 "A Challenger does not become Champion without explicit Owner promotion.",
             ],
         },
@@ -106,8 +106,11 @@ def main() -> int:
             "classification": "EXISTING",
             "facts": [
                 "Promoting Challenger B closes current Champion A tenure as FORMER history.",
-                "Champion replacement is mandatory and non-optional: old Strategy A tenure becomes FORMER, its source Challenger remains historical PROMOTED authority, and promoted Strategy B becomes the CURRENT Champion.",
-                "A source candidate that entered Champion lineage does not automatically return to the active Challenger pool.",
+                "Champion replacement follows the normal promote flow: old Strategy A tenure becomes FORMER and its source Challenger automatically returns to the active Challenger registry, while promoted Strategy B becomes the CURRENT Champion.",
+                "Promotion installs the selected Challenger's verified EA source and parameter set into the current Champion paths, then compiles for the retained request; no separate manual Champion retirement is required.",
+                "A former Champion source may later be explicitly retired through the Challenger Retirement / Archive lifecycle; that action is separate from Champion replacement.",
+                "On replacement, the former Champion source returns to the active Challenger registry and its retained EA is compiled into the Challenger Experts path; the newly promoted Challenger's standalone Challenger deployment is removed while its Champion EA is deployed to Max_MTF.",
+                "Former Champion deployment files may be retained in promotion history for recovery and audit; that history archive does not mark its source Challenger as RETIRED.",
                 "Stable Strategy identity and immutable Challenger evidence remain preserved across Champion tenure history.",
             ],
         },
@@ -126,8 +129,10 @@ def main() -> int:
             "classification": "EXISTING",
             "facts": [
                 "M06 is accepted.",
-                "M06 provides retained-contract real-MT5 Challenger Backtest and non-destructive Challenger Retirement / Archive.",
-                "Retirement preserves Strategy artifacts, evidence and lineage.",
+                "M06 provides retained-contract real-MT5 Challenger Backtest and verified removal of a retired Challenger's compiled MT5 deployment.",
+                "Retirement and Archive apply only to Challenger registry entries; the current PROMOTED Champion cannot be retired through this path.",
+                "Retirement removes only the verified runtime Challenger EA deployment; database parameters, immutable MQ5/SET source bundle, manifests, evidence, lineage, and backtest history remain preserved.",
+                "No restore endpoint is currently exposed; any later Owner-authorized restoration must recompile from the retained source bundle and parameters.",
                 "The registry scales to many active and retired Challengers.",
                 "M08 extends generated-object control with dependency-safe physical deletion; accepted historical authority remains protected.",
             ],
@@ -200,7 +205,7 @@ def main() -> int:
             "M07 accepted causal true-MTF Strategy epoch",
             "M08 accepted qualified pool, multi-Challenger selection, Backtest results and Artifact control plane",
             "V6 Strategy Optimizer source candidate with 17 dimensions including an exact Owner-grid InpRiskPct 0.5%..5.0% step 0.5% that refinement cannot shift off-grid, plus fixed 5.0% daily-loss authority for new jobs",
-            "Hardware-aware Strategy Optimizer resource admission with AUTO_SAFE default, bounded active local MT5 agents, RAM/CPU headroom and controlled resource stop semantics"
+            "Strategy Optimizer launches the frozen native tester INI through subprocess.Popen and relies on MetaTrader's configured tester-agent behavior without an external active-agent cap or memory-estimate START admission gate"
         ],
         "planned_capabilities": [
             "Owner Strategy Champion and real MT5 sample preparation before future Research source work is authorized",

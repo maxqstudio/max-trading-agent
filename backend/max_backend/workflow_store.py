@@ -431,8 +431,16 @@ def insert_challenger_batch_rows(
     batch_id: str,
     rows: list[dict[str, Any]],
     *,
+    mt5_deployments: list[dict[str, Any]] | None = None,
     path: Path = DATABASE_PATH,
 ) -> list[dict[str, Any]]:
+    if mt5_deployments is None or len(mt5_deployments) != len(rows):
+        raise RuntimeError("CHALLENGER_BATCH_MT5_DEPLOYMENT_COUNT_MISMATCH")
+    if any(
+        item.get("status") not in {"VERIFIED", "VERIFIED_EXISTING"}
+        for item in mt5_deployments
+    ):
+        raise RuntimeError("CHALLENGER_BATCH_MT5_DEPLOYMENT_NOT_VERIFIED")
     migrate_current(path)
     now = utc_now()
     with connect(path) as conn:
@@ -527,6 +535,7 @@ def insert_challenger_batch_rows(
         result_payload = {
             "challenger_ids": [str(row["challenger_id"]) for row in rows],
             "count": len(rows),
+            "mt5_deployments": mt5_deployments,
         }
         conn.execute(
             """

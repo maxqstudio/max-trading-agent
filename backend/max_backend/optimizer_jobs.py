@@ -10,8 +10,13 @@ from typing import Any
 
 from .challenger_store import get_challenger_by_source, migrate_m03
 from .config import DATABASE_PATH, ROOT
-from .optimizer_core import freeze_request
-from .optimizer_resources import frozen_resource_admission
+from .optimizer_core import (
+    freeze_request,
+    optimizer_fitness_for_request,
+    parse_optimizer_report_preview,
+    report_matches_request,
+    sha256_file,
+)
 from .optimizer_runtime import (
     OPTIMIZER_EVIDENCE_ROOT,
     compatible_reports,
@@ -385,11 +390,7 @@ def _spawn_worker(job_id: str, *, resume: bool) -> dict[str, Any]:
 
 def start_optimizer(raw_request: dict[str, Any]) -> dict[str, Any]:
     migrate_m03()
-    request = freeze_request(raw_request, force_resource_refresh=True)
-    resource_policy = request.get("resource_policy") or {}
-    if resource_policy.get("status") != "SAFE":
-        reason = str(resource_policy.get("reason") or "Resource safety could not be established.")
-        raise RuntimeError(f"RESOURCE_PREFLIGHT_BLOCKED: {reason}")
+    request = freeze_request(raw_request)
     job = create_job(
         request,
         evidence_root=OPTIMIZER_EVIDENCE_ROOT,
@@ -617,17 +618,6 @@ def resume_optimizer(job_id: str) -> dict[str, Any]:
             raise RuntimeError("Optimizer worker ownership could not be proven; resume is blocked.")
 
     _ensure_request_snapshot(job)
-    if str(job.get("status") or "") == "RESOURCE_STOPPED":
-        admission = frozen_resource_admission(
-            job["request"].get("resource_policy") or {},
-            mt5=job["request"]["mt5"],
-        )
-        if admission.get("status") != "SAFE":
-            raise RuntimeError(
-                "RESOURCE_PREFLIGHT_BLOCKED: "
-                + str(admission.get("reason") or "Current resources are unsafe for resume.")
-            )
-
     return _spawn_worker(job_id, resume=True)
 
 
@@ -822,6 +812,91 @@ def _round_passes(
         return []
 
 
+def _verified_raw_report_preview(
+    job: dict[str, Any],
+    round_record: dict[str, Any],
+    *,
+    evidence_root: Path,
+) -> dict[str, Any] | None:
+    if (
+        str(job.get("status") or "") != "FAILED"
+        or str(job.get("first_blocker") or "") != "OPTIMIZER_RUNTIME_FAILURE"
+    ):
+        return None
+    job_id = str(job.get("job_id") or "")
+    if not job_id or Path(job_id).name != job_id or ".." in job_id:
+        return {"status": "UNAVAILABLE", "message": "Raw optimizer evidence cannot be verified."}
+    try:
+        round_no = int(round_record["round_no"])
+        state = round_record.get("state")
+        if not isinstance(state, dict):
+            raise ValueError("round checkpoint missing")
+        base = evidence_root.resolve(strict=True)
+        raw_dir = (
+            evidence_root / job_id / f"round_{round_no:02d}" / ".staging" / "raw-freeze"
+        )
+        resolved_dir = raw_dir.resolve(strict=True)
+        resolved_dir.relative_to(base)
+        if any(part.is_symlink() for part in (
+            evidence_root / job_id,
+            evidence_root / job_id / f"round_{round_no:02d}",
+            evidence_root / job_id / f"round_{round_no:02d}" / ".staging",
+            raw_dir,
+        )):
+            raise ValueError("raw evidence path contains a symlink")
+
+        manifest_path = raw_dir / "raw-manifest.json"
+        report_path = raw_dir / "raw_Max_MTF.xml"
+        metrics_path = raw_dir / "raw_Max_MTF_metrics.csv"
+        for file_path in (manifest_path, report_path, metrics_path):
+            if file_path.is_symlink() or not file_path.is_file():
+                raise ValueError("raw evidence file is missing or unsafe")
+            file_path.resolve(strict=True).relative_to(resolved_dir)
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        files = manifest.get("files") if isinstance(manifest, dict) else None
+        expected_names = {report_path.name, metrics_path.name}
+        if (
+            manifest.get("schema") != "MAX_OPTIMIZER_RAW_FREEZE_V1"
+            or manifest.get("job_id") != job_id
+            or int(manifest.get("round", -1)) != round_no
+            or not isinstance(files, dict)
+            or set(files) != expected_names
+            or manifest.get("source_report_fingerprint") != state.get("report_fingerprint")
+        ):
+            raise ValueError("raw evidence manifest identity mismatch")
+        if (
+            files.get(report_path.name) != sha256_file(report_path)
+            or files.get(metrics_path.name) != sha256_file(metrics_path)
+            or state.get("raw_report_sha256") != files.get(report_path.name)
+            or state.get("raw_sidecar_sha256") != files.get(metrics_path.name)
+        ):
+            raise ValueError("raw evidence hash mismatch")
+        request = job.get("request")
+        if not isinstance(request, dict) or not report_matches_request(report_path, request):
+            raise ValueError("raw report does not match the frozen job request")
+        fitness = optimizer_fitness_for_request(request)
+        if fitness is None:
+            raise ValueError("frozen fitness authority missing")
+        preview = parse_optimizer_report_preview(
+            report_path,
+            round_no=round_no,
+            request=request,
+            metrics_path=metrics_path,
+            expected_nonce=int(state["optimizer_run_nonce"]),
+            limit=25,
+        )
+        preview["message"] = (
+            "MT5 report rows are retained for review. R evidence is incomplete; "
+            "these rows are not validated candidates and cannot be promoted."
+        )
+        return preview
+    except Exception:
+        return {
+            "status": "UNAVAILABLE",
+            "message": "Raw optimizer evidence could not be verified; no pass data is shown.",
+        }
+
+
 def job_detail(
     job_id: str,
     *,
@@ -856,6 +931,13 @@ def job_detail(
             )
         )
         state = item.get("state") if isinstance(item.get("state"), dict) else {}
+        report_preview = _verified_raw_report_preview(
+            job,
+            item,
+            evidence_root=evidence_root,
+        )
+        if report_preview is not None:
+            item["report_preview"] = report_preview
         transition = state.get("scientist_transition")
         decision = None
         if isinstance(transition, dict):

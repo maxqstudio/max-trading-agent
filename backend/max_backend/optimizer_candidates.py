@@ -8,7 +8,7 @@ from typing import Any
 
 from .config import DATABASE_PATH, ROOT
 from .db import connect
-from .challenger_store import consumed_source_identities
+from .challenger_store import consumed_source_identities, get_challenger_by_source
 from .mtf_geometry import STRATEGY_CONTRACT, assert_geometry_matches_main
 from .optimizer_core import (
     ABSOLUTE_BOUNDS,
@@ -24,6 +24,8 @@ from .optimizer_core import (
 from .optimizer_store import (
     attach_rounds,
     get_job,
+    optimizer_candidate_identities,
+    optimizer_candidate_identity,
     persist_candidate_projection,
 )
 from .optimizer_runtime import committed_round_dir, verify_committed_round_bundle
@@ -371,13 +373,15 @@ def candidate_projection_payload(
     bundle_path: str | Path,
     request_path: str | Path,
     run_nonce: int,
+    existing_candidate_identities: set[str] | None = None,
 ) -> dict[str, Any]:
     bundle = Path(bundle_path)
     report = _resolve_project_path(report_path)
     sidecar = _resolve_project_path(sidecar_path)
     if not report.is_file() or not sidecar.is_file():
         raise RuntimeError("OPTIMIZER_PROJECTION_SOURCE_EVIDENCE_MISSING")
-    candidates: list[dict[str, Any]] = []
+    candidates_by_identity: dict[str, dict[str, Any]] = {}
+    already_projected = existing_candidate_identities or set()
     for payload in passes_payload:
         if not isinstance(payload, dict):
             raise RuntimeError("OPTIMIZER_PROJECTION_PASS_INVALID")
@@ -401,11 +405,14 @@ def candidate_projection_payload(
             "request_path": str(request_path),
             "run_nonce": int(run_nonce),
         }
+        candidate_identity = optimizer_candidate_identity(candidate)
+        if candidate_identity in already_projected:
+            continue
         search_text = (
             f"{int(round_no)} {int(candidate['pass'])} "
             + json.dumps(candidate["params"], sort_keys=True, separators=(",", ":"))
         ).casefold()
-        candidates.append({
+        projected_candidate = {
             "pass": int(candidate["pass"]),
             "mean_r": float(candidate["mean_r"]),
             "custom_fitness": candidate.get("custom_fitness"),
@@ -416,7 +423,16 @@ def candidate_projection_payload(
             "required_trades": int(candidate["required_trades"]),
             "search_text": search_text,
             "candidate": candidate,
-        })
+        }
+        previous = candidates_by_identity.get(candidate_identity)
+        if previous is None or int(projected_candidate["pass"]) < int(
+            previous["pass"]
+        ):
+            candidates_by_identity[candidate_identity] = projected_candidate
+    candidates = sorted(
+        candidates_by_identity.values(),
+        key=lambda item: int(item["pass"]),
+    )
     content = json.dumps(candidates, sort_keys=True, separators=(",", ":"))
     return {
         "report_sha256": str(report_sha256),
@@ -457,6 +473,9 @@ def _ensure_candidate_projection(
             bundle_path=evidence["root"],
             request_path=_job_root(job) / "request.json",
             run_nonce=int((record.get("state") or {}).get("optimizer_run_nonce") or 0),
+            existing_candidate_identities=optimizer_candidate_identities(
+                str(job["job_id"]), path=path
+            ),
         )
         persist_candidate_projection(
             str(job["job_id"]), round_no, projection, path=path
@@ -537,6 +556,11 @@ def qualified_candidates_page(
             "WHERE job_id=? AND phase='PARSED'",
             (job_id,),
         ).fetchone()["n"])
+        eligible_pass_count = int(conn.execute(
+            "SELECT COALESCE(SUM(eligible_passes),0) AS n FROM optimizer_rounds "
+            "WHERE job_id=? AND phase='PARSED'",
+            (job_id,),
+        ).fetchone()["n"])
         historical_qualified_count = int(conn.execute(
             "SELECT COUNT(*) AS n FROM optimizer_candidate_projection WHERE job_id=?",
             (job_id,),
@@ -572,7 +596,8 @@ def qualified_candidates_page(
         "qualified_count": qualified_count,
         "historical_qualified_count": historical_qualified_count,
         "consumed_count": historical_qualified_count - qualified_count,
-        "rejected_count": raw_count - historical_qualified_count,
+        "deduplicated_count": max(0, eligible_pass_count - historical_qualified_count),
+        "rejected_count": raw_count - eligible_pass_count,
         "page": bounded_page,
         "page_size": size,
         "pages": pages,
@@ -608,17 +633,36 @@ def qualified_candidate(
     return {**match, "request": job["request"]}
 
 
-def revalidate_candidate_for_registration(
+def _revalidate_candidate(
     job_id: str,
     round_no: int,
     pass_no: int,
     *,
     path: Path = DATABASE_PATH,
+    allowed_existing_challenger_id: str | None = None,
 ) -> dict[str, Any]:
     """Reparse canonical MT5 evidence and reapply all frozen gates."""
     consumed = consumed_source_identities(job_id, path=path)
-    if (int(round_no), int(pass_no)) in consumed:
-        raise RuntimeError("QUALIFIED_CANDIDATE_ALREADY_CONSUMED")
+    identity = (int(round_no), int(pass_no))
+    if identity in consumed:
+        if allowed_existing_challenger_id is None:
+            raise RuntimeError("QUALIFIED_CANDIDATE_ALREADY_CONSUMED")
+        consumer = get_challenger_by_source(
+            job_id,
+            round_no,
+            pass_no,
+            path=path,
+        )
+        if (
+            consumer is None
+            or str(consumer["challenger_id"])
+            != str(allowed_existing_challenger_id)
+        ):
+            raise RuntimeError("QUALIFIED_CANDIDATE_CONSUMER_MISMATCH")
+        if str(consumer["status"]) != "CHALLENGER":
+            raise RuntimeError("QUALIFIED_CANDIDATE_CONSUMER_NOT_ACTIVE")
+    elif allowed_existing_challenger_id is not None:
+        raise RuntimeError("QUALIFIED_CANDIDATE_CONSUMER_MISMATCH")
     candidate = qualified_candidate(job_id, round_no, pass_no, path=path)
     request = candidate["request"]
     if not optimizer_uses_owner_selection(request):
@@ -677,3 +721,47 @@ def revalidate_candidate_for_registration(
     if str(provenance.get("sidecar_sha256") or "") != candidate["sidecar_sha256"]:
         raise RuntimeError("QUALIFIED_CANDIDATE_PROVENANCE_SIDECAR_HASH_MISMATCH")
     return candidate
+
+
+def revalidate_candidate_for_registration(
+    job_id: str,
+    round_no: int,
+    pass_no: int,
+    *,
+    path: Path = DATABASE_PATH,
+) -> dict[str, Any]:
+    """Revalidate an unconsumed candidate before creating its Challenger row."""
+    return _revalidate_candidate(
+        job_id,
+        round_no,
+        pass_no,
+        path=path,
+    )
+
+
+def revalidate_candidate_for_promotion(
+    job_id: str,
+    round_no: int,
+    pass_no: int,
+    *,
+    challenger_id: str,
+    path: Path = DATABASE_PATH,
+) -> dict[str, Any]:
+    """Deep-revalidate only the exact active Challenger owning this source."""
+    consumer = get_challenger_by_source(
+        job_id,
+        round_no,
+        pass_no,
+        path=path,
+    )
+    if consumer is None or str(consumer["challenger_id"]) != str(challenger_id):
+        raise RuntimeError("QUALIFIED_CANDIDATE_CONSUMER_MISMATCH")
+    if str(consumer["status"]) != "CHALLENGER":
+        raise RuntimeError("QUALIFIED_CANDIDATE_CONSUMER_NOT_ACTIVE")
+    return _revalidate_candidate(
+        job_id,
+        round_no,
+        pass_no,
+        path=path,
+        allowed_existing_challenger_id=challenger_id,
+    )

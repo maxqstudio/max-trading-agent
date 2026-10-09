@@ -16,8 +16,20 @@ from .challenger_bundle import (
     verify_challenger_bundle,
 )
 from .challenger_registry import verify_optimizer_winner
-from .optimizer_candidates import revalidate_candidate_for_registration
+from .optimizer_candidates import revalidate_candidate_for_promotion
 from .challenger_store import get_challenger
+from .challenger_deployment import (
+    cleanup_challenger_staging_root,
+    commit_challenger_deployment,
+    inspect_challenger_deployment,
+    new_challenger_staging_root,
+    prepare_challenger_deployment,
+    quarantine_challenger_deployment,
+    resolve_frozen_mt5_expert_root,
+    resolve_mt5_authority,
+    restore_quarantined_challenger_deployment,
+    verify_challenger_deployment,
+)
 from .champion_bundle import (
     verify_champion_parity,
     verify_champion_set,
@@ -176,10 +188,11 @@ def _verify_challenger_optimizer_source(
     if not deep_owner_selection:
         return _retained_owner_selected_source(challenger)
 
-    candidate = revalidate_candidate_for_registration(
+    candidate = revalidate_candidate_for_promotion(
         job_id,
         round_no,
         pass_no,
+        challenger_id=str(challenger["challenger_id"]),
         path=path,
     )
     return {
@@ -424,6 +437,172 @@ def _stage_former_champion_archive(
     return archive_id, root
 
 
+def _promotion_runtime_spec(
+    challenger: dict[str, Any],
+    integrity: dict[str, Any],
+    *,
+    authority: dict[str, Path],
+    quarantine_dir: Path,
+) -> dict[str, Any]:
+    identity = {
+        "job_id": str(challenger["source_job_id"]),
+        "round": int(challenger["source_round"]),
+        "pass": int(challenger["source_pass"]),
+    }
+    source_sha256 = str(
+        integrity.get("ea_sha256") or challenger["challenger_ea_sha256"]
+    )
+    set_sha256 = str(integrity.get("set_sha256") or challenger["set_sha256"])
+    observed = inspect_challenger_deployment(
+        challenger_id=str(challenger["challenger_id"]),
+        source_identity=identity,
+        bundle_manifest_sha256=str(integrity["manifest_sha256"]),
+        source_sha256=source_sha256,
+        set_sha256=set_sha256,
+        authority=authority,
+    )
+    return {
+        "challenger_id": str(challenger["challenger_id"]),
+        "source_identity": identity,
+        "bundle_manifest_sha256": str(integrity["manifest_sha256"]),
+        "source_sha256": source_sha256,
+        "set_sha256": set_sha256,
+        "final_dir": str(observed["final_dir"]),
+        "present_before": bool(observed["present"]),
+        "quarantine_dir": str(quarantine_dir),
+    }
+
+
+def _promotion_runtime_authority(runtime_state: dict[str, Any]) -> dict[str, Path]:
+    authority = resolve_frozen_mt5_expert_root({"mt5": runtime_state.get("mt5")})
+    staging_root = Path(str(runtime_state.get("staging_root") or "")).resolve()
+    expected_staging_parent = (
+        authority["data_root"] / "MQL5" / ".MaxMTF-Staging"
+    ).resolve()
+    if staging_root.parent != expected_staging_parent:
+        raise RuntimeError("PROMOTION_RUNTIME_STAGING_PATH_INVALID")
+    return authority
+
+
+def _verify_promotion_runtime_spec(
+    spec: dict[str, Any],
+    *,
+    authority: dict[str, Path],
+    directory: Path | None = None,
+) -> Path:
+    final_dir = Path(str(spec.get("final_dir") or "")).resolve()
+    actual_dir = directory.resolve() if directory is not None else final_dir
+    expected_final = inspect_challenger_deployment(
+        challenger_id=str(spec["challenger_id"]),
+        source_identity=spec["source_identity"],
+        bundle_manifest_sha256=str(spec["bundle_manifest_sha256"]),
+        source_sha256=str(spec["source_sha256"]),
+        set_sha256=str(spec["set_sha256"]),
+        authority=authority,
+    )["final_dir"]
+    if os.path.normcase(str(expected_final)) != os.path.normcase(str(final_dir)):
+        raise RuntimeError("PROMOTION_RUNTIME_DEPLOYMENT_PATH_MISMATCH")
+    verify_challenger_deployment(
+        actual_dir,
+        challenger_id=str(spec["challenger_id"]),
+        source_identity=spec["source_identity"],
+        bundle_manifest_sha256=str(spec["bundle_manifest_sha256"]),
+        source_sha256=str(spec["source_sha256"]),
+        set_sha256=str(spec["set_sha256"]),
+    )
+    return actual_dir
+
+
+def _restore_promotion_runtime_state(runtime_state: dict[str, Any] | None) -> None:
+    if runtime_state is None:
+        return
+    authority = _promotion_runtime_authority(runtime_state)
+    staging_root = Path(str(runtime_state["staging_root"])).resolve()
+    selected = runtime_state["selected"]
+    selected_final = Path(str(selected["final_dir"])).resolve()
+    selected_quarantine = Path(str(selected["quarantine_dir"])).resolve()
+    if selected_quarantine.exists():
+        if selected_final.exists() or selected_final.is_symlink():
+            raise RuntimeError("PROMOTION_RUNTIME_SELECTED_DUPLICATE")
+        _verify_promotion_runtime_spec(
+            selected,
+            authority=authority,
+            directory=selected_quarantine,
+        )
+        restore_quarantined_challenger_deployment(
+            {
+                "challenger_id": selected["challenger_id"],
+                "original_dir": selected_final,
+                "quarantine_dir": selected_quarantine,
+                "source_identity": selected["source_identity"],
+                "bundle_manifest_sha256": selected["bundle_manifest_sha256"],
+                "source_sha256": selected["source_sha256"],
+                "set_sha256": selected["set_sha256"],
+            }
+        )
+    elif selected["present_before"]:
+        _verify_promotion_runtime_spec(selected, authority=authority)
+    elif selected_final.exists() or selected_final.is_symlink():
+        raise RuntimeError("PROMOTION_RUNTIME_UNEXPECTED_SELECTED_DEPLOYMENT")
+
+    previous = runtime_state.get("previous")
+    if previous is not None:
+        previous_final = Path(str(previous["final_dir"])).resolve()
+        if previous["present_before"]:
+            _verify_promotion_runtime_spec(previous, authority=authority)
+        elif previous_final.exists() or previous_final.is_symlink():
+            _verify_promotion_runtime_spec(previous, authority=authority)
+            cleanup_quarantine = (staging_root / "rollback-former-challenger").resolve()
+            quarantine_challenger_deployment(
+                challenger_id=str(previous["challenger_id"]),
+                source_identity=previous["source_identity"],
+                bundle_manifest_sha256=str(previous["bundle_manifest_sha256"]),
+                source_sha256=str(previous["source_sha256"]),
+                set_sha256=str(previous["set_sha256"]),
+                authority=authority,
+                staging_root=staging_root,
+                quarantine_path=cleanup_quarantine,
+            )
+            verify_challenger_deployment(
+                cleanup_quarantine,
+                challenger_id=str(previous["challenger_id"]),
+                source_identity=previous["source_identity"],
+                bundle_manifest_sha256=str(previous["bundle_manifest_sha256"]),
+                source_sha256=str(previous["source_sha256"]),
+                set_sha256=str(previous["set_sha256"]),
+            )
+            shutil.rmtree(cleanup_quarantine)
+    if staging_root.exists():
+        cleanup_challenger_staging_root(staging_root)
+
+
+def _finalize_promotion_runtime_state(runtime_state: dict[str, Any] | None) -> None:
+    if runtime_state is None:
+        return
+    authority = _promotion_runtime_authority(runtime_state)
+    staging_root = Path(str(runtime_state["staging_root"])).resolve()
+    selected = runtime_state["selected"]
+    selected_final = Path(str(selected["final_dir"])).resolve()
+    selected_quarantine = Path(str(selected["quarantine_dir"])).resolve()
+    if selected_final.exists() or selected_final.is_symlink():
+        raise RuntimeError("PROMOTION_RUNTIME_SELECTED_EA_STILL_ACTIVE")
+    if selected_quarantine.exists():
+        _verify_promotion_runtime_spec(
+            selected,
+            authority=authority,
+            directory=selected_quarantine,
+        )
+        shutil.rmtree(selected_quarantine)
+
+    previous = runtime_state.get("previous")
+    if previous is not None:
+        _verify_promotion_runtime_spec(previous, authority=authority)
+    if staging_root.exists():
+        if any(staging_root.iterdir()):
+            raise RuntimeError("PROMOTION_RUNTIME_STAGING_NOT_EMPTY")
+        cleanup_challenger_staging_root(staging_root)
+
+
 def _capture_before_state(
     *,
     promotion_id: str,
@@ -432,6 +611,7 @@ def _capture_before_state(
     recovery: Path,
     baseline_archive_final: Path | None,
     former_archive_final: Path | None,
+    challenger_runtime: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     data_root = Path(source_request["mt5"]["data_root"])
     expert_dir = data_root / "MQL5" / "Experts" / EXPERT_SUBDIR
@@ -460,12 +640,17 @@ def _capture_before_state(
         "planned_former_archive": (
             str(former_archive_final) if former_archive_final else None
         ),
+        "challenger_runtime": challenger_runtime,
         "live_authority": "NONE",
     }
 
 
 def _restore_before_state(before_state: dict[str, Any]) -> None:
     errors: list[str] = []
+    try:
+        _restore_promotion_runtime_state(before_state.get("challenger_runtime"))
+    except Exception as exc:
+        errors.append(str(exc))
     for item in before_state["files"].values():
         try:
             _restore_file(item)
@@ -750,15 +935,80 @@ def promote_strategy_challenger(
         if former_archive_id
         else None
     )
-    before_state = _capture_before_state(
-        promotion_id=promotion_id,
-        source_request=source["request"],
-        current=current,
-        recovery=recovery,
-        baseline_archive_final=baseline_archive_final,
-        former_archive_final=former_archive_final,
-    )
     try:
+        mt5_authority = resolve_mt5_authority(source["request"])
+        runtime_staging_root = new_challenger_staging_root(
+            expert_root=mt5_authority["expert_root"],
+            operation_id=promotion_id,
+        )
+        runtime_state: dict[str, Any] = {
+            "mt5": {
+                key: str(mt5_authority[key])
+                for key in ("terminal", "metaeditor", "data_root")
+            },
+            "staging_root": str(runtime_staging_root),
+            "selected": _promotion_runtime_spec(
+                challenger,
+                challenger_integrity,
+                authority=mt5_authority,
+                quarantine_dir=runtime_staging_root / "promoted-challenger",
+            ),
+            "previous": None,
+        }
+        previous_challenger: dict[str, Any] | None = None
+        previous_integrity: dict[str, Any] | None = None
+        previous_source: dict[str, Any] | None = None
+        if current is not None:
+            previous_challenger = get_challenger(
+                str(current["source_challenger_id"]),
+                path=path,
+            )
+            if previous_challenger is None or previous_challenger["status"] != "PROMOTED":
+                raise RuntimeError("PROMOTION_PREVIOUS_CHALLENGER_SOURCE_INVALID")
+            previous_integrity = verify_challenger_bundle(
+                str(previous_challenger["challenger_id"]),
+                allow_promoted=True,
+                path=path,
+            )
+            if previous_integrity.get("status") != "VERIFIED":
+                raise RuntimeError("PROMOTION_PREVIOUS_CHALLENGER_INTEGRITY_FAIL")
+            if str(previous_integrity.get("manifest_sha256") or "") != str(
+                previous_challenger["manifest_sha256"]
+            ):
+                raise RuntimeError("PROMOTION_PREVIOUS_CHALLENGER_MANIFEST_MISMATCH")
+            previous_source = _verify_challenger_optimizer_source(
+                previous_challenger,
+                path=path,
+                deep_owner_selection=False,
+            )
+            if not _same_params(previous_source["params"], current["params"]):
+                raise RuntimeError("PROMOTION_PREVIOUS_CHAMPION_PARAM_MISMATCH")
+            previous_mt5 = previous_source["request"].get("mt5")
+            for field in ("terminal", "metaeditor", "data_root"):
+                if not isinstance(previous_mt5, dict):
+                    raise RuntimeError("PROMOTION_PREVIOUS_CHAMPION_MT5_AUTHORITY_MISSING")
+                if os.path.normcase(
+                    str(Path(str(previous_mt5.get(field) or "")).resolve())
+                ) != os.path.normcase(str(mt5_authority[field])):
+                    raise RuntimeError(
+                        f"PROMOTION_PREVIOUS_CHAMPION_MT5_AUTHORITY_MISMATCH:{field}"
+                    )
+            runtime_state["previous"] = _promotion_runtime_spec(
+                previous_challenger,
+                previous_integrity,
+                authority=mt5_authority,
+                quarantine_dir=runtime_staging_root / "rollback-former-challenger",
+            )
+
+        before_state = _capture_before_state(
+            promotion_id=promotion_id,
+            source_request=source["request"],
+            current=current,
+            recovery=recovery,
+            baseline_archive_final=baseline_archive_final,
+            former_archive_final=former_archive_final,
+            challenger_runtime=runtime_state,
+        )
         create_prepared_promotion(
             promotion_id=promotion_id,
             challenger_id=challenger_id,
@@ -769,11 +1019,35 @@ def promote_strategy_challenger(
             path=path,
         )
     except Exception:
+        if "runtime_staging_root" in locals():
+            cleanup_challenger_staging_root(runtime_staging_root)
         shutil.rmtree(recovery, ignore_errors=True)
         raise
 
     compile_result: dict[str, Any] | None = None
     try:
+        prepared_previous_deployment: dict[str, Any] | None = None
+        if previous_challenger is not None and previous_integrity is not None:
+            previous_bundle = ROOT / str(previous_challenger["bundle_path"])
+            prepared_previous_deployment = prepare_challenger_deployment(
+                challenger_id=str(previous_challenger["challenger_id"]),
+                source_request=previous_source["request"],
+                source_identity=runtime_state["previous"]["source_identity"],
+                bundle_manifest_sha256=str(
+                    runtime_state["previous"]["bundle_manifest_sha256"]
+                ),
+                source_ea=(
+                    previous_bundle
+                    / f"Max_Challenger_{previous_challenger['challenger_id']}.mq5"
+                ),
+                source_set=(
+                    previous_bundle
+                    / f"Max_Challenger_{previous_challenger['challenger_id']}.set"
+                ),
+                authority=mt5_authority,
+                staging_root=Path(runtime_state["staging_root"]),
+            )
+
         challenger_bundle = ROOT / challenger["bundle_path"]
         challenger_ea = challenger_bundle / f"Max_Challenger_{challenger_id}.mq5"
         stage_ea = stage_root / "champion" / "Max_MTF.mq5"
@@ -808,6 +1082,14 @@ def promote_strategy_challenger(
             "former_champion_archive": (
                 _relative(former_archive_final) if former_archive_final else None
             ),
+            "challenger_runtime": {
+                "promoted_challenger_ea": "REMOVE_ON_COMMIT",
+                "previous_champion_challenger_ea": (
+                    str(runtime_state["previous"]["final_dir"])
+                    if runtime_state["previous"] is not None
+                    else None
+                ),
+            },
             "live_authority": "NONE",
         }
         _stage_evidence(
@@ -849,6 +1131,22 @@ def promote_strategy_challenger(
         mt5_source = Path(deployment_plan["mt5_source"])
         mt5_ex5 = Path(deployment_plan["mt5_ex5"])
         tester_set = Path(deployment_plan["tester_set"])
+        selected_runtime = runtime_state["selected"]
+        if selected_runtime["present_before"]:
+            quarantine_challenger_deployment(
+                challenger_id=str(selected_runtime["challenger_id"]),
+                source_identity=selected_runtime["source_identity"],
+                bundle_manifest_sha256=str(
+                    selected_runtime["bundle_manifest_sha256"]
+                ),
+                source_sha256=str(selected_runtime["source_sha256"]),
+                set_sha256=str(selected_runtime["set_sha256"]),
+                authority=mt5_authority,
+                staging_root=Path(runtime_state["staging_root"]),
+                quarantine_path=Path(selected_runtime["quarantine_dir"]),
+            )
+        if prepared_previous_deployment is not None:
+            commit_challenger_deployment(prepared_previous_deployment)
         _atomic_copy(stage_ea, project_ea)
         _atomic_copy(stage_set, project_set)
         _atomic_copy(stage_ea, mt5_source)
@@ -897,8 +1195,14 @@ def promote_strategy_challenger(
                 "FORMER" if actual_current_id else None
             ),
             "previous_challenger_final_status": (
-                "PROMOTED" if actual_current_id else None
+                "CHALLENGER" if actual_current_id else None
             ),
+            "previous_champion_challenger_ea": (
+                "VERIFIED_CHALLENGER_DEPLOYMENT"
+                if runtime_state["previous"] is not None
+                else None
+            ),
+            "promoted_challenger_ea": "REMOVED_FROM_CHALLENGER_LIST",
             "promotion_status": "COMMITTED",
             "deployment": deployment,
         }
@@ -929,6 +1233,7 @@ def promote_strategy_challenger(
             evidence_path=evidence_relative,
             path=path,
         )
+        _finalize_promotion_runtime_state(runtime_state)
         promotion = get_promotion(promotion_id, path=path)
         if promotion is None or promotion["state"] != "COMMITTED":
             raise RuntimeError("PROMOTION_COMMIT_STATE_MISSING")
@@ -947,6 +1252,14 @@ def promote_strategy_challenger(
             "compile": compile_result,
             "parity": parity,
             "deployment": deployment,
+            "challenger_runtime": {
+                "promoted_challenger_ea": "REMOVED",
+                "previous_champion_challenger_ea": (
+                    "VERIFIED"
+                    if runtime_state["previous"] is not None
+                    else None
+                ),
+            },
             "champion": champion,
             "champion_integrity": integrity,
             "evidence_path": _relative(final_evidence),
@@ -960,6 +1273,14 @@ def promote_strategy_challenger(
             if champion is None:
                 raise RuntimeError(
                     "PROMOTION_AUTHORITY_INTEGRITY_FAILURE:NO_CURRENT_CHAMPION"
+                ) from exc
+            try:
+                _finalize_promotion_runtime_state(
+                    current_promotion["before_state"].get("challenger_runtime")
+                )
+            except Exception as runtime_exc:
+                raise RuntimeError(
+                    f"PROMOTION_RUNTIME_COMMIT_RECONCILIATION_REQUIRED:{runtime_exc}"
                 ) from exc
             _finalize_committed_evidence(current_promotion, champion)
             _cleanup_compile_temp(compile_result)
@@ -1091,7 +1412,8 @@ def verify_current_strategy_champion(
 def recover_incomplete_promotions(*, path: Path = DATABASE_PATH) -> list[dict[str, Any]]:
     migrate_m04(path)
     recovered: list[dict[str, Any]] = []
-    for promotion in list_promotions(path=path):
+    promotions = list_promotions(path=path)
+    for promotion in promotions:
         if promotion["state"] in PROMOTION_ACTIVE_STATES:
             try:
                 _restore_before_state(promotion["before_state"])
@@ -1117,6 +1439,23 @@ def recover_incomplete_promotions(*, path: Path = DATABASE_PATH) -> list[dict[st
                 raise RuntimeError(
                     f"PROMOTION_AUTHORITY_INTEGRITY_FAILURE:{promotion['promotion_id']}"
                 ) from exc
+
+    for promotion in promotions:
+        if promotion["state"] != "COMMITTED":
+            continue
+        runtime_state = promotion["before_state"].get("challenger_runtime")
+        if runtime_state is None:
+            continue
+        staging_root = Path(str(runtime_state.get("staging_root") or ""))
+        if not staging_root.exists():
+            continue
+        try:
+            _finalize_promotion_runtime_state(runtime_state)
+        except Exception as exc:
+            raise RuntimeError(
+                "PROMOTION_RUNTIME_COMMIT_RECONCILIATION_REQUIRED:"
+                f"{promotion['promotion_id']}"
+            ) from exc
 
     current = current_champion(path=path)
     if current is not None:

@@ -146,6 +146,7 @@ describe('M08 Artifacts workspace', () => {
     fireEvent.change(screen.getByLabelText('Artifact type filter'), { target: { value: 'CHALLENGER_BACKTEST' } })
     fireEvent.change(screen.getByLabelText('Artifact producer filter'), { target: { value: 'MT5_STRATEGY_TESTER' } })
     fireEvent.change(screen.getByLabelText('In-use filter'), { target: { value: 'false' } })
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Size' })).toBeEnabled())
     fireEvent.click(screen.getByRole('button', { name: 'Size' }))
     await waitFor(() => {
       expect(inventoryUrls.some((url) =>

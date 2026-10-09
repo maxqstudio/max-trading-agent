@@ -182,12 +182,12 @@ Authority: Owner authorization + promotion service + champion store atomic commi
 
 - Pre-commit filesystem/state changes restore prior before-state; immutable prior history remains retained.
 
-## FLOW-OPTIMIZER-DURABILITY-PERFORMANCE — Durable Strategy Optimizer draft, recovery, evidence and bounded reads
+## FLOW-OPTIMIZER-DURABILITY-PERFORMANCE — Durable Strategy Optimizer with native MT5 launch and duplicate-safe evidence projection
 
-Purpose: Make editable Optimizer state durable, jobs recoverable without duplicate execution, evidence publication atomic, ordinary Owner reads/actions bounded, and Windows physical-RAM/commit-memory use fail-closed under a frozen workload identity.
+Purpose: Keep Optimizer requests and evidence durable while restoring native MT5 launch behavior, safely recover uncertain execution, prevent identical repeated metrics from failing parsing, and ensure exact duplicate candidates never enter the SQLite read projection.
 Critical: TRUE
-Entry condition: Owner opens or edits the Optimizer draft, requests preview/start, MAX starts/restarts a known job, or a bounded MT5 process is monitored for resource safety.
-Authority: SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen V2 resource policy and current Windows system/Job Object telemetry
+Entry condition: Owner opens or edits the Optimizer draft, requests preview/start, MAX starts/restarts a known job, or a completed MT5 report and sidecar are parsed and projected.
+Authority: SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen report and sidecar evidence, and canonical candidate identity
 
 ### States
 
@@ -212,14 +212,7 @@ Authority: SQLite job/draft state, verified immutable round bundle, exact Optimi
 - EVIDENCE_BUNDLE_COMMITTED
 - CANDIDATE_PROJECTION_COMMITTED
 - ROUND_COMPLETE
-- FROZEN_RESOURCE_POLICY_V2
-- PRELAUNCH_RESOURCE_RECHECK
-- PHYSICAL_PRESSURE
-- COMMIT_PRESSURE
-- TELEMETRY_UNAVAILABLE
-- RESOURCE_STOP_REQUESTED
 - RESOURCE_STOPPED
-- RESOURCE_RECONCILIATION_REQUIRED
 - STOPPED
 - FAILED
 - RECOVERY_REQUIRED
@@ -229,19 +222,17 @@ Authority: SQLite job/draft state, verified immutable round bundle, exact Optimi
 
 | From | To | Action | Authority | Side effects |
 |---|---|---|---|---|
-| EDITABLE_DRAFT | DRAFT_SAVE_PENDING | Validate the bounded editable draft and persist with a monotonic revision; debounce frontend writes and reject stale responses. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen V2 resource policy and current Windows system/Job Object telemetry | current editable draft row only |
-| EDITABLE_DRAFT | PREVIEW_VALIDATING | Build preview without creating a job; display progress and validation errors rather than a silent no-op. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen V2 resource policy and current Windows system/Job Object telemetry |  |
-| START_REQUEST_VALIDATED | JOB_REQUEST_FROZEN | Validate exact start request, persist an immutable request snapshot and a single-flight launch claim, then spawn the bound worker. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen V2 resource policy and current Windows system/Job Object telemetry | immutable job request, durable worker launch token |
-| WORKER_LAUNCH_CLAIMED | WORKER_CONFIRMED | Worker waits until its exact job/token/PID identity has been committed by the parent; stopped or superseded claims cannot reactivate. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen V2 resource policy and current Windows system/Job Object telemetry | persisted worker identity |
-| WORKER_CONFIRMED | COMPILING_EA | Compile the frozen EA request; crashes follow deterministic startup reconciliation and do not create an undefined active zombie. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen V2 resource policy and current Windows system/Job Object telemetry | job/round lifecycle state |
-| ROUND_PREPARED | PRELAUNCH_RESOURCE_RECHECK | Refresh physical RAM and Windows commit telemetry against the immutable V2 resource policy before creating any MT5 process; a changed or unverifiable preflight blocks launch. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen V2 resource policy and current Windows system/Job Object telemetry |  |
-| PRELAUNCH_RESOURCE_RECHECK | LAUNCH_INTENT | Persist launch intent only after the fresh resource admission is SAFE, then confirm exact Job Object-owned terminal identity before treating MT5 execution as started. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen V2 resource policy and current Windows system/Job Object telemetry | durable launch journal, frozen Job Object process cap |
-| MT5_PROCESS_CONFIRMED | COMMIT_PRESSURE | Sample native system commit/physical metrics and exact Job Object-owned terminal/tester process PrivateUsage/working set; retain bounded high-water summaries and fail closed on pressure or telemetry loss. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen V2 resource policy and current Windows system/Job Object telemetry | resource_runtime round checkpoint |
-| RESOURCE_STOP_REQUESTED | RESOURCE_STOPPED | Request termination only for the owned Job Object and verify terminal exit plus empty membership. A verified stop records RESOURCE_STOPPED; uncertainty records RECONCILIATION_REQUIRED and blocks resume. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen V2 resource policy and current Windows system/Job Object telemetry | verified resource stop or reconciliation-required checkpoint |
-| MT5_PROCESS_CONFIRMED | REPORT_DISCOVERED | Observe owned MT5 exit and freeze a fresh matching report; uncertain launch/process state enters RECOVERY_REQUIRED without relaunch. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen V2 resource policy and current Windows system/Job Object telemetry | frozen source report |
-| RAW_EVIDENCE_FROZEN | EVIDENCE_BUNDLE_COMMITTED | Parse only frozen raw report bytes, stage derived metrics/passes/provenance and manifest, verify hashes, atomically publish bundle, then commit SQLite round and projection. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen V2 resource policy and current Windows system/Job Object telemetry | atomic immutable round bundle, round commit identity, bounded candidate projection |
-| CANDIDATE_PROJECTION_COMMITTED | WAITING_OWNER_SELECTION | Serve count/search/sort/filter/page from bounded indexed projection; strictly revalidate canonical evidence before Challenger mutation. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen V2 resource policy and current Windows system/Job Object telemetry |  |
-| WORKER_CONFIRMED | STOPPED | STOP is idempotent, preserves committed checkpoints and terminates only an exact verified Optimizer-owned process. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen V2 resource policy and current Windows system/Job Object telemetry | durable STOPPED lifecycle |
+| EDITABLE_DRAFT | DRAFT_SAVE_PENDING | Validate the bounded editable draft and persist with a monotonic revision; debounce frontend writes and reject stale responses. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen report and sidecar evidence, and canonical candidate identity | current editable draft row only |
+| EDITABLE_DRAFT | PREVIEW_VALIDATING | Build preview without creating a job; display progress and validation errors rather than a silent no-op. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen report and sidecar evidence, and canonical candidate identity |  |
+| START_REQUEST_VALIDATED | JOB_REQUEST_FROZEN | Validate exact start request, persist an immutable request snapshot and a single-flight launch claim, then spawn the bound worker. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen report and sidecar evidence, and canonical candidate identity | immutable job request, durable worker launch token |
+| WORKER_LAUNCH_CLAIMED | WORKER_CONFIRMED | Worker waits until its exact job/token/PID identity has been committed by the parent; stopped or superseded claims cannot reactivate. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen report and sidecar evidence, and canonical candidate identity | persisted worker identity |
+| WORKER_CONFIRMED | COMPILING_EA | Compile the frozen EA request; crashes follow deterministic startup reconciliation and do not create an undefined active zombie. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen report and sidecar evidence, and canonical candidate identity | job/round lifecycle state |
+| ROUND_PREPARED | LAUNCH_INTENT | Prepare the frozen round and retain the exact Owner-selected native MT5 tester-agent configuration without applying an external MAX process cap or estimated-memory gate. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen report and sidecar evidence, and canonical candidate identity |  |
+| LAUNCH_INTENT | MT5_PROCESS_CONFIRMED | Persist launch intent and launch terminal64.exe with its native /config INI; verify process identity and allow MT5 to manage local tester agents according to Owner configuration. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen report and sidecar evidence, and canonical candidate identity | durable launch journal, exact terminal identity |
+| MT5_PROCESS_CONFIRMED | REPORT_DISCOVERED | Observe owned MT5 exit and freeze a fresh matching report; uncertain launch/process state enters RECOVERY_REQUIRED without relaunch. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen report and sidecar evidence, and canonical candidate identity | frozen source report |
+| RAW_EVIDENCE_FROZEN | EVIDENCE_BUNDLE_COMMITTED | Parse only frozen raw report bytes; collapse repeated parameter vectors only when all semantic sidecar metrics are identical, fail on conflicts, stage and verify the evidence bundle, then atomically persist a duplicate-free SQLite candidate projection. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen report and sidecar evidence, and canonical candidate identity | atomic immutable round bundle, round commit identity, bounded candidate projection |
+| CANDIDATE_PROJECTION_COMMITTED | WAITING_OWNER_SELECTION | Serve count/search/sort/filter/page from bounded indexed projection; strictly revalidate canonical evidence before Challenger mutation. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen report and sidecar evidence, and canonical candidate identity |  |
+| WORKER_CONFIRMED | STOPPED | STOP is idempotent, preserves committed checkpoints and terminates only an exact verified Optimizer-owned process. | SQLite job/draft state, verified immutable round bundle, exact Optimizer worker/MT5 process identity, frozen report and sidecar evidence, and canonical candidate identity | durable STOPPED lifecycle |
 
 ### Invariants
 
@@ -252,7 +243,7 @@ Authority: SQLite job/draft state, verified immutable round bundle, exact Optimi
 - Raw report bytes and derived files are staged, verified, hashed and atomically published before database commit.
 - Ordinary candidate reads use bounded indexed SQLite projections; canonical evidence remains mutation authority.
 - UI disables unavailable/duplicate operations with a visible reason and reports pending, success, failure or recovery-required status.
-- Tests use synthetic temporary databases, evidence and mocked external process boundaries. Any Owner-PC resource diagnostic is separate, at most 20 minutes, must not complete the full optimization, and must not touch an already active Owner run.
+- Source tests use synthetic temporary databases/evidence and mocked process boundaries; no real Optimizer, MT5, or Owner runtime is run during this source phase.
 - No automatic Challenger registration, Champion mutation, Research execution or live trading follows Optimizer completion.
 
 ### Failure behavior
@@ -261,11 +252,10 @@ Authority: SQLite job/draft state, verified immutable round bundle, exact Optimi
 - A STARTED request is immutable even when the current editable draft later changes.
 - Startup reconciliation inspects only known active jobs and exact worker/launch identity; uncertain MT5 launch is blocked rather than blindly relaunched.
 - MAX never terminates an MT5 process unless the process identity is uniquely bound to the Optimizer job/launch token.
-- Resource admission binds physical RAM, current Windows commit charge/headroom, CPU and local-agent count to the frozen EA/build/symbol/timeframe/history/tick/search workload; the worker refreshes admission immediately before LAUNCH_INTENT.
-- Resource monitoring uses native Windows system APIs and exact Job Object membership; each owned process is identity-checked and sampled for PrivateUsage and working set, with every process handle closed after sampling.
-- Telemetry loss or resource pressure requests termination of only the owned Job Object. RESOURCE_STOPPED means process exit and empty Job Object were verified; otherwise RECONCILIATION_REQUIRED blocks resume and new work.
-- Compatible calibration is a read-only bounded query of existing inactive optimizer rounds; no schema/table or mutable Owner draft is changed by calibration lookup.
-- No system/pagefile setting, scientific parameter value, search-space dimension, report outcome, Challenger or Champion authority is changed by resource safety.
+- The production launch uses terminal64.exe with the native /config INI path; MT5 and Owner configuration control local tester-agent behavior, without a MAX-owned active-process cap or estimated-memory admission gate.
+- Legacy resource calibration from capped runs is ignored and cannot block START; no pagefile setting or scientific search-space dimension is changed.
+- Repeated sidecar rows for one parameter vector are accepted only when every semantic metric agrees; conflicting metrics or malformed evidence fail closed.
+- Exact duplicate strategy/result candidate identities are collapsed before persistence, and the transactional SQLite boundary rejects in-batch or previously persisted duplicates.
 - Partial evidence staging is never authoritative; committed files are verified before the database references the round, and missing/tampered committed evidence fails closed.
 - Candidate projections accelerate reads only; Challenger registration revalidates canonical retained evidence.
 
@@ -279,7 +269,7 @@ Authority: SQLite job/draft state, verified immutable round bundle, exact Optimi
 ### Rollback behavior
 
 - Unpublished staging remains isolated and may be discarded/rebuilt without changing committed authority.
-- A verified resource stop retains the immutable request and evidence; resume is permitted only after fresh frozen-policy admission. An unverified stop remains reconciliation-required and is never automatically relaunched.
+- A legacy RESOURCE_STOPPED checkpoint remains recognized for existing databases, but new launches do not enforce the removed MAX-owned resource cap or admission policy.
 - If atomic evidence publication completed but the database did not advance, verify the manifest and replay the same commit identity without rerunning MT5.
 - If the database claims committed evidence but files are missing, changed or unverifiable, block the job and preserve evidence for diagnosis; do not manufacture results.
 - A failed launch or stop never kills a process whose Optimizer ownership cannot be proven.

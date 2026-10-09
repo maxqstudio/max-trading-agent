@@ -2,7 +2,7 @@
 
 # ARCHITECTURE
 
-Current source digest: fc92b8e708375db049f7c767490a7b692772541411a573ba207239515493123b
+Current source digest: 7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f
 
 ## Components
 
@@ -10,7 +10,7 @@ Current source digest: fc92b8e708375db049f7c767490a7b692772541411a573ba207239515
 |---|---|---|---|---|
 | owner-ui | Owner React Control Surface | Present semantic Strategy, Artifact and Settings state with explicit feedback for blocked, running and completed Owner actions. | frontend/src/App.tsx::App, frontend/src/OptimizerPage.tsx::OptimizerPage, frontend/src/ChallengersPage.tsx::ChallengersPage, frontend/src/ChampionPage.tsx::ChampionPage, frontend/src/ScientistPage.tsx::ScientistPage | FastAPI semantic APIs |
 | strategy-domain | Strategy lifecycle domain | Own optimizer qualification, Challenger registration/lifecycle and Champion promotion/tenure semantics. | backend/max_backend/optimizer_candidates.py::qualified_candidates_page, backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration, backend/max_backend/challenger_selection.py::create_selected_challengers, backend/max_backend/challenger_store.py::consumed_source_identities, backend/max_backend/challenger_registry.py::challenger_detail, backend/max_backend/challenger_operations.py::retire_challenger, backend/max_backend/champion_store.py::commit_promotion_authority, backend/max_backend/promotion_service.py::promote_strategy_challenger | SQLite, immutable Challenger/optimizer evidence, MT5/MetaEditor |
-| optimizer-orchestration | Optimizer job orchestration and read model | Persist editable draft separately from immutable job/resource requests, reconcile exact worker/MT5 launch identity, revalidate Windows RAM and commit headroom before launch, monitor only Job Object-owned process PrivateUsage, fail closed on pressure/telemetry loss, atomically publish round evidence, and serve bounded candidate projections without weakening canonical mutation verification. | backend/max_backend/optimizer_draft.py, backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup, backend/max_backend/optimizer_resources.py, backend/max_backend/optimizer_resource_runtime.py, backend/max_backend/optimizer_worker.py, backend/max_backend/optimizer_store.py::load_resource_calibration, backend/max_backend/optimizer_store.py::persist_candidate_projection, backend/max_backend/optimizer_candidates.py::qualified_candidates_page | SQLite operational state, immutable round evidence, MT5/MetaEditor execution boundary |
+| optimizer-orchestration | Optimizer job orchestration and read model | Persist editable drafts separately from immutable job requests, reconcile exact worker/MT5 launch identity, run terminal64.exe through the native /config path while leaving tester-agent behavior to MT5 and Owner configuration, atomically publish verified round evidence, collapse only identical repeated metrics vectors, and reject exact duplicate candidate identities before SQLite persistence. | backend/max_backend/optimizer_draft.py, backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup, backend/max_backend/optimizer_worker.py, backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv, backend/max_backend/optimizer_runtime.py::commit_round_evidence, backend/max_backend/optimizer_store.py::optimizer_candidate_identity, backend/max_backend/optimizer_store.py::persist_candidate_projection, backend/max_backend/optimizer_candidates.py::candidate_projection_payload, backend/max_backend/optimizer_candidates.py::qualified_candidates_page | SQLite operational state, immutable round evidence, MT5/MetaEditor execution boundary |
 | scientist | Scientist advisory subsystem | Expose hash-verified static knowledge and bounded committed runtime context to an advisory LLM/chat workflow. | backend/max_backend/scientist_knowledge.py::load_knowledge, backend/max_backend/scientist_api.py::get_status, frontend/src/ScientistPage.tsx::ScientistPage | scientist/knowledge/source_manifest.json, Scientist store/provider settings |
 | backend-runtime | FastAPI runtime | Start migrations/recovery, route semantic APIs and expose overview/readiness. | backend/max_backend/main.py::lifespan, backend/max_backend/main.py::overview, backend/max_backend/main.py::app | domain services, SQLite, MT5 detection |
 | launcher | Windows launcher/readiness | Verify or start canonical backend/frontend instances, reject invalid occupied ports and emit MAX_READY only after authority/readiness checks. | RUN_MAX.cmd, scripts/run_max.ps1 | backend /api/overview, frontend proxy/root, Scientist status, ports 8000/5173 |
@@ -43,9 +43,9 @@ Current source digest: fc92b8e708375db049f7c767490a7b692772541411a573ba207239515
 
 ## Observed implementation inventory
 
-Source files: 118
-Source lines: 54778
-Languages: PowerShell=2, Python=96, TypeScript=3, TypeScript/React=17
+Source files: 121
+Source lines: 57121
+Languages: PowerShell=2, Python=97, TypeScript=3, TypeScript/React=19
 
 Structural facts come from the code extractor. Component meaning comes from
 .workflow/architecture.json.

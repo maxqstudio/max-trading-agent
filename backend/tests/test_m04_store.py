@@ -12,6 +12,10 @@ from max_backend.challenger_store import (
     migrate_m03,
     reserve_challenger,
 )
+from max_backend.challenger_operations_store import (
+    list_registry_page,
+    retire_registry_row,
+)
 from max_backend.champion_store import (
     champion_database_status,
     commit_promotion_authority,
@@ -295,11 +299,25 @@ def test_later_promotion_demotes_a_preserves_lineage_and_has_one_current(
     assert former["status"] == "FORMER"
     assert former["former_archive_id"] == "FORMER-A"
     assert former["replaced_by"] == b
-    assert get_challenger(a, path=db)["status"] == "PROMOTED"
+    assert get_challenger(a, path=db)["status"] == "CHALLENGER"
     assert get_challenger(b, path=db)["status"] == "PROMOTED"
+    active = list_registry_page(view="active", path=db)
+    assert [row["challenger_id"] for row in active["items"]] == [a]
     rows = list_champions(path=db)
     assert len([r for r in rows if r["status"] == "CURRENT"]) == 1
     assert len([r for r in rows if r["status"] == "FORMER"]) == 1
+
+    retired = retire_registry_row(
+        a,
+        retirement_id="RETIRE-FORMER-A",
+        expected_manifest_sha256=get_challenger(a, path=db)["manifest_sha256"],
+        evidence_path="evidence/test/RETIRE-FORMER-A",
+        path=db,
+    )
+    assert retired["challenger"]["status"] == "RETIRED"
+    assert list_registry_page(view="active", path=db)["total"] == 0
+    archived = list_registry_page(view="retired", path=db)
+    assert [row["challenger_id"] for row in archived["items"]] == [a]
 
 
 def test_stale_previous_champion_fails_without_consuming_challenger(
@@ -394,7 +412,7 @@ def test_db_partial_unique_index_rejects_two_current_rows(tmp_path: Path) -> Non
                 (job_a,),
             )
 
-def test_replacement_keeps_former_champion_source_historical_and_inactive(
+def test_replacement_returns_former_champion_source_to_active_challengers(
     tmp_path: Path,
 ) -> None:
     db = tmp_path / "max.db"
@@ -458,9 +476,9 @@ def test_replacement_keeps_former_champion_source_historical_and_inactive(
     former = get_champion(a, path=db)
     assert former is not None and former["status"] == "FORMER"
     assert former["replaced_by"] == b
-    assert get_challenger(a, path=db)["status"] == "PROMOTED"
+    assert get_challenger(a, path=db)["status"] == "CHALLENGER"
     assert get_challenger(b, path=db)["status"] == "PROMOTED"
-    assert list_challengers(path=db) == []
+    assert [row["challenger_id"] for row in list_challengers(path=db)] == [a]
 
     a_after = get_challenger(a, path=db)
     b_after = get_challenger(b, path=db)

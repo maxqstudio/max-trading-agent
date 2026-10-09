@@ -102,16 +102,6 @@ def raw_request(**overrides):
 
 def freeze(monkeypatch: pytest.MonkeyPatch, **overrides):
     monkeypatch.setattr(core, "detect_mt5", fake_mt5)
-    monkeypatch.setattr(
-        core,
-        "build_resource_preflight",
-        lambda *_args, **_kwargs: {
-            "schema": "MAX_OPTIMIZER_RESOURCE_POLICY_V1",
-            "mode": "AUTO_SAFE",
-            "status": "SAFE",
-            "resolved_max_local_agents": 1,
-        },
-    )
     return freeze_request(raw_request(**overrides))
 
 
@@ -464,7 +454,7 @@ def test_request_freeze_and_ea_hash(monkeypatch: pytest.MonkeyPatch) -> None:
     assert request["schema"] == "MAX_REBUILD_OPTIMIZER_REQUEST_V6"
     assert request["fixed_execution_authority"]["InpMaxDailyLossPct"] == 5.0
     assert request["fixed_execution_authority"]["risk_pct_upper_bound"] == 5.0
-    assert request["ea"]["sha256"] == "827c4caddedbe37081353e08bba35eac5f01e96314dd8650d7ea17ad109ae725"
+    assert request["ea"]["sha256"] == "10fadcd986a93cc075e13a6a383f1b00ee5c097c2a70d6edee315668111d5e20"
     assert request["optimizer_fitness"] == optimizer_fitness_contract(0.5)
     assert request["mt5_optimization_criterion"]["code"] == 6
     assert request["mt5_optimization_criterion"]["fitness"] == OPTIMIZER_FITNESS_SCHEMA
@@ -1065,12 +1055,34 @@ def test_wrong_nonce_fails_closed(tmp_path: Path) -> None:
         parse_optimizer_metrics_csv(metrics, expected_nonce=1)
 
 
+def test_identical_duplicate_parameter_vector_metrics_are_deduplicated(
+    tmp_path: Path,
+) -> None:
+    a = pass_row(frame_pass_id=2)
+    b = pass_row(frame_pass_id=1)
+    xml = tmp_path / "duplicate_vector.xml"
+    metrics = tmp_path / "m.csv"
+    write_xml(xml, [pass_row()])
+    write_metrics(metrics, [a, b], nonce=1)
+
+    parsed = parse_optimization_xml(
+        xml,
+        round_no=1,
+        metrics_path=metrics,
+        expected_nonce=1,
+    )
+
+    assert len(parsed) == 1
+    assert parsed[0].frame_pass_id == 1
+
+
 def test_duplicate_parameter_vector_fails_closed(tmp_path: Path) -> None:
     a = pass_row(frame_pass_id=1)
-    b = pass_row(frame_pass_id=2)
+    b = pass_row(frame_pass_id=2, profit=20.0, weighted_r=0.2)
     metrics = tmp_path / "m.csv"
     write_metrics(metrics, [a, b], nonce=1)
-    with pytest.raises(ValueError, match="Duplicate optimizer parameter-vector"):
+
+    with pytest.raises(ValueError, match="Conflicting optimizer parameter-vector"):
         parse_optimizer_metrics_csv(metrics, expected_nonce=1)
 
 

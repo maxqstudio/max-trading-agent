@@ -3,9 +3,12 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
+import max_backend.challenger_api as challenger_api
+import max_backend.challenger_deployment as challenger_deployment
 import max_backend.challenger_operations as operations
 import max_backend.challenger_registry as registry
 from max_backend.challenger_bundle import write_challenger_set
@@ -165,6 +168,41 @@ def fresh_schema6(tmp_path: Path) -> tuple[Path, Path, str]:
             conn.execute("SELECT value FROM schema_meta WHERE key='schema_version'").fetchone()["value"]
         ) == 6
     return root, db, row["challenger_id"]
+
+
+def install_verified_challenger_deployment(
+    row: dict,
+    *,
+    source_ea: Path,
+    source_set: Path,
+) -> Path:
+    challenger_id = str(row["challenger_id"])
+    authority = challenger_deployment.resolve_frozen_mt5_expert_root(
+        row["source_request"]
+    )
+    directory = challenger_deployment.challenger_deployment_directory(
+        expert_root=authority["expert_root"],
+        challenger_id=challenger_id,
+    )
+    directory.mkdir(parents=True, exist_ok=True)
+    (directory / f"Max_Challenger_{challenger_id}.mq5").write_bytes(source_ea.read_bytes())
+    (directory / f"Max_Challenger_{challenger_id}.set").write_bytes(source_set.read_bytes())
+    (directory / f"Max_Challenger_{challenger_id}.ex5").write_bytes(b"synthetic compiled EA")
+    challenger_deployment._deployment_payload(
+        directory,
+        challenger_id=challenger_id,
+        source_identity={
+            "job_id": str(row["source_job_id"]),
+            "round": int(row["source_round"]),
+            "pass": int(row["source_pass"]),
+        },
+        bundle_manifest_sha256=str(row["manifest_sha256"]),
+        source_sha256=sha(source_ea),
+        set_sha256=sha(source_set),
+        metaeditor_sha256="synthetic-metaeditor-sha",
+        compile_result={"found": True, "errors": 0, "warnings": 0},
+    )
+    return directory
 
 
 def test_schema6_to7_preserves_challenger_and_foreign_keys(tmp_path: Path) -> None:
@@ -338,7 +376,7 @@ def test_schema6_to7_preserves_current_champion_and_promotion_history(tmp_path: 
         assert conn.execute("PRAGMA foreign_key_check").fetchall() == []
 
 
-def test_non_destructive_retirement_preserves_bundle_and_history(
+def test_retirement_removes_compiled_ea_and_preserves_bundle_and_history(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -368,6 +406,94 @@ def test_non_destructive_retirement_preserves_bundle_and_history(
         },
     )
 
+    request = row["source_request"]
+    data_root = Path(request["mt5"]["data_root"])
+    terminal = Path(request["mt5"]["terminal"])
+    metaeditor = Path(request["mt5"]["metaeditor"])
+    terminal.parent.mkdir(parents=True, exist_ok=True)
+    terminal.write_bytes(b"synthetic terminal placeholder")
+    metaeditor.write_bytes(b"synthetic MetaEditor placeholder")
+    (data_root / "MQL5").mkdir(parents=True, exist_ok=True)
+
+    def fake_metaeditor_run(command, **_kwargs):
+        compile_arg = next(
+            item for item in command if str(item).startswith("/compile:")
+        )
+        compile_source = Path(str(compile_arg).split(":", 1)[1])
+        compile_source.with_suffix(".ex5").write_bytes(b"synthetic compiled EA")
+        compile_source.with_suffix(".log").write_text(
+            "Result: 0 errors, 0 warnings\n",
+            encoding="utf-8",
+        )
+        return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+    monkeypatch.setattr(
+        challenger_deployment,
+        "detect_mt5",
+        lambda: {
+            "status": "READY_EXECUTABLE_AND_DATA_ROOT",
+            "terminal": str(terminal),
+            "metaeditor": str(metaeditor),
+            "data_root": str(data_root),
+        },
+    )
+    monkeypatch.setattr(challenger_deployment.subprocess, "run", fake_metaeditor_run)
+    authority = challenger_deployment.resolve_mt5_authority(request)
+    staging = challenger_deployment.new_challenger_staging_root(
+        expert_root=authority["expert_root"],
+        operation_id=f"TEST-{cid}",
+    )
+    try:
+        prepared = challenger_deployment.prepare_challenger_deployment(
+            challenger_id=cid,
+            source_request=request,
+            source_identity={
+                "job_id": row["source_job_id"],
+                "round": row["source_round"],
+                "pass": row["source_pass"],
+            },
+            bundle_manifest_sha256=row["manifest_sha256"],
+            source_ea=bundle / f"Max_Challenger_{cid}.mq5",
+            source_set=bundle / f"Max_Challenger_{cid}.set",
+            authority=authority,
+            staging_root=staging,
+        )
+        challenger_deployment.commit_challenger_deployment(prepared)
+    finally:
+        challenger_deployment.cleanup_challenger_staging_root(staging)
+    runtime_dir = authority["expert_root"] / "Challengers" / cid
+    assert (runtime_dir / f"Max_Challenger_{cid}.ex5").is_file()
+
+    remove_runtime_ea = operations._remove_retired_runtime_ea
+    monkeypatch.setattr(
+        operations,
+        "_remove_retired_runtime_ea",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            RuntimeError("SYNTHETIC_REMOVAL_INTERRUPTED")
+        ),
+    )
+    with pytest.raises(RuntimeError, match="CHALLENGER_RETIRED_RUNTIME_EA_REMOVAL_PENDING"):
+        operations.retire_challenger(
+            cid,
+            expected_manifest_sha256=row["manifest_sha256"],
+            confirmed=True,
+            path=db,
+        )
+    assert get_challenger(cid, path=db)["status"] == "RETIRED"
+    assert runtime_dir.is_dir()
+    monkeypatch.setattr(operations, "_remove_retired_runtime_ea", remove_runtime_ea)
+    recovered = operations.recover_retired_challenger_deployments(path=db)
+    assert recovered == [
+        {
+            "challenger_id": cid,
+            "retirement_id": next(
+                item["retirement_id"] for item in list_retirements(cid, path=db)
+            ),
+            "runtime_ea": "REMOVED",
+        }
+    ]
+    assert not runtime_dir.exists()
+
     retired = operations.retire_challenger(
         cid,
         expected_manifest_sha256=row["manifest_sha256"],
@@ -376,8 +502,11 @@ def test_non_destructive_retirement_preserves_bundle_and_history(
     )
     assert retired["status"] == "RETIRED"
     assert retired["retired_utc"]
-    assert retired["retirement"] == "NON_DESTRUCTIVE"
+    assert retired["retirement"] == "COMPILED_EA_REMOVED_BUNDLE_PRESERVED"
+    assert retired["runtime_ea"] == "REMOVED"
     assert retired["bundle_preserved"] is True
+    assert retired["parameters_preserved"] is True
+    assert not runtime_dir.exists()
     assert retired["retirement_state"] == "COMMITTED"
     assert retired["retirement_before_status"] == "CHALLENGER"
     assert retired["retirement_after_status"] == "RETIRED"
@@ -400,6 +529,7 @@ def test_non_destructive_retirement_preserves_bundle_and_history(
         path=db,
     )
     assert repeated["retired_utc"] == retired["retired_utc"]
+    assert not runtime_dir.exists()
     with pytest.raises(RuntimeError, match="EXPLICIT_RETIREMENT_CONFIRMATION_REQUIRED"):
         operations.retire_challenger(
             cid,
@@ -407,6 +537,64 @@ def test_non_destructive_retirement_preserves_bundle_and_history(
             confirmed=False,
             path=db,
         )
+
+
+def test_verified_challenger_ea_and_set_downloads_work_in_retired_archive(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root, db, cid = fresh_schema6(tmp_path)
+    row = get_challenger(cid, path=db)
+    assert row is not None
+    bundle = root / row["bundle_path"]
+    ea = bundle / f"Max_Challenger_{cid}.mq5"
+    set_path = bundle / f"Max_Challenger_{cid}.set"
+    monkeypatch.setattr(operations, "ROOT", root)
+    monkeypatch.setattr(
+        operations,
+        "CHALLENGER_ARTIFACT_ROOT",
+        root / "artifacts" / "strategy_challengers",
+    )
+    monkeypatch.setattr(
+        operations,
+        "LEGACY_CHALLENGER_ARTIFACT_ROOT",
+        root / "artifacts" / "challengers",
+    )
+    verified_statuses: list[bool] = []
+
+    def verified_bundle(_challenger_id, *, allow_retired=False, path):
+        verified_statuses.append(allow_retired)
+        return {"status": "VERIFIED"}
+
+    monkeypatch.setattr(operations, "verify_challenger_bundle", verified_bundle)
+    monkeypatch.setattr(
+        challenger_api,
+        "challenger_bundle_artifact_path",
+        lambda challenger_id, artifact: operations.challenger_bundle_artifact_path(
+            challenger_id,
+            artifact,
+            path=db,
+        ),
+    )
+
+    ea_response = challenger_api.download_challenger_ea(cid)
+    set_response = challenger_api.download_challenger_set(cid)
+    assert Path(ea_response.path) == ea
+    assert Path(set_response.path) == set_path
+    assert 'attachment; filename="Max_Challenger_' + cid + '.mq5"' in (
+        ea_response.headers["content-disposition"]
+    )
+
+    retire_registry_row(
+        cid,
+        retirement_id="RETIRE-DOWNLOAD-TEST",
+        expected_manifest_sha256=row["manifest_sha256"],
+        evidence_path="evidence/test/RETIRE-DOWNLOAD-TEST",
+        path=db,
+    )
+    archived_response = challenger_api.download_challenger_ea(cid)
+    assert Path(archived_response.path) == ea
+    assert verified_statuses == [False, False, True]
 
 
 def test_registry_active_and_retired_views_are_paginated_searchable_and_sortable(
@@ -519,6 +707,11 @@ def test_backtest_uses_retained_bundle_mt5_truth_and_history_survives_retirement
     metaeditor.write_bytes(b"metaeditor")
     data_root = root / "mt5"
     data_root.mkdir(parents=True, exist_ok=True)
+    deployed_dir = install_verified_challenger_deployment(
+        row,
+        source_ea=ea,
+        source_set=set_path,
+    )
 
     monkeypatch.setattr(operations, "ROOT", root)
     monkeypatch.setattr(
@@ -558,33 +751,17 @@ def test_backtest_uses_retained_bundle_mt5_truth_and_history_survives_retirement
             "bundle_path": row["bundle_path"],
         },
     )
-    monkeypatch.setattr(
-        operations,
-        "_compile_retained_challenger",
-        lambda **_k: {
-            "status": "PASS",
-            "compile_summary": {
-                "found": True,
-                "errors": 0,
-                "warnings": 0,
-                "line": "Result: 0 errors, 0 warnings",
-            },
-            "process_returncode": 0,
-            "metaeditor_sha256": "metaeditor-sha",
-            "compile_log_sha256": "compile-log-sha",
-            "deployed_mq5": "fixture",
-            "deployed_mq5_sha256": sha(ea),
-            "compiled_ex5": "fixture.ex5",
-            "ex5_sha256": "compiled-ex5-sha",
-            "expert_name": "MaxMTF\\ChallengerBacktests\\fixture\\Max_Challenger",
-        },
-    )
-
     def fake_launch(_request: dict, *, ini_path: str | Path, timeout_sec: int) -> int:
         assert timeout_sec == 21600
         ini_text = Path(ini_path).read_text(encoding="utf-8")
         assert "Optimization=0" in ini_text
-        assert "Expert=MaxMTF\\ChallengerBacktests" in ini_text
+        assert (
+            "Expert=MaxMTF\\Challengers\\"
+            + cid
+            + "\\Max_Challenger_"
+            + cid
+        ) in ini_text
+        assert not (data_root / "MQL5" / "Experts" / "MaxMTF" / "ChallengerBacktests").exists()
         report_line = next(
             line for line in ini_text.splitlines() if line.startswith("Report=")
         )
@@ -624,8 +801,11 @@ def test_backtest_uses_retained_bundle_mt5_truth_and_history_survives_retirement
     assert result["result"]["execution_truth"] == "MT5_STRATEGY_TESTER"
     assert result["result"]["parameter_mutation"] == "NONE"
     assert result["result"]["live_authority"] == "NONE"
-    assert result["result"]["metaeditor_sha256"] == "metaeditor-sha"
-    assert result["result"]["compile_log_sha256"] == "compile-log-sha"
+    assert result["result"]["deployment_reused"] is True
+    assert result["result"]["deployment_manifest_sha256"]
+    assert result["result"]["runtime"]["expert_reused"] is True
+    assert Path(result["result"]["runtime"]["expert_dir"]) == deployed_dir
+    assert (deployed_dir / f"Max_Challenger_{cid}.ex5").is_file()
     assert result["result"]["terminal_sha256"] == sha(terminal)
     assert result["result"]["runtime_set_sha256"]
     runtime_text = Path(
@@ -811,6 +991,11 @@ def test_returned_mt5_without_report_becomes_unconfirmed(
     metaeditor.write_bytes(b"metaeditor")
     data_root = root / "mt5"
     data_root.mkdir(parents=True, exist_ok=True)
+    install_verified_challenger_deployment(
+        row,
+        source_ea=ea,
+        source_set=set_path,
+    )
 
     monkeypatch.setattr(operations, "ROOT", root)
     monkeypatch.setattr(
@@ -842,27 +1027,6 @@ def test_returned_mt5_without_report_becomes_unconfirmed(
             "manifest_sha256": row["manifest_sha256"],
             "ea_sha256": sha(ea),
             "set_sha256": sha(set_path),
-        },
-    )
-    monkeypatch.setattr(
-        operations,
-        "_compile_retained_challenger",
-        lambda **_k: {
-            "status": "PASS",
-            "compile_summary": {
-                "found": True,
-                "errors": 0,
-                "warnings": 0,
-                "line": "Result: 0 errors, 0 warnings",
-            },
-            "process_returncode": 0,
-            "metaeditor_sha256": "metaeditor-sha",
-            "compile_log_sha256": "compile-log-sha",
-            "deployed_mq5": "fixture",
-            "deployed_mq5_sha256": sha(ea),
-            "compiled_ex5": "fixture.ex5",
-            "ex5_sha256": "compiled-ex5-sha",
-            "expert_name": "MaxMTF\\ChallengerBacktests\\fixture\\Max_Challenger",
         },
     )
     monkeypatch.setattr(operations, "launch_mt5", lambda *_a, **_k: 0)
@@ -909,12 +1073,41 @@ def test_backtest_is_frozen_to_retained_contract_and_bundle_is_confined(
     assert frozen["from_date"] == row["source_request"]["from_date"]
     assert frozen["to_date"] == row["source_request"]["to_date"]
 
+    selected_window = operations.freeze_backtest_request(
+        row,
+        {"from_date": "2020.01.01", "to_date": "2025.01.01"},
+    )
+    assert selected_window["from_date"] == "2020.01.01"
+    assert selected_window["to_date"] == "2025.01.01"
+    assert selected_window["date_range_authority"] == "OWNER_SELECTED_BACKTEST_RANGE"
+    assert selected_window["optimizer_source_date_range"] == {
+        "from_date": row["source_request"]["from_date"],
+        "to_date": row["source_request"]["to_date"],
+    }
+    ini = operations._build_backtest_ini(
+        selected_window,
+        expert_name="MaxMTF\\Challenger\\Max_Challenger",
+        set_name="challenger.set",
+        report_name="backtest.html",
+    )
+    assert "FromDate=2020.01.01" in ini
+    assert "ToDate=2025.01.01" in ini
+
+    with pytest.raises(ValueError, match="BACKTEST_DATE_RANGE_INVALID"):
+        operations.freeze_backtest_request(
+            row,
+            {"from_date": "2025.01.01", "to_date": "2020.01.01"},
+        )
+    with pytest.raises(ValueError, match="BACKTEST_DATE_RANGE_INVALID"):
+        operations.freeze_backtest_request(
+            row,
+            {"from_date": "2025.02.30", "to_date": "2025.03.01"},
+        )
+
     for field, value in (
         ("symbol", "EURUSD.m"),
         ("relative_symbol", "GBPUSD.m"),
         ("period", "H1"),
-        ("from_date", "2026.08.02"),
-        ("to_date", "2026.08.14"),
         ("model", 0),
         ("deposit", 20000),
         ("leverage", 200),

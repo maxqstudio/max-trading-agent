@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from .challenger_operations_store import get_backtest
+from .challenger_deployment import challenger_deployment_directory, resolve_frozen_mt5_expert_root
 from .challenger_store import get_challenger
 from .config import (
     BACKTEST_ARTIFACT_ROOT,
@@ -54,7 +55,7 @@ def verified_retained_report(
     return report
 
 
-def _runtime_paths(record: dict[str, Any]) -> dict[str, Path]:
+def _runtime_paths(record: dict[str, Any]) -> dict[str, Any]:
     request = record.get("request") if isinstance(record.get("request"), dict) else {}
     mt5 = request.get("mt5") if isinstance(request.get("mt5"), dict) else {}
     data_root_text = str(mt5.get("data_root") or "").strip()
@@ -62,15 +63,28 @@ def _runtime_paths(record: dict[str, Any]) -> dict[str, Path]:
         raise RuntimeError("BACKTEST_RUNTIME_DATA_ROOT_UNAVAILABLE")
     data_root = Path(data_root_text).resolve()
     backtest_id = str(record["backtest_id"])
-    expert_root = data_root / "MQL5" / "Experts" / "MaxMTF" / "ChallengerBacktests"
+    result = record.get("result") if isinstance(record.get("result"), dict) else {}
+    runtime = result.get("runtime") if isinstance(result.get("runtime"), dict) else {}
+    expert_reused = runtime.get("expert_reused") is True
+    if expert_reused:
+        authority = resolve_frozen_mt5_expert_root({"mt5": mt5})
+        challenger_id = str(runtime.get("challenger_id") or record.get("challenger_id") or "")
+        expert = challenger_deployment_directory(
+            expert_root=authority["expert_root"],
+            challenger_id=challenger_id,
+        )
+        recorded_expert = Path(str(runtime.get("expert_dir") or ""))
+        if recorded_expert.is_symlink() or recorded_expert.resolve() != expert.resolve():
+            raise RuntimeError("BACKTEST_RUNTIME_EXPERT_IDENTITY_MISMATCH")
+        expert_root = expert.parent
+    else:
+        expert_root = data_root / "MQL5" / "Experts" / "MaxMTF" / "ChallengerBacktests"
+        expert = Path(
+            str(runtime.get("expert_dir") or (expert_root / backtest_id))
+        )
     tester_root = data_root / "MQL5" / "Profiles" / "Tester"
     report_root = data_root / "reports"
 
-    result = record.get("result") if isinstance(record.get("result"), dict) else {}
-    runtime = result.get("runtime") if isinstance(result.get("runtime"), dict) else {}
-    expert = Path(
-        str(runtime.get("expert_dir") or (expert_root / backtest_id))
-    )
     tester = Path(
         str(
             runtime.get("tester_set")
@@ -86,7 +100,7 @@ def _runtime_paths(record: dict[str, Any]) -> dict[str, Path]:
     )
 
     # Registered identity must agree with the exact Backtest naming contract.
-    if expert.name != backtest_id:
+    if not expert_reused and expert.name != backtest_id:
         raise RuntimeError("BACKTEST_RUNTIME_EXPERT_IDENTITY_MISMATCH")
     allowed_tester_names = {
         f"MaxMTF_Backtest_{backtest_id}.set",
@@ -109,6 +123,7 @@ def _runtime_paths(record: dict[str, Any]) -> dict[str, Path]:
         "tester_root": tester_root,
         "report_root": report_root,
         "expert_dir": expert,
+        "expert_reused": expert_reused,
         "tester_set": tester,
         "source_report": source_report,
     }
@@ -124,16 +139,16 @@ def runtime_inventory(
         raise FileNotFoundError(backtest_id)
     paths = _runtime_paths(record)
     items = []
-    for kind, root_key in (
-        ("EXPERT_DEPLOYMENT", "expert_root"),
-        ("TESTER_SET", "tester_root"),
-        ("MT5_REPORT", "report_root"),
-    ):
-        value_key = {
-            "EXPERT_DEPLOYMENT": "expert_dir",
-            "TESTER_SET": "tester_set",
-            "MT5_REPORT": "source_report",
-        }[kind]
+    inventory_specs = []
+    if paths["expert_reused"]:
+        inventory_specs.append(("EXPERT_DEPLOYMENT_REUSED", "expert_root", "expert_dir", False))
+    else:
+        inventory_specs.append(("EXPERT_DEPLOYMENT", "expert_root", "expert_dir", True))
+    inventory_specs.extend([
+        ("TESTER_SET", "tester_root", "tester_set", True),
+        ("MT5_REPORT", "report_root", "source_report", True),
+    ])
+    for kind, root_key, value_key, removable in inventory_specs:
         value = assert_owned_path(paths[value_key], roots=[paths[root_key]])
         items.append(
             {
@@ -141,13 +156,14 @@ def runtime_inventory(
                 "path": str(value),
                 "exists": value.exists(),
                 "size_bytes": file_size_tree(value),
+                "removable": removable,
             }
         )
     return {
         "backtest_id": backtest_id,
         "runtime_status": record.get("runtime_status", "UNKNOWN"),
         "items": items,
-        "size_bytes": sum(int(item["size_bytes"]) for item in items),
+        "size_bytes": sum(int(item["size_bytes"]) for item in items if item["removable"]),
     }
 
 
@@ -163,7 +179,8 @@ def clean_backtest_runtime(
         raise RuntimeError("BACKTEST_RUNTIME_CLEAN_BLOCKED_ACTIVE")
     paths = _runtime_paths(record)
     removed = 0
-    removed += remove_owned_path(paths["expert_dir"], roots=[paths["expert_root"]])
+    if not paths["expert_reused"]:
+        removed += remove_owned_path(paths["expert_dir"], roots=[paths["expert_root"]])
     removed += remove_owned_path(paths["tester_set"], roots=[paths["tester_root"]])
     removed += remove_owned_path(paths["source_report"], roots=[paths["report_root"]])
     set_backtest_runtime_status(backtest_id, "CLEANED", path=path)
@@ -174,7 +191,7 @@ def clean_backtest_runtime(
             (str(backtest_id),),
         )
     inventory = runtime_inventory(backtest_id, path=path)
-    if any(item["exists"] for item in inventory["items"]):
+    if any(item["exists"] and item["removable"] for item in inventory["items"]):
         raise RuntimeError("BACKTEST_RUNTIME_CLEAN_VERIFICATION_FAILED")
     retained_report: str | None = None
     if str(record.get("state")) == "COMPLETED":

@@ -170,15 +170,15 @@
     },
     {
       "id": "OPTIMIZER-MT5-RESOURCE-ADMISSION-MISSING",
-      "status": "FIXED/ACCEPTED_CANDIDATE",
-      "summary": "MT5 Strategy Tester could enqueue excessive local-agent work without MAX-owned hardware-aware admission, causing CPU/RAM pressure and optimizer failure.",
-      "evidence": "Owner-PC bounded native MT5 diagnostics on build 5.0.0.6231 proved AUTO_SAFE preflight plus Windows Job Object ActiveProcessLimit: accepted 9-pass run completed rc=0 with 3/3 agents and 9 parsed passes; 17D Fast Genetic queue stress produced 512 report rows with 2/2 agents and SAFE RAM headroom; real browser START/STOP later observed 2/2 agents and clean process shutdown. Full long Owner Optimizer remains NOT_RUN."
+      "status": "SUPERSEDED",
+      "summary": "The prior MAX-owned tester-agent cap/admission design was removed after Owner direction to restore native MT5 execution and preserve Owner-selected agent behavior.",
+      "evidence": "Historical capped Stage C/D results remain historical only. The current source candidate launches terminal64.exe through the native /config path and has source regressions asserting no external ActiveProcessLimit or estimated-memory START gate; real runtime behavior on this candidate is NOT_PROVEN."
     },
     {
       "id": "OPTIMIZER-COMMIT-MEMORY-EXHAUSTION",
       "status": "IN_PROGRESS",
       "summary": "Long-range Fast Genetic Optimizer exhausted Windows commit memory despite prior physical-RAM and local-agent admission.",
-      "evidence": "Owner-reported full-range 17D Fast Genetic crash remains the V2 repair trigger. The PR #17 V2 source candidate passed full local regression (483 backend tests, zero skips/failures; frontend 53/8; lint/build/npm tree/pip check), governance, exact-tree/secret scan, and both Windows push and PR-head CI. The separate OPTIMIZER-WORKER-IDENTITY-CIM-TIMEOUT exposed by baseline CI was repaired with deterministic authenticated handshake/native process identity, repeated real venv tests, and both hosted CI triggers passing. REAL V2 MT5 remains NOT_PROVEN because the bounded diagnostic was blocked before launch by commit headroom; FULL OWNER OPTIMIZER remains NOT_PROVEN; Research R00-R11 remains PAUSED. Exact candidate SHA/run identities remain external per D-012. Historical Stage C/D bounded results remain valid but do not prove current V2 runtime safety."
+      "evidence": "Owner-reported full-range 17D Fast Genetic crash remains unresolved runtime evidence. The current source candidate restores native MT5 /config launch and removes the MAX-owned tester-agent cap/admission gate; this does not prove that Windows commit-memory exhaustion is eliminated. The latest job 20261003_012101_e65a942d completed MT5 with exit code 0 but failed during result parsing on repeated parameter-vector metrics; it remains FAILED with zero candidate rows because no DB mutation/recovery was performed. Local source regression passed, but this updated candidate has not yet passed hosted CI. REAL MT5 and FULL OWNER OPTIMIZER remain NOT_PROVEN; Research R00-R11 remains PAUSED."
     },
     {
       "id": "OPTIMIZER-WORKER-IDENTITY-CIM-TIMEOUT",
@@ -186,6 +186,18 @@
       "summary": "Optimizer worker launch identity discovery depends on PowerShell/CIM global process enumeration with a fixed 8-second timeout.",
       "evidence": "Baseline GitHub Windows push run 37004211038 attempt 1 failed test_windows_venv_worker_resolution_finds_actual_child_process with subprocess.TimeoutExpired in optimizer_jobs._find_worker_by_token while powershell.exe/Get-CimInstance enumerated Win32_Process; reruns of that same baseline did not close the defect. The repair source candidate passed 32 focused identity/recovery/stop tests, 3 repeated real Windows venv tests covering 15/15 worker lifecycles, full backend (483 passed, 0 skipped, 0 failed), governance, exact-tree/secret scanning, and both push and PR-head Windows CI across all three jobs. Exact final SHA and CI run identities are external evidence per D-012.",
       "resolution": "PowerShell/CIM worker discovery is replaced by a deterministic authenticated one-use named-pipe handshake and native actual-peer PID, executable-path, process-creation-identity, and verified-termination checks. Source and hosted acceptance gates pass on the repair candidate. This remains an unmerged candidate; phase closure and Owner runtime are not claimed."
+    },
+    {
+      "id": "OPTIMIZER-DUPLICATE-METRICS-ROWS-FAILURE",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "An otherwise completed MT5 optimization failed during parsing because the sidecar repeated identical parameter-vector metric rows.",
+      "evidence": "The latest job 20261003_012101_e65a942d is FAILED/active=0 after MT5 exit code 0; exact report and sidecar hashes matched frozen evidence. Offline replay with the candidate parser accepted 7,115 report rows and 3,239 eligible unique candidates without database writes. Local parser tests collapse only rows whose semantic metrics are identical and continue rejecting conflicts. Hosted CI is pending."
+    },
+    {
+      "id": "OPTIMIZER-EXACT-DUPLICATE-CANDIDATE-PERSISTENCE",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Exact duplicate optimizer candidate identities could be inserted into the SQLite candidate projection.",
+      "evidence": "candidate_projection_payload removes exact duplicate identities within a round and across prior rounds; persist_candidate_projection rechecks in-batch and persisted identities inside its serialized transaction and fails closed. Synthetic SQLite tests prove duplicate rows are not inserted; full local backend suite passed 459 tests. Hosted CI is pending."
     }
   ],
   "schema_version": 1
