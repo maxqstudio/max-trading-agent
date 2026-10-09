@@ -3,7 +3,7 @@
 # SYMBOL INDEX
 
 Authority SHA: external final acceptance evidence
-Source digest: 7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f
+Source digest: 5480ce47bb11ea70e78d812b3aa6db03f6b17d71b5c185289e4786d3f05ffb17
 Status: CURRENT
 
 | File | Symbol | Kind | Lines@SHA | Responsibility | Reads/Writes | Called By | Tests |
@@ -1278,7 +1278,7 @@ Status: CURRENT
 | scripts/build_m05_final_evidence.py | main | function | 265-582 | Observed Python symbol | | | |
 | scripts/build_m05_partial_evidence.py | write_json | function | 28-32 | Observed Python symbol | | | |
 | scripts/build_m05_partial_evidence.py | main | function | 35-213 | Observed Python symbol | | | |
-| scripts/build_scientist_knowledge.py | main | function | 19-236 | Observed Python symbol | | | |
+| scripts/build_scientist_knowledge.py | main | function | 19-249 | Observed Python symbol | | | |
 | scripts/generate_module_map.py | head | function | 28-36 | Observed Python symbol | | | |
 | scripts/generate_module_map.py | language | function | 39-47 | Observed Python symbol | | | |
 | scripts/generate_module_map.py | main | function | 50-116 | Observed Python symbol | | | |

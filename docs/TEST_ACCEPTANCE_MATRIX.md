@@ -7,7 +7,7 @@
 ONNX-00 is planning/governance only on a work branch based on main 203f6ab3dc618e3edd247841aa25e1fa0951a19a. Exact starting-main Windows CI run 37964999480 passed. ModelLab main 883ebeb1ca2e70f6255e0889358ba7c822ac52f5 and all 19 Owner-listed authorities were inspected. The exact 14-family ONNX V1 and future stage/data/state/UI contracts are documented. No product source, schema, tests, Owner data, MT5 or runtime was changed or executed. Branch/PR-head CI remains pending; PR must stay unmerged for Control Room audit.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f
+Current source digest: 5480ce47bb11ea70e78d812b3aa6db03f6b17d71b5c185289e4786d3f05ffb17
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
