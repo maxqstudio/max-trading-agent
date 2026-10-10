@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 5d0bf933917ae0132170666ebb651ce4f4593b04bd4c8e2de4b46df67a8ff56b
+Source digest: cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -115,7 +115,7 @@ Generated/refreshed: current compiler run
 | frontend/src/tableFormat.ts | TypeScript | 6 | frontend/src | NO |
 | frontend/src/testSetup.ts | TypeScript | 1 | frontend/src | NO |
 | frontend/vite.config.ts | TypeScript | 18 | frontend | NO |
-| scripts/accept_onnx01.ps1 | PowerShell | 260 | scripts | NO |
+| scripts/accept_onnx01.ps1 | PowerShell | 292 | scripts | NO |
 | scripts/build_m05_final_evidence.py | Python | 586 | scripts | NO |
 | scripts/build_m05_partial_evidence.py | Python | 217 | scripts | NO |
 | scripts/build_scientist_knowledge.py | Python | 253 | scripts | NO |
@@ -126,6 +126,7 @@ Generated/refreshed: current compiler run
 | scripts/reset_strategy_epoch.py | Python | 623 | scripts | NO |
 | scripts/run_max.ps1 | PowerShell | 258 | scripts | NO |
 | scripts/scan_m05_candidate_tree.py | Python | 142 | scripts | NO |
+| scripts/test_onnx01_skill_workflow_cache.ps1 | PowerShell | 251 | scripts | YES |
 | scripts/validate_cross_document_consistency.py | Python | 591 | scripts | NO |
 | scripts/validate_handoff.py | Python | 198 | scripts | NO |
 | scripts/validate_project_truth.py | Python | 270 | scripts | NO |

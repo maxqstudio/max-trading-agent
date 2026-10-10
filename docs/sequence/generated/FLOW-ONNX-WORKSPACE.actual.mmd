@@ -1,6 +1,6 @@
 %% GENERATED FILE - DO NOT EDIT
-%% SOURCE_DIGEST: 5d0bf933917ae0132170666ebb651ce4f4593b04bd4c8e2de4b46df67a8ff56b
-%% OBSERVED_HEAD: 5954300fe1e07b0f6cef3870f886d55969df3fdf
+%% SOURCE_DIGEST: cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b
+%% OBSERVED_HEAD: eee1959d61b272d838d397be27e51c6781c750c4
 %% GENERATED_BY: generate_sequence_actual.py
 sequenceDiagram
     participant HTTP__api_overview_0 as HTTP /api/overview
@@ -79,8 +79,7 @@ sequenceDiagram
     participant backend_max_backend_workflow_store_py___purge_research_authority_73 as backend/max_backend/workflow_store.py::_purge_research_authority
     participant backend_max_backend_workflow_store_py___upgrade_challenger_roles_74 as backend/max_backend/workflow_store.py::_upgrade_challenger_roles
     participant backend_max_backend_workflow_store_py__migrate_current_75 as backend/max_backend/workflow_store.py::migrate_current
-    participant evidence_onnx01_Skill_Workflow_964481ed1609f87904ba9e08890bffc0a10c3fd4_scripts_validate_sequence_contract_py__resolve_76 as evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve
-    participant frontend_src_App_tsx___module__77 as frontend/src/App.tsx::<module>
+    participant frontend_src_App_tsx___module__76 as frontend/src/App.tsx::<module>
     HTTP__api_overview_0->>backend_max_backend_main_py__overview_30: GET route [STATIC]
     HTTP__api_recovery_reset_1->>backend_max_backend_main_py__reset_corrupt_state_32: POST route [STATIC]
     HTTP__api_recovery_status_2->>backend_max_backend_main_py__recovery_status_31: GET route [STATIC]
@@ -126,7 +125,6 @@ sequenceDiagram
     backend_max_backend_mt5_py__detect_mt5_37->>backend_max_backend_mt5_py___data_roots_34: _data_roots [STATIC]
     backend_max_backend_mt5_py__detect_mt5_37->>backend_max_backend_mt5_py___read_origin_35: _read_origin [STATIC]
     backend_max_backend_mt5_py__detect_mt5_37->>backend_max_backend_mt5_py___unavailable_36: _unavailable [STATIC]
-    backend_max_backend_mt5_py__detect_mt5_37->>evidence_onnx01_Skill_Workflow_964481ed1609f87904ba9e08890bffc0a10c3fd4_scripts_validate_sequence_contract_py__resolve_76: terminal.parent.resolve [STATIC]
     backend_max_backend_onnx_api_py___stage_page_56->>backend_max_backend_onnx_api_py__StagePageState_53: StagePageState [STATIC]
     backend_max_backend_onnx_api_py__build_onnx_workspace_snapshot_57->>backend_max_backend_onnx_api_py__ChallengerCandidatesState_38: ChallengerCandidatesState [STATIC]
     backend_max_backend_onnx_api_py__build_onnx_workspace_snapshot_57->>backend_max_backend_onnx_api_py__ChallengerState_39: ChallengerState [STATIC]
@@ -177,8 +175,8 @@ sequenceDiagram
     backend_max_backend_workflow_store_py__migrate_current_75->>backend_max_backend_workflow_store_py___ensure_backtest_runtime_status_72: _ensure_backtest_runtime_status [STATIC]
     backend_max_backend_workflow_store_py__migrate_current_75->>backend_max_backend_workflow_store_py___purge_research_authority_73: _purge_research_authority [STATIC]
     backend_max_backend_workflow_store_py__migrate_current_75->>backend_max_backend_workflow_store_py___upgrade_challenger_roles_74: _upgrade_challenger_roles [STATIC]
-    frontend_src_App_tsx___module__77->>HTTP__api_overview_0: FETCH request [STATIC]
-    frontend_src_App_tsx___module__77->>HTTP__api_recovery_reset_1: FETCH request [STATIC]
-    frontend_src_App_tsx___module__77->>HTTP__api_recovery_status_2: FETCH request [STATIC]
-    frontend_src_App_tsx___module__77->>HTTP__api_scientist_provider_settings_3: FETCH request [STATIC]
-    frontend_src_App_tsx___module__77->>HTTP__api_scientist_ui_settings_4: FETCH request [STATIC]
+    frontend_src_App_tsx___module__76->>HTTP__api_overview_0: FETCH request [STATIC]
+    frontend_src_App_tsx___module__76->>HTTP__api_recovery_reset_1: FETCH request [STATIC]
+    frontend_src_App_tsx___module__76->>HTTP__api_recovery_status_2: FETCH request [STATIC]
+    frontend_src_App_tsx___module__76->>HTTP__api_scientist_provider_settings_3: FETCH request [STATIC]
+    frontend_src_App_tsx___module__76->>HTTP__api_scientist_ui_settings_4: FETCH request [STATIC]

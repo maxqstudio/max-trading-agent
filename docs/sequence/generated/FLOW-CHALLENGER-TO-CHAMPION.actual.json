@@ -114,20 +114,6 @@
       "to": "backend/max_backend/mtf_geometry.py::assert_geometry_matches_main"
     },
     {
-      "action": "CHALLENGER_ARTIFACT_ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "LEGACY_CHALLENGER_ARTIFACT_ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
       "action": "_format_fixed_value",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_bundle.py::verify_geometry_set",
@@ -233,39 +219,11 @@
       "to": "backend/max_backend/optimizer_core.py::read_ea_optimizer_defaults"
     },
     {
-      "action": "expert_root.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_deployment.py::_deployment_paths",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "path.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_deployment.py::_path_identity",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
       "action": "_deployment_paths",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_deployment.py::challenger_deployment_directory",
       "resolver": "python_ast",
       "to": "backend/max_backend/challenger_deployment.py::_deployment_paths"
-    },
-    {
-      "action": "stage_root.parent.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_deployment.py::cleanup_challenger_staging_root",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "stage_root.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_deployment.py::cleanup_challenger_staging_root",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "verify_challenger_deployment",
@@ -287,13 +245,6 @@
       "from": "backend/max_backend/challenger_deployment.py::inspect_challenger_deployment",
       "resolver": "python_ast",
       "to": "backend/max_backend/challenger_deployment.py::verify_challenger_deployment"
-    },
-    {
-      "action": "expert_root.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_deployment.py::new_challenger_staging_root",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "_deployment_paths",
@@ -338,13 +289,6 @@
       "to": "backend/max_backend/optimizer_runtime.py::compile_summary"
     },
     {
-      "action": "staging_root.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_deployment.py::prepare_challenger_deployment",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
       "action": "_deployment_paths",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_deployment.py::quarantine_challenger_deployment",
@@ -357,20 +301,6 @@
       "from": "backend/max_backend/challenger_deployment.py::quarantine_challenger_deployment",
       "resolver": "python_ast",
       "to": "backend/max_backend/challenger_deployment.py::verify_challenger_deployment"
-    },
-    {
-      "action": "quarantine_path.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_deployment.py::quarantine_challenger_deployment",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "staging_root.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_deployment.py::quarantine_challenger_deployment",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "_path_identity",
@@ -674,20 +604,6 @@
       "to": "backend/max_backend/champion_bundle.py::_sha"
     },
     {
-      "action": "manifest_path.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_bundle.py::verify_hash_manifest",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "path.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_bundle.py::verify_hash_manifest",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
       "action": "current_baseline_sha256",
       "evidence": "STATIC",
       "from": "backend/max_backend/champion_bundle.py::verify_strategy_logic_unchanged",
@@ -763,20 +679,6 @@
       "from": "backend/max_backend/champion_bundle.py::write_hash_manifest",
       "resolver": "python_ast",
       "to": "backend/max_backend/champion_bundle.py::_sha"
-    },
-    {
-      "action": "item.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_bundle.py::write_hash_manifest",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "manifest_path.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_bundle.py::write_hash_manifest",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "_decode_json",
@@ -1038,13 +940,6 @@
       "to": "backend/max_backend/mt5.py::_unavailable"
     },
     {
-      "action": "terminal.parent.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/mt5.py::detect_mt5",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
       "action": "resolve_strategy_geometry",
       "evidence": "STATIC",
       "from": "backend/max_backend/mtf_geometry.py::assert_geometry_matches_main",
@@ -1127,13 +1022,6 @@
       "from": "backend/max_backend/optimizer_candidates.py::_load_job",
       "resolver": "python_ast",
       "to": "backend/max_backend/optimizer_store.py::attach_rounds"
-    },
-    {
-      "action": "raw.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/optimizer_candidates.py::_resolve_project_path",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "consumed_source_identities",
@@ -1822,20 +1710,6 @@
       "to": "backend/max_backend/challenger_deployment.py::inspect_challenger_deployment"
     },
     {
-      "action": "ROOT.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/promotion_service.py::_relative",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
-      "action": "path.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/promotion_service.py::_relative",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
-    },
-    {
       "action": "_restore_file",
       "evidence": "STATIC",
       "from": "backend/max_backend/promotion_service.py::_restore_before_state",
@@ -2037,13 +1911,6 @@
       "from": "backend/max_backend/promotion_service.py::_verify_promotion_runtime_spec",
       "resolver": "python_ast",
       "to": "backend/max_backend/challenger_deployment.py::verify_challenger_deployment"
-    },
-    {
-      "action": "directory.resolve",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/promotion_service.py::_verify_promotion_runtime_spec",
-      "resolver": "python_ast",
-      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "_same_params",
@@ -3859,18 +3726,9 @@
       "line_end": 47,
       "line_start": 35,
       "locator": "backend/tests/test_m01_recovery.py::good_pass"
-    },
-    {
-      "id": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve",
-      "kind": "function",
-      "label": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve",
-      "language": "Python",
-      "line_end": 28,
-      "line_start": 26,
-      "locator": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
     }
   ],
-  "observed_head": "5954300fe1e07b0f6cef3870f886d55969df3fdf",
+  "observed_head": "eee1959d61b272d838d397be27e51c6781c750c4",
   "schema_version": 1,
-  "source_digest": "5d0bf933917ae0132170666ebb651ce4f4593b04bd4c8e2de4b46df67a8ff56b"
+  "source_digest": "cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b"
 }

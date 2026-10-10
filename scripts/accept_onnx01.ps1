@@ -1,20 +1,40 @@
 param(
-  [string]$Python = ".venv\Scripts\python.exe",
+  [string]$Python = '',
   [string]$SkillWorkflowPath = ""
 )
 
 $ErrorActionPreference = 'Stop'
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
-$pythonPath = if ([System.IO.Path]::IsPathRooted($Python)) { $Python } else { Join-Path $repoRoot $Python }
+Import-Module (Join-Path $PSScriptRoot 'onnx01_skill_workflow_cache.psm1') -Force
+
+if ($Python) {
+  $pythonPath = if ([System.IO.Path]::IsPathRooted($Python)) { $Python } else { Join-Path $repoRoot $Python }
+} else {
+  $pythonCandidates = [System.Collections.Generic.List[string]]::new()
+  $pythonCandidates.Add((Join-Path $repoRoot '.venv\Scripts\python.exe'))
+  $commonGitDirectory = (& git -C $repoRoot rev-parse --git-common-dir).Trim()
+  if ($LASTEXITCODE -ne 0) { throw 'Cannot resolve the repository Git common directory to locate the default Python environment.' }
+  if (-not [System.IO.Path]::IsPathRooted($commonGitDirectory)) {
+    $commonGitDirectory = Join-Path $repoRoot $commonGitDirectory
+  }
+  $commonRepositoryRoot = Split-Path ([System.IO.Path]::GetFullPath($commonGitDirectory)) -Parent
+  $pythonCandidates.Add((Join-Path $commonRepositoryRoot '.venv\Scripts\python.exe'))
+  $pythonPath = $pythonCandidates | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Select-Object -First 1
+  if (-not $pythonPath) { $pythonPath = $pythonCandidates[0] }
+}
 $frontendRoot = Join-Path $repoRoot 'frontend'
+$cacheRegressionScript = Join-Path $PSScriptRoot 'test_onnx01_skill_workflow_cache.ps1'
 $evidenceRoot = Join-Path $repoRoot 'evidence\onnx01'
 $evidencePath = Join-Path $evidenceRoot 'acceptance.json'
 $skillSha = '964481ed1609f87904ba9e08890bffc0a10c3fd4'
+$skillWorkflowUrl = 'https://github.com/maxqstudio/Skill_Workflow.git'
 $startedAt = [DateTimeOffset]::UtcNow
 $oldPythonPath = $env:PYTHONPATH
+$oldPythonDontWriteBytecode = $env:PYTHONDONTWRITEBYTECODE
 $oldLocation = Get-Location
 $gates = [System.Collections.Generic.List[object]]::new()
 $firstFailedGate = $null
+$script:skillWorkflowRootForRun = $null
 
 function Invoke-Gate {
   param(
@@ -56,31 +76,13 @@ function Invoke-Gate {
   return ($exitCode -eq 0)
 }
 
-function Get-SkillWorkflowRoot {
-  if ($SkillWorkflowPath) {
-    $candidate = (Resolve-Path $SkillWorkflowPath).Path
-  } else {
-    $candidate = Join-Path $evidenceRoot ("Skill_Workflow-" + $skillSha)
-    if (-not (Test-Path (Join-Path $candidate '.git'))) {
-      if (Test-Path $candidate) { throw "Pinned Skill Workflow cache path is occupied: $candidate" }
-      New-Item -ItemType Directory -Force -Path $evidenceRoot | Out-Null
-      & git clone --quiet https://github.com/maxqstudio/Skill_Workflow.git $candidate
-      if ($LASTEXITCODE -ne 0) { throw 'Could not clone the pinned Skill Workflow repository.' }
-      & git -C $candidate checkout --quiet $skillSha
-      if ($LASTEXITCODE -ne 0) { throw 'Could not check out the pinned Skill Workflow commit.' }
-    }
-  }
-
-  $observed = (& git -C $candidate rev-parse HEAD).Trim()
-  if ($LASTEXITCODE -ne 0 -or $observed -ne $skillSha) {
-    throw "Skill Workflow pin mismatch: expected $skillSha, observed $observed"
-  }
-  return $candidate
-}
-
 try {
   Set-Location $repoRoot
   $env:PYTHONPATH = Join-Path $repoRoot 'backend'
+  # Keep the pinned Skill Workflow checkout immutable across repeated runs.
+  # Python self-tests execute from that checkout and otherwise may leave
+  # untracked __pycache__ files that make the next cache identity check fail.
+  $env:PYTHONDONTWRITEBYTECODE = '1'
 
   $head = (& git rev-parse HEAD).Trim()
   if ($LASTEXITCODE -ne 0) { throw 'Cannot resolve candidate HEAD.' }
@@ -97,6 +99,26 @@ try {
     Write-Output 'Candidate worktree is clean.'
   }
   if (-not $cleanGate) { $firstFailedGate = 'CANDIDATE_CLEAN' }
+
+  if (-not $firstFailedGate) {
+    $g = Invoke-Gate -Name 'SKILL_WORKFLOW_CACHE' -Command "resolve the worktree-local Skill Workflow cache at $skillSha before document scans" -Action {
+      $script:skillWorkflowRootForRun = Resolve-Onnx01SkillWorkflowRoot `
+        -RepositoryRoot $repoRoot `
+        -SkillWorkflowSha $skillSha `
+        -RepositoryUrl $skillWorkflowUrl `
+        -SkillWorkflowPath $SkillWorkflowPath
+      Write-Output "Pinned Skill Workflow checkout verified at $script:skillWorkflowRootForRun."
+    }
+    if (-not $g) { $firstFailedGate = 'SKILL_WORKFLOW_CACHE' }
+  }
+
+  if (-not $firstFailedGate) {
+    $g = Invoke-Gate -Name 'SKILL_CACHE_REGRESSION' -Command 'powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test_onnx01_skill_workflow_cache.ps1' -Action {
+      & powershell -NoProfile -ExecutionPolicy Bypass -File $cacheRegressionScript
+      if ($LASTEXITCODE -ne 0) { throw "Skill cache regression exit $LASTEXITCODE" }
+    }
+    if (-not $g) { $firstFailedGate = 'SKILL_CACHE_REGRESSION' }
+  }
 
   if (-not $firstFailedGate) {
     $g = Invoke-Gate -Name 'DIFF_CHECK' -Command 'git diff --check origin/main...HEAD' -Action {
@@ -164,7 +186,8 @@ try {
 
   if (-not $firstFailedGate) {
     $g = Invoke-Gate -Name 'SKILL_WORKFLOW_PROVENANCE' -Command 'verify pinned Skill Workflow tools at 964481ed1609f87904ba9e08890bffc0a10c3fd4' -Action {
-      $skillRoot = Get-SkillWorkflowRoot
+      $skillRoot = $script:skillWorkflowRootForRun
+      if (-not $skillRoot) { throw 'The verified Skill Workflow cache was not resolved before governance validation.' }
       $upstream = @(Get-ChildItem (Join-Path $skillRoot 'scripts\*.py') | Where-Object { $_.Name -notin @('initialize_project_truth.py', 'selftest_project_truth_compiler.py') })
       if ($upstream.Count -ne 21) { throw "Unexpected pinned Skill Workflow tool count: $($upstream.Count)" }
       foreach ($file in $upstream) {
@@ -180,7 +203,7 @@ try {
   }
 
   if (-not $firstFailedGate) {
-    $skillRoot = Get-SkillWorkflowRoot
+    $skillRoot = $script:skillWorkflowRootForRun
     foreach ($skillTest in @(
       @{ name = 'STRICT_SELFTEST'; script = 'selftest_strict_project_workflow.py' },
       @{ name = 'PROJECT_TRUTH_COMPILER_SELFTEST'; script = 'selftest_project_truth_compiler.py' },
@@ -232,6 +255,8 @@ try {
 } finally {
   if ($null -eq $oldPythonPath) { Remove-Item Env:PYTHONPATH -ErrorAction SilentlyContinue }
   else { $env:PYTHONPATH = $oldPythonPath }
+  if ($null -eq $oldPythonDontWriteBytecode) { Remove-Item Env:PYTHONDONTWRITEBYTECODE -ErrorAction SilentlyContinue }
+  else { $env:PYTHONDONTWRITEBYTECODE = $oldPythonDontWriteBytecode }
   Set-Location $oldLocation
 }
 
@@ -253,8 +278,15 @@ $report = [ordered]@{
   runtime_boundary = 'No Owner PC, MT5, dataset intake, scientific execution, model training/scoring, ONNX export, or ONNX runtime was performed.'
 }
 $json = $report | ConvertTo-Json -Depth 10
-[System.IO.File]::WriteAllText($evidencePath, $json + [Environment]::NewLine, [System.Text.UTF8Encoding]::new($false))
+$timestamp = $startedAt.UtcDateTime.ToString('yyyyMMddTHHmmss.fffZ')
+$timestampedEvidencePath = Join-Path $evidenceRoot ("acceptance-$timestamp.json")
+if (Test-Path -LiteralPath $timestampedEvidencePath) {
+  $timestampedEvidencePath = Join-Path $evidenceRoot ("acceptance-$timestamp-" + [Guid]::NewGuid().ToString('N') + '.json')
+}
+$evidenceContent = $json + [Environment]::NewLine
+[System.IO.File]::WriteAllText($timestampedEvidencePath, $evidenceContent, [System.Text.UTF8Encoding]::new($false))
+[System.IO.File]::WriteAllText($evidencePath, $evidenceContent, [System.Text.UTF8Encoding]::new($false))
 $failedGateLabel = if ($firstFailedGate) { $firstFailedGate } else { 'NONE' }
-Write-Host ("ACCEPTANCE={0}; FIRST_FAILED_GATE={1}; EVIDENCE={2}" -f $report.status, $failedGateLabel, $evidencePath)
+Write-Host ("ACCEPTANCE={0}; FIRST_FAILED_GATE={1}; EVIDENCE={2}; TIMESTAMPED_EVIDENCE={3}" -f $report.status, $failedGateLabel, $evidencePath, $timestampedEvidencePath)
 if ($firstFailedGate) { exit 1 }
 exit 0

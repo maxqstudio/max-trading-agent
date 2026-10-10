@@ -766,7 +766,7 @@
       "file": "scripts/accept_onnx01.ps1",
       "is_test": false,
       "language": "PowerShell",
-      "lines": 260
+      "lines": 292
     },
     {
       "directory": "scripts",
@@ -837,6 +837,13 @@
       "is_test": false,
       "language": "Python",
       "lines": 142
+    },
+    {
+      "directory": "scripts",
+      "file": "scripts/test_onnx01_skill_workflow_cache.ps1",
+      "is_test": true,
+      "language": "PowerShell",
+      "lines": 251
     },
     {
       "directory": "scripts",
@@ -75941,17 +75948,17 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "5d0bf933917ae0132170666ebb651ce4f4593b04bd4c8e2de4b46df67a8ff56b",
+  "source_digest": "cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b",
   "source_summary": {
-    "files": 128,
+    "files": 129,
     "languages": {
-      "PowerShell": 3,
+      "PowerShell": 4,
       "Python": 100,
       "TypeScript": 5,
       "TypeScript/React": 20
     },
-    "lines": 60961,
-    "test_files": 44
+    "lines": 61244,
+    "test_files": 45
   },
   "tests": [
     "backend/tests/conftest.py",
@@ -75997,6 +76004,7 @@
     "frontend/src/OptimizerPage.test.tsx",
     "frontend/src/ScientistPage.test.tsx",
     "frontend/src/SettingsPage.test.tsx",
-    "frontend/src/onnxApi.test.ts"
+    "frontend/src/onnxApi.test.ts",
+    "scripts/test_onnx01_skill_workflow_cache.ps1"
   ]
 }

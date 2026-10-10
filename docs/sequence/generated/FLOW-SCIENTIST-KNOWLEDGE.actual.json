@@ -979,7 +979,7 @@
       "locator": "backend/max_backend/scientist_store.py::scientist_database_status"
     }
   ],
-  "observed_head": "5954300fe1e07b0f6cef3870f886d55969df3fdf",
+  "observed_head": "eee1959d61b272d838d397be27e51c6781c750c4",
   "schema_version": 1,
-  "source_digest": "5d0bf933917ae0132170666ebb651ce4f4593b04bd4c8e2de4b46df67a8ff56b"
+  "source_digest": "cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b"
 }

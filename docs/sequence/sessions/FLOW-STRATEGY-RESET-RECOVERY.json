@@ -14,7 +14,7 @@
       "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
     ],
     "graph": "docs/sequence/generated/FLOW-STRATEGY-RESET-RECOVERY.actual.json",
-    "source_digest": "5d0bf933917ae0132170666ebb651ce4f4593b04bd4c8e2de4b46df67a8ff56b"
+    "source_digest": "cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b"
   },
   "critical": true,
   "implementation_base_sha": "e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d",
