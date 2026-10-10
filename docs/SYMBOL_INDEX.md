@@ -3,7 +3,7 @@
 # SYMBOL INDEX
 
 Authority SHA: external final acceptance evidence
-Source digest: eca30bb1e1abff5c3c87df344aa020bce0645cc07a90fb4e426d615d9b0863bf
+Source digest: 1b10cbe5840440fc0a4a4b851370d6bdb282bde43bc872fa1993b2597790c27d
 Status: CURRENT
 
 | File | Symbol | Kind | Lines@SHA | Responsibility | Reads/Writes | Called By | Tests |
@@ -783,6 +783,7 @@ Status: CURRENT
 | backend/max_backend/workflow_store.py | delete_backtest_row | function | 576-585 | Observed Python symbol | | | |
 | backend/max_backend/workflow_store.py | delete_challenger_row | function | 588-597 | Observed Python symbol | | | |
 | backend/tests/conftest.py | isolate_max_rebuild_local_appdata | function | 9-17 | Observed Python symbol | | | |
+| backend/tests/test_launcher_process_supervision.py | test_windows_launcher_captures_early_exit_and_timeout_diagnostics | function | 16-32 | Observed Python symbol | | | |
 | backend/tests/test_m00_foundation.py | _fake_install | function | 17-24 | Observed Python symbol | | | |
 | backend/tests/test_m00_foundation.py | _fake_data_root | function | 27-34 | Observed Python symbol | | | |
 | backend/tests/test_m00_foundation.py | test_fresh_database_bootstrap_records_current_strategy_epoch | function | 38-56 | Observed Python symbol | | | |
