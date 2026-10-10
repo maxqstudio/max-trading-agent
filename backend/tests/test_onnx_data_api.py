@@ -470,3 +470,46 @@ def test_api_has_no_training_or_scientific_mutation_routes() -> None:
         ("/api/v2/onnx/data/snapshots/{snapshot_id}/resolve-identical-duplicates", "POST"),
         ("/api/v2/onnx/data/windows/validate", "POST"),
     }
+
+def test_one_click_preflight_without_timezone_keeps_scientific_gate_blocked(tmp_path: Path) -> None:
+    """Source discovery is automatic; missing broker timezone cannot become DATA_READY."""
+    service = _service(tmp_path)
+    original = (service.common_files_root / "Max_MTF_Training.csv").read_bytes()
+
+    async def scenario() -> None:
+        async with _client(service) as client:
+            preflight = await client.post("/api/v2/onnx/data/preflight", json={})
+            assert preflight.status_code == 200
+            body = preflight.json()
+            assert body["source_identity"]["filename"] == "Max_MTF_Training.csv"
+            assert body["status"] == "PREFLIGHT_BLOCKED"
+            assert body["snapshot_permitted"] is True
+            assert body["data_quality"]["timezone_provenance"] is None
+            assert body["first_blocker"] == "TIMEZONE_PROVENANCE_REQUIRED"
+
+            created = await client.post(
+                "/api/v2/onnx/data/snapshots",
+                json={"expected_source_sha256": body["source_identity"]["sha256"], "confirmed": True},
+            )
+            assert created.status_code == 200
+            assert created.json()["snapshot"]["dq_status"] == "BLOCKED"
+            assert created.json()["snapshot"]["timezone_provenance"] is None
+            workspace = (await client.get("/api/v2/onnx/data/workspace")).json()
+            assert workspace["real_data_readiness"] == "NOT_PROVEN"
+            assert workspace["readiness_evidence"] is None
+
+    _run(scenario())
+    assert (service.common_files_root / "Max_MTF_Training.csv").read_bytes() == original
+
+
+def test_missing_canonical_file_reports_404_not_timezone_form_error(tmp_path: Path) -> None:
+    service = _service(tmp_path)
+    (service.common_files_root / "Max_MTF_Training.csv").unlink()
+
+    async def scenario() -> None:
+        async with _client(service) as client:
+            result = await client.post("/api/v2/onnx/data/preflight", json={})
+            assert result.status_code == 404
+            assert result.json()["detail"]["code"] == "SOURCE_MISSING"
+
+    _run(scenario())

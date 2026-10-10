@@ -671,11 +671,11 @@ export function fetchOnnxDataWorkspace(signal?: AbortSignal) {
   return request('/api/v2/onnx/data/workspace', parseOnnxDataWorkspace, { method: 'GET', signal })
 }
 
-export function preflightOnnxData(payload: { source_path?: string; timezone_provenance: string }) {
+export function preflightOnnxData(payload: { source_path?: string; timezone_provenance?: string } = {}) {
   return request('/api/v2/onnx/data/preflight', parseOnnxDataPreflight, { method: 'POST', body: JSON.stringify(payload) })
 }
 
-export function createOnnxSnapshot(payload: { source_path?: string; timezone_provenance: string; expected_source_sha256: string; confirmed: true }) {
+export function createOnnxSnapshot(payload: { source_path?: string; timezone_provenance?: string; expected_source_sha256: string; confirmed: true }) {
   return request('/api/v2/onnx/data/snapshots', parseSnapshotOperation, { method: 'POST', body: JSON.stringify(payload) })
 }
 

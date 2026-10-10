@@ -76,7 +76,7 @@ class OnnxDataService:
         ):
             raise OnnxDataSourceError("WINDOW_CONFIG_IDENTITY_MISMATCH", "Persisted research-window configuration does not match its immutable snapshot identity.")
 
-    def preflight(self, *, source_path: str | None, timezone_provenance: str) -> dict[str, Any]:
+    def preflight(self, *, source_path: str | None, timezone_provenance: str | None) -> dict[str, Any]:
         authority = self._authority()
         capture, report = capture_training_source(
             source_path,
@@ -105,7 +105,7 @@ class OnnxDataService:
         self,
         *,
         source_path: str | None,
-        timezone_provenance: str,
+        timezone_provenance: str | None,
         expected_source_sha256: str,
     ) -> dict[str, Any]:
         if len(expected_source_sha256) != 64:

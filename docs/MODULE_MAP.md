@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: eca30bb1e1abff5c3c87df344aa020bce0645cc07a90fb4e426d615d9b0863bf
+Source digest: 229eaceb3ec244dcb6eaf2218a2a6087e73152bf043878c65f4fa2c4877d195a
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -86,7 +86,7 @@ Generated/refreshed: current compiler run
 | backend/tests/test_m07_true_mtf.py | Python | 245 | backend/tests | YES |
 | backend/tests/test_m08_strategy_results.py | Python | 2465 | backend/tests | YES |
 | backend/tests/test_onnx00_governance_contracts.py | Python | 1326 | backend/tests | YES |
-| backend/tests/test_onnx_data_api.py | Python | 472 | backend/tests | YES |
+| backend/tests/test_onnx_data_api.py | Python | 515 | backend/tests | YES |
 | backend/tests/test_onnx_data_intake.py | Python | 426 | backend/tests | YES |
 | backend/tests/test_optimizer_draft.py | Python | 150 | backend/tests | YES |
 | backend/tests/test_optimizer_frame_finalization.py | Python | 46 | backend/tests | YES |
@@ -99,7 +99,7 @@ Generated/refreshed: current compiler run
 | backend/tests/test_strategy_workspace_reset.py | Python | 316 | backend/tests | YES |
 | frontend/src/ActionControls.test.tsx | TypeScript/React | 47 | frontend/src | YES |
 | frontend/src/ActionControls.tsx | TypeScript/React | 86 | frontend/src | NO |
-| frontend/src/App.test.tsx | TypeScript/React | 319 | frontend/src | YES |
+| frontend/src/App.test.tsx | TypeScript/React | 320 | frontend/src | YES |
 | frontend/src/App.tsx | TypeScript/React | 461 | frontend/src | NO |
 | frontend/src/ArtifactsPage.test.tsx | TypeScript/React | 343 | frontend/src | YES |
 | frontend/src/ArtifactsPage.tsx | TypeScript/React | 778 | frontend/src | NO |
@@ -109,8 +109,8 @@ Generated/refreshed: current compiler run
 | frontend/src/ChampionPage.tsx | TypeScript/React | 175 | frontend/src | NO |
 | frontend/src/DataTable.test.tsx | TypeScript/React | 122 | frontend/src | YES |
 | frontend/src/DataTable.tsx | TypeScript/React | 145 | frontend/src | NO |
-| frontend/src/OnnxDataIntake.test.tsx | TypeScript/React | 145 | frontend/src | YES |
-| frontend/src/OnnxDataIntake.tsx | TypeScript/React | 325 | frontend/src | NO |
+| frontend/src/OnnxDataIntake.test.tsx | TypeScript/React | 176 | frontend/src | YES |
+| frontend/src/OnnxDataIntake.tsx | TypeScript/React | 335 | frontend/src | NO |
 | frontend/src/OnnxWorkspace.tsx | TypeScript/React | 334 | frontend/src | NO |
 | frontend/src/OptimizerPage.test.tsx | TypeScript/React | 1325 | frontend/src | YES |
 | frontend/src/OptimizerPage.tsx | TypeScript/React | 1494 | frontend/src | NO |

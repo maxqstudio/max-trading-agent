@@ -97,20 +97,21 @@ describe('ONNX Data Intake controls', () => {
     vi.stubGlobal('fetch', fetchMock)
     render(<OnnxDataIntake />)
     await screen.findByRole('heading', { name: 'Data Intake' })
-    await waitFor(() => expect(screen.getByText('NO_IMMUTABLE_SNAPSHOT')).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText('Belum diperiksa')).toBeInTheDocument())
 
-    fireEvent.change(screen.getByLabelText(/Timestamp timezone\/source provenance/), {
+    fireEvent.click(screen.getByText('Pengaturan lanjutan'))
+    fireEvent.change(screen.getByLabelText(/Provenance waktu broker/), {
       target: { value: 'Owner-declared broker server time; UTC offset not independently verified' },
     })
-    fireEvent.click(screen.getByRole('button', { name: /Read-only source preflight/i }))
-    expect(screen.getByRole('status')).toHaveTextContent(/Checking lock, identity, schema and DQ/i)
+    fireEvent.click(screen.getByRole('button', { name: /Periksa Data/i }))
+    expect(screen.getByText('Memeriksa…')).toBeInTheDocument()
     expect(document.querySelector('.button-spinner')).toBeInTheDocument()
 
     releasePreflight?.(response(validPreflight()))
-    expect(await screen.findByText(/Backend preflight: PREFLIGHT_PASS/)).toBeInTheDocument()
-    fireEvent.click(screen.getByLabelText(/I reviewed this source hash/))
-    fireEvent.click(screen.getByRole('button', { name: /Create immutable snapshot/i }))
-    expect(await screen.findByText(/Backend result: SYNTHETIC_TEST_EVIDENCE/)).toBeInTheDocument()
+    expect(await screen.findByText(/6 baris/)).toBeInTheDocument()
+    fireEvent.click(screen.getByLabelText(/Saya menyetujui pembuatan snapshot/))
+    fireEvent.click(screen.getByRole('button', { name: /Simpan snapshot/i }))
+    expect(await screen.findByText(/Penyimpanan snapshot selesai/)).toBeInTheDocument()
     expect(await screen.findByText(`SNP-${hash('a')}`)).toBeInTheDocument()
 
     const snapshotCall = calls.find((call) => call.url.endsWith('/snapshots') && call.init?.method === 'POST')
@@ -134,12 +135,42 @@ describe('ONNX Data Intake controls', () => {
     vi.stubGlobal('fetch', fetchMock)
     render(<OnnxDataIntake />)
     expect(await screen.findByText(existing.snapshot_id)).toBeInTheDocument()
-    fireEvent.change(screen.getByLabelText(/Timestamp timezone\/source provenance/), {
-      target: { value: 'Owner-declared broker server time' },
-    })
-    fireEvent.click(screen.getByRole('button', { name: /Read-only source preflight/i }))
+    fireEvent.click(screen.getByRole('button', { name: /Periksa Data/i }))
     expect(await screen.findByRole('alert')).toHaveTextContent(/unsupported contract identity/i)
     await waitFor(() => expect(screen.queryByText(existing.snapshot_id)).not.toBeInTheDocument())
     expect(preflightCalled).toBe(true)
+  })
+})
+
+describe('One-click owner workflow', () => {
+  it('enables default-source inspection with no manual path or timezone and keeps readiness unproven', async () => {
+    const calls: Array<{ url: string; init?: RequestInit }> = []
+    const pendingProvenance = {
+      ...validPreflight(),
+      status: 'PREFLIGHT_BLOCKED',
+      data_quality: {
+        ...dq(), status: 'BLOCKED', timezone_provenance: null,
+        issues: [{ code: 'TIMEZONE_PROVENANCE_REQUIRED', message: 'Source time zone is not verified.', severity: 'BLOCKER' }],
+      },
+      first_blocker: 'TIMEZONE_PROVENANCE_REQUIRED',
+    }
+    vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input)
+      calls.push({ url, init })
+      if (url.endsWith('/workspace')) return Promise.resolve(response(workspace()))
+      if (url.endsWith('/preflight')) return Promise.resolve(response(pendingProvenance))
+      throw new Error(`unexpected request ${url}`)
+    }))
+    render(<OnnxDataIntake />)
+    const inspect = await screen.findByRole('button', { name: 'Periksa Data' })
+    await waitFor(() => expect(inspect).toBeEnabled())
+    expect(screen.getByText('Belum diperiksa')).toBeInTheDocument()
+    expect(screen.getByText('Max_MTF_Training.csv')).toBeInTheDocument()
+    fireEvent.click(inspect)
+    expect(await screen.findByText('Data ditemukan')).toBeInTheDocument()
+    expect(screen.getByText(/Zona waktu broker belum terverifikasi/)).toBeInTheDocument()
+    const submitted = calls.find((call) => call.url.endsWith('/preflight'))
+    expect(JSON.parse(String(submitted?.init?.body))).toEqual({})
+    expect(screen.queryByText('DATA_READY')).not.toBeInTheDocument()
   })
 })

@@ -236,8 +236,9 @@ describe('MAX Rebuild shell recovery', () => {
 
     fireEvent.click(within(onnxNav).getByRole('button', { name: 'Data Intake' }))
     expect(await screen.findByRole('heading', { name: 'Data Intake' })).toBeInTheDocument()
-    expect(screen.getByText('NO_IMMUTABLE_SNAPSHOT')).toBeInTheDocument()
-    expect(screen.getByText(/do not run scientific evaluation/i)).toBeInTheDocument()
+    expect(screen.getByText('Belum diperiksa')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Periksa Data' })).toBeEnabled()
+    expect(screen.getByRole('heading', { name: 'Sumber data' })).toBeInTheDocument()
 
     fireEvent.click(within(onnxNav).getByRole('button', { name: 'Discovery' }))
     expect(await screen.findByRole('heading', { name: 'Discovery' })).toBeInTheDocument()

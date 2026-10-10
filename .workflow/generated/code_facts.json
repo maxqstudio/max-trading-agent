@@ -563,7 +563,7 @@
       "file": "backend/tests/test_onnx_data_api.py",
       "is_test": true,
       "language": "Python",
-      "lines": 472
+      "lines": 515
     },
     {
       "directory": "backend/tests",
@@ -654,7 +654,7 @@
       "file": "frontend/src/App.test.tsx",
       "is_test": true,
       "language": "TypeScript/React",
-      "lines": 319
+      "lines": 320
     },
     {
       "directory": "frontend/src",
@@ -724,14 +724,14 @@
       "file": "frontend/src/OnnxDataIntake.test.tsx",
       "is_test": true,
       "language": "TypeScript/React",
-      "lines": 145
+      "lines": 176
     },
     {
       "directory": "frontend/src",
       "file": "frontend/src/OnnxDataIntake.tsx",
       "is_test": false,
       "language": "TypeScript/React",
-      "lines": 325
+      "lines": 335
     },
     {
       "directory": "frontend/src",
@@ -52714,6 +52714,70 @@
       "target_token": "path.startswith"
     },
     {
+      "caller": "backend/tests/test_onnx_data_api.py::test_one_click_preflight_without_timezone_keeps_scientific_gate_blocked",
+      "target_token": "_service"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_one_click_preflight_without_timezone_keeps_scientific_gate_blocked.scenario",
+      "target_token": "_client"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_one_click_preflight_without_timezone_keeps_scientific_gate_blocked.scenario",
+      "target_token": "client.post"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_one_click_preflight_without_timezone_keeps_scientific_gate_blocked.scenario",
+      "target_token": "preflight.json"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_one_click_preflight_without_timezone_keeps_scientific_gate_blocked.scenario",
+      "target_token": "client.post"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_one_click_preflight_without_timezone_keeps_scientific_gate_blocked.scenario",
+      "target_token": "created.json"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_one_click_preflight_without_timezone_keeps_scientific_gate_blocked.scenario",
+      "target_token": "created.json"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_one_click_preflight_without_timezone_keeps_scientific_gate_blocked.scenario",
+      "target_token": "client.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_one_click_preflight_without_timezone_keeps_scientific_gate_blocked",
+      "target_token": "_run"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_one_click_preflight_without_timezone_keeps_scientific_gate_blocked",
+      "target_token": "scenario"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_missing_canonical_file_reports_404_not_timezone_form_error",
+      "target_token": "_service"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_missing_canonical_file_reports_404_not_timezone_form_error.scenario",
+      "target_token": "_client"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_missing_canonical_file_reports_404_not_timezone_form_error.scenario",
+      "target_token": "client.post"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_missing_canonical_file_reports_404_not_timezone_form_error.scenario",
+      "target_token": "result.json"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_missing_canonical_file_reports_404_not_timezone_form_error",
+      "target_token": "_run"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_missing_canonical_file_reports_404_not_timezone_form_error",
+      "target_token": "scenario"
+    },
+    {
       "caller": "backend/tests/test_onnx_data_intake.py::_row",
       "target_token": "str"
     },
@@ -78625,6 +78689,38 @@
       "symbol": "test_api_has_no_training_or_scientific_mutation_routes"
     },
     {
+      "file": "backend/tests/test_onnx_data_api.py",
+      "kind": "function",
+      "line_end": 502,
+      "line_start": 474,
+      "locator": "backend/tests/test_onnx_data_api.py::test_one_click_preflight_without_timezone_keeps_scientific_gate_blocked",
+      "symbol": "test_one_click_preflight_without_timezone_keeps_scientific_gate_blocked"
+    },
+    {
+      "file": "backend/tests/test_onnx_data_api.py",
+      "kind": "async_method",
+      "line_end": 499,
+      "line_start": 479,
+      "locator": "backend/tests/test_onnx_data_api.py::test_one_click_preflight_without_timezone_keeps_scientific_gate_blocked.scenario",
+      "symbol": "test_one_click_preflight_without_timezone_keeps_scientific_gate_blocked.scenario"
+    },
+    {
+      "file": "backend/tests/test_onnx_data_api.py",
+      "kind": "function",
+      "line_end": 515,
+      "line_start": 505,
+      "locator": "backend/tests/test_onnx_data_api.py::test_missing_canonical_file_reports_404_not_timezone_form_error",
+      "symbol": "test_missing_canonical_file_reports_404_not_timezone_form_error"
+    },
+    {
+      "file": "backend/tests/test_onnx_data_api.py",
+      "kind": "async_method",
+      "line_end": 513,
+      "line_start": 509,
+      "locator": "backend/tests/test_onnx_data_api.py::test_missing_canonical_file_reports_404_not_timezone_form_error.scenario",
+      "symbol": "test_missing_canonical_file_reports_404_not_timezone_form_error.scenario"
+    },
+    {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
       "line_end": 49,
@@ -81026,7 +81122,7 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "eca30bb1e1abff5c3c87df344aa020bce0645cc07a90fb4e426d615d9b0863bf",
+  "source_digest": "229eaceb3ec244dcb6eaf2218a2a6087e73152bf043878c65f4fa2c4877d195a",
   "source_summary": {
     "files": 141,
     "languages": {
@@ -81035,7 +81131,7 @@
       "TypeScript": 7,
       "TypeScript/React": 22
     },
-    "lines": 65644,
+    "lines": 65729,
     "test_files": 49
   },
   "tests": [

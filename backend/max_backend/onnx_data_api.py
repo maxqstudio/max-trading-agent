@@ -24,7 +24,7 @@ class StrictRequest(BaseModel):
 
 class SourcePreflightRequest(StrictRequest):
     source_path: str | None = Field(default=None, min_length=1, max_length=1024)
-    timezone_provenance: str = Field(min_length=1, max_length=160)
+    timezone_provenance: str | None = Field(default=None, min_length=1, max_length=160)
 
     @field_validator("source_path")
     @classmethod
