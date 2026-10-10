@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a
+Source digest: 5d0bf933917ae0132170666ebb651ce4f4593b04bd4c8e2de4b46df67a8ff56b
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -110,8 +110,8 @@ Generated/refreshed: current compiler run
 | frontend/src/SettingsPage.test.tsx | TypeScript/React | 159 | frontend/src | YES |
 | frontend/src/SettingsPage.tsx | TypeScript/React | 613 | frontend/src | NO |
 | frontend/src/main.tsx | TypeScript/React | 10 | frontend/src | NO |
-| frontend/src/onnxApi.test.ts | TypeScript | 29 | frontend/src | YES |
-| frontend/src/onnxApi.ts | TypeScript | 180 | frontend/src | NO |
+| frontend/src/onnxApi.test.ts | TypeScript | 346 | frontend/src | YES |
+| frontend/src/onnxApi.ts | TypeScript | 290 | frontend/src | NO |
 | frontend/src/tableFormat.ts | TypeScript | 6 | frontend/src | NO |
 | frontend/src/testSetup.ts | TypeScript | 1 | frontend/src | NO |
 | frontend/vite.config.ts | TypeScript | 18 | frontend | NO |

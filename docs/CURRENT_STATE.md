@@ -18,7 +18,7 @@ Branch: codex/onnx-01-workspace-shell
 Authoritative SHA: external final acceptance evidence
 Last accepted SHA: c75f978ea4438183e6a759d398eb69b3eeca9ac4
 Current candidate SHA: external final acceptance evidence
-Current source digest: 41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a
+Current source digest: 5d0bf933917ae0132170666ebb651ce4f4593b04bd4c8e2de4b46df67a8ff56b
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
@@ -36,7 +36,7 @@ PROJECT_DOCS_SYNC: PASS
 Sequence policy: REQUIRED
 Current sequence mode: DURING
 Current sequence session: FLOW-ONNX-WORKSPACE
-SEQUENCE_SYNC: PASS: 9 DURING/CURRENT source-grounded sessions, including FLOW-ONNX-WORKSPACE, regenerated at source digest 41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a; 0 unresolved bindings. This is static/source evidence only, not a runtime trace.
+SEQUENCE_SYNC: PASS: 9 DURING/CURRENT source-grounded sessions, including FLOW-ONNX-WORKSPACE, regenerated at source digest 5d0bf933917ae0132170666ebb651ce4f4593b04bd4c8e2de4b46df67a8ff56b; 0 unresolved bindings. This is static/source evidence only, not a runtime trace.
 
 ## Proven
 - Starting GitHub main is 203f6ab3dc618e3edd247841aa25e1fa0951a19a; Windows CI run 37964999480 completed with conclusion success on that exact SHA.

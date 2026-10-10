@@ -219,6 +219,20 @@
       "to": "backend/max_backend/mtf_geometry.py::assert_geometry_matches_main"
     },
     {
+      "action": "CHALLENGER_ARTIFACT_ROOT.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle",
+      "resolver": "python_ast",
+      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
+      "action": "LEGACY_CHALLENGER_ARTIFACT_ROOT.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_bundle.py::verify_challenger_bundle",
+      "resolver": "python_ast",
+      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
       "action": "_format_fixed_value",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_bundle.py::verify_geometry_set",
@@ -324,11 +338,39 @@
       "to": "backend/max_backend/optimizer_core.py::read_ea_optimizer_defaults"
     },
     {
+      "action": "expert_root.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_deployment.py::_deployment_paths",
+      "resolver": "python_ast",
+      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
+      "action": "path.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_deployment.py::_path_identity",
+      "resolver": "python_ast",
+      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
       "action": "_deployment_paths",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_deployment.py::challenger_deployment_directory",
       "resolver": "python_ast",
       "to": "backend/max_backend/challenger_deployment.py::_deployment_paths"
+    },
+    {
+      "action": "stage_root.parent.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_deployment.py::cleanup_challenger_staging_root",
+      "resolver": "python_ast",
+      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
+      "action": "stage_root.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_deployment.py::cleanup_challenger_staging_root",
+      "resolver": "python_ast",
+      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "challenger_deployment_directory",
@@ -345,6 +387,13 @@
       "to": "backend/max_backend/challenger_deployment.py::verify_challenger_deployment"
     },
     {
+      "action": "expert_root.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_deployment.py::new_challenger_staging_root",
+      "resolver": "python_ast",
+      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
       "action": "_deployment_paths",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_deployment.py::quarantine_challenger_deployment",
@@ -359,11 +408,39 @@
       "to": "backend/max_backend/challenger_deployment.py::verify_challenger_deployment"
     },
     {
+      "action": "quarantine_path.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_deployment.py::quarantine_challenger_deployment",
+      "resolver": "python_ast",
+      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
+      "action": "staging_root.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_deployment.py::quarantine_challenger_deployment",
+      "resolver": "python_ast",
+      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
       "action": "_path_identity",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_deployment.py::resolve_frozen_mt5_expert_root",
       "resolver": "python_ast",
       "to": "backend/max_backend/challenger_deployment.py::_path_identity"
+    },
+    {
+      "action": "CHALLENGER_ARTIFACT_ROOT.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_bundle_paths",
+      "resolver": "python_ast",
+      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
+      "action": "LEGACY_CHALLENGER_ARTIFACT_ROOT.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::_bundle_paths",
+      "resolver": "python_ast",
+      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "cleanup_challenger_staging_root",
@@ -541,6 +618,20 @@
       "to": "backend/max_backend/challenger_operations_store.py::retire_registry_row"
     },
     {
+      "action": "ROOT.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::retire_challenger",
+      "resolver": "python_ast",
+      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
+      "action": "evidence.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::retire_challenger",
+      "resolver": "python_ast",
+      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
       "action": "parse_mt5_backtest_report",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
@@ -630,6 +721,27 @@
       "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
       "resolver": "python_ast",
       "to": "backend/max_backend/challenger_operations_store.py::update_backtest"
+    },
+    {
+      "action": "ROOT.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "resolver": "python_ast",
+      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
+      "action": "evidence.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "resolver": "python_ast",
+      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
+    },
+    {
+      "action": "staged_report.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
+      "resolver": "python_ast",
+      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "_backtest_schema_ready",
@@ -903,6 +1015,13 @@
       "from": "backend/max_backend/mt5.py::detect_mt5",
       "resolver": "python_ast",
       "to": "backend/max_backend/mt5.py::_unavailable"
+    },
+    {
+      "action": "terminal.parent.resolve",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/mt5.py::detect_mt5",
+      "resolver": "python_ast",
+      "to": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
     },
     {
       "action": "resolve_strategy_geometry",
@@ -1760,9 +1879,18 @@
       "line_end": 92,
       "line_start": 28,
       "locator": "backend/max_backend/scientist_store.py::migrate_m05"
+    },
+    {
+      "id": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve",
+      "kind": "function",
+      "label": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve",
+      "language": "Python",
+      "line_end": 28,
+      "line_start": 26,
+      "locator": "evidence/onnx01/Skill_Workflow-964481ed1609f87904ba9e08890bffc0a10c3fd4/scripts/validate_sequence_contract.py::resolve"
     }
   ],
-  "observed_head": "5fc9e82160ce5e9c8a76bca338caa42154580763",
+  "observed_head": "5954300fe1e07b0f6cef3870f886d55969df3fdf",
   "schema_version": 1,
-  "source_digest": "41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a"
+  "source_digest": "5d0bf933917ae0132170666ebb651ce4f4593b04bd4c8e2de4b46df67a8ff56b"
 }

@@ -7,7 +7,7 @@
 ONNX-00 is closed as accepted planning authority against main c75f978ea4438183e6a759d398eb69b3eeca9ac4 and tree de1eba7dc91cef12843780e9ef2fa70275422a12, with Control Room acceptance and post-merge Windows CI run 38012160408 PASS. ONNX-01 is IN_PROGRESS on codex/onnx-01-workspace-shell from that accepted parent and is limited to the read-only workspace shell/API-state skeleton. No operational cycle/store, dataset scan/snapshot, training/scoring, ONNX export/runtime, scientific result, MT5, or Owner-PC access is claimed. Exact ONNX-01 candidate SHA and hosted CI identity remain external acceptance evidence under D-012.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a
+Current source digest: 5d0bf933917ae0132170666ebb651ce4f4593b04bd4c8e2de4b46df67a8ff56b
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
@@ -81,7 +81,7 @@ ROADMAP_SYNC: PASS
 
 Sequence mode for this phase/session: DURING
 Sequence session contract: FLOW-ONNX-WORKSPACE
-SEQUENCE_SYNC: PASS: 9 DURING/CURRENT source-grounded sessions, including FLOW-ONNX-WORKSPACE, regenerated at source digest 41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a; 0 unresolved bindings. This is static/source evidence only, not a runtime trace.
+SEQUENCE_SYNC: PASS: 9 DURING/CURRENT source-grounded sessions, including FLOW-ONNX-WORKSPACE, regenerated at source digest 5d0bf933917ae0132170666ebb651ce4f4593b04bd4c8e2de4b46df67a8ff56b; 0 unresolved bindings. This is static/source evidence only, not a runtime trace.
 
 ## Project Truth Compiler evidence
 
