@@ -316,7 +316,7 @@ Rationale: The Owner-reported full-range 17D Fast Genetic attempt crashed under 
 
 ## D-040 — ONNX-00 planning authority and frozen V1 universe
 
-Status: CURRENT
+Status: SUPERSEDED
 
 The legacy Research subsystem and legacy R00-R11 roadmap are RETIRED. ONNX-00 establishes the sole future model-research authority as planning/governance only. V1 has exactly six standalone families (lightgbm, xgboost, gru, tcn, transformer, patchtst) and eight hybrids (each of gru, tcn, transformer, patchtst paired separately with lightgbm and xgboost); random_forest, lstm, itransformer, tft, transformer_moe and all other hybrids are excluded. This decision does not authorize ONNX runtime, scientific execution, model training, ONNX export, MT5, Research Challenger creation, or Champion mutation. The complete contracts and ONNX-00..ONNX-09 roadmap are in .workflow/onnx_v1_authority.json.
 
@@ -337,3 +337,19 @@ Status: CURRENT
 The current Optimizer execution authority is merged PR #18 at accepted main SHA 203f6ab3dc618e3edd247841aa25e1fa0951a19a: launch terminal64.exe through subprocess.Popen with the frozen /config INI and let MT5 manage its configured local tester agents. MAX must not impose an external active-process cap or estimated-memory START gate. Reintroducing either control requires a new explicit Owner decision. D-039 is superseded as current execution policy; the historical Windows commit-memory exhaustion remains unresolved and NOT_PROVEN.
 
 Rationale: PR #18 restored the Owner-authorized native MT5 launch and Owner-selected agent behavior. Removing the MAX-owned cap and memory-estimate gate does not prove the reported memory exhaustion is eliminated; source behavior and runtime evidence remain separate.
+
+## D-043 — ONNX V1 Owner model universe expansion and architecture identity
+
+Status: CURRENT
+
+The Owner's Revised ONNX-00 Model Universe Expansion V2 supersedes D-040's 14-family universe and any earlier Transformer-to-iTransformer universe amendment. ONNX V1 has exactly nine standalone identities (lightgbm, xgboost, gru, tcn, itransformer, patchtst, tft, transformer_moe, lstm) and exactly fourteen temporal-to-tree hybrids: each of gru, tcn, itransformer, patchtst, tft, transformer_moe, and lstm paired separately with lightgbm and xgboost. Conventional standalone transformer, random_forest, all other unapproved families, aliases, fallback models, and hybrid compositions are excluded. Each architecture and exact composition has an independent identity and artifact compatibility contract. This is governance/planning authorization only; it grants no runtime, training, scientific execution, ONNX export, Owner-PC, MT5, Challenger creation, or Champion promotion authority. Unresolved architecture-specific parameter, input, early-stopping, hardware, or compatibility contracts fail closed and block ONNX-03 admission until separately complete and frozen.
+
+Rationale: The Owner explicitly selected the 23-family universe and requires genuine architecture identity, source-backed covariates, no hidden aliases, and no unverified runtime claims. D-044 separately records the Owner's proposed ranges without changing this family decision. The earlier 14-family record is retained as history rather than rewritten.
+
+## D-044 — ONNX architecture search proposals and parameter capacity accounting
+
+Status: CURRENT
+
+The Owner V3 addendum supplements current D-043 without changing its exact 9-standalone/14-hybrid universe. The newly provided iTransformer, TFT, Transformer MoE, and LSTM numeric search ranges and patience values are recorded only as PROPOSED_ACTIVE_SEARCH_ENVELOPE, not permanent legal maxima or executable gates, until accepted through the applicable governance process. Existing LightGBM, XGBoost, GRU, TCN, and PatchTST active ranges remain unchanged. Every exact CandidateSpec requires an auditable architecture-specific parameter and memory estimate, with MoE total and active counts separated, tree complexity reported separately, and unknown fields explicitly NOT_APPLICABLE or OPEN_AUTHORITY_GAP. There is no arbitrary permanent trainable-parameter ceiling. No model training, runtime admission, or ONNX compatibility is proven or authorized by this decision.
+
+Rationale: Owner-supplied proposals and structural reference formulas enable transparent capacity planning while preserving the distinction between estimated model size, total training memory, architecture validity, dataset adequacy, and executable authority.

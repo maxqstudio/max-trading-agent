@@ -129,7 +129,7 @@
     {
       "authority": ".workflow/onnx_v1_authority.json plus the explicit Owner ONNX-00 decisions",
       "concern": "onnx_scientific_planning",
-      "meaning": "This is the planning-only source authority for the ONNX V1 family universe, candidate/parameter contracts, stage gates, data/checkpoint boundaries and roadmap. It grants no runtime, training, export, MT5 or promotion permission.",
+      "meaning": "This is the planning-only source authority for the exact 23-family ONNX V1 universe under current Owner decision D-043 (supplemented by D-044 proposals), distinct architecture/composition identities, CandidateSpec/parameter/capacity contracts, stage gates, data/checkpoint boundaries and roadmap. Explicit unresolved authority gaps fail closed before ONNX-03; no runtime, training, export, MT5 or promotion permission is granted.",
       "mutable": true
     },
     {

@@ -191,12 +191,13 @@
     },
     {
       "id": "TRUTH-ONNX-PLANNING-001",
-      "claim": "ONNX-00 defines the future single model-research authority and exact 14-family V1 allowlist as planning-only contracts. No ONNX runtime, real research, model training, ONNX export, Research Challenger, MT5 access, or Champion mutation is implemented or authorized by this phase.",
+      "claim": "ONNX-00 defines the future single model-research authority and exact 23-family V1 allowlist under current Owner decision D-043 as planning-only contracts. D-044 records proposed active envelopes and parameter-capacity accounting without granting executable authority; explicit unresolved architecture/input/hardware/compatibility gaps block ONNX-03. No ONNX runtime, real research, model training, ONNX export, Research Challenger, MT5 access, or Champion mutation is implemented or authorized by this phase.",
       "documents": [
         "docs/onnx/ONNX_00_SCIENTIFIC_AUTHORITY.md"
       ],
       "source_owners": [
         ".workflow/onnx_v1_authority.json",
+        ".workflow/decisions.json",
         ".workflow/roadmap.json",
         ".workflow/state.json"
       ],

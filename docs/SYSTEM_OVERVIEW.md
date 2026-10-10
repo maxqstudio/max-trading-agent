@@ -29,7 +29,7 @@ Users / External Systems
     -> State / Evidence Authorities
     -> External Runtime / Outputs
 
-Observed source inventory: 122 files, 4 language categories.
+Observed source inventory: 123 files, 4 language categories.
 
 ## Major components
 
@@ -195,7 +195,7 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 | documentation | .workflow semantic specs + Project Truth Compiler at Skill Workflow 964481ed1609f87904ba9e08890bffc0a10c3fd4 | Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden. |
 | sequence | DURING-mode generated actual sequence graphs plus source/test/runtime semantic review | Existing implementation is reconstructed from current source; retrospective BEFORE plans are forbidden. |
 | governance_tools | .workflow/tools vendored byte-identically from Skill Workflow 964481ed1609f87904ba9e08890bffc0a10c3fd4 | Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed. |
-| onnx_scientific_planning | .workflow/onnx_v1_authority.json plus the explicit Owner ONNX-00 decisions | This is the planning-only source authority for the ONNX V1 family universe, candidate/parameter contracts, stage gates, data/checkpoint boundaries and roadmap. It grants no runtime, training, export, MT5 or promotion permission. |
+| onnx_scientific_planning | .workflow/onnx_v1_authority.json plus the explicit Owner ONNX-00 decisions | This is the planning-only source authority for the exact 23-family ONNX V1 universe under current Owner decision D-043 (supplemented by D-044 proposals), distinct architecture/composition identities, CandidateSpec/parameter/capacity contracts, stage gates, data/checkpoint boundaries and roadmap. Explicit unresolved authority gaps fail closed before ONNX-03; no runtime, training, export, MT5 or promotion permission is granted. |
 | current_governance_guidance | Latest Skill_Workflow/main normative guidance at 3b3289681cf2cec8d3d132895e0848be64bb54b1 | Latest guidance is consulted for this planning phase. MAX's executable CI validator provenance remains explicitly pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4 until a separately reviewed toolchain migration. |
 
 ## Mutable vs immutable
@@ -219,7 +219,7 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 - corrupt_database_recovery: An unopenable or integrity-failed database disables ordinary APIs; only explicit confirmed backup/quarantine and current-schema bootstrap may restore service.
 - documentation: Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden.
 - sequence: Existing implementation is reconstructed from current source; retrospective BEFORE plans are forbidden.
-- onnx_scientific_planning: This is the planning-only source authority for the ONNX V1 family universe, candidate/parameter contracts, stage gates, data/checkpoint boundaries and roadmap. It grants no runtime, training, export, MT5 or promotion permission.
+- onnx_scientific_planning: This is the planning-only source authority for the exact 23-family ONNX V1 universe under current Owner decision D-043 (supplemented by D-044 proposals), distinct architecture/composition identities, CandidateSpec/parameter/capacity contracts, stage gates, data/checkpoint boundaries and roadmap. Explicit unresolved authority gaps fail closed before ONNX-03; no runtime, training, export, MT5 or promotion permission is granted.
 
 ### Immutable history / evidence
 
@@ -284,7 +284,7 @@ Known blockers:
 - Starting GitHub main is 203f6ab3dc618e3edd247841aa25e1fa0951a19a; Windows CI run 37964999480 completed with conclusion success on that exact SHA.
 - Latest maxqstudio/max_research_agent main was fetched at 883ebeb1ca2e70f6255e0889358ba7c822ac52f5; the 19 authorities listed in the Owner prompt were inspected at that commit.
 - Latest Skill_Workflow/main guidance was fetched at 3b3289681cf2cec8d3d132895e0848be64bb54b1 and applied as normative guidance. MAX executable Windows CI and vendored validator provenance remain pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4; no byte-identity with 3b328968 is claimed.
-- The Owner-frozen ONNX V1 universe is six standalone plus eight exact hybrid families, total 14; excluded families are explicitly recorded in .workflow/onnx_v1_authority.json.
+- Under current Owner decision D-043, the ONNX V1 universe is exactly nine standalone plus fourteen temporal-to-tree hybrid families, total 23; D-044 proposed parameter envelopes remain non-executable until separately accepted.
 - ONNX-00 is planning/governance only. No Owner PC, MT5, real data, model fitting, or ONNX runtime execution has occurred.
 
 ### Not proven

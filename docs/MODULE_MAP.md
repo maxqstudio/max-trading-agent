@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 5f95d01d5d0a3bc99ad45729cc24e53be926ba50e0d3b0815e3f0d5b8643fa19
+Source digest: 4a947282810a23e03392ef40f9ec55db83f08e96361c43c5808ea347aaeca979
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -31,6 +31,7 @@ Generated/refreshed: current compiler run
 | backend/max_backend/main.py | Python | 200 | backend/max_backend | NO |
 | backend/max_backend/mt5.py | Python | 104 | backend/max_backend | NO |
 | backend/max_backend/mtf_geometry.py | Python | 203 | backend/max_backend | NO |
+| backend/max_backend/onnx_parameter_estimation.py | Python | 468 | backend/max_backend | NO |
 | backend/max_backend/optimizer_api.py | Python | 169 | backend/max_backend | NO |
 | backend/max_backend/optimizer_candidates.py | Python | 767 | backend/max_backend | NO |
 | backend/max_backend/optimizer_core.py | Python | 1922 | backend/max_backend | NO |
@@ -78,7 +79,7 @@ Generated/refreshed: current compiler run
 | backend/tests/test_m07_launcher_authority.py | Python | 180 | backend/tests | YES |
 | backend/tests/test_m07_true_mtf.py | Python | 245 | backend/tests | YES |
 | backend/tests/test_m08_strategy_results.py | Python | 2465 | backend/tests | YES |
-| backend/tests/test_onnx00_governance_contracts.py | Python | 245 | backend/tests | YES |
+| backend/tests/test_onnx00_governance_contracts.py | Python | 941 | backend/tests | YES |
 | backend/tests/test_optimizer_draft.py | Python | 146 | backend/tests | YES |
 | backend/tests/test_optimizer_frame_finalization.py | Python | 46 | backend/tests | YES |
 | backend/tests/test_optimizer_reliability.py | Python | 846 | backend/tests | YES |

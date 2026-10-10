@@ -29,34 +29,45 @@
   },
   "model_universe": {
     "version": "ONNX_V1",
+    "owner_decision_id": "D-043",
     "active_standalone_models": [
       "lightgbm",
       "xgboost",
       "gru",
       "tcn",
-      "transformer",
-      "patchtst"
+      "itransformer",
+      "patchtst",
+      "tft",
+      "transformer_moe",
+      "lstm"
     ],
     "active_hybrid_models": [
       "hybrid::gru::lightgbm",
       "hybrid::gru::xgboost",
       "hybrid::tcn::lightgbm",
       "hybrid::tcn::xgboost",
-      "hybrid::transformer::lightgbm",
-      "hybrid::transformer::xgboost",
+      "hybrid::itransformer::lightgbm",
+      "hybrid::itransformer::xgboost",
       "hybrid::patchtst::lightgbm",
-      "hybrid::patchtst::xgboost"
+      "hybrid::patchtst::xgboost",
+      "hybrid::tft::lightgbm",
+      "hybrid::tft::xgboost",
+      "hybrid::transformer_moe::lightgbm",
+      "hybrid::transformer_moe::xgboost",
+      "hybrid::lstm::lightgbm",
+      "hybrid::lstm::xgboost"
     ],
-    "active_family_count": 14,
+    "active_standalone_count": 9,
+    "active_hybrid_count": 14,
+    "active_family_count": 23,
     "excluded_from_v1": [
+      "transformer",
       "random_forest",
-      "lstm",
-      "itransformer",
-      "tft",
-      "transformer_moe",
-      "all_other_hybrid_compositions"
+      "all_other_unapproved_model_families",
+      "all_other_unapproved_hybrid_compositions"
     ],
-    "admission_policy": "Explicit frozen allowlist only; no registry-driven dynamic family expansion or legacy aliases."
+    "conventional_transformer_exclusion": "The excluded identifier transformer means only the conventional standalone Transformer family and its hybrids; attention/Transformer components inside explicitly approved architectures are not excluded by this identifier.",
+    "admission_policy": "Exactly nine standalone and fourteen named hybrids; explicit frozen allowlist only, no hidden aliases, fallback models, registry-driven expansion, or unapproved compositions."
   },
   "compute_backend_authority": {
     "lightgbm": "OpenCL GPU for future real runtime",
@@ -72,11 +83,26 @@
       "EXACT_IMMUTABLE_CANDIDATE_SPEC"
     ],
     "active_envelope_resolution": "LEGAL_ENVELOPE intersected with hardware, dataset, resource, and scientific capacity",
-    "legal_envelope_semantics": "Broad technically supported limits governed separately; the ranges below are active V1 search ranges and are not permanent legal ceilings.",
+    "legal_envelope_semantics": "Broad technically supported limits are governed separately. Existing active ranges for LightGBM, XGBoost, GRU, TCN, and PatchTST are not permanent legal ceilings; D-044's four new-family ranges are explicitly proposed and not executable until accepted.",
     "concrete_scientist_proposal_outside_effective_bounds": "REJECT_WITHOUT_CLAMPING",
     "deterministic_auto_canonicalization": "Allowed only before candidate identity freeze and must be recorded.",
     "candidate_spec_mutability_after_freeze": "IMMUTABLE",
-    "legal_numeric_bounds_status": "Must be versioned before runtime admission; ONNX-00 does not turn active ranges into legal maxima."
+    "legal_numeric_bounds_status": "Must be versioned before runtime admission; ONNX-00 does not turn active ranges into legal maxima.",
+    "hardware_aware_active_envelope_inputs": [
+      "available GPU VRAM",
+      "available system RAM",
+      "compute capability",
+      "dataset sample count",
+      "feature dimensionality",
+      "effective sample adequacy",
+      "sequence length",
+      "model architecture",
+      "training budget",
+      "experiment and checkpoint storage"
+    ],
+    "hardware_capacity_rule": "More hardware does not itself authorize larger models; resolve the active envelope from frozen scientific and resource authority.",
+    "over_capacity_admission": "FAIL_CLOSED_BEFORE_FIT; never rely on uncontrolled OOM as admission control.",
+    "unapproved_or_missing_family_parameters": "FAIL_CLOSED; an explicit OPEN_AUTHORITY_GAP blocks ONNX-03 execution and cannot be filled with defaults."
   },
   "active_search_envelopes": {
     "lightgbm": {
@@ -125,20 +151,6 @@
       "weight_decay": {"type": "number", "min": 0.000001, "max": 0.02, "distribution": "log"},
       "training_memory_months": {"type": "dynamic", "frozen_at_cycle_start": true}
     },
-    "transformer": {
-      "sequence_length": {"type": "integer", "min": 32, "max": 256},
-      "d_model": {"type": "integer", "min": 32, "max": 256},
-      "num_layers": {"type": "integer", "min": 1, "max": 4},
-      "attention_heads": {"type": "integer", "min": 1, "max": 8},
-      "ffn_mult": {"type": "integer", "min": 2, "max": 4},
-      "dropout": {"type": "number", "min": 0.05, "max": 0.35},
-      "learning_rate": {"type": "number", "min": 0.00005, "max": 0.002, "distribution": "log"},
-      "batch_size": {"type": "integer", "min": 16, "max": 256},
-      "max_epochs": {"type": "integer", "min": 20, "max": 100},
-      "weight_decay": {"type": "number", "min": 0.000001, "max": 0.02, "distribution": "log"},
-      "training_memory_months": {"type": "dynamic", "frozen_at_cycle_start": true},
-      "constraints": ["d_model % attention_heads == 0"]
-    },
     "patchtst": {
       "sequence_length": {"type": "integer", "min": 64, "max": 256},
       "d_model": {"type": "integer", "min": 32, "max": 192},
@@ -160,10 +172,238 @@
       ]
     }
   },
+  "open_search_envelope_gaps": {
+    "itransformer": {
+      "status": "PROPOSED_ACTIVE_SEARCH_ENVELOPE; LEGAL_ENVELOPE_AND_RUNTIME_ADMISSION_OPEN",
+      "required_candidate_spec_fields": ["sequence_length", "embedding_mode", "input_variates_from_frozen_feature_contract", "d_model", "num_layers", "attention_heads", "ffn_mult", "dropout", "learning_rate", "batch_size", "max_epochs", "weight_decay", "training_memory_months", "patience"],
+      "unresolved": ["exact implementation/module ledger", "legal envelope", "hardware estimator validation", "ONNX operator/runtime compatibility"],
+      "blocks": "These proposed ranges are not executable authority; freeze the selected architecture, legal envelope, hardware policy, and compatibility contract before ONNX-03."
+    },
+    "tft": {
+      "status": "PROPOSED_ACTIVE_SEARCH_ENVELOPE; INPUT_AND_RUNTIME_AUTHORITY_OPEN",
+      "required_candidate_spec_fields": ["sequence_length", "hidden_size", "grn_hidden_size", "num_layers", "attention_heads", "ffn_configuration_id", "variable_selection_configuration_id", "variable_selection_sharing_policy_id", "supported_covariate_schema_id", "static_covariate_ids", "observed_historical_covariate_ids", "known_future_covariate_ids", "prediction_horizon_contract_id", "dropout", "learning_rate", "batch_size", "max_epochs", "weight_decay", "training_memory_months", "patience"],
+      "unresolved": ["verified MAX covariate availability", "exact temporal/variable-selection implementation", "legal envelope", "hardware estimator validation", "ONNX operator/runtime compatibility"],
+      "blocks": "Reject any configuration requiring unsupported covariates; proposed ranges do not authorize fabricated inputs or runtime admission."
+    },
+    "transformer_moe": {
+      "status": "PROPOSED_ACTIVE_SEARCH_ENVELOPE; MOE_IMPLEMENTATION_AND_RUNTIME_AUTHORITY_OPEN",
+      "required_candidate_spec_fields": ["sequence_length", "d_model", "num_layers", "attention_heads", "ffn_mult", "num_experts", "top_k", "capacity_factor", "router_aux_loss_weight_or_not_used", "expert_architecture_id", "expert_sharing_policy_id", "router_configuration_id", "routing_determinism_policy_id", "overflow_policy_id", "dropout", "learning_rate", "batch_size", "max_epochs", "weight_decay", "training_memory_months", "patience"],
+      "unresolved": ["exact router/expert/capacity implementation", "deterministic routing and tie-break contract", "auxiliary-loss applicability", "memory estimator validation", "ONNX operator/runtime compatibility"],
+      "blocks": "No dense fallback; proposed ranges do not authorize an unverified MoE implementation or runtime admission."
+    },
+    "lstm": {
+      "status": "PROPOSED_ACTIVE_SEARCH_ENVELOPE; LEGAL_ENVELOPE_AND_RUNTIME_ADMISSION_OPEN",
+      "required_candidate_spec_fields": ["sequence_length", "num_layers", "hidden_size", "dropout", "bidirectional", "projection_size", "state_initialization_contract_id", "learning_rate", "batch_size", "max_epochs", "weight_decay", "training_memory_months", "patience"],
+      "unresolved": ["state initialization implementation/version", "legal envelope", "hardware estimator validation", "ONNX operator/runtime compatibility"],
+      "blocks": "Only the proposed unidirectional causal configuration is described; proposed ranges are not executable authority."
+    }
+  },
+  "proposed_active_search_envelopes": {
+    "status": "PROPOSED_ACTIVE_SEARCH_ENVELOPE_NOT_LEGAL_MAXIMA_OR_EXECUTABLE_AUTHORITY",
+    "acceptance_required_before_execution": true,
+    "itransformer": {
+      "sequence_length": {"type": "integer", "min": 32, "max": 512},
+      "d_model": {"type": "integer", "min": 32, "max": 384},
+      "num_layers": {"type": "integer", "min": 1, "max": 6},
+      "attention_heads": {"type": "integer", "min": 1, "max": 12},
+      "ffn_mult": {"type": "integer", "min": 2, "max": 8},
+      "dropout": {"type": "number", "min": 0.05, "max": 0.35},
+      "learning_rate": {"type": "number", "min": 0.00005, "max": 0.002},
+      "batch_size": {"type": "integer", "min": 16, "max": 256},
+      "max_epochs": {"type": "integer", "min": 20, "max": 100},
+      "weight_decay": {"type": "number", "min": 0.000001, "max": 0.02},
+      "training_memory_months": {"type": "dynamic", "frozen_at_cycle_start": true},
+      "patience": 8,
+      "embedding_mode": "variates_as_tokens",
+      "input_variates": "DERIVED_FROM_VERIFIED_FEATURE_CONTRACT",
+      "constraints": ["d_model % attention_heads == 0", "sequence projection matches the exact frozen lookback", "output head matches the authorized label/output contract"]
+    },
+    "tft": {
+      "sequence_length": {"type": "integer", "min": 32, "max": 384},
+      "hidden_size": {"type": "integer", "min": 32, "max": 256},
+      "num_layers": {"type": "integer", "min": 1, "max": 3, "meaning": "LSTM temporal layers"},
+      "attention_heads": {"type": "integer", "min": 1, "max": 8},
+      "grn_hidden_size": {"type": "integer", "min": 32, "max": 512},
+      "ffn_mult": "ARCHITECTURE_SPECIFIC; explicit versioned family contract required; no numeric value inferred.",
+      "dropout": {"type": "number", "min": 0.05, "max": 0.35},
+      "learning_rate": {"type": "number", "min": 0.00005, "max": 0.002},
+      "batch_size": {"type": "integer", "min": 16, "max": 128},
+      "max_epochs": {"type": "integer", "min": 20, "max": 100},
+      "weight_decay": {"type": "number", "min": 0.000001, "max": 0.02},
+      "training_memory_months": {"type": "dynamic", "frozen_at_cycle_start": true},
+      "patience": 8,
+      "variable_selection_network_configuration": "EXACT_VERSIONED_CANDIDATE_FIELD_REQUIRED",
+      "variable_selection_sharing_policy": "EXACT_VERSIONED_CANDIDATE_FIELD_REQUIRED",
+      "static_covariates": "ONLY_IF_VERIFIED_IN_FROZEN_FEATURE_SCHEMA",
+      "observed_historical_covariates": "ONLY_SOURCE_BACKED_FROZEN_FEATURES",
+      "known_future_covariates": "ONLY_IF_PROVEN_KNOWN_AT_PREDICTION_TIME",
+      "prediction_horizon": "FROZEN_LABEL_CONTRACT; NOT_FREELY_TUNED",
+      "unsupported_inputs": "REJECT; NEVER_SYNTHESIZE"
+    },
+    "transformer_moe": {
+      "sequence_length": {"type": "integer", "min": 32, "max": 384},
+      "d_model": {"type": "integer", "min": 64, "max": 384},
+      "num_layers": {"type": "integer", "min": 1, "max": 6},
+      "attention_heads": {"type": "integer", "min": 1, "max": 12},
+      "ffn_mult": {"type": "integer", "min": 2, "max": 4},
+      "num_experts": {"type": "integer", "min": 2, "max": 16},
+      "top_k": {"type": "integer", "min": 1, "max": 4},
+      "expert_ffn_mult": {"type": "integer", "min": 2, "max": 4},
+      "expert_sharing_policy_id": "EXACT_VERSIONED_CANDIDATE_FIELD_REQUIRED",
+      "router_type_and_gating_policy_id": "EXACT_VERSIONED_CANDIDATE_FIELD_REQUIRED",
+      "overflow_policy_id": "EXACT_VERSIONED_CANDIDATE_FIELD_REQUIRED",
+      "routing_determinism_policy_id": "EXACT_VERSIONED_CANDIDATE_FIELD_REQUIRED",
+      "capacity_factor": {"type": "number", "min": 1.0, "max": 2.0, "where_applicable": true},
+      "router_aux_loss_weight": {"type": "number", "min": 0.0001, "max": 0.1, "where_applicable": true},
+      "dropout": {"type": "number", "min": 0.05, "max": 0.35},
+      "learning_rate": {"type": "number", "min": 0.00001, "max": 0.001},
+      "batch_size": {"type": "integer", "min": 8, "max": 128},
+      "max_epochs": {"type": "integer", "min": 20, "max": 100},
+      "weight_decay": {"type": "number", "min": 0.000001, "max": 0.02},
+      "training_memory_months": {"type": "dynamic", "frozen_at_cycle_start": true},
+      "patience": 10,
+      "constraints": ["1 <= top_k <= num_experts", "d_model % attention_heads == 0"],
+      "routing_overflow_expert_sharing_and_auxiliary_loss": "MUST_BE_EXPLICIT_IN_VERSIONED_ARCHITECTURE_CONTRACT"
+    },
+    "lstm": {
+      "sequence_length": {"type": "integer", "min": 24, "max": 192},
+      "hidden_size": {"type": "integer", "min": 32, "max": 256},
+      "num_layers": {"type": "integer", "min": 1, "max": 3},
+      "dropout": {"type": "number", "min": 0.0, "max": 0.35},
+      "learning_rate": {"type": "number", "min": 0.0001, "max": 0.003},
+      "batch_size": {"type": "integer", "min": 32, "max": 512},
+      "max_epochs": {"type": "integer", "min": 20, "max": 120},
+      "weight_decay": {"type": "number", "min": 0.000001, "max": 0.02},
+      "training_memory_months": {"type": "dynamic", "frozen_at_cycle_start": true},
+      "patience": 6,
+      "bidirectional": false,
+      "projection_size": 0,
+      "single_layer_effective_recurrent_dropout": 0,
+      "state_initialization_and_reset": "VERSIONED_DETERMINISTIC; RESET_AT_EACH_INDEPENDENT_SEQUENCE_AND_FOLD/WINDOW_BOUNDARY; NO_CARRYOVER"
+    }
+  },
+  "architecture_contracts": {
+    "lightgbm": {"identity": "lightgbm", "architecture": "LightGBM gradient-boosted tree family; preserve the existing V1 component envelope and versioned MAX feature/label input contracts.", "parameter_authority": "ACTIVE_SEARCH_ENVELOPE"},
+    "xgboost": {"identity": "xgboost", "architecture": "XGBoost gradient-boosted tree family; preserve the existing V1 component envelope and versioned MAX feature/label input contracts.", "parameter_authority": "ACTIVE_SEARCH_ENVELOPE"},
+    "gru": {"identity": "gru", "architecture": "GRU recurrent temporal family with the existing V1 envelope; preserve causal sequence construction, chronological validation, and the one-layer effective-dropout rule.", "parameter_authority": "ACTIVE_SEARCH_ENVELOPE"},
+    "tcn": {"identity": "tcn", "architecture": "Temporal convolutional network using the existing V1 channel/block/kernel envelope and causal temporal operations; no future row may influence a prediction.", "parameter_authority": "ACTIVE_SEARCH_ENVELOPE"},
+    "itransformer": {
+      "identity": "itransformer",
+      "architecture": "Genuine inverted multivariate time-series Transformer: variates, not timestamps, are tokenized; attention operates over variate-oriented tokens. A conventional time-token Transformer is not an alias or fallback.",
+      "required_candidate_spec_fields": ["sequence_length", "embedding_mode", "input_variates_from_frozen_feature_contract", "d_model", "num_layers", "attention_heads", "ffn_mult", "dropout", "learning_rate", "batch_size", "max_epochs", "weight_decay", "training_memory_months", "training_seed", "patience"],
+      "input_authority": "Only source-backed frozen MAX features; variate identity/order binds to the versioned feature contract.",
+      "parameter_authority": "OPEN_AUTHORITY_GAP_BLOCKS_ONNX_03"
+    },
+    "patchtst": {"identity": "patchtst", "architecture": "PatchTST temporal family; preserve existing V1 patch, sequence, attention, optimization, and causal data-boundary contracts.", "parameter_authority": "ACTIVE_SEARCH_ENVELOPE"},
+    "tft": {
+      "identity": "tft",
+      "architecture": "Genuine Temporal Fusion Transformer with variable-selection networks, temporal processing, gated residual mechanisms, and interpretable attention; it is not an iTransformer alias.",
+      "input_contract": {
+        "observed_historical_covariates": "Only columns explicitly present and source-backed in the frozen feature schema.",
+        "known_future_covariates": "Allowed only when the frozen source contract proves they are known at prediction time; never derive from future target/outcome data.",
+        "static_covariates": "Conditional on an explicitly supported frozen schema; absence must remain absence and cannot be synthesized.",
+        "unsupported_covariates": "Do not invent, fill, or synthesize; reject admission if the selected TFT configuration requires unavailable covariates.",
+        "horizon_and_output": "Bind prediction horizon, output shape, and class semantics to the versioned MAX label contract; no implicit horizon or class remapping."
+      },
+      "required_candidate_spec_fields": ["supported_covariate_schema_id", "sequence_length", "hidden_size", "grn_hidden_size", "num_layers", "attention_heads", "ffn_configuration_id", "prediction_horizon_contract_id", "variable_selection_configuration_id", "variable_selection_sharing_policy_id", "temporal_processing_configuration_id", "gating_configuration_id", "attention_configuration_id", "static_covariate_ids", "known_future_covariate_ids", "observed_historical_covariate_ids", "dropout", "learning_rate", "batch_size", "max_epochs", "weight_decay", "training_memory_months", "patience"],
+      "parameter_authority": "OPEN_AUTHORITY_GAP_BLOCKS_ONNX_03"
+    },
+    "transformer_moe": {
+      "identity": "transformer_moe",
+      "architecture": "Genuine attention-based Mixture-of-Experts: the frozen architecture must define expert networks and an explicit router/gating path; a dense Transformer substitution is forbidden.",
+      "required_contract": ["attention architecture", "expert network structure", "expert count", "active experts per routing decision", "expert capacity", "overflow policy", "load-balancing/auxiliary-loss definition or explicit not-used decision", "deterministic routing and tie-breaking", "memory/compute estimator", "ONNX operation and runtime compatibility"],
+      "resource_and_export": "Estimate candidate-specific memory and compute before admission; unsupported routing/export/runtime operations fail closed. No dense fallback.",
+      "parameter_authority": "OPEN_AUTHORITY_GAP_BLOCKS_ONNX_03"
+    },
+    "lstm": {
+      "identity": "lstm",
+      "architecture": "Genuine unidirectional causal LSTM; bidirectional processing is forbidden. Each sample is formed from a chronological lookback and its output binds to the frozen label contract.",
+      "sequence_contract": {
+        "sequence_length": "Exact CandidateSpec value bounded by a separately approved envelope.",
+        "layers_and_hidden_state": "Exact CandidateSpec layer count and hidden dimensions; no silent defaults.",
+        "dropout": "Exact CandidateSpec value under separately approved semantics.",
+        "initialization_and_reset": "Versioned deterministic initialization; reset at each independent sequence and fold/window boundary; no hidden-state carryover across samples, folds, windows, cycles, or candidates.",
+        "output": "Use the causal final valid timestep representation and the frozen MAX label/class contract; no future rows or bidirectional context."
+      },
+      "parameter_authority": "OPEN_AUTHORITY_GAP_BLOCKS_ONNX_03"
+    }
+  },
+  "research_reference_authority": {
+    "repository": "maxqstudio/max_research_agent",
+    "main_sha": "883ebeb1ca2e70f6255e0889358ba7c822ac52f5",
+    "supporting_files": [
+      "ModelLab/docs/research/HARDWARE_ADAPTIVE_MODEL_RESEARCH_V1.md",
+      "ModelLab/docs/research/CHAMPION_FACTORY_V3.md"
+    ],
+    "use_boundary": "Supporting research only; not Owner authorization for MAX architectures, numeric parameter ranges, hardware capability, KPI gates, performance, or runtime compatibility.",
+    "architecture_reference_gaps": ["iTransformer exact MAX implementation/module ledger and legal envelope", "TFT covariate schema and exact MAX input support", "Transformer MoE variant/router/capacity/ONNX operations", "LSTM state implementation and legal envelope", "per-family hardware/resource estimate validation", "per-family ONNX/runtime compatibility" ]
+  },
+  "parameter_capacity_contract": {
+    "status": "PLANNING_CONTRACT; NO_TRAINING_OR_RUNTIME_EXECUTED",
+    "pure_estimator_source": "backend/max_backend/onnx_parameter_estimation.py",
+    "pure_estimator_source_status": "IMPLEMENTED_FOR_STATIC_COUNTS_AND_STRUCTURAL_BOUNDS_ONLY; NOT_CONNECTED_TO_TRAINING_OR_RUNTIME",
+    "estimator_coverage": ["exact Owner recurrent formula for GRU/LSTM", "explicit tensor-shape ledger for seven temporal neural families", "dense Transformer dominant-term structural estimate", "MoE total and active structural estimate", "LightGBM/XGBoost theoretical tree-structure bound"],
+    "unimplemented_or_unverified_estimation": ["actual architecture instantiation comparison", "family-specific activation peak measurements", "framework temporary-buffer measurements", "tree serialized-size and actual grown-structure inspection", "hybrid OOF intermediate and end-to-end peak accounting", "GPU/runtime-provider memory validation"],
+    "model_parameter_estimate_required_per_candidate_spec": true,
+    "required_report_fields": ["architecture_family", "architecture_version", "input_feature_count", "output_dimension", "sequence_length", "exact_architecture_parameters", "trainable_parameter_count", "non_trainable_parameter_count", "total_parameter_count", "active_parameter_count", "expert_parameter_count", "shared_parameter_count", "estimated_weight_bytes", "estimated_gradient_bytes", "estimated_optimizer_state_bytes", "estimated_activation_peak_bytes", "estimated_peak_training_bytes", "estimated_inference_bytes", "estimation_method", "estimation_assumptions", "estimation_confidence"],
+    "not_applicable": "Use the explicit string NOT_APPLICABLE for fields that do not apply; never substitute fabricated zero values.",
+    "authoritative_instantiated_trainable_count": "sum(p.numel() for p in model.parameters() if p.requires_grad)",
+    "static_estimator_validation": "Static architecture/module-ledger estimates must be compared against actual instantiated model counts and measured capacity before runtime admission; ONNX-00 has no instantiated model evidence.",
+    "exact_module_accounting": "The estimator consumes the exact versioned architecture module ledger bound to CandidateSpec. Account projections, recurrent gates, convolution kernels, embeddings, normalization, gates, output heads, routers, and experts. TCN, PatchTST, iTransformer, and TFT require family-specific module ledgers; a generic Transformer formula is not an exact substitute.",
+    "required_module_roles_by_family": {
+      "gru": ["recurrent", "output_head"],
+      "tcn": ["causal_convolution", "output_head"],
+      "itransformer": ["variate_projection", "attention", "feedforward", "normalization", "output_head"],
+      "patchtst": ["patch_projection", "attention", "feedforward", "normalization", "output_head"],
+      "tft": ["variable_selection", "temporal_processing", "gating", "attention", "output_head"],
+      "transformer_moe": ["attention", "router", "expert", "output_head"],
+      "lstm": ["recurrent", "output_head"]
+    },
+    "confidence_values": ["EXACT_STATIC_MODULE_LEDGER_UNVALIDATED_AGAINST_RUNTIME", "STRUCTURAL_APPROXIMATION", "MEASURED_INSTANTIATED_MODEL", "OPEN_AUTHORITY_GAP"],
+    "tree_model_accounting": {
+      "neural_parameter_fields": "NOT_APPLICABLE",
+      "required_fields": ["tree_count", "total_leaf_count", "total_split_node_count", "tree_depth_distribution", "serialized_model_bytes", "estimated_training_peak_bytes", "estimated_inference_bytes"],
+      "distinguish_actual_from_bound": "Report actual grown tree structure separately from theoretical structural bounds; do not present n_estimators/depth limits as actual grown complexity."
+    },
+    "hybrid_accounting": "Temporal module parameters + tree complexity + OOF feature/intermediate storage + applicable training overhead; do not double count, and do not assume temporal component sharing between independently trained candidates.",
+    "memory_estimation": {
+      "fp32_adamw_baseline_bytes_per_trainable_parameter": 16,
+      "baseline_components": "Approximately 4-byte parameter + 4-byte gradient + two 4-byte AdamW moment buffers, excluding activations, framework/temporary buffers, and mixed-precision master weights.",
+      "parameter_fit_is_not_training_feasibility": true,
+      "peak_training_memory_must_include": ["weights", "gradients", "optimizer state", "activation peak", "temporary/framework buffers", "batch and sequence geometry", "MoE routing/overflow overhead", "checkpoint and experiment storage"],
+      "unknown_memory_components": "Report as OPEN_AUTHORITY_GAP or explicit NOT_APPLICABLE; never silently report a complete peak estimate."
+    },
+    "permanent_trainable_parameter_ceiling": "NONE_AUTHORIZED; no arbitrary 1M, 10M, 100M, or 1B ceiling. Admission remains conditional on demonstrated hardware, data adequacy, numerical safety, budget, and architecture validity.",
+    "reference_formulas": {
+      "gru": "P=3H(F+H+2)+3(L-1)H(2H+2)+HO+O for unidirectional, bias-enabled, unprojected recurrent layer and linear output head.",
+      "lstm": "P=4H(F+H+2)+4(L-1)H(2H+2)+HO+O for unidirectional, bias-enabled, unprojected recurrent layer and linear output head.",
+      "dense_transformer_block": "Dominant structural approximation per encoder block: 4d^2 + 2d*d_ff.",
+      "moe_encoder_block": "Approximate total per block: 4d^2 + E*2d*d_ff + router_parameters; active per-token estimate uses top_k experts plus shared layers/router. Track total and active separately.",
+      "structural_approximations_are_not_exact_counts": true
+    },
+    "reference_estimates": {
+      "configuration": {"input_features": 32, "output_dimensions": 3, "lookback": 128, "recurrent_hidden_size": 128, "transformer_d_model": 128, "transformer_layers": 3, "ffn_multiplier": 4, "tcn_blocks": 4, "tcn_convolutions_per_block": 2, "tcn_kernel_size": 3, "patch_length": 16, "patch_stride": 8, "moe_experts": 8, "moe_top_k": 2},
+      "approximate_parameters": {"gru": "~0.26M", "lstm": "~0.35M", "tcn": "~0.36M", "itransformer": "~0.61M", "patchtst": "~0.60M", "tft": "~3-6M implementation-dependent; not an exact regression expectation", "transformer_moe_total": "~3.37M", "transformer_moe_active_per_token": "~0.99M"},
+      "capacity_illustrations": {"gru_256_hidden_3_layers": "~1.01M", "lstm_256_hidden_3_layers": "~1.35M", "tcn_192_channels_6_blocks_2_convolutions_kernel_5": "~2.06M", "itransformer_d384_6_layers_ffn4_lookback512": "~10.85M", "transformer_moe_d384_6_layers_16_experts_top_k2_ffn4_total": "~117M", "transformer_moe_d384_6_layers_16_experts_top_k2_ffn4_active_per_token": "~17.7M"},
+      "confidence": "ILLUSTRATIVE_REFERENCE_ONLY; sensitive to module specification, sharing, and output head; not a fit guarantee, legal maximum, VRAM claim, or acceptance threshold."
+    },
+    "portfolio_illustration": "Seven reference standalone temporal models total approximately 8.5-11.5M neural parameters. The same seven independently trained encoders for both tree-policy hybrid sets imply about 25.5-34.5M neural parameters plus sixteen tree models across the portfolio, not one simultaneously trained network.",
+    "capacity_gates": ["available GPU VRAM and current free memory", "CPU RAM and OS memory pressure", "weight/gradient/optimizer/activation estimates", "batch and sequence geometry", "attention-token dimensions", "MoE total weights/routed experts/routing overhead", "effective post-purge sample count", "sample-to-parameter adequacy diagnostics", "validation stability/overfitting risk", "throughput/time/checkpoint storage", "runtime provider and ONNX operation compatibility"],
+    "proposal_outside_effective_active_envelope": "REJECT_WITH_CONCRETE_REASON; never silently clamp an exact proposal."
+  },
   "hybrid_contract": {
     "single_candidate": true,
-    "temporal_component_allowlist": ["gru", "tcn", "transformer", "patchtst"],
+    "temporal_component_allowlist": ["gru", "tcn", "itransformer", "patchtst", "tft", "transformer_moe", "lstm"],
     "policy_component_allowlist": ["lightgbm", "xgboost"],
+    "authorized_compositions": [
+      "hybrid::gru::lightgbm", "hybrid::gru::xgboost",
+      "hybrid::tcn::lightgbm", "hybrid::tcn::xgboost",
+      "hybrid::itransformer::lightgbm", "hybrid::itransformer::xgboost",
+      "hybrid::patchtst::lightgbm", "hybrid::patchtst::xgboost",
+      "hybrid::tft::lightgbm", "hybrid::tft::xgboost",
+      "hybrid::transformer_moe::lightgbm", "hybrid::transformer_moe::xgboost",
+      "hybrid::lstm::lightgbm", "hybrid::lstm::xgboost"
+    ],
     "shared_parameter": "training_memory_months",
     "separate_component_training_memory_parameters": false,
     "parameter_projection": {
@@ -182,11 +422,15 @@
       "preserve original chronological row identity",
       "combine legal OOF temporal features with permitted CP32 policy features",
       "train LightGBM or XGBoost policy only on the assembled OOF rows",
-      "refit final temporal component only after qualification, under the final-fit contract"
-    ]
+      "refit final temporal component only after qualification, under the final-fit contract",
+      "never feed Tournament or Forward outcomes back into training or candidate tuning",
+      "never reuse a component or hybrid artifact under another standalone or hybrid family identity",
+      "freeze each exact composition and both component specifications in one immutable CandidateSpec"
+    ],
+    "composition_identity": "The ordered temporal-family and tree-policy pair is part of family_id, CandidateSpec hash, artifact compatibility identity, and experiment fingerprint; aliases or component substitution are forbidden."
   },
   "temporal_training_contract": {
-    "families": ["gru", "tcn", "transformer", "patchtst"],
+    "families": ["gru", "tcn", "itransformer", "patchtst", "tft", "transformer_moe", "lstm"],
     "optimizer": "AdamW",
     "validation": "PURGED_CHRONOLOGICAL_INTERNAL_VALIDATION",
     "random_train_validation_split": "FORBIDDEN",
@@ -195,15 +439,32 @@
     "nonfinite_behavior": "FAIL_CLOSED",
     "chronology_purge_embargo_and_checkpoint_integrity": "GOVERNED_NOT_SCIENTIST_CONTROLLED",
     "preserve_original_row_identity": true,
-    "patience": {"gru": 6, "tcn": 8, "transformer": 8, "patchtst": 8},
+    "patience": {"gru": 6, "tcn": 8, "itransformer": 8, "patchtst": 8, "tft": 8, "transformer_moe": 10, "lstm": 6},
+    "patience_authority": {
+      "status": "NEW_FAMILY_VALUES_ARE_PROPOSED_NOT_EXECUTABLE_UNTIL_ACCEPTED",
+      "rule": "Each family has an explicit architecture-specific patience proposal; values for iTransformer, TFT, Transformer MoE, and LSTM remain PROPOSED_ACTIVE_SEARCH_ENVELOPE and must be accepted/versioned before execution. Never copy a value silently or use an undocumented default.",
+      "proposed_new_family_values": {"itransformer": 8, "tft": 8, "transformer_moe": 10, "lstm": 6},
+      "acceptance_required_before_execution": true
+    },
+    "candidate_spec_and_reproducibility": [
+      "Immutable CandidateSpec includes exact family/composition, architecture contract version, parameters, training configuration, explicit seed, data snapshot and feature/label contract identities.",
+      "Deterministic experiment fingerprint binds the exact CandidateSpec and all frozen scientific inputs.",
+      "Preprocessing and feature contracts are versioned and fit only on permitted training rows.",
+      "Numerical non-finite values fail closed; checkpoint bytes and identity are integrity-verified.",
+      "Hardware-aware admission binds VRAM, system RAM, compute capability, dataset/sample adequacy, dimensions, sequence length, architecture, training budget, and storage before fit."
+    ],
     "max_epochs_semantics": "Upper training budget; early stopping determines actual completed epochs.",
     "gru_single_layer_rule": "If num_layers == 1, effective recurrent dropout is 0."
   },
   "candidate_identity": {
     "candidate_spec_fields": [
       "schema_version",
-      "model_family_or_exact_hybrid_composition",
+      "exact_case_sensitive_model_family_id_or_exact_hybrid_composition_id",
+      "architecture_contract_id_and_version",
+      "component_family_ids_and_order_for_hybrids",
       "exact_component_parameters",
+      "versioned_architecture_module_ledger_identity_and_sha256",
+      "exact_training_configuration_and_early_stopping_contract_id",
       "training_seed",
       "training_memory_months",
       "output_class_contract",
@@ -223,9 +484,20 @@
       "candidate_spec_hash"
     ],
     "candidate_id": "Stable hash of cycle identity plus candidate_spec_hash.",
+    "no_alias_or_artifact_cross_identity": "Family ID, architecture contract version, component order, parameter schema and artifact compatibility identity are hash-bound; any mismatch is a different candidate and cannot inherit another family's artifact.",
     "canonical_serialization": "Versioned deterministic UTF-8 JSON with sorted object keys, fixed separators, normalized numeric types, and no non-finite values.",
     "duplicate_exposure": "Exact experiment fingerprints are deduplicated; failures remain append-only evidence.",
     "threshold_boundary": "Thresholds are not included as searchable params unless explicitly Owner-authorized and frozen before CandidateSpec identity."
+  },
+  "model_registry_identity_contract": {
+    "registry_key": "Exact case-sensitive model_family_id plus architecture_contract_id and version.",
+    "authorized_standalone_ids": ["lightgbm", "xgboost", "gru", "tcn", "itransformer", "patchtst", "tft", "transformer_moe", "lstm"],
+    "authorized_hybrid_ids": ["hybrid::gru::lightgbm", "hybrid::gru::xgboost", "hybrid::tcn::lightgbm", "hybrid::tcn::xgboost", "hybrid::itransformer::lightgbm", "hybrid::itransformer::xgboost", "hybrid::patchtst::lightgbm", "hybrid::patchtst::xgboost", "hybrid::tft::lightgbm", "hybrid::tft::xgboost", "hybrid::transformer_moe::lightgbm", "hybrid::transformer_moe::xgboost", "hybrid::lstm::lightgbm", "hybrid::lstm::xgboost"],
+    "aliases": [],
+    "fallback_families": [],
+    "artifact_compatibility_binding": ["exact family and architecture version", "ordered hybrid component identities", "CandidateSpec hash", "feature/preprocessing and label/output contract hashes", "parameter/module-ledger hash", "training-method contract version", "exporter/runtime compatibility identity"],
+    "cross_family_or_cross_composition_artifact_reuse": "FORBIDDEN",
+    "registry_source": "Explicit D-043 allowlist only; no ModelLab dynamic registry expansion."
   },
   "dataset_contract": {
     "source_discovery": "Auto-discover canonical Max_MTF_Training.csv; Owner may override the path.",
@@ -492,7 +764,19 @@
     "onnx_parity_numeric_tolerances": "Must be versioned and approved before ONNX-07; ONNX-00 does not invent them.",
     "runtime_manifest_schema": "Must be frozen before ONNX-07.",
     "final_fit_row_boundary": "Must be frozen before Forward is opened; Forward outcomes never enter fit.",
-    "scientific_metrics_beyond_reference_proposals": "A complete versioned KPI contract must be explicitly Owner-authorized and frozen before ONNX-03; the ModelLab V3 expectancy values remain references only."
+    "scientific_metrics_beyond_reference_proposals": "A complete versioned KPI contract must be explicitly Owner-authorized and frozen before ONNX-03; the ModelLab V3 expectancy values remain references only.",
+    "family_specific_search_envelopes": "D-044 supplies proposed numeric ranges for iTransformer, TFT, Transformer MoE, and LSTM; these are not legal maxima or executable active authority until accepted/versioned, and cannot enter ONNX-03 before architecture-specific gaps are closed.",
+    "family_specific_early_stopping": "D-044 proposes separate patience values for iTransformer, TFT, Transformer MoE, and LSTM; each remains proposed until accepted/versioned before ONNX-03.",
+    "tft_supported_covariates_and_horizon": "Must be proven from the frozen MAX feature/label schema; unsupported static or known-future covariates remain absent and cannot be synthesized.",
+    "transformer_moe_variant_and_capacity": "Expert/router/capacity/overflow/auxiliary-loss/determinism and candidate resource estimation remain open and block ONNX-03.",
+    "per_family_onnx_compatibility": "Exportable operators, dynamic/static shapes, parity and target runtime support must be verified per exact architecture and version before Challenger admission; unsupported paths fail closed."
+  },
+  "onnx_compatibility_authority": {
+    "admission_order": ["WFA_PASS", "CPCV_PASS", "TOURNAMENT_PASS", "MONTE_CARLO_PASS", "FORWARD_PASS", "SCIENTIFICALLY_QUALIFIED", "FINAL_PERMITTED_FIT", "ONNX_EXPORT", "ONNX_PARITY", "RUNTIME_MANIFEST_VALIDATION", "CHALLENGER_REGISTRATION", "CHALLENGER_READY"],
+    "per_family_binding": "Architecture family/version, supported operations, input/output shapes, preprocessing, precision, exporter/runtime versions and artifact hashes bind to the exact CandidateSpec.",
+    "tft_and_moe_additional_validation": "TFT and Transformer MoE require explicit architecture-specific operator, shape, parity, and runtime compatibility validation; no support is presumed.",
+    "unsupported_operation_or_parity": "FAIL_CLOSED_AT_GATE; no architecture substitution, degraded inference fallback, or Challenger admission bypass.",
+    "runtime_authorization": "NOT_GRANTED_BY_ONNX_00"
   },
   "state_machine": {
     "initial": "NO_CYCLE",
@@ -527,8 +811,7 @@
       "MONTE_CARLO_NO_SURVIVOR",
       "FORWARD_INSUFFICIENT_SAMPLE",
       "FORWARD_NO_SURVIVOR",
-      "RUNTIME_NO_SURVIVOR",
-      "CHAMPION_ACTIVE"
+      "RUNTIME_NO_SURVIVOR"
     ],
     "transitions": [
       {"from": "NO_CYCLE", "to": "DATA_PREFLIGHT", "guard": "Owner explicitly begins a new cycle and selects the authorized dataset source."},
@@ -548,18 +831,139 @@
       {"from": "FORWARD_RUNNING", "to": "FORWARD_INSUFFICIENT_SAMPLE", "guard": "No candidate passes Forward and at least one candidate is INSUFFICIENT_SAMPLE; this state is not eligible for Challenger admission."},
       {"from": "FORWARD_RUNNING", "to": "FORWARD_NO_SURVIVOR", "guard": "All Forward candidates have terminal results, none passes, and none is INSUFFICIENT_SAMPLE."},
       {"from": "FORWARD_RUNNING", "to": "CANDIDATE_RUNTIME_PIPELINE", "guard": "At least one candidate passes untouched Forward. Only each exact PASS candidate enters its independent post-Forward candidate pipeline; Forward PASS alone does not mean scientifically qualified, runtime-ready, Challenger-ready, or promotion-eligible."},
-      {"from": "CANDIDATE_RUNTIME_PIPELINE", "to": "PROMOTION_PENDING_OWNER", "guard": "At least one exact candidate reaches CHALLENGER_READY through every candidate-level fit/export/parity/manifest/registration gate. A blocked candidate does not invalidate or block another ready candidate; present only individually ready identities to the Owner."},
-      {"from": "CANDIDATE_RUNTIME_PIPELINE", "to": "RUNTIME_NO_SURVIVOR", "guard": "Every Forward-PASS candidate is terminally RUNTIME_BLOCKED_UNRECOVERABLE and none reached CHALLENGER_READY; preserve all candidate failures and do not relax any gate."},
-      {"from": "PROMOTION_PENDING_OWNER", "to": "CHAMPION_ACTIVE", "guard": "Owner explicitly selects one exact CHALLENGER_READY candidate identity; all stage seals, artifact hash/parity, manifest and registry identity are reverified, then promotion and prior Champion archive commit atomically."},
-      {"from": "PROMOTION_PENDING_OWNER", "to": "NO_CYCLE", "guard": "Owner explicitly declines or closes promotion; no Champion mutation occurs."},
-      {"from": "CHAMPION_ACTIVE", "to": "NO_CYCLE", "guard": "Promotion transaction and prior-Champion archival are verified; this cycle is closed."},
-      {"from": ["NO_QUALIFIED_CANDIDATE", "CPCV_NO_SURVIVOR", "TOURNAMENT_NO_SURVIVOR", "MONTE_CARLO_NO_SURVIVOR", "FORWARD_INSUFFICIENT_SAMPLE", "FORWARD_NO_SURVIVOR", "RUNTIME_NO_SURVIVOR"], "to": "NO_CYCLE", "guard": "Terminal stage evidence and cycle closure are committed; a later cycle requires a new explicit Owner start."},
+      {"from": "CANDIDATE_RUNTIME_PIPELINE", "to": "PROMOTION_PENDING_OWNER", "guard": "At least one exact candidate reaches CHALLENGER_READY through every candidate-level fit/export/parity/manifest/registration gate. A blocked candidate does not invalidate or block another ready candidate. Promotion eligibility is per exact candidate and does not wait for unrelated candidates to finish or receive dispositions; persist every independent candidate cursor before presenting only ready identities to the Owner."},
+      {"from": "CANDIDATE_RUNTIME_PIPELINE", "to": "RUNTIME_NO_SURVIVOR", "guard": "Every Forward-PASS candidate has a committed RUNTIME_BLOCKED_UNRECOVERABLE disposition, none reached CHALLENGER_READY, and no candidate cursor or owned process remains active; preserve all candidate failures and do not relax any gate."},
+      {"from": "PROMOTION_PENDING_OWNER", "to": "CHAMPION_ACTIVE", "guard": "Owner explicitly selects one exact CHALLENGER_READY candidate and records its transaction identity; all stage seals, artifact hash/parity, manifest and registry identity are reverified, then promotion and prior Champion archive commit atomically. Other candidate cursors and evidence remain intact; promotion does not close the cycle."},
+      {"from": "PROMOTION_PENDING_OWNER", "to": "CANDIDATE_RUNTIME_PIPELINE", "guard": "Owner explicitly declines the exact pending candidate; atomically commit its OWNER_DECLINED disposition and preserve every other candidate cursor and evidence without closing the cycle."},
+      {"from": "PROMOTION_PENDING_OWNER", "to": "NO_CYCLE", "guard": "Close only after every Forward-PASS candidate has a committed disposition from the terminal disposition set, every disposition and stage seal verifies, no active candidate cursor or owned process remains, and the pending promotion decision is explicitly resolved."},
+      {"from": "CHAMPION_ACTIVE", "to": "NO_CYCLE", "guard": "Promotion transaction, published Champion identity, and prior-Champion archive verify; close only after every Forward-PASS candidate has a committed disposition from the terminal disposition set and no active candidate cursor or owned process remains."},
+      {"from": ["NO_QUALIFIED_CANDIDATE", "CPCV_NO_SURVIVOR", "TOURNAMENT_NO_SURVIVOR", "MONTE_CARLO_NO_SURVIVOR", "FORWARD_INSUFFICIENT_SAMPLE", "FORWARD_NO_SURVIVOR", "RUNTIME_NO_SURVIVOR"], "to": "NO_CYCLE", "guard": "Terminal stage evidence and cycle closure are committed; every Forward-PASS candidate has a committed verified terminal disposition and no active candidate cursor or owned process remains; a later cycle requires a new explicit Owner start."},
       {"from": ["DISCOVERY_RUNNING", "CPCV_RUNNING", "TOURNAMENT_RUNNING", "MONTE_CARLO_RUNNING", "FORWARD_RUNNING", "CANDIDATE_RUNTIME_PIPELINE"], "to": "PAUSED_AT_SAFE_BOUNDARY", "guard": "Cooperative pause reaches a safe boundary and atomically commits a valid checkpoint for the same cycle/stage and all active candidate runtime cursors."},
       {"from": "PAUSED_AT_SAFE_BOUNDARY", "to_one_of": ["DISCOVERY_RUNNING", "CPCV_RUNNING", "TOURNAMENT_RUNNING", "MONTE_CARLO_RUNNING", "FORWARD_RUNNING", "CANDIDATE_RUNTIME_PIPELINE"], "guard": "Owner resumes the same cycle only after the newest valid checkpoint is verified; target stage and each candidate cursor match committed state and completed exposures are not repeated."},
       {"from": ["DATA_PREFLIGHT", "DATA_READY", "CYCLE_FROZEN", "DISCOVERY_RUNNING", "NO_QUALIFIED_CANDIDATE", "QUALIFIED_POOL_FROZEN", "CPCV_RUNNING", "CPCV_NO_SURVIVOR", "TOURNAMENT_RUNNING", "TOURNAMENT_NO_SURVIVOR", "MONTE_CARLO_RUNNING", "MONTE_CARLO_NO_SURVIVOR", "FORWARD_RUNNING", "FORWARD_INSUFFICIENT_SAMPLE", "FORWARD_NO_SURVIVOR", "CANDIDATE_RUNTIME_PIPELINE", "RUNTIME_NO_SURVIVOR", "PROMOTION_PENDING_OWNER", "CHAMPION_ACTIVE", "PAUSED_AT_SAFE_BOUNDARY"], "to": "RECOVERY_REQUIRED", "guard": "Cycle authority, checkpoint, process ownership, candidate cursor, or durable-write integrity is uncertain; fail closed and do not advance or retrain."},
-      {"from": "RECOVERY_REQUIRED", "to": "PAUSED_AT_SAFE_BOUNDARY", "guard": "A valid committed checkpoint and same-cycle lineage are verified; resume remains an explicit Owner action."},
-      {"from": "RECOVERY_REQUIRED", "to": "NO_CYCLE", "guard": "No scientific work is silently restarted; Owner explicitly abandons the unresolved cycle after preserving its failure evidence."}
+      {"from": "RECOVERY_REQUIRED", "to": "PAUSED_AT_SAFE_BOUNDARY", "guard": "Only a non-promotion original_state may resume through this route; a valid committed checkpoint and same-cycle lineage are verified, and resume remains an explicit Owner action. Promotion-origin recovery must use promotion transaction reconciliation, not the scientific pipeline."},
+      {"from": "RECOVERY_REQUIRED", "to": "PROMOTION_PENDING_OWNER", "guard": "original_state is PROMOTION_PENDING_OWNER and exact cycle, candidate, transaction, and authorization evidence verify that atomic promotion has not committed; reuse any valid recorded Owner authorization, or return to await an explicit Owner decision if none exists, without assuming success or creating a decision."},
+      {"from": "RECOVERY_REQUIRED", "to": "CHAMPION_ACTIVE", "guard": "original_state is PROMOTION_PENDING_OWNER or CHAMPION_ACTIVE and readback proves the exact promotion transaction already committed; verify exact Champion identity, artifact publication, and prior-Champion archive, then reconcile projections idempotently without replaying promotion."},
+      {"from": "RECOVERY_REQUIRED", "to": "RECOVERY_REQUIRED", "guard": "Missing, corrupt, conflicting, or otherwise uncertain promotion evidence remains fail-closed in RECOVERY_REQUIRED; no promotion, rollback, cycle closure, or scientific restart is allowed."},
+      {"from": "RECOVERY_REQUIRED", "to": "NO_CYCLE", "guard": "Only a non-promotion-origin recovery may be explicitly abandoned by the Owner after preserving failure evidence, committing dispositions for every Forward-PASS candidate, and verifying no active candidate cursor or owned process remains; promotion-origin recovery cannot close through this route."}
     ],
+    "candidate_disposition_contract": {
+      "scope": "PER_FORWARD_PASS_CANDIDATE_ID",
+      "immutable_identity_fields": [
+        "cycle_id",
+        "candidate_id",
+        "candidate_spec_sha256",
+        "forward_stage_seal_sha256"
+      ],
+      "independent_runtime_cursor": "Every exact Forward-PASS candidate has its own durable cursor and last-valid-committed runtime checkpoint bound to the immutable identity; cursor updates and disposition recovery cannot alter another candidate or repeat a committed exposure.",
+      "promotion_eligibility": {
+        "requires_selected_candidate_state": "CHALLENGER_READY",
+        "unrelated_candidate_terminal_disposition_required": false,
+        "owner_selection_required": true,
+        "rule": "A ready candidate may enter Owner promotion while another candidate is processing or blocked. Promotion eligibility is candidate-scoped and is not cycle-closure eligibility."
+      },
+      "terminal_dispositions": [
+        "PROMOTED",
+        "OWNER_DECLINED",
+        "OWNER_CANCELLED",
+        "RUNTIME_BLOCKED_UNRECOVERABLE"
+      ],
+      "cycle_closure": {
+        "requires_every_forward_pass_candidate_disposition_committed": true,
+        "requires_each_disposition_and_stage_seal_verified": true,
+        "requires_no_active_candidate_cursor_or_owned_process": true,
+        "terminal_disposition_set": [
+          "PROMOTED",
+          "OWNER_DECLINED",
+          "OWNER_CANCELLED",
+          "RUNTIME_BLOCKED_UNRECOVERABLE"
+        ],
+        "rule": "No cycle closes while any Forward-PASS candidate is processing, runtime-blocked with repair authority, or ready without a committed terminal disposition. A retained candidate continues only under this same open cycle and its existing candidate identity/cursor; this authority does not permit post-cycle continuation."
+      },
+      "post_promotion_lifecycle": "After one candidate is promoted, CHAMPION_ACTIVE is a nonterminal cycle state while any other candidate cursor remains active or undisposed. Other candidates retain their exact identity, evidence, runtime cursor, and repair authority; promotion never silently cancels, invalidates, or discards them. No new cycle begins until the cycle-closure guard passes.",
+      "cancellation": {
+        "requires_explicit_owner_action": true,
+        "requires_exact_candidate_identity": true,
+        "requires_verified_no_active_owned_process": true,
+        "requires_durable_disposition_and_lineage": true,
+        "unverified_stop_enters": "RECOVERY_REQUIRED"
+      },
+      "disposition_recovery": {
+        "transaction_identity": [
+          "cycle_id",
+          "candidate_id",
+          "disposition_transaction_id",
+          "disposition",
+          "owner_authorization_id"
+        ],
+      "idempotency_key_fields": [
+        "cycle_id",
+        "disposition_transaction_id"
+      ],
+        "commit": "Disposition and its evidence/lineage are committed atomically before it counts toward cycle closure.",
+        "idempotent": true,
+        "replays_candidate_execution": false,
+        "crash_rule": "Read back the exact disposition transaction; if committed, reuse its evidence without duplicate exposure; if not committed, resume only the same transaction; uncertain or conflicting evidence remains RECOVERY_REQUIRED."
+      },
+      "candidate_failure_isolation": "A candidate failure or unrecoverable runtime block changes only that candidate's disposition and cannot change another candidate's scientific PASS, identity, cursor, or evidence."
+    },
+    "promotion_transaction_recovery": {
+      "required_context_fields": [
+        "original_state",
+        "cycle_id",
+        "promotion_transaction_id",
+        "candidate_id",
+        "owner_authorization_id",
+        "prior_champion_identity"
+      ],
+      "pre_commit_recovery_target": "PROMOTION_PENDING_OWNER",
+      "post_commit_recovery_target": "CHAMPION_ACTIVE",
+      "promotion_origin_may_resume_scientific_stage": false,
+      "promotion_origin_may_close_on_uncertain_evidence": false,
+      "transaction_identity_fields": [
+        "cycle_id",
+        "promotion_transaction_id",
+        "candidate_id",
+        "candidate_spec_sha256",
+        "owner_authorization_id",
+        "prior_champion_identity",
+        "candidate_artifact_sha256",
+        "candidate_stage_seal_set_sha256"
+      ],
+      "idempotency_key_fields": [
+        "cycle_id",
+        "promotion_transaction_id"
+      ],
+      "before_atomic_commit": {
+        "determine_durable_owner_authorization": true,
+        "assume_success": false,
+        "automatic_new_owner_decision": false,
+        "verify_exact_candidate_and_all_promotion_preconditions": true,
+        "resume_requires_same_transaction_identity": true,
+        "rule": "If no durable Owner authorization exists, return only to the same pending candidate decision and await the Owner; do not create authorization. If authorization exists and all exact bindings verify, resume only that transaction after proving atomic commit is absent. If commit status is uncertain, remain RECOVERY_REQUIRED."
+      },
+      "after_atomic_commit": {
+        "verify_committed_champion_identity": true,
+        "verify_artifact_publication_and_prior_champion_archive": true,
+        "reconcile_incomplete_state_projections": "Only from verified transaction, Champion, artifact, and archive evidence; preserve the committed transaction identity.",
+        "repeat_promotion_commit": "FORBIDDEN",
+        "repeated_recovery_is_idempotent": true,
+        "rule": "Read back the committed transaction before reconciling publication projections. Never recommit, reselect, or repeat an already committed promotion."
+      },
+      "uncertain_or_conflicting_evidence": {
+        "fail_closed": true,
+        "required_state": "RECOVERY_REQUIRED",
+        "automatic_promotion": false,
+        "automatic_rollback": false,
+        "automatic_new_cycle": false,
+        "rule": "Missing/corrupt transaction, authorization, Champion, artifact, or prior-archive evidence is not inferred; remain blocked until exact authority is verified."
+      },
+      "rollback": {
+        "requires_separate_explicit_owner_authorization": true,
+        "automatic_during_recovery": false
+      },
+      "recovery_must_not_resume_scientific_training": true
+    },
     "candidate_runtime_pipeline": {
       "scope": "PER_CANDIDATE_ID",
       "initial": "AWAITING_FORWARD_PASS",
@@ -593,11 +997,11 @@
         {"from": "RUNTIME_MANIFEST_VALIDATION", "to": "RUNTIME_BLOCKED", "guard": "Manifest validation failure is recorded against this exact candidate and last valid runtime checkpoint; no other candidate or sealed science evidence is invalidated."},
         {"from": "CHALLENGER_REGISTRATION", "to": "RUNTIME_BLOCKED", "guard": "Registration or readback failure is recorded against this exact candidate and last valid runtime checkpoint; no other candidate or sealed science evidence is invalidated."},
         {"from": "RUNTIME_BLOCKED", "to_one_of": ["FINAL_PERMITTED_FIT", "ONNX_EXPORT", "ONNX_PARITY", "RUNTIME_MANIFEST_VALIDATION", "CHALLENGER_REGISTRATION"], "guard": "After bounded runtime-only repair, resume the same candidate at its last valid runtime checkpoint, revalidate downstream artifacts, and reuse all sealed science evidence without rerunning Discovery, WFA, CPCV, Tournament, Monte Carlo, or Forward."},
-        {"from": "RUNTIME_BLOCKED", "to": "RUNTIME_BLOCKED_UNRECOVERABLE", "guard": "If authority or artifacts cannot be safely repaired, preserve failure evidence and permanently exclude only this candidate for the cycle; fail closed without blocking other candidates."}
+        {"from": "RUNTIME_BLOCKED", "to": "RUNTIME_BLOCKED_UNRECOVERABLE", "guard": "If authority or artifacts cannot be safely repaired, atomically commit this exact candidate's RUNTIME_BLOCKED_UNRECOVERABLE disposition and failure evidence, then permanently exclude only this candidate for the cycle; fail closed without changing another candidate's scientific status or blocking its repair."}
       ],
       "terminal_states": ["CHALLENGER_READY", "RUNTIME_BLOCKED_UNRECOVERABLE"]
     },
-    "transition_law": "Cycle transitions advance only on committed stage evidence. Post-Forward states are per-candidate and require the ordered fit/export/parity/manifest/registration chain. Candidate runtime failure cannot invalidate another candidate. Recovery resumes only from a valid committed checkpoint; a new cycle is never automatic."
+    "transition_law": "Cycle transitions advance only on committed stage evidence. Post-Forward runtime and disposition are per-candidate and preserve independent immutable identities/cursors. Promotion eligibility does not wait for unrelated candidates, but cycle closure requires every Forward-PASS candidate to have a committed verified terminal disposition and no active cursor or owned process. Promotion recovery preserves original state and transaction identity; it verifies before/after atomic commit and never resumes scientific training or replays a committed promotion. A new cycle is never automatic."
   },
   "ui_and_api_ownership": {
     "top_level_navigation": ["Strategy", "ONNX", "Artifacts", "Settings"],
@@ -631,7 +1035,7 @@
     {"id": "ONNX-00", "title": "Scientific authority and roadmap", "status": "CURRENT", "runtime": false},
     {"id": "ONNX-01", "title": "Eight-page workspace shell and API/state skeleton", "status": "PLANNED", "runtime": false},
     {"id": "ONNX-02", "title": "Data Intake, data quality, windows, immutable snapshot", "status": "PLANNED", "exit": "DATA_READY evidence"},
-    {"id": "ONNX-03", "title": "Labels, 14-family Discovery, CandidateSpec, Cheap Screen, 3-fold WFA, max-12 pool", "status": "PLANNED"},
+    {"id": "ONNX-03", "title": "Labels, 23-family Discovery, CandidateSpec, Cheap Screen, 3-fold WFA, max-12 pool", "status": "PLANNED", "entry_guard": "A complete versioned Owner-authorized KPI contract and every selected family's legal/active parameter, architecture, early-stopping, hardware, and data-input contract must be frozen; unresolved family gaps fail admission."},
     {"id": "ONNX-04", "title": "CPCV 6C2=15, purge/embargo, seed confirmation, candidate freeze and stage seal", "status": "PLANNED"},
     {"id": "ONNX-05", "title": "Independent Tournament window, no tuning, hard KPI and stage seal", "status": "PLANNED"},
     {"id": "ONNX-06", "title": "Monte Carlo, survivor gate and replayable sealed evidence", "status": "PLANNED"},

@@ -216,6 +216,18 @@
       "status": "FIXED/ACCEPTED_CANDIDATE",
       "summary": "ModelLab V3 expectancy reference values were represented as executable MAX hard gates without explicit Owner KPI authorization.",
       "evidence": "The 0.00R values remain labeled scientific reference proposals only, with executable hard gates disabled. ONNX-03 is blocked until a complete, versioned KPI contract is explicitly Owner-authorized and frozen before cycle start. Focused contract test: backend/tests/test_onnx00_governance_contracts.py."
+    },
+    {
+      "id": "ONNX00-CANDIDATE-CYCLE-CLOSURE",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Cycle closure could discard or orphan Forward-PASS candidates whose independent runtime work or disposition remained unresolved after another candidate was promoted.",
+      "evidence": "Planning authority defines immutable per-candidate identity/cursors, promotion eligibility independent from cycle closure, committed terminal dispositions for every Forward-PASS candidate, verified safe cancellation, and idempotent disposition recovery. Focused governance suite: 10 passed; full backend: 483 passed, 0 failed, 0 skipped. Runtime orchestration is not implemented or claimed."
+    },
+    {
+      "id": "ONNX00-PROMOTION-RECOVERY-GAP",
+      "status": "FIXED/ACCEPTED_CANDIDATE",
+      "summary": "Recovery around Owner promotion and Champion publication lacked a same-stage transaction reconciliation path and could not prove whether promotion had committed.",
+      "evidence": "Planning authority binds original state and exact promotion transaction identity, distinguishes pre-commit authorization from post-commit publication/archive verification, prohibits promotion replay, and remains fail-closed on uncertain evidence. Focused governance suite: 10 passed; full backend: 483 passed, 0 failed, 0 skipped. Runtime orchestration is not implemented or claimed."
     }
   ],
   "schema_version": 1

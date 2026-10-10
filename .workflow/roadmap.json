@@ -53,7 +53,7 @@
       "id": "R02_COMPLETE_MODEL_FACTORY",
       "title": "Legacy R02 Complete Model Factory",
       "status": "RETIRED",
-      "objective": "Retired legacy Research model-factory roadmap phase; ONNX V1 uses the Owner-frozen 14-family allowlist.",
+      "objective": "Retired legacy Research model-factory roadmap phase; ONNX V1 uses the current Owner D-043 23-family allowlist.",
       "exit_criteria": ["Do not revive the legacy model registry, family universe, or runtime."]
     },
     {
@@ -123,13 +123,15 @@
       "id": "ONNX-00",
       "title": "ONNX-00 scientific authority and roadmap",
       "status": "CURRENT",
-      "objective": "Planning/governance only: inspect latest ModelLab, define the exact V1 model and parameter authority, dataset/stage/state/evidence contracts, product ownership and ONNX-00..ONNX-09 roadmap; retire legacy Research.",
+      "objective": "Planning/governance only: inspect frozen ModelLab references, record current Owner decision D-043 for the exact 23-family V1 universe and D-044 capacity proposals, define distinct architecture/composition identities, parameter/capacity authority and explicit open gaps, dataset/stage/state/evidence contracts, product ownership and ONNX-00..ONNX-09 roadmap; retire legacy Research.",
       "exit_criteria": [
         "The exact current ModelLab main SHA and all 19 authorities listed by the Owner prompt are inspected and recorded.",
-        "KEEP / ADAPT / RETIRE / NOT_USED mapping and the exact Owner-frozen 14-family allowlist/exclusions are recorded.",
-        "The full parameter, hybrid OOF, temporal training, dataset/windows/labels, stage gates, state machine, checkpoint, UI/API ownership, KPI gaps and roadmap contracts are machine-readable and explained.",
+        "D-040 is preserved as historical and superseded by current Owner decision D-043; the exact 9-standalone + 14-hybrid allowlist and exclusions are recorded.",
+        "Each active architecture and exact hybrid composition has a distinct identity; existing active envelopes remain unchanged, D-044 additions are clearly proposed, and unresolved architecture-specific values are explicit fail-closed gaps rather than defaults.",
+        "Parameter/hardware/capacity, hybrid OOF, temporal training, dataset/windows/labels, stage gates, state machine, checkpoint, UI/API ownership, KPI gaps, ONNX compatibility gaps, and roadmap contracts are machine-readable and explained.",
+        "Every unresolved family implementation, input, legal envelope, hardware estimate, or ONNX compatibility gap blocks ONNX-03 admission until separately justified, versioned, accepted, and frozen.",
         "Legacy Research and R00-R11 are marked RETIRED; Owner runtime and real research remain NOT_PROVEN/NOT_STARTED.",
-        "No runtime, training, ONNX export, MT5, Owner PC, tests that execute models, or product behavior change is introduced.",
+        "No runtime, training, ONNX export, MT5, Owner PC, tests that execute models, or product behavior change is introduced; D-043 and D-044 grant no runtime authorization.",
         "Applicable governance validators and Windows PR-head CI pass; planning-only PR is open for Control Room audit and remains unmerged."
       ]
     },
@@ -153,8 +155,8 @@
       "id": "ONNX-03",
       "title": "Causal labels, Discovery, Cheap Screen, WFA and qualified pool",
       "status": "PLANNED",
-      "blocked_by": "ONNX-02_DATA_READY_AND_COMPLETE_FROZEN_KPI_CONTRACT",
-      "objective": "Implement causal labels, the exact 14-family CandidateSpec/fingerprint, Discovery, Cheap Screen allocation, exact 3-fold WFA, maximum-12 pool, and Discovery checkpoints.",
+      "blocked_by": "ONNX-02_DATA_READY_AND_COMPLETE_FROZEN_KPI_CONTRACT_AND_SELECTED_FAMILY_AUTHORITY",
+      "objective": "Implement causal labels, the exact 23-family CandidateSpec/fingerprint, Discovery, Cheap Screen allocation, exact 3-fold WFA, maximum-12 pool, and Discovery checkpoints only after each selected family's implementation, input, legal/active parameter, patience, hardware, capacity, and compatibility authority is complete and frozen.",
       "exit_criteria": ["Only WFA_PASS candidates enter the pool; 0 PASS terminates; all failures remain in append-only evidence."]
     },
     {

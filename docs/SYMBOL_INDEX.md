@@ -3,7 +3,7 @@
 # SYMBOL INDEX
 
 Authority SHA: external final acceptance evidence
-Source digest: 5f95d01d5d0a3bc99ad45729cc24e53be926ba50e0d3b0815e3f0d5b8643fa19
+Source digest: 4a947282810a23e03392ef40f9ec55db83f08e96361c43c5808ea347aaeca979
 Status: CURRENT
 
 | File | Symbol | Kind | Lines@SHA | Responsibility | Reads/Writes | Called By | Tests |
@@ -270,6 +270,18 @@ Status: CURRENT
 | backend/max_backend/mtf_geometry.py | frozen_geometry_inputs | function | 153-168 | Observed Python symbol | | | |
 | backend/max_backend/mtf_geometry.py | latest_fully_closed_open_time | function | 171-187 | Observed Python symbol | | | |
 | backend/max_backend/mtf_geometry.py | fuse_role_observations | function | 190-203 | Observed Python symbol | | | |
+| backend/max_backend/onnx_parameter_estimation.py | _positive_int | function | 31-34 | Observed Python symbol | | | |
+| backend/max_backend/onnx_parameter_estimation.py | recurrent_parameter_count | function | 37-56 | Observed Python symbol | | | |
+| backend/max_backend/onnx_parameter_estimation.py | dense_transformer_block_parameter_estimate | function | 59-66 | Observed Python symbol | | | |
+| backend/max_backend/onnx_parameter_estimation.py | moe_transformer_block_parameter_estimate | function | 69-108 | Observed Python symbol | | | |
+| backend/max_backend/onnx_parameter_estimation.py | validate_attention_heads | function | 111-115 | Observed Python symbol | | | |
+| backend/max_backend/onnx_parameter_estimation.py | validate_patch_configuration | function | 118-127 | Observed Python symbol | | | |
+| backend/max_backend/onnx_parameter_estimation.py | validate_tft_covariates | function | 130-148 | Observed Python symbol | | | |
+| backend/max_backend/onnx_parameter_estimation.py | validate_search_proposal | function | 151-187 | Observed Python symbol | | | |
+| backend/max_backend/onnx_parameter_estimation.py | count_module_parameter_ledger | function | 190-309 | Observed Python symbol | | | |
+| backend/max_backend/onnx_parameter_estimation.py | estimate_neural_memory_bytes | function | 312-363 | Observed Python symbol | | | |
+| backend/max_backend/onnx_parameter_estimation.py | estimate_neural_candidate | function | 366-400 | Observed Python symbol | | | |
+| backend/max_backend/onnx_parameter_estimation.py | estimate_tree_complexity_bound | function | 403-468 | Observed Python symbol | | | |
 | backend/max_backend/optimizer_api.py | QualifiedSelection | class | 22-26 | Observed Python symbol | | | |
 | backend/max_backend/optimizer_api.py | PromoteQualifiedRequest | class | 29-30 | Observed Python symbol | | | |
 | backend/max_backend/optimizer_api.py | OptimizerDraftRequest | class | 33-35 | Observed Python symbol | | | |
@@ -1178,13 +1190,22 @@ Status: CURRENT
 | backend/tests/test_m08_strategy_results.py | test_owner_selected_consumed_challenger_completes_synthetic_promotion | function | 2326-2415 | Observed Python symbol | | | |
 | backend/tests/test_m08_strategy_results.py | test_owner_selected_consumed_challenger_completes_synthetic_promotion.fake_compile | method | 2379-2391 | Observed Python symbol | | | |
 | backend/tests/test_m08_strategy_results.py | test_committed_batch_keeps_source_consumed_after_challenger_row_delete | function | 2418-2465 | Observed Python symbol | | | |
-| backend/tests/test_onnx00_governance_contracts.py | _json | function | 8-9 | Observed Python symbol | | | |
-| backend/tests/test_onnx00_governance_contracts.py | _edge_exists | function | 12-17 | Observed Python symbol | | | |
-| backend/tests/test_onnx00_governance_contracts.py | _reachable_states | function | 20-37 | Observed Python symbol | | | |
-| backend/tests/test_onnx00_governance_contracts.py | test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect | function | 40-78 | Observed Python symbol | | | |
-| backend/tests/test_onnx00_governance_contracts.py | test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain | function | 81-147 | Observed Python symbol | | | |
-| backend/tests/test_onnx00_governance_contracts.py | test_model_lab_expectancy_values_are_proposals_not_executable_kpi_gates | function | 150-188 | Observed Python symbol | | | |
-| backend/tests/test_onnx00_governance_contracts.py | test_frozen_onnx_v1_scientific_contract_is_preserved | function | 191-245 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | _json | function | 28-29 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | _edge_exists | function | 32-37 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | _reachable_states | function | 40-57 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | _promotion_is_eligible | function | 60-66 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | _cycle_closure_is_eligible | function | 69-78 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect | function | 81-119 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain | function | 122-196 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | test_candidate_promotion_is_independent_from_safe_cycle_closure | function | 199-299 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | test_promotion_recovery_preserves_transaction_identity_and_is_idempotent | function | 302-367 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | test_model_lab_expectancy_values_are_proposals_not_executable_kpi_gates | function | 370-408 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact | function | 411-509 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact.bounds | method | 414-417 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | test_frozen_onnx_v1_scientific_contract_is_preserved | function | 512-669 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | test_every_temporal_family_has_a_complete_estimator_role_contract | function | 672-707 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | test_pure_parameter_estimation_and_capacity_guards_are_fail_closed | function | 710-880 | Observed Python symbol | | | |
+| backend/tests/test_onnx00_governance_contracts.py | test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults | function | 883-941 | Observed Python symbol | | | |
 | backend/tests/test_optimizer_draft.py | make_database | function | 14-18 | Observed Python symbol | | | |
 | backend/tests/test_optimizer_draft.py | test_optimizer_draft_survives_database_reopen_and_stores_all_parameter_ranges | function | 21-44 | Observed Python symbol | | | |
 | backend/tests/test_optimizer_draft.py | test_optimizer_draft_rejects_stale_save_without_overwriting_newer_values | function | 47-60 | Observed Python symbol | | | |

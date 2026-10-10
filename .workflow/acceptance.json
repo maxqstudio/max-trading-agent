@@ -161,9 +161,9 @@
       "status": "PASS_LOCAL"
     },
     {
-      "evidence": ".workflow/onnx_v1_authority.json; docs/onnx/ONNX_00_SCIENTIFIC_AUTHORITY.md",
+      "evidence": ".workflow/decisions.json::D-043/D-044; .workflow/onnx_v1_authority.json; docs/onnx/ONNX_00_SCIENTIFIC_AUTHORITY.md",
       "id": "ONNX-00-MODEL-AUTHORITY-01",
-      "requirement": "The exact Owner-frozen 14-family V1 universe, excluded models, active ranges, hybrid purged-OOF contract and temporal training contract are machine-readable and documented.",
+      "requirement": "The exact Owner-authorized 23-family V1 universe under D-043, exclusions, independent architecture/composition identities, unchanged existing active ranges, D-044 proposed envelopes, explicit fail-closed gaps, parameter/capacity accounting contract, hybrid purged-OOF contract, and temporal training contract are machine-readable and documented without granting runtime authority.",
       "status": "PASS_LOCAL"
     },
     {
@@ -194,6 +194,18 @@
       "evidence": ".workflow/onnx_v1_authority.json::kpi_authority/stage_authority; docs/onnx/ONNX_00_SCIENTIFIC_AUTHORITY.md; backend/tests/test_onnx00_governance_contracts.py",
       "id": "ONNX00-KPI-AUTHORIZATION-GAP",
       "requirement": "ModelLab V3 expectancy values remain proposed scientific references, not executable MAX gates; a complete versioned Owner-authorized KPI contract is required and frozen before ONNX-03.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": ".workflow/onnx_v1_authority.json::state_machine/candidate_disposition_contract; docs/onnx/ONNX_00_SCIENTIFIC_AUTHORITY.md; backend/tests/test_onnx00_governance_contracts.py",
+      "id": "ONNX00-CANDIDATE-CYCLE-CLOSURE",
+      "requirement": "Promotion of an exact ready candidate does not wait for unrelated candidates, while cycle closure requires a committed verified terminal disposition for every Forward-PASS candidate and no active cursor or owned process; cancellation and disposition recovery preserve evidence and cannot duplicate execution.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": ".workflow/onnx_v1_authority.json::state_machine/promotion_transaction_recovery; docs/onnx/ONNX_00_SCIENTIFIC_AUTHORITY.md; backend/tests/test_onnx00_governance_contracts.py",
+      "id": "ONNX00-PROMOTION-RECOVERY-GAP",
+      "requirement": "Promotion recovery preserves original stage and transaction identity, distinguishes uncommitted authorization from committed Champion publication/archive, resumes only the exact transaction, never replays commit, and stays fail-closed on uncertain evidence without entering scientific training or automatic rollback.",
       "status": "PASS_LOCAL"
     },
     {
@@ -237,12 +249,12 @@
       "tested_sha": null
     },
     "regression": {
-      "backend_full_status": "NOT_RUN_LOCAL_PRODUCT_SOURCE_UNCHANGED; starting main exact CI PASS, current PR CI pending",
-      "build": "NOT_RUN_LOCAL_PRODUCT_SOURCE_UNCHANGED",
-      "frontend_status": "NOT_RUN_LOCAL_PRODUCT_SOURCE_UNCHANGED; starting main exact CI PASS, current PR CI pending",
-      "lint": "NOT_RUN_LOCAL_PRODUCT_SOURCE_UNCHANGED",
-      "npm_ls_all": "NOT_RUN_LOCAL_PRODUCT_SOURCE_UNCHANGED",
-      "pip_check": "NOT_RUN_LOCAL_PRODUCT_SOURCE_UNCHANGED"
+      "backend_full_status": "PASS: 483 passed, 0 failed, 0 skipped; focused ONNX-00 governance suite 10 passed",
+      "build": "PASS: frontend npm run build; Vite bundle-size warning remains non-blocking and unchanged in scope",
+      "frontend_status": "PASS: 61 passed / 9 files",
+      "lint": "PASS: frontend npm run lint",
+      "npm_ls_all": "PASS: exit 0; optional platform packages remain listed unmet",
+      "pip_check": "PASS: No broken requirements found"
     },
     "runtime": {
       "model_training": 0,
