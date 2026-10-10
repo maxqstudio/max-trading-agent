@@ -119,7 +119,9 @@ try {
   if (-not $firstFailedGate) {
     $ok = Invoke-Gate -Name 'CUMULATIVE_ACCEPTANCE' -Command 'scripts/accept_onnx01.ps1 with the current pinned Skill Workflow and complete repository gates' -Action {
       $runner = Join-Path $PSScriptRoot 'accept_onnx01.ps1'
-      & powershell -NoProfile -ExecutionPolicy Bypass -File $runner -Python $pythonPath -SkillWorkflowPath $SkillWorkflowPath
+      $runnerArguments = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $runner, '-Python', $pythonPath)
+      if ($SkillWorkflowPath) { $runnerArguments += @('-SkillWorkflowPath', $SkillWorkflowPath) }
+      & powershell @runnerArguments
       if ($LASTEXITCODE -ne 0) { throw "Cumulative repository acceptance exit $LASTEXITCODE" }
       $childPath = Join-Path $repoRoot 'evidence\onnx01\acceptance.json'
       if (-not (Test-Path -LiteralPath $childPath -PathType Leaf)) { throw 'Cumulative acceptance evidence is missing.' }
