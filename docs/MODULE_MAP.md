@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 10f401006631e66c17785b2cc60c9a4b9c648484dbec74de2842af1747ea223e
+Source digest: ced328c4116b3465abaaac70bd6e4831da60ed27073112f8d3ca4e759363de90
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -127,7 +127,7 @@ Generated/refreshed: current compiler run
 | frontend/src/testSetup.ts | TypeScript | 1 | frontend/src | NO |
 | frontend/vite.config.ts | TypeScript | 18 | frontend | NO |
 | scripts/accept_onnx01.ps1 | PowerShell | 292 | scripts | NO |
-| scripts/accept_onnx02.ps1 | PowerShell | 182 | scripts | NO |
+| scripts/accept_onnx02.ps1 | PowerShell | 190 | scripts | NO |
 | scripts/build_m05_final_evidence.py | Python | 586 | scripts | NO |
 | scripts/build_m05_partial_evidence.py | Python | 217 | scripts | NO |
 | scripts/build_scientist_knowledge.py | Python | 270 | scripts | NO |
