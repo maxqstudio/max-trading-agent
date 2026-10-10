@@ -724,14 +724,14 @@
       "file": "frontend/src/OnnxDataIntake.test.tsx",
       "is_test": true,
       "language": "TypeScript/React",
-      "lines": 176
+      "lines": 225
     },
     {
       "directory": "frontend/src",
       "file": "frontend/src/OnnxDataIntake.tsx",
       "is_test": false,
       "language": "TypeScript/React",
-      "lines": 335
+      "lines": 338
     },
     {
       "directory": "frontend/src",
@@ -81122,7 +81122,7 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "229eaceb3ec244dcb6eaf2218a2a6087e73152bf043878c65f4fa2c4877d195a",
+  "source_digest": "c07d8608b820ce5e77b7b8afe270791d76a828e1cca78bdeabf8d2d862d09674",
   "source_summary": {
     "files": 141,
     "languages": {
@@ -81131,7 +81131,7 @@
       "TypeScript": 7,
       "TypeScript/React": 22
     },
-    "lines": 65729,
+    "lines": 65781,
     "test_files": 49
   },
   "tests": [

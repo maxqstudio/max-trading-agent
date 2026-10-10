@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 229eaceb3ec244dcb6eaf2218a2a6087e73152bf043878c65f4fa2c4877d195a
+Source digest: c07d8608b820ce5e77b7b8afe270791d76a828e1cca78bdeabf8d2d862d09674
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -109,8 +109,8 @@ Generated/refreshed: current compiler run
 | frontend/src/ChampionPage.tsx | TypeScript/React | 175 | frontend/src | NO |
 | frontend/src/DataTable.test.tsx | TypeScript/React | 122 | frontend/src | YES |
 | frontend/src/DataTable.tsx | TypeScript/React | 145 | frontend/src | NO |
-| frontend/src/OnnxDataIntake.test.tsx | TypeScript/React | 176 | frontend/src | YES |
-| frontend/src/OnnxDataIntake.tsx | TypeScript/React | 335 | frontend/src | NO |
+| frontend/src/OnnxDataIntake.test.tsx | TypeScript/React | 225 | frontend/src | YES |
+| frontend/src/OnnxDataIntake.tsx | TypeScript/React | 338 | frontend/src | NO |
 | frontend/src/OnnxWorkspace.tsx | TypeScript/React | 334 | frontend/src | NO |
 | frontend/src/OptimizerPage.test.tsx | TypeScript/React | 1325 | frontend/src | YES |
 | frontend/src/OptimizerPage.tsx | TypeScript/React | 1494 | frontend/src | NO |
