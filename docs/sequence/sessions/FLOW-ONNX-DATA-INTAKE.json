@@ -18,7 +18,7 @@
       "backend/max_backend/onnx_data_store.py::persist_snapshot"
     ],
     "graph": "docs/sequence/generated/FLOW-ONNX-DATA-INTAKE.actual.json",
-    "source_digest": "229eaceb3ec244dcb6eaf2218a2a6087e73152bf043878c65f4fa2c4877d195a"
+    "source_digest": "c07d8608b820ce5e77b7b8afe270791d76a828e1cca78bdeabf8d2d862d09674"
   },
   "critical": true,
   "implementation_base_sha": "1a9c9a6990e1f2571e4d85d79436402e6d37ec23",
