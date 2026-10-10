@@ -29,7 +29,7 @@
       "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration"
     ],
     "graph": "docs/sequence/generated/FLOW-OPTIMIZER-DURABILITY-PERFORMANCE.actual.json",
-      "source_digest": "eca30bb1e1abff5c3c87df344aa020bce0645cc07a90fb4e426d615d9b0863bf"
+    "source_digest": "1b10cbe5840440fc0a4a4b851370d6bdb282bde43bc872fa1993b2597790c27d"
   },
   "critical": true,
   "implementation_base_sha": "5a30097d76a46ad077bed8dfd978eb6b27f83264",
