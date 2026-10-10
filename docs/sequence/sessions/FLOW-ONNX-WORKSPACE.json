@@ -7,7 +7,7 @@
       "backend/max_backend/onnx_api.py::get_onnx_workspace"
     ],
     "graph": "docs/sequence/generated/FLOW-ONNX-WORKSPACE.actual.json",
-    "source_digest": "dc57f52fc7ab02ff2b35cf481a2e27873131eb4f70de6d3c6a40280e8492140b"
+    "source_digest": "10f401006631e66c17785b2cc60c9a4b9c648484dbec74de2842af1747ea223e"
   },
   "critical": true,
   "implementation_base_sha": "c75f978ea4438183e6a759d398eb69b3eeca9ac4",

@@ -374,11 +374,11 @@
     },
     {
       "path": "backend/max_backend/onnx_data_contract.py",
-      "sha256": "736251924fc31057d44e2b0adcfa06bcf5b991be29df244e2b9d319b6c00fb6e"
+      "sha256": "02ef5055f19d99defe663ae15eb9d0eb082b74f688d4eec9382f6f29ee1b8add"
     },
     {
       "path": "backend/max_backend/onnx_data_source.py",
-      "sha256": "301e85c8b1212074f4eca37a242dc72b091c7b381632d8644f6cb60845f639c2"
+      "sha256": "a3fee61ca00823277a755fe331690ca86347cbbee27ba707e47e9c4cc086b74d"
     },
     {
       "path": "backend/max_backend/onnx_data_store.py",
@@ -390,7 +390,7 @@
     },
     {
       "path": "backend/max_backend/onnx_data_api.py",
-      "sha256": "421e3ded3ac6701e79d8b8943cd3f3a5d80ebdd0b664899925026f00ec304ba9"
+      "sha256": "de149d94749d20f0b0f3cc160a6d83491a20e60930c829b087caa2be2e7be03f"
     },
     {
       "path": "frontend/src/onnxDataApi.ts",

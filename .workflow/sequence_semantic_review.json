@@ -6,8 +6,8 @@
   "skill_authority_sha": "964481ed1609f87904ba9e08890bffc0a10c3fd4",
   "generation_anchor_policy": {
     "meaning": "The observed head is a pre-commit generation anchor. Final hosted source SHA and CI identity remain external acceptance evidence; real MT5 and Owner-PC runtime remain deferred.",
-    "observed_head": "eee1959d61b272d838d397be27e51c6781c750c4",
-    "source_digest": "cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b"
+    "observed_head": "698367073679ea27254a85f7f2c97e1b59429dd6",
+    "source_digest": "10f401006631e66c17785b2cc60c9a4b9c648484dbec74de2842af1747ea223e"
   },
   "flows": [
     {
@@ -29,15 +29,17 @@
         "backend/max_backend/artifact_api.py::strategy_workspace_reset",
         "backend/max_backend/artifact_control.py::clean_generated_data"
       ],
-      "generated_nodes": 123,
-      "generated_edges": 222,
-      "source_digest": "cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b",
+      "generated_nodes": 124,
+      "generated_edges": 223,
+      "source_digest": "10f401006631e66c17785b2cc60c9a4b9c648484dbec74de2842af1747ea223e",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_strategy_workspace_reset.py",
         "frontend/src/ArtifactsPage.test.tsx"
       ],
-      "unresolved_bindings": [],
+      "unresolved_bindings": [
+        null
+      ],
       "runtime_evidence_boundary": "Browser checks used mocked API responses. No Owner database, MT5, broker, or real operational artifact was accessed."
     },
     {
@@ -53,12 +55,14 @@
       ],
       "generated_nodes": 88,
       "generated_edges": 135,
-      "source_digest": "cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b",
+      "source_digest": "10f401006631e66c17785b2cc60c9a4b9c648484dbec74de2842af1747ea223e",
       "tests": [
         "backend/tests/test_m06_challenger_operations.py",
         "backend/tests/test_m08_strategy_results.py"
       ],
-      "unresolved_bindings": [],
+      "unresolved_bindings": [
+        null
+      ],
       "runtime_evidence_boundary": "Static sequence and synthetic tests only; real Strategy Tester and Owner-PC behavior remain deferred."
     },
     {
@@ -73,12 +77,14 @@
       ],
       "generated_nodes": 44,
       "generated_edges": 62,
-      "source_digest": "cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b",
+      "source_digest": "10f401006631e66c17785b2cc60c9a4b9c648484dbec74de2842af1747ea223e",
       "tests": [
         "backend/tests/test_m03_challenger.py",
         "backend/tests/test_m06_challenger_operations.py"
       ],
-      "unresolved_bindings": [],
+      "unresolved_bindings": [
+        null
+      ],
       "runtime_evidence_boundary": "Static sequence and synthetic tests only; real Strategy Tester and Owner-PC behavior remain deferred."
     },
     {
@@ -92,12 +98,14 @@
       ],
       "generated_nodes": 162,
       "generated_edges": 321,
-      "source_digest": "cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b",
+      "source_digest": "10f401006631e66c17785b2cc60c9a4b9c648484dbec74de2842af1747ea223e",
       "tests": [
         "backend/tests/test_m04_promotion.py",
         "backend/tests/test_m04_store.py"
       ],
-      "unresolved_bindings": [],
+      "unresolved_bindings": [
+        null
+      ],
       "runtime_evidence_boundary": "Promotion authority is covered by local synthetic tests; no real deployment or Champion mutation was performed."
     },
     {
@@ -110,14 +118,16 @@
         "backend/max_backend/optimizer_api.py::get_qualified_candidates",
         "backend/max_backend/optimizer_api.py::promote_qualified_candidates"
       ],
-      "generated_nodes": 145,
-      "generated_edges": 239,
-      "source_digest": "cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b",
+      "generated_nodes": 146,
+      "generated_edges": 240,
+      "source_digest": "10f401006631e66c17785b2cc60c9a4b9c648484dbec74de2842af1747ea223e",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_m03_challenger.py"
       ],
-      "unresolved_bindings": [],
+      "unresolved_bindings": [
+        null
+      ],
       "runtime_evidence_boundary": "Static sequence and synthetic tests only; real MT5 optimization evidence is not produced in this phase."
     },
     {
@@ -132,13 +142,15 @@
       ],
       "generated_nodes": 48,
       "generated_edges": 75,
-      "source_digest": "cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b",
+      "source_digest": "10f401006631e66c17785b2cc60c9a4b9c648484dbec74de2842af1747ea223e",
       "tests": [
         "backend/tests/test_m05_scientist.py",
         "backend/tests/test_m05_final_evidence_contract.py",
         "frontend/src/ScientistPage.test.tsx"
       ],
-      "unresolved_bindings": [],
+      "unresolved_bindings": [
+        null
+      ],
       "runtime_evidence_boundary": "Synthetic and static checks only; no real model, Owner runtime, MT5, or market-data execution is claimed."
     },
     {
@@ -158,16 +170,18 @@
         "backend/max_backend/strategy_reset.py::database_recovery_status",
         "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
       ],
-      "generated_nodes": 80,
-      "generated_edges": 115,
-      "source_digest": "cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b",
+      "generated_nodes": 81,
+      "generated_edges": 116,
+      "source_digest": "10f401006631e66c17785b2cc60c9a4b9c648484dbec74de2842af1747ea223e",
       "tests": [
         "backend/tests/test_strategy_workspace_reset.py",
         "backend/tests/test_retired_subsystem_migration.py",
         "frontend/src/App.test.tsx",
         "frontend/src/ArtifactsPage.test.tsx"
       ],
-      "unresolved_bindings": [],
+      "unresolved_bindings": [
+        null
+      ],
       "runtime_evidence_boundary": "UI checks used mocked API responses; reset/recovery behavior was tested only with synthetic temporary SQLite databases."
     },
     {
@@ -181,11 +195,11 @@
         "backend/max_backend/optimizer_draft.py::get_optimizer_draft",
         "backend/max_backend/optimizer_draft.py::put_optimizer_draft",
         "backend/max_backend/optimizer_jobs.py::start_optimizer",
-          "backend/max_backend/optimizer_jobs.py::_spawn_worker",
-          "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
-          "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.receive",
-          "backend/max_backend/optimizer_worker_identity.py::terminate_process_verified",
-          "backend/max_backend/optimizer_worker.py::main",
+        "backend/max_backend/optimizer_jobs.py::_spawn_worker",
+        "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
+        "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.receive",
+        "backend/max_backend/optimizer_worker_identity.py::terminate_process_verified",
+        "backend/max_backend/optimizer_worker.py::main",
         "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
         "backend/max_backend/optimizer_jobs.py::stop_optimizer",
         "backend/max_backend/optimizer_jobs.py::resume_optimizer",
@@ -194,8 +208,8 @@
         "backend/max_backend/optimizer_worker.py::run_job",
         "backend/max_backend/optimizer_runtime.py::launch_mt5",
         "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv",
-          "backend/max_backend/optimizer_runtime.py::commit_round_evidence",
-          "backend/max_backend/optimizer_candidates.py::candidate_projection_payload",
+        "backend/max_backend/optimizer_runtime.py::commit_round_evidence",
+        "backend/max_backend/optimizer_candidates.py::candidate_projection_payload",
         "backend/max_backend/optimizer_store.py::optimizer_candidate_identity",
         "backend/max_backend/optimizer_store.py::optimizer_candidate_identities",
         "backend/max_backend/optimizer_store.py::persist_candidate_projection",
@@ -204,7 +218,7 @@
       ],
       "generated_nodes": 268,
       "generated_edges": 514,
-      "source_digest": "cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b",
+      "source_digest": "10f401006631e66c17785b2cc60c9a4b9c648484dbec74de2842af1747ea223e",
       "tests": [
         "backend/tests/test_optimizer_draft.py",
         "backend/tests/test_optimizer_reliability.py",
@@ -217,7 +231,9 @@
         "frontend/src/OptimizerPage.test.tsx",
         "frontend/src/ChallengersPage.test.tsx"
       ],
-      "unresolved_bindings": [],
+      "unresolved_bindings": [
+        null
+      ],
       "runtime_evidence_boundary": "Historical Stage C/D MT5 diagnostics remain historical only. This source candidate has not run MT5 or a real Optimizer; the reported long-range run ended in FAILED during result parsing after MT5 returned exit code 0. Frozen evidence was replayed offline without database writes. Owner runtime remains NOT_PROVEN; no scientific result is claimed."
     },
     {
@@ -230,15 +246,17 @@
         "frontend/src/App.tsx::<module>",
         "backend/max_backend/onnx_api.py::get_onnx_workspace"
       ],
-      "generated_nodes": 77,
-      "generated_edges": 100,
-      "source_digest": "cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b",
+      "generated_nodes": 78,
+      "generated_edges": 101,
+      "source_digest": "10f401006631e66c17785b2cc60c9a4b9c648484dbec74de2842af1747ea223e",
       "tests": [
         "backend/tests/test_m00_foundation.py",
         "frontend/src/App.test.tsx",
         "frontend/src/onnxApi.test.ts"
       ],
-      "unresolved_bindings": [],
+      "unresolved_bindings": [
+        null
+      ],
       "runtime_evidence_boundary": "Synthetic API/UI tests and static sequence only. No operational database, dataset, Owner PC, MT5, model training, ONNX export/runtime, or scientific outcome was accessed or produced."
     },
     {
@@ -255,25 +273,27 @@
         "backend/max_backend/onnx_data_api.py::validate_windows",
         "backend/max_backend/onnx_data_service.py::OnnxDataService",
         "backend/max_backend/onnx_data_source.py::capture_training_source",
-          "backend/max_backend/onnx_data_store.py::migrate_onnx_data"
+        "backend/max_backend/onnx_data_store.py::migrate_onnx_data"
       ],
-        "generated_nodes": 48,
-        "generated_edges": 66,
-        "source_digest": "dc57f52fc7ab02ff2b35cf481a2e27873131eb4f70de6d3c6a40280e8492140b",
+      "generated_nodes": 48,
+      "generated_edges": 66,
+      "source_digest": "10f401006631e66c17785b2cc60c9a4b9c648484dbec74de2842af1747ea223e",
       "tests": [
         "backend/tests/test_onnx_data_intake.py",
         "backend/tests/test_onnx_data_api.py",
         "frontend/src/onnxDataApi.test.ts",
         "frontend/src/OnnxDataIntake.test.tsx"
       ],
-      "unresolved_bindings": [],
+      "unresolved_bindings": [
+        null
+      ],
       "runtime_evidence_boundary": "Synthetic temporary CSV/database and mocked API/UI checks only. No Owner data, broker history, Owner PC, MT5, research evaluation, model training, ONNX export/runtime, or Champion mutation was accessed or performed; real DATA_READY remains NOT_PROVEN."
     }
   ],
   "parse_failure_boundary": {
     "classification": "NO_FAILURES",
     "python_parse_failures": 0,
-    "source_digest": "cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b",
+    "source_digest": "10f401006631e66c17785b2cc60c9a4b9c648484dbec74de2842af1747ea223e",
     "detail": "All current source files parsed during canonical sequence regeneration; no temporary pytest fixture is present in the workspace."
   },
   "retrospective_plan_artifacts": 0,

@@ -192,7 +192,7 @@
       "file": "backend/max_backend/onnx_data_contract.py",
       "is_test": false,
       "language": "Python",
-      "lines": 365
+      "lines": 364
     },
     {
       "directory": "backend/max_backend",
@@ -206,7 +206,7 @@
       "file": "backend/max_backend/onnx_data_source.py",
       "is_test": false,
       "language": "Python",
-      "lines": 381
+      "lines": 380
     },
     {
       "directory": "backend/max_backend",
@@ -563,7 +563,7 @@
       "file": "backend/tests/test_onnx_data_api.py",
       "is_test": true,
       "language": "Python",
-      "lines": 417
+      "lines": 416
     },
     {
       "directory": "backend/tests",
@@ -70071,40 +70071,40 @@
     {
       "file": "backend/max_backend/onnx_data_api.py",
       "kind": "function",
-      "line_end": 96,
-      "line_start": 92,
+      "line_end": 99,
+      "line_start": 95,
       "locator": "backend/max_backend/onnx_data_api.py::preflight_source",
       "symbol": "preflight_source"
     },
     {
       "file": "backend/max_backend/onnx_data_api.py",
       "kind": "function",
-      "line_end": 108,
-      "line_start": 100,
+      "line_end": 111,
+      "line_start": 103,
       "locator": "backend/max_backend/onnx_data_api.py::create_snapshot",
       "symbol": "create_snapshot"
     },
     {
       "file": "backend/max_backend/onnx_data_api.py",
       "kind": "function",
-      "line_end": 116,
-      "line_start": 112,
+      "line_end": 117,
+      "line_start": 113,
       "locator": "backend/max_backend/onnx_data_api.py::get_snapshot",
       "symbol": "get_snapshot"
     },
     {
       "file": "backend/max_backend/onnx_data_api.py",
       "kind": "function",
-      "line_end": 132,
-      "line_start": 120,
+      "line_end": 133,
+      "line_start": 121,
       "locator": "backend/max_backend/onnx_data_api.py::resolve_identical_duplicates",
       "symbol": "resolve_identical_duplicates"
     },
     {
       "file": "backend/max_backend/onnx_data_api.py",
       "kind": "function",
-      "line_end": 149,
-      "line_start": 136,
+      "line_end": 150,
+      "line_start": 137,
       "locator": "backend/max_backend/onnx_data_api.py::validate_windows",
       "symbol": "validate_windows"
     },
@@ -80726,7 +80726,7 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "dc57f52fc7ab02ff2b35cf481a2e27873131eb4f70de6d3c6a40280e8492140b",
+  "source_digest": "10f401006631e66c17785b2cc60c9a4b9c648484dbec74de2842af1747ea223e",
   "source_summary": {
     "files": 141,
     "languages": {
@@ -80735,7 +80735,7 @@
       "TypeScript": 7,
       "TypeScript/React": 22
     },
-    "lines": 65482,
+    "lines": 65479,
     "test_files": 49
   },
   "tests": [

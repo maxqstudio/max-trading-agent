@@ -3,7 +3,7 @@
 # SYMBOL INDEX
 
 Authority SHA: external final acceptance evidence
-Source digest: dc57f52fc7ab02ff2b35cf481a2e27873131eb4f70de6d3c6a40280e8492140b
+Source digest: 10f401006631e66c17785b2cc60c9a4b9c648484dbec74de2842af1747ea223e
 Status: CURRENT
 
 | File | Symbol | Kind | Lines@SHA | Responsibility | Reads/Writes | Called By | Tests |
@@ -304,11 +304,11 @@ Status: CURRENT
 | backend/max_backend/onnx_data_api.py | get_data_service | function | 65-66 | Observed Python symbol | | | |
 | backend/max_backend/onnx_data_api.py | _raise_api_error | function | 69-80 | Observed Python symbol | | | |
 | backend/max_backend/onnx_data_api.py | get_data_workspace | function | 84-88 | Observed Python symbol | | | |
-| backend/max_backend/onnx_data_api.py | preflight_source | function | 92-96 | Observed Python symbol | | | |
-| backend/max_backend/onnx_data_api.py | create_snapshot | function | 100-108 | Observed Python symbol | | | |
-| backend/max_backend/onnx_data_api.py | get_snapshot | function | 112-116 | Observed Python symbol | | | |
-| backend/max_backend/onnx_data_api.py | resolve_identical_duplicates | function | 120-132 | Observed Python symbol | | | |
-| backend/max_backend/onnx_data_api.py | validate_windows | function | 136-149 | Observed Python symbol | | | |
+| backend/max_backend/onnx_data_api.py | preflight_source | function | 95-99 | Observed Python symbol | | | |
+| backend/max_backend/onnx_data_api.py | create_snapshot | function | 103-111 | Observed Python symbol | | | |
+| backend/max_backend/onnx_data_api.py | get_snapshot | function | 113-117 | Observed Python symbol | | | |
+| backend/max_backend/onnx_data_api.py | resolve_identical_duplicates | function | 121-133 | Observed Python symbol | | | |
+| backend/max_backend/onnx_data_api.py | validate_windows | function | 137-150 | Observed Python symbol | | | |
 | backend/max_backend/onnx_data_contract.py | DataQualityIssue | class | 57-60 | Observed Python symbol | | | |
 | backend/max_backend/onnx_data_contract.py | DataQualityReport | class | 64-80 | Observed Python symbol | | | |
 | backend/max_backend/onnx_data_contract.py | ResearchWindow | class | 84-88 | Observed Python symbol | | | |
