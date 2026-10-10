@@ -766,7 +766,7 @@
       "file": "scripts/accept_onnx01.ps1",
       "is_test": false,
       "language": "PowerShell",
-      "lines": 253
+      "lines": 260
     },
     {
       "directory": "scripts",
@@ -75941,7 +75941,7 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
+  "source_digest": "41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a",
   "source_summary": {
     "files": 128,
     "languages": {
@@ -75950,7 +75950,7 @@
       "TypeScript": 5,
       "TypeScript/React": 20
     },
-    "lines": 60527,
+    "lines": 60534,
     "test_files": 44
   },
   "tests": [

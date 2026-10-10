@@ -321,7 +321,7 @@
   "schema_version": 1,
   "sequence_mode": "DURING",
   "sequence_session": "FLOW-ONNX-WORKSPACE",
-  "sequence_sync_status": "PASS: 9 DURING/CURRENT source-grounded sessions, including FLOW-ONNX-WORKSPACE, regenerated at source digest 2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a; 0 unresolved bindings. This is static/source evidence only, not a runtime trace.",
+  "sequence_sync_status": "PASS: 9 DURING/CURRENT source-grounded sessions, including FLOW-ONNX-WORKSPACE, regenerated at source digest 41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a; 0 unresolved bindings. This is static/source evidence only, not a runtime trace.",
   "skill_workflow_current_sha": "964481ed1609f87904ba9e08890bffc0a10c3fd4",
   "skill_workflow_guidance_sha": "3b3289681cf2cec8d3d132895e0848be64bb54b1",
   "test_commands": [

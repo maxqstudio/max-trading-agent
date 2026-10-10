@@ -6,8 +6,8 @@
   "skill_authority_sha": "964481ed1609f87904ba9e08890bffc0a10c3fd4",
   "generation_anchor_policy": {
     "meaning": "The observed head is a pre-commit generation anchor. Final hosted source SHA and CI identity remain external acceptance evidence; real MT5 and Owner-PC runtime remain deferred.",
-    "observed_head": "073e69044c03f4296849dd5bc02516f30b9439b1",
-    "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a"
+    "observed_head": "5fc9e82160ce5e9c8a76bca338caa42154580763",
+    "source_digest": "41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a"
   },
   "flows": [
     {
@@ -31,7 +31,7 @@
       ],
       "generated_nodes": 123,
       "generated_edges": 222,
-      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
+      "source_digest": "41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_strategy_workspace_reset.py",
@@ -53,7 +53,7 @@
       ],
       "generated_nodes": 88,
       "generated_edges": 135,
-      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
+      "source_digest": "41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a",
       "tests": [
         "backend/tests/test_m06_challenger_operations.py",
         "backend/tests/test_m08_strategy_results.py"
@@ -73,7 +73,7 @@
       ],
       "generated_nodes": 44,
       "generated_edges": 62,
-      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
+      "source_digest": "41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a",
       "tests": [
         "backend/tests/test_m03_challenger.py",
         "backend/tests/test_m06_challenger_operations.py"
@@ -92,7 +92,7 @@
       ],
       "generated_nodes": 162,
       "generated_edges": 321,
-      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
+      "source_digest": "41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a",
       "tests": [
         "backend/tests/test_m04_promotion.py",
         "backend/tests/test_m04_store.py"
@@ -112,7 +112,7 @@
       ],
       "generated_nodes": 145,
       "generated_edges": 239,
-      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
+      "source_digest": "41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_m03_challenger.py"
@@ -132,7 +132,7 @@
       ],
       "generated_nodes": 48,
       "generated_edges": 75,
-      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
+      "source_digest": "41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a",
       "tests": [
         "backend/tests/test_m05_scientist.py",
         "backend/tests/test_m05_final_evidence_contract.py",
@@ -160,7 +160,7 @@
       ],
       "generated_nodes": 80,
       "generated_edges": 115,
-      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
+      "source_digest": "41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a",
       "tests": [
         "backend/tests/test_strategy_workspace_reset.py",
         "backend/tests/test_retired_subsystem_migration.py",
@@ -199,7 +199,7 @@
       ],
       "generated_nodes": 268,
       "generated_edges": 514,
-      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
+      "source_digest": "41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a",
       "tests": [
         "backend/tests/test_optimizer_draft.py",
         "backend/tests/test_optimizer_reliability.py",
@@ -227,7 +227,7 @@
       ],
       "generated_nodes": 77,
       "generated_edges": 100,
-      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
+      "source_digest": "41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a",
       "tests": [
         "backend/tests/test_m00_foundation.py",
         "frontend/src/App.test.tsx",
@@ -240,7 +240,7 @@
   "parse_failure_boundary": {
     "classification": "NO_FAILURES",
     "python_parse_failures": 0,
-    "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
+    "source_digest": "41d94495e1aa12a63e41d41bd8bb5966a1a9edde027b4b6d8bc0dccf1f69ad4a",
     "detail": "All current source files parsed during canonical sequence regeneration; no temporary pytest fixture is present in the workspace."
   },
   "retrospective_plan_artifacts": 0,
