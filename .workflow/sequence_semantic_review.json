@@ -37,9 +37,7 @@
         "backend/tests/test_strategy_workspace_reset.py",
         "frontend/src/ArtifactsPage.test.tsx"
       ],
-      "unresolved_bindings": [
-        null
-      ],
+      "unresolved_bindings": [],
       "runtime_evidence_boundary": "Browser checks used mocked API responses. No Owner database, MT5, broker, or real operational artifact was accessed."
     },
     {
@@ -60,9 +58,7 @@
         "backend/tests/test_m06_challenger_operations.py",
         "backend/tests/test_m08_strategy_results.py"
       ],
-      "unresolved_bindings": [
-        null
-      ],
+      "unresolved_bindings": [],
       "runtime_evidence_boundary": "Static sequence and synthetic tests only; real Strategy Tester and Owner-PC behavior remain deferred."
     },
     {
@@ -82,9 +78,7 @@
         "backend/tests/test_m03_challenger.py",
         "backend/tests/test_m06_challenger_operations.py"
       ],
-      "unresolved_bindings": [
-        null
-      ],
+      "unresolved_bindings": [],
       "runtime_evidence_boundary": "Static sequence and synthetic tests only; real Strategy Tester and Owner-PC behavior remain deferred."
     },
     {
@@ -103,9 +97,7 @@
         "backend/tests/test_m04_promotion.py",
         "backend/tests/test_m04_store.py"
       ],
-      "unresolved_bindings": [
-        null
-      ],
+      "unresolved_bindings": [],
       "runtime_evidence_boundary": "Promotion authority is covered by local synthetic tests; no real deployment or Champion mutation was performed."
     },
     {
@@ -125,9 +117,7 @@
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_m03_challenger.py"
       ],
-      "unresolved_bindings": [
-        null
-      ],
+      "unresolved_bindings": [],
       "runtime_evidence_boundary": "Static sequence and synthetic tests only; real MT5 optimization evidence is not produced in this phase."
     },
     {
@@ -148,9 +138,7 @@
         "backend/tests/test_m05_final_evidence_contract.py",
         "frontend/src/ScientistPage.test.tsx"
       ],
-      "unresolved_bindings": [
-        null
-      ],
+      "unresolved_bindings": [],
       "runtime_evidence_boundary": "Synthetic and static checks only; no real model, Owner runtime, MT5, or market-data execution is claimed."
     },
     {
@@ -179,9 +167,7 @@
         "frontend/src/App.test.tsx",
         "frontend/src/ArtifactsPage.test.tsx"
       ],
-      "unresolved_bindings": [
-        null
-      ],
+      "unresolved_bindings": [],
       "runtime_evidence_boundary": "UI checks used mocked API responses; reset/recovery behavior was tested only with synthetic temporary SQLite databases."
     },
     {
@@ -231,9 +217,7 @@
         "frontend/src/OptimizerPage.test.tsx",
         "frontend/src/ChallengersPage.test.tsx"
       ],
-      "unresolved_bindings": [
-        null
-      ],
+      "unresolved_bindings": [],
       "runtime_evidence_boundary": "Historical Stage C/D MT5 diagnostics remain historical only. This source candidate has not run MT5 or a real Optimizer; the reported long-range run ended in FAILED during result parsing after MT5 returned exit code 0. Frozen evidence was replayed offline without database writes. Owner runtime remains NOT_PROVEN; no scientific result is claimed."
     },
     {
@@ -254,9 +238,7 @@
         "frontend/src/App.test.tsx",
         "frontend/src/onnxApi.test.ts"
       ],
-      "unresolved_bindings": [
-        null
-      ],
+      "unresolved_bindings": [],
       "runtime_evidence_boundary": "Synthetic API/UI tests and static sequence only. No operational database, dataset, Owner PC, MT5, model training, ONNX export/runtime, or scientific outcome was accessed or produced."
     },
     {
@@ -284,9 +266,7 @@
         "frontend/src/onnxDataApi.test.ts",
         "frontend/src/OnnxDataIntake.test.tsx"
       ],
-      "unresolved_bindings": [
-        null
-      ],
+      "unresolved_bindings": [],
       "runtime_evidence_boundary": "Synthetic temporary CSV/database and mocked API/UI checks only. No Owner data, broker history, Owner PC, MT5, research evaluation, model training, ONNX export/runtime, or Champion mutation was accessed or performed; real DATA_READY remains NOT_PROVEN."
     }
   ],
