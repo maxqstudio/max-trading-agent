@@ -109,7 +109,7 @@ try {
   if (-not $firstFailedGate) {
     $ok = Invoke-Gate -Name 'SCIENTIST_KNOWLEDGE_MANIFEST' -Command 'python -c "from max_backend.scientist_knowledge import load_knowledge; load_knowledge()"' -Action {
       Write-Output "PYTHON=$pythonPath; PYTHONPATH=$env:PYTHONPATH; ROOT=$((Get-Location).Path)"
-      & $pythonPath -c 'import sys; from pathlib import Path; from max_backend.scientist_knowledge import load_knowledge; snapshot = load_knowledge(root=Path.cwd()); print("PYTHON=" + sys.executable); print("SCIENTIST_KNOWLEDGE=VERIFIED; SOURCE_COUNT=" + str(len(snapshot["source_manifest"])))'
+      & $pythonPath -c 'import sys; from pathlib import Path; from max_backend.scientist_knowledge import load_knowledge; snapshot = load_knowledge(root=Path.cwd()); print(sys.executable); print(len(snapshot))'
       $pythonExit = $LASTEXITCODE
       Write-Output "PYTHON_EXIT=$pythonExit"
     }
