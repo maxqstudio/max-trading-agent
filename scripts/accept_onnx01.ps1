@@ -26,12 +26,19 @@ function Invoke-Gate {
   $gateStart = [DateTimeOffset]::UtcNow
   $exitCode = 0
   $output = ''
+  $previousErrorActionPreference = $ErrorActionPreference
   try {
+    # Windows PowerShell 5.1 promotes native stderr (including Vite's
+    # non-fatal chunk-size warning) to ErrorRecord. Preserve that diagnostic
+    # output, but determine gate success from the native process exit code.
+    $ErrorActionPreference = 'Continue'
     $output = (& $Action 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
     if ($null -ne $LASTEXITCODE) { $exitCode = [int]$LASTEXITCODE }
   } catch {
     $exitCode = 1
     $output = (($_ | Out-String).Trim())
+  } finally {
+    $ErrorActionPreference = $previousErrorActionPreference
   }
 
   $status = if ($exitCode -eq 0) { 'PASS' } else { 'FAIL' }
