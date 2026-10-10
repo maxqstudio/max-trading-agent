@@ -4,16 +4,16 @@
 
 ## Project
 Name: MAX Trading Agent
-Purpose: Windows-only GitHub-first Strategy control plane with a separately governed ONNX model Challenger/Champion workspace; ONNX-00 is planning-only and runtime remains unimplemented.
+Purpose: Windows-only GitHub-first Strategy control plane with a separately governed ONNX workspace; ONNX-02 implements data intake and immutable snapshot contracts only, while real DATA_READY, scientific runtime, training, export, and research remain unproven or unauthorized.
 Primary users: Owner, authorized Builder, Control Room auditor
 Governance profile: strict
 
 ## Repositories
 Repository: maxqstudio/max-trading-agent
-Active branch: codex/onnx-01-workspace-shell
+Active branch: codex/onnx-02-data-intake
 Current authoritative SHA: external final acceptance evidence
-Last accepted SHA: c75f978ea4438183e6a759d398eb69b3eeca9ac4
-Current source digest: cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b
+Last accepted SHA: 1a9c9a6990e1f2571e4d85d79436402e6d37ec23
+Current source digest: dc57f52fc7ab02ff2b35cf481a2e27873131eb4f70de6d3c6a40280e8492140b
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.
@@ -68,10 +68,11 @@ Generated from PROJECT_PROFILE.yaml.
 - GitHub Actions on windows-latest is the hosted build/test authority for ordinary development phases.
 - Owner PC plus real MetaTrader 5 is final runtime/E2E authority only after the GitHub development roadmap is complete.
 - The public repository is source-only: runtime databases, evidence, artifacts, datasets, credentials and Owner terminal state are not source authority and must not be tracked.
-- The Owner explicitly authorizes Strategy promotion. The legacy Research subsystem and R00-R11 roadmap are RETIRED; ONNX-00 planning is authorized, while every ONNX runtime/science implementation phase requires separate Control Room authorization.
+- The Owner explicitly authorizes Strategy promotion. The legacy Research subsystem and R00-R11 roadmap are RETIRED; ONNX-00 planning, ONNX-01 workspace shell, and ONNX-02 data-intake source work are separately authorized within frozen phase scope; scientific execution phases require further authorization.
 - Scientist is advisory only and cannot create scientific, promotion, risk or execution authority.
 - The previously implemented Research subsystem is retired and removed from active MAX source, API, UI, schema authority and runtime dependencies. It must not be revived beside ONNX.
-- ONNX-00 is planning/governance only. No ONNX runtime, model training, scientific outcome, ONNX export, Research Challenger, or Champion mutation is authorized or proven by this phase.
+- ONNX-00 is planning/governance only. ONNX-02 adds no scientific evaluation, model training, ONNX export/runtime, Research Challenger, or ONNX Champion mutation. Real DATA_READY remains unproven while broker reconciliation evidence is unavailable.
+- ONNX-02 snapshots use only the source-verified MAX training CSV contract; immutable runtime snapshots and operational databases are ignored and excluded from public source.
 - Optimizer editable draft is mutable current preference state; every started job owns an immutable request snapshot, durable launch identity, and atomically published round evidence.
 - Optimizer read projections may accelerate ordinary listing only; candidate-to-Challenger mutations still revalidate retained canonical evidence.
 - Builder verification uses synthetic temporary databases/evidence and mocked or isolated process boundaries; it does not run a real Owner MT5 optimization or touch the Owner operational database.

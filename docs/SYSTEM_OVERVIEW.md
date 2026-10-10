@@ -9,7 +9,7 @@ Human comprehension status: PASS
 
 Project: MAX Trading Agent
 
-Purpose: Windows-only GitHub-first Strategy control plane with a separately governed ONNX model Challenger/Champion workspace; ONNX-00 is planning-only and runtime remains unimplemented.
+Purpose: Windows-only GitHub-first Strategy control plane with a separately governed ONNX workspace; ONNX-02 implements data intake and immutable snapshot contracts only, while real DATA_READY, scientific runtime, training, export, and research remain unproven or unauthorized.
 
 Primary users: Owner, authorized Builder, Control Room auditor
 
@@ -17,7 +17,7 @@ Expected outcomes:
 - Preserve deterministic Strategy lifecycle authority from optimizer evidence through Challenger and Champion tenure.
 - Stabilize the Strategy lifecycle, generated artifact controls, explicit reset/recovery behavior, and fail-closed Owner-facing actions.
 - Keep the rejected legacy Research subsystem retired and establish a single separately governed ONNX model Challenger/Champion roadmap.
-- Complete ONNX-00 scientific authority and planning only; runtime, training, export, and real research remain unimplemented and unauthorized.
+- Complete ONNX-00 planning authority and ONNX-01 workspace shell; implement only ONNX-02 source-grounded Data Intake, DQ, immutable snapshots, and three-window validation. Scientific evaluation, training, export, and real research remain unimplemented and unauthorized.
 - Keep public-source development reproducible from GitHub with Windows CI as hosted build/test authority while deferring real MT5/runtime acceptance to the final Owner-PC phase.
 - Make the Strategy Optimizer draft durable, job execution restart-safe, evidence publication atomic, and ordinary candidate reads bounded before any fresh Owner runtime run.
 
@@ -29,7 +29,7 @@ Users / External Systems
     -> State / Evidence Authorities
     -> External Runtime / Outputs
 
-Observed source inventory: 129 files, 4 language categories.
+Observed source inventory: 141 files, 4 language categories.
 
 ## Major components
 
@@ -164,7 +164,7 @@ Authority: SQLite integrity/recovery status plus exact Owner confirmation and ve
 
 ## Lifecycle and state
 
-Current phase: ONNX-01
+Current phase: ONNX-02
 
 Current status: IN_PROGRESS
 
@@ -197,6 +197,7 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 | governance_tools | .workflow/tools vendored byte-identically from Skill Workflow 964481ed1609f87904ba9e08890bffc0a10c3fd4 | Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed. |
 | onnx_scientific_planning | .workflow/onnx_v1_authority.json plus the explicit Owner ONNX-00 decisions | This is the planning-only source authority for the exact 23-family ONNX V1 universe under current Owner decision D-043 (supplemented by D-044 proposals), distinct architecture/composition identities, CandidateSpec/parameter/capacity contracts, stage gates, data/checkpoint boundaries and roadmap. Explicit unresolved authority gaps fail closed before ONNX-03; no runtime, training, export, MT5 or promotion permission is granted. |
 | onnx_workspace_read_state | backend/max_backend/onnx_api.py::get_onnx_workspace plus frontend/src/onnxApi.ts contract parser | ONNX-01 exposes only a versioned read-only backend-owned capability snapshot. It creates no persisted operational cycle, reads no dataset/database, and grants no stage transition or scientific mutation; status distinctions and the existing application Recovery Required gate remain authoritative. |
+| onnx_data_intake_and_snapshot | backend/max_backend/onnx_data_source.py, onnx_data_store.py, onnx_data_service.py and /api/v2/onnx/data; frontend/src/onnxDataApi.ts | ONNX-02 owns source-contained MAX CSV preflight, EA-lock-coordinated byte-exact immutable snapshots, DQ and duplicate lineage, and exactly three snapshot-backed window configuration. ONNX-01 /api/v1/onnx/workspace remains its accepted null-only contract. Timestamp gaps are observations, not broker facts; without source-backed broker reconciliation or an explicitly approved disposition, real DATA_READY is withheld. Synthetic fixtures remain SYNTHETIC_TEST_EVIDENCE. This phase exposes no research evaluation, training, export, runtime, or Champion mutation. |
 | current_governance_guidance | Latest Skill_Workflow/main normative guidance at 3b3289681cf2cec8d3d132895e0848be64bb54b1 | Latest guidance is consulted for this planning phase. MAX's executable CI validator provenance remains explicitly pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4 until a separately reviewed toolchain migration. |
 
 ## Mutable vs immutable
@@ -222,6 +223,7 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 - sequence: Existing implementation is reconstructed from current source; retrospective BEFORE plans are forbidden.
 - onnx_scientific_planning: This is the planning-only source authority for the exact 23-family ONNX V1 universe under current Owner decision D-043 (supplemented by D-044 proposals), distinct architecture/composition identities, CandidateSpec/parameter/capacity contracts, stage gates, data/checkpoint boundaries and roadmap. Explicit unresolved authority gaps fail closed before ONNX-03; no runtime, training, export, MT5 or promotion permission is granted.
 - onnx_workspace_read_state: ONNX-01 exposes only a versioned read-only backend-owned capability snapshot. It creates no persisted operational cycle, reads no dataset/database, and grants no stage transition or scientific mutation; status distinctions and the existing application Recovery Required gate remain authoritative.
+- onnx_data_intake_and_snapshot: ONNX-02 owns source-contained MAX CSV preflight, EA-lock-coordinated byte-exact immutable snapshots, DQ and duplicate lineage, and exactly three snapshot-backed window configuration. ONNX-01 /api/v1/onnx/workspace remains its accepted null-only contract. Timestamp gaps are observations, not broker facts; without source-backed broker reconciliation or an explicitly approved disposition, real DATA_READY is withheld. Synthetic fixtures remain SYNTHETIC_TEST_EVIDENCE. This phase exposes no research evaluation, training, export, runtime, or Champion mutation.
 
 ### Immutable history / evidence
 
@@ -264,35 +266,36 @@ compiler does not infer them from implementation names.
 ## Current project state
 
 Next authorized actions:
-- Implement ONNX-01's exact four-workspace navigation, eight-page read-only shell, versioned backend state contract, recovery-gate behavior, and focused regression tests without operational persistence or scientific mutations.
-- Regenerate governed Project Truth, Scientist knowledge and DURING/CURRENT sequence artifacts; run the one-click acceptance runner, complete local regressions, source-only scan, pinned Skill Workflow checks, and Windows GitHub Actions.
-- Create a new ONNX-01 branch and PR, verify exact PR head/tree and hosted Windows CI, then STOP with the PR open and unmerged for independent Control Room audit. Do not begin ONNX-02.
+- Complete ONNX-02 canonical MAX CSV discovery, writer-safe immutable snapshots, strict DQ/duplicate handling, broker-gap status separation, and exact three-window validation without asserting real DATA_READY absent broker authority.
+- Regenerate Project Truth, Scientist knowledge and DURING/CURRENT sequence artifacts; run the repeatable acceptance runner, full local regressions, source-only scan, pinned Skill Workflow checks, and Windows GitHub Actions.
+- Push a new ONNX-02 branch and PR, verify exact PR head/tree and hosted Windows CI, then STOP with the PR open and unmerged for independent Control Room audit. Do not begin ONNX-03.
 
 Blocked actions:
-- ONNX-01 permits only the read-only workspace shell and backend state skeleton; no operational cycle, data intake, scientific mutation, model training/scoring, ONNX export/runtime, or promotion is authorized.
-- Any Owner PC access, MT5 launch, broker/data-root access, real Optimizer run, or real market-research execution during ONNX-01.
+- ONNX-02 authorizes source discovery, read-only preflight, explicit immutable snapshots, DQ/duplicate evidence, and validation of the exact three research windows only; no research evaluation, model/scientific execution, training/scoring, ONNX export/runtime, or promotion is authorized.
+- Any Owner-PC access, live MT5 launch, broker-data repair, real Owner dataset snapshot, real Optimizer run, or real scientific result during hosted source development.
+- DATA_READY must fail closed while broker reconciliation remains pending; synthetic fixtures are SYNTHETIC_TEST_EVIDENCE and never establish real DATA_READY.
 - Any promotion or mutation of a Strategy or ONNX Champion from this phase.
 - Any expansion beyond the Owner-frozen V1 model allowlist or silent change to scientific gates, KPI thresholds, date windows, or CandidateSpec.
 
 Known blockers:
 - Complete numeric KPI definitions for WFA, Tournament, Monte Carlo, and Forward remain an explicit future execution prerequisite; ONNX-00 does not invent them.
 - ONNX parity tolerances, runtime-manifest schema, final-fit row boundary, verified MAX CP32 identity fields, and temporal compute-device policy require separate phase-specific authority before their implementation gates.
-- ONNX-02 data-source/snapshot authority and any later scientific implementation require their own roadmap authorization after ONNX-01 audit and acceptance.
+- No broker-history evidence source or Owner-approved reconciliation disposition is available in ONNX-02 source authority; real DATA_READY therefore remains NOT_PROVEN even when no timestamp discontinuity is observed.
 
 ## Proven vs not proven
 
 ### Proven
 
-- Starting GitHub main is 203f6ab3dc618e3edd247841aa25e1fa0951a19a; Windows CI run 37964999480 completed with conclusion success on that exact SHA.
+- ONNX-01 was accepted at parent main 1a9c9a6990e1f2571e4d85d79436402e6d37ec23 (tree 32b6ed070eab06270ec53cac0322890825d85236); post-merge Windows CI run 38022879077 completed successfully in Source-only, Backend/Skill Workflow, and Frontend jobs. Exact evidence is external under D-012.
 - ONNX-00 was closed against accepted merge main c75f978ea4438183e6a759d398eb69b3eeca9ac4 (tree de1eba7dc91cef12843780e9ef2fa70275422a12), Control Room acceptance, and post-merge Windows CI run 38012160408 PASS; this is accepted parent evidence under D-012, not ONNX-01 runtime evidence.
 - Latest maxqstudio/max_research_agent main was fetched at 883ebeb1ca2e70f6255e0889358ba7c822ac52f5; the 19 authorities listed in the Owner prompt were inspected at that commit.
 - Latest Skill_Workflow/main guidance was fetched at 3b3289681cf2cec8d3d132895e0848be64bb54b1 and applied as normative guidance. MAX executable Windows CI and vendored validator provenance remain pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4; no byte-identity with 3b328968 is claimed.
 - Under current Owner decision D-043, the ONNX V1 universe is exactly nine standalone plus fourteen temporal-to-tree hybrid families, total 23; D-044 proposed parameter envelopes remain non-executable until separately accepted.
-- ONNX-00 is accepted planning/governance authority; ONNX-01 is authorized only for a read-only workspace and API/state skeleton. No operational cycle, Owner PC, MT5, real data, model fitting, ONNX export/runtime, or scientific result is proven.
+- ONNX-00 planning and ONNX-01 workspace/API shell are accepted; ONNX-02 is authorized for data intake source implementation only. Local synthetic tests do not prove real data readiness, broker reconciliation, model fitting, ONNX export/runtime, MT5, or any scientific result.
 
 ### Not proven
 
-- ONNX runtime, scientific data readiness, model training, GPU execution, ONNX conversion/parity, Research Challenger, or Champion behavior.
+- Real market-data DATA_READY, broker reconciliation, ONNX runtime, scientific evaluation, model training, GPU execution, ONNX conversion/parity, Research Challenger, or Champion behavior.
 - Owner-PC Strategy Optimizer and real MT5 runtime acceptance; this planning phase does not claim that unresolved source/runtime behavior is solved.
 - The complete numeric KPI contract and ONNX runtime/parity contracts required before later implementation phases.
 

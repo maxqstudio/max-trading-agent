@@ -1,0 +1,45 @@
+{
+  "acceptance_report": "artifacts/sequence/FLOW-ONNX-DATA-INTAKE.acceptance.json",
+  "actual": {
+    "diagram": "docs/sequence/generated/FLOW-ONNX-DATA-INTAKE.actual.mmd",
+    "entries": [
+      "backend/max_backend/onnx_data_api.py::get_data_workspace",
+      "backend/max_backend/onnx_data_api.py::preflight_source",
+      "backend/max_backend/onnx_data_api.py::create_snapshot",
+      "backend/max_backend/onnx_data_api.py::resolve_identical_duplicates",
+      "backend/max_backend/onnx_data_api.py::validate_windows",
+      "backend/max_backend/onnx_data_service.py::OnnxDataService",
+      "backend/max_backend/onnx_data_source.py::capture_training_source",
+      "backend/max_backend/onnx_data_store.py::migrate_onnx_data"
+    ],
+    "graph": "docs/sequence/generated/FLOW-ONNX-DATA-INTAKE.actual.json",
+    "source_digest": "dc57f52fc7ab02ff2b35cf481a2e27873131eb4f70de6d3c6a40280e8492140b"
+  },
+  "critical": true,
+  "implementation_base_sha": "1a9c9a6990e1f2571e4d85d79436402e6d37ec23",
+  "mode": "DURING",
+  "phase": "ONNX-02",
+  "plan": {
+    "contract": "",
+    "diagram": "",
+    "frozen": false,
+    "frozen_commit": "",
+    "required": false,
+    "sha256": ""
+  },
+  "runtime_trace": {
+    "graph": "",
+    "required": false
+  },
+  "schema_version": 1,
+  "scope": "CURRENT",
+  "session_id": "FLOW-ONNX-DATA-INTAKE",
+  "status": "CURRENT",
+  "test_traceability_required": true,
+  "tests": [
+    "backend/tests/test_onnx_data_intake.py",
+    "backend/tests/test_onnx_data_api.py",
+    "frontend/src/onnxDataApi.test.ts",
+    "frontend/src/OnnxDataIntake.test.tsx"
+  ]
+}

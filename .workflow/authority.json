@@ -139,6 +139,12 @@
       "mutable": true
     },
     {
+      "authority": "backend/max_backend/onnx_data_source.py, onnx_data_store.py, onnx_data_service.py and /api/v2/onnx/data; frontend/src/onnxDataApi.ts",
+      "concern": "onnx_data_intake_and_snapshot",
+      "meaning": "ONNX-02 owns source-contained MAX CSV preflight, EA-lock-coordinated byte-exact immutable snapshots, DQ and duplicate lineage, and exactly three snapshot-backed window configuration. ONNX-01 /api/v1/onnx/workspace remains its accepted null-only contract. Timestamp gaps are observations, not broker facts; without source-backed broker reconciliation or an explicitly approved disposition, real DATA_READY is withheld. Synthetic fixtures remain SYNTHETIC_TEST_EVIDENCE. This phase exposes no research evaluation, training, export, runtime, or Champion mutation.",
+      "mutable": true
+    },
+    {
       "authority": "Latest Skill_Workflow/main normative guidance at 3b3289681cf2cec8d3d132895e0848be64bb54b1",
       "concern": "current_governance_guidance",
       "meaning": "Latest guidance is consulted for this planning phase. MAX's executable CI validator provenance remains explicitly pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4 until a separately reviewed toolchain migration.",
@@ -153,7 +159,7 @@
     "Historical retained Challenger evidence remains exact legacy 16D while current V6 is exact 17D including InpRiskPct; mixed/missing/extra universes fail closed.",
     "Durable optimizer consumption survives Challenger promotion, retirement and later permitted physical deletion while registry or COMMITTED batch authority remains.",
     "Former Champion tenure does not recreate active Challenger eligibility.",
-    "The legacy Research subsystem and legacy R00-R11 roadmap are RETIRED; ONNX-00 is accepted planning authority and ONNX-01 is limited to a read-only workspace/API skeleton; scientific/data/runtime implementation requires a later separately authorized phase.",
+    "The legacy Research subsystem and legacy R00-R11 roadmap are RETIRED; ONNX-00 planning and ONNX-01 workspace/API shell are accepted, and ONNX-02 is limited to MAX CSV intake, DQ, immutable snapshots and three-window validation. Scientific execution/training/runtime requires later authorization; real DATA_READY is NOT_PROVEN without broker reconciliation evidence.",
     "Strategy Artifact inventory GETs do not reconcile runtime state; destructive controls require fresh preflight and explicit confirmation.",
     "Corrupt operational state fails closed and normal application actions remain disabled until explicit recovery is completed.",
     "An uncertain prior MT5 launch is reconciled, never blindly relaunched; MAX stops a terminal only when Optimizer ownership is proven.",

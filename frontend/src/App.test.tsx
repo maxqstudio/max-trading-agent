@@ -165,6 +165,19 @@ function installFetch(recoveryState: {
       page: 1, page_size: 25, pages: 0, total: 0, items: [],
     }))
     if (url.endsWith('/api/v1/onnx/workspace')) return Promise.resolve(response(onnxWorkspace))
+    if (url.endsWith('/api/v2/onnx/data/workspace')) return Promise.resolve(response({
+      contract_version: '2.0',
+      source: 'BACKEND_ONNX_02_DATA_API',
+      status: 'NOT_STARTED',
+      implementation_status: 'IMPLEMENTED',
+      real_data_readiness: 'NOT_PROVEN',
+      latest_snapshot: null,
+      window_config: null,
+      readiness_evidence: null,
+      snapshots: [],
+      scientific_execution: 'NOT_IMPLEMENTED',
+      first_blocker: 'NO_IMMUTABLE_SNAPSHOT',
+    }))
     throw new Error('unexpected fetch ' + method + ' ' + url)
   }))
   return uiPatches
@@ -220,6 +233,11 @@ describe('MAX Rebuild shell recovery', () => {
     expect(screen.getByText(/no scientific evidence is available/i)).toBeInTheDocument()
     expect(screen.queryByText(/^Cycle ID$/i)).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /start|train|resume|export|promote/i })).not.toBeInTheDocument()
+
+    fireEvent.click(within(onnxNav).getByRole('button', { name: 'Data Intake' }))
+    expect(await screen.findByRole('heading', { name: 'Data Intake' })).toBeInTheDocument()
+    expect(screen.getByText('NO_IMMUTABLE_SNAPSHOT')).toBeInTheDocument()
+    expect(screen.getByText(/do not run scientific evaluation/i)).toBeInTheDocument()
 
     fireEvent.click(within(onnxNav).getByRole('button', { name: 'Discovery' }))
     expect(await screen.findByRole('heading', { name: 'Discovery' })).toBeInTheDocument()

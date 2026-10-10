@@ -177,20 +177,36 @@ def main() -> int:
             "classification": "EXISTING",
             "facts": [
                 "The legacy Research runtime and legacy R00-R11 roadmap are RETIRED; they are not implementation authority.",
-                "ONNX-00 is the current planning/governance-only phase and does not implement runtime, UI, model fitting/training, or ONNX export.",
-                "ONNX-01 through ONNX-09 are planned phases only and require their respective future authorization before implementation.",
-                "Real ONNX scientific execution and real Owner-PC MT5 Strategy acceptance remain NOT_PROVEN; planning documents and hosted source checks are not scientific evidence.",
+                "ONNX-00 is accepted planning/governance authority and ONNX-01 is the accepted workspace/API shell.",
+                "ONNX-02 implements source-grounded MAX CSV intake, DQ, immutable snapshot evidence and exact three-window configuration only; it does not execute research, training, ONNX export/runtime or Champion mutation.",
+                "Real broker reconciliation and real market DATA_READY remain NOT_PROVEN; timestamp continuity and synthetic fixtures are not broker-completeness evidence.",
+                "ONNX-03 through ONNX-09 remain future separately authorized phases; scientific execution and real Owner-PC MT5 Strategy acceptance remain NOT_PROVEN.",
+            ],
+        },
+        {
+            "ref": "contract:onnx-data-intake",
+            "title": "ONNX-02 MAX data intake boundary",
+            "classification": "EXISTING",
+            "facts": [
+                "MAX source contract is MAX_TRUE_MTF_DYNAMIC_V1 / CP32_TRUE_MTF_V1 with exactly 49 semicolon-delimited columns and 32 CP32 features, source-verified against the current EA baseline and manifest.",
+                "Canonical source discovery is restricted to the MetaTrader Common Files MAX training filename or an explicit path contained within that approved root; source reads respect the existing exclusive writer lock and never edit the live file.",
+                "Snapshots preserve exact source bytes and SHA-256 in immutable storage with backend-owned SQLite lineage; DQ and window results are recomputed on reads.",
+                "Duplicate identity is contract, symbol, period and signal_time as verified from the EA first-write behavior; conflicting duplicates fail closed and identical-row correction creates a separate derived snapshot after explicit confirmation.",
+                "Timestamp discontinuity is an observation, not proof of a broker-missing bar or complete history. Without broker evidence or an explicitly approved disposition, BROKER_RECONCILIATION_PENDING blocks real DATA_READY.",
+                "Exactly DISCOVERY, TOURNAMENT and FORWARD windows are validated against the same immutable snapshot using the source's naive broker/server wall-clock semantics; no UTC is inferred and no evaluation is run.",
+                "Synthetic API/test fixtures are SYNTHETIC_TEST_EVIDENCE and never establish real market readiness. Scientist remains advisory and cannot start intake, repair data, or authorize science.",
             ],
         },
     ]
     snapshot = {
         "schema": KNOWLEDGE_SCHEMA,
-        "project": {"name": "MAX Trading Agent", "phase": "ONNX-00 planning/governance; runtime not implemented"},
+        "project": {"name": "MAX Trading Agent", "phase": "ONNX-02 source Data Intake/DQ/snapshots/windows; real DATA_READY and scientific runtime NOT_PROVEN"},
         "authority_summary": [
             "GitHub main exact SHA = source authority",
             "GitHub Actions windows-latest = hosted build/test authority",
             "Owner PC + real MT5 = final runtime/E2E authority",
-            "Legacy Research and R00-R11 = RETIRED; current ONNX-00 = planning/governance only",
+            "Legacy Research and R00-R11 = RETIRED; ONNX-00 planning and ONNX-01 shell accepted; ONNX-02 data intake source only",
+            "Real broker reconciliation and real market DATA_READY = NOT_PROVEN; synthetic evidence is not market proof",
             "MT5 = simulation/optimization truth when runtime execution is authorized",
             "Deterministic Python = legality/KPI qualification/evidence validation authority",
             "SQLite = mutable operational authority",
@@ -217,14 +233,15 @@ def main() -> int:
             "M07 accepted causal true-MTF Strategy epoch",
             "M08 accepted qualified pool, multi-Challenger selection, Backtest results and Artifact control plane",
             "V6 Strategy Optimizer source candidate with 17 dimensions including an exact Owner-grid InpRiskPct 0.5%..5.0% step 0.5% that refinement cannot shift off-grid, plus fixed 5.0% daily-loss authority for new jobs",
-            "Strategy Optimizer launches the frozen native tester INI through subprocess.Popen and relies on MetaTrader's configured tester-agent behavior without an external active-agent cap or memory-estimate START admission gate"
+            "Strategy Optimizer launches the frozen native tester INI through subprocess.Popen and relies on MetaTrader's configured tester-agent behavior without an external active-agent cap or memory-estimate START admission gate",
+            "ONNX-02 source implementation provides source-contained MAX CP32 preflight, byte-exact immutable snapshot evidence, DQ/duplicate lineage and three-window configuration through a separate versioned API; real DATA_READY is withheld pending broker reconciliation evidence"
         ],
         "planned_capabilities": [
-            "ONNX-00 defines the scientific authority and roadmap only; ONNX-01 through ONNX-09 remain future phases requiring separate authorization",
-            "Owner decides whether a canonical Strategy-derived training dataset is ready before ONNX-02; this does not block ONNX-00 planning",
+            "ONNX-03 through ONNX-09 remain future separately authorized scientific and runtime phases; ONNX-02 does not run research, training, ONNX export/runtime, or promotion",
+            "Broker-history evidence or a separately Owner-approved reconciliation disposition is required before real DATA_READY can be established",
         ],
         "explicit_deferred_capabilities": [
-            "ONNX runtime implementation, model fitting/training, ONNX export and scientific execution are not authorized by ONNX-00",
+            "Real market DATA_READY, broker reconciliation, scientific evaluation, model fitting/training, ONNX export/runtime and ONNX Champion promotion are NOT_PROVEN or deferred beyond ONNX-02",
             "Real Owner-PC MT5 Strategy runtime acceptance remains NOT_PROVEN and Owner-controlled",
             "Shadow/Live/portfolio execution",
             "news and sentiment workflows",

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "current_phase": "ONNX-01",
+  "current_phase": "ONNX-02",
   "phases": [
     {
       "id": "PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE",
@@ -29,9 +29,9 @@
       "id": "OWNER_STRATEGY_CHAMPION_AND_MT5_SAMPLE_PREPARATION",
       "title": "Owner Strategy runtime acceptance and data readiness",
       "status": "BLOCKED_BY_OWNER_ACTION",
-      "objective": "Owner-controlled real Strategy Optimizer, Challenger/Champion and MT5 acceptance remain a separate runtime/data boundary. This is not a prerequisite for ONNX-00 planning.",
+      "objective": "Owner-controlled real Strategy Optimizer, Challenger/Champion and MT5 acceptance remain a separate runtime/data boundary. Real runtime acceptance is not a prerequisite for ONNX-02 source implementation.",
       "exit_criteria": [
-        "Owner decides and records whether a canonical Strategy-derived training dataset is ready for ONNX-02.",
+        "When the Owner uses the local intake page, the Owner explicitly selects the approved MAX source and declares its broker/server timezone provenance; no real source selection or data readiness is claimed by GitHub source CI, and this local use is not a prerequisite for implementing ONNX-02.",
         "Any real MT5 run, Champion mutation, or Owner-PC runtime acceptance is performed only by the Owner under separate runtime authority."
       ]
     },
@@ -138,7 +138,7 @@
     {
       "id": "ONNX-01",
       "title": "ONNX workspace shell and API/state skeleton",
-      "status": "CURRENT",
+      "status": "COMPLETED",
       "objective": "Implement the four-workspace Owner navigation and exact eight-page ONNX read-only shell, plus a versioned backend API/state skeleton that reports only backend-owned status. Preserve application-wide recovery gating. Do not create operational persistence, inspect or snapshot data, instantiate models, execute training/scoring/export/runtime, or expose scientific mutations.",
       "exit_criteria": [
         "Top-level navigation is exactly Strategy, ONNX, Artifacts, Settings; existing Strategy, Artifacts, Settings and Scientist drawer behavior remains usable.",
@@ -147,16 +147,25 @@
         "The versioned read-only API distinguishes NOT_IMPLEMENTED, NOT_STARTED, NOT_PROVEN, UNAVAILABLE and RECOVERY_REQUIRED; the frontend cannot invent domain state, and global recovery mode blocks the API with existing exact error semantics.",
         "No database migration, new operational store, data scan/snapshot, MT5/external process, model instantiation/training/scoring, ONNX export/runtime, scientific outcome or Champion mutation is introduced.",
         "Model universe, parameter-estimator and ONNX-00 lifecycle/governance contracts remain unchanged and pass regression tests.",
-        "Project Truth, Scientist knowledge, source-grounded DURING/CURRENT sequence, source-only scan, pinned Skill Workflow checks, one-click acceptance evidence and all required local gates pass; Windows GitHub Actions passes on the exact PR tree and PR remains open for Control Room audit."
+        "ONNX-01 was accepted at main 1a9c9a6990e1f2571e4d85d79436402e6d37ec23 (tree 32b6ed070eab06270ec53cac0322890825d85236), with Control Room acceptance and post-merge Windows CI run 38022879077 passing all three jobs; exact external evidence is preserved under D-012."
       ]
     },
     {
       "id": "ONNX-02",
       "title": "Data Intake and immutable DATA_READY snapshot",
-      "status": "PLANNED",
-      "blocked_by": "ONNX-01_ACCEPTED_AND_DATA_AUTHORITY_AVAILABLE",
-      "objective": "Implement canonical source discovery, schema/CP32/data-quality audit, duplicate handling, broker reconciliation/gap-repair authority, exactly three windows, and immutable snapshot.",
-      "exit_criteria": ["DATA_READY evidence binds the verified dataset snapshot SHA and frozen ranges."]
+      "status": "CURRENT",
+      "objective": "Implement source-grounded MAX training CSV discovery and read-only preflight, writer-safe immutable snapshot publication, exact CP32-v1 schema/DQ/duplicate evidence, explicit broker-reconciliation gap states, and exactly three chronological snapshot-backed windows. The browser/API never starts MT5 or scientific evaluation.",
+      "exit_criteria": [
+        "The 49-column semicolon-delimited Max_MTF_Training.csv contract, MAX_TRUE_MTF_DYNAMIC_V1 / CP32_TRUE_MTF_V1 authority, actual MQL timeframe identities, and broker/server wall-clock timestamp semantics are source-verified.",
+        "Canonical source discovery is limited to the approved MetaTrader Common Files root; explicit overrides remain contained, regular, non-reparse paths and reads respect the EA writer lock without changing the active CSV.",
+        "A complete stable source is copied byte-exactly into a content-addressed immutable snapshot; unstable, locked, partial, interrupted, concurrent-conflict, tampered, or out-of-root sources fail closed and never appear as ready.",
+        "Data quality checks the exact schema/order, numeric finiteness, identities, OHLC/ATR/quotes/spread, chronology, source timezone provenance, mixed symbols/timeframes, duplicate identities, and candidate snapshot lineage; identical-duplicate correction is explicit and creates a derived snapshot while retaining the original.",
+        "Timestamp discontinuity is distinct from broker-confirmed missing/not-missing; without source-backed broker evidence or an explicitly authorized disposition, BROKER_RECONCILIATION_PENDING remains a blocker and REAL_DATA_READY_NOT_PROVEN is reported even when no discontinuity is observed.",
+        "Exactly DISCOVERY, TOURNAMENT, and FORWARD ranges are validated for strict chronology, non-overlap, snapshot coverage and source-row support; no evaluation is executed and Forward does not grow after persisted validation.",
+        "The separately versioned ONNX-02 API and Data Intake page use backend-owned evidence, preserve the frozen null-only ONNX-01 v1 workspace contract and application recovery gate, and expose no training, evaluation, export, promotion, or Champion mutation.",
+        "Synthetic fixtures are labeled SYNTHETIC_TEST_EVIDENCE and never establish actual market DATA_READY. Source-only checks exclude private datasets, snapshots, runtime databases, credentials, and evidence.",
+        "Project Truth, Scientist source knowledge, DURING/CURRENT sequence, pinned Skill Workflow checks, repeatable acceptance evidence, full local gates, and Windows CI pass on the exact PR tree; PR remains open for independent Control Room audit."
+      ]
     },
     {
       "id": "ONNX-03",

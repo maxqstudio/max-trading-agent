@@ -228,6 +228,12 @@
       "status": "FIXED/ACCEPTED_CANDIDATE",
       "summary": "Recovery around Owner promotion and Champion publication lacked a same-stage transaction reconciliation path and could not prove whether promotion had committed.",
       "evidence": "Planning authority binds original state and exact promotion transaction identity, distinguishes pre-commit authorization from post-commit publication/archive verification, prohibits promotion replay, and remains fail-closed on uncertain evidence. Focused governance suite: 10 passed; full backend: 483 passed, 0 failed, 0 skipped. Runtime orchestration is not implemented or claimed."
+    },
+    {
+      "id": "ONNX02-BROKER-RECONCILIATION-AUTHORITY",
+      "status": "NOT_PROVEN",
+      "summary": "The public source phase has no source-backed broker history evidence or Owner-approved disposition for determining whether timestamp discontinuities represent missing bars.",
+      "evidence": "ONNX-02 reports OBSERVED_TIMESTAMP_DISCONTINUITY separately from BROKER_RECONCILIATION_PENDING and withholds real DATA_READY. No synthetic fixture, continuous timestamp sequence, Owner PC, broker data, or MT5 run is accepted as reconciliation proof. A future authorized authority/source is required before real DATA_READY can be issued."
     }
   ],
   "schema_version": 1

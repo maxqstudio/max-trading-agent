@@ -2,7 +2,7 @@
 
 # ARCHITECTURE
 
-Current source digest: cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b
+Current source digest: dc57f52fc7ab02ff2b35cf481a2e27873131eb4f70de6d3c6a40280e8492140b
 
 ## Components
 
@@ -43,9 +43,9 @@ Current source digest: cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be
 
 ## Observed implementation inventory
 
-Source files: 129
-Source lines: 61244
-Languages: PowerShell=4, Python=100, TypeScript=5, TypeScript/React=20
+Source files: 141
+Source lines: 65482
+Languages: PowerShell=5, Python=107, TypeScript=7, TypeScript/React=22
 
 Structural facts come from the code extractor. Component meaning comes from
 .workflow/architecture.json.

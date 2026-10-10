@@ -8,6 +8,7 @@ import {
   type StateSection,
   type ValueSection,
 } from './onnxApi'
+import OnnxDataIntake from './OnnxDataIntake'
 
 type OnnxPageId = 'overview' | OnnxStagePageId
 
@@ -205,6 +206,7 @@ function StageWorkspacePage({
   pageId: OnnxStagePageId
   data: OnnxWorkspaceSnapshot
 }) {
+  if (pageId === 'data_intake') return <OnnxDataIntake />
   const page = PAGE_DEFINITIONS.find((item) => item.id === pageId)
   const stage = data.stage_pages.find((item) => item.page_id === pageId)
   if (!page || !stage) return <p role="alert">The backend did not provide this ONNX page state.</p>

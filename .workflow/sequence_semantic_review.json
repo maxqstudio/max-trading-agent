@@ -181,6 +181,11 @@
         "backend/max_backend/optimizer_draft.py::get_optimizer_draft",
         "backend/max_backend/optimizer_draft.py::put_optimizer_draft",
         "backend/max_backend/optimizer_jobs.py::start_optimizer",
+          "backend/max_backend/optimizer_jobs.py::_spawn_worker",
+          "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
+          "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.receive",
+          "backend/max_backend/optimizer_worker_identity.py::terminate_process_verified",
+          "backend/max_backend/optimizer_worker.py::main",
         "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
         "backend/max_backend/optimizer_jobs.py::stop_optimizer",
         "backend/max_backend/optimizer_jobs.py::resume_optimizer",
@@ -188,12 +193,12 @@
         "backend/max_backend/optimizer_store.py::confirm_worker_launch",
         "backend/max_backend/optimizer_worker.py::run_job",
         "backend/max_backend/optimizer_runtime.py::launch_mt5",
-        "backend/max_backend/optimizer_runtime.py::commit_round_evidence",
         "backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv",
+          "backend/max_backend/optimizer_runtime.py::commit_round_evidence",
+          "backend/max_backend/optimizer_candidates.py::candidate_projection_payload",
         "backend/max_backend/optimizer_store.py::optimizer_candidate_identity",
         "backend/max_backend/optimizer_store.py::optimizer_candidate_identities",
         "backend/max_backend/optimizer_store.py::persist_candidate_projection",
-        "backend/max_backend/optimizer_candidates.py::candidate_projection_payload",
         "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
         "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration"
       ],
@@ -220,7 +225,7 @@
       "mode": "DURING",
       "scope": "CURRENT",
       "semantic_review": "PASS",
-      "purpose": "Render the ONNX workspace only from the versioned backend read-only capability snapshot; application recovery mode blocks the read, and no operational cycle or scientific mutation is created.",
+      "purpose": "Render the accepted ONNX-01 workspace only from its frozen versioned backend capability snapshot; application recovery mode blocks the read. ONNX-02 data evidence is isolated in its separate v2 intake flow.",
       "declared_entries": [
         "frontend/src/App.tsx::<module>",
         "backend/max_backend/onnx_api.py::get_onnx_workspace"
@@ -235,6 +240,34 @@
       ],
       "unresolved_bindings": [],
       "runtime_evidence_boundary": "Synthetic API/UI tests and static sequence only. No operational database, dataset, Owner PC, MT5, model training, ONNX export/runtime, or scientific outcome was accessed or produced."
+    },
+    {
+      "flow_id": "FLOW-ONNX-DATA-INTAKE",
+      "mode": "DURING",
+      "scope": "CURRENT",
+      "semantic_review": "PASS",
+      "purpose": "Discover only the approved MAX CP32 CSV, preflight under the EA lock, publish and reverify immutable snapshot lineage, surface DQ and duplicate findings, and validate exactly three source-backed windows. Observed timestamp gaps remain separate from broker evidence and block real DATA_READY while reconciliation is pending.",
+      "declared_entries": [
+        "backend/max_backend/onnx_data_api.py::get_data_workspace",
+        "backend/max_backend/onnx_data_api.py::preflight_source",
+        "backend/max_backend/onnx_data_api.py::create_snapshot",
+        "backend/max_backend/onnx_data_api.py::resolve_identical_duplicates",
+        "backend/max_backend/onnx_data_api.py::validate_windows",
+        "backend/max_backend/onnx_data_service.py::OnnxDataService",
+        "backend/max_backend/onnx_data_source.py::capture_training_source",
+          "backend/max_backend/onnx_data_store.py::migrate_onnx_data"
+      ],
+        "generated_nodes": 48,
+        "generated_edges": 66,
+        "source_digest": "dc57f52fc7ab02ff2b35cf481a2e27873131eb4f70de6d3c6a40280e8492140b",
+      "tests": [
+        "backend/tests/test_onnx_data_intake.py",
+        "backend/tests/test_onnx_data_api.py",
+        "frontend/src/onnxDataApi.test.ts",
+        "frontend/src/OnnxDataIntake.test.tsx"
+      ],
+      "unresolved_bindings": [],
+      "runtime_evidence_boundary": "Synthetic temporary CSV/database and mocked API/UI checks only. No Owner data, broker history, Owner PC, MT5, research evaluation, model training, ONNX export/runtime, or Champion mutation was accessed or performed; real DATA_READY remains NOT_PROVEN."
     }
   ],
   "parse_failure_boundary": {
