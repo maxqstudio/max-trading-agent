@@ -724,7 +724,7 @@
       "file": "frontend/src/OnnxDataIntake.test.tsx",
       "is_test": true,
       "language": "TypeScript/React",
-      "lines": 225
+      "lines": 265
     },
     {
       "directory": "frontend/src",
@@ -808,14 +808,14 @@
       "file": "frontend/src/onnxDataApi.test.ts",
       "is_test": true,
       "language": "TypeScript",
-      "lines": 257
+      "lines": 272
     },
     {
       "directory": "frontend/src",
       "file": "frontend/src/onnxDataApi.ts",
       "is_test": false,
       "language": "TypeScript",
-      "lines": 742
+      "lines": 767
     },
     {
       "directory": "frontend/src",
@@ -81122,7 +81122,7 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "c07d8608b820ce5e77b7b8afe270791d76a828e1cca78bdeabf8d2d862d09674",
+  "source_digest": "da0e2c7f4b8192f4993d9a9223d5dec9ea722c168c3bc9d567014d0d0592707f",
   "source_summary": {
     "files": 141,
     "languages": {
@@ -81131,7 +81131,7 @@
       "TypeScript": 7,
       "TypeScript/React": 22
     },
-    "lines": 65781,
+    "lines": 65861,
     "test_files": 49
   },
   "tests": [

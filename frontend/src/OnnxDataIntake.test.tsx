@@ -1,6 +1,7 @@
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import OnnxDataIntake from './OnnxDataIntake'
+import { ONNX_DATA_REQUEST_TIMEOUT_MS } from './onnxDataApi'
 
 const hash = (char: string) => char.repeat(64)
 
@@ -221,5 +222,44 @@ describe('One-click owner workflow', () => {
     ])
     expect(calls.some((call) => call.url.endsWith('/snapshots') && call.init?.method === 'POST')).toBe(false)
     expect(screen.queryByText('DATA_READY')).not.toBeInTheDocument()
+  })
+
+  it('does not replay an uncertain snapshot after timeout and retries by refreshing workspace only', async () => {
+    const calls: Array<{ url: string; init?: RequestInit }> = []
+    const fetchMock = vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input)
+      calls.push({ url, init })
+      if (url.endsWith('/workspace')) return Promise.resolve(response(workspace()))
+      if (url.endsWith('/preflight')) return Promise.resolve(response(validPreflight()))
+      if (url.endsWith('/snapshots') && init?.method === 'POST') {
+        return new Promise<Response>((_resolve, reject) => {
+          init?.signal?.addEventListener('abort', () => {
+            reject(new DOMException('The operation was aborted.', 'AbortError'))
+          }, { once: true })
+        })
+      }
+      throw new Error(`unexpected request ${url}`)
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    render(<OnnxDataIntake />)
+    await screen.findByRole('heading', { name: 'Data Intake' })
+    fireEvent.click(screen.getByRole('button', { name: 'Periksa Data' }))
+    expect(await screen.findByText(/6 baris/)).toBeInTheDocument()
+    fireEvent.click(screen.getByLabelText(/Saya menyetujui pembuatan snapshot/))
+
+    vi.useFakeTimers()
+    fireEvent.click(screen.getByRole('button', { name: /Simpan snapshot/i }))
+    await act(async () => { await vi.advanceTimersByTimeAsync(ONNX_DATA_REQUEST_TIMEOUT_MS) })
+
+    expect(screen.getByRole('alert')).toHaveTextContent(/batas 60 detik/i)
+    expect(screen.getByRole('alert')).toHaveTextContent(/muat ulang workspace/i)
+    expect(screen.getByRole('alert')).toHaveTextContent(/hasil belum terkonfirmasi/i)
+    expect(calls.filter((call) => call.url.endsWith('/snapshots') && call.init?.method === 'POST')).toHaveLength(1)
+
+    vi.useRealTimers()
+    fireEvent.click(screen.getByRole('button', { name: 'Coba lagi' }))
+    expect(await screen.findByText('Belum diperiksa')).toBeInTheDocument()
+    expect(calls.filter((call) => call.url.endsWith('/snapshots') && call.init?.method === 'POST')).toHaveLength(1)
   })
 })

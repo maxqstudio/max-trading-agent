@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: c07d8608b820ce5e77b7b8afe270791d76a828e1cca78bdeabf8d2d862d09674
+Source digest: da0e2c7f4b8192f4993d9a9223d5dec9ea722c168c3bc9d567014d0d0592707f
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -109,7 +109,7 @@ Generated/refreshed: current compiler run
 | frontend/src/ChampionPage.tsx | TypeScript/React | 175 | frontend/src | NO |
 | frontend/src/DataTable.test.tsx | TypeScript/React | 122 | frontend/src | YES |
 | frontend/src/DataTable.tsx | TypeScript/React | 145 | frontend/src | NO |
-| frontend/src/OnnxDataIntake.test.tsx | TypeScript/React | 225 | frontend/src | YES |
+| frontend/src/OnnxDataIntake.test.tsx | TypeScript/React | 265 | frontend/src | YES |
 | frontend/src/OnnxDataIntake.tsx | TypeScript/React | 338 | frontend/src | NO |
 | frontend/src/OnnxWorkspace.tsx | TypeScript/React | 334 | frontend/src | NO |
 | frontend/src/OptimizerPage.test.tsx | TypeScript/React | 1325 | frontend/src | YES |
@@ -121,8 +121,8 @@ Generated/refreshed: current compiler run
 | frontend/src/main.tsx | TypeScript/React | 10 | frontend/src | NO |
 | frontend/src/onnxApi.test.ts | TypeScript | 346 | frontend/src | YES |
 | frontend/src/onnxApi.ts | TypeScript | 290 | frontend/src | NO |
-| frontend/src/onnxDataApi.test.ts | TypeScript | 257 | frontend/src | YES |
-| frontend/src/onnxDataApi.ts | TypeScript | 742 | frontend/src | NO |
+| frontend/src/onnxDataApi.test.ts | TypeScript | 272 | frontend/src | YES |
+| frontend/src/onnxDataApi.ts | TypeScript | 767 | frontend/src | NO |
 | frontend/src/tableFormat.ts | TypeScript | 6 | frontend/src | NO |
 | frontend/src/testSetup.ts | TypeScript | 1 | frontend/src | NO |
 | frontend/vite.config.ts | TypeScript | 18 | frontend | NO |
