@@ -34,6 +34,7 @@
   "source_discovery": {
     "canonical_root": "%APPDATA%/MetaQuotes/Terminal/Common/Files",
     "allowed_name": "Max_MTF_Training.csv",
+    "one_click_preflight": "The default backend preflight accepts an empty request, discovers MAX Common Files automatically, and reports source/DQ without a manual timezone. Unknown timezone is an explicit TIMEZONE_PROVENANCE_REQUIRED DQ blocker; it never authorizes scientific DATA_READY or a verified broker UTC offset.",
     "override": "Owner-selected absolute path only when its resolved file remains under the approved canonical root",
     "forbidden": ["recursive discovery", "unrelated private-file scanning", "MT5 launch", "EA configuration mutation", "source-file modification", "reparse/symlink path traversal"]
   },

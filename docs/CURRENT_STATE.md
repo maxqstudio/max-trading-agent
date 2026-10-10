@@ -18,7 +18,7 @@ Branch: codex/onnx-02-data-intake
 Authoritative SHA: external final acceptance evidence
 Last accepted SHA: 1a9c9a6990e1f2571e4d85d79436402e6d37ec23
 Current candidate SHA: external final acceptance evidence
-Current source digest: eca30bb1e1abff5c3c87df344aa020bce0645cc07a90fb4e426d615d9b0863bf
+Current source digest: da0e2c7f4b8192f4993d9a9223d5dec9ea722c168c3bc9d567014d0d0592707f
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md

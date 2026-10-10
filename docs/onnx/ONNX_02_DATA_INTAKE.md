@@ -12,8 +12,9 @@ The MAX source authority is `ea/baseline/Max_MTF.mq5` and its adjacent manifest.
 The verified contracts are `MAX_TRUE_MTF_DYNAMIC_V1` and `CP32_TRUE_MTF_V1`, with
 the exact 49-column semicolon-delimited `Max_MTF_Training.csv` and 32 CP32 feature
 columns. The CSV's `signal_time` is a naive broker/source wall-clock timestamp. No
-UTC conversion or timezone offset is inferred; the source timezone provenance is
-required and carried unchanged into window validation.
+UTC conversion or timezone offset is inferred. Owner-declared source timezone
+provenance is mandatory for full DQ PASS and subsequent window validation, but
+it is **not required to locate or inspect** the canonical training CSV.
 
 The source writer uses the MetaTrader Common Files area, a training lock, shared-read
 CSV access, flush, and close before lock release. ONNX discovery checks only
@@ -22,6 +23,16 @@ absolute override contained under that same approved root. It does not recurse o
 scan other private files. Reads acquire the existing lock without creating or
 modifying it, verify a regular non-reparse path and stable file fingerprint, bound
 the copy, and reject a partial final row or changing source.
+
+The Owner's default Data Intake workflow is now a single **Periksa Data** action
+with no manually entered file path or timezone. The backend accepts an empty
+preflight request, discovers the canonical filename automatically, and reports
+rows, source identity and DQ findings. If the broker timezone is unknown, DQ
+records `TIMEZONE_PROVENANCE_REQUIRED` and stays `BLOCKED` for scientific
+admission; this never fabricates a timezone, source completeness, or `DATA_READY`.
+A structurally valid raw snapshot may still be explicitly authorized for review
+without promoting it to scientific readiness. Optional path/time provenance
+inputs and raw hash/status details are placed under advanced UI disclosures.
 
 ## Snapshot and evidence lifecycle
 

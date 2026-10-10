@@ -11,6 +11,8 @@ export const ONNX_DATA_STATUSES = [
   'RECOVERY_REQUIRED',
 ] as const
 
+export const ONNX_DATA_REQUEST_TIMEOUT_MS = 60_000
+
 export type OnnxDataStatus = typeof ONNX_DATA_STATUSES[number]
 
 export interface DataIssue {
@@ -654,28 +656,51 @@ function parseResponse<T>(response: Response, body: unknown, parser: (value: unk
 }
 
 async function request<T>(path: string, parser: (value: unknown) => T, init?: RequestInit): Promise<T> {
-  const response = await fetch(path, {
-    ...init,
-    headers: { 'Content-Type': 'application/json', ...(init?.headers ?? {}) },
-  })
-  let payload: unknown
+  const controller = new AbortController()
+  const externalSignal = init?.signal
+  let timedOut = false
+  const timeoutId = window.setTimeout(() => {
+    timedOut = true
+    controller.abort()
+  }, ONNX_DATA_REQUEST_TIMEOUT_MS)
+  const abortFromCaller = () => controller.abort()
+  if (externalSignal?.aborted) controller.abort()
+  else externalSignal?.addEventListener('abort', abortFromCaller, { once: true })
+
   try {
-    payload = await response.json()
-  } catch {
-    throw contractError('response body is not valid JSON.')
+    const response = await fetch(path, {
+      ...init,
+      signal: controller.signal,
+      headers: { 'Content-Type': 'application/json', ...(init?.headers ?? {}) },
+    })
+    let payload: unknown
+    try {
+      payload = await response.json()
+    } catch (reason) {
+      if (timedOut || externalSignal?.aborted) throw reason
+      throw contractError('response body is not valid JSON.')
+    }
+    return parseResponse(response, payload, parser)
+  } catch (reason) {
+    if (timedOut) {
+      throw new Error(`Permintaan data ONNX melewati batas ${ONNX_DATA_REQUEST_TIMEOUT_MS / 1000} detik. Hasil belum terkonfirmasi; muat ulang workspace sebelum mengulangi operasi tulis.`)
+    }
+    throw reason
+  } finally {
+    window.clearTimeout(timeoutId)
+    externalSignal?.removeEventListener('abort', abortFromCaller)
   }
-  return parseResponse(response, payload, parser)
 }
 
 export function fetchOnnxDataWorkspace(signal?: AbortSignal) {
   return request('/api/v2/onnx/data/workspace', parseOnnxDataWorkspace, { method: 'GET', signal })
 }
 
-export function preflightOnnxData(payload: { source_path?: string; timezone_provenance: string }) {
+export function preflightOnnxData(payload: { source_path?: string; timezone_provenance?: string } = {}) {
   return request('/api/v2/onnx/data/preflight', parseOnnxDataPreflight, { method: 'POST', body: JSON.stringify(payload) })
 }
 
-export function createOnnxSnapshot(payload: { source_path?: string; timezone_provenance: string; expected_source_sha256: string; confirmed: true }) {
+export function createOnnxSnapshot(payload: { source_path?: string; timezone_provenance?: string; expected_source_sha256: string; confirmed: true }) {
   return request('/api/v2/onnx/data/snapshots', parseSnapshotOperation, { method: 'POST', body: JSON.stringify(payload) })
 }
 

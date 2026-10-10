@@ -13,11 +13,11 @@
   },
   {
     "path": "docs/onnx/ONNX_02_DATA_INTAKE.md",
-    "sha256": "bd7825a42c443573f194442b31b06d1943bb5a797c1f358ead044b396284f242"
+    "sha256": "96507c9cc258e3c4a6602d1952e0100ba4a05b892207de22b65330df426fed24"
   },
   {
     "path": ".workflow/onnx_data_authority.json",
-    "sha256": "3aba4e4eca6f7db383571639d0cddfcb6dd76bc972df17da39042e15ac6098c6"
+    "sha256": "e123ea174bb055049434eccfb87dcbb6c15051d0c4af7feb9ef23a231ef52bd2"
   },
   {
     "path": "docs/ARCHITECTURE_PHASE1.md",
@@ -153,19 +153,19 @@
   },
   {
     "path": "backend/max_backend/onnx_data_service.py",
-    "sha256": "50a628ce629545645d04371d842520029251a33627eeb1a8a1341ff9783c4845"
+    "sha256": "f559d1e5a9f7a883cbc323843e095c79163b0dcfd531479c1964b8e59b2bdc76"
   },
   {
     "path": "backend/max_backend/onnx_data_api.py",
-    "sha256": "de149d94749d20f0b0f3cc160a6d83491a20e60930c829b087caa2be2e7be03f"
+    "sha256": "558425a8d366894293dabd899202f0000ff12c896bf406d33a89a2028abb1354"
   },
   {
     "path": "frontend/src/onnxDataApi.ts",
-    "sha256": "a6aa1e9f198d99dfc4f59b6fc5b005b263f465a7c72145f29f045e1cf51ed32b"
+    "sha256": "bca322aca6ea63085e438ea2e8146aa91f63de5597773f0690ee3182de6e2c19"
   },
   {
     "path": "frontend/src/OnnxDataIntake.tsx",
-    "sha256": "ab7bc8bf040417a6ed94d44deb6f4c1a7a3c8719abc91f9b238259e2de2a2368"
+    "sha256": "0f35f9f0bd8b12603fd949b94bde10dcc0dcab25b7ef278608a38143556430d6"
   },
   {
     "path": "backend/max_backend/scientist_knowledge.py",

@@ -3,7 +3,7 @@
 # SYMBOL INDEX
 
 Authority SHA: external final acceptance evidence
-Source digest: eca30bb1e1abff5c3c87df344aa020bce0645cc07a90fb4e426d615d9b0863bf
+Source digest: da0e2c7f4b8192f4993d9a9223d5dec9ea722c168c3bc9d567014d0d0592707f
 Status: CURRENT
 
 | File | Symbol | Kind | Lines@SHA | Responsibility | Reads/Writes | Called By | Tests |
@@ -1342,6 +1342,10 @@ Status: CURRENT
 | backend/tests/test_onnx_data_api.py | test_recovery_required_503_blocks_v2_operations_with_existing_error_contract | function | 439-455 | Observed Python symbol | | | |
 | backend/tests/test_onnx_data_api.py | test_recovery_required_503_blocks_v2_operations_with_existing_error_contract.scenario | async_method | 446-453 | Observed Python symbol | | | |
 | backend/tests/test_onnx_data_api.py | test_api_has_no_training_or_scientific_mutation_routes | function | 458-472 | Observed Python symbol | | | |
+| backend/tests/test_onnx_data_api.py | test_one_click_preflight_without_timezone_keeps_scientific_gate_blocked | function | 474-502 | Observed Python symbol | | | |
+| backend/tests/test_onnx_data_api.py | test_one_click_preflight_without_timezone_keeps_scientific_gate_blocked.scenario | async_method | 479-499 | Observed Python symbol | | | |
+| backend/tests/test_onnx_data_api.py | test_missing_canonical_file_reports_404_not_timezone_form_error | function | 505-515 | Observed Python symbol | | | |
+| backend/tests/test_onnx_data_api.py | test_missing_canonical_file_reports_404_not_timezone_form_error.scenario | async_method | 509-513 | Observed Python symbol | | | |
 | backend/tests/test_onnx_data_intake.py | _row | function | 33-49 | Observed Python symbol | | | |
 | backend/tests/test_onnx_data_intake.py | _csv_bytes | function | 52-57 | Observed Python symbol | | | |
 | backend/tests/test_onnx_data_intake.py | _valid_rows | function | 60-61 | Observed Python symbol | | | |

@@ -218,6 +218,21 @@ describe('ONNX-02 v2 API contract', () => {
     await expect(fetchOnnxDataWorkspace()).rejects.toThrow(/valid JSON/i)
   })
 
+  it('preserves caller cancellation instead of reporting it as a request timeout', async () => {
+    const controller = new AbortController()
+    const fetchMock = vi.fn((_input: RequestInfo | URL, init?: RequestInit) => new Promise<Response>((_resolve, reject) => {
+      init?.signal?.addEventListener('abort', () => {
+        reject(new DOMException('The operation was aborted.', 'AbortError'))
+      }, { once: true })
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const pending = fetchOnnxDataWorkspace(controller.signal)
+    controller.abort()
+
+    await expect(pending).rejects.toMatchObject({ name: 'AbortError' })
+  })
+
   it('parses a complete backend window result and rejects a contradictory frozen range', async () => {
     const config = validWindowConfig()
     const body = {
