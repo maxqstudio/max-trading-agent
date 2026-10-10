@@ -38,7 +38,8 @@ function Invoke-Gate {
     if ($null -ne $LASTEXITCODE) { $exitCode = [int]$LASTEXITCODE }
   } catch {
     $exitCode = 1
-    $output = (($_ | Out-String).Trim())
+    $exceptionOutput = (($_ | Out-String).Trim())
+    $output = if ($output) { $output + "`n" + $exceptionOutput } else { $exceptionOutput }
   } finally {
     $ErrorActionPreference = $previousPreference
   }
