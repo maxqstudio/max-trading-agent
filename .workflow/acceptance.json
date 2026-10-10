@@ -1,23 +1,24 @@
 {
-  "current_phase": "ONNX-00",
+  "current_phase": "ONNX-01",
   "current_phase_results": {
     "database_schema_version": 15,
-    "hosted_ci": "Exact updated PR-head run ID and tested SHA are external acceptance evidence per D-012; verify directly on PR #19.",
-    "local_governance": "PASS_LOCAL on the current candidate: Project Truth Compiler, Project Docs, Doc Quality, Sequence Sessions/Contract, Handoff, Human Comprehension, Cross-document Consistency, and Project Truth pass; cross-document and Project Truth validators use --allow-dirty because this candidate is uncommitted. Existing pinned Skill Workflow provenance and strict/compiler/sequence/cross-document selftests pass at executable authority SHA 964481ed1609f87904ba9e08890bffc0a10c3fd4. Owner runtime remains NOT_PROVEN.",
+    "hosted_ci": "ONNX-01 exact branch/PR Windows CI is NOT_RUN; record exact hosted identity externally under D-012 after pushing the candidate. Previous accepted ONNX-00 merged-main Windows CI is recorded separately below.",
+    "local_governance": "ONNX-01 full local governance is NOT_RUN. ONNX-00 closure is accepted on parent main c75f978ea4438183e6a759d398eb69b3eeca9ac4 (tree de1eba7dc91cef12843780e9ef2fa70275422a12), Control Room acceptance, and post-merge Windows CI 38012160408 PASS. Pinned Skill Workflow remains 964481ed1609f87904ba9e08890bffc0a10c3fd4; Owner/scientific runtime remains NOT_PROVEN.",
     "max_executable_validator_pin": "964481ed1609f87904ba9e08890bffc0a10c3fd4",
     "model_lab_authorities_inspected": 19,
     "model_lab_main": "883ebeb1ca2e70f6255e0889358ba7c822ac52f5",
     "onnx_runtime": "NOT_IMPLEMENTED",
     "owner_runtime": "NOT_PROVEN",
-    "product_source_changed": "NO; governance-only contract test added",
+    "product_source_changed": "YES; ONNX-01 read-only workspace shell and API/state skeleton are in scope; no scientific/runtime behavior is implemented",
     "schema_changed": "NO",
     "skill_workflow_latest_guidance": "3b3289681cf2cec8d3d132895e0848be64bb54b1",
-    "source_only_scan": "PASS on exact staged candidate tree: 258 tracked text files, 0 matches. Exact pushed PR-head/tree and hosted CI identities remain external evidence per D-012.",
-    "starting_main": "203f6ab3dc618e3edd247841aa25e1fa0951a19a",
-    "starting_main_windows_ci": "PASS: run 37964999480 on exact starting SHA"
+    "source_only_scan": "NOT_RUN for ONNX-01 exact candidate",
+    "starting_main": "c75f978ea4438183e6a759d398eb69b3eeca9ac4",
+    "starting_main_tree": "de1eba7dc91cef12843780e9ef2fa70275422a12",
+    "starting_main_windows_ci": "PASS: run 38012160408 on exact accepted ONNX-00 merged main; external evidence per D-012"
   },
   "current_phase_status": "IN_PROGRESS",
-  "evidence_boundary": "ONNX-00 remains planning/governance only on a work branch based on main 203f6ab3dc618e3edd247841aa25e1fa0951a19a. This repair changes governed JSON, one focused backend contract test and compiler-generated docs only; no product behavior, schema, dependencies, Owner data, MT5, model training, or runtime is changed or executed. D-039 is retained as historical and superseded by D-042; the reported Windows commit-memory exhaustion remains unresolved/NOT_PROVEN. The ONNX state machine now gates candidate readiness through final fit/export/parity/manifest/registration, and ModelLab KPI values remain non-executable references pending explicit Owner authorization. Exact final PR-head SHA and hosted-run identity are external evidence under D-012; PR #19 stays open and unmerged for Control Room re-audit.",
+  "evidence_boundary": "ONNX-00 is closed as accepted planning authority against main c75f978ea4438183e6a759d398eb69b3eeca9ac4 and tree de1eba7dc91cef12843780e9ef2fa70275422a12, with Control Room acceptance and post-merge Windows CI run 38012160408 PASS. ONNX-01 is IN_PROGRESS on codex/onnx-01-workspace-shell from that accepted parent and is limited to the read-only workspace shell/API-state skeleton. No operational cycle/store, dataset scan/snapshot, training/scoring, ONNX export/runtime, scientific result, MT5, or Owner-PC access is claimed. Exact ONNX-01 candidate SHA and hosted CI identity remain external acceptance evidence under D-012.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
     "How does important data flow through the system?": "PASS",
@@ -83,10 +84,10 @@
       "status": "PASS_LOCAL"
     },
     {
-      "evidence": "Exact updated PR-head Windows CI run identity/result is external evidence under D-012 and must be independently verified on PR #19; this task intentionally stops before merge.",
+      "evidence": "ONNX-00 accepted merged main c75f978ea4438183e6a759d398eb69b3eeca9ac4, tree de1eba7dc91cef12843780e9ef2fa70275422a12; Control Room acceptance and post-merge Windows CI run 38012160408 PASS. ONNX-01 CI remains a separate external gate.",
       "id": "HOSTED-01",
-      "requirement": "Windows GitHub Actions passes on the exact ONNX-00 planning PR head. This handoff stops before merge; exact PR-head acceptance evidence is external and no merged-main claim is made.",
-      "status": "NOT_PROVEN"
+      "requirement": "ONNX-00 was merged and exact post-merge Windows GitHub Actions passed on the accepted main authority; this closure does not prove ONNX-01 hosted acceptance or scientific/runtime behavior.",
+      "status": "PASS"
     },
     {
       "evidence": "Owner PC and MT5 were not accessed; real Strategy Optimizer/Champion/backtest runtime remains NOT_PROVEN and outside ONNX-00.",
@@ -175,7 +176,7 @@
     {
       "evidence": ".workflow/state.json; .workflow/roadmap.json; .workflow/claims.json; Project Truth Compiler and validators",
       "id": "ONNX-00-GOVERNANCE-01",
-      "requirement": "Legacy Research and R00-R11 are retired; current state and roadmap point to ONNX-00; generated docs are synchronized by the canonical compiler; local governance validators pass.",
+      "requirement": "Legacy Research and R00-R11 are retired; ONNX-00 planning authority and its accepted closure are preserved as historical parent evidence; current ONNX-01 state and roadmap transition is governed separately.",
       "status": "PASS_LOCAL"
     },
     {
@@ -209,9 +210,39 @@
       "status": "PASS_LOCAL"
     },
     {
-      "evidence": "External GitHub Actions evidence bound to the exact PR head and reported outside tracked final-SHA state per D-012; no merge is authorized.",
+      "evidence": "ONNX-00 merged-main Windows CI run 38012160408 PASS for accepted main c75f978ea4438183e6a759d398eb69b3eeca9ac4; ONNX-01 branch/PR CI remains pending and will be reported externally per D-012.",
       "id": "ONNX-00-PR-CI-01",
-      "requirement": "Planning-only PR-head Windows CI passes on the exact candidate SHA and PR remains open/unmerged for Control Room audit.",
+      "requirement": "ONNX-00 merged-main Windows CI passed on the exact accepted merge SHA; this is historical phase closure evidence, not an ONNX-01 CI result.",
+      "status": "PASS"
+    },
+    {
+      "evidence": "frontend/src/App.tsx; frontend/src/OnnxWorkspace.tsx; frontend/src/App.test.tsx",
+      "id": "ONNX-01-WORKSPACE-01",
+      "requirement": "Exactly four top-level workspaces and eight ONNX pages; Qualified Pool remains within Discovery and Forward within Challenger; Strategy navigation and Scientist drawer remain usable.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": "backend/max_backend/onnx_api.py; frontend/src/onnxApi.ts; docs/onnx/ONNX_01_WORKSPACE_API.md",
+      "id": "ONNX-01-READ-API-01",
+      "requirement": "A versioned read-only API is the source for ONNX state and truthfully reports NOT_IMPLEMENTED, NOT_STARTED, NOT_PROVEN, UNAVAILABLE, and RECOVERY_REQUIRED without fabricated operational state or scientific mutation endpoints.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": "backend/max_backend/main.py recovery middleware; backend/tests/test_m00_foundation.py; frontend/src/onnxApi.test.ts",
+      "id": "ONNX-01-RECOVERY-01",
+      "requirement": "Application-wide Recovery Required mode continues blocking ONNX reads with the existing exact 503 response; ONNX-01 introduces no startup, database, data-scan, MT5, or model-execution side effects.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": "backend/tests/test_onnx00_governance_contracts.py and backend/max_backend/onnx_parameter_estimation.py",
+      "id": "ONNX-01-SCIENTIFIC-REGRESSION-01",
+      "requirement": "The frozen 23-family model universe, estimator/CandidateSpec coherence, MoE accounting, lifecycle and promotion-recovery governance contracts remain unchanged and pass regression tests.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": "scripts/accept_onnx01.ps1 writes ignored machine-readable evidence with first_failed_gate; exact candidate/hosted identities remain external per D-012.",
+      "id": "ONNX-01-ACCEPTANCE-RUNNER-01",
+      "requirement": "A one-click Windows acceptance runner executes the required local gates in order and records machine-readable gate results and first_failed_gate without claiming Owner runtime or scientific acceptance.",
       "status": "NOT_PROVEN"
     }
   ],
@@ -245,14 +276,14 @@
     },
     "hosted_ci": {
       "run_id": null,
-      "status": "PENDING_PR_HEAD_CI",
+      "status": "NOT_RUN",
       "tested_sha": null
     },
     "regression": {
-      "backend_full_status": "PASS: 483 passed, 0 failed, 0 skipped; focused ONNX-00 governance suite 10 passed",
-      "build": "PASS: frontend npm run build; Vite bundle-size warning remains non-blocking and unchanged in scope",
-      "frontend_status": "PASS: 61 passed / 9 files",
-      "lint": "PASS: frontend npm run lint",
+      "backend_full_status": "PASS: 486 passed, 0 failed, 0 skipped",
+      "build": "PASS: frontend npm run build; non-blocking chunk-size warning (>500 kB) reported",
+      "frontend_status": "PASS: 64 passed / 10 files",
+      "lint": "PASS: frontend npm run lint; no warnings",
       "npm_ls_all": "PASS: exit 0; optional platform packages remain listed unmet",
       "pip_check": "PASS: No broken requirements found"
     },
@@ -265,7 +296,7 @@
     },
     "scientific_state": {
       "champion_mutation": 0,
-      "current_onnx_phase": "ONNX-00_PLANNING_ONLY",
+      "current_onnx_phase": "ONNX-01_READ_ONLY_WORKSPACE_ONLY",
       "legacy_research": "RETIRED",
       "model_training": 0,
       "onnx": 0,
@@ -277,7 +308,7 @@
     "source_only_scan": {
       "candidate_sha": null,
       "matches": null,
-      "status": "PENDING_EXACT_BRANCH_TREE",
+      "status": "NOT_RUN",
       "tracked_text_files": null
     }
   },
@@ -289,21 +320,27 @@
   "runtime_status": "ONNX_RUNTIME_NOT_IMPLEMENTED; REAL_RESEARCH_NOT_STARTED; OWNER_PC_AND_MT5_NOT_RUN; STRATEGY_RUNTIME_NOT_PROVEN",
   "schema_version": 1,
   "sequence_mode": "DURING",
-  "sequence_session": "ONNX-00-PLANNING_ONLY_NO_RUNTIME_SEQUENCE",
-  "sequence_sync_status": "PASS: all 8 existing DURING/CURRENT source-grounded sessions validated; ONNX-00 is planning-only and introduces no runtime sequence.",
+  "sequence_session": "FLOW-ONNX-WORKSPACE",
+  "sequence_sync_status": "PASS: 9 DURING/CURRENT source-grounded sessions, including FLOW-ONNX-WORKSPACE, regenerated at source digest 2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a; 0 unresolved bindings. This is static/source evidence only, not a runtime trace.",
   "skill_workflow_current_sha": "964481ed1609f87904ba9e08890bffc0a10c3fd4",
   "skill_workflow_guidance_sha": "3b3289681cf2cec8d3d132895e0848be64bb54b1",
   "test_commands": [
-    ".venv/Scripts/python.exe -m pytest backend/tests/test_onnx00_governance_contracts.py -q -o addopts=",
+    ".venv/Scripts/python.exe -m pytest backend/tests -q -o addopts=",
+    ".venv/Scripts/python.exe -m pip check",
+    "frontend/npm test -- --run",
+    "frontend/npm run lint",
+    "frontend/npm run build",
+    "frontend/npm ls --all",
     ".venv/Scripts/python.exe .workflow/tools/sync_project_truth.py",
     ".venv/Scripts/python.exe .workflow/tools/validate_project_docs.py",
     ".venv/Scripts/python.exe .workflow/tools/validate_doc_quality.py",
     ".venv/Scripts/python.exe .workflow/tools/validate_sequence_sessions.py",
     ".venv/Scripts/python.exe .workflow/tools/validate_handoff.py",
     ".venv/Scripts/python.exe .workflow/tools/validate_human_comprehension.py --require-pass",
-    ".venv/Scripts/python.exe .workflow/tools/validate_cross_document_consistency.py --allow-dirty",
-    ".venv/Scripts/python.exe .workflow/tools/validate_project_truth.py --allow-dirty",
-    "GitHub Actions Windows CI on exact ONNX-00 PR head; source-only, backend, frontend, dependencies and governance"
+    ".venv/Scripts/python.exe .workflow/tools/validate_cross_document_consistency.py",
+    ".venv/Scripts/python.exe .workflow/tools/validate_project_truth.py",
+    "scripts/scan_m05_candidate_tree.py --candidate-sha HEAD",
+    "GitHub Actions Windows CI on exact ONNX-01 PR head"
   ],
   "truth_gates": {
     "BEHAVIORAL_SYNC": "NOT_APPLICABLE",

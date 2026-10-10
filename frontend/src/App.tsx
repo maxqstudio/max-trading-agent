@@ -6,6 +6,7 @@ import ChampionPage from './ChampionPage'
 import OptimizerPage from './OptimizerPage'
 import ScientistPage from './ScientistPage'
 import SettingsPage from './SettingsPage'
+import OnnxWorkspace from './OnnxWorkspace'
 import type { ProviderSettings } from './SettingsPage'
 import { ActionButton, ActionProgress } from './ActionControls'
 
@@ -225,7 +226,7 @@ function OverviewPage() {
 }
 
 export default function App() {
-  const [workspace, setWorkspace] = useState<'strategy' | 'artifacts' | 'settings'>('strategy')
+  const [workspace, setWorkspace] = useState<'strategy' | 'onnx' | 'artifacts' | 'settings'>('strategy')
   const [page, setPage] = useState<'overview' | 'optimizer' | 'challengers' | 'champion'>('overview')
   const [leftOpen, setLeftOpen] = useState(true)
   const [scientistOpen, setScientistOpen] = useState(true)
@@ -362,31 +363,45 @@ export default function App() {
 
   return (
     <div className={'app-shell ' + (!leftOpen ? 'left-collapsed ' : '') + (!scientistOpen ? 'scientist-collapsed' : '')}>
-      <aside className={'left-nav ' + (leftOpen ? 'left-nav-open' : 'left-nav-closed')} aria-label="MAX workspace navigation">
+      <nav className={'left-nav ' + (leftOpen ? 'left-nav-open' : 'left-nav-closed')} aria-label="MAX workspaces">
         <div className="left-nav-head">
           <strong>MAX</strong>
           <button type="button" onClick={() => changeLeft(false)} aria-label="Hide navigation">‹</button>
         </div>
         <button
+          type="button"
           className={workspace === 'strategy' ? 'left-nav-active' : ''}
+          aria-current={workspace === 'strategy' ? 'page' : undefined}
           onClick={() => setWorkspace('strategy')}
         >
           Strategy
         </button>
         <button
+          type="button"
+          className={workspace === 'onnx' ? 'left-nav-active' : ''}
+          aria-current={workspace === 'onnx' ? 'page' : undefined}
+          onClick={() => setWorkspace('onnx')}
+        >
+          ONNX
+        </button>
+        <button
+          type="button"
           className={workspace === 'artifacts' ? 'left-nav-active' : ''}
+          aria-current={workspace === 'artifacts' ? 'page' : undefined}
           onClick={() => setWorkspace('artifacts')}
         >
           Artifacts
         </button>
         <div className="left-nav-separator" />
         <button
+          type="button"
           className={workspace === 'settings' ? 'left-nav-active' : ''}
+          aria-current={workspace === 'settings' ? 'page' : undefined}
           onClick={() => setWorkspace('settings')}
         >
           Settings
         </button>
-      </aside>
+      </nav>
 
       {!leftOpen && (
         <button
@@ -404,11 +419,11 @@ export default function App() {
         {uiStatus && <p role="status" className="notice">{uiStatus}</p>}
         {workspace === 'strategy' && (
           <>
-            <nav className="nav" aria-label="MAX navigation">
-              <button className={page === 'overview' ? 'nav-active' : ''} onClick={() => setPage('overview')}>Overview</button>
-              <button className={page === 'optimizer' ? 'nav-active' : ''} onClick={() => setPage('optimizer')}>Optimizer</button>
-              <button className={page === 'challengers' ? 'nav-active' : ''} onClick={() => setPage('challengers')}>Challengers</button>
-              <button className={page === 'champion' ? 'nav-active' : ''} onClick={() => setPage('champion')}>Champion</button>
+            <nav className="nav" aria-label="Strategy navigation">
+              <button type="button" className={page === 'overview' ? 'nav-active' : ''} aria-current={page === 'overview' ? 'page' : undefined} onClick={() => setPage('overview')}>Overview</button>
+              <button type="button" className={page === 'optimizer' ? 'nav-active' : ''} aria-current={page === 'optimizer' ? 'page' : undefined} onClick={() => setPage('optimizer')}>Optimizer</button>
+              <button type="button" className={page === 'challengers' ? 'nav-active' : ''} aria-current={page === 'challengers' ? 'page' : undefined} onClick={() => setPage('challengers')}>Challengers</button>
+              <button type="button" className={page === 'champion' ? 'nav-active' : ''} aria-current={page === 'champion' ? 'page' : undefined} onClick={() => setPage('champion')}>Champion</button>
             </nav>
             {page === 'overview' && <OverviewPage />}
             {page === 'optimizer' && <OptimizerPage />}
@@ -418,6 +433,7 @@ export default function App() {
         )}
         {workspace === 'artifacts' && <ArtifactsPage />}
         {workspace === 'settings' && <SettingsPage chatModel={chatModel} onSaved={providerSaved} />}
+        {workspace === 'onnx' && <OnnxWorkspace />}
       </main>
 
       {!scientistOpen && (

@@ -37,6 +37,13 @@
       "to": "backend/max_backend/main.py::recovery_status"
     },
     {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /workspace",
+      "resolver": "python_route_decorator",
+      "to": "backend/max_backend/onnx_api.py::get_onnx_workspace"
+    },
+    {
       "action": "_backtest_schema_ready",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema",
@@ -324,6 +331,146 @@
       "to": "backend/max_backend/mt5.py::_unavailable"
     },
     {
+      "action": "StagePageState",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::_stage_page",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::StagePageState"
+    },
+    {
+      "action": "ChallengerCandidatesState",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::ChallengerCandidatesState"
+    },
+    {
+      "action": "ChallengerState",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::ChallengerState"
+    },
+    {
+      "action": "ChampionState",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::ChampionState"
+    },
+    {
+      "action": "CheckpointState",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::CheckpointState"
+    },
+    {
+      "action": "DatasetState",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::DatasetState"
+    },
+    {
+      "action": "DiscoveryState",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::DiscoveryState"
+    },
+    {
+      "action": "FirstBlocker",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::FirstBlocker"
+    },
+    {
+      "action": "ForwardState",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::ForwardState"
+    },
+    {
+      "action": "HardwareCapacityState",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::HardwareCapacityState"
+    },
+    {
+      "action": "OnnxWorkspaceSnapshot",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::OnnxWorkspaceSnapshot"
+    },
+    {
+      "action": "OperationalState",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::OperationalState"
+    },
+    {
+      "action": "ProgressState",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::ProgressState"
+    },
+    {
+      "action": "QualifiedPoolState",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::QualifiedPoolState"
+    },
+    {
+      "action": "RecoveryState",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::RecoveryState"
+    },
+    {
+      "action": "ResearchWindowsState",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::ResearchWindowsState"
+    },
+    {
+      "action": "StateSection",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::StateSection"
+    },
+    {
+      "action": "ValueSection",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::ValueSection"
+    },
+    {
+      "action": "_stage_page",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::_stage_page"
+    },
+    {
+      "action": "build_onnx_workspace_snapshot",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_api.py::get_onnx_workspace",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot"
+    },
+    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_store.py::latest_job",
@@ -364,20 +511,6 @@
       "from": "backend/max_backend/optimizer_store.py::migrate_m02",
       "resolver": "python_ast",
       "to": "backend/max_backend/optimizer_store.py::migrate_m01"
-    },
-    {
-      "action": "_is_reparse",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/path_safety.py::assert_owned_path",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/path_safety.py::_is_reparse"
-    },
-    {
-      "action": "assert_owned_path",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/path_safety.py::remove_owned_path",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/path_safety.py::assert_owned_path"
     },
     {
       "action": "migrate_m04",
@@ -457,104 +590,6 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
-      "action": "sqlite3.connect",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_make_database_backup",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::connect"
-    },
-    {
-      "action": "target.close",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_make_database_backup",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
-    },
-    {
-      "action": "StrategyResetError",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_make_database_backup",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::StrategyResetError"
-    },
-    {
-      "action": "_hash_file",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_make_database_backup",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::_hash_file"
-    },
-    {
-      "action": "detect_mt5",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_owned_paths",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/mt5.py::detect_mt5"
-    },
-    {
-      "action": "file_size_tree",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_owned_paths",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/path_safety.py::file_size_tree"
-    },
-    {
-      "action": "_runtime_paths",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_owned_paths",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::_runtime_paths"
-    },
-    {
-      "action": "assert_owned_path",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_read_counts",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/path_safety.py::assert_owned_path"
-    },
-    {
-      "action": "StrategyResetError",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_read_counts",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::StrategyResetError"
-    },
-    {
-      "action": "_connect",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_read_counts",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::_connect"
-    },
-    {
-      "action": "_count",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_read_counts",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::_count"
-    },
-    {
-      "action": "_hash_file",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_read_counts",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::_hash_file"
-    },
-    {
-      "action": "_owned_paths",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_read_counts",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::_owned_paths"
-    },
-    {
-      "action": "_tables",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_read_counts",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::_tables"
-    },
-    {
       "action": "_hash_file",
       "evidence": "STATIC",
       "from": "backend/max_backend/strategy_reset.py::_settings_fingerprint",
@@ -602,83 +637,6 @@
       "from": "backend/max_backend/strategy_reset.py::database_recovery_status",
       "resolver": "python_ast",
       "to": "backend/max_backend/strategy_reset.py::_connect"
-    },
-    {
-      "action": "conn.close",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
-    },
-    {
-      "action": "assert_owned_path",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/path_safety.py::assert_owned_path"
-    },
-    {
-      "action": "remove_owned_path",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/path_safety.py::remove_owned_path"
-    },
-    {
-      "action": "StrategyResetError",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::StrategyResetError"
-    },
-    {
-      "action": "_connect",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::_connect"
-    },
-    {
-      "action": "_delete_rows",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::_delete_rows"
-    },
-    {
-      "action": "_hash_file",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::_hash_file"
-    },
-    {
-      "action": "_make_database_backup",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::_make_database_backup"
-    },
-    {
-      "action": "_read_counts",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::_read_counts"
-    },
-    {
-      "action": "_settings_fingerprint",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::_settings_fingerprint"
-    },
-    {
-      "action": "_read_counts",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/strategy_reset.py::_read_counts"
     },
     {
       "action": "_challenger_role_schema_ready",
@@ -756,148 +714,15 @@
       "from": "frontend/src/App.tsx::<module>",
       "resolver": "js_http_scan",
       "to": "HTTP /api/scientist/ui-settings"
-    },
-    {
-      "action": "FETCH request",
-      "evidence": "STATIC",
-      "from": "frontend/src/ArtifactsPage.tsx::<module>",
-      "resolver": "js_http_scan",
-      "to": "HTTP /api/artifacts"
-    },
-    {
-      "action": "FETCH request",
-      "evidence": "STATIC",
-      "from": "frontend/src/ArtifactsPage.tsx::<module>",
-      "resolver": "js_http_scan",
-      "to": "HTTP /api/artifacts/"
-    },
-    {
-      "action": "FETCH request",
-      "evidence": "STATIC",
-      "from": "frontend/src/ArtifactsPage.tsx::<module>",
-      "resolver": "js_http_scan",
-      "to": "HTTP /api/artifacts/action"
-    },
-    {
-      "action": "FETCH request",
-      "evidence": "STATIC",
-      "from": "frontend/src/ArtifactsPage.tsx::<module>",
-      "resolver": "js_http_scan",
-      "to": "HTTP /api/artifacts/cleanup"
-    },
-    {
-      "action": "FETCH request",
-      "evidence": "STATIC",
-      "from": "frontend/src/ArtifactsPage.tsx::<module>",
-      "resolver": "js_http_scan",
-      "to": "HTTP /api/artifacts/cleanup/preflight"
-    },
-    {
-      "action": "FETCH request",
-      "evidence": "STATIC",
-      "from": "frontend/src/ArtifactsPage.tsx::<module>",
-      "resolver": "js_http_scan",
-      "to": "HTTP /api/artifacts/preflight"
-    },
-    {
-      "action": "FETCH request",
-      "evidence": "STATIC",
-      "from": "frontend/src/ArtifactsPage.tsx::<module>",
-      "resolver": "js_http_scan",
-      "to": "HTTP /api/artifacts/reconcile"
-    },
-    {
-      "action": "FETCH request",
-      "evidence": "STATIC",
-      "from": "frontend/src/ArtifactsPage.tsx::<module>",
-      "resolver": "js_http_scan",
-      "to": "HTTP /api/artifacts/strategy-reset"
-    },
-    {
-      "action": "FETCH request",
-      "evidence": "STATIC",
-      "from": "frontend/src/ArtifactsPage.tsx::<module>",
-      "resolver": "js_http_scan",
-      "to": "HTTP /api/artifacts/strategy-reset/preflight"
     }
   ],
   "entries": [
     "frontend/src/App.tsx::<module>",
-    "frontend/src/ArtifactsPage.tsx::<module>",
-    "backend/max_backend/main.py::recovery_required_gate",
-    "backend/max_backend/main.py::recovery_status",
-    "backend/max_backend/main.py::reset_corrupt_state",
-    "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
-    "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
-    "backend/max_backend/strategy_reset.py::database_recovery_status",
-    "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
+    "backend/max_backend/onnx_api.py::get_onnx_workspace"
   ],
   "generated": true,
   "generated_by": "generate_sequence_actual.py",
   "nodes": [
-    {
-      "id": "HTTP /api/artifacts",
-      "kind": "external",
-      "label": "HTTP /api/artifacts",
-      "language": "HTTP",
-      "locator": "HTTP /api/artifacts"
-    },
-    {
-      "id": "HTTP /api/artifacts/",
-      "kind": "external",
-      "label": "HTTP /api/artifacts/",
-      "language": "HTTP",
-      "locator": "HTTP /api/artifacts/"
-    },
-    {
-      "id": "HTTP /api/artifacts/action",
-      "kind": "external",
-      "label": "HTTP /api/artifacts/action",
-      "language": "HTTP",
-      "locator": "HTTP /api/artifacts/action"
-    },
-    {
-      "id": "HTTP /api/artifacts/cleanup",
-      "kind": "external",
-      "label": "HTTP /api/artifacts/cleanup",
-      "language": "HTTP",
-      "locator": "HTTP /api/artifacts/cleanup"
-    },
-    {
-      "id": "HTTP /api/artifacts/cleanup/preflight",
-      "kind": "external",
-      "label": "HTTP /api/artifacts/cleanup/preflight",
-      "language": "HTTP",
-      "locator": "HTTP /api/artifacts/cleanup/preflight"
-    },
-    {
-      "id": "HTTP /api/artifacts/preflight",
-      "kind": "external",
-      "label": "HTTP /api/artifacts/preflight",
-      "language": "HTTP",
-      "locator": "HTTP /api/artifacts/preflight"
-    },
-    {
-      "id": "HTTP /api/artifacts/reconcile",
-      "kind": "external",
-      "label": "HTTP /api/artifacts/reconcile",
-      "language": "HTTP",
-      "locator": "HTTP /api/artifacts/reconcile"
-    },
-    {
-      "id": "HTTP /api/artifacts/strategy-reset",
-      "kind": "external",
-      "label": "HTTP /api/artifacts/strategy-reset",
-      "language": "HTTP",
-      "locator": "HTTP /api/artifacts/strategy-reset"
-    },
-    {
-      "id": "HTTP /api/artifacts/strategy-reset/preflight",
-      "kind": "external",
-      "label": "HTTP /api/artifacts/strategy-reset/preflight",
-      "language": "HTTP",
-      "locator": "HTTP /api/artifacts/strategy-reset/preflight"
-    },
     {
       "id": "HTTP /api/overview",
       "kind": "external",
@@ -932,6 +757,13 @@
       "label": "HTTP /api/scientist/ui-settings",
       "language": "HTTP",
       "locator": "HTTP /api/scientist/ui-settings"
+    },
+    {
+      "id": "HTTP /workspace",
+      "kind": "external",
+      "label": "HTTP /workspace",
+      "language": "HTTP",
+      "locator": "HTTP /workspace"
     },
     {
       "id": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready",
@@ -1159,15 +991,6 @@
       "locator": "backend/max_backend/main.py::overview"
     },
     {
-      "id": "backend/max_backend/main.py::recovery_required_gate",
-      "kind": "async_function",
-      "label": "backend/max_backend/main.py::recovery_required_gate",
-      "language": "Python",
-      "line_end": 99,
-      "line_start": 86,
-      "locator": "backend/max_backend/main.py::recovery_required_gate"
-    },
-    {
       "id": "backend/max_backend/main.py::recovery_status",
       "kind": "function",
       "label": "backend/max_backend/main.py::recovery_status",
@@ -1231,6 +1054,195 @@
       "locator": "backend/max_backend/mt5.py::detect_mt5"
     },
     {
+      "id": "backend/max_backend/onnx_api.py::ChallengerCandidatesState",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::ChallengerCandidatesState",
+      "language": "Python",
+      "line_end": 98,
+      "line_start": 97,
+      "locator": "backend/max_backend/onnx_api.py::ChallengerCandidatesState"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::ChallengerState",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::ChallengerState",
+      "language": "Python",
+      "line_end": 103,
+      "line_start": 101,
+      "locator": "backend/max_backend/onnx_api.py::ChallengerState"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::ChampionState",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::ChampionState",
+      "language": "Python",
+      "line_end": 107,
+      "line_start": 106,
+      "locator": "backend/max_backend/onnx_api.py::ChampionState"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::CheckpointState",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::CheckpointState",
+      "language": "Python",
+      "line_end": 111,
+      "line_start": 110,
+      "locator": "backend/max_backend/onnx_api.py::CheckpointState"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::DatasetState",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::DatasetState",
+      "language": "Python",
+      "line_end": 61,
+      "line_start": 57,
+      "locator": "backend/max_backend/onnx_api.py::DatasetState"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::DiscoveryState",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::DiscoveryState",
+      "language": "Python",
+      "line_end": 85,
+      "line_start": 82,
+      "locator": "backend/max_backend/onnx_api.py::DiscoveryState"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::FirstBlocker",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::FirstBlocker",
+      "language": "Python",
+      "line_end": 118,
+      "line_start": 114,
+      "locator": "backend/max_backend/onnx_api.py::FirstBlocker"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::ForwardState",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::ForwardState",
+      "language": "Python",
+      "line_end": 94,
+      "line_start": 93,
+      "locator": "backend/max_backend/onnx_api.py::ForwardState"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::HardwareCapacityState",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::HardwareCapacityState",
+      "language": "Python",
+      "line_end": 70,
+      "line_start": 68,
+      "locator": "backend/max_backend/onnx_api.py::HardwareCapacityState"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::OnnxWorkspaceSnapshot",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::OnnxWorkspaceSnapshot",
+      "language": "Python",
+      "line_end": 142,
+      "line_start": 127,
+      "locator": "backend/max_backend/onnx_api.py::OnnxWorkspaceSnapshot"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::OperationalState",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::OperationalState",
+      "language": "Python",
+      "line_end": 54,
+      "line_start": 50,
+      "locator": "backend/max_backend/onnx_api.py::OperationalState"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::ProgressState",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::ProgressState",
+      "language": "Python",
+      "line_end": 75,
+      "line_start": 73,
+      "locator": "backend/max_backend/onnx_api.py::ProgressState"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::QualifiedPoolState",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::QualifiedPoolState",
+      "language": "Python",
+      "line_end": 79,
+      "line_start": 78,
+      "locator": "backend/max_backend/onnx_api.py::QualifiedPoolState"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::RecoveryState",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::RecoveryState",
+      "language": "Python",
+      "line_end": 124,
+      "line_start": 121,
+      "locator": "backend/max_backend/onnx_api.py::RecoveryState"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::ResearchWindowsState",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::ResearchWindowsState",
+      "language": "Python",
+      "line_end": 65,
+      "line_start": 64,
+      "locator": "backend/max_backend/onnx_api.py::ResearchWindowsState"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::StagePageState",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::StagePageState",
+      "language": "Python",
+      "line_end": 90,
+      "line_start": 88,
+      "locator": "backend/max_backend/onnx_api.py::StagePageState"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::StateSection",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::StateSection",
+      "language": "Python",
+      "line_end": 43,
+      "line_start": 40,
+      "locator": "backend/max_backend/onnx_api.py::StateSection"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::ValueSection",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_api.py::ValueSection",
+      "language": "Python",
+      "line_end": 47,
+      "line_start": 46,
+      "locator": "backend/max_backend/onnx_api.py::ValueSection"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::_stage_page",
+      "kind": "function",
+      "label": "backend/max_backend/onnx_api.py::_stage_page",
+      "language": "Python",
+      "line_end": 161,
+      "line_start": 154,
+      "locator": "backend/max_backend/onnx_api.py::_stage_page"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "kind": "function",
+      "label": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "language": "Python",
+      "line_end": 307,
+      "line_start": 164,
+      "locator": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot"
+    },
+    {
+      "id": "backend/max_backend/onnx_api.py::get_onnx_workspace",
+      "kind": "function",
+      "label": "backend/max_backend/onnx_api.py::get_onnx_workspace",
+      "language": "Python",
+      "line_end": 315,
+      "line_start": 314,
+      "locator": "backend/max_backend/onnx_api.py::get_onnx_workspace"
+    },
+    {
       "id": "backend/max_backend/optimizer_store.py::_decode_job",
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::_decode_job",
@@ -1265,51 +1277,6 @@
       "line_end": 134,
       "line_start": 114,
       "locator": "backend/max_backend/optimizer_store.py::migrate_m02"
-    },
-    {
-      "id": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close",
-      "kind": "method",
-      "label": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close",
-      "language": "Python",
-      "line_end": 428,
-      "line_start": 421,
-      "locator": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
-    },
-    {
-      "id": "backend/max_backend/path_safety.py::_is_reparse",
-      "kind": "function",
-      "label": "backend/max_backend/path_safety.py::_is_reparse",
-      "language": "Python",
-      "line_end": 19,
-      "line_start": 11,
-      "locator": "backend/max_backend/path_safety.py::_is_reparse"
-    },
-    {
-      "id": "backend/max_backend/path_safety.py::assert_owned_path",
-      "kind": "function",
-      "label": "backend/max_backend/path_safety.py::assert_owned_path",
-      "language": "Python",
-      "line_end": 62,
-      "line_start": 22,
-      "locator": "backend/max_backend/path_safety.py::assert_owned_path"
-    },
-    {
-      "id": "backend/max_backend/path_safety.py::file_size_tree",
-      "kind": "function",
-      "label": "backend/max_backend/path_safety.py::file_size_tree",
-      "language": "Python",
-      "line_end": 98,
-      "line_start": 88,
-      "locator": "backend/max_backend/path_safety.py::file_size_tree"
-    },
-    {
-      "id": "backend/max_backend/path_safety.py::remove_owned_path",
-      "kind": "function",
-      "label": "backend/max_backend/path_safety.py::remove_owned_path",
-      "language": "Python",
-      "line_end": 85,
-      "line_start": 65,
-      "locator": "backend/max_backend/path_safety.py::remove_owned_path"
     },
     {
       "id": "backend/max_backend/scientist_store.py::migrate_m05",
@@ -1348,24 +1315,6 @@
       "locator": "backend/max_backend/strategy_reset.py::_connect"
     },
     {
-      "id": "backend/max_backend/strategy_reset.py::_count",
-      "kind": "function",
-      "label": "backend/max_backend/strategy_reset.py::_count",
-      "language": "Python",
-      "line_end": 115,
-      "line_start": 113,
-      "locator": "backend/max_backend/strategy_reset.py::_count"
-    },
-    {
-      "id": "backend/max_backend/strategy_reset.py::_delete_rows",
-      "kind": "function",
-      "label": "backend/max_backend/strategy_reset.py::_delete_rows",
-      "language": "Python",
-      "line_end": 344,
-      "line_start": 324,
-      "locator": "backend/max_backend/strategy_reset.py::_delete_rows"
-    },
-    {
       "id": "backend/max_backend/strategy_reset.py::_hash_file",
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_hash_file",
@@ -1375,42 +1324,6 @@
       "locator": "backend/max_backend/strategy_reset.py::_hash_file"
     },
     {
-      "id": "backend/max_backend/strategy_reset.py::_make_database_backup",
-      "kind": "function",
-      "label": "backend/max_backend/strategy_reset.py::_make_database_backup",
-      "language": "Python",
-      "line_end": 321,
-      "line_start": 298,
-      "locator": "backend/max_backend/strategy_reset.py::_make_database_backup"
-    },
-    {
-      "id": "backend/max_backend/strategy_reset.py::_owned_paths",
-      "kind": "function",
-      "label": "backend/max_backend/strategy_reset.py::_owned_paths",
-      "language": "Python",
-      "line_end": 174,
-      "line_start": 145,
-      "locator": "backend/max_backend/strategy_reset.py::_owned_paths"
-    },
-    {
-      "id": "backend/max_backend/strategy_reset.py::_read_counts",
-      "kind": "function",
-      "label": "backend/max_backend/strategy_reset.py::_read_counts",
-      "language": "Python",
-      "line_end": 286,
-      "line_start": 177,
-      "locator": "backend/max_backend/strategy_reset.py::_read_counts"
-    },
-    {
-      "id": "backend/max_backend/strategy_reset.py::_runtime_paths",
-      "kind": "function",
-      "label": "backend/max_backend/strategy_reset.py::_runtime_paths",
-      "language": "Python",
-      "line_end": 142,
-      "line_start": 118,
-      "locator": "backend/max_backend/strategy_reset.py::_runtime_paths"
-    },
-    {
       "id": "backend/max_backend/strategy_reset.py::_settings_fingerprint",
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_settings_fingerprint",
@@ -1418,15 +1331,6 @@
       "line_end": 93,
       "line_start": 79,
       "locator": "backend/max_backend/strategy_reset.py::_settings_fingerprint"
-    },
-    {
-      "id": "backend/max_backend/strategy_reset.py::_tables",
-      "kind": "function",
-      "label": "backend/max_backend/strategy_reset.py::_tables",
-      "language": "Python",
-      "line_end": 110,
-      "line_start": 104,
-      "locator": "backend/max_backend/strategy_reset.py::_tables"
     },
     {
       "id": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database",
@@ -1445,24 +1349,6 @@
       "line_end": 432,
       "line_start": 422,
       "locator": "backend/max_backend/strategy_reset.py::database_recovery_status"
-    },
-    {
-      "id": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
-      "kind": "function",
-      "label": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
-      "language": "Python",
-      "line_end": 419,
-      "line_start": 347,
-      "locator": "backend/max_backend/strategy_reset.py::reset_strategy_workspace"
-    },
-    {
-      "id": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
-      "kind": "function",
-      "label": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
-      "language": "Python",
-      "line_end": 295,
-      "line_start": 289,
-      "locator": "backend/max_backend/strategy_reset.py::strategy_reset_preflight"
     },
     {
       "id": "backend/max_backend/workflow_store.py::_challenger_role_schema_ready",
@@ -1515,13 +1401,6 @@
       "label": "frontend/src/App.tsx::<module>",
       "language": "JavaScript/TypeScript",
       "locator": "frontend/src/App.tsx::<module>"
-    },
-    {
-      "id": "frontend/src/ArtifactsPage.tsx::<module>",
-      "kind": "module",
-      "label": "frontend/src/ArtifactsPage.tsx::<module>",
-      "language": "JavaScript/TypeScript",
-      "locator": "frontend/src/ArtifactsPage.tsx::<module>"
     }
   ],
   "observed_head": "c75f978ea4438183e6a759d398eb69b3eeca9ac4",

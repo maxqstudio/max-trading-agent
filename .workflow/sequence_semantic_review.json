@@ -7,7 +7,7 @@
   "generation_anchor_policy": {
     "meaning": "The observed head is a pre-commit generation anchor. Final hosted source SHA and CI identity remain external acceptance evidence; real MT5 and Owner-PC runtime remain deferred.",
     "observed_head": "073e69044c03f4296849dd5bc02516f30b9439b1",
-    "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e"
+    "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a"
   },
   "flows": [
     {
@@ -29,9 +29,9 @@
         "backend/max_backend/artifact_api.py::strategy_workspace_reset",
         "backend/max_backend/artifact_control.py::clean_generated_data"
       ],
-      "generated_nodes": 118,
-      "generated_edges": 216,
-      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
+      "generated_nodes": 123,
+      "generated_edges": 222,
+      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_strategy_workspace_reset.py",
@@ -51,9 +51,9 @@
         "backend/max_backend/challenger_operations.py::run_challenger_backtest",
         "backend/max_backend/challenger_store.py::consumed_source_identities"
       ],
-      "generated_nodes": 80,
-      "generated_edges": 117,
-      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
+      "generated_nodes": 88,
+      "generated_edges": 135,
+      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
       "tests": [
         "backend/tests/test_m06_challenger_operations.py",
         "backend/tests/test_m08_strategy_results.py"
@@ -73,7 +73,7 @@
       ],
       "generated_nodes": 44,
       "generated_edges": 62,
-      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
+      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
       "tests": [
         "backend/tests/test_m03_challenger.py",
         "backend/tests/test_m06_challenger_operations.py"
@@ -90,9 +90,9 @@
       "declared_entries": [
         "backend/max_backend/promotion_service.py::promote_strategy_challenger"
       ],
-      "generated_nodes": 134,
-      "generated_edges": 272,
-      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
+      "generated_nodes": 162,
+      "generated_edges": 321,
+      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
       "tests": [
         "backend/tests/test_m04_promotion.py",
         "backend/tests/test_m04_store.py"
@@ -110,9 +110,9 @@
         "backend/max_backend/optimizer_api.py::get_qualified_candidates",
         "backend/max_backend/optimizer_api.py::promote_qualified_candidates"
       ],
-      "generated_nodes": 126,
-      "generated_edges": 214,
-      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
+      "generated_nodes": 145,
+      "generated_edges": 239,
+      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_m03_challenger.py"
@@ -132,7 +132,7 @@
       ],
       "generated_nodes": 48,
       "generated_edges": 75,
-      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
+      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
       "tests": [
         "backend/tests/test_m05_scientist.py",
         "backend/tests/test_m05_final_evidence_contract.py",
@@ -158,9 +158,9 @@
         "backend/max_backend/strategy_reset.py::database_recovery_status",
         "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
       ],
-      "generated_nodes": 79,
-      "generated_edges": 113,
-      "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
+      "generated_nodes": 80,
+      "generated_edges": 115,
+      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
       "tests": [
         "backend/tests/test_strategy_workspace_reset.py",
         "backend/tests/test_retired_subsystem_migration.py",
@@ -197,9 +197,9 @@
         "backend/max_backend/optimizer_candidates.py::qualified_candidates_page",
         "backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration"
       ],
-      "generated_nodes": 126,
-      "generated_edges": 186,
-      "source_digest": "c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048",
+      "generated_nodes": 268,
+      "generated_edges": 514,
+      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
       "tests": [
         "backend/tests/test_optimizer_draft.py",
         "backend/tests/test_optimizer_reliability.py",
@@ -214,12 +214,33 @@
       ],
       "unresolved_bindings": [],
       "runtime_evidence_boundary": "Historical Stage C/D MT5 diagnostics remain historical only. This source candidate has not run MT5 or a real Optimizer; the reported long-range run ended in FAILED during result parsing after MT5 returned exit code 0. Frozen evidence was replayed offline without database writes. Owner runtime remains NOT_PROVEN; no scientific result is claimed."
+    },
+    {
+      "flow_id": "FLOW-ONNX-WORKSPACE",
+      "mode": "DURING",
+      "scope": "CURRENT",
+      "semantic_review": "PASS",
+      "purpose": "Render the ONNX workspace only from the versioned backend read-only capability snapshot; application recovery mode blocks the read, and no operational cycle or scientific mutation is created.",
+      "declared_entries": [
+        "frontend/src/App.tsx::<module>",
+        "backend/max_backend/onnx_api.py::get_onnx_workspace"
+      ],
+      "generated_nodes": 77,
+      "generated_edges": 100,
+      "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
+      "tests": [
+        "backend/tests/test_m00_foundation.py",
+        "frontend/src/App.test.tsx",
+        "frontend/src/onnxApi.test.ts"
+      ],
+      "unresolved_bindings": [],
+      "runtime_evidence_boundary": "Synthetic API/UI tests and static sequence only. No operational database, dataset, Owner PC, MT5, model training, ONNX export/runtime, or scientific outcome was accessed or produced."
     }
   ],
   "parse_failure_boundary": {
     "classification": "NO_FAILURES",
     "python_parse_failures": 0,
-    "source_digest": "fcd5983131c45774f375a2e85024ff087ce91d11b2db39641ff3e386c0b0641e",
+    "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
     "detail": "All current source files parsed during canonical sequence regeneration; no temporary pytest fixture is present in the workspace."
   },
   "retrospective_plan_artifacts": 0,

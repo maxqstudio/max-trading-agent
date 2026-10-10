@@ -24,6 +24,7 @@ from .optimizer_jobs import reconcile_optimizer_startup
 from .optimizer_store import latest_job
 from .promotion_service import recover_incomplete_promotions
 from .scientist_api import router as scientist_router
+from .onnx_api import router as onnx_router
 from .scientist_store import (
     migrate_m05,
     recover_unconfirmed_requests,
@@ -78,6 +79,7 @@ app.include_router(optimizer_router)
 app.include_router(challenger_router)
 app.include_router(champion_router)
 app.include_router(scientist_router)
+app.include_router(onnx_router)
 
 
 @app.middleware("http")

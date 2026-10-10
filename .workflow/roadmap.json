@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "current_phase": "ONNX-00",
+  "current_phase": "ONNX-01",
   "phases": [
     {
       "id": "PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE",
@@ -122,7 +122,7 @@
     {
       "id": "ONNX-00",
       "title": "ONNX-00 scientific authority and roadmap",
-      "status": "CURRENT",
+      "status": "COMPLETED",
       "objective": "Planning/governance only: inspect frozen ModelLab references, record current Owner decision D-043 for the exact 23-family V1 universe and D-044 capacity proposals, define distinct architecture/composition identities, parameter/capacity authority and explicit open gaps, dataset/stage/state/evidence contracts, product ownership and ONNX-00..ONNX-09 roadmap; retire legacy Research.",
       "exit_criteria": [
         "The exact current ModelLab main SHA and all 19 authorities listed by the Owner prompt are inspected and recorded.",
@@ -132,16 +132,23 @@
         "Every unresolved family implementation, input, legal envelope, hardware estimate, or ONNX compatibility gap blocks ONNX-03 admission until separately justified, versioned, accepted, and frozen.",
         "Legacy Research and R00-R11 are marked RETIRED; Owner runtime and real research remain NOT_PROVEN/NOT_STARTED.",
         "No runtime, training, ONNX export, MT5, Owner PC, tests that execute models, or product behavior change is introduced; D-043 and D-044 grant no runtime authorization.",
-        "Applicable governance validators and Windows PR-head CI pass; planning-only PR is open for Control Room audit and remains unmerged."
+        "ONNX-00 is accepted against merged main c75f978ea4438183e6a759d398eb69b3eeca9ac4, tree de1eba7dc91cef12843780e9ef2fa70275422a12, Control Room acceptance, and post-merge Windows CI run 38012160408 PASS; exact final evidence remains external per D-012, with no scientific/runtime acceptance implied."
       ]
     },
     {
       "id": "ONNX-01",
       "title": "ONNX workspace shell and API/state skeleton",
-      "status": "PLANNED",
-      "blocked_by": "ONNX-00_CONTROL_ROOM_AUDIT_AND_SEPARATE_PHASE_AUTHORIZATION",
-      "objective": "Implement the eight-page React shell and backend API/state skeleton without real scientific execution.",
-      "exit_criteria": ["Eight exact user-facing ONNX pages exist; no model training or research execution."]
+      "status": "CURRENT",
+      "objective": "Implement the four-workspace Owner navigation and exact eight-page ONNX read-only shell, plus a versioned backend API/state skeleton that reports only backend-owned status. Preserve application-wide recovery gating. Do not create operational persistence, inspect or snapshot data, instantiate models, execute training/scoring/export/runtime, or expose scientific mutations.",
+      "exit_criteria": [
+        "Top-level navigation is exactly Strategy, ONNX, Artifacts, Settings; existing Strategy, Artifacts, Settings and Scientist drawer behavior remains usable.",
+        "ONNX contains exactly Overview, Data Intake, Discovery, CPCV, Tournament, Monte Carlo, Challenger and Champion; Qualified Pool is within Discovery and Forward within Challenger.",
+        "Overview and stage pages display backend-reported truthful empty/not-started states; no fabricated identities, metrics, candidates or checkpoint data and no scientific mutation controls exist.",
+        "The versioned read-only API distinguishes NOT_IMPLEMENTED, NOT_STARTED, NOT_PROVEN, UNAVAILABLE and RECOVERY_REQUIRED; the frontend cannot invent domain state, and global recovery mode blocks the API with existing exact error semantics.",
+        "No database migration, new operational store, data scan/snapshot, MT5/external process, model instantiation/training/scoring, ONNX export/runtime, scientific outcome or Champion mutation is introduced.",
+        "Model universe, parameter-estimator and ONNX-00 lifecycle/governance contracts remain unchanged and pass regression tests.",
+        "Project Truth, Scientist knowledge, source-grounded DURING/CURRENT sequence, source-only scan, pinned Skill Workflow checks, one-click acceptance evidence and all required local gates pass; Windows GitHub Actions passes on the exact PR tree and PR remains open for Control Room audit."
+      ]
     },
     {
       "id": "ONNX-02",

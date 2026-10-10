@@ -3,7 +3,7 @@
 # FLOW INDEX
 
 Authority SHA: external final acceptance evidence
-Source digest: 2671164d4e2bb587165d521cd430fcf2e90cb28ab2eb41211eaa99d9e9a0ad0d
+Source digest: 2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a
 
 ## Flow inventory
 
@@ -73,6 +73,7 @@ Source digest: 2671164d4e2bb587165d521cd430fcf2e90cb28ab2eb41211eaa99d9e9a0ad0d
 | GET | /threads/{thread_id}/messages | backend/max_backend/scientist_api.py::get_thread_messages |
 | POST | /threads/{thread_id}/messages | backend/max_backend/scientist_api.py::post_thread_message |
 | PUT | /ui-settings | backend/max_backend/scientist_api.py::put_scientist_ui_settings |
+| GET | /workspace | backend/max_backend/onnx_api.py::get_onnx_workspace |
 | GET | /{artifact_id}/trace | backend/max_backend/artifact_api.py::trace |
 | DELETE | /{challenger_id} | backend/max_backend/challenger_api.py::delete_challenger_endpoint |
 | GET | /{challenger_id} | backend/max_backend/challenger_api.py::get_challenger |

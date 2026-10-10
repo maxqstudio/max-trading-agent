@@ -1,0 +1,38 @@
+{
+  "acceptance_report": "artifacts/sequence/FLOW-ONNX-WORKSPACE.acceptance.json",
+  "actual": {
+    "diagram": "docs/sequence/generated/FLOW-ONNX-WORKSPACE.actual.mmd",
+    "entries": [
+      "frontend/src/App.tsx::<module>",
+      "backend/max_backend/onnx_api.py::get_onnx_workspace"
+    ],
+    "graph": "docs/sequence/generated/FLOW-ONNX-WORKSPACE.actual.json",
+    "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a"
+  },
+  "critical": true,
+  "implementation_base_sha": "c75f978ea4438183e6a759d398eb69b3eeca9ac4",
+  "mode": "DURING",
+  "phase": "ONNX-01",
+  "plan": {
+    "contract": "",
+    "diagram": "",
+    "frozen": false,
+    "frozen_commit": "",
+    "required": false,
+    "sha256": ""
+  },
+  "runtime_trace": {
+    "graph": "",
+    "required": false
+  },
+  "schema_version": 1,
+  "scope": "CURRENT",
+  "session_id": "FLOW-ONNX-WORKSPACE",
+  "status": "CURRENT",
+  "test_traceability_required": true,
+  "tests": [
+    "backend/tests/test_m00_foundation.py",
+    "frontend/src/App.test.tsx",
+    "frontend/src/onnxApi.test.ts"
+  ]
+}

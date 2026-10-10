@@ -3,22 +3,22 @@
 # CURRENT STATE
 
 Last updated: generated from current specs
-Authority verified at SHA: 203f6ab3dc618e3edd247841aa25e1fa0951a19a
+Authority verified at SHA: c75f978ea4438183e6a759d398eb69b3eeca9ac4
 Governance profile: strict
 
 ## Current phase
-Phase: ONNX-00
+Phase: ONNX-01
 Status: IN_PROGRESS
-Roadmap phase: ONNX-00
+Roadmap phase: ONNX-01
 ROADMAP_SYNC: PASS
 
 ## Source
 Repository: maxqstudio/max-trading-agent
-Branch: codex/onnx-00-scientific-authority
+Branch: codex/onnx-01-workspace-shell
 Authoritative SHA: external final acceptance evidence
-Last accepted SHA: 203f6ab3dc618e3edd247841aa25e1fa0951a19a
+Last accepted SHA: c75f978ea4438183e6a759d398eb69b3eeca9ac4
 Current candidate SHA: external final acceptance evidence
-Current source digest: 2671164d4e2bb587165d521cd430fcf2e90cb28ab2eb41211eaa99d9e9a0ad0d
+Current source digest: 2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
@@ -35,15 +35,16 @@ PROJECT_DOCS_SYNC: PASS
 ## Sequence governance
 Sequence policy: REQUIRED
 Current sequence mode: DURING
-Current sequence session: ONNX-00-PLANNING_ONLY_NO_RUNTIME_SEQUENCE
-SEQUENCE_SYNC: PASS: all 8 existing DURING/CURRENT source-grounded sessions validated; ONNX-00 is planning-only and introduces no runtime sequence.
+Current sequence session: FLOW-ONNX-WORKSPACE
+SEQUENCE_SYNC: PASS: 9 DURING/CURRENT source-grounded sessions, including FLOW-ONNX-WORKSPACE, regenerated at source digest 2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a; 0 unresolved bindings. This is static/source evidence only, not a runtime trace.
 
 ## Proven
 - Starting GitHub main is 203f6ab3dc618e3edd247841aa25e1fa0951a19a; Windows CI run 37964999480 completed with conclusion success on that exact SHA.
+- ONNX-00 was closed against accepted merge main c75f978ea4438183e6a759d398eb69b3eeca9ac4 (tree de1eba7dc91cef12843780e9ef2fa70275422a12), Control Room acceptance, and post-merge Windows CI run 38012160408 PASS; this is accepted parent evidence under D-012, not ONNX-01 runtime evidence.
 - Latest maxqstudio/max_research_agent main was fetched at 883ebeb1ca2e70f6255e0889358ba7c822ac52f5; the 19 authorities listed in the Owner prompt were inspected at that commit.
 - Latest Skill_Workflow/main guidance was fetched at 3b3289681cf2cec8d3d132895e0848be64bb54b1 and applied as normative guidance. MAX executable Windows CI and vendored validator provenance remain pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4; no byte-identity with 3b328968 is claimed.
 - Under current Owner decision D-043, the ONNX V1 universe is exactly nine standalone plus fourteen temporal-to-tree hybrid families, total 23; D-044 proposed parameter envelopes remain non-executable until separately accepted.
-- ONNX-00 is planning/governance only. No Owner PC, MT5, real data, model fitting, or ONNX runtime execution has occurred.
+- ONNX-00 is accepted planning/governance authority; ONNX-01 is authorized only for a read-only workspace and API/state skeleton. No operational cycle, Owner PC, MT5, real data, model fitting, ONNX export/runtime, or scientific result is proven.
 
 ## Not proven
 - ONNX runtime, scientific data readiness, model training, GPU execution, ONNX conversion/parity, Research Challenger, or Champion behavior.
@@ -51,20 +52,20 @@ SEQUENCE_SYNC: PASS: all 8 existing DURING/CURRENT source-grounded sessions vali
 - The complete numeric KPI contract and ONNX runtime/parity contracts required before later implementation phases.
 
 ## Known blockers
-- ONNX-00 planning PR and exact PR-head Windows CI are pending; phase remains IN_PROGRESS and must stop before merge for Control Room audit.
 - Complete numeric KPI definitions for WFA, Tournament, Monte Carlo, and Forward remain an explicit future execution prerequisite; ONNX-00 does not invent them.
 - ONNX parity tolerances, runtime-manifest schema, final-fit row boundary, verified MAX CP32 identity fields, and temporal compute-device policy require separate phase-specific authority before their implementation gates.
+- ONNX-02 data-source/snapshot authority and any later scientific implementation require their own roadmap authorization after ONNX-01 audit and acceptance.
 
 ## Known defects
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Finish ONNX-00 machine-readable and human-readable authority, regenerate canonical Project Truth, and run applicable local governance validators.
-- Commit and push the planning-only branch, wait for required Windows GitHub Actions on its exact head, and open a PR for Control Room audit.
-- STOP with the PR open and unmerged. Do not begin ONNX-01 or any runtime/model execution without separate authority.
+- Implement ONNX-01's exact four-workspace navigation, eight-page read-only shell, versioned backend state contract, recovery-gate behavior, and focused regression tests without operational persistence or scientific mutations.
+- Regenerate governed Project Truth, Scientist knowledge and DURING/CURRENT sequence artifacts; run the one-click acceptance runner, complete local regressions, source-only scan, pinned Skill Workflow checks, and Windows GitHub Actions.
+- Create a new ONNX-01 branch and PR, verify exact PR head/tree and hosted Windows CI, then STOP with the PR open and unmerged for independent Control Room audit. Do not begin ONNX-02.
 
 ## Explicitly blocked
-- Any ONNX runtime, real research execution, model training, ONNX export, ONNX Challenger creation, or scientific outcome production before separate Control Room authorization.
-- Any Owner PC access, MT5 launch, broker/data-root access, real Optimizer run, or real market-research execution during ONNX-00.
-- Any promotion or mutation of a Strategy or ONNX Champion from this planning-only phase.
+- ONNX-01 permits only the read-only workspace shell and backend state skeleton; no operational cycle, data intake, scientific mutation, model training/scoring, ONNX export/runtime, or promotion is authorized.
+- Any Owner PC access, MT5 launch, broker/data-root access, real Optimizer run, or real market-research execution during ONNX-01.
+- Any promotion or mutation of a Strategy or ONNX Champion from this phase.
 - Any expansion beyond the Owner-frozen V1 model allowlist or silent change to scientific gates, KPI thresholds, date windows, or CandidateSpec.

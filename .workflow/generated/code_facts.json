@@ -157,7 +157,7 @@
       "file": "backend/max_backend/main.py",
       "is_test": false,
       "language": "Python",
-      "lines": 200
+      "lines": 202
     },
     {
       "directory": "backend/max_backend",
@@ -172,6 +172,13 @@
       "is_test": false,
       "language": "Python",
       "lines": 203
+    },
+    {
+      "directory": "backend/max_backend",
+      "file": "backend/max_backend/onnx_api.py",
+      "is_test": false,
+      "language": "Python",
+      "lines": 315
     },
     {
       "directory": "backend/max_backend",
@@ -353,7 +360,7 @@
       "file": "backend/tests/test_m00_foundation.py",
       "is_test": true,
       "language": "Python",
-      "lines": 326
+      "lines": 406
     },
     {
       "directory": "backend/tests",
@@ -598,14 +605,14 @@
       "file": "frontend/src/App.test.tsx",
       "is_test": true,
       "language": "TypeScript/React",
-      "lines": 187
+      "lines": 301
     },
     {
       "directory": "frontend/src",
       "file": "frontend/src/App.tsx",
       "is_test": false,
       "language": "TypeScript/React",
-      "lines": 445
+      "lines": 461
     },
     {
       "directory": "frontend/src",
@@ -665,6 +672,13 @@
     },
     {
       "directory": "frontend/src",
+      "file": "frontend/src/OnnxWorkspace.tsx",
+      "is_test": false,
+      "language": "TypeScript/React",
+      "lines": 332
+    },
+    {
+      "directory": "frontend/src",
       "file": "frontend/src/OptimizerPage.test.tsx",
       "is_test": true,
       "language": "TypeScript/React",
@@ -714,6 +728,20 @@
     },
     {
       "directory": "frontend/src",
+      "file": "frontend/src/onnxApi.test.ts",
+      "is_test": true,
+      "language": "TypeScript",
+      "lines": 29
+    },
+    {
+      "directory": "frontend/src",
+      "file": "frontend/src/onnxApi.ts",
+      "is_test": false,
+      "language": "TypeScript",
+      "lines": 180
+    },
+    {
+      "directory": "frontend/src",
       "file": "frontend/src/tableFormat.ts",
       "is_test": false,
       "language": "TypeScript",
@@ -732,6 +760,13 @@
       "is_test": false,
       "language": "TypeScript",
       "lines": 18
+    },
+    {
+      "directory": "scripts",
+      "file": "scripts/accept_onnx01.ps1",
+      "is_test": false,
+      "language": "PowerShell",
+      "lines": 253
     },
     {
       "directory": "scripts",
@@ -13918,6 +13953,114 @@
     {
       "caller": "backend/max_backend/mtf_geometry.py::fuse_role_observations",
       "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::_stage_page",
+      "target_token": "StagePageState"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "_stage_page"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "_stage_page"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "_stage_page"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "_stage_page"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "_stage_page"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "_stage_page"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "_stage_page"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "OnnxWorkspaceSnapshot"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "OperationalState"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "DatasetState"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "ResearchWindowsState"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "StateSection"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "HardwareCapacityState"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "DiscoveryState"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "ValueSection"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "ProgressState"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "QualifiedPoolState"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "ChallengerState"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "ChallengerCandidatesState"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "ForwardState"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "ChampionState"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "ValueSection"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "CheckpointState"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "FirstBlocker"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "target_token": "RecoveryState"
+    },
+    {
+      "caller": "backend/max_backend/onnx_api.py::get_onnx_workspace",
+      "target_token": "build_onnx_workspace_snapshot"
     },
     {
       "caller": "backend/max_backend/onnx_parameter_estimation.py::_positive_int",
@@ -35569,6 +35712,110 @@
     },
     {
       "caller": "backend/tests/test_m00_foundation.py::test_health_and_overview_contract",
+      "target_token": "exercise_api"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only.exercise_api",
+      "target_token": "httpx.ASGITransport"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only.exercise_api",
+      "target_token": "httpx.AsyncClient"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only.exercise_api",
+      "target_token": "client.get"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only.exercise_api",
+      "target_token": "response.json"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only.exercise_api",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only.exercise_api",
+      "target_token": "app.openapi"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only.exercise_api",
+      "target_token": "path.startswith"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only.exercise_api",
+      "target_token": "methods.items"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only.exercise_api",
+      "target_token": "method.lower"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only.exercise_api",
+      "target_token": "list"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only.exercise_api",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only.exercise_api",
+      "target_token": "app.openapi"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only",
+      "target_token": "AssertionError"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only",
+      "target_token": "AssertionError"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only",
+      "target_token": "asyncio.run"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only",
+      "target_token": "exercise_api"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_preserves_global_recovery_gate",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_preserves_global_recovery_gate",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_preserves_global_recovery_gate.exercise_api",
+      "target_token": "httpx.ASGITransport"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_preserves_global_recovery_gate.exercise_api",
+      "target_token": "httpx.AsyncClient"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_preserves_global_recovery_gate.exercise_api",
+      "target_token": "client.get"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_preserves_global_recovery_gate.exercise_api",
+      "target_token": "response.json"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_preserves_global_recovery_gate",
+      "target_token": "asyncio.run"
+    },
+    {
+      "caller": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_preserves_global_recovery_gate",
       "target_token": "exercise_api"
     },
     {
@@ -63633,6 +63880,11 @@
       "route": "/ui-settings"
     },
     {
+      "handler": "backend/max_backend/onnx_api.py::get_onnx_workspace",
+      "method": "GET",
+      "route": "/workspace"
+    },
+    {
       "handler": "backend/max_backend/artifact_api.py::trace",
       "method": "GET",
       "route": "/{artifact_id}/trace"
@@ -65602,80 +65854,80 @@
     {
       "file": "backend/max_backend/main.py",
       "kind": "class",
-      "line_end": 45,
-      "line_start": 44,
+      "line_end": 46,
+      "line_start": 45,
       "locator": "backend/max_backend/main.py::CorruptStateResetConfirmation",
       "symbol": "CorruptStateResetConfirmation"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "async_function",
-      "line_end": 72,
-      "line_start": 49,
+      "line_end": 73,
+      "line_start": 50,
       "locator": "backend/max_backend/main.py::lifespan",
       "symbol": "lifespan"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "async_function",
-      "line_end": 97,
-      "line_start": 84,
+      "line_end": 99,
+      "line_start": 86,
       "locator": "backend/max_backend/main.py::recovery_required_gate",
       "symbol": "recovery_required_gate"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 113,
-      "line_start": 101,
+      "line_end": 115,
+      "line_start": 103,
       "locator": "backend/max_backend/main.py::recovery_status",
       "symbol": "recovery_status"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 129,
-      "line_start": 117,
+      "line_end": 131,
+      "line_start": 119,
       "locator": "backend/max_backend/main.py::reset_corrupt_state",
       "symbol": "reset_corrupt_state"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 159,
-      "line_start": 132,
+      "line_end": 161,
+      "line_start": 134,
       "locator": "backend/max_backend/main.py::_foundation_state",
       "symbol": "_foundation_state"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 179,
-      "line_start": 163,
+      "line_end": 181,
+      "line_start": 165,
       "locator": "backend/max_backend/main.py::health",
       "symbol": "health"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 184,
-      "line_start": 183,
+      "line_end": 186,
+      "line_start": 185,
       "locator": "backend/max_backend/main.py::ea_baseline",
       "symbol": "ea_baseline"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 189,
-      "line_start": 188,
+      "line_end": 191,
+      "line_start": 190,
       "locator": "backend/max_backend/main.py::mt5_preflight",
       "symbol": "mt5_preflight"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 200,
-      "line_start": 193,
+      "line_end": 202,
+      "line_start": 195,
       "locator": "backend/max_backend/main.py::overview",
       "symbol": "overview"
     },
@@ -65774,6 +66026,190 @@
       "line_start": 190,
       "locator": "backend/max_backend/mtf_geometry.py::fuse_role_observations",
       "symbol": "fuse_role_observations"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 22,
+      "line_start": 17,
+      "locator": "backend/max_backend/onnx_api.py::WorkspaceStatus",
+      "symbol": "WorkspaceStatus"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 37,
+      "line_start": 36,
+      "locator": "backend/max_backend/onnx_api.py::ContractModel",
+      "symbol": "ContractModel"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 43,
+      "line_start": 40,
+      "locator": "backend/max_backend/onnx_api.py::StateSection",
+      "symbol": "StateSection"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 47,
+      "line_start": 46,
+      "locator": "backend/max_backend/onnx_api.py::ValueSection",
+      "symbol": "ValueSection"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 54,
+      "line_start": 50,
+      "locator": "backend/max_backend/onnx_api.py::OperationalState",
+      "symbol": "OperationalState"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 61,
+      "line_start": 57,
+      "locator": "backend/max_backend/onnx_api.py::DatasetState",
+      "symbol": "DatasetState"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 65,
+      "line_start": 64,
+      "locator": "backend/max_backend/onnx_api.py::ResearchWindowsState",
+      "symbol": "ResearchWindowsState"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 70,
+      "line_start": 68,
+      "locator": "backend/max_backend/onnx_api.py::HardwareCapacityState",
+      "symbol": "HardwareCapacityState"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 75,
+      "line_start": 73,
+      "locator": "backend/max_backend/onnx_api.py::ProgressState",
+      "symbol": "ProgressState"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 79,
+      "line_start": 78,
+      "locator": "backend/max_backend/onnx_api.py::QualifiedPoolState",
+      "symbol": "QualifiedPoolState"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 85,
+      "line_start": 82,
+      "locator": "backend/max_backend/onnx_api.py::DiscoveryState",
+      "symbol": "DiscoveryState"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 90,
+      "line_start": 88,
+      "locator": "backend/max_backend/onnx_api.py::StagePageState",
+      "symbol": "StagePageState"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 94,
+      "line_start": 93,
+      "locator": "backend/max_backend/onnx_api.py::ForwardState",
+      "symbol": "ForwardState"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 98,
+      "line_start": 97,
+      "locator": "backend/max_backend/onnx_api.py::ChallengerCandidatesState",
+      "symbol": "ChallengerCandidatesState"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 103,
+      "line_start": 101,
+      "locator": "backend/max_backend/onnx_api.py::ChallengerState",
+      "symbol": "ChallengerState"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 107,
+      "line_start": 106,
+      "locator": "backend/max_backend/onnx_api.py::ChampionState",
+      "symbol": "ChampionState"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 111,
+      "line_start": 110,
+      "locator": "backend/max_backend/onnx_api.py::CheckpointState",
+      "symbol": "CheckpointState"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 118,
+      "line_start": 114,
+      "locator": "backend/max_backend/onnx_api.py::FirstBlocker",
+      "symbol": "FirstBlocker"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 124,
+      "line_start": 121,
+      "locator": "backend/max_backend/onnx_api.py::RecoveryState",
+      "symbol": "RecoveryState"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "class",
+      "line_end": 142,
+      "line_start": 127,
+      "locator": "backend/max_backend/onnx_api.py::OnnxWorkspaceSnapshot",
+      "symbol": "OnnxWorkspaceSnapshot"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "function",
+      "line_end": 161,
+      "line_start": 154,
+      "locator": "backend/max_backend/onnx_api.py::_stage_page",
+      "symbol": "_stage_page"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "function",
+      "line_end": 307,
+      "line_start": 164,
+      "locator": "backend/max_backend/onnx_api.py::build_onnx_workspace_snapshot",
+      "symbol": "build_onnx_workspace_snapshot"
+    },
+    {
+      "file": "backend/max_backend/onnx_api.py",
+      "kind": "function",
+      "line_end": 315,
+      "line_start": 314,
+      "locator": "backend/max_backend/onnx_api.py::get_onnx_workspace",
+      "symbol": "get_onnx_workspace"
     },
     {
       "file": "backend/max_backend/onnx_parameter_estimation.py",
@@ -69254,6 +69690,38 @@
       "line_start": 305,
       "locator": "backend/tests/test_m00_foundation.py::test_health_and_overview_contract.exercise_api",
       "symbol": "test_health_and_overview_contract.exercise_api"
+    },
+    {
+      "file": "backend/tests/test_m00_foundation.py",
+      "kind": "function",
+      "line_end": 384,
+      "line_start": 329,
+      "locator": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only",
+      "symbol": "test_onnx_workspace_read_api_is_truthful_and_read_only"
+    },
+    {
+      "file": "backend/tests/test_m00_foundation.py",
+      "kind": "async_method",
+      "line_end": 379,
+      "line_start": 334,
+      "locator": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_is_truthful_and_read_only.exercise_api",
+      "symbol": "test_onnx_workspace_read_api_is_truthful_and_read_only.exercise_api"
+    },
+    {
+      "file": "backend/tests/test_m00_foundation.py",
+      "kind": "function",
+      "line_end": 406,
+      "line_start": 387,
+      "locator": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_preserves_global_recovery_gate",
+      "symbol": "test_onnx_workspace_read_api_preserves_global_recovery_gate"
+    },
+    {
+      "file": "backend/tests/test_m00_foundation.py",
+      "kind": "async_method",
+      "line_end": 404,
+      "line_start": 393,
+      "locator": "backend/tests/test_m00_foundation.py::test_onnx_workspace_read_api_preserves_global_recovery_gate.exercise_api",
+      "symbol": "test_onnx_workspace_read_api_preserves_global_recovery_gate.exercise_api"
     },
     {
       "file": "backend/tests/test_m01_fail_closed.py",
@@ -75473,17 +75941,17 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "2671164d4e2bb587165d521cd430fcf2e90cb28ab2eb41211eaa99d9e9a0ad0d",
+  "source_digest": "2c892504c67c177db599f570431d02b22165faab85ac1443210ae755e8a8d49a",
   "source_summary": {
-    "files": 123,
+    "files": 128,
     "languages": {
-      "PowerShell": 2,
-      "Python": 99,
-      "TypeScript": 3,
-      "TypeScript/React": 19
+      "PowerShell": 3,
+      "Python": 100,
+      "TypeScript": 5,
+      "TypeScript/React": 20
     },
-    "lines": 59206,
-    "test_files": 43
+    "lines": 60527,
+    "test_files": 44
   },
   "tests": [
     "backend/tests/conftest.py",
@@ -75528,6 +75996,7 @@
     "frontend/src/DataTable.test.tsx",
     "frontend/src/OptimizerPage.test.tsx",
     "frontend/src/ScientistPage.test.tsx",
-    "frontend/src/SettingsPage.test.tsx"
+    "frontend/src/SettingsPage.test.tsx",
+    "frontend/src/onnxApi.test.ts"
   ]
 }
