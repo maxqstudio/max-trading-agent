@@ -31,14 +31,17 @@ function Invoke-Gate {
   $begin = [DateTimeOffset]::UtcNow
   $exitCode = 0
   $output = ''
+  $capturedOutput = [System.Collections.Generic.List[string]]::new()
   $previousPreference = $ErrorActionPreference
   try {
     $ErrorActionPreference = 'Continue'
-    $output = (& $Action 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
+    & $Action 2>&1 | ForEach-Object { $capturedOutput.Add([string]$_) }
+    $output = $capturedOutput -join "`n"
     if ($null -ne $LASTEXITCODE) { $exitCode = [int]$LASTEXITCODE }
   } catch {
     $exitCode = 1
     $exceptionOutput = (($_ | Out-String).Trim())
+    $output = $capturedOutput -join "`n"
     $output = if ($output) { $output + "`n" + $exceptionOutput } else { $exceptionOutput }
   } finally {
     $ErrorActionPreference = $previousPreference
