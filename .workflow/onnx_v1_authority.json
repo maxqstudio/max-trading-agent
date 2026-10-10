@@ -341,15 +341,28 @@
   "parameter_capacity_contract": {
     "status": "PLANNING_CONTRACT; NO_TRAINING_OR_RUNTIME_EXECUTED",
     "pure_estimator_source": "backend/max_backend/onnx_parameter_estimation.py",
-    "pure_estimator_source_status": "IMPLEMENTED_FOR_STATIC_COUNTS_AND_STRUCTURAL_BOUNDS_ONLY; NOT_CONNECTED_TO_TRAINING_OR_RUNTIME",
-    "estimator_coverage": ["exact Owner recurrent formula for GRU/LSTM", "explicit tensor-shape ledger for seven temporal neural families", "dense Transformer dominant-term structural estimate", "MoE total and active structural estimate", "LightGBM/XGBoost theoretical tree-structure bound"],
+    "pure_estimator_source_status": "RAW_DECLARED_LEDGER_COUNTS_PLUS_GRU_LSTM_FORMULA_AND_EXACT_TENSOR_RECONCILIATION; NOT_CONNECTED_TO_TRAINING_OR_RUNTIME",
+    "estimator_coverage": ["GRU/LSTM approved formula reconciled against exact named tensor identities and shapes for the supported recurrent variant", "raw declared tensor-shape ledger for seven temporal neural families; role labels alone never validate CandidateSpec topology", "dense Transformer dominant-term structural estimate", "MoE structural total/active estimate with separate shared and expert FFN multipliers; exact architecture remains open", "LightGBM/XGBoost theoretical tree-structure bound"],
     "unimplemented_or_unverified_estimation": ["actual architecture instantiation comparison", "family-specific activation peak measurements", "framework temporary-buffer measurements", "tree serialized-size and actual grown-structure inspection", "hybrid OOF intermediate and end-to-end peak accounting", "GPU/runtime-provider memory validation"],
     "model_parameter_estimate_required_per_candidate_spec": true,
-    "required_report_fields": ["architecture_family", "architecture_version", "input_feature_count", "output_dimension", "sequence_length", "exact_architecture_parameters", "trainable_parameter_count", "non_trainable_parameter_count", "total_parameter_count", "active_parameter_count", "expert_parameter_count", "shared_parameter_count", "estimated_weight_bytes", "estimated_gradient_bytes", "estimated_optimizer_state_bytes", "estimated_activation_peak_bytes", "estimated_peak_training_bytes", "estimated_inference_bytes", "estimation_method", "estimation_assumptions", "estimation_confidence"],
+    "required_report_fields": ["architecture_family", "architecture_version", "input_feature_count", "output_dimension", "sequence_length", "exact_architecture_parameters", "trainable_parameter_count", "non_trainable_parameter_count", "total_parameter_count", "raw_declared_ledger_trainable_parameter_count", "raw_declared_ledger_non_trainable_parameter_count", "raw_declared_ledger_total_parameter_count", "candidate_spec_validated_parameter_count", "candidate_spec_static_validation_status", "active_parameter_count", "expert_parameter_count", "shared_parameter_count", "estimated_weight_bytes", "estimated_gradient_bytes", "estimated_optimizer_state_bytes", "estimated_activation_peak_bytes", "estimated_peak_training_bytes", "estimated_inference_bytes", "estimation_method", "estimation_assumptions", "estimation_confidence"],
     "not_applicable": "Use the explicit string NOT_APPLICABLE for fields that do not apply; never substitute fabricated zero values.",
     "authoritative_instantiated_trainable_count": "sum(p.numel() for p in model.parameters() if p.requires_grad)",
-    "static_estimator_validation": "Static architecture/module-ledger estimates must be compared against actual instantiated model counts and measured capacity before runtime admission; ONNX-00 has no instantiated model evidence.",
-    "exact_module_accounting": "The estimator consumes the exact versioned architecture module ledger bound to CandidateSpec. Account projections, recurrent gates, convolution kernels, embeddings, normalization, gates, output heads, routers, and experts. TCN, PatchTST, iTransformer, and TFT require family-specific module ledgers; a generic Transformer formula is not an exact substitute.",
+    "static_estimator_validation": "Raw declared ledger arithmetic is not CandidateSpec validation. Only GRU/LSTM use the supported unidirectional, bias-enabled, unprojected recurrent variant with a linear output head and exact named tensor identities/shapes reconciled to the approved formula. Other families remain RAW_DECLARED_LEDGER_COUNT plus OPEN_AUTHORITY_GAP until exact topology and sharing are validated. Actual instantiated-model comparison and measured capacity remain required before runtime admission; ONNX-00 has no instantiated model evidence.",
+    "candidate_spec_validation_contract": {
+      "confidence_values": ["RAW_DECLARED_LEDGER_COUNT", "CANDIDATE_SPEC_STATICALLY_VALIDATED", "MEASURED_INSTANTIATED_MODEL", "OPEN_AUTHORITY_GAP"],
+      "raw_ledger_semantics": "Arithmetic over caller-declared tensor shapes only; preserve raw counts and never label them CandidateSpec validated based on role presence.",
+      "recurrent_static_validation": {
+        "families": ["gru", "lstm"],
+        "supported_variant": "simple_unidirectional_bias_enabled_unprojected",
+        "required_candidate_spec_binding": ["architecture_family", "architecture_version", "input_feature_count", "output_dimension", "sequence_length", "hidden_size", "num_layers", "recurrent_variant", "bias=true", "bidirectional=false", "projection_size=0", "output_head=linear"],
+        "tensor_identity_contract": "Each layer must supply unique recurrent.layer_N.weight_ih, recurrent.layer_N.weight_hh, recurrent.layer_N.bias_ih, recurrent.layer_N.bias_hh IDs with exact gate/input/hidden shapes; output_head.weight and output_head.bias must match output_dimension and hidden_size.",
+        "acceptance": "Formula count must equal the exact named tensor-ledger count; mismatch or unsupported variant fails closed. This is static evidence, not instantiated-model evidence."
+      },
+      "other_family_validation": "TCN, PatchTST, iTransformer, TFT, and Transformer MoE remain raw-ledger counts with OPEN_AUTHORITY_GAP until a frozen exact topology, tensor identity/shape, and component-sharing validator exists.",
+      "measured_model_boundary": "MEASURED_INSTANTIATED_MODEL is an allowed future evidence label but MUST NOT be emitted in ONNX-00."
+    },
+    "exact_module_accounting": "Count explicitly declared tensor shapes, but distinguish RAW_DECLARED_LEDGER_COUNT from CANDIDATE_SPEC_STATICALLY_VALIDATED. Role labels alone cannot validate architecture topology. GRU/LSTM formula validation requires exact named tensor identities and shapes. TCN, PatchTST, iTransformer, TFT, and Transformer MoE remain OPEN_AUTHORITY_GAP until family-specific topology and sharing are validated; a generic Transformer formula is not an exact substitute.",
     "required_module_roles_by_family": {
       "gru": ["recurrent", "output_head"],
       "tcn": ["causal_convolution", "output_head"],
@@ -359,7 +372,17 @@
       "transformer_moe": ["attention", "router", "expert", "output_head"],
       "lstm": ["recurrent", "output_head"]
     },
-    "confidence_values": ["EXACT_STATIC_MODULE_LEDGER_UNVALIDATED_AGAINST_RUNTIME", "STRUCTURAL_APPROXIMATION", "MEASURED_INSTANTIATED_MODEL", "OPEN_AUTHORITY_GAP"],
+    "confidence_values": ["RAW_DECLARED_LEDGER_COUNT", "CANDIDATE_SPEC_STATICALLY_VALIDATED", "STRUCTURAL_APPROXIMATION", "MEASURED_INSTANTIATED_MODEL", "OPEN_AUTHORITY_GAP"],
+    "moe_parameter_accounting": {
+      "architecture_status": "OPEN_AUTHORITY_GAP; structural estimate is not CandidateSpec topology validation",
+      "expert_width_binding": "expert_ffn_mult determines each independent expert FFN width; it must not be substituted with ffn_mult.",
+      "shared_ffn_binding": "The exact architecture contract must explicitly set shared_ffn_present. If false, ffn_mult contribution is NOT_APPLICABLE; if true, ffn_mult sizes only that shared dense FFN. No default or silent omission is allowed.",
+      "expert_sharing_policy": "The structural estimator supports only explicitly declared independent_per_expert. Other sharing policies fail closed until separately authorized and modeled.",
+      "parameter_reporting": "Count all expert weights in expert_parameter_count and total stored weights; bind every expert tensor to exact layer_index and expert_index, and require every expert identity in every configured layer. Active-per-token count includes top_k selected experts independently per layer plus shared attention, optional shared FFN, and router. Validate 1 <= top_k <= num_experts.",
+      "unequal_expert_sizes": "Do not use a representative first expert or aggregate same expert_index across layers. Compute lower/upper active expert parameter bounds by selecting top_k sizes independently within each layer; otherwise OPEN_AUTHORITY_GAP.",
+      "group_contract": {"attention": "shared", "shared_ffn": "shared only when explicitly present", "router": "router", "expert": "expert with exact layer_index and expert_index", "output_head": "shared"},
+      "memory_and_runtime_boundary": "Weight bytes use all stored weights, never active-only weights. Peak VRAM and ONNX/provider compatibility remain OPEN_AUTHORITY_GAP; structural estimates do not prove either."
+    },
     "tree_model_accounting": {
       "neural_parameter_fields": "NOT_APPLICABLE",
       "required_fields": ["tree_count", "total_leaf_count", "total_split_node_count", "tree_depth_distribution", "serialized_model_bytes", "estimated_training_peak_bytes", "estimated_inference_bytes"],
@@ -378,11 +401,11 @@
       "gru": "P=3H(F+H+2)+3(L-1)H(2H+2)+HO+O for unidirectional, bias-enabled, unprojected recurrent layer and linear output head.",
       "lstm": "P=4H(F+H+2)+4(L-1)H(2H+2)+HO+O for unidirectional, bias-enabled, unprojected recurrent layer and linear output head.",
       "dense_transformer_block": "Dominant structural approximation per encoder block: 4d^2 + 2d*d_ff.",
-      "moe_encoder_block": "Approximate total per block: 4d^2 + E*2d*d_ff + router_parameters; active per-token estimate uses top_k experts plus shared layers/router. Track total and active separately.",
+      "moe_encoder_block": "Structural approximation per block: shared attention 4d^2 + (shared FFN 2d^2*ffn_mult only when shared_ffn_present=true) + E*2d^2*expert_ffn_mult + explicit router_parameters. Active-per-token uses top_k expert widths plus shared attention/optional shared FFN/router. When shared FFN is absent, ffn_mult is NOT_APPLICABLE. Expert sharing must be explicitly independent_per_expert for this estimator. This does not validate the open MoE architecture topology.",
       "structural_approximations_are_not_exact_counts": true
     },
     "reference_estimates": {
-      "configuration": {"input_features": 32, "output_dimensions": 3, "lookback": 128, "recurrent_hidden_size": 128, "transformer_d_model": 128, "transformer_layers": 3, "ffn_multiplier": 4, "tcn_blocks": 4, "tcn_convolutions_per_block": 2, "tcn_kernel_size": 3, "patch_length": 16, "patch_stride": 8, "moe_experts": 8, "moe_top_k": 2},
+      "configuration": {"input_features": 32, "output_dimensions": 3, "lookback": 128, "recurrent_hidden_size": 128, "transformer_d_model": 128, "transformer_layers": 3, "dense_transformer_ffn_multiplier": 4, "tcn_blocks": 4, "tcn_convolutions_per_block": 2, "tcn_kernel_size": 3, "patch_length": 16, "patch_stride": 8, "moe_experts": 8, "moe_top_k": 2, "moe_expert_ffn_multiplier": 4, "moe_shared_ffn_multiplier": "NOT_APPLICABLE_FOR_REFERENCE_FORMULA"},
       "approximate_parameters": {"gru": "~0.26M", "lstm": "~0.35M", "tcn": "~0.36M", "itransformer": "~0.61M", "patchtst": "~0.60M", "tft": "~3-6M implementation-dependent; not an exact regression expectation", "transformer_moe_total": "~3.37M", "transformer_moe_active_per_token": "~0.99M"},
       "capacity_illustrations": {"gru_256_hidden_3_layers": "~1.01M", "lstm_256_hidden_3_layers": "~1.35M", "tcn_192_channels_6_blocks_2_convolutions_kernel_5": "~2.06M", "itransformer_d384_6_layers_ffn4_lookback512": "~10.85M", "transformer_moe_d384_6_layers_16_experts_top_k2_ffn4_total": "~117M", "transformer_moe_d384_6_layers_16_experts_top_k2_ffn4_active_per_token": "~17.7M"},
       "confidence": "ILLUSTRATIVE_REFERENCE_ONLY; sensitive to module specification, sharing, and output head; not a fit guarantee, legal maximum, VRAM claim, or acceptance threshold."

@@ -7,7 +7,7 @@
 ONNX-00 remains planning/governance only on a work branch based on main 203f6ab3dc618e3edd247841aa25e1fa0951a19a. This repair changes governed JSON, one focused backend contract test and compiler-generated docs only; no product behavior, schema, dependencies, Owner data, MT5, model training, or runtime is changed or executed. D-039 is retained as historical and superseded by D-042; the reported Windows commit-memory exhaustion remains unresolved/NOT_PROVEN. The ONNX state machine now gates candidate readiness through final fit/export/parity/manifest/registration, and ModelLab KPI values remain non-executable references pending explicit Owner authorization. Exact final PR-head SHA and hosted-run identity are external evidence under D-012; PR #19 stays open and unmerged for Control Room re-audit.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 4a947282810a23e03392ef40f9ec55db83f08e96361c43c5808ea347aaeca979
+Current source digest: 2671164d4e2bb587165d521cd430fcf2e90cb28ab2eb41211eaa99d9e9a0ad0d
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|

@@ -20,6 +20,7 @@ estimate_tree_complexity_bound = _ESTIMATOR.estimate_tree_complexity_bound
 moe_transformer_block_parameter_estimate = _ESTIMATOR.moe_transformer_block_parameter_estimate
 REQUIRED_MODULE_ROLES_BY_FAMILY = _ESTIMATOR.REQUIRED_MODULE_ROLES_BY_FAMILY
 recurrent_parameter_count = _ESTIMATOR.recurrent_parameter_count
+validate_recurrent_candidate_spec = _ESTIMATOR.validate_recurrent_candidate_spec
 validate_attention_heads = _ESTIMATOR.validate_attention_heads
 validate_patch_configuration = _ESTIMATOR.validate_patch_configuration
 validate_search_proposal = _ESTIMATOR.validate_search_proposal
@@ -35,6 +36,64 @@ def _edge_exists(transitions: list[dict], source: str, target: str) -> bool:
         and target in (edge.get("to") if isinstance(edge.get("to"), list) else [edge.get("to")])
         for edge in transitions
     )
+
+
+def _recurrent_candidate_spec(
+    family: str = "gru",
+    *,
+    input_features: int = 32,
+    hidden_size: int = 8,
+    num_layers: int = 1,
+    output_dimensions: int = 3,
+) -> dict:
+    return {
+        "architecture_family": family,
+        "architecture_version": "planning-v1",
+        "input_feature_count": input_features,
+        "output_dimension": output_dimensions,
+        "sequence_length": 128,
+        "exact_architecture_parameters": {
+            "hidden_size": hidden_size,
+            "num_layers": num_layers,
+            "recurrent_variant": "simple_unidirectional_bias_enabled_unprojected",
+            "bias": True,
+            "bidirectional": False,
+            "projection_size": 0,
+            "output_head": "linear",
+        },
+    }
+
+
+def _recurrent_tensor_ledger(
+    family: str = "gru",
+    *,
+    input_features: int = 32,
+    hidden_size: int = 8,
+    num_layers: int = 1,
+    output_dimensions: int = 3,
+) -> list[dict]:
+    gates = 3 if family == "gru" else 4
+    tensors = []
+    for layer in range(num_layers):
+        layer_input = input_features if layer == 0 else hidden_size
+        prefix = f"recurrent.layer_{layer}"
+        for suffix, shape in (
+            ("weight_ih", [gates * hidden_size, layer_input]),
+            ("weight_hh", [gates * hidden_size, hidden_size]),
+            ("bias_ih", [gates * hidden_size]),
+            ("bias_hh", [gates * hidden_size]),
+        ):
+            tensors.append({
+                "parameter_id": f"{prefix}.{suffix}",
+                "role": "recurrent",
+                "shape": shape,
+                "trainable": True,
+            })
+    tensors.extend([
+        {"parameter_id": "output_head.weight", "role": "output_head", "shape": [output_dimensions, hidden_size], "trainable": True},
+        {"parameter_id": "output_head.bias", "role": "output_head", "shape": [output_dimensions], "trainable": True},
+    ])
+    return tensors
 
 
 def _reachable_states(initial: str, transitions: list[dict]) -> set[str]:
@@ -606,9 +665,23 @@ def test_frozen_onnx_v1_scientific_contract_is_preserved():
     estimator = authority["parameter_capacity_contract"]
     assert estimator["model_parameter_estimate_required_per_candidate_spec"] is True
     assert "NOT_APPLICABLE" in estimator["not_applicable"]
-    assert "require family-specific module ledgers" in estimator["exact_module_accounting"]
+    assert "role labels alone cannot validate architecture topology" in estimator["exact_module_accounting"].lower()
+    assert estimator["confidence_values"] == [
+        "RAW_DECLARED_LEDGER_COUNT", "CANDIDATE_SPEC_STATICALLY_VALIDATED",
+        "STRUCTURAL_APPROXIMATION", "MEASURED_INSTANTIATED_MODEL", "OPEN_AUTHORITY_GAP",
+    ]
+    assert estimator["candidate_spec_validation_contract"]["recurrent_static_validation"]["supported_variant"] == "simple_unidirectional_bias_enabled_unprojected"
+    assert "MEASURED_INSTANTIATED_MODEL is an allowed future evidence label but MUST NOT be emitted" in estimator["candidate_spec_validation_contract"]["measured_model_boundary"]
+    moe_formula = estimator["reference_formulas"]["moe_encoder_block"]
+    assert "expert_ffn_mult" in moe_formula and "ffn_mult" in moe_formula
+    assert "NOT_APPLICABLE" in moe_formula
+    moe_accounting = estimator["moe_parameter_accounting"]
+    assert moe_accounting["architecture_status"].startswith("OPEN_AUTHORITY_GAP")
+    assert "must not be substituted" in moe_accounting["expert_width_binding"]
+    assert "shared_ffn_present" in moe_accounting["shared_ffn_binding"]
+    assert "all stored weights" in moe_accounting["memory_and_runtime_boundary"]
     assert estimator["memory_estimation"]["fp32_adamw_baseline_bytes_per_trainable_parameter"] == 16
-    assert estimator["static_estimator_validation"].find("actual instantiated") >= 0
+    assert "actual instantiated-model comparison" in estimator["static_estimator_validation"].lower()
     assert estimator["tree_model_accounting"]["neural_parameter_fields"] == "NOT_APPLICABLE"
     assert "actual grown tree structure separately" in estimator["tree_model_accounting"]["distinguish_actual_from_bound"]
     assert "not one simultaneously trained network" in estimator["portfolio_illustration"]
@@ -679,14 +752,15 @@ def test_every_temporal_family_has_a_complete_estimator_role_contract():
         for role in roles:
             if family == "transformer_moe" and role == "expert":
                 modules.extend(
-                    {"role": role, "shape": [2, 3], "trainable": True, "group": "expert", "expert_index": index}
+                    {"parameter_id": f"expert.{index}.weight", "role": role, "shape": [2, 3], "trainable": True, "group": "expert", "expert_index": index, "layer_index": 0}
                     for index in range(2)
                 )
             else:
-                group = "router" if family == "transformer_moe" and role == "router" else (
-                    "other" if family == "transformer_moe" and role == "output_head" else "shared"
-                )
-                modules.append({"role": role, "shape": [2, 3], "trainable": True, "group": group})
+                group = "router" if family == "transformer_moe" and role == "router" else "shared"
+                module = {"role": role, "shape": [2, 3], "trainable": True, "group": group}
+                if family == "transformer_moe":
+                    module["parameter_id"] = f"{role}.weight"
+                modules.append(module)
         result = count_module_parameter_ledger(
             architecture_family=family,
             architecture_version="planning-v1",
@@ -694,7 +768,16 @@ def test_every_temporal_family_has_a_complete_estimator_role_contract():
             output_dimension=3,
             sequence_length=128,
             exact_architecture_parameters=(
-                {"family": family, "num_experts": 2, "top_k": 1}
+                {
+                    "family": family,
+                    "num_layers": 1,
+                    "num_experts": 2,
+                    "top_k": 1,
+                    "expert_ffn_mult": 2,
+                    "expert_sharing_policy": "independent_per_expert",
+                    "shared_ffn_present": False,
+                    "ffn_mult": "NOT_APPLICABLE",
+                }
                 if family == "transformer_moe"
                 else {"family": family}
             ),
@@ -704,7 +787,10 @@ def test_every_temporal_family_has_a_complete_estimator_role_contract():
         )
         assert result["architecture_family"] == family
         assert result["total_parameter_count"] > 0
-        assert result["estimation_confidence"] == "EXACT_STATIC_MODULE_LEDGER_UNVALIDATED_AGAINST_RUNTIME"
+        assert result["estimation_confidence"] == "RAW_DECLARED_LEDGER_COUNT"
+        assert result["candidate_spec_validated_parameter_count"] == "OPEN_AUTHORITY_GAP"
+        assert result["candidate_spec_static_validation_status"] == "OPEN_AUTHORITY_GAP"
+        assert result["instantiated_model_verification"] == "NOT_PERFORMED_IN_ONNX_00"
 
 
 def test_pure_parameter_estimation_and_capacity_guards_are_fail_closed():
@@ -731,28 +817,43 @@ def test_pure_parameter_estimation_and_capacity_guards_are_fail_closed():
 
     moe = moe_transformer_block_parameter_estimate(
         d_model=128,
-        ffn_multiplier=4,
+        ffn_mult=None,
+        expert_ffn_mult=4,
+        shared_ffn_present=False,
+        expert_sharing_policy="independent_per_expert",
         num_layers=3,
         num_experts=8,
         top_k=2,
         router_parameters_per_layer=0,
     )
     assert moe["total_parameter_count"] > moe["active_parameter_count"]
+    assert moe["expert_parameter_count"] == moe["active_expert_parameter_count"] * 4
     assert 3_300_000 <= moe["total_parameter_count"] <= 3_400_000
     assert 950_000 <= moe["active_parameter_count"] <= 1_050_000
+    assert moe["candidate_spec_validation_status"] == "OPEN_AUTHORITY_GAP"
+    assert moe["measured_peak_vram"] == "OPEN_AUTHORITY_GAP"
+    assert moe["onnx_compatibility"] == "OPEN_AUTHORITY_GAP"
+    assert moe["estimated_peak_training_bytes"] == "OPEN_AUTHORITY_GAP"
     more_experts = moe_transformer_block_parameter_estimate(
         d_model=128,
-        ffn_multiplier=4,
+        ffn_mult=None,
+        expert_ffn_mult=4,
+        shared_ffn_present=False,
+        expert_sharing_policy="independent_per_expert",
         num_layers=3,
         num_experts=12,
         top_k=2,
         router_parameters_per_layer=0,
     )
     assert more_experts["total_parameter_count"] > moe["total_parameter_count"]
+    assert more_experts["estimated_weight_bytes"] > moe["estimated_weight_bytes"]
     assert more_experts["active_parameter_count"] == moe["active_parameter_count"]
     deeper = moe_transformer_block_parameter_estimate(
         d_model=128,
-        ffn_multiplier=4,
+        ffn_mult=None,
+        expert_ffn_mult=4,
+        shared_ffn_present=False,
+        expert_sharing_policy="independent_per_expert",
         num_layers=4,
         num_experts=8,
         top_k=2,
@@ -761,7 +862,49 @@ def test_pure_parameter_estimation_and_capacity_guards_are_fail_closed():
     assert deeper["total_parameter_count"] > moe["total_parameter_count"]
     with pytest.raises(ValueError, match="top_k"):
         moe_transformer_block_parameter_estimate(
-            d_model=128, ffn_multiplier=4, num_layers=3, num_experts=2, top_k=3, router_parameters_per_layer=0
+            d_model=128,
+            ffn_mult=None,
+            expert_ffn_mult=4,
+            shared_ffn_present=False,
+            expert_sharing_policy="independent_per_expert",
+            num_layers=3,
+            num_experts=2,
+            top_k=3,
+            router_parameters_per_layer=0,
+        )
+
+    shared_ffn_narrow = moe_transformer_block_parameter_estimate(
+        d_model=32, ffn_mult=2, expert_ffn_mult=3, shared_ffn_present=True, expert_sharing_policy="independent_per_expert",
+        num_layers=2, num_experts=4, top_k=1, router_parameters_per_layer=17,
+    )
+    shared_ffn_wide = moe_transformer_block_parameter_estimate(
+        d_model=32, ffn_mult=4, expert_ffn_mult=3, shared_ffn_present=True, expert_sharing_policy="independent_per_expert",
+        num_layers=2, num_experts=4, top_k=1, router_parameters_per_layer=17,
+    )
+    assert shared_ffn_narrow["expert_parameter_count"] == shared_ffn_wide["expert_parameter_count"]
+    assert shared_ffn_narrow["total_parameter_count"] < shared_ffn_wide["total_parameter_count"]
+    expert_wider = moe_transformer_block_parameter_estimate(
+        d_model=32, ffn_mult=2, expert_ffn_mult=4, shared_ffn_present=True, expert_sharing_policy="independent_per_expert",
+        num_layers=2, num_experts=4, top_k=1, router_parameters_per_layer=17,
+    )
+    assert expert_wider["expert_parameter_count"] > shared_ffn_narrow["expert_parameter_count"]
+    assert expert_wider["total_parameter_count"] > shared_ffn_narrow["total_parameter_count"]
+    assert expert_wider["active_parameter_count"] > shared_ffn_narrow["active_parameter_count"]
+    top_two = moe_transformer_block_parameter_estimate(
+        d_model=32, ffn_mult=2, expert_ffn_mult=3, shared_ffn_present=True, expert_sharing_policy="independent_per_expert",
+        num_layers=2, num_experts=4, top_k=2, router_parameters_per_layer=17,
+    )
+    assert top_two["total_parameter_count"] == shared_ffn_narrow["total_parameter_count"]
+    assert top_two["active_parameter_count"] > shared_ffn_narrow["active_parameter_count"]
+    assert moe_transformer_block_parameter_estimate(
+        d_model=32, ffn_mult=None, expert_ffn_mult=3, shared_ffn_present=False, expert_sharing_policy="independent_per_expert",
+        num_layers=2, num_experts=4, top_k=1, router_parameters_per_layer=17,
+    )["shared_ffn_parameter_count"] == "NOT_APPLICABLE"
+    with pytest.raises(ValueError, match="expert_sharing_policy"):
+        moe_transformer_block_parameter_estimate(
+            d_model=32, ffn_mult=None, expert_ffn_mult=3, shared_ffn_present=False,
+            expert_sharing_policy="shared_experts", num_layers=2, num_experts=4,
+            top_k=1, router_parameters_per_layer=17,
         )
 
     validate_attention_heads(d_model=384, attention_heads=12)
@@ -816,17 +959,15 @@ def test_pure_parameter_estimation_and_capacity_guards_are_fail_closed():
             inference_workspace_bytes=None,
         )
 
+    recurrent_spec = _recurrent_candidate_spec()
     neural_record = estimate_neural_candidate(
         architecture_family="gru",
-        architecture_version="planning-v1",
-        input_feature_count=32,
-        output_dimension=3,
-        sequence_length=128,
-        exact_architecture_parameters={"hidden_size": 8, "num_layers": 1},
-        modules=[
-            {"role": "recurrent", "shape": [8, 12], "trainable": True},
-            {"role": "output_head", "shape": [3, 8], "trainable": True},
-        ],
+        architecture_version=recurrent_spec["architecture_version"],
+        input_feature_count=recurrent_spec["input_feature_count"],
+        output_dimension=recurrent_spec["output_dimension"],
+        sequence_length=recurrent_spec["sequence_length"],
+        exact_architecture_parameters=recurrent_spec["exact_architecture_parameters"],
+        modules=_recurrent_tensor_ledger(),
         activation_peak_bytes=None,
         temporary_peak_bytes=None,
         inference_workspace_bytes=None,
@@ -835,9 +976,110 @@ def test_pure_parameter_estimation_and_capacity_guards_are_fail_closed():
     assert neural_record["input_feature_count"] == 32
     assert neural_record["output_dimension"] == 3
     assert neural_record["sequence_length"] == 128
-    assert neural_record["total_parameter_count"] == 120
-    assert neural_record["estimated_weight_bytes"] == 480
+    assert neural_record["total_parameter_count"] == 1_035
+    assert neural_record["raw_declared_ledger_total_parameter_count"] == 1_035
+    assert neural_record["candidate_spec_validated_parameter_count"] == 1_035
+    assert neural_record["estimation_confidence"] == "CANDIDATE_SPEC_STATICALLY_VALIDATED"
+    assert neural_record["estimated_weight_bytes"] == 4_140
     assert neural_record["active_parameter_count"] == "NOT_APPLICABLE"
+    assert neural_record["instantiated_model_verification"] == "NOT_PERFORMED_IN_ONNX_00"
+
+
+def test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers():
+    counterexample_modules = [
+        {"role": "recurrent", "shape": [8, 12], "trainable": True},
+        {"role": "output_head", "shape": [3, 8], "trainable": True},
+    ]
+    raw = count_module_parameter_ledger(
+        architecture_family="gru",
+        architecture_version="planning-v1",
+        input_feature_count=32,
+        output_dimension=3,
+        sequence_length=128,
+        exact_architecture_parameters={"hidden_size": 8, "num_layers": 1},
+        modules=counterexample_modules,
+    )
+    assert raw["raw_declared_ledger_total_parameter_count"] == 120
+    assert raw["estimation_confidence"] == "RAW_DECLARED_LEDGER_COUNT"
+    assert raw["candidate_spec_validated_parameter_count"] == "OPEN_AUTHORITY_GAP"
+    with pytest.raises(ValueError, match="parameter_id|tensor identity"):
+        validate_recurrent_candidate_spec(
+            candidate_spec=_recurrent_candidate_spec(), modules=counterexample_modules
+        )
+
+    for family, expected in (("gru", 1_035), ("lstm", 1_371)):
+        spec = _recurrent_candidate_spec(family)
+        result = validate_recurrent_candidate_spec(
+            candidate_spec=spec, modules=_recurrent_tensor_ledger(family)
+        )
+        assert result["trainable_parameter_count"] == expected
+        assert result["trainable_parameter_count"] == recurrent_parameter_count(
+            family,
+            input_features=32,
+            hidden_size=8,
+            num_layers=1,
+            output_dimensions=3,
+        )
+        assert result["raw_declared_ledger_total_parameter_count"] == expected
+        assert result["estimation_confidence"] == "CANDIDATE_SPEC_STATICALLY_VALIDATED"
+        assert result["instantiated_model_verification"] == "NOT_PERFORMED_IN_ONNX_00"
+        assert result["measured_peak_vram"] == "OPEN_AUTHORITY_GAP"
+        assert result["onnx_compatibility"] == "OPEN_AUTHORITY_GAP"
+
+    base = validate_recurrent_candidate_spec(
+        candidate_spec=_recurrent_candidate_spec(), modules=_recurrent_tensor_ledger()
+    )["candidate_spec_validated_parameter_count"]
+    larger_hidden = validate_recurrent_candidate_spec(
+        candidate_spec=_recurrent_candidate_spec(hidden_size=16),
+        modules=_recurrent_tensor_ledger(hidden_size=16),
+    )["candidate_spec_validated_parameter_count"]
+    more_layers = validate_recurrent_candidate_spec(
+        candidate_spec=_recurrent_candidate_spec(num_layers=2),
+        modules=_recurrent_tensor_ledger(num_layers=2),
+    )["candidate_spec_validated_parameter_count"]
+    assert larger_hidden != base
+    assert more_layers > base
+
+    mismatched_input = _recurrent_candidate_spec(input_features=31)
+    with pytest.raises(ValueError, match="role/shape contradicts CandidateSpec"):
+        validate_recurrent_candidate_spec(
+            candidate_spec=mismatched_input, modules=_recurrent_tensor_ledger()
+        )
+    mismatched_output = _recurrent_candidate_spec(output_dimensions=4)
+    with pytest.raises(ValueError, match="tensor identity mismatch|role/shape contradicts"):
+        validate_recurrent_candidate_spec(
+            candidate_spec=mismatched_output, modules=_recurrent_tensor_ledger()
+        )
+    unsupported = _recurrent_candidate_spec()
+    unsupported["exact_architecture_parameters"]["recurrent_variant"] = "bidirectional_projected"
+    with pytest.raises(ValueError, match="unsupported recurrent_variant"):
+        validate_recurrent_candidate_spec(
+            candidate_spec=unsupported, modules=_recurrent_tensor_ledger()
+        )
+    invalid_head = _recurrent_candidate_spec()
+    invalid_head["exact_architecture_parameters"]["output_head"] = "mlp"
+    with pytest.raises(ValueError, match="output_head"):
+        validate_recurrent_candidate_spec(
+            candidate_spec=invalid_head, modules=_recurrent_tensor_ledger()
+        )
+    duplicate = _recurrent_tensor_ledger()
+    duplicate[-1] = dict(duplicate[-1], parameter_id="output_head.weight")
+    with pytest.raises(ValueError, match="duplicate recurrent parameter_id"):
+        validate_recurrent_candidate_spec(candidate_spec=_recurrent_candidate_spec(), modules=duplicate)
+    assert "MEASURED_INSTANTIATED_MODEL" not in {
+        result["estimation_confidence"] for result in (
+            validate_recurrent_candidate_spec(candidate_spec=_recurrent_candidate_spec(), modules=_recurrent_tensor_ledger()),
+            count_module_parameter_ledger(
+                architecture_family="tcn", architecture_version="planning-v1",
+                input_feature_count=32, output_dimension=3, sequence_length=128,
+                exact_architecture_parameters={"channels": 8},
+                modules=[
+                    {"role": "causal_convolution", "shape": [2, 2], "trainable": True},
+                    {"role": "output_head", "shape": [2, 2], "trainable": True},
+                ],
+            ),
+        )
+    }
 
     tree_record = estimate_tree_complexity_bound(
         architecture_family="lightgbm",
@@ -882,12 +1124,12 @@ def test_pure_parameter_estimation_and_capacity_guards_are_fail_closed():
 
 def test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults():
     modules = [
-        {"role": "attention", "shape": [4, 4], "trainable": True, "group": "shared"},
-        {"role": "router", "shape": [4, 2], "trainable": True, "group": "router"},
-        {"role": "expert", "shape": [4, 8], "trainable": True, "group": "expert", "expert_index": 0},
-        {"role": "expert", "shape": [4, 8], "trainable": True, "group": "expert", "expert_index": 1},
-        {"role": "output_head", "shape": [4, 2], "trainable": True, "group": "other"},
-        {"role": "running_stat", "shape": [2], "trainable": False, "group": "other"},
+        {"parameter_id": "attention.weight", "role": "attention", "shape": [4, 4], "trainable": True, "group": "shared"},
+        {"parameter_id": "router.weight", "role": "router", "shape": [4, 2], "trainable": True, "group": "router"},
+        {"parameter_id": "expert.0.weight", "role": "expert", "shape": [4, 8], "trainable": True, "group": "expert", "expert_index": 0, "layer_index": 0},
+        {"parameter_id": "expert.1.weight", "role": "expert", "shape": [4, 8], "trainable": True, "group": "expert", "expert_index": 1, "layer_index": 0},
+        {"parameter_id": "output_head.weight", "role": "output_head", "shape": [4, 2], "trainable": True, "group": "shared"},
+        {"parameter_id": "running_stat", "role": "running_stat", "shape": [2], "trainable": False, "group": "other"},
     ]
     counts = count_module_parameter_ledger(
         architecture_family="transformer_moe",
@@ -895,7 +1137,11 @@ def test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaul
         input_feature_count=4,
         output_dimension=2,
         sequence_length=8,
-        exact_architecture_parameters={"num_experts": 2, "top_k": 1},
+        exact_architecture_parameters={
+            "num_layers": 1, "num_experts": 2, "top_k": 1, "expert_ffn_mult": 2,
+            "expert_sharing_policy": "independent_per_expert",
+            "shared_ffn_present": False, "ffn_mult": "NOT_APPLICABLE",
+        },
         modules=modules,
         num_experts=2,
         top_k=1,
@@ -905,8 +1151,143 @@ def test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaul
     assert counts["total_parameter_count"] == 98
     assert counts["expert_parameter_count"] == 64
     assert counts["active_expert_parameter_count"] == 32
-    assert counts["active_parameter_count"] == 64
-    assert counts["estimation_confidence"] == "EXACT_STATIC_MODULE_LEDGER_UNVALIDATED_AGAINST_RUNTIME"
+    assert counts["active_parameter_count"] == 66
+    assert counts["shared_parameter_count"] == 24
+    assert counts["shared_ffn_parameter_count"] == "NOT_APPLICABLE"
+    assert counts["estimation_confidence"] == "RAW_DECLARED_LEDGER_COUNT"
+    assert counts["candidate_spec_static_validation_status"] == "OPEN_AUTHORITY_GAP"
+    raw_memory = estimate_neural_candidate(
+        architecture_family="transformer_moe",
+        architecture_version="planning-v1",
+        input_feature_count=4,
+        output_dimension=2,
+        sequence_length=8,
+        exact_architecture_parameters={
+            "num_layers": 1, "num_experts": 2, "top_k": 1, "expert_ffn_mult": 2,
+            "expert_sharing_policy": "independent_per_expert",
+            "shared_ffn_present": False, "ffn_mult": "NOT_APPLICABLE",
+        },
+        modules=modules,
+        activation_peak_bytes=None,
+        temporary_peak_bytes=None,
+        inference_workspace_bytes=None,
+        num_experts=2,
+        top_k=1,
+    )
+    assert raw_memory["total_parameter_count"] == 98
+    assert raw_memory["active_parameter_count"] == 66
+    assert raw_memory["estimated_weight_bytes"] == 98 * 4
+    assert raw_memory["estimation_confidence"] == "RAW_DECLARED_LEDGER_COUNT"
+    assert raw_memory["candidate_spec_validation_gap"] != "NOT_APPLICABLE"
+
+    router_misgrouped = [dict(module) for module in modules]
+    router_misgrouped[1]["group"] = "expert"
+    with pytest.raises(ValueError, match="role/group mismatch|group cannot contain"):
+        count_module_parameter_ledger(
+            architecture_family="transformer_moe", architecture_version="planning-v1",
+            input_feature_count=4, output_dimension=2, sequence_length=8,
+            exact_architecture_parameters={
+                "num_layers": 1, "num_experts": 2, "top_k": 1, "expert_ffn_mult": 2,
+                "expert_sharing_policy": "independent_per_expert",
+                "shared_ffn_present": False, "ffn_mult": "NOT_APPLICABLE",
+            }, modules=router_misgrouped, num_experts=2, top_k=1,
+        )
+    expert_misgrouped = [dict(module) for module in modules]
+    expert_misgrouped[2]["group"] = "shared"
+    with pytest.raises(ValueError, match="role/group mismatch"):
+        count_module_parameter_ledger(
+            architecture_family="transformer_moe", architecture_version="planning-v1",
+            input_feature_count=4, output_dimension=2, sequence_length=8,
+            exact_architecture_parameters={
+                "num_layers": 1, "num_experts": 2, "top_k": 1, "expert_ffn_mult": 2,
+                "expert_sharing_policy": "independent_per_expert",
+                "shared_ffn_present": False, "ffn_mult": "NOT_APPLICABLE",
+            }, modules=expert_misgrouped, num_experts=2, top_k=1,
+        )
+    missing_expert = [dict(module) for module in modules if module.get("expert_index") != 1]
+    with pytest.raises(ValueError, match="exact expert universe"):
+        count_module_parameter_ledger(
+            architecture_family="transformer_moe", architecture_version="planning-v1",
+            input_feature_count=4, output_dimension=2, sequence_length=8,
+            exact_architecture_parameters={
+                "num_layers": 1, "num_experts": 2, "top_k": 1, "expert_ffn_mult": 2,
+                "expert_sharing_policy": "independent_per_expert",
+                "shared_ffn_present": False, "ffn_mult": "NOT_APPLICABLE",
+            }, modules=missing_expert, num_experts=2, top_k=1,
+        )
+    duplicate_tensor = [dict(module) for module in modules]
+    duplicate_tensor[-1]["parameter_id"] = duplicate_tensor[0]["parameter_id"]
+    with pytest.raises(ValueError, match="duplicate MoE parameter_id"):
+        count_module_parameter_ledger(
+            architecture_family="transformer_moe", architecture_version="planning-v1",
+            input_feature_count=4, output_dimension=2, sequence_length=8,
+            exact_architecture_parameters={
+                "num_layers": 1, "num_experts": 2, "top_k": 1, "expert_ffn_mult": 2,
+                "expert_sharing_policy": "independent_per_expert",
+                "shared_ffn_present": False, "ffn_mult": "NOT_APPLICABLE",
+            }, modules=duplicate_tensor, num_experts=2, top_k=1,
+        )
+    unapproved_sharing = {
+        "num_layers": 1, "num_experts": 2, "top_k": 1, "expert_ffn_mult": 2,
+        "expert_sharing_policy": "shared_experts",
+        "shared_ffn_present": False, "ffn_mult": "NOT_APPLICABLE",
+    }
+    with pytest.raises(ValueError, match="expert_sharing_policy"):
+        count_module_parameter_ledger(
+            architecture_family="transformer_moe", architecture_version="planning-v1",
+            input_feature_count=4, output_dimension=2, sequence_length=8,
+            exact_architecture_parameters=unapproved_sharing, modules=modules,
+            num_experts=2, top_k=1,
+        )
+    uneven_experts = [dict(module) for module in modules]
+    uneven_experts.append({
+        "parameter_id": "expert.0.extra", "role": "expert", "shape": [2, 2],
+        "trainable": True, "group": "expert", "expert_index": 0, "layer_index": 0,
+    })
+    uneven = count_module_parameter_ledger(
+        architecture_family="transformer_moe", architecture_version="planning-v1",
+        input_feature_count=4, output_dimension=2, sequence_length=8,
+        exact_architecture_parameters={
+            "num_layers": 1, "num_experts": 2, "top_k": 1, "expert_ffn_mult": 2,
+            "expert_sharing_policy": "independent_per_expert",
+            "shared_ffn_present": False, "ffn_mult": "NOT_APPLICABLE",
+        }, modules=uneven_experts, num_experts=2, top_k=1,
+    )
+    assert uneven["active_parameter_count"] == "OPEN_AUTHORITY_GAP"
+    assert uneven["active_parameter_count_min"] < uneven["active_parameter_count_max"]
+
+    layerwise_modules = [
+        {"parameter_id": "attention.weight", "role": "attention", "shape": [1], "trainable": True, "group": "shared"},
+        {"parameter_id": "router.weight", "role": "router", "shape": [1], "trainable": True, "group": "router"},
+        {"parameter_id": "output_head.weight", "role": "output_head", "shape": [1], "trainable": True, "group": "shared"},
+        {"parameter_id": "expert.l0.e0", "role": "expert", "shape": [10, 10], "trainable": True, "group": "expert", "expert_index": 0, "layer_index": 0},
+        {"parameter_id": "expert.l0.e1", "role": "expert", "shape": [1], "trainable": True, "group": "expert", "expert_index": 1, "layer_index": 0},
+        {"parameter_id": "expert.l1.e0", "role": "expert", "shape": [1], "trainable": True, "group": "expert", "expert_index": 0, "layer_index": 1},
+        {"parameter_id": "expert.l1.e1", "role": "expert", "shape": [10, 10], "trainable": True, "group": "expert", "expert_index": 1, "layer_index": 1},
+    ]
+    layerwise = count_module_parameter_ledger(
+        architecture_family="transformer_moe", architecture_version="planning-v1",
+        input_feature_count=1, output_dimension=1, sequence_length=2,
+        exact_architecture_parameters={
+            "num_layers": 2, "num_experts": 2, "top_k": 1, "expert_ffn_mult": 2,
+            "expert_sharing_policy": "independent_per_expert",
+            "shared_ffn_present": False, "ffn_mult": "NOT_APPLICABLE",
+        }, modules=layerwise_modules, num_experts=2, top_k=1,
+    )
+    assert layerwise["active_parameter_count_min"] == 5
+    assert layerwise["active_parameter_count_max"] == 203
+    missing_layer_binding = [dict(module) for module in layerwise_modules]
+    del missing_layer_binding[3]["layer_index"]
+    with pytest.raises(ValueError, match="layer_index"):
+        count_module_parameter_ledger(
+            architecture_family="transformer_moe", architecture_version="planning-v1",
+            input_feature_count=1, output_dimension=1, sequence_length=2,
+            exact_architecture_parameters={
+                "num_layers": 2, "num_experts": 2, "top_k": 1, "expert_ffn_mult": 2,
+                "expert_sharing_policy": "independent_per_expert",
+                "shared_ffn_present": False, "ffn_mult": "NOT_APPLICABLE",
+            }, modules=missing_layer_binding, num_experts=2, top_k=1,
+        )
     with pytest.raises(ValueError, match="match exact architecture parameters"):
         count_module_parameter_ledger(
             architecture_family="transformer_moe",
@@ -914,7 +1295,11 @@ def test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaul
             input_feature_count=4,
             output_dimension=2,
             sequence_length=8,
-            exact_architecture_parameters={"num_experts": 2, "top_k": 2},
+            exact_architecture_parameters={
+                "num_layers": 1, "num_experts": 2, "top_k": 2, "expert_ffn_mult": 2,
+                "expert_sharing_policy": "independent_per_expert",
+                "shared_ffn_present": False, "ffn_mult": "NOT_APPLICABLE",
+            },
             modules=modules,
             num_experts=2,
             top_k=1,
