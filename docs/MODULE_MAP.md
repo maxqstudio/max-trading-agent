@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: ced328c4116b3465abaaac70bd6e4831da60ed27073112f8d3ca4e759363de90
+Source digest: eca30bb1e1abff5c3c87df344aa020bce0645cc07a90fb4e426d615d9b0863bf
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -34,9 +34,9 @@ Generated/refreshed: current compiler run
 | backend/max_backend/onnx_api.py | Python | 315 | backend/max_backend | NO |
 | backend/max_backend/onnx_data_api.py | Python | 150 | backend/max_backend | NO |
 | backend/max_backend/onnx_data_contract.py | Python | 364 | backend/max_backend | NO |
-| backend/max_backend/onnx_data_service.py | Python | 480 | backend/max_backend | NO |
-| backend/max_backend/onnx_data_source.py | Python | 380 | backend/max_backend | NO |
-| backend/max_backend/onnx_data_store.py | Python | 363 | backend/max_backend | NO |
+| backend/max_backend/onnx_data_service.py | Python | 481 | backend/max_backend | NO |
+| backend/max_backend/onnx_data_source.py | Python | 426 | backend/max_backend | NO |
+| backend/max_backend/onnx_data_store.py | Python | 368 | backend/max_backend | NO |
 | backend/max_backend/onnx_parameter_estimation.py | Python | 746 | backend/max_backend | NO |
 | backend/max_backend/optimizer_api.py | Python | 169 | backend/max_backend | NO |
 | backend/max_backend/optimizer_candidates.py | Python | 767 | backend/max_backend | NO |
@@ -86,8 +86,8 @@ Generated/refreshed: current compiler run
 | backend/tests/test_m07_true_mtf.py | Python | 245 | backend/tests | YES |
 | backend/tests/test_m08_strategy_results.py | Python | 2465 | backend/tests | YES |
 | backend/tests/test_onnx00_governance_contracts.py | Python | 1326 | backend/tests | YES |
-| backend/tests/test_onnx_data_api.py | Python | 416 | backend/tests | YES |
-| backend/tests/test_onnx_data_intake.py | Python | 377 | backend/tests | YES |
+| backend/tests/test_onnx_data_api.py | Python | 472 | backend/tests | YES |
+| backend/tests/test_onnx_data_intake.py | Python | 426 | backend/tests | YES |
 | backend/tests/test_optimizer_draft.py | Python | 150 | backend/tests | YES |
 | backend/tests/test_optimizer_frame_finalization.py | Python | 46 | backend/tests | YES |
 | backend/tests/test_optimizer_reliability.py | Python | 846 | backend/tests | YES |

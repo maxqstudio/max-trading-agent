@@ -12,7 +12,7 @@ from typing import Any
 from .config import DATABASE_PATH
 from .db import connect
 from .onnx_data_contract import WindowValidation
-from .onnx_data_source import PublishedSnapshot, report_payload
+from .onnx_data_source import PublishedSnapshot, report_payload, validate_snapshot_source
 
 
 def migrate_onnx_data(conn: sqlite3.Connection) -> None:
@@ -123,6 +123,11 @@ def _snapshot_row(row: sqlite3.Row) -> dict[str, Any]:
 
 def persist_snapshot(snapshot: PublishedSnapshot, *, authority: dict[str, str], path: Path = DATABASE_PATH) -> dict[str, Any]:
     report = snapshot.report
+    validate_snapshot_source(
+        snapshot.path.read_bytes(),
+        report,
+        expected_sha256=snapshot.sha256,
+    )
     created = _utc_now()
     fingerprint = {
         "file_id": snapshot.source_fingerprint.file_id,

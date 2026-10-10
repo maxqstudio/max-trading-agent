@@ -260,7 +260,7 @@
     {
       "evidence": "backend/max_backend/onnx_data_source.py; backend/max_backend/onnx_data_store.py; backend/tests/test_onnx_data_intake.py",
       "id": "ONNX-02-IMMUTABLE-SNAPSHOT-01",
-      "requirement": "Read the approved CSV only under verified EA lock/stable identity; exact-byte, hash-verified, atomic, immutable snapshot publication and idempotent/interruption/concurrency/tamper behavior fail closed.",
+      "requirement": "Read the approved CSV only under verified EA lock/stable identity; reject partial or structurally malformed CSV before snapshot file or ledger publication, while preserving structurally valid raw evidence with semantic DQ blockers such as identical duplicates; exact-byte, hash-verified, atomic, immutable publication and idempotent/interruption/concurrency/tamper behavior fail closed.",
       "status": "NOT_RUN"
     },
     {

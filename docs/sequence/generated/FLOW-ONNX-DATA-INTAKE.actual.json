@@ -149,6 +149,41 @@
       "to": "backend/max_backend/onnx_data_contract.py::_issue"
     },
     {
+      "action": "verify_ea_authority",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_service.py::OnnxDataService._authority",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::verify_ea_authority"
+    },
+    {
+      "action": "self._public_snapshot",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_service.py::OnnxDataService._publish_and_persist",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_service.py::OnnxDataService._public_snapshot"
+    },
+    {
+      "action": "publish_snapshot",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_service.py::OnnxDataService._publish_and_persist",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::publish_snapshot"
+    },
+    {
+      "action": "verify_snapshot_file",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_service.py::OnnxDataService._publish_and_persist",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::verify_snapshot_file"
+    },
+    {
+      "action": "persist_snapshot",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_service.py::OnnxDataService._publish_and_persist",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_store.py::persist_snapshot"
+    },
+    {
       "action": "OnnxDataSourceError",
       "evidence": "STATIC",
       "from": "backend/max_backend/onnx_data_service.py::OnnxDataService._verify_snapshot_ledger",
@@ -161,6 +196,62 @@
       "from": "backend/max_backend/onnx_data_service.py::OnnxDataService._verify_window_config",
       "resolver": "python_ast",
       "to": "backend/max_backend/onnx_data_source.py::OnnxDataSourceError"
+    },
+    {
+      "action": "self._authority",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_service.py::OnnxDataService.create_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_service.py::OnnxDataService._authority"
+    },
+    {
+      "action": "self._publish_and_persist",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_service.py::OnnxDataService.create_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_service.py::OnnxDataService._publish_and_persist"
+    },
+    {
+      "action": "OnnxDataSourceError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_service.py::OnnxDataService.create_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::OnnxDataSourceError"
+    },
+    {
+      "action": "capture_training_source",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_service.py::OnnxDataService.create_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::capture_training_source"
+    },
+    {
+      "action": "self._authority",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_service.py::OnnxDataService.preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_service.py::OnnxDataService._authority"
+    },
+    {
+      "action": "capture_training_source",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_service.py::OnnxDataService.preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::capture_training_source"
+    },
+    {
+      "action": "report_payload",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_service.py::OnnxDataService.preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::report_payload"
+    },
+    {
+      "action": "structurally_admissible_for_snapshot",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_service.py::OnnxDataService.preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::structurally_admissible_for_snapshot"
     },
     {
       "action": "audit_training_csv",
@@ -410,6 +501,34 @@
     {
       "action": "OnnxDataSourceError",
       "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_source.py::publish_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::OnnxDataSourceError"
+    },
+    {
+      "action": "PublishedSnapshot",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_source.py::publish_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::PublishedSnapshot"
+    },
+    {
+      "action": "_path_has_reparse_component",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_source.py::publish_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::_path_has_reparse_component"
+    },
+    {
+      "action": "validate_snapshot_source",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_source.py::publish_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::validate_snapshot_source"
+    },
+    {
+      "action": "OnnxDataSourceError",
+      "evidence": "STATIC",
       "from": "backend/max_backend/onnx_data_source.py::resolve_training_source",
       "resolver": "python_ast",
       "to": "backend/max_backend/onnx_data_source.py::OnnxDataSourceError"
@@ -420,6 +539,41 @@
       "from": "backend/max_backend/onnx_data_source.py::resolve_training_source",
       "resolver": "python_ast",
       "to": "backend/max_backend/onnx_data_source.py::_path_has_reparse_component"
+    },
+    {
+      "action": "audit_training_csv",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_contract.py::audit_training_csv"
+    },
+    {
+      "action": "OnnxDataSourceError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::OnnxDataSourceError"
+    },
+    {
+      "action": "report_payload",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::report_payload"
+    },
+    {
+      "action": "structurally_admissible_for_snapshot",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::structurally_admissible_for_snapshot"
+    },
+    {
+      "action": "OnnxDataSourceError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_source.py::verify_ea_authority",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::OnnxDataSourceError"
     },
     {
       "action": "OnnxDataSourceError",
@@ -459,6 +613,48 @@
     {
       "action": "connect",
       "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_store.py::persist_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "report_payload",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_store.py::persist_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::report_payload"
+    },
+    {
+      "action": "validate_snapshot_source",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_store.py::persist_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_source.py::validate_snapshot_source"
+    },
+    {
+      "action": "_canonical_json",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_store.py::persist_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_store.py::_canonical_json"
+    },
+    {
+      "action": "_snapshot_row",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_store.py::persist_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_store.py::_snapshot_row"
+    },
+    {
+      "action": "_utc_now",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/onnx_data_store.py::persist_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_store.py::_utc_now"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
       "from": "backend/max_backend/onnx_data_store.py::readiness_for_snapshot",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
@@ -484,9 +680,14 @@
     "backend/max_backend/onnx_data_api.py::create_snapshot",
     "backend/max_backend/onnx_data_api.py::resolve_identical_duplicates",
     "backend/max_backend/onnx_data_api.py::validate_windows",
-    "backend/max_backend/onnx_data_service.py::OnnxDataService",
+    "backend/max_backend/onnx_data_service.py::OnnxDataService.preflight",
+    "backend/max_backend/onnx_data_service.py::OnnxDataService.create_snapshot",
     "backend/max_backend/onnx_data_source.py::capture_training_source",
-    "backend/max_backend/onnx_data_store.py::migrate_onnx_data"
+    "backend/max_backend/onnx_data_source.py::structurally_admissible_for_snapshot",
+    "backend/max_backend/onnx_data_source.py::publish_snapshot",
+    "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+    "backend/max_backend/onnx_data_store.py::migrate_onnx_data",
+    "backend/max_backend/onnx_data_store.py::persist_snapshot"
   ],
   "generated": true,
   "generated_by": "generate_sequence_actual.py",
@@ -671,21 +872,21 @@
       "locator": "backend/max_backend/onnx_data_contract.py::validate_research_windows"
     },
     {
-      "id": "backend/max_backend/onnx_data_service.py::OnnxDataService",
-      "kind": "class",
-      "label": "backend/max_backend/onnx_data_service.py::OnnxDataService",
+      "id": "backend/max_backend/onnx_data_service.py::OnnxDataService._authority",
+      "kind": "method",
+      "label": "backend/max_backend/onnx_data_service.py::OnnxDataService._authority",
       "language": "Python",
-      "line_end": 480,
-      "line_start": 44,
-      "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService"
+      "line_end": 64,
+      "line_start": 63,
+      "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService._authority"
     },
     {
       "id": "backend/max_backend/onnx_data_service.py::OnnxDataService._first_blocker",
       "kind": "method",
       "label": "backend/max_backend/onnx_data_service.py::OnnxDataService._first_blocker",
       "language": "Python",
-      "line_end": 480,
-      "line_start": 468,
+      "line_end": 481,
+      "line_start": 469,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService._first_blocker"
     },
     {
@@ -693,17 +894,26 @@
       "kind": "method",
       "label": "backend/max_backend/onnx_data_service.py::OnnxDataService._public_snapshot",
       "language": "Python",
-      "line_end": 453,
-      "line_start": 422,
+      "line_end": 454,
+      "line_start": 423,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService._public_snapshot"
+    },
+    {
+      "id": "backend/max_backend/onnx_data_service.py::OnnxDataService._publish_and_persist",
+      "kind": "method",
+      "label": "backend/max_backend/onnx_data_service.py::OnnxDataService._publish_and_persist",
+      "language": "Python",
+      "line_end": 335,
+      "line_start": 306,
+      "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService._publish_and_persist"
     },
     {
       "id": "backend/max_backend/onnx_data_service.py::OnnxDataService._verify_snapshot_ledger",
       "kind": "method",
       "label": "backend/max_backend/onnx_data_service.py::OnnxDataService._verify_snapshot_ledger",
       "language": "Python",
-      "line_end": 398,
-      "line_start": 347,
+      "line_end": 399,
+      "line_start": 348,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService._verify_snapshot_ledger"
     },
     {
@@ -711,8 +921,8 @@
       "kind": "method",
       "label": "backend/max_backend/onnx_data_service.py::OnnxDataService._verify_window_config",
       "language": "Python",
-      "line_end": 76,
-      "line_start": 66,
+      "line_end": 77,
+      "line_start": 67,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService._verify_window_config"
     },
     {
@@ -720,17 +930,35 @@
       "kind": "method",
       "label": "backend/max_backend/onnx_data_service.py::OnnxDataService._window_payload",
       "language": "Python",
-      "line_end": 465,
-      "line_start": 456,
+      "line_end": 466,
+      "line_start": 457,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService._window_payload"
+    },
+    {
+      "id": "backend/max_backend/onnx_data_service.py::OnnxDataService.create_snapshot",
+      "kind": "method",
+      "label": "backend/max_backend/onnx_data_service.py::OnnxDataService.create_snapshot",
+      "language": "Python",
+      "line_end": 121,
+      "line_start": 104,
+      "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService.create_snapshot"
+    },
+    {
+      "id": "backend/max_backend/onnx_data_service.py::OnnxDataService.preflight",
+      "kind": "method",
+      "label": "backend/max_backend/onnx_data_service.py::OnnxDataService.preflight",
+      "language": "Python",
+      "line_end": 102,
+      "line_start": 79,
+      "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService.preflight"
     },
     {
       "id": "backend/max_backend/onnx_data_service.py::OnnxDataService.workspace",
       "kind": "method",
       "label": "backend/max_backend/onnx_data_service.py::OnnxDataService.workspace",
       "language": "Python",
-      "line_end": 303,
-      "line_start": 223,
+      "line_end": 304,
+      "line_start": 224,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService.workspace"
     },
     {
@@ -738,17 +966,26 @@
       "kind": "class",
       "label": "backend/max_backend/onnx_data_source.py::OnnxDataSourceError",
       "language": "Python",
-      "line_end": 49,
-      "line_start": 45,
+      "line_end": 57,
+      "line_start": 53,
       "locator": "backend/max_backend/onnx_data_source.py::OnnxDataSourceError"
+    },
+    {
+      "id": "backend/max_backend/onnx_data_source.py::PublishedSnapshot",
+      "kind": "class",
+      "label": "backend/max_backend/onnx_data_source.py::PublishedSnapshot",
+      "language": "Python",
+      "line_end": 89,
+      "line_start": 78,
+      "locator": "backend/max_backend/onnx_data_source.py::PublishedSnapshot"
     },
     {
       "id": "backend/max_backend/onnx_data_source.py::SourceCapture",
       "kind": "class",
       "label": "backend/max_backend/onnx_data_source.py::SourceCapture",
       "language": "Python",
-      "line_end": 66,
-      "line_start": 61,
+      "line_end": 74,
+      "line_start": 69,
       "locator": "backend/max_backend/onnx_data_source.py::SourceCapture"
     },
     {
@@ -756,8 +993,8 @@
       "kind": "class",
       "label": "backend/max_backend/onnx_data_source.py::SourceFingerprint",
       "language": "Python",
-      "line_end": 57,
-      "line_start": 53,
+      "line_end": 65,
+      "line_start": 61,
       "locator": "backend/max_backend/onnx_data_source.py::SourceFingerprint"
     },
     {
@@ -765,8 +1002,8 @@
       "kind": "class",
       "label": "backend/max_backend/onnx_data_source.py::_FILE_ATTRIBUTE_TAG_INFO_STRUCT",
       "language": "Python",
-      "line_end": 85,
-      "line_start": 84,
+      "line_end": 93,
+      "line_start": 92,
       "locator": "backend/max_backend/onnx_data_source.py::_FILE_ATTRIBUTE_TAG_INFO_STRUCT"
     },
     {
@@ -774,8 +1011,8 @@
       "kind": "function",
       "label": "backend/max_backend/onnx_data_source.py::_exclusive_writer_lock",
       "language": "Python",
-      "line_end": 205,
-      "line_start": 191,
+      "line_end": 213,
+      "line_start": 199,
       "locator": "backend/max_backend/onnx_data_source.py::_exclusive_writer_lock"
     },
     {
@@ -783,8 +1020,8 @@
       "kind": "function",
       "label": "backend/max_backend/onnx_data_source.py::_has_reparse_attribute",
       "language": "Python",
-      "line_end": 122,
-      "line_start": 115,
+      "line_end": 130,
+      "line_start": 123,
       "locator": "backend/max_backend/onnx_data_source.py::_has_reparse_attribute"
     },
     {
@@ -792,8 +1029,8 @@
       "kind": "function",
       "label": "backend/max_backend/onnx_data_source.py::_kernel32",
       "language": "Python",
-      "line_end": 103,
-      "line_start": 88,
+      "line_end": 111,
+      "line_start": 96,
       "locator": "backend/max_backend/onnx_data_source.py::_kernel32"
     },
     {
@@ -801,8 +1038,8 @@
       "kind": "function",
       "label": "backend/max_backend/onnx_data_source.py::_path_has_reparse_component",
       "language": "Python",
-      "line_end": 138,
-      "line_start": 125,
+      "line_end": 146,
+      "line_start": 133,
       "locator": "backend/max_backend/onnx_data_source.py::_path_has_reparse_component"
     },
     {
@@ -810,8 +1047,8 @@
       "kind": "function",
       "label": "backend/max_backend/onnx_data_source.py::_raise_win_error",
       "language": "Python",
-      "line_end": 112,
-      "line_start": 106,
+      "line_end": 120,
+      "line_start": 114,
       "locator": "backend/max_backend/onnx_data_source.py::_raise_win_error"
     },
     {
@@ -819,8 +1056,8 @@
       "kind": "function",
       "label": "backend/max_backend/onnx_data_source.py::_read_source_locked",
       "language": "Python",
-      "line_end": 259,
-      "line_start": 208,
+      "line_end": 267,
+      "line_start": 216,
       "locator": "backend/max_backend/onnx_data_source.py::_read_source_locked"
     },
     {
@@ -828,17 +1065,26 @@
       "kind": "function",
       "label": "backend/max_backend/onnx_data_source.py::capture_training_source",
       "language": "Python",
-      "line_end": 271,
-      "line_start": 262,
+      "line_end": 279,
+      "line_start": 270,
       "locator": "backend/max_backend/onnx_data_source.py::capture_training_source"
+    },
+    {
+      "id": "backend/max_backend/onnx_data_source.py::publish_snapshot",
+      "kind": "function",
+      "label": "backend/max_backend/onnx_data_source.py::publish_snapshot",
+      "language": "Python",
+      "line_end": 367,
+      "line_start": 306,
+      "locator": "backend/max_backend/onnx_data_source.py::publish_snapshot"
     },
     {
       "id": "backend/max_backend/onnx_data_source.py::report_payload",
       "kind": "function",
       "label": "backend/max_backend/onnx_data_source.py::report_payload",
       "language": "Python",
-      "line_end": 365,
-      "line_start": 361,
+      "line_end": 374,
+      "line_start": 370,
       "locator": "backend/max_backend/onnx_data_source.py::report_payload"
     },
     {
@@ -846,18 +1092,54 @@
       "kind": "function",
       "label": "backend/max_backend/onnx_data_source.py::resolve_training_source",
       "language": "Python",
-      "line_end": 187,
-      "line_start": 141,
+      "line_end": 195,
+      "line_start": 149,
       "locator": "backend/max_backend/onnx_data_source.py::resolve_training_source"
+    },
+    {
+      "id": "backend/max_backend/onnx_data_source.py::structurally_admissible_for_snapshot",
+      "kind": "function",
+      "label": "backend/max_backend/onnx_data_source.py::structurally_admissible_for_snapshot",
+      "language": "Python",
+      "line_end": 383,
+      "line_start": 377,
+      "locator": "backend/max_backend/onnx_data_source.py::structurally_admissible_for_snapshot"
+    },
+    {
+      "id": "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+      "kind": "function",
+      "label": "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+      "language": "Python",
+      "line_end": 411,
+      "line_start": 386,
+      "locator": "backend/max_backend/onnx_data_source.py::validate_snapshot_source"
+    },
+    {
+      "id": "backend/max_backend/onnx_data_source.py::verify_ea_authority",
+      "kind": "function",
+      "label": "backend/max_backend/onnx_data_source.py::verify_ea_authority",
+      "language": "Python",
+      "line_end": 303,
+      "line_start": 282,
+      "locator": "backend/max_backend/onnx_data_source.py::verify_ea_authority"
     },
     {
       "id": "backend/max_backend/onnx_data_source.py::verify_snapshot_file",
       "kind": "function",
       "label": "backend/max_backend/onnx_data_source.py::verify_snapshot_file",
       "language": "Python",
-      "line_end": 380,
-      "line_start": 368,
+      "line_end": 426,
+      "line_start": 414,
       "locator": "backend/max_backend/onnx_data_source.py::verify_snapshot_file"
+    },
+    {
+      "id": "backend/max_backend/onnx_data_store.py::_canonical_json",
+      "kind": "function",
+      "label": "backend/max_backend/onnx_data_store.py::_canonical_json",
+      "language": "Python",
+      "line_end": 113,
+      "line_start": 112,
+      "locator": "backend/max_backend/onnx_data_store.py::_canonical_json"
     },
     {
       "id": "backend/max_backend/onnx_data_store.py::_snapshot_row",
@@ -869,12 +1151,21 @@
       "locator": "backend/max_backend/onnx_data_store.py::_snapshot_row"
     },
     {
+      "id": "backend/max_backend/onnx_data_store.py::_utc_now",
+      "kind": "function",
+      "label": "backend/max_backend/onnx_data_store.py::_utc_now",
+      "language": "Python",
+      "line_end": 109,
+      "line_start": 108,
+      "locator": "backend/max_backend/onnx_data_store.py::_utc_now"
+    },
+    {
       "id": "backend/max_backend/onnx_data_store.py::latest_snapshot",
       "kind": "function",
       "label": "backend/max_backend/onnx_data_store.py::latest_snapshot",
       "language": "Python",
-      "line_end": 216,
-      "line_start": 211,
+      "line_end": 221,
+      "line_start": 216,
       "locator": "backend/max_backend/onnx_data_store.py::latest_snapshot"
     },
     {
@@ -882,8 +1173,8 @@
       "kind": "function",
       "label": "backend/max_backend/onnx_data_store.py::latest_window_config",
       "language": "Python",
-      "line_end": 294,
-      "line_start": 283,
+      "line_end": 299,
+      "line_start": 288,
       "locator": "backend/max_backend/onnx_data_store.py::latest_window_config"
     },
     {
@@ -896,12 +1187,21 @@
       "locator": "backend/max_backend/onnx_data_store.py::migrate_onnx_data"
     },
     {
+      "id": "backend/max_backend/onnx_data_store.py::persist_snapshot",
+      "kind": "function",
+      "label": "backend/max_backend/onnx_data_store.py::persist_snapshot",
+      "language": "Python",
+      "line_end": 207,
+      "line_start": 124,
+      "locator": "backend/max_backend/onnx_data_store.py::persist_snapshot"
+    },
+    {
       "id": "backend/max_backend/onnx_data_store.py::readiness_for_snapshot",
       "kind": "function",
       "label": "backend/max_backend/onnx_data_store.py::readiness_for_snapshot",
       "language": "Python",
-      "line_end": 363,
-      "line_start": 353,
+      "line_end": 368,
+      "line_start": 358,
       "locator": "backend/max_backend/onnx_data_store.py::readiness_for_snapshot"
     },
     {
@@ -909,12 +1209,12 @@
       "kind": "function",
       "label": "backend/max_backend/onnx_data_store.py::recent_snapshots",
       "language": "Python",
-      "line_end": 225,
-      "line_start": 219,
+      "line_end": 230,
+      "line_start": 224,
       "locator": "backend/max_backend/onnx_data_store.py::recent_snapshots"
     }
   ],
-  "observed_head": "7c73243154af2f8d717b3f9570e644c2aeec41c3",
+  "observed_head": "7ba135982ca5989706b49485011988a0ee66c83c",
   "schema_version": 1,
-  "source_digest": "ced328c4116b3465abaaac70bd6e4831da60ed27073112f8d3ca4e759363de90"
+  "source_digest": "eca30bb1e1abff5c3c87df344aa020bce0645cc07a90fb4e426d615d9b0863bf"
 }

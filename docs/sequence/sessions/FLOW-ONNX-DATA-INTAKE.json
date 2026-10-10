@@ -8,12 +8,17 @@
       "backend/max_backend/onnx_data_api.py::create_snapshot",
       "backend/max_backend/onnx_data_api.py::resolve_identical_duplicates",
       "backend/max_backend/onnx_data_api.py::validate_windows",
-      "backend/max_backend/onnx_data_service.py::OnnxDataService",
+      "backend/max_backend/onnx_data_service.py::OnnxDataService.preflight",
+      "backend/max_backend/onnx_data_service.py::OnnxDataService.create_snapshot",
       "backend/max_backend/onnx_data_source.py::capture_training_source",
-      "backend/max_backend/onnx_data_store.py::migrate_onnx_data"
+      "backend/max_backend/onnx_data_source.py::structurally_admissible_for_snapshot",
+      "backend/max_backend/onnx_data_source.py::publish_snapshot",
+      "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+      "backend/max_backend/onnx_data_store.py::migrate_onnx_data",
+      "backend/max_backend/onnx_data_store.py::persist_snapshot"
     ],
     "graph": "docs/sequence/generated/FLOW-ONNX-DATA-INTAKE.actual.json",
-    "source_digest": "ced328c4116b3465abaaac70bd6e4831da60ed27073112f8d3ca4e759363de90"
+      "source_digest": "eca30bb1e1abff5c3c87df344aa020bce0645cc07a90fb4e426d615d9b0863bf"
   },
   "critical": true,
   "implementation_base_sha": "1a9c9a6990e1f2571e4d85d79436402e6d37ec23",

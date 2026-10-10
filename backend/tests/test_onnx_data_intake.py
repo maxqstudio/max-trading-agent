@@ -17,6 +17,7 @@ from max_backend.onnx_data_contract import (
 )
 from max_backend.onnx_data_source import (
     OnnxDataSourceError,
+    PublishedSnapshot,
     _exclusive_writer_lock,
     capture_training_source,
     publish_snapshot,
@@ -24,6 +25,7 @@ from max_backend.onnx_data_source import (
     verify_ea_authority,
     verify_snapshot_file,
 )
+from max_backend.onnx_data_store import persist_snapshot
 from max_backend import onnx_data_source
 from max_backend.config import EA_BASELINE, EA_MANIFEST
 
@@ -333,6 +335,53 @@ def test_interrupted_snapshot_publication_is_not_exposed_and_retry_is_idempotent
     assert published.sha256 == hashlib.sha256(capture.raw).hexdigest()
     assert verify_snapshot_file(root, capture.sha256) == expected
     assert [path.name for path in root.glob("*.csv")] == [expected.name]
+
+
+def test_structurally_invalid_csv_is_rejected_by_publisher_before_creating_snapshot_root(tmp_path: Path) -> None:
+    common = tmp_path / "Common" / "Files"
+    source = _write_test_source(common)
+    source.write_bytes(source.read_bytes()[:-2])
+    capture, report = capture_training_source(
+        str(source), common_files_root=common, timezone_provenance="broker server time",
+    )
+    root = tmp_path / "private" / "snapshots"
+    authority = verify_ea_authority(EA_MANIFEST, EA_BASELINE)
+
+    with pytest.raises(OnnxDataSourceError) as caught:
+        publish_snapshot(capture, report, snapshot_root=root, authority=authority)
+
+    assert caught.value.code == "SNAPSHOT_SOURCE_STRUCTURALLY_INVALID"
+    assert not root.exists()
+
+
+def test_structurally_invalid_csv_is_rejected_by_storage_before_database_creation(tmp_path: Path) -> None:
+    common = tmp_path / "Common" / "Files"
+    source = _write_test_source(common)
+    raw = source.read_bytes()[:-2]
+    source.write_bytes(raw)
+    capture, report = capture_training_source(
+        str(source), common_files_root=common, timezone_provenance="broker server time",
+    )
+    artifact = tmp_path / "forged-published-artifact.csv"
+    artifact.write_bytes(raw)
+    authority = verify_ea_authority(EA_MANIFEST, EA_BASELINE)
+    snapshot = PublishedSnapshot(
+        snapshot_id=f"SNP-{capture.sha256}",
+        dataset_id="DS-test",
+        sha256=capture.sha256,
+        size_bytes=len(raw),
+        path=artifact,
+        source_path=str(source),
+        source_fingerprint=capture.fingerprint,
+        report=report,
+    )
+    database = tmp_path / "state" / "should-not-be-created.db"
+
+    with pytest.raises(OnnxDataSourceError) as caught:
+        persist_snapshot(snapshot, authority=authority, path=database)
+
+    assert caught.value.code == "SNAPSHOT_SOURCE_STRUCTURALLY_INVALID"
+    assert not database.exists()
 
 
 def test_snapshot_publication_rejects_reparse_parent_before_creating_outside_directory(tmp_path: Path) -> None:

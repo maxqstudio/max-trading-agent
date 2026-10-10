@@ -40,6 +40,7 @@
   "snapshot_contract": {
     "capture": "Acquire the existing EA lock read-only; validate regular-file identity and filesystem fingerprint before/after byte capture; enforce the bounded source-size and capture-time limits.",
     "partial_read": "Reject missing final line terminator, parse errors, source mutation, lock contention, unsupported path, or any before/after fingerprint mismatch.",
+    "snapshot_admission": "Before creating a snapshot file or ledger row, recompute structure from the exact captured/published bytes and reject partial trailing rows, unsupported encoding/size, schema mismatch, CSV parse errors, or any row with a column-count mismatch. Structurally complete raw CSV with semantic DQ blockers, including identical duplicates, remains snapshot-able for explicit review/correction; this does not grant DATA_READY.",
     "publication": "Write exact captured bytes to same-volume staging, flush, verify SHA-256, make artifact read-only, then atomically publish content-addressed snapshot; persist lineage and audit metadata transactionally.",
     "retry": "Same content and identity are idempotent; conflicting DB identity, hash mismatch, or tampered published artifact fails closed.",
     "duplicates": "Conflicting identities block. Identical duplicate removal requires explicit confirmation and produces a new derived immutable snapshot with original/backup/before/after hashes and row count; the live source and parent snapshot are never edited."

@@ -139,6 +139,59 @@ def test_v2_preflight_snapshot_windows_and_synthetic_readiness_are_truthful(tmp_
     _run(scenario())
 
 
+@pytest.mark.parametrize(
+    ("malformation", "expected_blocker"),
+    [
+        ("partial_trailing_row", "PARTIAL_TRAILING_ROW"),
+        ("wrong_column_count", "ROW_COLUMN_COUNT_MISMATCH"),
+        ("wrong_header", "SCHEMA_MISMATCH"),
+    ],
+)
+def test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger(
+    tmp_path: Path, malformation: str, expected_blocker: str,
+) -> None:
+    service = _service(tmp_path)
+    source = service.common_files_root / "Max_MTF_Training.csv"
+    parsed = list(csv.reader(io.StringIO(source.read_text(encoding="ascii"), newline=""), delimiter=";"))
+    if malformation == "partial_trailing_row":
+        raw = source.read_bytes()[:-2]
+    elif malformation == "wrong_column_count":
+        parsed[1] = parsed[1][:-1]
+        stream = io.StringIO(newline="")
+        writer = csv.writer(stream, delimiter=";", lineterminator="\r\n")
+        writer.writerows(parsed)
+        raw = stream.getvalue().encode("ascii")
+    else:
+        parsed[0][0] = "wrong_contract"
+        stream = io.StringIO(newline="")
+        writer = csv.writer(stream, delimiter=";", lineterminator="\r\n")
+        writer.writerows(parsed)
+        raw = stream.getvalue().encode("ascii")
+    source.write_bytes(raw)
+
+    async def scenario() -> None:
+        async with _client(service) as client:
+            preflight = await client.post("/api/v2/onnx/data/preflight", json=_preflight_payload())
+            assert preflight.status_code == 200
+            body = preflight.json()
+            assert body["status"] == "PREFLIGHT_BLOCKED"
+            assert body["snapshot_permitted"] is False
+            assert body["first_blocker"] == expected_blocker
+
+            rejected = await client.post(
+                "/api/v2/onnx/data/snapshots",
+                json={**_preflight_payload(), "expected_source_sha256": body["source_identity"]["sha256"], "confirmed": True},
+            )
+            assert rejected.status_code == 422
+            assert rejected.json()["detail"]["code"] == "SNAPSHOT_SOURCE_STRUCTURALLY_INVALID"
+            assert service.workspace()["latest_snapshot"] is None
+            assert not service.snapshot_root.exists()
+            with connect(service.database_path) as conn:
+                assert conn.execute("SELECT COUNT(*) FROM onnx_data_snapshots").fetchone()[0] == 0
+
+    _run(scenario())
+
+
 def test_source_change_after_preflight_cannot_be_snapshotted(tmp_path: Path) -> None:
     service = _service(tmp_path)
     source = service.common_files_root / "Max_MTF_Training.csv"
@@ -190,6 +243,9 @@ def test_identical_duplicate_repair_is_new_immutable_snapshot_with_lineage(tmp_p
     async def scenario() -> None:
         async with _client(service) as client:
             preflight = (await client.post("/api/v2/onnx/data/preflight", json=_preflight_payload())).json()
+            assert preflight["status"] == "PREFLIGHT_BLOCKED"
+            assert preflight["snapshot_permitted"] is True
+            assert preflight["first_blocker"] == "IDENTICAL_DUPLICATES_REQUIRE_EXPLICIT_RESOLUTION"
             raw = await client.post(
                 "/api/v2/onnx/data/snapshots",
                 json={**_preflight_payload(), "expected_source_sha256": preflight["source_identity"]["sha256"], "confirmed": True},

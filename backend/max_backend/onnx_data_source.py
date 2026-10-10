@@ -31,6 +31,14 @@ MAX_SOURCE_BYTES = 256 * 1024 * 1024
 MAX_LOCKED_CAPTURE_SECONDS = 1.0
 CAPTURE_CHUNK_BYTES = 1024 * 1024
 _SAFE_FILENAME = re.compile(r"^[A-Za-z0-9_.-]{1,128}$")
+_SNAPSHOT_STRUCTURAL_ISSUE_CODES = frozenset({
+    "PARTIAL_TRAILING_ROW",
+    "SOURCE_SIZE_UNSUPPORTED",
+    "UNSUPPORTED_SOURCE_ENCODING",
+    "SCHEMA_MISMATCH",
+    "CSV_PARSE_ERROR",
+    "ROW_COLUMN_COUNT_MISMATCH",
+})
 _GENERIC_READ = 0x80000000
 _GENERIC_WRITE = 0x40000000
 _FILE_SHARE_READ = 0x00000001
@@ -305,6 +313,7 @@ def publish_snapshot(
     correction: dict[str, object] | None = None,
     evidence_class: str = "OWNER_SELECTED_SOURCE_NOT_EXECUTED_IN_SOURCE_CI",
 ) -> PublishedSnapshot:
+    validate_snapshot_source(capture.raw, report, expected_sha256=capture.sha256)
     snapshot_root = snapshot_root.absolute()
     if _path_has_reparse_component(snapshot_root):
         raise OnnxDataSourceError("SNAPSHOT_ROOT_UNSAFE", "Private snapshot directory contains a link or reparse point.")
@@ -363,6 +372,43 @@ def report_payload(report: DataQualityReport) -> dict[str, object]:
     payload.pop("_timestamps", None)
     payload["issues"] = [asdict(issue) for issue in report.issues]
     return payload
+
+
+def structurally_admissible_for_snapshot(report: DataQualityReport) -> bool:
+    """Return whether the CSV structure is complete enough to publish as raw evidence.
+
+    Semantic DQ blockers, including identical duplicates, remain reviewable in a
+    raw immutable snapshot. Truncation and malformed CSV structure do not.
+    """
+    return not any(issue.code in _SNAPSHOT_STRUCTURAL_ISSUE_CODES for issue in report.issues)
+
+
+def validate_snapshot_source(
+    raw: bytes,
+    report: DataQualityReport,
+    *,
+    expected_sha256: str,
+) -> None:
+    """Reproduce structural and DQ evidence before any snapshot authority is persisted."""
+    actual_sha256 = hashlib.sha256(raw).hexdigest()
+    if actual_sha256 != expected_sha256:
+        raise OnnxDataSourceError(
+            "SNAPSHOT_SOURCE_HASH_MISMATCH",
+            "Snapshot source bytes do not match their declared SHA-256.",
+        )
+    reproduced = audit_training_csv(raw, timezone_provenance=report.timezone_provenance)
+    if not structurally_admissible_for_snapshot(reproduced):
+        codes = sorted({issue.code for issue in reproduced.issues if issue.code in _SNAPSHOT_STRUCTURAL_ISSUE_CODES})
+        raise OnnxDataSourceError(
+            "SNAPSHOT_SOURCE_STRUCTURALLY_INVALID",
+            "A truncated or structurally malformed MAX CSV cannot be published as an immutable snapshot: " + ", ".join(codes),
+            status_code=422,
+        )
+    if report_payload(reproduced) != report_payload(report):
+        raise OnnxDataSourceError(
+            "SNAPSHOT_DQ_EVIDENCE_MISMATCH",
+            "Snapshot data-quality evidence does not reproduce from the exact source bytes.",
+        )
 
 
 def verify_snapshot_file(snapshot_root: Path, sha256: str) -> Path:

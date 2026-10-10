@@ -250,7 +250,7 @@
     },
     {
       "path": ".workflow/onnx_data_authority.json",
-      "sha256": "9f8b52061577576c877f345805872f11168a9031e56949ac5ace40c111a56ead"
+      "sha256": "3aba4e4eca6f7db383571639d0cddfcb6dd76bc972df17da39042e15ac6098c6"
     },
     {
       "path": "docs/ARCHITECTURE_PHASE1.md",
@@ -378,15 +378,15 @@
     },
     {
       "path": "backend/max_backend/onnx_data_source.py",
-      "sha256": "a3fee61ca00823277a755fe331690ca86347cbbee27ba707e47e9c4cc086b74d"
+      "sha256": "73d558d1580b14367a5f22f97000475806f2b8e768bb38c1730744c817e8a75e"
     },
     {
       "path": "backend/max_backend/onnx_data_store.py",
-      "sha256": "e1dfca043eebab59106fead2fab6c79a5e25ab37d29fce7bb4d0c8e6f5b242aa"
+      "sha256": "8bcbf88f31491df9189991da25d15e5310e1a239025b5fb927691cec07d45b9e"
     },
     {
       "path": "backend/max_backend/onnx_data_service.py",
-      "sha256": "b4675670243b25a5042e62d80749bdc3d5dc7f506d6d5ee021ec8c4baada8a71"
+      "sha256": "50a628ce629545645d04371d842520029251a33627eeb1a8a1341ff9783c4845"
     },
     {
       "path": "backend/max_backend/onnx_data_api.py",

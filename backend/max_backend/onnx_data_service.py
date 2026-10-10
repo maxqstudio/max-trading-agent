@@ -26,6 +26,7 @@ from .onnx_data_source import (
     capture_training_source,
     publish_snapshot,
     report_payload,
+    structurally_admissible_for_snapshot,
     verify_ea_authority,
     verify_snapshot_file,
 )
@@ -86,7 +87,7 @@ class OnnxDataService:
             "contract_version": "2.0",
             "source": "BACKEND_ONNX_02_DATA_API",
             "status": "PREFLIGHT_PASS" if report.status == "PASS" else "PREFLIGHT_BLOCKED",
-            "snapshot_permitted": bool(capture.raw),
+            "snapshot_permitted": structurally_admissible_for_snapshot(report),
             "source_identity": {
                 "filename": capture.filename,
                 "path_sha256": hashlib.sha256(str(capture.path).encode("utf-8")).hexdigest(),

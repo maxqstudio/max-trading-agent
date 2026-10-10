@@ -199,21 +199,21 @@
       "file": "backend/max_backend/onnx_data_service.py",
       "is_test": false,
       "language": "Python",
-      "lines": 480
+      "lines": 481
     },
     {
       "directory": "backend/max_backend",
       "file": "backend/max_backend/onnx_data_source.py",
       "is_test": false,
       "language": "Python",
-      "lines": 380
+      "lines": 426
     },
     {
       "directory": "backend/max_backend",
       "file": "backend/max_backend/onnx_data_store.py",
       "is_test": false,
       "language": "Python",
-      "lines": 363
+      "lines": 368
     },
     {
       "directory": "backend/max_backend",
@@ -563,14 +563,14 @@
       "file": "backend/tests/test_onnx_data_api.py",
       "is_test": true,
       "language": "Python",
-      "lines": 416
+      "lines": 472
     },
     {
       "directory": "backend/tests",
       "file": "backend/tests/test_onnx_data_intake.py",
       "is_test": true,
       "language": "Python",
-      "lines": 377
+      "lines": 426
     },
     {
       "directory": "backend/tests",
@@ -14983,7 +14983,7 @@
     },
     {
       "caller": "backend/max_backend/onnx_data_service.py::OnnxDataService.preflight",
-      "target_token": "bool"
+      "target_token": "structurally_admissible_for_snapshot"
     },
     {
       "caller": "backend/max_backend/onnx_data_service.py::OnnxDataService.preflight",
@@ -15971,6 +15971,10 @@
     },
     {
       "caller": "backend/max_backend/onnx_data_source.py::publish_snapshot",
+      "target_token": "validate_snapshot_source"
+    },
+    {
+      "caller": "backend/max_backend/onnx_data_source.py::publish_snapshot",
       "target_token": "snapshot_root.absolute"
     },
     {
@@ -16130,6 +16134,46 @@
       "target_token": "asdict"
     },
     {
+      "caller": "backend/max_backend/onnx_data_source.py::structurally_admissible_for_snapshot",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+      "target_token": "OnnxDataSourceError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+      "target_token": "audit_training_csv"
+    },
+    {
+      "caller": "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+      "target_token": "structurally_admissible_for_snapshot"
+    },
+    {
+      "caller": "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+      "target_token": "OnnxDataSourceError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+      "target_token": "report_payload"
+    },
+    {
+      "caller": "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+      "target_token": "report_payload"
+    },
+    {
+      "caller": "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+      "target_token": "OnnxDataSourceError"
+    },
+    {
       "caller": "backend/max_backend/onnx_data_source.py::verify_snapshot_file",
       "target_token": "re.fullmatch"
     },
@@ -16188,6 +16232,14 @@
     {
       "caller": "backend/max_backend/onnx_data_store.py::_snapshot_row",
       "target_token": "json.loads"
+    },
+    {
+      "caller": "backend/max_backend/onnx_data_store.py::persist_snapshot",
+      "target_token": "validate_snapshot_source"
+    },
+    {
+      "caller": "backend/max_backend/onnx_data_store.py::persist_snapshot",
+      "target_token": "snapshot.path.read_bytes"
     },
     {
       "caller": "backend/max_backend/onnx_data_store.py::persist_snapshot",
@@ -52062,6 +52114,118 @@
       "target_token": "scenario"
     },
     {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "target_token": "_service"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "target_token": "list"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "target_token": "csv.reader"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "target_token": "io.StringIO"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "target_token": "source.read_text"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "target_token": "source.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "target_token": "io.StringIO"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "target_token": "csv.writer"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "target_token": "writer.writerows"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "target_token": "stream.getvalue"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "target_token": "io.StringIO"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "target_token": "csv.writer"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "target_token": "writer.writerows"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "target_token": "stream.getvalue"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "target_token": "source.write_bytes"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger.scenario",
+      "target_token": "_client"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger.scenario",
+      "target_token": "client.post"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger.scenario",
+      "target_token": "_preflight_payload"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger.scenario",
+      "target_token": "preflight.json"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger.scenario",
+      "target_token": "client.post"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger.scenario",
+      "target_token": "_preflight_payload"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger.scenario",
+      "target_token": "rejected.json"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger.scenario",
+      "target_token": "service.workspace"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger.scenario",
+      "target_token": "service.snapshot_root.exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger.scenario",
+      "target_token": "connect"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger.scenario",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "target_token": "_run"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "target_token": "scenario"
+    },
+    {
       "caller": "backend/tests/test_onnx_data_api.py::test_source_change_after_preflight_cannot_be_snapshotted",
       "target_token": "_service"
     },
@@ -53108,6 +53272,94 @@
     {
       "caller": "backend/tests/test_onnx_data_intake.py::test_interrupted_snapshot_publication_is_not_exposed_and_retry_is_idempotent",
       "target_token": "root.glob"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_publisher_before_creating_snapshot_root",
+      "target_token": "_write_test_source"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_publisher_before_creating_snapshot_root",
+      "target_token": "source.write_bytes"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_publisher_before_creating_snapshot_root",
+      "target_token": "source.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_publisher_before_creating_snapshot_root",
+      "target_token": "capture_training_source"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_publisher_before_creating_snapshot_root",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_publisher_before_creating_snapshot_root",
+      "target_token": "verify_ea_authority"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_publisher_before_creating_snapshot_root",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_publisher_before_creating_snapshot_root",
+      "target_token": "publish_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_publisher_before_creating_snapshot_root",
+      "target_token": "root.exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_storage_before_database_creation",
+      "target_token": "_write_test_source"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_storage_before_database_creation",
+      "target_token": "source.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_storage_before_database_creation",
+      "target_token": "source.write_bytes"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_storage_before_database_creation",
+      "target_token": "capture_training_source"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_storage_before_database_creation",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_storage_before_database_creation",
+      "target_token": "artifact.write_bytes"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_storage_before_database_creation",
+      "target_token": "verify_ea_authority"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_storage_before_database_creation",
+      "target_token": "PublishedSnapshot"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_storage_before_database_creation",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_storage_before_database_creation",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_storage_before_database_creation",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_storage_before_database_creation",
+      "target_token": "persist_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_storage_before_database_creation",
+      "target_token": "database.exists"
     },
     {
       "caller": "backend/tests/test_onnx_data_intake.py::test_snapshot_publication_rejects_reparse_parent_before_creating_outside_directory",
@@ -70191,272 +70443,288 @@
     {
       "file": "backend/max_backend/onnx_data_service.py",
       "kind": "class",
-      "line_end": 480,
-      "line_start": 44,
+      "line_end": 481,
+      "line_start": 45,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService",
       "symbol": "OnnxDataService"
     },
     {
       "file": "backend/max_backend/onnx_data_service.py",
       "kind": "method",
-      "line_end": 60,
-      "line_start": 45,
+      "line_end": 61,
+      "line_start": 46,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService.__init__",
       "symbol": "OnnxDataService.__init__"
     },
     {
       "file": "backend/max_backend/onnx_data_service.py",
       "kind": "method",
-      "line_end": 63,
-      "line_start": 62,
+      "line_end": 64,
+      "line_start": 63,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService._authority",
       "symbol": "OnnxDataService._authority"
     },
     {
       "file": "backend/max_backend/onnx_data_service.py",
       "kind": "method",
-      "line_end": 76,
-      "line_start": 66,
+      "line_end": 77,
+      "line_start": 67,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService._verify_window_config",
       "symbol": "OnnxDataService._verify_window_config"
     },
     {
       "file": "backend/max_backend/onnx_data_service.py",
       "kind": "method",
-      "line_end": 101,
-      "line_start": 78,
+      "line_end": 102,
+      "line_start": 79,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService.preflight",
       "symbol": "OnnxDataService.preflight"
     },
     {
       "file": "backend/max_backend/onnx_data_service.py",
       "kind": "method",
-      "line_end": 120,
-      "line_start": 103,
+      "line_end": 121,
+      "line_start": 104,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService.create_snapshot",
       "symbol": "OnnxDataService.create_snapshot"
     },
     {
       "file": "backend/max_backend/onnx_data_service.py",
       "kind": "method",
-      "line_end": 170,
-      "line_start": 122,
+      "line_end": 171,
+      "line_start": 123,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService.resolve_identical_duplicates",
       "symbol": "OnnxDataService.resolve_identical_duplicates"
     },
     {
       "file": "backend/max_backend/onnx_data_service.py",
       "kind": "method",
-      "line_end": 221,
-      "line_start": 172,
+      "line_end": 222,
+      "line_start": 173,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService.validate_windows",
       "symbol": "OnnxDataService.validate_windows"
     },
     {
       "file": "backend/max_backend/onnx_data_service.py",
       "kind": "method",
-      "line_end": 303,
-      "line_start": 223,
+      "line_end": 304,
+      "line_start": 224,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService.workspace",
       "symbol": "OnnxDataService.workspace"
     },
     {
       "file": "backend/max_backend/onnx_data_service.py",
       "kind": "method",
-      "line_end": 334,
-      "line_start": 305,
+      "line_end": 335,
+      "line_start": 306,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService._publish_and_persist",
       "symbol": "OnnxDataService._publish_and_persist"
     },
     {
       "file": "backend/max_backend/onnx_data_service.py",
       "kind": "method",
-      "line_end": 344,
-      "line_start": 336,
+      "line_end": 345,
+      "line_start": 337,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService._verified_snapshot",
       "symbol": "OnnxDataService._verified_snapshot"
     },
     {
       "file": "backend/max_backend/onnx_data_service.py",
       "kind": "method",
-      "line_end": 398,
-      "line_start": 347,
+      "line_end": 399,
+      "line_start": 348,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService._verify_snapshot_ledger",
       "symbol": "OnnxDataService._verify_snapshot_ledger"
     },
     {
       "file": "backend/max_backend/onnx_data_service.py",
       "kind": "method",
-      "line_end": 419,
-      "line_start": 400,
+      "line_end": 420,
+      "line_start": 401,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService.snapshot_details",
       "symbol": "OnnxDataService.snapshot_details"
     },
     {
       "file": "backend/max_backend/onnx_data_service.py",
       "kind": "method",
-      "line_end": 453,
-      "line_start": 422,
+      "line_end": 454,
+      "line_start": 423,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService._public_snapshot",
       "symbol": "OnnxDataService._public_snapshot"
     },
     {
       "file": "backend/max_backend/onnx_data_service.py",
       "kind": "method",
-      "line_end": 465,
-      "line_start": 456,
+      "line_end": 466,
+      "line_start": 457,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService._window_payload",
       "symbol": "OnnxDataService._window_payload"
     },
     {
       "file": "backend/max_backend/onnx_data_service.py",
       "kind": "method",
-      "line_end": 480,
-      "line_start": 468,
+      "line_end": 481,
+      "line_start": 469,
       "locator": "backend/max_backend/onnx_data_service.py::OnnxDataService._first_blocker",
       "symbol": "OnnxDataService._first_blocker"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "class",
-      "line_end": 49,
-      "line_start": 45,
+      "line_end": 57,
+      "line_start": 53,
       "locator": "backend/max_backend/onnx_data_source.py::OnnxDataSourceError",
       "symbol": "OnnxDataSourceError"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "method",
-      "line_end": 49,
-      "line_start": 46,
+      "line_end": 57,
+      "line_start": 54,
       "locator": "backend/max_backend/onnx_data_source.py::OnnxDataSourceError.__init__",
       "symbol": "OnnxDataSourceError.__init__"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "class",
-      "line_end": 57,
-      "line_start": 53,
+      "line_end": 65,
+      "line_start": 61,
       "locator": "backend/max_backend/onnx_data_source.py::SourceFingerprint",
       "symbol": "SourceFingerprint"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "class",
-      "line_end": 66,
-      "line_start": 61,
+      "line_end": 74,
+      "line_start": 69,
       "locator": "backend/max_backend/onnx_data_source.py::SourceCapture",
       "symbol": "SourceCapture"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "class",
-      "line_end": 81,
-      "line_start": 70,
+      "line_end": 89,
+      "line_start": 78,
       "locator": "backend/max_backend/onnx_data_source.py::PublishedSnapshot",
       "symbol": "PublishedSnapshot"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "class",
-      "line_end": 85,
-      "line_start": 84,
+      "line_end": 93,
+      "line_start": 92,
       "locator": "backend/max_backend/onnx_data_source.py::_FILE_ATTRIBUTE_TAG_INFO_STRUCT",
       "symbol": "_FILE_ATTRIBUTE_TAG_INFO_STRUCT"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "function",
-      "line_end": 103,
-      "line_start": 88,
+      "line_end": 111,
+      "line_start": 96,
       "locator": "backend/max_backend/onnx_data_source.py::_kernel32",
       "symbol": "_kernel32"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "function",
-      "line_end": 112,
-      "line_start": 106,
+      "line_end": 120,
+      "line_start": 114,
       "locator": "backend/max_backend/onnx_data_source.py::_raise_win_error",
       "symbol": "_raise_win_error"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "function",
-      "line_end": 122,
-      "line_start": 115,
+      "line_end": 130,
+      "line_start": 123,
       "locator": "backend/max_backend/onnx_data_source.py::_has_reparse_attribute",
       "symbol": "_has_reparse_attribute"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "function",
-      "line_end": 138,
-      "line_start": 125,
+      "line_end": 146,
+      "line_start": 133,
       "locator": "backend/max_backend/onnx_data_source.py::_path_has_reparse_component",
       "symbol": "_path_has_reparse_component"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "function",
-      "line_end": 187,
-      "line_start": 141,
+      "line_end": 195,
+      "line_start": 149,
       "locator": "backend/max_backend/onnx_data_source.py::resolve_training_source",
       "symbol": "resolve_training_source"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "function",
-      "line_end": 205,
-      "line_start": 191,
+      "line_end": 213,
+      "line_start": 199,
       "locator": "backend/max_backend/onnx_data_source.py::_exclusive_writer_lock",
       "symbol": "_exclusive_writer_lock"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "function",
-      "line_end": 259,
-      "line_start": 208,
+      "line_end": 267,
+      "line_start": 216,
       "locator": "backend/max_backend/onnx_data_source.py::_read_source_locked",
       "symbol": "_read_source_locked"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "function",
-      "line_end": 271,
-      "line_start": 262,
+      "line_end": 279,
+      "line_start": 270,
       "locator": "backend/max_backend/onnx_data_source.py::capture_training_source",
       "symbol": "capture_training_source"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "function",
-      "line_end": 295,
-      "line_start": 274,
+      "line_end": 303,
+      "line_start": 282,
       "locator": "backend/max_backend/onnx_data_source.py::verify_ea_authority",
       "symbol": "verify_ea_authority"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "function",
-      "line_end": 358,
-      "line_start": 298,
+      "line_end": 367,
+      "line_start": 306,
       "locator": "backend/max_backend/onnx_data_source.py::publish_snapshot",
       "symbol": "publish_snapshot"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "function",
-      "line_end": 365,
-      "line_start": 361,
+      "line_end": 374,
+      "line_start": 370,
       "locator": "backend/max_backend/onnx_data_source.py::report_payload",
       "symbol": "report_payload"
     },
     {
       "file": "backend/max_backend/onnx_data_source.py",
       "kind": "function",
-      "line_end": 380,
-      "line_start": 368,
+      "line_end": 383,
+      "line_start": 377,
+      "locator": "backend/max_backend/onnx_data_source.py::structurally_admissible_for_snapshot",
+      "symbol": "structurally_admissible_for_snapshot"
+    },
+    {
+      "file": "backend/max_backend/onnx_data_source.py",
+      "kind": "function",
+      "line_end": 411,
+      "line_start": 386,
+      "locator": "backend/max_backend/onnx_data_source.py::validate_snapshot_source",
+      "symbol": "validate_snapshot_source"
+    },
+    {
+      "file": "backend/max_backend/onnx_data_source.py",
+      "kind": "function",
+      "line_end": 426,
+      "line_start": 414,
       "locator": "backend/max_backend/onnx_data_source.py::verify_snapshot_file",
       "symbol": "verify_snapshot_file"
     },
@@ -70495,7 +70763,7 @@
     {
       "file": "backend/max_backend/onnx_data_store.py",
       "kind": "function",
-      "line_end": 202,
+      "line_end": 207,
       "line_start": 124,
       "locator": "backend/max_backend/onnx_data_store.py::persist_snapshot",
       "symbol": "persist_snapshot"
@@ -70503,56 +70771,56 @@
     {
       "file": "backend/max_backend/onnx_data_store.py",
       "kind": "function",
-      "line_end": 208,
-      "line_start": 205,
+      "line_end": 213,
+      "line_start": 210,
       "locator": "backend/max_backend/onnx_data_store.py::get_snapshot",
       "symbol": "get_snapshot"
     },
     {
       "file": "backend/max_backend/onnx_data_store.py",
       "kind": "function",
-      "line_end": 216,
-      "line_start": 211,
+      "line_end": 221,
+      "line_start": 216,
       "locator": "backend/max_backend/onnx_data_store.py::latest_snapshot",
       "symbol": "latest_snapshot"
     },
     {
       "file": "backend/max_backend/onnx_data_store.py",
       "kind": "function",
-      "line_end": 225,
-      "line_start": 219,
+      "line_end": 230,
+      "line_start": 224,
       "locator": "backend/max_backend/onnx_data_store.py::recent_snapshots",
       "symbol": "recent_snapshots"
     },
     {
       "file": "backend/max_backend/onnx_data_store.py",
       "kind": "function",
-      "line_end": 280,
-      "line_start": 228,
+      "line_end": 285,
+      "line_start": 233,
       "locator": "backend/max_backend/onnx_data_store.py::save_window_config",
       "symbol": "save_window_config"
     },
     {
       "file": "backend/max_backend/onnx_data_store.py",
       "kind": "function",
-      "line_end": 294,
-      "line_start": 283,
+      "line_end": 299,
+      "line_start": 288,
       "locator": "backend/max_backend/onnx_data_store.py::latest_window_config",
       "symbol": "latest_window_config"
     },
     {
       "file": "backend/max_backend/onnx_data_store.py",
       "kind": "function",
-      "line_end": 350,
-      "line_start": 297,
+      "line_end": 355,
+      "line_start": 302,
       "locator": "backend/max_backend/onnx_data_store.py::persist_data_ready_evidence",
       "symbol": "persist_data_ready_evidence"
     },
     {
       "file": "backend/max_backend/onnx_data_store.py",
       "kind": "function",
-      "line_end": 363,
-      "line_start": 353,
+      "line_end": 368,
+      "line_start": 358,
       "locator": "backend/max_backend/onnx_data_store.py::readiness_for_snapshot",
       "symbol": "readiness_for_snapshot"
     },
@@ -78183,368 +78451,400 @@
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "function",
-      "line_end": 159,
-      "line_start": 142,
+      "line_end": 192,
+      "line_start": 150,
+      "locator": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger",
+      "symbol": "test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger"
+    },
+    {
+      "file": "backend/tests/test_onnx_data_api.py",
+      "kind": "async_method",
+      "line_end": 190,
+      "line_start": 172,
+      "locator": "backend/tests/test_onnx_data_api.py::test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger.scenario",
+      "symbol": "test_structurally_invalid_source_is_rejected_before_snapshot_file_or_ledger.scenario"
+    },
+    {
+      "file": "backend/tests/test_onnx_data_api.py",
+      "kind": "function",
+      "line_end": 212,
+      "line_start": 195,
       "locator": "backend/tests/test_onnx_data_api.py::test_source_change_after_preflight_cannot_be_snapshotted",
       "symbol": "test_source_change_after_preflight_cannot_be_snapshotted"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "async_method",
-      "line_end": 157,
-      "line_start": 146,
+      "line_end": 210,
+      "line_start": 199,
       "locator": "backend/tests/test_onnx_data_api.py::test_source_change_after_preflight_cannot_be_snapshotted.scenario",
       "symbol": "test_source_change_after_preflight_cannot_be_snapshotted.scenario"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "function",
-      "line_end": 184,
-      "line_start": 162,
+      "line_end": 237,
+      "line_start": 215,
       "locator": "backend/tests/test_onnx_data_api.py::test_same_content_with_conflicting_source_provenance_cannot_reuse_snapshot_identity",
       "symbol": "test_same_content_with_conflicting_source_provenance_cannot_reuse_snapshot_identity"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "async_method",
-      "line_end": 182,
-      "line_start": 165,
+      "line_end": 235,
+      "line_start": 218,
       "locator": "backend/tests/test_onnx_data_api.py::test_same_content_with_conflicting_source_provenance_cannot_reuse_snapshot_identity.scenario",
       "symbol": "test_same_content_with_conflicting_source_provenance_cannot_reuse_snapshot_identity.scenario"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "function",
-      "line_end": 220,
-      "line_start": 187,
+      "line_end": 276,
+      "line_start": 240,
       "locator": "backend/tests/test_onnx_data_api.py::test_identical_duplicate_repair_is_new_immutable_snapshot_with_lineage",
       "symbol": "test_identical_duplicate_repair_is_new_immutable_snapshot_with_lineage"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "async_method",
-      "line_end": 218,
-      "line_start": 190,
+      "line_end": 274,
+      "line_start": 243,
       "locator": "backend/tests/test_onnx_data_api.py::test_identical_duplicate_repair_is_new_immutable_snapshot_with_lineage.scenario",
       "symbol": "test_identical_duplicate_repair_is_new_immutable_snapshot_with_lineage.scenario"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "function",
-      "line_end": 256,
-      "line_start": 223,
+      "line_end": 312,
+      "line_start": 279,
       "locator": "backend/tests/test_onnx_data_api.py::test_observed_gap_is_not_broker_confirmation_and_does_not_claim_data_ready",
       "symbol": "test_observed_gap_is_not_broker_confirmation_and_does_not_claim_data_ready"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "async_method",
-      "line_end": 254,
-      "line_start": 226,
+      "line_end": 310,
+      "line_start": 282,
       "locator": "backend/tests/test_onnx_data_api.py::test_observed_gap_is_not_broker_confirmation_and_does_not_claim_data_ready.scenario",
       "symbol": "test_observed_gap_is_not_broker_confirmation_and_does_not_claim_data_ready.scenario"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "function",
-      "line_end": 277,
-      "line_start": 259,
+      "line_end": 333,
+      "line_start": 315,
       "locator": "backend/tests/test_onnx_data_api.py::test_real_data_ready_is_blocked_until_broker_reconciliation_is_verified",
       "symbol": "test_real_data_ready_is_blocked_until_broker_reconciliation_is_verified"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "function",
-      "line_end": 303,
-      "line_start": 280,
+      "line_end": 359,
+      "line_start": 336,
       "locator": "backend/tests/test_onnx_data_api.py::test_snapshot_tampering_fails_closed_and_database_rows_are_immutable",
       "symbol": "test_snapshot_tampering_fails_closed_and_database_rows_are_immutable"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "async_method",
-      "line_end": 296,
-      "line_start": 283,
+      "line_end": 352,
+      "line_start": 339,
       "locator": "backend/tests/test_onnx_data_api.py::test_snapshot_tampering_fails_closed_and_database_rows_are_immutable.scenario",
       "symbol": "test_snapshot_tampering_fails_closed_and_database_rows_are_immutable.scenario"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "function",
-      "line_end": 333,
-      "line_start": 306,
+      "line_end": 389,
+      "line_start": 362,
       "locator": "backend/tests/test_onnx_data_api.py::test_snapshot_broker_status_column_tampering_fails_closed",
       "symbol": "test_snapshot_broker_status_column_tampering_fails_closed"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "async_method",
-      "line_end": 317,
-      "line_start": 309,
+      "line_end": 373,
+      "line_start": 365,
       "locator": "backend/tests/test_onnx_data_api.py::test_snapshot_broker_status_column_tampering_fails_closed.create_snapshot",
       "symbol": "test_snapshot_broker_status_column_tampering_fails_closed.create_snapshot"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "async_method",
-      "line_end": 331,
-      "line_start": 327,
+      "line_end": 387,
+      "line_start": 383,
       "locator": "backend/tests/test_onnx_data_api.py::test_snapshot_broker_status_column_tampering_fails_closed.reject_tampered_snapshot",
       "symbol": "test_snapshot_broker_status_column_tampering_fails_closed.reject_tampered_snapshot"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "function",
-      "line_end": 380,
-      "line_start": 336,
+      "line_end": 436,
+      "line_start": 392,
       "locator": "backend/tests/test_onnx_data_api.py::test_tampered_window_ledger_fails_readback_identity_check",
       "symbol": "test_tampered_window_ledger_fails_readback_identity_check"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "async_method",
-      "line_end": 361,
-      "line_start": 339,
+      "line_end": 417,
+      "line_start": 395,
       "locator": "backend/tests/test_onnx_data_api.py::test_tampered_window_ledger_fails_readback_identity_check.create_configuration",
       "symbol": "test_tampered_window_ledger_fails_readback_identity_check.create_configuration"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "async_method",
-      "line_end": 378,
-      "line_start": 374,
+      "line_end": 434,
+      "line_start": 430,
       "locator": "backend/tests/test_onnx_data_api.py::test_tampered_window_ledger_fails_readback_identity_check.read_tampered_configuration",
       "symbol": "test_tampered_window_ledger_fails_readback_identity_check.read_tampered_configuration"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "function",
-      "line_end": 399,
-      "line_start": 383,
+      "line_end": 455,
+      "line_start": 439,
       "locator": "backend/tests/test_onnx_data_api.py::test_recovery_required_503_blocks_v2_operations_with_existing_error_contract",
       "symbol": "test_recovery_required_503_blocks_v2_operations_with_existing_error_contract"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "async_method",
-      "line_end": 397,
-      "line_start": 390,
+      "line_end": 453,
+      "line_start": 446,
       "locator": "backend/tests/test_onnx_data_api.py::test_recovery_required_503_blocks_v2_operations_with_existing_error_contract.scenario",
       "symbol": "test_recovery_required_503_blocks_v2_operations_with_existing_error_contract.scenario"
     },
     {
       "file": "backend/tests/test_onnx_data_api.py",
       "kind": "function",
-      "line_end": 416,
-      "line_start": 402,
+      "line_end": 472,
+      "line_start": 458,
       "locator": "backend/tests/test_onnx_data_api.py::test_api_has_no_training_or_scientific_mutation_routes",
       "symbol": "test_api_has_no_training_or_scientific_mutation_routes"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 47,
-      "line_start": 31,
+      "line_end": 49,
+      "line_start": 33,
       "locator": "backend/tests/test_onnx_data_intake.py::_row",
       "symbol": "_row"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 55,
-      "line_start": 50,
+      "line_end": 57,
+      "line_start": 52,
       "locator": "backend/tests/test_onnx_data_intake.py::_csv_bytes",
       "symbol": "_csv_bytes"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 59,
-      "line_start": 58,
+      "line_end": 61,
+      "line_start": 60,
       "locator": "backend/tests/test_onnx_data_intake.py::_valid_rows",
       "symbol": "_valid_rows"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 72,
-      "line_start": 62,
+      "line_end": 74,
+      "line_start": 64,
       "locator": "backend/tests/test_onnx_data_intake.py::test_actual_cp32_schema_and_broker_wall_clock_are_audited_without_utc_conversion",
       "symbol": "test_actual_cp32_schema_and_broker_wall_clock_are_audited_without_utc_conversion"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 86,
-      "line_start": 83,
+      "line_end": 88,
+      "line_start": 85,
       "locator": "backend/tests/test_onnx_data_intake.py::test_invalid_header_delimiter_or_partial_trailing_row_fails_closed",
       "symbol": "test_invalid_header_delimiter_or_partial_trailing_row_fails_closed"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 100,
-      "line_start": 89,
+      "line_end": 102,
+      "line_start": 91,
       "locator": "backend/tests/test_onnx_data_intake.py::test_wrong_feature_contract_and_nonfinite_feature_fail_closed",
       "symbol": "test_wrong_feature_contract_and_nonfinite_feature_fail_closed"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 113,
-      "line_start": 103,
+      "line_end": 115,
+      "line_start": 105,
       "locator": "backend/tests/test_onnx_data_intake.py::test_ohlc_atr_quote_and_row_completeness_are_enforced",
       "symbol": "test_ohlc_atr_quote_and_row_completeness_are_enforced"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 127,
-      "line_start": 116,
+      "line_end": 129,
+      "line_start": 118,
       "locator": "backend/tests/test_onnx_data_intake.py::test_mixed_symbol_or_timeframe_fails_closed",
       "symbol": "test_mixed_symbol_or_timeframe_fails_closed"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 143,
-      "line_start": 130,
+      "line_end": 145,
+      "line_start": 132,
       "locator": "backend/tests/test_onnx_data_intake.py::test_duplicate_identity_is_contract_symbol_period_and_signal_time",
       "symbol": "test_duplicate_identity_is_contract_symbol_period_and_signal_time"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 156,
-      "line_start": 146,
+      "line_end": 158,
+      "line_start": 148,
       "locator": "backend/tests/test_onnx_data_intake.py::test_nonchronological_rows_fail_and_timestamp_gaps_remain_unconfirmed",
       "symbol": "test_nonchronological_rows_fail_and_timestamp_gaps_remain_unconfirmed"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 169,
-      "line_start": 159,
+      "line_end": 171,
+      "line_start": 161,
       "locator": "backend/tests/test_onnx_data_intake.py::test_unknown_period_empty_dataset_and_missing_timezone_provenance_fail_closed",
       "symbol": "test_unknown_period_empty_dataset_and_missing_timezone_provenance_fail_closed"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 192,
-      "line_start": 172,
+      "line_end": 194,
+      "line_start": 174,
       "locator": "backend/tests/test_onnx_data_intake.py::test_exact_three_windows_are_ordered_and_supported_by_snapshot_rows",
       "symbol": "test_exact_three_windows_are_ordered_and_supported_by_snapshot_rows"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 200,
-      "line_start": 195,
+      "line_end": 202,
+      "line_start": 197,
       "locator": "backend/tests/test_onnx_data_intake.py::_write_test_source",
       "symbol": "_write_test_source"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 216,
-      "line_start": 203,
+      "line_end": 218,
+      "line_start": 205,
       "locator": "backend/tests/test_onnx_data_intake.py::test_preflight_is_read_only_hashes_exact_source_and_requires_ea_lock",
       "symbol": "test_preflight_is_read_only_hashes_exact_source_and_requires_ea_lock"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 234,
-      "line_start": 219,
+      "line_end": 236,
+      "line_start": 221,
       "locator": "backend/tests/test_onnx_data_intake.py::test_owner_override_must_remain_inside_common_files_and_rejects_links",
       "symbol": "test_owner_override_must_remain_inside_common_files_and_rejects_links"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 257,
-      "line_start": 237,
+      "line_end": 259,
+      "line_start": 239,
       "locator": "backend/tests/test_onnx_data_intake.py::test_missing_and_permission_denied_sources_have_distinct_blockers",
       "symbol": "test_missing_and_permission_denied_sources_have_distinct_blockers"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "method",
-      "line_end": 251,
-      "line_start": 248,
+      "line_end": 253,
+      "line_start": 250,
       "locator": "backend/tests/test_onnx_data_intake.py::test_missing_and_permission_denied_sources_have_distinct_blockers.deny_selected_source",
       "symbol": "test_missing_and_permission_denied_sources_have_distinct_blockers.deny_selected_source"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 268,
-      "line_start": 260,
+      "line_end": 270,
+      "line_start": 262,
       "locator": "backend/tests/test_onnx_data_intake.py::test_active_ea_writer_lock_blocks_source_read_without_retry_or_mutation",
       "symbol": "test_active_ea_writer_lock_blocks_source_read_without_retry_or_mutation"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 294,
-      "line_start": 271,
+      "line_end": 296,
+      "line_start": 273,
       "locator": "backend/tests/test_onnx_data_intake.py::test_source_identity_change_during_locked_copy_fails_closed",
       "symbol": "test_source_identity_change_during_locked_copy_fails_closed"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "method",
-      "line_end": 289,
-      "line_start": 277,
+      "line_end": 291,
+      "line_start": 279,
       "locator": "backend/tests/test_onnx_data_intake.py::test_source_identity_change_during_locked_copy_fails_closed.changing_fstat",
       "symbol": "test_source_identity_change_during_locked_copy_fails_closed.changing_fstat"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 306,
-      "line_start": 297,
+      "line_end": 308,
+      "line_start": 299,
       "locator": "backend/tests/test_onnx_data_intake.py::test_capture_exceeding_ea_lock_budget_fails_without_publishing",
       "symbol": "test_capture_exceeding_ea_lock_budget_fails_without_publishing"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 335,
-      "line_start": 309,
+      "line_end": 337,
+      "line_start": 311,
       "locator": "backend/tests/test_onnx_data_intake.py::test_interrupted_snapshot_publication_is_not_exposed_and_retry_is_idempotent",
       "symbol": "test_interrupted_snapshot_publication_is_not_exposed_and_retry_is_idempotent"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "method",
-      "line_end": 322,
-      "line_start": 321,
+      "line_end": 324,
+      "line_start": 323,
       "locator": "backend/tests/test_onnx_data_intake.py::test_interrupted_snapshot_publication_is_not_exposed_and_retry_is_idempotent.interrupted_rename",
       "symbol": "test_interrupted_snapshot_publication_is_not_exposed_and_retry_is_idempotent.interrupted_rename"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 357,
-      "line_start": 338,
+      "line_end": 354,
+      "line_start": 340,
+      "locator": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_publisher_before_creating_snapshot_root",
+      "symbol": "test_structurally_invalid_csv_is_rejected_by_publisher_before_creating_snapshot_root"
+    },
+    {
+      "file": "backend/tests/test_onnx_data_intake.py",
+      "kind": "function",
+      "line_end": 384,
+      "line_start": 357,
+      "locator": "backend/tests/test_onnx_data_intake.py::test_structurally_invalid_csv_is_rejected_by_storage_before_database_creation",
+      "symbol": "test_structurally_invalid_csv_is_rejected_by_storage_before_database_creation"
+    },
+    {
+      "file": "backend/tests/test_onnx_data_intake.py",
+      "kind": "function",
+      "line_end": 406,
+      "line_start": 387,
       "locator": "backend/tests/test_onnx_data_intake.py::test_snapshot_publication_rejects_reparse_parent_before_creating_outside_directory",
       "symbol": "test_snapshot_publication_rejects_reparse_parent_before_creating_outside_directory"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "function",
-      "line_end": 377,
-      "line_start": 360,
+      "line_end": 426,
+      "line_start": 409,
       "locator": "backend/tests/test_onnx_data_intake.py::test_concurrent_same_hash_publication_returns_one_immutable_artifact",
       "symbol": "test_concurrent_same_hash_publication_returns_one_immutable_artifact"
     },
     {
       "file": "backend/tests/test_onnx_data_intake.py",
       "kind": "method",
-      "line_end": 370,
-      "line_start": 369,
+      "line_end": 419,
+      "line_start": 418,
       "locator": "backend/tests/test_onnx_data_intake.py::test_concurrent_same_hash_publication_returns_one_immutable_artifact.publish",
       "symbol": "test_concurrent_same_hash_publication_returns_one_immutable_artifact.publish"
     },
@@ -80726,7 +81026,7 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "ced328c4116b3465abaaac70bd6e4831da60ed27073112f8d3ca4e759363de90",
+  "source_digest": "eca30bb1e1abff5c3c87df344aa020bce0645cc07a90fb4e426d615d9b0863bf",
   "source_summary": {
     "files": 141,
     "languages": {
@@ -80735,7 +81035,7 @@
       "TypeScript": 7,
       "TypeScript/React": 22
     },
-    "lines": 65487,
+    "lines": 65644,
     "test_files": 49
   },
   "tests": [
