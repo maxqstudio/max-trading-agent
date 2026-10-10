@@ -10,10 +10,10 @@ Governance profile: strict
 
 ## Repositories
 Repository: maxqstudio/max-trading-agent
-Active branch: codex/onnx-00-scientific-authority
+Active branch: codex/onnx-01-workspace-shell
 Current authoritative SHA: external final acceptance evidence
-Last accepted SHA: 203f6ab3dc618e3edd247841aa25e1fa0951a19a
-Current source digest: 2671164d4e2bb587165d521cd430fcf2e90cb28ab2eb41211eaa99d9e9a0ad0d
+Last accepted SHA: c75f978ea4438183e6a759d398eb69b3eeca9ac4
+Current source digest: cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.

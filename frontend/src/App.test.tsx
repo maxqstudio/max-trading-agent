@@ -54,6 +54,63 @@ const providerSettings = {
   },
 }
 
+const onnxWorkspace = {
+  contract_version: '1.0',
+  source: 'BACKEND_ONNX_01_SKELETON',
+  operational_state: {
+    status: 'NOT_STARTED',
+    availability: 'NOT_IMPLEMENTED',
+    persisted: false,
+    cycle_id: null,
+    reason: 'ONNX-01 has no operational cycle store; the planning state machine is not persisted operational state.',
+  },
+  dataset: {
+    status: 'NOT_STARTED', availability: 'UNAVAILABLE', dataset_id: null,
+    snapshot_id: null, symbol: null, timeframe: null,
+    reason: 'Dataset intake and snapshots are not implemented in ONNX-01.',
+  },
+  research_windows: {
+    status: 'NOT_STARTED', availability: 'UNAVAILABLE', items: null,
+    reason: 'No persisted cycle exists from which to read frozen research windows.',
+  },
+  scientific_authority: {
+    status: 'NOT_PROVEN', availability: 'NOT_IMPLEMENTED',
+    reason: 'ONNX-00 is planning authority only; no scientific evidence is available.',
+  },
+  hardware_capacity: {
+    status: 'NOT_PROVEN', availability: 'UNAVAILABLE', gpu_vram_bytes: null,
+    system_ram_bytes: null, reason: 'ONNX-01 does not inspect hardware capacity.',
+  },
+  discovery: {
+    status: 'NOT_STARTED', availability: 'NOT_IMPLEMENTED',
+    reason: 'Discovery execution is not implemented.',
+    budget: { status: 'NOT_STARTED', availability: 'UNAVAILABLE', value: null, reason: 'No frozen cycle budget exists.' },
+    experiment_progress: { status: 'NOT_STARTED', availability: 'UNAVAILABLE', completed: null, total: null, reason: 'No operational experiment ledger exists.' },
+    qualified_pool: { status: 'NOT_STARTED', availability: 'NOT_IMPLEMENTED', candidates: null, reason: 'Pool admission is not implemented.' },
+  },
+  stage_pages: [
+    { page_id: 'data_intake', status: 'NOT_STARTED', availability: 'NOT_IMPLEMENTED', reason: 'Data intake is not implemented.', prerequisites: ['ONNX-02 authorization and accepted data authority'] },
+    { page_id: 'discovery', status: 'NOT_STARTED', availability: 'NOT_IMPLEMENTED', reason: 'Discovery is not implemented.', prerequisites: ['Verified DATA_READY snapshot and frozen KPI contract'] },
+    { page_id: 'cpcv', status: 'NOT_STARTED', availability: 'NOT_IMPLEMENTED', reason: 'CPCV is not implemented.', prerequisites: ['Sealed WFA-qualified pool'] },
+    { page_id: 'tournament', status: 'NOT_STARTED', availability: 'NOT_IMPLEMENTED', reason: 'Tournament is not implemented.', prerequisites: ['Terminal CPCV evidence'] },
+    { page_id: 'monte_carlo', status: 'NOT_STARTED', availability: 'NOT_IMPLEMENTED', reason: 'Monte Carlo is not implemented.', prerequisites: ['Tournament survivors and frozen simulation policy'] },
+    { page_id: 'challenger', status: 'NOT_STARTED', availability: 'NOT_IMPLEMENTED', reason: 'Challenger admission is not implemented.', prerequisites: ['Monte Carlo survivors and untouched Forward PASS'] },
+    { page_id: 'champion', status: 'NOT_STARTED', availability: 'NOT_IMPLEMENTED', reason: 'Champion lifecycle is not implemented.', prerequisites: ['Registered Challenger and explicit Owner promotion'] },
+  ],
+  challenger: {
+    candidates: { status: 'NOT_STARTED', availability: 'UNAVAILABLE', items: null, reason: 'No persisted Challenger registry exists.' },
+    forward: { status: 'NOT_STARTED', availability: 'NOT_IMPLEMENTED', reason: 'Forward execution is not implemented.', prerequisites: ['Monte Carlo survivors'] },
+  },
+  champion: {
+    status: 'NOT_STARTED', availability: 'NOT_IMPLEMENTED', identity: null,
+    reason: 'ONNX Champion publication is not implemented.',
+  },
+  current_stage: { status: 'NOT_STARTED', availability: 'UNAVAILABLE', value: null, reason: 'No operational cycle stage can be read.' },
+  checkpoint: { status: 'NOT_STARTED', availability: 'NOT_IMPLEMENTED', identity: null, reason: 'ONNX checkpoint persistence is not implemented.' },
+  first_blocker: { status: 'NOT_IMPLEMENTED', availability: 'NOT_IMPLEMENTED', reason: 'The first blocker is an explicit source-phase boundary.', code: 'ONNX_EXECUTION_NOT_IMPLEMENTED', message: 'ONNX-01 is a read-only workspace shell; scientific execution is not implemented or authorized.' },
+  recovery: { status: 'UNAVAILABLE', availability: 'UNAVAILABLE', available: false, reason: 'No ONNX operational state or recovery cursor exists.' },
+}
+
 function installFetch(recoveryState: {
   status: string
   reason: string
@@ -95,6 +152,19 @@ function installFetch(recoveryState: {
       current_strategy_champion: { strategy_id: 'STRAT-PARENT' },
       optimizer_job: null, mt5: { status: 'READY_EXECUTABLE_AND_DATA_ROOT' },
     }))
+    if (url.endsWith('/api/champion')) return Promise.resolve(response({
+      status: 'BASELINE_NOT_CHAMPION', seed_authority: 'BASELINE_NOT_CHAMPION', current: null,
+    }))
+    if (url.endsWith('/api/promotions')) return Promise.resolve(response([]))
+    if (url.startsWith('/api/artifacts?')) return Promise.resolve(response({
+      runtime: { status: 'UNAVAILABLE', reason: 'NOT_CONFIGURED', data_root: null },
+      summary: {
+        total_generated_storage: 0, optimizer_storage: 0, challenger_storage: 0,
+        backtest_storage: 0, runtime_storage: 0, safe_cleanup_bytes: 0, active_in_use_bytes: 0,
+      },
+      page: 1, page_size: 25, pages: 0, total: 0, items: [],
+    }))
+    if (url.endsWith('/api/v1/onnx/workspace')) return Promise.resolve(response(onnxWorkspace))
     throw new Error('unexpected fetch ' + method + ' ' + url)
   }))
   return uiPatches
@@ -111,15 +181,59 @@ describe('MAX Rebuild shell recovery', () => {
     render(<App />)
     expect(await screen.findByRole('heading', { name: 'Overview' })).toBeInTheDocument()
 
-    const workspaceNav = screen.getByRole('complementary', { name: 'MAX workspace navigation' })
-    expect(within(workspaceNav).getAllByRole('button').map((button) => button.textContent)).toEqual([
-      '‹', 'Strategy', 'Artifacts', 'Settings',
+    const workspaceNav = screen.getByRole('navigation', { name: 'MAX workspaces' })
+    expect(within(workspaceNav).getAllByRole('button', { name: /^(Strategy|ONNX|Artifacts|Settings)$/ })
+      .map((button) => button.textContent)).toEqual([
+      'Strategy', 'ONNX', 'Artifacts', 'Settings',
     ])
-    const strategyNav = screen.getByRole('navigation', { name: 'MAX navigation' })
+    const strategyNav = screen.getByRole('navigation', { name: 'Strategy navigation' })
     expect(within(strategyNav).getAllByRole('button').map((button) => button.textContent)).toEqual([
       'Overview', 'Optimizer', 'Challengers', 'Champion',
     ])
     expect(screen.getByLabelText('Scientist chat drawer')).toBeInTheDocument()
+
+    fireEvent.click(within(strategyNav).getByRole('button', { name: 'Champion' }))
+    expect(await screen.findByRole('heading', { name: 'Strategy Champion' })).toBeInTheDocument()
+    fireEvent.click(within(workspaceNav).getByRole('button', { name: 'Artifacts' }))
+    expect(await screen.findByRole('heading', { name: 'Artifacts' })).toBeInTheDocument()
+    fireEvent.click(within(workspaceNav).getByRole('button', { name: 'Settings' }))
+    expect(await screen.findByRole('heading', { name: 'Settings' })).toBeInTheDocument()
+  })
+
+  it('shows the exact ONNX page set and backend-reported empty state without mutation controls', async () => {
+    installFetch()
+    render(<App />)
+    await screen.findByRole('heading', { name: 'Overview' })
+
+    const workspaceNav = screen.getByRole('navigation', { name: 'MAX workspaces' })
+    fireEvent.click(within(workspaceNav).getByRole('button', { name: 'ONNX' }))
+    expect(await screen.findByRole('heading', { name: 'ONNX Overview' })).toBeInTheDocument()
+
+    const onnxNav = screen.getByRole('navigation', { name: 'ONNX pages' })
+    expect(within(onnxNav).getAllByRole('button').map((button) => button.textContent)).toEqual([
+      'Overview', 'Data Intake', 'Discovery', 'CPCV', 'Tournament',
+      'Monte Carlo', 'Challenger', 'Champion',
+    ])
+    expect(screen.getAllByText('Not implemented').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Not proven').length).toBeGreaterThan(0)
+    expect(screen.getByText(/no operational cycle store/i)).toBeInTheDocument()
+    expect(screen.getByText(/no scientific evidence is available/i)).toBeInTheDocument()
+    expect(screen.queryByText(/^Cycle ID$/i)).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /start|train|resume|export|promote/i })).not.toBeInTheDocument()
+
+    fireEvent.click(within(onnxNav).getByRole('button', { name: 'Discovery' }))
+    expect(await screen.findByRole('heading', { name: 'Discovery' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Qualified Pool' })).toBeInTheDocument()
+    expect(within(onnxNav).queryByRole('button', { name: 'Pool' })).not.toBeInTheDocument()
+
+    fireEvent.click(within(onnxNav).getByRole('button', { name: 'Challenger' }))
+    expect(await screen.findByRole('heading', { name: 'Challenger' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Forward' })).toBeInTheDocument()
+    expect(within(onnxNav).queryByRole('button', { name: 'Forward' })).not.toBeInTheDocument()
+
+    fireEvent.click(within(workspaceNav).getByRole('button', { name: 'Strategy' }))
+    expect(await screen.findByRole('navigation', { name: 'Strategy navigation' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'ONNX Overview' })).not.toBeInTheDocument()
   })
 
   it('blocks the workspace and explains explicit recovery until exact confirmation', async () => {
@@ -136,7 +250,7 @@ describe('MAX Rebuild shell recovery', () => {
     expect(await screen.findByRole('heading', { name: 'Application state needs recovery' })).toBeInTheDocument()
     expect(screen.getByText(/Normal Strategy actions are disabled/)).toBeInTheDocument()
     expect(screen.getByText('The damaged database is preserved.')).toBeInTheDocument()
-    expect(screen.queryByRole('navigation', { name: 'MAX navigation' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('navigation', { name: 'MAX workspaces' })).not.toBeInTheDocument()
     const reset = screen.getByRole('button', { name: 'Backup and Reset Operational State' })
     expect(reset).toBeDisabled()
 
@@ -153,7 +267,7 @@ describe('MAX Rebuild shell recovery', () => {
     installFetch()
     render(<App />)
     await screen.findByRole('heading', { name: 'Overview' })
-    const workspaceNav = screen.getByRole('complementary', { name: 'MAX workspace navigation' })
+    const workspaceNav = screen.getByRole('navigation', { name: 'MAX workspaces' })
 
     for (const workspace of ['Strategy', 'Settings']) {
       fireEvent.click(within(workspaceNav).getByRole('button', { name: workspace }))

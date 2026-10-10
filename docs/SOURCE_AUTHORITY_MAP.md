@@ -28,6 +28,7 @@ Canonical authority is declared in .workflow/authority.json.
 | sequence | DURING-mode generated actual sequence graphs plus source/test/runtime semantic review | Existing implementation is reconstructed from current source; retrospective BEFORE plans are forbidden. | YES |
 | governance_tools | .workflow/tools vendored byte-identically from Skill Workflow 964481ed1609f87904ba9e08890bffc0a10c3fd4 | Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed. | NO |
 | onnx_scientific_planning | .workflow/onnx_v1_authority.json plus the explicit Owner ONNX-00 decisions | This is the planning-only source authority for the exact 23-family ONNX V1 universe under current Owner decision D-043 (supplemented by D-044 proposals), distinct architecture/composition identities, CandidateSpec/parameter/capacity contracts, stage gates, data/checkpoint boundaries and roadmap. Explicit unresolved authority gaps fail closed before ONNX-03; no runtime, training, export, MT5 or promotion permission is granted. | YES |
+| onnx_workspace_read_state | backend/max_backend/onnx_api.py::get_onnx_workspace plus frontend/src/onnxApi.ts contract parser | ONNX-01 exposes only a versioned read-only backend-owned capability snapshot. It creates no persisted operational cycle, reads no dataset/database, and grants no stage transition or scientific mutation; status distinctions and the existing application Recovery Required gate remain authoritative. | YES |
 | current_governance_guidance | Latest Skill_Workflow/main normative guidance at 3b3289681cf2cec8d3d132895e0848be64bb54b1 | Latest guidance is consulted for this planning phase. MAX's executable CI validator provenance remains explicitly pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4 until a separately reviewed toolchain migration. | NO |
 
 ## Invariants
@@ -39,7 +40,7 @@ Canonical authority is declared in .workflow/authority.json.
 - Historical retained Challenger evidence remains exact legacy 16D while current V6 is exact 17D including InpRiskPct; mixed/missing/extra universes fail closed.
 - Durable optimizer consumption survives Challenger promotion, retirement and later permitted physical deletion while registry or COMMITTED batch authority remains.
 - Former Champion tenure does not recreate active Challenger eligibility.
-- The legacy Research subsystem and legacy R00-R11 roadmap are RETIRED; ONNX is the only future model-research authority, and ONNX-00 is planning-only until Control Room separately authorizes implementation phases.
+- The legacy Research subsystem and legacy R00-R11 roadmap are RETIRED; ONNX-00 is accepted planning authority and ONNX-01 is limited to a read-only workspace/API skeleton; scientific/data/runtime implementation requires a later separately authorized phase.
 - Strategy Artifact inventory GETs do not reconcile runtime state; destructive controls require fresh preflight and explicit confirmation.
 - Corrupt operational state fails closed and normal application actions remain disabled until explicit recovery is completed.
 - An uncertain prior MT5 launch is reconciled, never blindly relaunched; MAX stops a terminal only when Optimizer ownership is proven.

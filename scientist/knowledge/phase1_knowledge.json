@@ -225,7 +225,7 @@
     },
     {
       "path": "docs/ROADMAP.md",
-      "sha256": "ea7df6392b15ae9d8591b1411b7c017249803389f42059f89d24f9ef103f55bc"
+      "sha256": "8cbcf6beda48adff5c2c43f8d48d590aedb106ca055f94992e802bd79273b3a4"
     },
     {
       "path": "docs/ARCHITECTURE_PHASE1.md",
@@ -345,7 +345,7 @@
     },
     {
       "path": "backend/max_backend/main.py",
-      "sha256": "849c7dab8af31f8a3efb79ec5847f578981ea29f79cd1eac754598399ef3e4b0"
+      "sha256": "a1c11d70fbc4650fe4c20c2544a3818db830c0733381b4ea2d3ebc7e00f26dea"
     },
     {
       "path": "backend/max_backend/scientist_knowledge.py",

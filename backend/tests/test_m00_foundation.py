@@ -324,3 +324,83 @@ def test_health_and_overview_contract(monkeypatch: pytest.MonkeyPatch) -> None:
             assert data["mt5"] == ready_mt5
 
     asyncio.run(exercise_api())
+
+
+def test_onnx_workspace_read_api_is_truthful_and_read_only(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from max_backend.main import RECOVERY_REQUIRED
+
+    async def exercise_api() -> None:
+        transport = httpx.ASGITransport(app=app)
+        async with httpx.AsyncClient(
+            transport=transport,
+            base_url="http://test",
+        ) as client:
+            response = await client.get("/api/v1/onnx/workspace")
+            assert response.status_code == 200
+            payload = response.json()
+            assert payload["contract_version"] == "1.0"
+            assert payload["source"] == "BACKEND_ONNX_01_SKELETON"
+            assert payload["operational_state"] == {
+                "status": "NOT_STARTED",
+                "availability": "NOT_IMPLEMENTED",
+                "persisted": False,
+                "cycle_id": None,
+                "reason": "ONNX-01 has no operational cycle store; the planning state machine is not persisted operational state.",
+            }
+            assert payload["dataset"]["dataset_id"] is None
+            assert payload["dataset"]["snapshot_id"] is None
+            assert payload["dataset"]["status"] == "NOT_STARTED"
+            assert payload["dataset"]["availability"] == "UNAVAILABLE"
+            assert payload["research_windows"]["items"] is None
+            assert payload["scientific_authority"]["status"] == "NOT_PROVEN"
+            assert payload["hardware_capacity"]["status"] == "NOT_PROVEN"
+            assert payload["discovery"]["qualified_pool"]["candidates"] is None
+            assert payload["challenger"]["forward"]["status"] == "NOT_STARTED"
+            assert payload["challenger"]["candidates"]["items"] is None
+            assert payload["champion"]["identity"] is None
+            assert payload["recovery"]["status"] == "UNAVAILABLE"
+            assert payload["first_blocker"]["status"] == "NOT_IMPLEMENTED"
+            assert [item["page_id"] for item in payload["stage_pages"]] == [
+                "data_intake", "discovery", "cpcv", "tournament",
+                "monte_carlo", "challenger", "champion",
+            ]
+            assert all(item["availability"] == "NOT_IMPLEMENTED" for item in payload["stage_pages"])
+
+            onnx_paths = {
+                path: operation
+                for path, methods in app.openapi()["paths"].items()
+                if path.startswith("/api/v1/onnx")
+                for method, operation in methods.items()
+                if method.lower() == "get"
+            }
+            assert list(onnx_paths) == ["/api/v1/onnx/workspace"]
+            assert set(app.openapi()["paths"]["/api/v1/onnx/workspace"]) == {"get"}
+
+    assert RECOVERY_REQUIRED is False
+    monkeypatch.setattr("max_backend.main.challenger_operations_database_status", lambda: (_ for _ in ()).throw(AssertionError("ONNX API read database")))
+    monkeypatch.setattr("max_backend.main.read_baseline", lambda: (_ for _ in ()).throw(AssertionError("ONNX API read baseline")))
+    asyncio.run(exercise_api())
+
+
+def test_onnx_workspace_read_api_preserves_global_recovery_gate(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr("max_backend.main.RECOVERY_REQUIRED", True)
+    monkeypatch.setattr("max_backend.main.RECOVERY_REASON", "DATABASE_UNOPENABLE")
+
+    async def exercise_api() -> None:
+        transport = httpx.ASGITransport(app=app)
+        async with httpx.AsyncClient(
+            transport=transport,
+            base_url="http://test",
+        ) as client:
+            response = await client.get("/api/v1/onnx/workspace")
+            assert response.status_code == 503
+            assert response.json() == {
+                "detail": "RECOVERY_REQUIRED: application operations are disabled",
+                "reason": "DATABASE_UNOPENABLE",
+            }
+
+    asyncio.run(exercise_api())

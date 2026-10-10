@@ -3,7 +3,7 @@
 # SYMBOL INDEX
 
 Authority SHA: external final acceptance evidence
-Source digest: 2671164d4e2bb587165d521cd430fcf2e90cb28ab2eb41211eaa99d9e9a0ad0d
+Source digest: cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b
 Status: CURRENT
 
 | File | Symbol | Kind | Lines@SHA | Responsibility | Reads/Writes | Called By | Tests |
@@ -248,16 +248,16 @@ Status: CURRENT
 | backend/max_backend/ea.py | sha256_file | function | 12-17 | Observed Python symbol | | | |
 | backend/max_backend/ea.py | load_manifest | function | 20-24 | Observed Python symbol | | | |
 | backend/max_backend/ea.py | verify_baseline_snapshot | function | 27-46 | Observed Python symbol | | | |
-| backend/max_backend/main.py | CorruptStateResetConfirmation | class | 44-45 | Observed Python symbol | | | |
-| backend/max_backend/main.py | lifespan | async_function | 49-72 | Observed Python symbol | | | |
-| backend/max_backend/main.py | recovery_required_gate | async_function | 84-97 | Observed Python symbol | | | |
-| backend/max_backend/main.py | recovery_status | function | 101-113 | Observed Python symbol | | | |
-| backend/max_backend/main.py | reset_corrupt_state | function | 117-129 | Observed Python symbol | | | |
-| backend/max_backend/main.py | _foundation_state | function | 132-159 | Observed Python symbol | | | |
-| backend/max_backend/main.py | health | function | 163-179 | Observed Python symbol | | | |
-| backend/max_backend/main.py | ea_baseline | function | 183-184 | Observed Python symbol | | | |
-| backend/max_backend/main.py | mt5_preflight | function | 188-189 | Observed Python symbol | | | |
-| backend/max_backend/main.py | overview | function | 193-200 | Observed Python symbol | | | |
+| backend/max_backend/main.py | CorruptStateResetConfirmation | class | 45-46 | Observed Python symbol | | | |
+| backend/max_backend/main.py | lifespan | async_function | 50-73 | Observed Python symbol | | | |
+| backend/max_backend/main.py | recovery_required_gate | async_function | 86-99 | Observed Python symbol | | | |
+| backend/max_backend/main.py | recovery_status | function | 103-115 | Observed Python symbol | | | |
+| backend/max_backend/main.py | reset_corrupt_state | function | 119-131 | Observed Python symbol | | | |
+| backend/max_backend/main.py | _foundation_state | function | 134-161 | Observed Python symbol | | | |
+| backend/max_backend/main.py | health | function | 165-181 | Observed Python symbol | | | |
+| backend/max_backend/main.py | ea_baseline | function | 185-186 | Observed Python symbol | | | |
+| backend/max_backend/main.py | mt5_preflight | function | 190-191 | Observed Python symbol | | | |
+| backend/max_backend/main.py | overview | function | 195-202 | Observed Python symbol | | | |
 | backend/max_backend/mt5.py | _read_origin | function | 8-19 | Observed Python symbol | | | |
 | backend/max_backend/mt5.py | _auto_terminal_candidates | function | 22-28 | Observed Python symbol | | | |
 | backend/max_backend/mt5.py | _data_roots | function | 31-38 | Observed Python symbol | | | |
@@ -270,6 +270,29 @@ Status: CURRENT
 | backend/max_backend/mtf_geometry.py | frozen_geometry_inputs | function | 153-168 | Observed Python symbol | | | |
 | backend/max_backend/mtf_geometry.py | latest_fully_closed_open_time | function | 171-187 | Observed Python symbol | | | |
 | backend/max_backend/mtf_geometry.py | fuse_role_observations | function | 190-203 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | WorkspaceStatus | class | 17-22 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | ContractModel | class | 36-37 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | StateSection | class | 40-43 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | ValueSection | class | 46-47 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | OperationalState | class | 50-54 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | DatasetState | class | 57-61 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | ResearchWindowsState | class | 64-65 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | HardwareCapacityState | class | 68-70 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | ProgressState | class | 73-75 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | QualifiedPoolState | class | 78-79 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | DiscoveryState | class | 82-85 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | StagePageState | class | 88-90 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | ForwardState | class | 93-94 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | ChallengerCandidatesState | class | 97-98 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | ChallengerState | class | 101-103 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | ChampionState | class | 106-107 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | CheckpointState | class | 110-111 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | FirstBlocker | class | 114-118 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | RecoveryState | class | 121-124 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | OnnxWorkspaceSnapshot | class | 127-142 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | _stage_page | function | 154-161 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | build_onnx_workspace_snapshot | function | 164-307 | Observed Python symbol | | | |
+| backend/max_backend/onnx_api.py | get_onnx_workspace | function | 314-315 | Observed Python symbol | | | |
 | backend/max_backend/onnx_parameter_estimation.py | _positive_int | function | 35-38 | Observed Python symbol | | | |
 | backend/max_backend/onnx_parameter_estimation.py | recurrent_parameter_count | function | 41-60 | Observed Python symbol | | | |
 | backend/max_backend/onnx_parameter_estimation.py | dense_transformer_block_parameter_estimate | function | 63-70 | Observed Python symbol | | | |
@@ -705,6 +728,10 @@ Status: CURRENT
 | backend/tests/test_m00_foundation.py | test_data_root_ambiguous_fails_closed | function | 259-273 | Observed Python symbol | | | |
 | backend/tests/test_m00_foundation.py | test_health_and_overview_contract | function | 276-326 | Observed Python symbol | | | |
 | backend/tests/test_m00_foundation.py | test_health_and_overview_contract.exercise_api | async_method | 305-324 | Observed Python symbol | | | |
+| backend/tests/test_m00_foundation.py | test_onnx_workspace_read_api_is_truthful_and_read_only | function | 329-384 | Observed Python symbol | | | |
+| backend/tests/test_m00_foundation.py | test_onnx_workspace_read_api_is_truthful_and_read_only.exercise_api | async_method | 334-379 | Observed Python symbol | | | |
+| backend/tests/test_m00_foundation.py | test_onnx_workspace_read_api_preserves_global_recovery_gate | function | 387-406 | Observed Python symbol | | | |
+| backend/tests/test_m00_foundation.py | test_onnx_workspace_read_api_preserves_global_recovery_gate.exercise_api | async_method | 393-404 | Observed Python symbol | | | |
 | backend/tests/test_m01_fail_closed.py | request_for_compile | function | 29-47 | Observed Python symbol | | | |
 | backend/tests/test_m01_fail_closed.py | patch_compile_environment | function | 50-72 | Observed Python symbol | | | |
 | backend/tests/test_m01_fail_closed.py | patch_compile_environment.fake_run | method | 64-69 | Observed Python symbol | | | |

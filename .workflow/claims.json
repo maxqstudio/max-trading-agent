@@ -191,21 +191,49 @@
     },
     {
       "id": "TRUTH-ONNX-PLANNING-001",
-      "claim": "ONNX-00 defines the future single model-research authority and exact 23-family V1 allowlist under current Owner decision D-043 as planning-only contracts. D-044 records proposed active envelopes and parameter-capacity accounting without granting executable authority; explicit unresolved architecture/input/hardware/compatibility gaps block ONNX-03. No ONNX runtime, real research, model training, ONNX export, Research Challenger, MT5 access, or Champion mutation is implemented or authorized by this phase.",
+      "claim": "ONNX-00 is accepted planning authority for the exact 23-family V1 allowlist under current Owner decision D-043. D-044 records proposed active envelopes and parameter-capacity accounting without granting executable authority; unresolved architecture/input/hardware/compatibility gaps block ONNX-03. ONNX-01 adds only a read-only workspace and backend API/state skeleton; no operational cycle, data intake, real research, model training, ONNX export/runtime, Research Challenger, MT5 access, or Champion mutation is implemented or authorized.",
       "documents": [
-        "docs/onnx/ONNX_00_SCIENTIFIC_AUTHORITY.md"
+        "docs/onnx/ONNX_00_SCIENTIFIC_AUTHORITY.md",
+        "docs/onnx/ONNX_01_WORKSPACE_API.md"
       ],
       "source_owners": [
         ".workflow/onnx_v1_authority.json",
         ".workflow/decisions.json",
         ".workflow/roadmap.json",
-        ".workflow/state.json"
+        ".workflow/state.json",
+        "backend/max_backend/onnx_api.py",
+        "frontend/src/OnnxWorkspace.tsx",
+        "frontend/src/onnxApi.ts"
       ],
       "status": "PASS",
       "tests": [],
       "runtime_evidence": [
         "PLANNING_ONLY_NO_RUNTIME_CLAIM",
         "OWNER_PC_AND_MT5_NOT_RUN"
+      ]
+    },
+    {
+      "id": "TRUTH-ONNX-WORKSPACE-001",
+      "claim": "The ONNX workspace displays only status from the versioned read-only backend contract. The contract contains no persisted cycle/data/candidate/checkpoint, exposes no scientific mutation endpoint, and is blocked by the existing application Recovery Required middleware. Frontend code does not create scientific or operational status.",
+      "documents": [
+        "docs/onnx/ONNX_01_WORKSPACE_API.md"
+      ],
+      "source_owners": [
+        "backend/max_backend/onnx_api.py",
+        "backend/max_backend/main.py",
+        "frontend/src/OnnxWorkspace.tsx",
+        "frontend/src/onnxApi.ts",
+        "backend/tests/test_m00_foundation.py",
+        "frontend/src/onnxApi.test.ts"
+      ],
+      "status": "PASS",
+      "tests": [
+        "backend/tests/test_m00_foundation.py",
+        "frontend/src/onnxApi.test.ts"
+      ],
+      "runtime_evidence": [
+        "READ_ONLY_SYNTHETIC_API_TESTS_ONLY",
+        "NO_OWNER_RUNTIME_OR_SCIENTIFIC_EXECUTION"
       ]
     },
     {

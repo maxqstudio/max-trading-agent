@@ -133,6 +133,12 @@
       "mutable": true
     },
     {
+      "authority": "backend/max_backend/onnx_api.py::get_onnx_workspace plus frontend/src/onnxApi.ts contract parser",
+      "concern": "onnx_workspace_read_state",
+      "meaning": "ONNX-01 exposes only a versioned read-only backend-owned capability snapshot. It creates no persisted operational cycle, reads no dataset/database, and grants no stage transition or scientific mutation; status distinctions and the existing application Recovery Required gate remain authoritative.",
+      "mutable": true
+    },
+    {
       "authority": "Latest Skill_Workflow/main normative guidance at 3b3289681cf2cec8d3d132895e0848be64bb54b1",
       "concern": "current_governance_guidance",
       "meaning": "Latest guidance is consulted for this planning phase. MAX's executable CI validator provenance remains explicitly pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4 until a separately reviewed toolchain migration.",
@@ -147,7 +153,7 @@
     "Historical retained Challenger evidence remains exact legacy 16D while current V6 is exact 17D including InpRiskPct; mixed/missing/extra universes fail closed.",
     "Durable optimizer consumption survives Challenger promotion, retirement and later permitted physical deletion while registry or COMMITTED batch authority remains.",
     "Former Champion tenure does not recreate active Challenger eligibility.",
-    "The legacy Research subsystem and legacy R00-R11 roadmap are RETIRED; ONNX is the only future model-research authority, and ONNX-00 is planning-only until Control Room separately authorizes implementation phases.",
+    "The legacy Research subsystem and legacy R00-R11 roadmap are RETIRED; ONNX-00 is accepted planning authority and ONNX-01 is limited to a read-only workspace/API skeleton; scientific/data/runtime implementation requires a later separately authorized phase.",
     "Strategy Artifact inventory GETs do not reconcile runtime state; destructive controls require fresh preflight and explicit confirmation.",
     "Corrupt operational state fails closed and normal application actions remain disabled until explicit recovery is completed.",
     "An uncertain prior MT5 launch is reconciled, never blindly relaunched; MAX stops a terminal only when Optimizer ownership is proven.",
