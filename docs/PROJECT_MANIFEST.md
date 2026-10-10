@@ -13,7 +13,7 @@ Repository: maxqstudio/max-trading-agent
 Active branch: codex/onnx-02-data-intake
 Current authoritative SHA: external final acceptance evidence
 Last accepted SHA: 1a9c9a6990e1f2571e4d85d79436402e6d37ec23
-Current source digest: eca30bb1e1abff5c3c87df344aa020bce0645cc07a90fb4e426d615d9b0863bf
+Current source digest: 1b10cbe5840440fc0a4a4b851370d6bdb282bde43bc872fa1993b2597790c27d
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.

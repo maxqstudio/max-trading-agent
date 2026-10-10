@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: eca30bb1e1abff5c3c87df344aa020bce0645cc07a90fb4e426d615d9b0863bf
+Source digest: 1b10cbe5840440fc0a4a4b851370d6bdb282bde43bc872fa1993b2597790c27d
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -62,6 +62,7 @@ Generated/refreshed: current compiler run
 | backend/max_backend/workflow_contract.py | Python | 45 | backend/max_backend | NO |
 | backend/max_backend/workflow_store.py | Python | 597 | backend/max_backend | NO |
 | backend/tests/conftest.py | Python | 17 | backend/tests | YES |
+| backend/tests/test_launcher_process_supervision.py | Python | 32 | backend/tests | YES |
 | backend/tests/test_m00_foundation.py | Python | 406 | backend/tests | YES |
 | backend/tests/test_m01_fail_closed.py | Python | 446 | backend/tests | YES |
 | backend/tests/test_m01_jobs.py | Python | 126 | backend/tests | YES |
@@ -134,10 +135,12 @@ Generated/refreshed: current compiler run
 | scripts/generate_module_map.py | Python | 120 | scripts | NO |
 | scripts/generate_symbol_index.py | Python | 261 | scripts | NO |
 | scripts/launcher_authority.py | Python | 161 | scripts | NO |
+| scripts/launcher_process.ps1 | PowerShell | 145 | scripts | NO |
 | scripts/project_profile.py | Python | 193 | scripts | NO |
 | scripts/reset_strategy_epoch.py | Python | 623 | scripts | NO |
-| scripts/run_max.ps1 | PowerShell | 258 | scripts | NO |
+| scripts/run_max.ps1 | PowerShell | 269 | scripts | NO |
 | scripts/scan_m05_candidate_tree.py | Python | 142 | scripts | NO |
+| scripts/test_launcher_process_supervision.ps1 | PowerShell | 82 | scripts | YES |
 | scripts/test_onnx01_skill_workflow_cache.ps1 | PowerShell | 251 | scripts | YES |
 | scripts/validate_cross_document_consistency.py | Python | 591 | scripts | NO |
 | scripts/validate_handoff.py | Python | 198 | scripts | NO |

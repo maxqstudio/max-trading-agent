@@ -7,7 +7,7 @@
 ONNX-01 is accepted on parent main 1a9c9a6990e1f2571e4d85d79436402e6d37ec23, tree 32b6ed070eab06270ec53cac0322890825d85236, with post-merge Windows CI run 38022879077 passing all three jobs; exact external evidence follows D-012. ONNX-02 is IN_PROGRESS on codex/onnx-02-data-intake. It implements source-grounded data intake, DQ, immutable snapshots and window configuration only. Real data readiness and broker reconciliation remain NOT_PROVEN; no Owner PC, MT5, broker repair, scientific evaluation/training, ONNX export/runtime or Champion mutation is claimed. Current ONNX-02 candidate/CI identities remain NOT_RUN/external until acceptance.
 
 Final tested source: external final acceptance evidence.
-Current source digest: eca30bb1e1abff5c3c87df344aa020bce0645cc07a90fb4e426d615d9b0863bf
+Current source digest: 1b10cbe5840440fc0a4a4b851370d6bdb282bde43bc872fa1993b2597790c27d
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|

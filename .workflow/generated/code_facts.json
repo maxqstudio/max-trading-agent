@@ -392,6 +392,13 @@
     },
     {
       "directory": "backend/tests",
+      "file": "backend/tests/test_launcher_process_supervision.py",
+      "is_test": true,
+      "language": "Python",
+      "lines": 32
+    },
+    {
+      "directory": "backend/tests",
       "file": "backend/tests/test_m00_foundation.py",
       "is_test": true,
       "language": "Python",
@@ -896,6 +903,13 @@
     },
     {
       "directory": "scripts",
+      "file": "scripts/launcher_process.ps1",
+      "is_test": false,
+      "language": "PowerShell",
+      "lines": 145
+    },
+    {
+      "directory": "scripts",
       "file": "scripts/project_profile.py",
       "is_test": false,
       "language": "Python",
@@ -913,7 +927,7 @@
       "file": "scripts/run_max.ps1",
       "is_test": false,
       "language": "PowerShell",
-      "lines": 258
+      "lines": 269
     },
     {
       "directory": "scripts",
@@ -921,6 +935,13 @@
       "is_test": false,
       "language": "Python",
       "lines": 142
+    },
+    {
+      "directory": "scripts",
+      "file": "scripts/test_launcher_process_supervision.ps1",
+      "is_test": true,
+      "language": "PowerShell",
+      "lines": 82
     },
     {
       "directory": "scripts",
@@ -37802,6 +37823,22 @@
       "target_token": "str"
     },
     {
+      "caller": "backend/tests/test_launcher_process_supervision.py::test_windows_launcher_captures_early_exit_and_timeout_diagnostics",
+      "target_token": "shutil.which"
+    },
+    {
+      "caller": "backend/tests/test_launcher_process_supervision.py::test_windows_launcher_captures_early_exit_and_timeout_diagnostics",
+      "target_token": "shutil.which"
+    },
+    {
+      "caller": "backend/tests/test_launcher_process_supervision.py::test_windows_launcher_captures_early_exit_and_timeout_diagnostics",
+      "target_token": "subprocess.run"
+    },
+    {
+      "caller": "backend/tests/test_launcher_process_supervision.py::test_windows_launcher_captures_early_exit_and_timeout_diagnostics",
+      "target_token": "str"
+    },
+    {
       "caller": "backend/tests/test_m00_foundation.py::_fake_install",
       "target_token": "install.mkdir"
     },
@@ -74153,6 +74190,14 @@
       "symbol": "isolate_max_rebuild_local_appdata"
     },
     {
+      "file": "backend/tests/test_launcher_process_supervision.py",
+      "kind": "function",
+      "line_end": 32,
+      "line_start": 16,
+      "locator": "backend/tests/test_launcher_process_supervision.py::test_windows_launcher_captures_early_exit_and_timeout_diagnostics",
+      "symbol": "test_windows_launcher_captures_early_exit_and_timeout_diagnostics"
+    },
+    {
       "file": "backend/tests/test_m00_foundation.py",
       "kind": "function",
       "line_end": 24,
@@ -81026,20 +81071,21 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "eca30bb1e1abff5c3c87df344aa020bce0645cc07a90fb4e426d615d9b0863bf",
+  "source_digest": "1b10cbe5840440fc0a4a4b851370d6bdb282bde43bc872fa1993b2597790c27d",
   "source_summary": {
-    "files": 141,
+    "files": 144,
     "languages": {
-      "PowerShell": 5,
-      "Python": 107,
+      "PowerShell": 7,
+      "Python": 108,
       "TypeScript": 7,
       "TypeScript/React": 22
     },
-    "lines": 65644,
-    "test_files": 49
+    "lines": 65914,
+    "test_files": 51
   },
   "tests": [
     "backend/tests/conftest.py",
+    "backend/tests/test_launcher_process_supervision.py",
     "backend/tests/test_m00_foundation.py",
     "backend/tests/test_m01_fail_closed.py",
     "backend/tests/test_m01_jobs.py",
@@ -81087,6 +81133,7 @@
     "frontend/src/SettingsPage.test.tsx",
     "frontend/src/onnxApi.test.ts",
     "frontend/src/onnxDataApi.test.ts",
+    "scripts/test_launcher_process_supervision.ps1",
     "scripts/test_onnx01_skill_workflow_cache.ps1"
   ]
 }

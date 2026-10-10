@@ -9,6 +9,7 @@ frontend/dist/
 state/*.db
 state/*.db-*
 state/onnx_data/
+state/diagnostics/launcher/
 state/reset_backups/
 state/recovery_quarantine/
 state/promotion_recovery/

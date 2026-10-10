@@ -3,11 +3,17 @@ $ErrorActionPreference = "Stop"
 $ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 $BackendUrl = "http://127.0.0.1:8000"
 $FrontendUrl = "http://127.0.0.1:5173"
+$LauncherLogRoot = Join-Path $ProjectRoot "state\diagnostics\launcher"
 $Python = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
 $AuthorityHelper = Join-Path $ProjectRoot "scripts\launcher_authority.py"
+$ProcessHelper = Join-Path $ProjectRoot "scripts\launcher_process.ps1"
 $Authority = $null
 $BackendProcess = $null
 $FrontendProcess = $null
+$BackendLaunch = $null
+$FrontendLaunch = $null
+
+. $ProcessHelper
 
 function Stop-StartedProcessTree {
     param([System.Diagnostics.Process]$Process)
@@ -27,8 +33,16 @@ function Fail-Max {
         [string]$Message,
         [int]$Code
     )
-    Stop-StartedProcessTree $FrontendProcess
-    Stop-StartedProcessTree $BackendProcess
+    if ($null -ne $FrontendLaunch) {
+        Stop-MaxLauncherProcess -Launch $FrontendLaunch
+    } else {
+        Stop-StartedProcessTree $FrontendProcess
+    }
+    if ($null -ne $BackendLaunch) {
+        Stop-MaxLauncherProcess -Launch $BackendLaunch
+    } else {
+        Stop-StartedProcessTree $BackendProcess
+    }
     Write-Host "[FAIL] $Message" -ForegroundColor Red
     exit $Code
 }
@@ -87,23 +101,6 @@ function Get-OverviewProblem {
     return Get-AuthorityProblem "overview" $Overview
 }
 
-function Wait-Overview {
-    param(
-        [string]$Url,
-        [int]$TimeoutSeconds
-    )
-
-    $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
-    while ((Get-Date) -lt $deadline) {
-        $overview = Get-Overview $Url
-        if ($null -ne $overview) {
-            return $overview
-        }
-        Start-Sleep -Milliseconds 250
-    }
-    return $null
-}
-
 function Test-FrontendRoot {
     try {
         $response = Invoke-WebRequest -Uri ($FrontendUrl + "/") -UseBasicParsing -TimeoutSec 2
@@ -159,11 +156,18 @@ if ($null -ne $backendOverview) {
         Fail-Max "Backend runner missing: $backendCmd" 24
     }
 
-    $BackendProcess = Start-Process -FilePath $env:COMSPEC -ArgumentList "/c", ('"' + $backendCmd + '"') -WorkingDirectory $ProjectRoot -WindowStyle Minimized -PassThru
-    $backendOverview = Wait-Overview ($BackendUrl + "/api/overview") 30
-    if ($null -eq $backendOverview) {
-        Fail-Max "Backend did not become ready within 30 seconds." 25
+    $BackendLaunch = Start-MaxLauncherProcess -Name "backend" -CommandFile $backendCmd `
+        -WorkingDirectory $ProjectRoot -LogRoot $LauncherLogRoot
+    $BackendProcess = $BackendLaunch.Process
+    $backendWait = Wait-MaxProcessReadiness -Launch $BackendLaunch -TimeoutSeconds 30 -Probe {
+        Get-Overview ($BackendUrl + "/api/overview")
     }
+    if ($backendWait.Status -ne "READY") {
+        if ($backendWait.Status -eq "TIMEOUT") { Stop-MaxLauncherProcess -Launch $BackendLaunch }
+        $details = Format-MaxLauncherFailure -Launch $BackendLaunch -Port "8000" -Status $backendWait.Status
+        Fail-Max ("Backend startup failed: " + $details) 25
+    }
+    $backendOverview = $backendWait.Value
 
     $problem = Get-OverviewProblem $backendOverview
     if ($null -ne $problem) {
@@ -204,11 +208,18 @@ if ($null -ne $proxyOverview) {
         Fail-Max "Frontend runner missing: $frontendCmd" 37
     }
 
-    $FrontendProcess = Start-Process -FilePath $env:COMSPEC -ArgumentList "/c", ('"' + $frontendCmd + '"') -WorkingDirectory $ProjectRoot -WindowStyle Minimized -PassThru
-    $proxyOverview = Wait-Overview ($FrontendUrl + "/api/overview") 30
-    if ($null -eq $proxyOverview) {
-        Fail-Max "Frontend/Vite proxy did not become ready within 30 seconds." 38
+    $FrontendLaunch = Start-MaxLauncherProcess -Name "frontend" -CommandFile $frontendCmd `
+        -WorkingDirectory $ProjectRoot -LogRoot $LauncherLogRoot
+    $FrontendProcess = $FrontendLaunch.Process
+    $frontendWait = Wait-MaxProcessReadiness -Launch $FrontendLaunch -TimeoutSeconds 30 -Probe {
+        Get-Overview ($FrontendUrl + "/api/overview")
     }
+    if ($frontendWait.Status -ne "READY") {
+        if ($frontendWait.Status -eq "TIMEOUT") { Stop-MaxLauncherProcess -Launch $FrontendLaunch }
+        $details = Format-MaxLauncherFailure -Launch $FrontendLaunch -Port "5173" -Status $frontendWait.Status
+        Fail-Max ("Frontend/Vite startup failed: " + $details) 38
+    }
+    $proxyOverview = $frontendWait.Value
 
     $problem = Get-OverviewProblem $proxyOverview
     if ($null -ne $problem) {
