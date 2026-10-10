@@ -914,7 +914,7 @@
       "locator": "backend/max_backend/onnx_data_store.py::recent_snapshots"
     }
   ],
-  "observed_head": "698367073679ea27254a85f7f2c97e1b59429dd6",
+  "observed_head": "7c73243154af2f8d717b3f9570e644c2aeec41c3",
   "schema_version": 1,
-  "source_digest": "10f401006631e66c17785b2cc60c9a4b9c648484dbec74de2842af1747ea223e"
+  "source_digest": "ced328c4116b3465abaaac70bd6e4831da60ed27073112f8d3ca4e759363de90"
 }
