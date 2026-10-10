@@ -74,6 +74,7 @@ export default function OnnxDataIntake() {
 
   const snapshot = workspace?.latest_snapshot ?? null
   const firstBlocker = preflight?.first_blocker ?? workspace?.first_blocker ?? null
+  const hasAdvancedSourceInput = Boolean(sourcePath.trim() || timezoneProvenance.trim())
   const visibleStatus = busy ? 'Sedang memproses' : preflight
     ? (preflight.data_quality.status === 'PASS' || (preflight.snapshot_permitted
       && preflight.data_quality.issues.every((issue) => issue.code === 'TIMEZONE_PROVENANCE_REQUIRED' || issue.severity === 'RECONCILIATION_PENDING')))
@@ -207,8 +208,10 @@ export default function OnnxDataIntake() {
             <div className="onnx-data-source-row">
               <div>
                 <h2 id="onnx-source-preflight-title">Sumber data</h2>
-                <p className="onnx-data-filename">Max_MTF_Training.csv</p>
-                <p className="onnx-data-muted">MT5 Common Files · ditemukan otomatis saat diperiksa</p>
+                <p className="onnx-data-filename">{sourcePath.trim() ? 'Lokasi alternatif dipilih' : 'Max_MTF_Training.csv'}</p>
+                <p className="onnx-data-muted">{sourcePath.trim()
+                  ? 'Lokasi alternatif akan divalidasi agar tetap berada di MT5 Common Files.'
+                  : 'MT5 Common Files · ditemukan otomatis saat diperiksa'}</p>
               </div>
               <ActionButton type="button" onClick={runPreflight} disabled={busy || loading}>
                 <ActionProgress active={busy} idle="Periksa Data" pending="Memeriksa…" />
@@ -219,7 +222,7 @@ export default function OnnxDataIntake() {
               <p className="onnx-data-muted">Data bisa diperiksa. Zona waktu broker belum terverifikasi; kesiapan riset tetap tertahan.</p>
             )}
             {operationResult && <p className="onnx-data-muted">{operationResult}</p>}
-            <details className="onnx-data-advanced">
+            <details className="onnx-data-advanced" open={hasAdvancedSourceInput}>
               <summary>Pengaturan lanjutan</summary>
               <div className="form-grid onnx-data-form">
                 <label htmlFor="onnx-source-path">Lokasi file alternatif

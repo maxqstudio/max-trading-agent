@@ -173,4 +173,53 @@ describe('One-click owner workflow', () => {
     expect(JSON.parse(String(submitted?.init?.body))).toEqual({})
     expect(screen.queryByText('DATA_READY')).not.toBeInTheDocument()
   })
+
+  it('keeps a rejected source override visible after retry and allows a corrected preflight', async () => {
+    const calls: Array<{ url: string; init?: RequestInit }> = []
+    const rejectedPath = 'C:\\outside.csv'
+    const correctedPath = 'C:\\Users\\Owner\\AppData\\Roaming\\MetaQuotes\\Terminal\\Common\\Files\\Alternate.csv'
+    let preflightCount = 0
+    vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input)
+      calls.push({ url, init })
+      if (url.endsWith('/workspace')) return Promise.resolve(response(workspace()))
+      if (url.endsWith('/preflight')) {
+        preflightCount += 1
+        if (preflightCount === 1) {
+          return Promise.resolve(response({
+            detail: { code: 'SOURCE_PATH_OUTSIDE_COMMON_FILES', message: 'Training CSV must be inside the approved MAX Common Files directory.' },
+          }, 400))
+        }
+        return Promise.resolve(response(validPreflight()))
+      }
+      throw new Error(`unexpected request ${url}`)
+    }))
+
+    render(<OnnxDataIntake />)
+    await screen.findByRole('heading', { name: 'Data Intake' })
+    fireEvent.click(screen.getByText('Pengaturan lanjutan'))
+    fireEvent.change(screen.getByLabelText('Lokasi file alternatif'), { target: { value: rejectedPath } })
+    fireEvent.click(screen.getByRole('button', { name: 'Periksa Data' }))
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(/inside the approved MAX Common Files directory/i)
+    fireEvent.click(screen.getByRole('button', { name: 'Coba lagi' }))
+
+    const sourceOverride = await screen.findByLabelText('Lokasi file alternatif')
+    expect(sourceOverride).toHaveValue(rejectedPath)
+    expect(sourceOverride.closest('details')).toHaveProperty('open', true)
+    expect(screen.getByText('Lokasi alternatif dipilih')).toBeInTheDocument()
+
+    fireEvent.change(sourceOverride, { target: { value: correctedPath } })
+    fireEvent.click(screen.getByRole('button', { name: 'Periksa Data' }))
+    expect(await screen.findByText(/6 baris/)).toBeInTheDocument()
+
+    const submitted = calls.filter((call) => call.url.endsWith('/preflight'))
+      .map((call) => JSON.parse(String(call.init?.body)))
+    expect(submitted).toEqual([
+      { source_path: rejectedPath },
+      { source_path: correctedPath },
+    ])
+    expect(calls.some((call) => call.url.endsWith('/snapshots') && call.init?.method === 'POST')).toBe(false)
+    expect(screen.queryByText('DATA_READY')).not.toBeInTheDocument()
+  })
 })
