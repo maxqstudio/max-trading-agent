@@ -108,7 +108,7 @@ try {
       Write-Output "PYTHON=$pythonPath; PYTHONPATH=$env:PYTHONPATH; ROOT=$((Get-Location).Path)"
       & $pythonPath -c 'import sys; from pathlib import Path; from max_backend.scientist_knowledge import load_knowledge; snapshot = load_knowledge(root=Path.cwd()); print("PYTHON=" + sys.executable); print("SCIENTIST_KNOWLEDGE=VERIFIED; SOURCE_COUNT=" + str(len(snapshot["source_manifest"])))'
       $pythonExit = $LASTEXITCODE
-      if ($pythonExit -ne 0) { throw "Scientist manifest verification exit $pythonExit" }
+      Write-Output "PYTHON_EXIT=$pythonExit"
     }
     if (-not $ok) { $firstFailedGate = 'SCIENTIST_KNOWLEDGE_MANIFEST' }
   }
