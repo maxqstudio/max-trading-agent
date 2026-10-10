@@ -1472,6 +1472,13 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "migrate_onnx_data",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::migrate_current",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/onnx_data_store.py::migrate_onnx_data"
+    },
+    {
       "action": "_ensure_backtest_runtime_status",
       "evidence": "STATIC",
       "from": "backend/max_backend/workflow_store.py::migrate_current",
@@ -2381,6 +2388,15 @@
       "locator": "backend/max_backend/mt5.py::detect_mt5"
     },
     {
+      "id": "backend/max_backend/onnx_data_store.py::migrate_onnx_data",
+      "kind": "function",
+      "label": "backend/max_backend/onnx_data_store.py::migrate_onnx_data",
+      "language": "Python",
+      "line_end": 105,
+      "line_start": 18,
+      "locator": "backend/max_backend/onnx_data_store.py::migrate_onnx_data"
+    },
+    {
       "id": "backend/max_backend/optimizer_store.py::migrate_m01",
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::migrate_m01",
@@ -2583,8 +2599,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::_challenger_role_schema_ready",
       "language": "Python",
-      "line_end": 28,
-      "line_start": 24,
+      "line_end": 29,
+      "line_start": 25,
       "locator": "backend/max_backend/workflow_store.py::_challenger_role_schema_ready"
     },
     {
@@ -2592,8 +2608,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::_ensure_backtest_runtime_status",
       "language": "Python",
-      "line_end": 134,
-      "line_start": 124,
+      "line_end": 135,
+      "line_start": 125,
       "locator": "backend/max_backend/workflow_store.py::_ensure_backtest_runtime_status"
     },
     {
@@ -2601,8 +2617,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::_purge_research_authority",
       "language": "Python",
-      "line_end": 180,
-      "line_start": 137,
+      "line_end": 181,
+      "line_start": 138,
       "locator": "backend/max_backend/workflow_store.py::_purge_research_authority"
     },
     {
@@ -2610,8 +2626,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles",
       "language": "Python",
-      "line_end": 121,
-      "line_start": 31,
+      "line_end": 122,
+      "line_start": 32,
       "locator": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles"
     },
     {
@@ -2619,8 +2635,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::delete_backtest_row",
       "language": "Python",
-      "line_end": 583,
-      "line_start": 574,
+      "line_end": 585,
+      "line_start": 576,
       "locator": "backend/max_backend/workflow_store.py::delete_backtest_row"
     },
     {
@@ -2628,8 +2644,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::delete_challenger_row",
       "language": "Python",
-      "line_end": 595,
-      "line_start": 586,
+      "line_end": 597,
+      "line_start": 588,
       "locator": "backend/max_backend/workflow_store.py::delete_challenger_row"
     },
     {
@@ -2637,8 +2653,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::migrate_current",
       "language": "Python",
-      "line_end": 309,
-      "line_start": 183,
+      "line_end": 311,
+      "line_start": 184,
       "locator": "backend/max_backend/workflow_store.py::migrate_current"
     },
     {
@@ -2646,8 +2662,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::set_backtest_runtime_status",
       "language": "Python",
-      "line_end": 571,
-      "line_start": 556,
+      "line_end": 573,
+      "line_start": 558,
       "locator": "backend/max_backend/workflow_store.py::set_backtest_runtime_status"
     },
     {
@@ -2658,7 +2674,7 @@
       "locator": "frontend/src/ArtifactsPage.tsx::<module>"
     }
   ],
-  "observed_head": "eee1959d61b272d838d397be27e51c6781c750c4",
+  "observed_head": "7ba135982ca5989706b49485011988a0ee66c83c",
   "schema_version": 1,
-  "source_digest": "cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b"
+  "source_digest": "eca30bb1e1abff5c3c87df344aa020bce0645cc07a90fb4e426d615d9b0863bf"
 }

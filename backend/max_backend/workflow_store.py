@@ -10,6 +10,7 @@ from .config import DATABASE_PATH
 from .db import connect
 from .optimizer_store import utc_now
 from .schema import CURRENT_SCHEMA_VERSION
+from .onnx_data_store import migrate_onnx_data
 from .workflow_contract import (
     ROLE_OPTIMIZER_WINNER,
     ROLE_OWNER_SELECTED_QUALIFIED_CANDIDATE,
@@ -298,6 +299,7 @@ def migrate_current(path: Path = DATABASE_PATH) -> None:
             ON optimizer_candidate_projection(job_id, round_no, pass_no);
             """
         )
+        migrate_onnx_data(conn)
         conn.execute(
             "INSERT OR REPLACE INTO schema_meta(key,value) VALUES('schema_version',?)",
             (str(CURRENT_SCHEMA_VERSION),),

@@ -191,10 +191,11 @@
     },
     {
       "id": "TRUTH-ONNX-PLANNING-001",
-      "claim": "ONNX-00 is accepted planning authority for the exact 23-family V1 allowlist under current Owner decision D-043. D-044 records proposed active envelopes and parameter-capacity accounting without granting executable authority; unresolved architecture/input/hardware/compatibility gaps block ONNX-03. ONNX-01 adds only a read-only workspace and backend API/state skeleton; no operational cycle, data intake, real research, model training, ONNX export/runtime, Research Challenger, MT5 access, or Champion mutation is implemented or authorized.",
+      "claim": "ONNX-00 is accepted planning authority for the exact 23-family V1 allowlist under D-043; D-044 remains proposed parameter/capacity authority. ONNX-01 is the accepted read-only workspace/API shell. ONNX-02 separately implements MAX-source Data Intake, DQ, immutable snapshots and exact three-window configuration; it does not execute scientific research, training, ONNX export/runtime, Research Challenger, live MT5, or Champion mutation. Real DATA_READY remains NOT_PROVEN while broker reconciliation is pending.",
       "documents": [
         "docs/onnx/ONNX_00_SCIENTIFIC_AUTHORITY.md",
-        "docs/onnx/ONNX_01_WORKSPACE_API.md"
+        "docs/onnx/ONNX_01_WORKSPACE_API.md",
+        "docs/onnx/ONNX_02_DATA_INTAKE.md"
       ],
       "source_owners": [
         ".workflow/onnx_v1_authority.json",
@@ -202,6 +203,12 @@
         ".workflow/roadmap.json",
         ".workflow/state.json",
         "backend/max_backend/onnx_api.py",
+        "backend/max_backend/onnx_data_contract.py",
+        "backend/max_backend/onnx_data_source.py",
+        "backend/max_backend/onnx_data_store.py",
+        "backend/max_backend/onnx_data_service.py",
+        "backend/max_backend/onnx_data_api.py",
+        "frontend/src/OnnxDataIntake.tsx",
         "frontend/src/OnnxWorkspace.tsx",
         "frontend/src/onnxApi.ts"
       ],
@@ -214,12 +221,16 @@
     },
     {
       "id": "TRUTH-ONNX-WORKSPACE-001",
-      "claim": "The ONNX workspace displays only status from the versioned read-only backend contract. The contract contains no persisted cycle/data/candidate/checkpoint, exposes no scientific mutation endpoint, and is blocked by the existing application Recovery Required middleware. Frontend code does not create scientific or operational status.",
+      "claim": "The accepted ONNX-01 /api/v1/onnx/workspace response remains a frozen null-only read contract. ONNX-02 data status is separately versioned at /api/v2/onnx/data and reconstructed by backend services from the source-bound snapshot/window ledger; the frontend cannot establish DATA_READY. The existing Recovery Required middleware blocks both APIs, and no scientific evaluation or training endpoint exists.",
       "documents": [
-        "docs/onnx/ONNX_01_WORKSPACE_API.md"
+        "docs/onnx/ONNX_01_WORKSPACE_API.md",
+        "docs/onnx/ONNX_02_DATA_INTAKE.md"
       ],
       "source_owners": [
         "backend/max_backend/onnx_api.py",
+        "backend/max_backend/onnx_data_api.py",
+        "backend/max_backend/onnx_data_service.py",
+        "backend/max_backend/onnx_data_store.py",
         "backend/max_backend/main.py",
         "frontend/src/OnnxWorkspace.tsx",
         "frontend/src/onnxApi.ts",
@@ -234,6 +245,37 @@
       "runtime_evidence": [
         "READ_ONLY_SYNTHETIC_API_TESTS_ONLY",
         "NO_OWNER_RUNTIME_OR_SCIENTIFIC_EXECUTION"
+      ]
+    },
+    {
+      "id": "TRUTH-ONNX-DATA-INTAKE-001",
+      "claim": "ONNX-02 inspects only the source-verified MAX_TRUE_MTF_DYNAMIC_V1 / CP32_TRUE_MTF_V1 49-column semicolon CSV under the approved Common Files root, publishes byte-exact immutable snapshots, audits DQ and duplicate lineage, and validates exactly three snapshot-backed windows. Timestamp discontinuity is not broker evidence; broker reconciliation remains BROKER_RECONCILIATION_PENDING, so real DATA_READY is NOT_PROVEN. Test fixtures are SYNTHETIC_TEST_EVIDENCE. No Owner PC, live MT5, broker repair, research evaluation, training, export, or Champion operation was performed.",
+      "documents": [
+        "docs/onnx/ONNX_02_DATA_INTAKE.md",
+        "PROJECT_TRUTH_SYNC.md"
+      ],
+      "source_owners": [
+        ".workflow/onnx_data_authority.json",
+        ".workflow/decisions.json",
+        "backend/max_backend/onnx_data_contract.py",
+        "backend/max_backend/onnx_data_source.py",
+        "backend/max_backend/onnx_data_store.py",
+        "backend/max_backend/onnx_data_service.py",
+        "backend/max_backend/onnx_data_api.py",
+        "frontend/src/onnxDataApi.ts",
+        "frontend/src/OnnxDataIntake.tsx"
+      ],
+      "status": "PASS",
+      "tests": [
+        "backend/tests/test_onnx_data_intake.py",
+        "backend/tests/test_onnx_data_api.py",
+        "frontend/src/onnxDataApi.test.ts",
+        "frontend/src/OnnxDataIntake.test.tsx"
+      ],
+      "runtime_evidence": [
+        "SYNTHETIC_TEST_EVIDENCE_ONLY",
+        "REAL_DATA_READY_NOT_PROVEN_BROKER_RECONCILIATION_PENDING",
+        "OWNER_PC_AND_MT5_NOT_ACCESSED"
       ]
     },
     {

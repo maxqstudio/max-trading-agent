@@ -309,6 +309,13 @@
       "decision": "The Owner V3 addendum supplements current D-043 without changing its exact 9-standalone/14-hybrid universe. The newly provided iTransformer, TFT, Transformer MoE, and LSTM numeric search ranges and patience values are recorded only as PROPOSED_ACTIVE_SEARCH_ENVELOPE, not permanent legal maxima or executable gates, until accepted through the applicable governance process. Existing LightGBM, XGBoost, GRU, TCN, and PatchTST active ranges remain unchanged. Every exact CandidateSpec requires an auditable architecture-specific parameter and memory estimate, with MoE total and active counts separated, tree complexity reported separately, and unknown fields explicitly NOT_APPLICABLE or OPEN_AUTHORITY_GAP. There is no arbitrary permanent trainable-parameter ceiling. No model training, runtime admission, or ONNX compatibility is proven or authorized by this decision.",
       "rationale": "Owner-supplied proposals and structural reference formulas enable transparent capacity planning while preserving the distinction between estimated model size, total training memory, architecture validity, dataset adequacy, and executable authority.",
       "status": "CURRENT"
+    },
+    {
+      "id": "D-045",
+      "title": "Authorize ONNX-02 MAX Data Intake source phase",
+      "decision": "The Owner authorizes ONNX-02 source implementation for canonical/explicitly selected MAX training CSV discovery, read-only preflight, writer-safe immutable snapshots, CP32-v1 DQ and duplicate evidence, and exactly three chronological snapshot-backed window configuration. The canonical API contract remains a separate /api/v2/onnx/data surface; the accepted ONNX-01 /api/v1/onnx/workspace snapshot stays frozen. This decision does not authorize Owner-PC access, live MT5, broker-data repair, scientific evaluation, model instantiation/training/scoring, ONNX export/runtime, ONNX or Strategy Champion mutation, or live trading. Timestamp discontinuities are observations only. Without source-backed broker reconciliation or a separately Owner-approved disposition, BROKER_RECONCILIATION_PENDING blocks real DATA_READY; synthetic tests are not market evidence.",
+      "rationale": "The phase requires safe data intake and reproducible snapshot/window preparation while preserving source-only GitHub development and refusing to infer broker completeness or scientific readiness from timestamp continuity or synthetic fixtures.",
+      "status": "CURRENT"
     }
   ],
   "schema_version": 1

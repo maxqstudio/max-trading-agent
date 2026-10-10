@@ -1,24 +1,24 @@
 {
-  "current_phase": "ONNX-01",
+  "current_phase": "ONNX-02",
   "current_phase_results": {
-    "database_schema_version": 15,
-    "hosted_ci": "ONNX-01 exact branch/PR Windows CI is NOT_RUN; record exact hosted identity externally under D-012 after pushing the candidate. Previous accepted ONNX-00 merged-main Windows CI is recorded separately below.",
-    "local_governance": "ONNX-01 full local governance is NOT_RUN. ONNX-00 closure is accepted on parent main c75f978ea4438183e6a759d398eb69b3eeca9ac4 (tree de1eba7dc91cef12843780e9ef2fa70275422a12), Control Room acceptance, and post-merge Windows CI 38012160408 PASS. Pinned Skill Workflow remains 964481ed1609f87904ba9e08890bffc0a10c3fd4; Owner/scientific runtime remains NOT_PROVEN.",
+    "database_schema_version": 16,
+    "hosted_ci": "ONNX-02 exact PR-head Windows CI is NOT_RUN until source is pushed; exact hosted identity remains external under D-012.",
+    "local_governance": "ONNX-02 governance/regression acceptance is NOT_RUN until the current candidate is regenerated and validated. Parent ONNX-01 acceptance and its exact main CI evidence are recorded separately; Owner data, broker reconciliation, scientific/runtime behavior remain NOT_PROVEN.",
     "max_executable_validator_pin": "964481ed1609f87904ba9e08890bffc0a10c3fd4",
     "model_lab_authorities_inspected": 19,
     "model_lab_main": "883ebeb1ca2e70f6255e0889358ba7c822ac52f5",
     "onnx_runtime": "NOT_IMPLEMENTED",
     "owner_runtime": "NOT_PROVEN",
-    "product_source_changed": "YES; ONNX-01 read-only workspace shell and API/state skeleton are in scope; no scientific/runtime behavior is implemented",
-    "schema_changed": "NO",
+    "product_source_changed": "YES; ONNX-02 MAX Data Intake API, snapshot/DQ services and page are in scope; no scientific execution/training/runtime behavior is implemented",
+    "schema_changed": "YES; additive schema 16 snapshot/window/readiness evidence tables",
     "skill_workflow_latest_guidance": "3b3289681cf2cec8d3d132895e0848be64bb54b1",
-    "source_only_scan": "NOT_RUN for ONNX-01 exact candidate",
-    "starting_main": "c75f978ea4438183e6a759d398eb69b3eeca9ac4",
-    "starting_main_tree": "de1eba7dc91cef12843780e9ef2fa70275422a12",
-    "starting_main_windows_ci": "PASS: run 38012160408 on exact accepted ONNX-00 merged main; external evidence per D-012"
+    "source_only_scan": "NOT_RUN for ONNX-02 candidate",
+    "starting_main": "1a9c9a6990e1f2571e4d85d79436402e6d37ec23",
+    "starting_main_tree": "32b6ed070eab06270ec53cac0322890825d85236",
+    "starting_main_windows_ci": "PASS: run 38022879077 passed Source-only, Backend/Skill Workflow, and Frontend on accepted main; exact parent evidence external per D-012"
   },
   "current_phase_status": "IN_PROGRESS",
-  "evidence_boundary": "ONNX-00 is closed as accepted planning authority against main c75f978ea4438183e6a759d398eb69b3eeca9ac4 and tree de1eba7dc91cef12843780e9ef2fa70275422a12, with Control Room acceptance and post-merge Windows CI run 38012160408 PASS. ONNX-01 is IN_PROGRESS on codex/onnx-01-workspace-shell from that accepted parent and is limited to the read-only workspace shell/API-state skeleton. No operational cycle/store, dataset scan/snapshot, training/scoring, ONNX export/runtime, scientific result, MT5, or Owner-PC access is claimed. Exact ONNX-01 candidate SHA and hosted CI identity remain external acceptance evidence under D-012.",
+  "evidence_boundary": "ONNX-01 is accepted on parent main 1a9c9a6990e1f2571e4d85d79436402e6d37ec23, tree 32b6ed070eab06270ec53cac0322890825d85236, with post-merge Windows CI run 38022879077 passing all three jobs; exact external evidence follows D-012. ONNX-02 is IN_PROGRESS on codex/onnx-02-data-intake. It implements source-grounded data intake, DQ, immutable snapshots and window configuration only. Real data readiness and broker reconciliation remain NOT_PROVEN; no Owner PC, MT5, broker repair, scientific evaluation/training, ONNX export/runtime or Champion mutation is claimed. Current ONNX-02 candidate/CI identities remain NOT_RUN/external until acceptance.",
   "human_comprehension_questions": {
     "How does failure/recovery behave?": "PASS",
     "How does important data flow through the system?": "PASS",
@@ -176,7 +176,7 @@
     {
       "evidence": ".workflow/state.json; .workflow/roadmap.json; .workflow/claims.json; Project Truth Compiler and validators",
       "id": "ONNX-00-GOVERNANCE-01",
-      "requirement": "Legacy Research and R00-R11 are retired; ONNX-00 planning authority and its accepted closure are preserved as historical parent evidence; current ONNX-01 state and roadmap transition is governed separately.",
+      "requirement": "Legacy Research and R00-R11 are retired; ONNX-00 and ONNX-01 accepted authority/evidence are preserved as historical parent phases; the current ONNX-02 data-intake transition is governed separately.",
       "status": "PASS_LOCAL"
     },
     {
@@ -210,9 +210,9 @@
       "status": "PASS_LOCAL"
     },
     {
-      "evidence": "ONNX-00 merged-main Windows CI run 38012160408 PASS for accepted main c75f978ea4438183e6a759d398eb69b3eeca9ac4; ONNX-01 branch/PR CI remains pending and will be reported externally per D-012.",
+      "evidence": "ONNX-00 merged-main Windows CI run 38012160408 PASS on accepted main c75f978ea4438183e6a759d398eb69b3eeca9ac4; ONNX-01 merged-main Windows CI run 38022879077 PASS on accepted main 1a9c9a6990e1f2571e4d85d79436402e6d37ec23. Both exact closures are historical external evidence under D-012 and are not ONNX-02 CI evidence.",
       "id": "ONNX-00-PR-CI-01",
-      "requirement": "ONNX-00 merged-main Windows CI passed on the exact accepted merge SHA; this is historical phase closure evidence, not an ONNX-01 CI result.",
+      "requirement": "ONNX-00 and ONNX-01 accepted main revisions each passed their exact post-merge Windows CI; this historical evidence does not imply ONNX-02 hosted acceptance or scientific/runtime behavior.",
       "status": "PASS"
     },
     {
@@ -244,6 +244,60 @@
       "id": "ONNX-01-ACCEPTANCE-RUNNER-01",
       "requirement": "A one-click Windows acceptance runner executes the required local gates in order and records machine-readable gate results and first_failed_gate without claiming Owner runtime or scientific acceptance.",
       "status": "NOT_PROVEN"
+    },
+    {
+      "evidence": "ONNX-01 accepted main 1a9c9a6990e1f2571e4d85d79436402e6d37ec23, tree 32b6ed070eab06270ec53cac0322890825d85236, Control Room acceptance, and post-merge Windows CI run 38022879077 success in all three jobs; exact evidence external under D-012.",
+      "id": "ONNX-01-CLOSE-01",
+      "requirement": "Reconcile ONNX-01 as accepted before transition to ONNX-02, without converting source/CI acceptance into scientific or runtime evidence.",
+      "status": "PASS"
+    },
+    {
+      "evidence": "ea/baseline/Max_MTF.mq5; ea/baseline/manifest.json; backend/max_backend/onnx_data_contract.py; backend/tests/test_onnx_data_intake.py",
+      "id": "ONNX-02-SOURCE-SCHEMA-01",
+      "requirement": "Verify exact MAX strategy/feature contracts, 49-column semicolon CSV, 32 CP32 features, broker/source-naive timestamp semantics, supported timeframe enums, and source-derived duplicate identity.",
+      "status": "NOT_RUN"
+    },
+    {
+      "evidence": "backend/max_backend/onnx_data_source.py; backend/max_backend/onnx_data_store.py; backend/tests/test_onnx_data_intake.py",
+      "id": "ONNX-02-IMMUTABLE-SNAPSHOT-01",
+      "requirement": "Read the approved CSV only under verified EA lock/stable identity; reject partial or structurally malformed CSV before snapshot file or ledger publication, while preserving structurally valid raw evidence with semantic DQ blockers such as identical duplicates; exact-byte, hash-verified, atomic, immutable publication and idempotent/interruption/concurrency/tamper behavior fail closed.",
+      "status": "NOT_RUN"
+    },
+    {
+      "evidence": "backend/max_backend/onnx_data_contract.py; backend/tests/test_onnx_data_intake.py",
+      "id": "ONNX-02-DQ-DUPLICATE-01",
+      "requirement": "Audit schema, finite values, OHLC/ATR/quotes, timestamps, identity and duplicate semantics; conflicting duplicates fail closed and identical correction produces a lineage-preserving derived snapshot after explicit confirmation.",
+      "status": "NOT_RUN"
+    },
+    {
+      "evidence": ".workflow/onnx_data_authority.json; backend/max_backend/onnx_data_contract.py; backend/max_backend/onnx_data_service.py; backend/tests/test_onnx_data_intake.py",
+      "id": "ONNX-02-BROKER-GAP-01",
+      "requirement": "Observed timestamp discontinuity is distinct from broker-confirmed missing/not-missing; unavailable broker evidence remains pending and prevents real DATA_READY without synthetic or interpolated repairs.",
+      "status": "NOT_RUN"
+    },
+    {
+      "evidence": "backend/max_backend/onnx_data_contract.py; backend/max_backend/onnx_data_store.py; backend/tests/test_onnx_data_intake.py; frontend/src/OnnxDataIntake.test.tsx",
+      "id": "ONNX-02-WINDOWS-01",
+      "requirement": "Exactly DISCOVERY, TOURNAMENT and FORWARD windows satisfy the frozen strict chronology, snapshot coverage, source-row and timestamp-provenance contracts; no window evaluation is run.",
+      "status": "NOT_RUN"
+    },
+    {
+      "evidence": "backend/max_backend/onnx_data_api.py; frontend/src/onnxDataApi.ts; backend/tests/test_onnx_data_api.py; frontend/src/onnxDataApi.test.ts; backend/max_backend/main.py recovery middleware",
+      "id": "ONNX-02-API-RECOVERY-01",
+      "requirement": "Versioned v2 data API/UI use backend-owned validated evidence, preserve ONNX-01 v1 compatibility and Recovery Required 503 behavior, and expose no scientific execution/mutation endpoints.",
+      "status": "NOT_RUN"
+    },
+    {
+      "evidence": "scripts/accept_onnx02.ps1 writes ignored machine-readable evidence including exact local candidate identity and first_failed_gate; hosted final SHA/CI remain external under D-012.",
+      "id": "ONNX-02-ACCEPTANCE-RUNNER-01",
+      "requirement": "A repeatable one-click acceptance runner executes cumulative required local gates and records machine-readable per-gate result, exit code, candidate identity and first_failed_gate without claiming real data/runtime readiness.",
+      "status": "NOT_RUN"
+    },
+    {
+      "evidence": ".workflow/onnx_data_authority.json; backend/tests/test_onnx_data_intake.py; backend/tests/test_onnx_data_api.py; frontend/src/onnxDataApi.test.ts; frontend/src/OnnxDataIntake.test.tsx",
+      "id": "ONNX-02-SCIENTIFIC-BOUNDARY-01",
+      "requirement": "CI fixtures remain SYNTHETIC_TEST_EVIDENCE; no real DATA_READY, Owner-PC data access, broker repair, MT5, scientific evaluation, model training, ONNX export/runtime, or Champion mutation is performed or claimed.",
+      "status": "NOT_RUN"
     }
   ],
   "results": {
@@ -275,9 +329,10 @@
       }
     },
     "hosted_ci": {
-      "run_id": null,
-      "status": "NOT_RUN",
-      "tested_sha": null
+      "phase": "ONNX-01 accepted parent main; external evidence under D-012",
+      "run_id": "38022879077",
+      "status": "PASS",
+      "tested_sha": "1a9c9a6990e1f2571e4d85d79436402e6d37ec23"
     },
     "regression": {
       "backend_full_status": "PASS: 486 passed, 0 failed, 0 skipped",
@@ -296,7 +351,7 @@
     },
     "scientific_state": {
       "champion_mutation": 0,
-      "current_onnx_phase": "ONNX-01_READ_ONLY_WORKSPACE_ONLY",
+      "current_onnx_phase": "ONNX-02_DATA_INTAKE_ONLY; REAL_DATA_READY_NOT_PROVEN",
       "legacy_research": "RETIRED",
       "model_training": 0,
       "onnx": 0,
@@ -317,11 +372,11 @@
     "NOT_RUN_BY_SCOPE: Owner PC, real MT5, broker reconciliation or real market research.",
     "NOT_PROVEN: Owner Strategy Optimizer/Champion/backtest runtime."
   ],
-  "runtime_status": "ONNX_RUNTIME_NOT_IMPLEMENTED; REAL_RESEARCH_NOT_STARTED; OWNER_PC_AND_MT5_NOT_RUN; STRATEGY_RUNTIME_NOT_PROVEN",
+  "runtime_status": "ONNX_DATA_INTAKE_SOURCE_IMPLEMENTED_IN_CURRENT_PHASE; REAL_DATA_READY_NOT_PROVEN_BROKER_RECONCILIATION_PENDING; ONNX_RUNTIME_NOT_IMPLEMENTED; REAL_RESEARCH_NOT_STARTED; OWNER_PC_AND_MT5_NOT_RUN; STRATEGY_RUNTIME_NOT_PROVEN",
   "schema_version": 1,
   "sequence_mode": "DURING",
-  "sequence_session": "FLOW-ONNX-WORKSPACE",
-  "sequence_sync_status": "PASS: 9 DURING/CURRENT source-grounded sessions, including FLOW-ONNX-WORKSPACE, regenerated at source digest 5d0bf933917ae0132170666ebb651ce4f4593b04bd4c8e2de4b46df67a8ff56b; 0 unresolved bindings. This is static/source evidence only, not a runtime trace.",
+  "sequence_session": "FLOW-ONNX-DATA-INTAKE",
+  "sequence_sync_status": "NOT_RUN for ONNX-02; sequence graph generation and DURING/CURRENT validation are required before local acceptance.",
   "skill_workflow_current_sha": "964481ed1609f87904ba9e08890bffc0a10c3fd4",
   "skill_workflow_guidance_sha": "3b3289681cf2cec8d3d132895e0848be64bb54b1",
   "test_commands": [
@@ -340,7 +395,10 @@
     ".venv/Scripts/python.exe .workflow/tools/validate_cross_document_consistency.py",
     ".venv/Scripts/python.exe .workflow/tools/validate_project_truth.py",
     "scripts/scan_m05_candidate_tree.py --candidate-sha HEAD",
-    "GitHub Actions Windows CI on exact ONNX-01 PR head"
+    ".venv/Scripts/python.exe -m pytest backend/tests/test_onnx_data_intake.py backend/tests/test_onnx_data_api.py -q -o addopts= (repeat twice)",
+    "frontend/npm test -- --run (repeat twice for ONNX-02 intake contracts)",
+    "scripts/accept_onnx02.ps1",
+    "GitHub Actions Windows CI on exact ONNX-02 PR head"
   ],
   "truth_gates": {
     "BEHAVIORAL_SYNC": "NOT_APPLICABLE",

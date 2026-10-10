@@ -80,7 +80,7 @@ def test_optimizer_draft_corruption_is_explicit_and_does_not_touch_jobs(tmp_path
     assert jobs == 0
 
 
-def test_schema_15_upgrades_version_14_optimizer_storage_without_job_rows(tmp_path):
+def test_schema_16_upgrades_version_14_and_creates_onnx_data_storage_without_job_rows(tmp_path):
     path = make_database(tmp_path)
     with connect(path) as conn:
         conn.execute("DROP TABLE optimizer_candidate_projection")
@@ -90,6 +90,7 @@ def test_schema_15_upgrades_version_14_optimizer_storage_without_job_rows(tmp_pa
         conn.execute("ALTER TABLE optimizer_jobs DROP COLUMN launch_token")
         conn.execute("UPDATE schema_meta SET value='14' WHERE key='schema_version'")
 
+    migrate_current(path)
     migrate_current(path)
 
     with connect(path) as conn:
@@ -104,11 +105,14 @@ def test_schema_15_upgrades_version_14_optimizer_storage_without_job_rows(tmp_pa
             row["name"] for row in conn.execute("PRAGMA table_info(optimizer_jobs)")
         }
         job_count = conn.execute("SELECT COUNT(*) AS n FROM optimizer_jobs").fetchone()["n"]
-    assert version == str(CURRENT_SCHEMA_VERSION) == "15"
+    assert version == str(CURRENT_SCHEMA_VERSION) == "16"
     assert {
         "optimizer_drafts",
         "optimizer_candidate_projection_rounds",
         "optimizer_candidate_projection",
+        "onnx_data_snapshots",
+        "onnx_data_window_configs",
+        "onnx_data_readiness_evidence",
     }.issubset(tables)
     assert {"launch_token", "worker_identity_json"}.issubset(job_columns)
     assert job_count == 0

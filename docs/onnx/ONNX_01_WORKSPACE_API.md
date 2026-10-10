@@ -93,3 +93,9 @@ powershell -ExecutionPolicy Bypass -File .\scripts\accept_onnx01.ps1
 It requires a clean candidate checkout and writes machine-readable gate results
 and `first_failed_gate` under ignored `evidence/onnx01/acceptance.json`. It does
 not modify operational state or perform runtime/scientific execution.
+
+ONNX-02 adds data-intake state through the separately versioned
+`/api/v2/onnx/data` API. It does not change this frozen v1 response or its
+null-only capability snapshot. Snapshot, DQ, and window identities are
+backend-owned in the v2 contract; real `DATA_READY` remains `NOT_PROVEN` without
+broker reconciliation evidence. See [ONNX-02 Data Intake](ONNX_02_DATA_INTAKE.md).

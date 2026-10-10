@@ -1955,6 +1955,138 @@ td input[type="checkbox"] {
   outline-offset: 2px;
 }
 
+.onnx-data-intake {
+  display: grid;
+  gap: 14px;
+}
+
+.onnx-data-intake .page-head {
+  padding-top: 22px;
+}
+
+.onnx-data-intake .onnx-card h2 {
+  margin-top: 0;
+}
+
+.onnx-data-status-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 28px;
+}
+
+.onnx-data-status-line > div {
+  display: grid;
+  gap: 4px;
+}
+
+.onnx-data-status-line strong {
+  overflow-wrap: anywhere;
+}
+
+.onnx-data-form {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  margin-top: 14px;
+}
+
+.onnx-data-form label span {
+  color: #7a828c;
+  font-weight: 400;
+}
+
+.onnx-data-actions,
+.onnx-confirmation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin-top: 14px;
+}
+
+.onnx-data-actions p,
+.onnx-data-result p,
+.onnx-card > p {
+  color: #59616b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.onnx-data-result {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px solid #cbd4df;
+  border-radius: 6px;
+  background: #f8fafc;
+}
+
+.onnx-data-result h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.onnx-data-result .mono,
+.onnx-data-intake .mono {
+  overflow-wrap: anywhere;
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 12px;
+}
+
+.onnx-data-issues-list {
+  display: grid;
+  gap: 8px;
+  padding-left: 20px;
+  line-height: 1.45;
+}
+
+.onnx-data-issues-list span {
+  color: #59616b;
+}
+
+.onnx-confirmation label {
+  display: flex;
+  align-items: start;
+  gap: 8px;
+  max-width: 760px;
+  color: #343b44;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.onnx-confirmation input[type="checkbox"] {
+  width: auto;
+  margin-top: 3px;
+}
+
+.onnx-window-form {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+}
+
+.onnx-window-fieldset {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  margin: 0;
+  padding: 12px;
+  border: 1px solid #d7dbe0;
+  border-radius: 6px;
+}
+
+.onnx-window-fieldset legend {
+  padding: 0 5px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.onnx-window-fieldset label {
+  display: grid;
+  gap: 5px;
+  font-size: 12px;
+}
+
+.onnx-action-result {
+  margin-bottom: 0;
+  font-weight: 650;
+}
+
 @media (max-width: 640px) {
   .main-workspace.shell {
     padding: 16px 16px 40px;

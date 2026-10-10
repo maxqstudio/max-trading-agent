@@ -1,37 +1,38 @@
 {
   "schema_version": 1,
-  "phase": "ONNX-01",
+  "phase": "ONNX-02",
   "status": "IN_PROGRESS",
-  "working_branch": "codex/onnx-01-workspace-shell",
+  "working_branch": "codex/onnx-02-data-intake",
   "last_accepted_branch": "main",
-  "last_accepted_sha": "c75f978ea4438183e6a759d398eb69b3eeca9ac4",
+  "last_accepted_sha": "1a9c9a6990e1f2571e4d85d79436402e6d37ec23",
   "blocked_actions": [
-    "ONNX-01 permits only the read-only workspace shell and backend state skeleton; no operational cycle, data intake, scientific mutation, model training/scoring, ONNX export/runtime, or promotion is authorized.",
-    "Any Owner PC access, MT5 launch, broker/data-root access, real Optimizer run, or real market-research execution during ONNX-01.",
+    "ONNX-02 authorizes source discovery, read-only preflight, explicit immutable snapshots, DQ/duplicate evidence, and validation of the exact three research windows only; no research evaluation, model/scientific execution, training/scoring, ONNX export/runtime, or promotion is authorized.",
+    "Any Owner-PC access, live MT5 launch, broker-data repair, real Owner dataset snapshot, real Optimizer run, or real scientific result during hosted source development.",
+    "DATA_READY must fail closed while broker reconciliation remains pending; synthetic fixtures are SYNTHETIC_TEST_EVIDENCE and never establish real DATA_READY.",
     "Any promotion or mutation of a Strategy or ONNX Champion from this phase.",
     "Any expansion beyond the Owner-frozen V1 model allowlist or silent change to scientific gates, KPI thresholds, date windows, or CandidateSpec."
   ],
   "blockers": [
     "Complete numeric KPI definitions for WFA, Tournament, Monte Carlo, and Forward remain an explicit future execution prerequisite; ONNX-00 does not invent them.",
     "ONNX parity tolerances, runtime-manifest schema, final-fit row boundary, verified MAX CP32 identity fields, and temporal compute-device policy require separate phase-specific authority before their implementation gates.",
-    "ONNX-02 data-source/snapshot authority and any later scientific implementation require their own roadmap authorization after ONNX-01 audit and acceptance."
+    "No broker-history evidence source or Owner-approved reconciliation disposition is available in ONNX-02 source authority; real DATA_READY therefore remains NOT_PROVEN even when no timestamp discontinuity is observed."
   ],
   "proven": [
-    "Starting GitHub main is 203f6ab3dc618e3edd247841aa25e1fa0951a19a; Windows CI run 37964999480 completed with conclusion success on that exact SHA.",
+    "ONNX-01 was accepted at parent main 1a9c9a6990e1f2571e4d85d79436402e6d37ec23 (tree 32b6ed070eab06270ec53cac0322890825d85236); post-merge Windows CI run 38022879077 completed successfully in Source-only, Backend/Skill Workflow, and Frontend jobs. Exact evidence is external under D-012.",
     "ONNX-00 was closed against accepted merge main c75f978ea4438183e6a759d398eb69b3eeca9ac4 (tree de1eba7dc91cef12843780e9ef2fa70275422a12), Control Room acceptance, and post-merge Windows CI run 38012160408 PASS; this is accepted parent evidence under D-012, not ONNX-01 runtime evidence.",
     "Latest maxqstudio/max_research_agent main was fetched at 883ebeb1ca2e70f6255e0889358ba7c822ac52f5; the 19 authorities listed in the Owner prompt were inspected at that commit.",
     "Latest Skill_Workflow/main guidance was fetched at 3b3289681cf2cec8d3d132895e0848be64bb54b1 and applied as normative guidance. MAX executable Windows CI and vendored validator provenance remain pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4; no byte-identity with 3b328968 is claimed.",
     "Under current Owner decision D-043, the ONNX V1 universe is exactly nine standalone plus fourteen temporal-to-tree hybrid families, total 23; D-044 proposed parameter envelopes remain non-executable until separately accepted.",
-    "ONNX-00 is accepted planning/governance authority; ONNX-01 is authorized only for a read-only workspace and API/state skeleton. No operational cycle, Owner PC, MT5, real data, model fitting, ONNX export/runtime, or scientific result is proven."
+    "ONNX-00 planning and ONNX-01 workspace/API shell are accepted; ONNX-02 is authorized for data intake source implementation only. Local synthetic tests do not prove real data readiness, broker reconciliation, model fitting, ONNX export/runtime, MT5, or any scientific result."
   ],
   "not_proven": [
-    "ONNX runtime, scientific data readiness, model training, GPU execution, ONNX conversion/parity, Research Challenger, or Champion behavior.",
+    "Real market-data DATA_READY, broker reconciliation, ONNX runtime, scientific evaluation, model training, GPU execution, ONNX conversion/parity, Research Challenger, or Champion behavior.",
     "Owner-PC Strategy Optimizer and real MT5 runtime acceptance; this planning phase does not claim that unresolved source/runtime behavior is solved.",
     "The complete numeric KPI contract and ONNX runtime/parity contracts required before later implementation phases."
   ],
   "next_authorized_actions": [
-    "Implement ONNX-01's exact four-workspace navigation, eight-page read-only shell, versioned backend state contract, recovery-gate behavior, and focused regression tests without operational persistence or scientific mutations.",
-    "Regenerate governed Project Truth, Scientist knowledge and DURING/CURRENT sequence artifacts; run the one-click acceptance runner, complete local regressions, source-only scan, pinned Skill Workflow checks, and Windows GitHub Actions.",
-    "Create a new ONNX-01 branch and PR, verify exact PR head/tree and hosted Windows CI, then STOP with the PR open and unmerged for independent Control Room audit. Do not begin ONNX-02."
+    "Complete ONNX-02 canonical MAX CSV discovery, writer-safe immutable snapshots, strict DQ/duplicate handling, broker-gap status separation, and exact three-window validation without asserting real DATA_READY absent broker authority.",
+    "Regenerate Project Truth, Scientist knowledge and DURING/CURRENT sequence artifacts; run the repeatable acceptance runner, full local regressions, source-only scan, pinned Skill Workflow checks, and Windows GitHub Actions.",
+    "Push a new ONNX-02 branch and PR, verify exact PR head/tree and hosted Windows CI, then STOP with the PR open and unmerged for independent Control Room audit. Do not begin ONNX-03."
   ]
 }

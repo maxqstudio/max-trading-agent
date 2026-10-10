@@ -179,3 +179,12 @@ Type: planning
 - Retire the legacy R00-R11 roadmap and define ONNX V1 as exactly six standalone plus eight hybrid families.
 - Add planning-only ONNX model, parameter, data, stage, state, checkpoint, UI/API ownership and ONNX-00..ONNX-09 roadmap authority.
 - No ONNX runtime, model training, MT5, Owner PC, export, Challenger creation or Champion mutation.
+
+## 2026-10-10 — Accept ONNX-01 shell and authorize ONNX-02 source phase
+
+Type: phase_transition
+
+- ONNX-01 is accepted at main 1a9c9a6990e1f2571e4d85d79436402e6d37ec23, tree 32b6ed070eab06270ec53cac0322890825d85236, with post-merge Windows CI run 38022879077 passing all three jobs; exact evidence is external under D-012.
+- Begin ONNX-02 on codex/onnx-02-data-intake under current Owner decision D-045.
+- Add a separate versioned MAX training-data intake API, source-contained preflight, immutable snapshot lineage, DQ/duplicate review and three research-window configuration.
+- No real DATA_READY, broker reconciliation, MT5, Owner-PC source read, scientific evaluation/training, ONNX export/runtime, or Champion mutation is claimed.

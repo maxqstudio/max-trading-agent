@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "phase": "ONNX-02",
+  "phase_status": "IN_PROGRESS",
+  "authority_decision": "D-045",
+  "data_contract": {
+    "strategy_contract": "MAX_TRUE_MTF_DYNAMIC_V1",
+    "feature_contract": "CP32_TRUE_MTF_V1",
+    "dataset_schema_id": "MAX_MTF_TRAINING_CSV_49_V1",
+    "dataset_schema_version": "1.0",
+    "canonical_filename": "Max_MTF_Training.csv",
+    "delimiter": ";",
+    "column_count": 49,
+    "feature_count": 32,
+    "timestamp_format": "YYYY.MM.DD HH:MM",
+    "timestamp_semantics": "NAIVE_BROKER_SOURCE_TIME; no UTC conversion or offset inference",
+    "identity_columns": ["contract", "symbol", "period", "signal_time"],
+    "identity_source": "ea/baseline/Max_MTF.mq5::training CSV writer and first-write-wins identity check",
+    "ea_source": {
+      "path": "ea/baseline/Max_MTF.mq5",
+      "sha256": "10fadcd986a93cc075e13a6a383f1b00ee5c097c2a70d6edee315668111d5e20"
+    },
+    "ea_manifest": {
+      "path": "ea/baseline/manifest.json",
+      "sha256": "b1ac042d019a7a5e2b2d32ae533a1954b7adbbebd4a91e970b648e327af7d457",
+      "declared_source_sha256": "10fadcd986a93cc075e13a6a383f1b00ee5c097c2a70d6edee315668111d5e20"
+    },
+    "writer_contract": {
+      "storage": "MetaTrader Common Files directory",
+      "lock": "training lock file opened with exclusive sharing; ONNX reads only while lock can be acquired without creating or changing it",
+      "csv": "FILE_COMMON with FILE_SHARE_READ; training writes, FileFlush and closes before releasing lock"
+    }
+  },
+  "source_discovery": {
+    "canonical_root": "%APPDATA%/MetaQuotes/Terminal/Common/Files",
+    "allowed_name": "Max_MTF_Training.csv",
+    "override": "Owner-selected absolute path only when its resolved file remains under the approved canonical root",
+    "forbidden": ["recursive discovery", "unrelated private-file scanning", "MT5 launch", "EA configuration mutation", "source-file modification", "reparse/symlink path traversal"]
+  },
+  "snapshot_contract": {
+    "capture": "Acquire the existing EA lock read-only; validate regular-file identity and filesystem fingerprint before/after byte capture; enforce the bounded source-size and capture-time limits.",
+    "partial_read": "Reject missing final line terminator, parse errors, source mutation, lock contention, unsupported path, or any before/after fingerprint mismatch.",
+    "snapshot_admission": "Before creating a snapshot file or ledger row, recompute structure from the exact captured/published bytes and reject partial trailing rows, unsupported encoding/size, schema mismatch, CSV parse errors, or any row with a column-count mismatch. Structurally complete raw CSV with semantic DQ blockers, including identical duplicates, remains snapshot-able for explicit review/correction; this does not grant DATA_READY.",
+    "publication": "Write exact captured bytes to same-volume staging, flush, verify SHA-256, make artifact read-only, then atomically publish content-addressed snapshot; persist lineage and audit metadata transactionally.",
+    "retry": "Same content and identity are idempotent; conflicting DB identity, hash mismatch, or tampered published artifact fails closed.",
+    "duplicates": "Conflicting identities block. Identical duplicate removal requires explicit confirmation and produces a new derived immutable snapshot with original/backup/before/after hashes and row count; the live source and parent snapshot are never edited."
+  },
+  "data_quality_contract": {
+    "checks": ["exact header/order/49 columns/semicolon", "CP32 feature contract and source lineage", "finite numeric values", "OHLC ordering and positive prices", "ATR validity", "bid/ask/spread sanity", "required field and row completeness", "supported period enum", "single symbol/timeframe", "timestamp format and chronology", "timezone provenance", "duplicate identity and conflicting row detection"],
+    "gap_states": ["NO_OBSERVED_DISCONTINUITY", "OBSERVED_TIMESTAMP_DISCONTINUITY", "GAP_DETECTION_UNAVAILABLE", "BROKER_RECONCILIATION_PENDING", "BROKER_CONFIRMED_MISSING", "BROKER_CONFIRMED_NOT_MISSING", "REPAIR_REQUIRED", "REPAIR_VERIFIED"],
+    "gap_rule": "Observed timestamp spacing is not proof of broker data loss or completeness. ONNX-02 has no source-backed broker-history channel or approved repair/disposition authority; real broker reconciliation therefore remains pending. No mean/fill/interpolation/synthetic OHLC or CP32 repair is allowed.",
+    "dq_status_boundary": "Schema/row blockers are DQ blockers; an observed timestamp gap is a distinct RECONCILIATION_PENDING finding and does not by itself rewrite broker status."
+  },
+  "research_windows": {
+    "exact_names_order": ["DISCOVERY", "TOURNAMENT", "FORWARD"],
+    "chronology": ["DiscoveryFrom <= DiscoveryTo", "DiscoveryTo < TournamentFrom", "TournamentFrom <= TournamentTo", "TournamentTo < ForwardFrom", "ForwardFrom <= ForwardTo"],
+    "requirements": ["all ranges have source rows", "all ranges are covered by the same verified immutable snapshot", "timezone-naive boundaries exactly match recorded source provenance", "persisted snapshot hash and window identity are immutable and replay-verified", "Forward does not grow after validation"],
+    "execution": "Configuration and validation only; no Discovery, WFA, CPCV, Tournament, Monte Carlo, or Forward evaluation."
+  },
+  "data_ready_gate": {
+    "requires": ["verified source authority and provenance", "passed schema and mandatory DQ", "duplicate identity issues resolved", "verified immutable snapshot SHA-256", "exact three valid chronological windows", "reproducible persisted evidence", "verified broker reconciliation or a separately Owner-authorized policy disposition", "no outstanding mandatory blocker"],
+    "real_status_without_broker_authority": "NOT_PROVEN",
+    "synthetic_status": "SYNTHETIC_TEST_EVIDENCE; never market DATA_READY",
+    "no_gap_does_not_mean": "BROKER_CONFIRMED_NOT_MISSING"
+  },
+  "api_contract": {
+    "base_path": "/api/v2/onnx/data",
+    "source_of_truth": "Backend validation and persisted snapshot/window/readiness evidence; frontend may not create readiness or DQ state.",
+    "compatibility": "Do not change frozen /api/v1/onnx/workspace null-only ONNX-01 response contract.",
+    "operations": ["GET /workspace", "POST /preflight", "POST /snapshots", "GET /snapshots/{snapshot_id}", "POST /snapshots/{snapshot_id}/resolve-identical-duplicates", "POST /windows/validate"],
+    "prohibited": ["research evaluation", "model instantiation/training/scoring", "ONNX export/runtime", "Champion mutation", "MT5 process invocation", "broker data repair"]
+  },
+  "evidence_boundary": {
+    "local_ci": "Synthetic fixtures only; evidence class is SYNTHETIC_TEST_EVIDENCE.",
+    "real_data_ready": "NOT_PROVEN",
+    "owner_pc": "NOT_ACCESSED",
+    "mt5": "NOT_RUN",
+    "scientific_execution": "NOT_RUN",
+    "model_training": 0,
+    "onnx_export": 0,
+    "champion_mutation": 0,
+    "owner_runtime": "NOT_PROVEN"
+  }
+}
