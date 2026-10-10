@@ -170,7 +170,7 @@
     },
     {
       "id": "TRUTH-RESEARCH-PURGE-001",
-      "claim": "The rejected active Research subsystem is absent from the registered API routes and application UI; Research-prefixed persisted runtime tables and metadata are removed during the current database migration. Future R00-R11 work remains planned and blocked until real MT5 sample readiness and separate authorization.",
+      "claim": "The legacy Research subsystem is retired and absent from active API routes, application UI, runtime tables, metadata, and dependencies. The legacy R00-R11 roadmap is retired and replaced by the separately governed ONNX-00..ONNX-09 plan; ONNX-00 grants planning authority only, not runtime execution or model training.",
       "documents": [
         "PROJECT_TRUTH_SYNC.md"
       ],
@@ -187,6 +187,25 @@
       "runtime_evidence": [
         "SYNTHETIC_DATABASES_ONLY",
         "OWNER_PC_FINAL_ACCEPTANCE_REQUIRED"
+      ]
+    },
+    {
+      "id": "TRUTH-ONNX-PLANNING-001",
+      "claim": "ONNX-00 defines the future single model-research authority and exact 23-family V1 allowlist under current Owner decision D-043 as planning-only contracts. D-044 records proposed active envelopes and parameter-capacity accounting without granting executable authority; explicit unresolved architecture/input/hardware/compatibility gaps block ONNX-03. No ONNX runtime, real research, model training, ONNX export, Research Challenger, MT5 access, or Champion mutation is implemented or authorized by this phase.",
+      "documents": [
+        "docs/onnx/ONNX_00_SCIENTIFIC_AUTHORITY.md"
+      ],
+      "source_owners": [
+        ".workflow/onnx_v1_authority.json",
+        ".workflow/decisions.json",
+        ".workflow/roadmap.json",
+        ".workflow/state.json"
+      ],
+      "status": "PASS",
+      "tests": [],
+      "runtime_evidence": [
+        "PLANNING_ONLY_NO_RUNTIME_CLAIM",
+        "OWNER_PC_AND_MT5_NOT_RUN"
       ]
     },
     {

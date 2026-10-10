@@ -175,6 +175,13 @@
     },
     {
       "directory": "backend/max_backend",
+      "file": "backend/max_backend/onnx_parameter_estimation.py",
+      "is_test": false,
+      "language": "Python",
+      "lines": 746
+    },
+    {
+      "directory": "backend/max_backend",
       "file": "backend/max_backend/optimizer_api.py",
       "is_test": false,
       "language": "Python",
@@ -504,6 +511,13 @@
     },
     {
       "directory": "backend/tests",
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "is_test": true,
+      "language": "Python",
+      "lines": 1326
+    },
+    {
+      "directory": "backend/tests",
       "file": "backend/tests/test_optimizer_draft.py",
       "is_test": true,
       "language": "Python",
@@ -738,7 +752,7 @@
       "file": "scripts/build_scientist_knowledge.py",
       "is_test": false,
       "language": "Python",
-      "lines": 240
+      "lines": 253
     },
     {
       "directory": "scripts",
@@ -13904,6 +13918,1054 @@
     {
       "caller": "backend/max_backend/mtf_geometry.py::fuse_role_observations",
       "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::_positive_int",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::_positive_int",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::_positive_int",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::recurrent_parameter_count",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::recurrent_parameter_count",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::recurrent_parameter_count",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::recurrent_parameter_count",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::recurrent_parameter_count",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::dense_transformer_block_parameter_estimate",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::dense_transformer_block_parameter_estimate",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::dense_transformer_block_parameter_estimate",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::moe_transformer_block_parameter_estimate",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::moe_transformer_block_parameter_estimate",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::moe_transformer_block_parameter_estimate",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::moe_transformer_block_parameter_estimate",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::moe_transformer_block_parameter_estimate",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::moe_transformer_block_parameter_estimate",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::moe_transformer_block_parameter_estimate",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::moe_transformer_block_parameter_estimate",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::moe_transformer_block_parameter_estimate",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::moe_transformer_block_parameter_estimate",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::moe_transformer_block_parameter_estimate",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::moe_transformer_block_parameter_estimate",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::moe_transformer_block_parameter_estimate",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::moe_transformer_block_parameter_estimate",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "candidate_spec.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "candidate_spec.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "candidate_spec.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "candidate_spec.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "candidate_spec.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "candidate_spec.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "params.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "params.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "range"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "enumerate"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "module.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "module.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "module.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "prod"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "expected.items"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "module.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "module.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "recurrent_parameter_count"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_attention_heads",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_attention_heads",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_attention_heads",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_patch_configuration",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_patch_configuration",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_patch_configuration",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_patch_configuration",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_patch_configuration",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_tft_covariates",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_tft_covariates",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_tft_covariates",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_tft_covariates",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_tft_covariates",
+      "target_token": "list"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_tft_covariates",
+      "target_token": "list"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_tft_covariates",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_tft_covariates",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_tft_covariates",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_tft_covariates",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_tft_covariates",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_tft_covariates",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_tft_covariates",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "proposal.items"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "envelope.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "isfinite"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "isfinite"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "bounds.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "isfinite"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "moe_params.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "moe_params.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "moe_params.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "moe_params.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "moe_params.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "moe_params.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "moe_params.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "moe_params.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "enumerate"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "module.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "module.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "module.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "module.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "prod"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "module.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "parameter_ids.add"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "required_group_by_role.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "roles.add"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "module.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "module.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "expert_counts.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "range"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "expert_counts.items"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "range"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "per_layer_expert_sizes.append"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "layer_experts.values"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "sum"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "sum"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "sum"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "sum"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "result.update"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "sum"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "expert_counts.values"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "sum"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "prod"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "module.get"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "target_token": "result.update"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_memory_bytes",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_memory_bytes",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_memory_bytes",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_memory_bytes",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_memory_bytes",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_memory_bytes",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_memory_bytes",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_memory_bytes",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_memory_bytes",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_candidate",
+      "target_token": "count_module_parameter_ledger"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_candidate",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_candidate",
+      "target_token": "validate_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_candidate",
+      "target_token": "counts.update"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_candidate",
+      "target_token": "estimate_neural_memory_bytes"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_candidate",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_candidate",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_tree_complexity_bound",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_tree_complexity_bound",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_tree_complexity_bound",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_tree_complexity_bound",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_tree_complexity_bound",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_tree_complexity_bound",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_tree_complexity_bound",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_tree_complexity_bound",
+      "target_token": "_positive_int"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_tree_complexity_bound",
+      "target_token": "min"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_tree_complexity_bound",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/onnx_parameter_estimation.py::estimate_tree_complexity_bound",
+      "target_token": "max"
     },
     {
       "caller": "backend/max_backend/optimizer_api.py::get_contract",
@@ -46902,6 +47964,1254 @@
       "target_token": "revalidate_candidate_for_registration"
     },
     {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_json",
+      "target_token": "json.loads"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_recurrent_tensor_ledger",
+      "target_token": "range"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_recurrent_tensor_ledger",
+      "target_token": "tensors.append"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_recurrent_tensor_ledger",
+      "target_token": "tensors.extend"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "transition.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "transition.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "transition.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "edges.setdefault"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "edges.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "pending.pop"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "reached.add"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "target_token": "pending.append"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_promotion_is_eligible",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_promotion_is_eligible",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_promotion_is_eligible",
+      "target_token": "candidate.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_cycle_closure_is_eligible",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_cycle_closure_is_eligible",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_cycle_closure_is_eligible",
+      "target_token": "candidate.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_cycle_closure_is_eligible",
+      "target_token": "candidate.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_cycle_closure_is_eligible",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_cycle_closure_is_eligible",
+      "target_token": "candidate.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::_cycle_closure_is_eligible",
+      "target_token": "candidate.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "target_token": "required.lower"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "target_token": "next"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_reachable_states"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_edge_exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_edge_exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_edge_exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_reachable_states"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_edge_exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_edge_exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "zip"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_edge_exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "next"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_edge_exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "_edge_exists"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "next"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "next"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "flow.index"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_candidate_promotion_is_independent_from_safe_cycle_closure",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_candidate_promotion_is_independent_from_safe_cycle_closure",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_candidate_promotion_is_independent_from_safe_cycle_closure",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_candidate_promotion_is_independent_from_safe_cycle_closure",
+      "target_token": "next"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_candidate_promotion_is_independent_from_safe_cycle_closure",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_candidate_promotion_is_independent_from_safe_cycle_closure",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_candidate_promotion_is_independent_from_safe_cycle_closure",
+      "target_token": "next"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_candidate_promotion_is_independent_from_safe_cycle_closure",
+      "target_token": "item.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_candidate_promotion_is_independent_from_safe_cycle_closure",
+      "target_token": "item.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_candidate_promotion_is_independent_from_safe_cycle_closure",
+      "target_token": "_promotion_is_eligible"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_candidate_promotion_is_independent_from_safe_cycle_closure",
+      "target_token": "_cycle_closure_is_eligible"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_candidate_promotion_is_independent_from_safe_cycle_closure",
+      "target_token": "_promotion_is_eligible"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_candidate_promotion_is_independent_from_safe_cycle_closure",
+      "target_token": "_cycle_closure_is_eligible"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_candidate_promotion_is_independent_from_safe_cycle_closure",
+      "target_token": "_cycle_closure_is_eligible"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_candidate_promotion_is_independent_from_safe_cycle_closure",
+      "target_token": "_cycle_closure_is_eligible"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_promotion_recovery_preserves_transaction_identity_and_is_idempotent",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_promotion_recovery_preserves_transaction_identity_and_is_idempotent",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_promotion_recovery_preserves_transaction_identity_and_is_idempotent",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_promotion_recovery_preserves_transaction_identity_and_is_idempotent",
+      "target_token": "next"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_promotion_recovery_preserves_transaction_identity_and_is_idempotent",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_promotion_recovery_preserves_transaction_identity_and_is_idempotent",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_promotion_recovery_preserves_transaction_identity_and_is_idempotent",
+      "target_token": "next"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_promotion_recovery_preserves_transaction_identity_and_is_idempotent",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_promotion_recovery_preserves_transaction_identity_and_is_idempotent",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_promotion_recovery_preserves_transaction_identity_and_is_idempotent",
+      "target_token": "next"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_promotion_recovery_preserves_transaction_identity_and_is_idempotent",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_promotion_recovery_preserves_transaction_identity_and_is_idempotent",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_promotion_recovery_preserves_transaction_identity_and_is_idempotent",
+      "target_token": "next"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_promotion_recovery_preserves_transaction_identity_and_is_idempotent",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_promotion_recovery_preserves_transaction_identity_and_is_idempotent",
+      "target_token": "edge.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_model_lab_expectancy_values_are_proposals_not_executable_kpi_gates",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_model_lab_expectancy_values_are_proposals_not_executable_kpi_gates",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_model_lab_expectancy_values_are_proposals_not_executable_kpi_gates",
+      "target_token": "human.lower"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_model_lab_expectancy_values_are_proposals_not_executable_kpi_gates",
+      "target_token": "human.lower"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact.bounds",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact.bounds",
+      "target_token": "value.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact.bounds",
+      "target_token": "value.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact",
+      "target_token": "expected_active.items"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact",
+      "target_token": "parameters.items"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact",
+      "target_token": "bounds"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact",
+      "target_token": "expected_new.items"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact",
+      "target_token": "parameters.items"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact",
+      "target_token": "bounds"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "json.dumps"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "gates.index"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "gates.index"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "requirement.lower"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "target_token": "requirement.lower"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_every_temporal_family_has_a_complete_estimator_role_contract",
+      "target_token": "_json"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_every_temporal_family_has_a_complete_estimator_role_contract",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_every_temporal_family_has_a_complete_estimator_role_contract",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_every_temporal_family_has_a_complete_estimator_role_contract",
+      "target_token": "set"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_every_temporal_family_has_a_complete_estimator_role_contract",
+      "target_token": "roles_by_family.items"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_every_temporal_family_has_a_complete_estimator_role_contract",
+      "target_token": "roles_by_family.items"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_every_temporal_family_has_a_complete_estimator_role_contract",
+      "target_token": "modules.extend"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_every_temporal_family_has_a_complete_estimator_role_contract",
+      "target_token": "range"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_every_temporal_family_has_a_complete_estimator_role_contract",
+      "target_token": "modules.append"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_every_temporal_family_has_a_complete_estimator_role_contract",
+      "target_token": "count_module_parameter_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "recurrent_parameter_count"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "recurrent_parameter_count"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "recurrent_parameter_count"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "recurrent_parameter_count"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "recurrent_parameter_count"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "recurrent_parameter_count"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "dense_transformer_block_parameter_estimate"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "dense_transformer_block_parameter_estimate"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "dense_transformer_block_parameter_estimate"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "moe_transformer_block_parameter_estimate"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "moe_transformer_block_parameter_estimate"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "moe_transformer_block_parameter_estimate"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "moe_transformer_block_parameter_estimate"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "moe_transformer_block_parameter_estimate"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "moe_transformer_block_parameter_estimate"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "moe_transformer_block_parameter_estimate"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "moe_transformer_block_parameter_estimate"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "moe_transformer_block_parameter_estimate"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "moe_transformer_block_parameter_estimate"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "validate_attention_heads"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "validate_attention_heads"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "validate_patch_configuration"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "validate_patch_configuration"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "validate_patch_configuration"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "validate_tft_covariates"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "validate_tft_covariates"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "validate_search_proposal"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "validate_search_proposal"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "validate_search_proposal"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "validate_search_proposal"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "float"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "float"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "float"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "validate_search_proposal"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "validate_search_proposal"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "float"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "validate_tft_covariates"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "validate_tft_covariates"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "estimate_neural_memory_bytes"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "estimate_neural_memory_bytes"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "estimate_neural_candidate"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "target_token": "_recurrent_tensor_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "count_module_parameter_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "validate_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "validate_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_tensor_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "recurrent_parameter_count"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "validate_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_tensor_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "validate_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_tensor_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "validate_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_tensor_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "validate_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_tensor_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "validate_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_tensor_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "validate_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_tensor_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "validate_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_tensor_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_tensor_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "validate_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "validate_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_candidate_spec"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "_recurrent_tensor_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "count_module_parameter_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "estimate_tree_complexity_bound"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "estimate_tree_complexity_bound"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "target_token": "estimate_tree_complexity_bound"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "count_module_parameter_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "estimate_neural_candidate"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "count_module_parameter_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "count_module_parameter_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "module.get"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "count_module_parameter_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "count_module_parameter_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "count_module_parameter_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "uneven_experts.append"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "count_module_parameter_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "count_module_parameter_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "count_module_parameter_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "count_module_parameter_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "count_module_parameter_ledger"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "target_token": "count_module_parameter_ledger"
+    },
+    {
       "caller": "backend/tests/test_optimizer_draft.py::make_database",
       "target_token": "initialize_database"
     },
@@ -63466,6 +65776,110 @@
       "symbol": "fuse_role_observations"
     },
     {
+      "file": "backend/max_backend/onnx_parameter_estimation.py",
+      "kind": "function",
+      "line_end": 38,
+      "line_start": 35,
+      "locator": "backend/max_backend/onnx_parameter_estimation.py::_positive_int",
+      "symbol": "_positive_int"
+    },
+    {
+      "file": "backend/max_backend/onnx_parameter_estimation.py",
+      "kind": "function",
+      "line_end": 60,
+      "line_start": 41,
+      "locator": "backend/max_backend/onnx_parameter_estimation.py::recurrent_parameter_count",
+      "symbol": "recurrent_parameter_count"
+    },
+    {
+      "file": "backend/max_backend/onnx_parameter_estimation.py",
+      "kind": "function",
+      "line_end": 70,
+      "line_start": 63,
+      "locator": "backend/max_backend/onnx_parameter_estimation.py::dense_transformer_block_parameter_estimate",
+      "symbol": "dense_transformer_block_parameter_estimate"
+    },
+    {
+      "file": "backend/max_backend/onnx_parameter_estimation.py",
+      "kind": "function",
+      "line_end": 143,
+      "line_start": 73,
+      "locator": "backend/max_backend/onnx_parameter_estimation.py::moe_transformer_block_parameter_estimate",
+      "symbol": "moe_transformer_block_parameter_estimate"
+    },
+    {
+      "file": "backend/max_backend/onnx_parameter_estimation.py",
+      "kind": "function",
+      "line_end": 269,
+      "line_start": 146,
+      "locator": "backend/max_backend/onnx_parameter_estimation.py::validate_recurrent_candidate_spec",
+      "symbol": "validate_recurrent_candidate_spec"
+    },
+    {
+      "file": "backend/max_backend/onnx_parameter_estimation.py",
+      "kind": "function",
+      "line_end": 276,
+      "line_start": 272,
+      "locator": "backend/max_backend/onnx_parameter_estimation.py::validate_attention_heads",
+      "symbol": "validate_attention_heads"
+    },
+    {
+      "file": "backend/max_backend/onnx_parameter_estimation.py",
+      "kind": "function",
+      "line_end": 288,
+      "line_start": 279,
+      "locator": "backend/max_backend/onnx_parameter_estimation.py::validate_patch_configuration",
+      "symbol": "validate_patch_configuration"
+    },
+    {
+      "file": "backend/max_backend/onnx_parameter_estimation.py",
+      "kind": "function",
+      "line_end": 309,
+      "line_start": 291,
+      "locator": "backend/max_backend/onnx_parameter_estimation.py::validate_tft_covariates",
+      "symbol": "validate_tft_covariates"
+    },
+    {
+      "file": "backend/max_backend/onnx_parameter_estimation.py",
+      "kind": "function",
+      "line_end": 348,
+      "line_start": 312,
+      "locator": "backend/max_backend/onnx_parameter_estimation.py::validate_search_proposal",
+      "symbol": "validate_search_proposal"
+    },
+    {
+      "file": "backend/max_backend/onnx_parameter_estimation.py",
+      "kind": "function",
+      "line_end": 563,
+      "line_start": 351,
+      "locator": "backend/max_backend/onnx_parameter_estimation.py::count_module_parameter_ledger",
+      "symbol": "count_module_parameter_ledger"
+    },
+    {
+      "file": "backend/max_backend/onnx_parameter_estimation.py",
+      "kind": "function",
+      "line_end": 617,
+      "line_start": 566,
+      "locator": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_memory_bytes",
+      "symbol": "estimate_neural_memory_bytes"
+    },
+    {
+      "file": "backend/max_backend/onnx_parameter_estimation.py",
+      "kind": "function",
+      "line_end": 678,
+      "line_start": 620,
+      "locator": "backend/max_backend/onnx_parameter_estimation.py::estimate_neural_candidate",
+      "symbol": "estimate_neural_candidate"
+    },
+    {
+      "file": "backend/max_backend/onnx_parameter_estimation.py",
+      "kind": "function",
+      "line_end": 746,
+      "line_start": 681,
+      "locator": "backend/max_backend/onnx_parameter_estimation.py::estimate_tree_complexity_bound",
+      "symbol": "estimate_tree_complexity_bound"
+    },
+    {
       "file": "backend/max_backend/optimizer_api.py",
       "kind": "class",
       "line_end": 26,
@@ -70730,6 +73144,158 @@
       "symbol": "test_committed_batch_keeps_source_consumed_after_challenger_row_delete"
     },
     {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 30,
+      "line_start": 29,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::_json",
+      "symbol": "_json"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 38,
+      "line_start": 33,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::_edge_exists",
+      "symbol": "_edge_exists"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 64,
+      "line_start": 41,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::_recurrent_candidate_spec",
+      "symbol": "_recurrent_candidate_spec"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 96,
+      "line_start": 67,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::_recurrent_tensor_ledger",
+      "symbol": "_recurrent_tensor_ledger"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 116,
+      "line_start": 99,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::_reachable_states",
+      "symbol": "_reachable_states"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 125,
+      "line_start": 119,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::_promotion_is_eligible",
+      "symbol": "_promotion_is_eligible"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 137,
+      "line_start": 128,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::_cycle_closure_is_eligible",
+      "symbol": "_cycle_closure_is_eligible"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 178,
+      "line_start": 140,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect",
+      "symbol": "test_optimizer_resource_authority_supersedes_d039_without_clearing_memory_defect"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 255,
+      "line_start": 181,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain",
+      "symbol": "test_forward_pass_cannot_bypass_candidate_runtime_readiness_chain"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 358,
+      "line_start": 258,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::test_candidate_promotion_is_independent_from_safe_cycle_closure",
+      "symbol": "test_candidate_promotion_is_independent_from_safe_cycle_closure"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 426,
+      "line_start": 361,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::test_promotion_recovery_preserves_transaction_identity_and_is_idempotent",
+      "symbol": "test_promotion_recovery_preserves_transaction_identity_and_is_idempotent"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 467,
+      "line_start": 429,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::test_model_lab_expectancy_values_are_proposals_not_executable_kpi_gates",
+      "symbol": "test_model_lab_expectancy_values_are_proposals_not_executable_kpi_gates"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 568,
+      "line_start": 470,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact",
+      "symbol": "test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "method",
+      "line_end": 476,
+      "line_start": 473,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact.bounds",
+      "symbol": "test_owner_proposed_parameter_envelopes_and_capacity_references_are_exact.bounds"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 742,
+      "line_start": 571,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::test_frozen_onnx_v1_scientific_contract_is_preserved",
+      "symbol": "test_frozen_onnx_v1_scientific_contract_is_preserved"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 793,
+      "line_start": 745,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::test_every_temporal_family_has_a_complete_estimator_role_contract",
+      "symbol": "test_every_temporal_family_has_a_complete_estimator_role_contract"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 985,
+      "line_start": 796,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::test_pure_parameter_estimation_and_capacity_guards_are_fail_closed",
+      "symbol": "test_pure_parameter_estimation_and_capacity_guards_are_fail_closed"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 1122,
+      "line_start": 988,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers",
+      "symbol": "test_recurrent_candidate_spec_reconciles_formula_and_rejects_arbitrary_ledgers"
+    },
+    {
+      "file": "backend/tests/test_onnx00_governance_contracts.py",
+      "kind": "function",
+      "line_end": 1326,
+      "line_start": 1125,
+      "locator": "backend/tests/test_onnx00_governance_contracts.py::test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults",
+      "symbol": "test_parameter_module_ledger_counts_moe_total_and_active_without_fake_defaults"
+    },
+    {
       "file": "backend/tests/test_optimizer_draft.py",
       "kind": "function",
       "line_end": 18,
@@ -71532,7 +74098,7 @@
     {
       "file": "scripts/build_scientist_knowledge.py",
       "kind": "function",
-      "line_end": 236,
+      "line_end": 249,
       "line_start": 19,
       "locator": "scripts/build_scientist_knowledge.py::main",
       "symbol": "main"
@@ -72907,17 +75473,17 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f",
+  "source_digest": "2671164d4e2bb587165d521cd430fcf2e90cb28ab2eb41211eaa99d9e9a0ad0d",
   "source_summary": {
-    "files": 121,
+    "files": 123,
     "languages": {
       "PowerShell": 2,
-      "Python": 97,
+      "Python": 99,
       "TypeScript": 3,
       "TypeScript/React": 19
     },
-    "lines": 57121,
-    "test_files": 42
+    "lines": 59206,
+    "test_files": 43
   },
   "tests": [
     "backend/tests/conftest.py",
@@ -72944,6 +75510,7 @@
     "backend/tests/test_m07_launcher_authority.py",
     "backend/tests/test_m07_true_mtf.py",
     "backend/tests/test_m08_strategy_results.py",
+    "backend/tests/test_onnx00_governance_contracts.py",
     "backend/tests/test_optimizer_draft.py",
     "backend/tests/test_optimizer_frame_finalization.py",
     "backend/tests/test_optimizer_reliability.py",

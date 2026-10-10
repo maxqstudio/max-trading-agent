@@ -171,14 +171,26 @@ def main() -> int:
                 "Automatic Champion selection, live trading, portfolio execution, news/sentiment and autonomous Scientist coding are outside the current Strategy contract.",
             ],
         },
+        {
+            "ref": "contract:legacy-research-retirement-and-onnx-boundary",
+            "title": "Legacy Research retirement and ONNX phase boundary",
+            "classification": "EXISTING",
+            "facts": [
+                "The legacy Research runtime and legacy R00-R11 roadmap are RETIRED; they are not implementation authority.",
+                "ONNX-00 is the current planning/governance-only phase and does not implement runtime, UI, model fitting/training, or ONNX export.",
+                "ONNX-01 through ONNX-09 are planned phases only and require their respective future authorization before implementation.",
+                "Real ONNX scientific execution and real Owner-PC MT5 Strategy acceptance remain NOT_PROVEN; planning documents and hosted source checks are not scientific evidence.",
+            ],
+        },
     ]
     snapshot = {
         "schema": KNOWLEDGE_SCHEMA,
-        "project": {"name": "MAX Trading Agent", "phase": "GitHub-hosted Strategy stabilization"},
+        "project": {"name": "MAX Trading Agent", "phase": "ONNX-00 planning/governance; runtime not implemented"},
         "authority_summary": [
             "GitHub main exact SHA = source authority",
             "GitHub Actions windows-latest = hosted build/test authority",
             "Owner PC + real MT5 = final runtime/E2E authority",
+            "Legacy Research and R00-R11 = RETIRED; current ONNX-00 = planning/governance only",
             "MT5 = simulation/optimization truth when runtime execution is authorized",
             "Deterministic Python = legality/KPI qualification/evidence validation authority",
             "SQLite = mutable operational authority",
@@ -208,11 +220,12 @@ def main() -> int:
             "Strategy Optimizer launches the frozen native tester INI through subprocess.Popen and relies on MetaTrader's configured tester-agent behavior without an external active-agent cap or memory-estimate START admission gate"
         ],
         "planned_capabilities": [
-            "Owner Strategy Champion and real MT5 sample preparation before future Research source work is authorized",
-            "Fresh future R00-R11 research roadmap remains blocked until the Owner declares the real MT5 backtest sample READY",
+            "ONNX-00 defines the scientific authority and roadmap only; ONNX-01 through ONNX-09 remain future phases requiring separate authorization",
+            "Owner decides whether a canonical Strategy-derived training dataset is ready before ONNX-02; this does not block ONNX-00 planning",
         ],
         "explicit_deferred_capabilities": [
-            "Research development and scientific execution until the Owner-declared real MT5 backtest sample is READY",
+            "ONNX runtime implementation, model fitting/training, ONNX export and scientific execution are not authorized by ONNX-00",
+            "Real Owner-PC MT5 Strategy runtime acceptance remains NOT_PROVEN and Owner-controlled",
             "Shadow/Live/portfolio execution",
             "news and sentiment workflows",
             "Scientist Python sandbox or coding tools",

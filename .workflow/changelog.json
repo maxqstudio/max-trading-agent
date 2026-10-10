@@ -193,6 +193,27 @@
         "Keep schema 15 unchanged. No pagefile/OS changes, search-space reduction, Research/scientific changes, real full-run completion, or Champion mutation is authorized.",
         "Adopt inspected Skill Workflow main 64836990609cd1ab22f9517be5aaffc14ad19ea9 and vendor its 21 applicable tools byte-identically; full regression, bounded runtime evidence and hosted CI remain pending until proven."
       ]
+    },
+    {
+      "date": "2026-10-09",
+      "title": "Close Strategy Optimizer source acceptance at exact main",
+      "type": "acceptance",
+      "changes": [
+        "Accepted main authority is 203f6ab3dc618e3edd247841aa25e1fa0951a19a.",
+        "Windows CI run 37964999480 passed on that exact main SHA.",
+        "This closes source/hosted acceptance only; real Owner MT5 and full Optimizer runtime remain NOT_PROVEN."
+      ]
+    },
+    {
+      "date": "2026-10-10",
+      "title": "Start ONNX-00 scientific authority planning",
+      "type": "planning",
+      "changes": [
+        "Fetch and inspect maxqstudio/max_research_agent ModelLab main 883ebeb1ca2e70f6255e0889358ba7c822ac52f5 and all 19 Owner-listed authorities.",
+        "Retire the legacy R00-R11 roadmap and define ONNX V1 as exactly six standalone plus eight hybrid families.",
+        "Add planning-only ONNX model, parameter, data, stage, state, checkpoint, UI/API ownership and ONNX-00..ONNX-09 roadmap authority.",
+        "No ONNX runtime, model training, MT5, Owner PC, export, Challenger creation or Champion mutation."
+      ]
     }
   ],
   "schema_version": 1

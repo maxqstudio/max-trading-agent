@@ -300,7 +300,7 @@ Rationale: The Owner-authorized Strategy Optimizer hardening repairs durable dra
 
 ## D-038 — Adopt Skill Workflow SW2-00 governance regressions
 
-Status: CURRENT
+Status: SUPERSEDED
 
 MAX adopts Skill_Workflow main 64836990609cd1ab22f9517be5aaffc14ad19ea9 after inspecting the exact delta from 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8. Vendor its 21 applicable scripts byte-identically, verify exact upstream provenance in Windows CI, and run its new sequence call-resolution and cross-document regression selftests. Do not adopt Skill Workflow sample project state or unrelated workflows.
 
@@ -308,8 +308,48 @@ Rationale: The Owner requested the updated Skill Workflow. Its current delta pre
 
 ## D-039 — Fail closed on Windows commit-memory pressure
 
-Status: CURRENT
+Status: SUPERSEDED
 
-Resource admission considers both physical RAM and current Windows commit headroom. The frozen Optimizer workload identity includes EA SHA, MT5 build, symbol, timeframe, history-duration bucket, tick model, optimization mode, parameter count and search-space size. Native monitoring reads system commit and exact Job Object-owned terminal/tester processes, including PrivateUsage; compatible bounded high-water observations reuse existing round state read-only. A verified resource stop remains resumable only after fresh admission; failed termination or telemetry persistence enters RECONCILIATION_REQUIRED and is not resumable. AUTO_SAFE and CUSTOM remain subject to the same physical/commit hard floors and Job Object active-process cap. No pagefile mutation, schema bump, search-space shrink, or scientific acceptance change is permitted.
+Historical policy, superseded by D-042: resource admission considered physical RAM and Windows commit headroom. The frozen Optimizer workload identity included EA SHA, MT5 build, symbol, timeframe, history-duration bucket, tick model, optimization mode, parameter count and search-space size. Native monitoring read system commit and exact Job Object-owned terminal/tester processes, including PrivateUsage; compatible bounded high-water observations reused existing round state read-only. A verified resource stop remained resumable only after fresh admission; failed termination or telemetry persistence entered RECONCILIATION_REQUIRED and was not resumable. AUTO_SAFE and CUSTOM were subject to physical/commit floors and a Job Object active-process cap. No pagefile mutation, schema bump, search-space shrink, or scientific acceptance change was part of that historical decision.
 
 Rationale: The Owner-reported full-range 17D Fast Genetic attempt crashed under Windows commit-memory exhaustion despite historical bounded RAM/concurrency checks. Current commit charge and process private bytes must therefore gate capacity and trigger explicit, verified stop/reconciliation behavior before system exhaustion.
+
+## D-040 — ONNX-00 planning authority and frozen V1 universe
+
+Status: SUPERSEDED
+
+The legacy Research subsystem and legacy R00-R11 roadmap are RETIRED. ONNX-00 establishes the sole future model-research authority as planning/governance only. V1 has exactly six standalone families (lightgbm, xgboost, gru, tcn, transformer, patchtst) and eight hybrids (each of gru, tcn, transformer, patchtst paired separately with lightgbm and xgboost); random_forest, lstm, itransformer, tft, transformer_moe and all other hybrids are excluded. This decision does not authorize ONNX runtime, scientific execution, model training, ONNX export, MT5, Research Challenger creation, or Champion mutation. The complete contracts and ONNX-00..ONNX-09 roadmap are in .workflow/onnx_v1_authority.json.
+
+Rationale: A single explicit Owner-fixed family universe and planning-only boundary prevent revival of the retired Research implementation or accidental expansion from ModelLab's dynamic legacy registry.
+
+## D-041 — Apply latest Skill Workflow guidance without silently changing MAX validator provenance
+
+Status: CURRENT
+
+The latest Skill_Workflow/main SHA 3b3289681cf2cec8d3d132895e0848be64bb54b1 was fetched and its normative guidance applied to ONNX-00. MAX's executable Windows CI and vendored validator provenance remain pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4. The toolchain is not claimed byte-identical to 3b328968 and is not migrated in this planning-only phase; a separate reviewed migration is required before changing the CI pin.
+
+Rationale: The Owner requested use of the updated Skill Workflow. Preserve verifiable current CI provenance while making the non-adoption boundary explicit instead of representing older tools as the new SHA.
+
+## D-042 — Restore native MT5 tester-agent execution authority
+
+Status: CURRENT
+
+The current Optimizer execution authority is merged PR #18 at accepted main SHA 203f6ab3dc618e3edd247841aa25e1fa0951a19a: launch terminal64.exe through subprocess.Popen with the frozen /config INI and let MT5 manage its configured local tester agents. MAX must not impose an external active-process cap or estimated-memory START gate. Reintroducing either control requires a new explicit Owner decision. D-039 is superseded as current execution policy; the historical Windows commit-memory exhaustion remains unresolved and NOT_PROVEN.
+
+Rationale: PR #18 restored the Owner-authorized native MT5 launch and Owner-selected agent behavior. Removing the MAX-owned cap and memory-estimate gate does not prove the reported memory exhaustion is eliminated; source behavior and runtime evidence remain separate.
+
+## D-043 — ONNX V1 Owner model universe expansion and architecture identity
+
+Status: CURRENT
+
+The Owner's Revised ONNX-00 Model Universe Expansion V2 supersedes D-040's 14-family universe and any earlier Transformer-to-iTransformer universe amendment. ONNX V1 has exactly nine standalone identities (lightgbm, xgboost, gru, tcn, itransformer, patchtst, tft, transformer_moe, lstm) and exactly fourteen temporal-to-tree hybrids: each of gru, tcn, itransformer, patchtst, tft, transformer_moe, and lstm paired separately with lightgbm and xgboost. Conventional standalone transformer, random_forest, all other unapproved families, aliases, fallback models, and hybrid compositions are excluded. Each architecture and exact composition has an independent identity and artifact compatibility contract. This is governance/planning authorization only; it grants no runtime, training, scientific execution, ONNX export, Owner-PC, MT5, Challenger creation, or Champion promotion authority. Unresolved architecture-specific parameter, input, early-stopping, hardware, or compatibility contracts fail closed and block ONNX-03 admission until separately complete and frozen.
+
+Rationale: The Owner explicitly selected the 23-family universe and requires genuine architecture identity, source-backed covariates, no hidden aliases, and no unverified runtime claims. D-044 separately records the Owner's proposed ranges without changing this family decision. The earlier 14-family record is retained as history rather than rewritten.
+
+## D-044 — ONNX architecture search proposals and parameter capacity accounting
+
+Status: CURRENT
+
+The Owner V3 addendum supplements current D-043 without changing its exact 9-standalone/14-hybrid universe. The newly provided iTransformer, TFT, Transformer MoE, and LSTM numeric search ranges and patience values are recorded only as PROPOSED_ACTIVE_SEARCH_ENVELOPE, not permanent legal maxima or executable gates, until accepted through the applicable governance process. Existing LightGBM, XGBoost, GRU, TCN, and PatchTST active ranges remain unchanged. Every exact CandidateSpec requires an auditable architecture-specific parameter and memory estimate, with MoE total and active counts separated, tree complexity reported separately, and unknown fields explicitly NOT_APPLICABLE or OPEN_AUTHORITY_GAP. There is no arbitrary permanent trainable-parameter ceiling. No model training, runtime admission, or ONNX compatibility is proven or authorized by this decision.
+
+Rationale: Owner-supplied proposals and structural reference formulas enable transparent capacity planning while preserving the distinction between estimated model size, total training memory, architecture validity, dataset adequacy, and executable authority.

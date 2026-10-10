@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f
+Source digest: 2671164d4e2bb587165d521cd430fcf2e90cb28ab2eb41211eaa99d9e9a0ad0d
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -31,6 +31,7 @@ Generated/refreshed: current compiler run
 | backend/max_backend/main.py | Python | 200 | backend/max_backend | NO |
 | backend/max_backend/mt5.py | Python | 104 | backend/max_backend | NO |
 | backend/max_backend/mtf_geometry.py | Python | 203 | backend/max_backend | NO |
+| backend/max_backend/onnx_parameter_estimation.py | Python | 746 | backend/max_backend | NO |
 | backend/max_backend/optimizer_api.py | Python | 169 | backend/max_backend | NO |
 | backend/max_backend/optimizer_candidates.py | Python | 767 | backend/max_backend | NO |
 | backend/max_backend/optimizer_core.py | Python | 1922 | backend/max_backend | NO |
@@ -78,6 +79,7 @@ Generated/refreshed: current compiler run
 | backend/tests/test_m07_launcher_authority.py | Python | 180 | backend/tests | YES |
 | backend/tests/test_m07_true_mtf.py | Python | 245 | backend/tests | YES |
 | backend/tests/test_m08_strategy_results.py | Python | 2465 | backend/tests | YES |
+| backend/tests/test_onnx00_governance_contracts.py | Python | 1326 | backend/tests | YES |
 | backend/tests/test_optimizer_draft.py | Python | 146 | backend/tests | YES |
 | backend/tests/test_optimizer_frame_finalization.py | Python | 46 | backend/tests | YES |
 | backend/tests/test_optimizer_reliability.py | Python | 846 | backend/tests | YES |
@@ -111,7 +113,7 @@ Generated/refreshed: current compiler run
 | frontend/vite.config.ts | TypeScript | 18 | frontend | NO |
 | scripts/build_m05_final_evidence.py | Python | 586 | scripts | NO |
 | scripts/build_m05_partial_evidence.py | Python | 217 | scripts | NO |
-| scripts/build_scientist_knowledge.py | Python | 240 | scripts | NO |
+| scripts/build_scientist_knowledge.py | Python | 253 | scripts | NO |
 | scripts/generate_module_map.py | Python | 120 | scripts | NO |
 | scripts/generate_symbol_index.py | Python | 261 | scripts | NO |
 | scripts/launcher_authority.py | Python | 161 | scripts | NO |

@@ -4,15 +4,15 @@
     "GitHub Actions on windows-latest is the hosted build/test authority for ordinary development phases.",
     "Owner PC plus real MetaTrader 5 is final runtime/E2E authority only after the GitHub development roadmap is complete.",
     "The public repository is source-only: runtime databases, evidence, artifacts, datasets, credentials and Owner terminal state are not source authority and must not be tracked.",
-    "The Owner explicitly authorizes Strategy promotion. Fresh Research work remains blocked until the Owner declares a real MT5 backtest/sample dataset READY and Control Room authorizes a source phase.",
+    "The Owner explicitly authorizes Strategy promotion. The legacy Research subsystem and R00-R11 roadmap are RETIRED; ONNX-00 planning is authorized, while every ONNX runtime/science implementation phase requires separate Control Room authorization.",
     "Scientist is advisory only and cannot create scientific, promotion, risk or execution authority.",
-    "The previously implemented Research subsystem is rejected and removed from active MAX source, API, UI, schema authority and runtime dependencies.",
-    "No Research runtime, Research model fitting, or scientific outcome is proven or authorized by the current Strategy source phase; synthetic Optimizer fixtures are source tests only.",
+    "The previously implemented Research subsystem is retired and removed from active MAX source, API, UI, schema authority and runtime dependencies. It must not be revived beside ONNX.",
+    "ONNX-00 is planning/governance only. No ONNX runtime, model training, scientific outcome, ONNX export, Research Challenger, or Champion mutation is authorized or proven by this phase.",
     "Optimizer editable draft is mutable current preference state; every started job owns an immutable request snapshot, durable launch identity, and atomically published round evidence.",
     "Optimizer read projections may accelerate ordinary listing only; candidate-to-Challenger mutations still revalidate retained canonical evidence.",
     "Builder verification uses synthetic temporary databases/evidence and mocked or isolated process boundaries; it does not run a real Owner MT5 optimization or touch the Owner operational database.",
     "Destructive Strategy reset requires explicit confirmation, verified backup and ownership-scoped cleanup; ordinary cleanup remains a distinct action.",
-    "Current governance method is Skill Workflow exact SHA 64836990609cd1ab22f9517be5aaffc14ad19ea9 with roadmap authority, generated documentation and DURING sequence evidence."
+    "The latest Skill_Workflow/main guidance inspected for ONNX-00 is 3b3289681cf2cec8d3d132895e0848be64bb54b1. MAX's executable Windows CI and vendored validator provenance remain pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4; this planning phase applies current normative guidance but does not silently migrate the validator toolchain."
   ],
   "entry_points": [
     {
@@ -45,7 +45,8 @@
     "expected_outcomes": [
       "Preserve deterministic Strategy lifecycle authority from optimizer evidence through Challenger and Champion tenure.",
       "Stabilize the Strategy lifecycle, generated artifact controls, explicit reset/recovery behavior, and fail-closed Owner-facing actions.",
-      "Remove the rejected active Research subsystem and keep fresh R00-R11 work planned and blocked until the Owner declares a real MT5 sample READY.",
+      "Keep the rejected legacy Research subsystem retired and establish a single separately governed ONNX model Challenger/Champion roadmap.",
+      "Complete ONNX-00 scientific authority and planning only; runtime, training, export, and real research remain unimplemented and unauthorized.",
       "Keep public-source development reproducible from GitHub with Windows CI as hosted build/test authority while deferring real MT5/runtime acceptance to the final Owner-PC phase.",
       "Make the Strategy Optimizer draft durable, job execution restart-safe, evidence publication atomic, and ordinary candidate reads bounded before any fresh Owner runtime run."
     ],
@@ -55,7 +56,7 @@
       "authorized Builder",
       "Control Room auditor"
     ],
-    "purpose": "Windows-only GitHub-first control plane for deterministic Strategy optimization, Challenger/Champion governance, and MetaTrader 5 execution evidence; fresh Research work is roadmap-gated and not active runtime.",
+    "purpose": "Windows-only GitHub-first Strategy control plane with a separately governed ONNX model Challenger/Champion workspace; ONNX-00 is planning-only and runtime remains unimplemented.",
     "repository": "maxqstudio/max-trading-agent"
   },
   "schema_version": 1,

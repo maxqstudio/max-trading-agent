@@ -423,7 +423,7 @@
       "source_of_truth": "ea/baseline/manifest.json + ea/baseline/Max_MTF.mq5"
     },
     {
-      "name": "Retired Research runtime state",
+      "name": "Retired legacy Research runtime state",
       "source_of_truth": "schema migration 15 and legacy research tables/metadata when encountered",
       "mutability": "purged from current operational authority during migration",
       "legal_writes": [
@@ -432,7 +432,8 @@
       "invariants": [
         "legacy Research tables and metadata do not remain current runtime authority",
         "Strategy registry, Champion, optimizer, baseline and Scientist settings are preserved",
-        "fresh R00-R11 phases require future Owner readiness and separate authorization"
+        "legacy R00-R11 are retired and are not a runtime authority",
+        "future ONNX runtime requires a separately authorized implementation phase after ONNX-00 planning audit"
       ],
       "retention": "historical source lineage only; no active runtime state",
       "source_of_truth": "schema_meta schema version 15 plus migration regression tests"
