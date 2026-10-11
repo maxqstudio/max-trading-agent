@@ -1,6 +1,6 @@
 # P0B Schema-16 Compatibility Decision
 
-Status: design authority for the P0B source phase; implementation and synthetic acceptance are not yet proven.
+Status: P0B source implementation remains IN_PROGRESS pending cumulative local/hosted validation and independent Control Room acceptance. Focused synthetic schema/cutover suite: 74 passed, 0 failed. Actual Owner database compatibility remains NOT_PROVEN.
 
 ## Scope and evidence
 
@@ -11,10 +11,22 @@ The source baseline is the accepted P0A main commit `8ba001bba31d7c74e2d1d1aa03d
 | `203f6ab3dc618e3edd247841aa25e1fa0951a19a` | `backend/max_backend/schema.py`, `backend/max_backend/workflow_store.py` | Schema 15 application baseline. |
 | `c75f978ea4438183e6a759d398eb69b3eeca9ac4` | ONNX-00 governance-only tree diff | No database schema change. |
 | `1a9c9a6990e1f2571e4d85d79436402e6d37ec23` | ONNX-01 workspace/API tree diff | No database schema change. |
-| `98ac8477646bafd608650f3a30de8a3c38b2df68` | `backend/max_backend/schema.py`, `backend/max_backend/onnx_data_store.py`, `backend/max_backend/workflow_store.py::migrate_current` | Schema 15 → 16; adds three ONNX data tables, two named indexes and six immutability triggers. |
+| `98ac8477646bafd608650f3a30de8a3c38b2df68` | Historical `schema.py`, archive-store migration module, and `workflow_store.py::migrate_current` in that Git tree | Schema 15 → 16; adds three ONNX data tables, two named indexes and six immutability triggers. |
 | `39f7a7ea9da943e4ce72b74a5264395c1edd6888` | Final pre-rollback source tree | No further schema change after ONNX-02. |
 
-The historical archive tables are `onnx_data_snapshots`, `onnx_data_window_configs`, and `onnx_data_readiness_evidence`. Their declared foreign keys retain snapshot ancestry and bind window/readiness records to snapshot identities. Two indexes support creation-time and snapshot/revision reads. Six triggers reject UPDATE/DELETE on the three archive tables. Exact DDL, columns, indexes, foreign keys, constraints, and trigger bodies must be verified by the implementation's structural profile; names alone are insufficient.
+The historical archive schema was read from the `migrate_onnx_data` routine in the [immutable ONNX-02 commit `98ac847`](https://github.com/maxqstudio/max-trading-agent/commit/98ac8477646bafd608650f3a30de8a3c38b2df68). That implementation is retired from the current rollback source tree and cited only as historical migration evidence.
+
+| Object | Columns / role | Relationships and constraints |
+|---|---|---|
+| `onnx_data_snapshots` | Snapshot and dataset identity/hash; parent snapshot; source path/fingerprint/size/row count; schema/strategy/feature/EA identities; symbol/timeframe/period; timestamp provenance/range/discontinuity; broker reconciliation; DQ/correction/evidence JSON; creation evidence/time. | `snapshot_id` primary key; unique 64-character SHA; positive size, nonnegative rows, DQ/evidence-class checks; nullable `parent_snapshot_id` self-FK. |
+| `onnx_data_window_configs` | Window config identity, snapshot identity/hash, revision, timezone provenance, frozen windows/validation JSON, creation time. | Primary key; unique `(snapshot_id, revision)`; FK to snapshot. |
+| `onnx_data_readiness_evidence` | Readiness identity, snapshot identity/hash, window-config identity, evidence JSON, creation time. | Primary key; unique `(snapshot_id, window_config_id)`; FKs to snapshot and window config. |
+| `ix_onnx_data_snapshots_created` | Snapshot chronology read index. | `created_utc DESC`. |
+| `ix_onnx_data_windows_snapshot` | Snapshot/revision read index. | `(snapshot_id, revision DESC)`. |
+
+Six immutable triggers reject UPDATE/DELETE on each of the three archive tables. The exact schema profile fingerprints all 11 named objects including SQL bodies, table definitions, constraints, indexes and foreign-key declarations; names alone are insufficient. Archive lineage/hash/path values are stored as columns; the historical DDL has no FK to `artifact_registry`.
+
+The schema-15 core's 42 application-owned objects match the pinned structural digest; no schema-15 core table, column, index or trigger was changed by schema 16. Strategy baseline, Optimizer jobs/rounds/checkpoints, Challenger/Champion/promotion, Scientist, and `artifact_registry` remain core authority. Research-prefixed tables/metadata/objects are not active MAX authority in the rollback source; P0B preserves them as opaque rows/objects and deliberately does not replay the historical purge. Unknown non-Research/non-archive objects fail closed. The tests use populated relational synthetic records and compare physical source hashes and logical object/row/FK fingerprints across blocked/startup/staging operations.
 
 Important historical side effect: schema-16 `backend/max_backend/workflow_store.py::migrate_current` called the ONNX table creator and also called `backend/max_backend/workflow_store.py::_purge_research_authority`, which deletes Research-tagged `artifact_registry` rows, Research-prefixed `schema_meta` keys, and Research-prefixed SQLite objects. P0B must never replay this purge. If an earlier real migration already removed records, this compatibility work cannot recreate them; actual Owner contents remain unverified.
 
@@ -47,7 +59,9 @@ The implementation may stage only explicitly supplied synthetic test databases i
 - publish an immutable machine-readable staging report and retain failed candidates for explicit disposition;
 - never auto-activate a candidate; activation is a separate explicit Owner action, followed by post-activation readback and rollback/recovery evidence.
 
-This P0B source phase does not access or copy the actual Owner database and does not activate any candidate. Synthetic acceptance cannot establish compatibility with the actual Owner database.
+Staging requires the caller to attest that the source is quiesced and provide an authorization reference; staging also rejects SQLite sidecars, hashes source before/after, and confirms logical equality of candidate and source. That attestation is recorded evidence, not independent proof that an Owner process is stopped. Activation requires a distinct exact confirmation, application-stopped attestation, authorization reference, and exact source/candidate hashes; it remains a separate operation and is never invoked by startup or CI. These local inputs are not a cryptographic identity system and do not authorize actual Owner execution.
+
+This P0B source phase does not access or copy the actual Owner database and does not activate any candidate. Synthetic acceptance cannot establish compatibility with the actual Owner database. Artifact registry rows and database lineage are fingerprinted as part of the SQLite image; live external artifact paths and Owner runtime references have not been independently verified.
 
 ## Compatibility matrix
 

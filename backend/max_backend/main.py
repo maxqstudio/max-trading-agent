@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 import logging
+import sqlite3
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
@@ -21,14 +22,18 @@ from .db import (
     assert_database_schema_compatible,
     ensure_baseline_registered,
     initialize_database,
+    is_schema16_archive_compatible,
+    open_read_only,
     read_baseline,
+    verify_schema16_database_integrity,
 )
 from .mt5 import detect_mt5
 from .workflow_store import migrate_current
 from .optimizer_api import router as optimizer_router
 from .optimizer_jobs import reconcile_optimizer_startup
+from .optimizer_store import ACTIVE_STATES as OPTIMIZER_ACTIVE_STATES
 from .optimizer_store import latest_job
-from .promotion_service import recover_incomplete_promotions
+from .promotion_service import recover_incomplete_promotions, verify_current_strategy_champion
 from .scientist_api import router as scientist_router
 from .scientist_store import (
     migrate_m05,
@@ -79,7 +84,12 @@ async def lifespan(_: FastAPI):
 
 def _run_startup_migrations(path) -> None:
     """Guard the existing database before any initialization or recovery write."""
-    assert_database_schema_compatible(path, allow_missing=True)
+    schema = assert_database_schema_compatible(path, allow_missing=True)
+    if is_schema16_archive_compatible(schema):
+        verify_schema16_database_integrity(path)
+        ensure_baseline_registered(path)
+        _validate_schema16_operational_state(path, schema)
+        return
     initialize_database(path)
     ensure_baseline_registered(path)
     migrate_m04(path)
@@ -91,6 +101,89 @@ def _run_startup_migrations(path) -> None:
     recover_retired_challenger_deployments(path=path)
     migrate_current(path)
     reconcile_optimizer_startup(path=path)
+
+
+def _validate_schema16_operational_state(path, schema: dict) -> None:
+    """Read-only startup gate: never replay schema-16 recovery side effects."""
+    conn = open_read_only(path)
+    try:
+        pending: dict[str, int] = {}
+        optimizer_rows = conn.execute(
+            "SELECT status,active FROM optimizer_jobs"
+        ).fetchall()
+        optimizer_pending = sum(
+            1
+            for row in optimizer_rows
+            if bool(row["active"]) or str(row["status"]) in OPTIMIZER_ACTIVE_STATES
+        )
+        if optimizer_pending:
+            pending["optimizer"] = optimizer_pending
+        checks = (
+            (
+                "promotion",
+                "SELECT COUNT(*) FROM strategy_promotions "
+                "WHERE state IN ('PREPARED','ARTIFACTS_STAGED','FILES_COMMITTED')",
+            ),
+            (
+                "backtest",
+                "SELECT COUNT(*) FROM strategy_challenger_backtests "
+                "WHERE state IN ('PREPARED','RUNNING')",
+            ),
+            (
+                "scientist_request",
+                "SELECT COUNT(*) FROM scientist_chat_requests "
+                "WHERE state='CALL_IN_FLIGHT'",
+            ),
+            (
+                "challenger_batch",
+                "SELECT COUNT(*) FROM strategy_challenger_batches "
+                "WHERE state IN ('PREPARED','VALIDATED','STAGED','RECOVERY_REQUIRED')",
+            ),
+            (
+                "challenger_retirement",
+                "SELECT COUNT(*) FROM strategy_challenger_retirements "
+                "WHERE state='PREPARED'",
+            ),
+            (
+                "challenger_registration",
+                "SELECT COUNT(*) FROM strategy_challengers WHERE status='REGISTERING'",
+            ),
+        )
+        for name, query in checks:
+            count = int(conn.execute(query).fetchone()[0])
+            if count:
+                pending[name] = count
+    except sqlite3.Error as exc:
+        raise DatabaseSchemaGuardError(
+            "SCHEMA16_OPERATIONAL_STATE_UNVERIFIABLE",
+            "Schema-16 operational invariants could not be checked read-only; startup is blocked without recovery or mutation.",
+            database_schema_version=16,
+            compatibility_profile=schema["compatibility_profile"],
+        ) from exc
+    finally:
+        conn.close()
+
+    try:
+        champion = verify_current_strategy_champion(path=path)
+    except Exception:
+        # The failure may concern a persisted path, artifact, or current
+        # Champion projection. Keep its details out of the public startup
+        # diagnostic and preserve the database for explicit reconciliation.
+        pending["champion_integrity_unverifiable"] = 1
+    else:
+        if champion.get("status") not in {"VERIFIED", "NONE"}:
+            pending["champion_integrity"] = 1
+    if pending:
+        categories = ", ".join(
+            f"{name}={count}" for name, count in sorted(pending.items())
+        )
+        raise DatabaseSchemaGuardError(
+            "SCHEMA16_OPERATIONAL_RECONCILIATION_REQUIRED",
+            "Schema 16 is structurally compatible, but persisted operational authority needs explicit reconciliation "
+            f"({categories}). No startup recovery, migration, Champion change, file cleanup, or database mutation was performed.",
+            database_schema_version=16,
+            compatibility_profile=schema["compatibility_profile"],
+        )
 
 
 app = FastAPI(title=PROJECT_NAME, version="0.1.0", lifespan=lifespan)

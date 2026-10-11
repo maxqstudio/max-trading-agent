@@ -212,7 +212,7 @@
     },
     {
       "path": "docs/ROADMAP.md",
-      "sha256": "b2b9e6a4172eecaf965711ac3d266b666f5bc5d8a529b321f0897258e60ddbb2"
+      "sha256": "f330c7eab821d47f3e2d3624efe7387957faf081f30d0f98ba0e24d8e4190ca0"
     },
     {
       "path": "docs/ARCHITECTURE_PHASE1.md",
@@ -240,7 +240,7 @@
     },
     {
       "path": "backend/max_backend/workflow_store.py",
-      "sha256": "5700cf8bd3fd2365fa418b9c165d6e11da00632fa724d9594f942e691c072d68"
+      "sha256": "6df897377e0d441f8089ef884cc8d67cfbb7c30667b4259cf35a28a2a8952c3a"
     },
     {
       "path": "backend/max_backend/mtf_geometry.py",
@@ -252,7 +252,7 @@
     },
     {
       "path": "backend/max_backend/optimizer_store.py",
-      "sha256": "17edea66c88eabafd46d50bac618daaf28883862113b8934260d4fd975af380c"
+      "sha256": "e20d47e0e3708fbc283f7855b64909ca8ebd0c5c72d0c7f9c69a0cdd6aace0e1"
     },
     {
       "path": "backend/max_backend/optimizer_worker.py",
@@ -280,7 +280,7 @@
     },
     {
       "path": "backend/max_backend/challenger_store.py",
-      "sha256": "575f475b81f484d6f1b2bbcb83d6ee237b939b15ba89f84ce6e01dfddb9a08fc"
+      "sha256": "f39b363767d9b33b50aaed690b14d5bce2411d6b9b450154293599c7503cfcea"
     },
     {
       "path": "backend/max_backend/challenger_bundle.py",
@@ -288,11 +288,11 @@
     },
     {
       "path": "backend/max_backend/challenger_operations_store.py",
-      "sha256": "63049a925ed7d9fc44ea0ca1d3bb74821536b3e8a907f0ed09c211754442cda5"
+      "sha256": "16313a11beb64f5789fa5062c280b5b05f6f9da88cc1b7f3b9dc602d5afdbd36"
     },
     {
       "path": "backend/max_backend/challenger_operations.py",
-      "sha256": "0ebc947394f1e6a4ede38cb212e949fa0f318a17ecea5f74bd1cf19b53ba661f"
+      "sha256": "057ae67fa1973ee18136055691f597c0c83decce398cf847a1e734d9a8e2e61d"
     },
     {
       "path": "backend/max_backend/challenger_api.py",
@@ -320,7 +320,7 @@
     },
     {
       "path": "backend/max_backend/champion_store.py",
-      "sha256": "41986ee85766bc88115f26fa82df0fc0b859a78df419c3fb2e46fd573449c9c2"
+      "sha256": "405fb12e607a3675fbb6859486bf14c98a00085faec6a6ce2fc2e34904c8eca5"
     },
     {
       "path": "backend/max_backend/champion_bundle.py",
@@ -328,11 +328,11 @@
     },
     {
       "path": "backend/max_backend/promotion_service.py",
-      "sha256": "247551a3d8e8d729e62d70d0d28c1100354ffe312a2b1d8f4e0d201d6c9159db"
+      "sha256": "9fdc9bd6622edb4524058914375bba2a64722d364af885d4ea29d403a010e19a"
     },
     {
       "path": "backend/max_backend/main.py",
-      "sha256": "e18abaa7f8eb61ebcec1ef0ec550f1953783f2166b3feb5c5058291503bc7239"
+      "sha256": "06c492c5074943c742d2eef4c7c8a20a13adb9a7df6a3b0e34ae4818dde73268"
     },
     {
       "path": "backend/max_backend/scientist_knowledge.py",
@@ -344,7 +344,7 @@
     },
     {
       "path": "backend/max_backend/scientist_store.py",
-      "sha256": "43df0c4d39c5a91606df4973a8de832e019f82e903575ef97727b38081b7cb84"
+      "sha256": "396cd4b622b8758e98fb7168f2d6428b6f6ebb259d47c94ff0fa2133cf2a8ff6"
     },
     {
       "path": "backend/max_backend/scientist_provider.py",

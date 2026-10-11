@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d
+Source digest: 38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -18,17 +18,18 @@ Generated/refreshed: current compiler run
 | backend/max_backend/challenger_bundle.py | Python | 839 | backend/max_backend | NO |
 | backend/max_backend/challenger_deployment.py | Python | 554 | backend/max_backend | NO |
 | backend/max_backend/challenger_operations.py | Python | 1066 | backend/max_backend | NO |
-| backend/max_backend/challenger_operations_store.py | Python | 1030 | backend/max_backend | NO |
+| backend/max_backend/challenger_operations_store.py | Python | 1037 | backend/max_backend | NO |
 | backend/max_backend/challenger_registry.py | Python | 571 | backend/max_backend | NO |
 | backend/max_backend/challenger_selection.py | Python | 410 | backend/max_backend | NO |
-| backend/max_backend/challenger_store.py | Python | 445 | backend/max_backend | NO |
+| backend/max_backend/challenger_store.py | Python | 447 | backend/max_backend | NO |
 | backend/max_backend/champion_api.py | Python | 80 | backend/max_backend | NO |
 | backend/max_backend/champion_bundle.py | Python | 350 | backend/max_backend | NO |
-| backend/max_backend/champion_store.py | Python | 771 | backend/max_backend | NO |
+| backend/max_backend/champion_store.py | Python | 773 | backend/max_backend | NO |
 | backend/max_backend/config.py | Python | 30 | backend/max_backend | NO |
-| backend/max_backend/db.py | Python | 283 | backend/max_backend | NO |
+| backend/max_backend/database_cutover.py | Python | 519 | backend/max_backend | NO |
+| backend/max_backend/db.py | Python | 511 | backend/max_backend | NO |
 | backend/max_backend/ea.py | Python | 46 | backend/max_backend | NO |
-| backend/max_backend/main.py | Python | 243 | backend/max_backend | NO |
+| backend/max_backend/main.py | Python | 336 | backend/max_backend | NO |
 | backend/max_backend/mt5.py | Python | 104 | backend/max_backend | NO |
 | backend/max_backend/mtf_geometry.py | Python | 203 | backend/max_backend | NO |
 | backend/max_backend/optimizer_api.py | Python | 169 | backend/max_backend | NO |
@@ -39,7 +40,7 @@ Generated/refreshed: current compiler run
 | backend/max_backend/optimizer_runtime.py | Python | 782 | backend/max_backend | NO |
 | backend/max_backend/optimizer_scientist.py | Python | 767 | backend/max_backend | NO |
 | backend/max_backend/optimizer_scientist_transition.py | Python | 670 | backend/max_backend | NO |
-| backend/max_backend/optimizer_store.py | Python | 792 | backend/max_backend | NO |
+| backend/max_backend/optimizer_store.py | Python | 796 | backend/max_backend | NO |
 | backend/max_backend/optimizer_worker.py | Python | 773 | backend/max_backend | NO |
 | backend/max_backend/optimizer_worker_identity.py | Python | 428 | backend/max_backend | NO |
 | backend/max_backend/path_safety.py | Python | 98 | backend/max_backend | NO |
@@ -50,10 +51,10 @@ Generated/refreshed: current compiler run
 | backend/max_backend/scientist_context.py | Python | 625 | backend/max_backend | NO |
 | backend/max_backend/scientist_knowledge.py | Python | 168 | backend/max_backend | NO |
 | backend/max_backend/scientist_provider.py | Python | 993 | backend/max_backend | NO |
-| backend/max_backend/scientist_store.py | Python | 596 | backend/max_backend | NO |
-| backend/max_backend/strategy_reset.py | Python | 551 | backend/max_backend | NO |
+| backend/max_backend/scientist_store.py | Python | 603 | backend/max_backend | NO |
+| backend/max_backend/strategy_reset.py | Python | 590 | backend/max_backend | NO |
 | backend/max_backend/workflow_contract.py | Python | 45 | backend/max_backend | NO |
-| backend/max_backend/workflow_store.py | Python | 596 | backend/max_backend | NO |
+| backend/max_backend/workflow_store.py | Python | 598 | backend/max_backend | NO |
 | backend/tests/conftest.py | Python | 17 | backend/tests | YES |
 | backend/tests/test_m00_foundation.py | Python | 325 | backend/tests | YES |
 | backend/tests/test_m01_fail_closed.py | Python | 446 | backend/tests | YES |
@@ -86,7 +87,7 @@ Generated/refreshed: current compiler run
 | backend/tests/test_optimizer_runtime_durability.py | Python | 83 | backend/tests | YES |
 | backend/tests/test_optimizer_worker_identity.py | Python | 361 | backend/tests | YES |
 | backend/tests/test_retired_subsystem_migration.py | Python | 98 | backend/tests | YES |
-| backend/tests/test_schema_compatibility_guard.py | Python | 856 | backend/tests | YES |
+| backend/tests/test_schema_compatibility_guard.py | Python | 1570 | backend/tests | YES |
 | backend/tests/test_strategy_workspace_reset.py | Python | 314 | backend/tests | YES |
 | frontend/src/ActionControls.test.tsx | TypeScript/React | 47 | frontend/src | YES |
 | frontend/src/ActionControls.tsx | TypeScript/React | 86 | frontend/src | NO |
@@ -110,6 +111,7 @@ Generated/refreshed: current compiler run
 | frontend/src/tableFormat.ts | TypeScript | 6 | frontend/src | NO |
 | frontend/src/testSetup.ts | TypeScript | 1 | frontend/src | NO |
 | frontend/vite.config.ts | TypeScript | 18 | frontend | NO |
+| scripts/accept_p0b_database_compatibility.ps1 | PowerShell | 269 | scripts | NO |
 | scripts/build_m05_final_evidence.py | Python | 586 | scripts | NO |
 | scripts/build_m05_partial_evidence.py | Python | 217 | scripts | NO |
 | scripts/build_scientist_knowledge.py | Python | 240 | scripts | NO |
@@ -117,7 +119,7 @@ Generated/refreshed: current compiler run
 | scripts/generate_symbol_index.py | Python | 261 | scripts | NO |
 | scripts/launcher_authority.py | Python | 161 | scripts | NO |
 | scripts/project_profile.py | Python | 193 | scripts | NO |
-| scripts/reset_strategy_epoch.py | Python | 626 | scripts | NO |
+| scripts/reset_strategy_epoch.py | Python | 631 | scripts | NO |
 | scripts/run_max.ps1 | PowerShell | 301 | scripts | NO |
 | scripts/scan_m05_candidate_tree.py | Python | 142 | scripts | NO |
 | scripts/validate_cross_document_consistency.py | Python | 591 | scripts | NO |

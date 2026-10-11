@@ -37,6 +37,13 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_store.py::migrate_m03",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
       "action": "migrate_m02",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_store.py::migrate_m03",
@@ -93,11 +100,32 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "action": "_schema_object_fingerprint",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::_schema_object_fingerprint"
+    },
+    {
       "action": "DatabaseSchemaGuardError",
       "evidence": "STATIC",
       "from": "backend/max_backend/db.py::assert_database_schema_compatible",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::DatabaseSchemaGuardError"
+    },
+    {
+      "action": "_schema16_archive_profile_error",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::_schema16_archive_profile_error"
     },
     {
       "action": "sqlite3.connect",
@@ -107,11 +135,25 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "open_read_only",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::open_read_only"
+    },
+    {
       "action": "conn.close",
       "evidence": "STATIC",
       "from": "backend/max_backend/db.py::assert_database_schema_compatible",
       "resolver": "python_ast",
       "to": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
+    },
+    {
+      "action": "sqlite3.connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::open_read_only",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
     },
     {
       "action": "sanitize_route_config",
@@ -177,6 +219,13 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
       "action": "assert_database_schema_compatible",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_store.py::migrate_m02",
@@ -189,6 +238,13 @@
       "from": "backend/max_backend/optimizer_store.py::migrate_m02",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
     },
     {
       "action": "migrate_m01",
@@ -583,6 +639,13 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_store.py::migrate_m05",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/scientist_store.py::scientist_database_status",
@@ -616,7 +679,7 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_store.py::migrate_m03",
       "language": "Python",
-      "line_end": 76,
+      "line_end": 78,
       "line_start": 18,
       "locator": "backend/max_backend/challenger_store.py::migrate_m03"
     },
@@ -661,7 +724,7 @@
       "kind": "function",
       "label": "backend/max_backend/champion_store.py::migrate_m04",
       "language": "Python",
-      "line_end": 262,
+      "line_end": 264,
       "line_start": 200,
       "locator": "backend/max_backend/champion_store.py::migrate_m04"
     },
@@ -670,17 +733,35 @@
       "kind": "class",
       "label": "backend/max_backend/db.py::DatabaseSchemaGuardError",
       "language": "Python",
-      "line_end": 40,
-      "line_start": 15,
+      "line_end": 63,
+      "line_start": 34,
       "locator": "backend/max_backend/db.py::DatabaseSchemaGuardError"
+    },
+    {
+      "id": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "language": "Python",
+      "line_end": 118,
+      "line_start": 74,
+      "locator": "backend/max_backend/db.py::_schema16_archive_profile_error"
+    },
+    {
+      "id": "backend/max_backend/db.py::_schema_object_fingerprint",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::_schema_object_fingerprint",
+      "language": "Python",
+      "line_end": 71,
+      "line_start": 66,
+      "locator": "backend/max_backend/db.py::_schema_object_fingerprint"
     },
     {
       "id": "backend/max_backend/db.py::assert_database_schema_compatible",
       "kind": "function",
       "label": "backend/max_backend/db.py::assert_database_schema_compatible",
       "language": "Python",
-      "line_end": 138,
-      "line_start": 43,
+      "line_end": 322,
+      "line_start": 202,
       "locator": "backend/max_backend/db.py::assert_database_schema_compatible"
     },
     {
@@ -688,9 +769,27 @@
       "kind": "function",
       "label": "backend/max_backend/db.py::connect",
       "language": "Python",
-      "line_end": 147,
-      "line_start": 141,
+      "line_end": 331,
+      "line_start": 325,
       "locator": "backend/max_backend/db.py::connect"
+    },
+    {
+      "id": "backend/max_backend/db.py::is_schema16_archive_compatible",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::is_schema16_archive_compatible",
+      "language": "Python",
+      "line_end": 132,
+      "line_start": 131,
+      "locator": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "id": "backend/max_backend/db.py::open_read_only",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::open_read_only",
+      "language": "Python",
+      "line_end": 128,
+      "line_start": 121,
+      "locator": "backend/max_backend/db.py::open_read_only"
     },
     {
       "id": "backend/max_backend/optimizer_scientist.py::_route_config_from_environment_only",
@@ -742,7 +841,7 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::migrate_m01",
       "language": "Python",
-      "line_end": 112,
+      "line_end": 114,
       "line_start": 46,
       "locator": "backend/max_backend/optimizer_store.py::migrate_m01"
     },
@@ -751,8 +850,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::migrate_m02",
       "language": "Python",
-      "line_end": 136,
-      "line_start": 115,
+      "line_end": 140,
+      "line_start": 117,
       "locator": "backend/max_backend/optimizer_store.py::migrate_m02"
     },
     {
@@ -1048,8 +1147,8 @@
       "kind": "function",
       "label": "backend/max_backend/scientist_store.py::migrate_m05",
       "language": "Python",
-      "line_end": 93,
-      "line_start": 28,
+      "line_end": 100,
+      "line_start": 33,
       "locator": "backend/max_backend/scientist_store.py::migrate_m05"
     },
     {
@@ -1057,12 +1156,12 @@
       "kind": "function",
       "label": "backend/max_backend/scientist_store.py::scientist_database_status",
       "language": "Python",
-      "line_end": 117,
-      "line_start": 96,
+      "line_end": 124,
+      "line_start": 103,
       "locator": "backend/max_backend/scientist_store.py::scientist_database_status"
     }
   ],
-  "observed_head": "805acae1256973a5fd3b3caee79eee5c7837ff2b",
+  "observed_head": "a374a5e8a3fe3acc6872ecff42874c1131d1aa52",
   "schema_version": 1,
-  "source_digest": "d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d"
+  "source_digest": "38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa"
 }

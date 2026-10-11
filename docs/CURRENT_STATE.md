@@ -18,7 +18,7 @@ Branch: codex/p0b-schema16-compat
 Authoritative SHA: external final acceptance evidence
 Last accepted SHA: 8ba001bba31d7c74e2d1d1aa03d6c79fb0f9576a
 Current candidate SHA: external final acceptance evidence
-Current source digest: d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d
+Current source digest: 38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
@@ -36,7 +36,7 @@ PROJECT_DOCS_SYNC: PASS
 Sequence policy: REQUIRED
 Current sequence mode: DURING
 Current sequence session: FLOW-STRATEGY-RESET-RECOVERY
-SEQUENCE_SYNC: PASS_LOCAL: all 8 DURING/CURRENT sessions and generated actual graphs validated at source digest d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d.
+SEQUENCE_SYNC: PASS_LOCAL_GENERATED: all 9 DURING/CURRENT sessions and actual graphs regenerated at source digest 38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa; formal validation remains in cumulative acceptance.
 
 ## Proven
 - P0A was accepted and merged; actual origin/main at P0B entry is 8ba001bba31d7c74e2d1d1aa03d6c79fb0f9576a, tree 597dbd569a9c9c99feae5fea2e2b2a2ff8fa3e46. The prior local P0 baseline 858dcb205fa2fb734fd5a68b8a4970a29c553897 is an ancestor and must not replace this newer accepted main.
@@ -53,22 +53,23 @@ SEQUENCE_SYNC: PASS_LOCAL: all 8 DURING/CURRENT sessions and generated actual gr
 - Local source candidate deduplicates only semantically exact candidate identities before transactional SQLite projection persistence and collapses repeated sidecar vectors only when every semantic metric agrees; this remains historical accepted Optimizer behavior.
 - P0A local source/test evidence is historical and remains recorded in the prior acceptance data; P0A merge is the P0B parent authority. P0B will use synthetic temporary SQLite fixtures only.
 - Git history establishes that ONNX-00 and ONNX-01 did not change schema; ONNX-02 changed schema 15 to 16 by adding three ONNX data tables, two indexes and six immutability triggers. The historical schema-16 migration also invoked Research purge logic; P0B must not repeat that path.
-- P0B selected a structurally verified schema-16 archive-extension profile with no metadata downgrade and no schema bump. This is a design decision only until implementation and synthetic acceptance complete.
+- P0B keeps CURRENT_SCHEMA_VERSION=15 and recognizes only the exact historical schema-15 core plus schema-16 ONNX archive extension; schema_version remains 16 and the historical Research purge is not replayed.
+- Focused schema-compatibility and cutover suite passed 74 tests with 0 failures, including populated synthetic preservation, fail-closed unknown layouts/future versions/sidecars, idempotent startup and cutover recovery. The source database is unchanged across staged-copy tests.
 
 ## Not proven
 - The Owner database schema-16 contents and compatibility with current MTA are NOT_PROVEN; the Owner database was not accessed.
-- P0B implementation, synthetic schema-16 compatibility/cutover acceptance, and hosted CI are IN_PROGRESS / NOT_PROVEN.
+- P0B implementation and synthetic evidence are not a Control Room acceptance; the phase stays IN_PROGRESS until exact-candidate local and hosted evidence is reviewed.
 - Owner runtime acceptance, real MT5/Optimizer runs, scientific training, ONNX, and Champion mutation remain NOT_PROVEN / NOT_STARTED.
 
 ## Known blockers
 - The Owner database is reported to be schema 16, but its contents and compatibility have not been independently verified.
-- P0B structural compatibility, synthetic preservation/cutover acceptance, complete regressions, exact-tree source-only scan, governance, and Windows CI are NOT_RUN at phase entry.
+- P0B remains IN_PROGRESS until the exact candidate's local and hosted evidence is independently reviewed by Control Room; actual Owner database compatibility remains NOT_PROVEN.
 
 ## Known defects
 See KNOWN_DEFECTS.md.
 
 ## Next authorized action
-- Complete P0B source and synthetic acceptance on codex/p0b-schema16-compat, create a dedicated PR against current main, obtain exact-tree Windows CI, and stop for Control Room audit. Do not merge.
+- Complete the exact-candidate acceptance runner and Windows CI on codex/p0b-schema16-compat, then stop for Control Room audit. Do not merge.
 - Do not access/copy the actual Owner database, activate a cutover, start MT5/Optimizer, train models, run Research, or mutate Champion.
 
 ## Explicitly blocked

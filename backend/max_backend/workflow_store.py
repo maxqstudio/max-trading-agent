@@ -7,7 +7,7 @@ from typing import Any
 
 from .challenger_operations_store import migrate_m06
 from .config import DATABASE_PATH
-from .db import assert_database_schema_compatible, connect
+from .db import assert_database_schema_compatible, connect, is_schema16_archive_compatible
 from .optimizer_store import utc_now
 from .schema import CURRENT_SCHEMA_VERSION
 from .workflow_contract import (
@@ -181,7 +181,9 @@ def _purge_research_authority(conn: sqlite3.Connection) -> None:
 
 
 def migrate_current(path: Path = DATABASE_PATH) -> None:
-    assert_database_schema_compatible(path, allow_missing=False)
+    schema = assert_database_schema_compatible(path, allow_missing=False)
+    if is_schema16_archive_compatible(schema):
+        return
     migrate_m06(path)
     with connect(path) as conn:
         _upgrade_challenger_roles(conn)

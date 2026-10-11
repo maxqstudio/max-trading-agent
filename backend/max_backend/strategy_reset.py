@@ -11,7 +11,14 @@ from pathlib import Path
 from typing import Any
 
 from .config import DATABASE_PATH, ROOT
-from .db import DatabaseSchemaGuardError, assert_database_schema_compatible
+from .db import (
+    DatabaseSchemaGuardError,
+    assert_database_schema_compatible,
+    assert_reset_supported,
+    is_schema16_archive_compatible,
+    open_read_only,
+    verify_schema16_database_integrity,
+)
 from .mt5 import detect_mt5
 from .path_safety import assert_owned_path, file_size_tree, remove_owned_path
 from .schema import CURRENT_SCHEMA_VERSION
@@ -97,7 +104,7 @@ def _settings_fingerprint() -> dict[str, dict[str, Any]]:
 def _connect(path: Path) -> sqlite3.Connection:
     # Keep this low-level connection guarded as well as its callers so direct
     # recovery/preflight paths cannot open a newer database read-write.
-    assert_database_schema_compatible(path, allow_missing=False)
+    assert_reset_supported(path)
     conn = sqlite3.connect(path, timeout=5)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys=ON")
@@ -183,7 +190,7 @@ def _read_counts(path: Path, *, root: Path) -> dict[str, Any]:
         raise StrategyResetError("STRATEGY_RESET_DATABASE_MISSING")
     # Guard before opening the reset preflight's read-write connection. _connect
     # repeats the same canonical guard to protect any other direct caller.
-    assert_database_schema_compatible(path, allow_missing=False)
+    assert_reset_supported(path)
     try:
         with closing(_connect(path)) as conn:
             tables = _tables(conn)
@@ -296,6 +303,25 @@ def _read_counts(path: Path, *, root: Path) -> dict[str, Any]:
 def strategy_reset_preflight(
     *, path: Path = DATABASE_PATH, root: Path = ROOT
 ) -> dict[str, Any]:
+    schema = assert_database_schema_compatible(path, allow_missing=False)
+    if is_schema16_archive_compatible(schema):
+        integrity = verify_schema16_database_integrity(path)
+        return {
+            "status": "BLOCKED",
+            "blockers": {"schema_compatibility": "SCHEMA16_ARCHIVE_PRESERVATION_ONLY"},
+            "schema_version": 16,
+            "database_integrity": integrity["physical_integrity"],
+            "generated_artifact_rows": None,
+            "generated_artifact_bytes": None,
+            "roots": {},
+            "deletion_plan": [],
+            "preserved": [
+                "All schema-16 Strategy, Optimizer, Champion, Research and archive records",
+                "ONNX historical archive tables and all retained evidence",
+            ],
+            "baseline": None,
+            "confirmation_required": None,
+        }
     report = _read_counts(path, root=root)
     report.pop("_owned_paths", None)
     report["confirmation_required"] = STRATEGY_RESET_CONFIRMATION
@@ -359,7 +385,7 @@ def reset_strategy_workspace(
 ) -> dict[str, Any]:
     if confirmed != STRATEGY_RESET_CONFIRMATION:
         raise StrategyResetError("EXPLICIT_STRATEGY_WORKSPACE_RESET_CONFIRMATION_REQUIRED")
-    assert_database_schema_compatible(path, allow_missing=False)
+    assert_reset_supported(path)
     before = _read_counts(path, root=root)
     if before["status"] != "READY":
         raise StrategyResetError("STRATEGY_WORKSPACE_RESET_BLOCKED")
@@ -453,8 +479,12 @@ def database_recovery_status(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
         return result
 
     try:
-        with closing(_connect(path)) as conn:
+        connection = open_read_only(path) if is_schema16_archive_compatible(schema) else _connect(path)
+        with closing(connection) as conn:
             result = str(conn.execute("PRAGMA integrity_check").fetchone()[0])
+            foreign_key_errors = conn.execute("PRAGMA foreign_key_check").fetchall()
+            if foreign_key_errors:
+                result = "foreign_key_check failed"
             return {
                 "status": "READY" if result == "ok" else "RECOVERY_REQUIRED",
                 "reason": (
@@ -462,10 +492,19 @@ def database_recovery_status(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
                     if result == "ok"
                     else "DATABASE_INTEGRITY_FAILED"
                 ),
-                "application_schema_compatibility": "SUPPORTED",
+                "application_schema_compatibility": (
+                    "SUPPORTED_SCHEMA16_ARCHIVE_EXTENSION"
+                    if is_schema16_archive_compatible(schema)
+                    else "SUPPORTED"
+                ),
                 "application_schema_version": schema["schema_version"],
                 "supported_schema_version": CURRENT_SCHEMA_VERSION,
                 "physical_integrity": result,
+                **(
+                    {"compatibility_profile": schema["compatibility_profile"]}
+                    if is_schema16_archive_compatible(schema)
+                    else {}
+                ),
             }
     except sqlite3.Error:
         return {
@@ -508,7 +547,7 @@ def backup_and_reset_corrupt_database(
 ) -> dict[str, Any]:
     if confirmed != RECOVERY_RESET_CONFIRMATION:
         raise StrategyResetError("EXPLICIT_CORRUPT_STATE_RECOVERY_CONFIRMATION_REQUIRED")
-    assert_database_schema_compatible(path, allow_missing=False)
+    assert_reset_supported(path)
     status = database_recovery_status(path=path)
     if status["status"] != "RECOVERY_REQUIRED":
         raise StrategyResetError("DATABASE_RECOVERY_NOT_REQUIRED")

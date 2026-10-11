@@ -100,6 +100,13 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
       "action": "migrate_m05",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
@@ -119,6 +126,13 @@
       "from": "backend/max_backend/challenger_store.py::migrate_m03",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_store.py::migrate_m03",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
     },
     {
       "action": "migrate_m02",
@@ -205,11 +219,32 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "action": "_schema_object_fingerprint",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::_schema_object_fingerprint"
+    },
+    {
       "action": "DatabaseSchemaGuardError",
       "evidence": "STATIC",
       "from": "backend/max_backend/db.py::assert_database_schema_compatible",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::DatabaseSchemaGuardError"
+    },
+    {
+      "action": "_schema16_archive_profile_error",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::_schema16_archive_profile_error"
     },
     {
       "action": "sqlite3.connect",
@@ -219,11 +254,39 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "open_read_only",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::open_read_only"
+    },
+    {
       "action": "conn.close",
       "evidence": "STATIC",
       "from": "backend/max_backend/db.py::assert_database_schema_compatible",
       "resolver": "python_ast",
       "to": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
+    },
+    {
+      "action": "DatabaseSchemaGuardError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_reset_supported",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::DatabaseSchemaGuardError"
+    },
+    {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_reset_supported",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_reset_supported",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
     },
     {
       "action": "exc.diagnostic",
@@ -247,6 +310,27 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::database_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "action": "open_read_only",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::database_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::open_read_only"
+    },
+    {
+      "action": "DatabaseSchemaGuardError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::ensure_baseline_registered",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::DatabaseSchemaGuardError"
+    },
+    {
       "action": "assert_database_schema_compatible",
       "evidence": "STATIC",
       "from": "backend/max_backend/db.py::ensure_baseline_registered",
@@ -268,11 +352,32 @@
       "to": "backend/max_backend/db.py::initialize_database"
     },
     {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::ensure_baseline_registered",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "action": "open_read_only",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::ensure_baseline_registered",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::open_read_only"
+    },
+    {
       "action": "verify_baseline_snapshot",
       "evidence": "STATIC",
       "from": "backend/max_backend/db.py::ensure_baseline_registered",
       "resolver": "python_ast",
       "to": "backend/max_backend/ea.py::verify_baseline_snapshot"
+    },
+    {
+      "action": "conn.close",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::ensure_baseline_registered",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
     },
     {
       "action": "assert_database_schema_compatible",
@@ -289,6 +394,13 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::initialize_database",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
       "action": "verify_baseline_snapshot",
       "evidence": "STATIC",
       "from": "backend/max_backend/db.py::initialize_database",
@@ -296,11 +408,53 @@
       "to": "backend/max_backend/ea.py::verify_baseline_snapshot"
     },
     {
+      "action": "sqlite3.connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::open_read_only",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/db.py::read_baseline",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "DatabaseSchemaGuardError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::DatabaseSchemaGuardError"
+    },
+    {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "action": "open_read_only",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::open_read_only"
+    },
+    {
+      "action": "conn.close",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
     },
     {
       "action": "load_manifest",
@@ -436,6 +590,13 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
       "action": "assert_database_schema_compatible",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_store.py::migrate_m02",
@@ -448,6 +609,13 @@
       "from": "backend/max_backend/optimizer_store.py::migrate_m02",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
     },
     {
       "action": "migrate_m01",
@@ -490,6 +658,13 @@
       "from": "backend/max_backend/scientist_store.py::migrate_m05",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_store.py::migrate_m05",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
     },
     {
       "action": "migrate_m06",
@@ -548,11 +723,11 @@
       "to": "backend/max_backend/workflow_store.py::migrate_current"
     },
     {
-      "action": "assert_database_schema_compatible",
+      "action": "assert_reset_supported",
       "evidence": "STATIC",
       "from": "backend/max_backend/strategy_reset.py::_connect",
       "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+      "to": "backend/max_backend/db.py::assert_reset_supported"
     },
     {
       "action": "sqlite3.connect",
@@ -611,11 +786,11 @@
       "to": "backend/max_backend/strategy_reset.py::_runtime_paths"
     },
     {
-      "action": "assert_database_schema_compatible",
+      "action": "assert_reset_supported",
       "evidence": "STATIC",
       "from": "backend/max_backend/strategy_reset.py::_read_counts",
       "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+      "to": "backend/max_backend/db.py::assert_reset_supported"
     },
     {
       "action": "assert_owned_path",
@@ -674,11 +849,11 @@
       "to": "backend/max_backend/strategy_reset.py::_hash_file"
     },
     {
-      "action": "assert_database_schema_compatible",
+      "action": "assert_reset_supported",
       "evidence": "STATIC",
       "from": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database",
       "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+      "to": "backend/max_backend/db.py::assert_reset_supported"
     },
     {
       "action": "StrategyResetError",
@@ -730,6 +905,20 @@
       "to": "backend/max_backend/db.py::assert_database_schema_compatible"
     },
     {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::database_recovery_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "action": "open_read_only",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::database_recovery_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::open_read_only"
+    },
+    {
       "action": "_connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/strategy_reset.py::database_recovery_status",
@@ -737,11 +926,11 @@
       "to": "backend/max_backend/strategy_reset.py::_connect"
     },
     {
-      "action": "assert_database_schema_compatible",
+      "action": "assert_reset_supported",
       "evidence": "STATIC",
       "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
       "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+      "to": "backend/max_backend/db.py::assert_reset_supported"
     },
     {
       "action": "conn.close",
@@ -814,6 +1003,27 @@
       "to": "backend/max_backend/strategy_reset.py::_settings_fingerprint"
     },
     {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "action": "verify_schema16_database_integrity",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::verify_schema16_database_integrity"
+    },
+    {
       "action": "_read_counts",
       "evidence": "STATIC",
       "from": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
@@ -847,6 +1057,13 @@
       "from": "backend/max_backend/workflow_store.py::migrate_current",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/workflow_store.py::migrate_current",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
     },
     {
       "action": "_ensure_backtest_runtime_status",
@@ -1088,8 +1305,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready",
       "language": "Python",
-      "line_end": 162,
-      "line_start": 155,
+      "line_end": 167,
+      "line_start": 160,
       "locator": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready"
     },
     {
@@ -1097,8 +1314,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready",
       "language": "Python",
-      "line_end": 46,
-      "line_start": 37,
+      "line_end": 51,
+      "line_start": 42,
       "locator": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready"
     },
     {
@@ -1106,8 +1323,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations_store.py::_create_m06_tables",
       "language": "Python",
-      "line_end": 295,
-      "line_start": 223,
+      "line_end": 300,
+      "line_start": 228,
       "locator": "backend/max_backend/challenger_operations_store.py::_create_m06_tables"
     },
     {
@@ -1115,8 +1332,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema",
       "language": "Python",
-      "line_end": 220,
-      "line_start": 165,
+      "line_end": 225,
+      "line_start": 170,
       "locator": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema"
     },
     {
@@ -1124,8 +1341,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry",
       "language": "Python",
-      "line_end": 152,
-      "line_start": 49,
+      "line_end": 157,
+      "line_start": 54,
       "locator": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry"
     },
     {
@@ -1133,8 +1350,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations_store.py::challenger_operations_database_status",
       "language": "Python",
-      "line_end": 392,
-      "line_start": 320,
+      "line_end": 399,
+      "line_start": 327,
       "locator": "backend/max_backend/challenger_operations_store.py::challenger_operations_database_status"
     },
     {
@@ -1142,8 +1359,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations_store.py::migrate_m06",
       "language": "Python",
-      "line_end": 317,
-      "line_start": 298,
+      "line_end": 324,
+      "line_start": 303,
       "locator": "backend/max_backend/challenger_operations_store.py::migrate_m06"
     },
     {
@@ -1151,7 +1368,7 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_store.py::migrate_m03",
       "language": "Python",
-      "line_end": 76,
+      "line_end": 78,
       "line_start": 18,
       "locator": "backend/max_backend/challenger_store.py::migrate_m03"
     },
@@ -1178,8 +1395,8 @@
       "kind": "function",
       "label": "backend/max_backend/champion_store.py::_decode_champion",
       "language": "Python",
-      "line_end": 346,
-      "line_start": 338,
+      "line_end": 348,
+      "line_start": 340,
       "locator": "backend/max_backend/champion_store.py::_decode_champion"
     },
     {
@@ -1214,8 +1431,8 @@
       "kind": "function",
       "label": "backend/max_backend/champion_store.py::current_champion",
       "language": "Python",
-      "line_end": 355,
-      "line_start": 349,
+      "line_end": 357,
+      "line_start": 351,
       "locator": "backend/max_backend/champion_store.py::current_champion"
     },
     {
@@ -1223,7 +1440,7 @@
       "kind": "function",
       "label": "backend/max_backend/champion_store.py::migrate_m04",
       "language": "Python",
-      "line_end": 262,
+      "line_end": 264,
       "line_start": 200,
       "locator": "backend/max_backend/champion_store.py::migrate_m04"
     },
@@ -1232,8 +1449,8 @@
       "kind": "class",
       "label": "backend/max_backend/db.py::DatabaseSchemaGuardError",
       "language": "Python",
-      "line_end": 40,
-      "line_start": 15,
+      "line_end": 63,
+      "line_start": 34,
       "locator": "backend/max_backend/db.py::DatabaseSchemaGuardError"
     },
     {
@@ -1241,26 +1458,53 @@
       "kind": "method",
       "label": "backend/max_backend/db.py::DatabaseSchemaGuardError.diagnostic",
       "language": "Python",
-      "line_end": 40,
-      "line_start": 30,
+      "line_end": 63,
+      "line_start": 51,
       "locator": "backend/max_backend/db.py::DatabaseSchemaGuardError.diagnostic"
+    },
+    {
+      "id": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "language": "Python",
+      "line_end": 118,
+      "line_start": 74,
+      "locator": "backend/max_backend/db.py::_schema16_archive_profile_error"
+    },
+    {
+      "id": "backend/max_backend/db.py::_schema_object_fingerprint",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::_schema_object_fingerprint",
+      "language": "Python",
+      "line_end": 71,
+      "line_start": 66,
+      "locator": "backend/max_backend/db.py::_schema_object_fingerprint"
     },
     {
       "id": "backend/max_backend/db.py::assert_database_schema_compatible",
       "kind": "function",
       "label": "backend/max_backend/db.py::assert_database_schema_compatible",
       "language": "Python",
-      "line_end": 138,
-      "line_start": 43,
+      "line_end": 322,
+      "line_start": 202,
       "locator": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
+      "id": "backend/max_backend/db.py::assert_reset_supported",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::assert_reset_supported",
+      "language": "Python",
+      "line_end": 156,
+      "line_start": 147,
+      "locator": "backend/max_backend/db.py::assert_reset_supported"
     },
     {
       "id": "backend/max_backend/db.py::connect",
       "kind": "function",
       "label": "backend/max_backend/db.py::connect",
       "language": "Python",
-      "line_end": 147,
-      "line_start": 141,
+      "line_end": 331,
+      "line_start": 325,
       "locator": "backend/max_backend/db.py::connect"
     },
     {
@@ -1268,8 +1512,8 @@
       "kind": "function",
       "label": "backend/max_backend/db.py::database_status",
       "language": "Python",
-      "line_end": 283,
-      "line_start": 237,
+      "line_end": 511,
+      "line_start": 461,
       "locator": "backend/max_backend/db.py::database_status"
     },
     {
@@ -1277,8 +1521,8 @@
       "kind": "function",
       "label": "backend/max_backend/db.py::ensure_baseline_registered",
       "language": "Python",
-      "line_end": 226,
-      "line_start": 195,
+      "line_end": 450,
+      "line_start": 381,
       "locator": "backend/max_backend/db.py::ensure_baseline_registered"
     },
     {
@@ -1286,18 +1530,45 @@
       "kind": "function",
       "label": "backend/max_backend/db.py::initialize_database",
       "language": "Python",
-      "line_end": 192,
-      "line_start": 150,
+      "line_end": 378,
+      "line_start": 334,
       "locator": "backend/max_backend/db.py::initialize_database"
+    },
+    {
+      "id": "backend/max_backend/db.py::is_schema16_archive_compatible",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::is_schema16_archive_compatible",
+      "language": "Python",
+      "line_end": 132,
+      "line_start": 131,
+      "locator": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "id": "backend/max_backend/db.py::open_read_only",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::open_read_only",
+      "language": "Python",
+      "line_end": 128,
+      "line_start": 121,
+      "locator": "backend/max_backend/db.py::open_read_only"
     },
     {
       "id": "backend/max_backend/db.py::read_baseline",
       "kind": "function",
       "label": "backend/max_backend/db.py::read_baseline",
       "language": "Python",
-      "line_end": 234,
-      "line_start": 229,
+      "line_end": 458,
+      "line_start": 453,
       "locator": "backend/max_backend/db.py::read_baseline"
+    },
+    {
+      "id": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "language": "Python",
+      "line_end": 199,
+      "line_start": 159,
+      "locator": "backend/max_backend/db.py::verify_schema16_database_integrity"
     },
     {
       "id": "backend/max_backend/ea.py::load_manifest",
@@ -1331,8 +1602,8 @@
       "kind": "function",
       "label": "backend/max_backend/main.py::_foundation_state",
       "language": "Python",
-      "line_end": 191,
-      "line_start": 164,
+      "line_end": 284,
+      "line_start": 257,
       "locator": "backend/max_backend/main.py::_foundation_state"
     },
     {
@@ -1340,8 +1611,8 @@
       "kind": "function",
       "label": "backend/max_backend/main.py::overview",
       "language": "Python",
-      "line_end": 243,
-      "line_start": 236,
+      "line_end": 336,
+      "line_start": 329,
       "locator": "backend/max_backend/main.py::overview"
     },
     {
@@ -1349,8 +1620,8 @@
       "kind": "async_function",
       "label": "backend/max_backend/main.py::recovery_required_gate",
       "language": "Python",
-      "line_end": 122,
-      "line_start": 105,
+      "line_end": 215,
+      "line_start": 198,
       "locator": "backend/max_backend/main.py::recovery_required_gate"
     },
     {
@@ -1358,8 +1629,8 @@
       "kind": "function",
       "label": "backend/max_backend/main.py::recovery_status",
       "language": "Python",
-      "line_end": 140,
-      "line_start": 126,
+      "line_end": 233,
+      "line_start": 219,
       "locator": "backend/max_backend/main.py::recovery_status"
     },
     {
@@ -1367,8 +1638,8 @@
       "kind": "function",
       "label": "backend/max_backend/main.py::reset_corrupt_state",
       "language": "Python",
-      "line_end": 161,
-      "line_start": 144,
+      "line_end": 254,
+      "line_start": 237,
       "locator": "backend/max_backend/main.py::reset_corrupt_state"
     },
     {
@@ -1421,8 +1692,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::_decode_job",
       "language": "Python",
-      "line_end": 190,
-      "line_start": 180,
+      "line_end": 194,
+      "line_start": 184,
       "locator": "backend/max_backend/optimizer_store.py::_decode_job"
     },
     {
@@ -1430,8 +1701,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::latest_job",
       "language": "Python",
-      "line_end": 281,
-      "line_start": 275,
+      "line_end": 285,
+      "line_start": 279,
       "locator": "backend/max_backend/optimizer_store.py::latest_job"
     },
     {
@@ -1439,7 +1710,7 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::migrate_m01",
       "language": "Python",
-      "line_end": 112,
+      "line_end": 114,
       "line_start": 46,
       "locator": "backend/max_backend/optimizer_store.py::migrate_m01"
     },
@@ -1448,8 +1719,8 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::migrate_m02",
       "language": "Python",
-      "line_end": 136,
-      "line_start": 115,
+      "line_end": 140,
+      "line_start": 117,
       "locator": "backend/max_backend/optimizer_store.py::migrate_m02"
     },
     {
@@ -1502,8 +1773,8 @@
       "kind": "function",
       "label": "backend/max_backend/scientist_store.py::migrate_m05",
       "language": "Python",
-      "line_end": 93,
-      "line_start": 28,
+      "line_end": 100,
+      "line_start": 33,
       "locator": "backend/max_backend/scientist_store.py::migrate_m05"
     },
     {
@@ -1511,8 +1782,8 @@
       "kind": "class",
       "label": "backend/max_backend/strategy_reset.py::StrategyResetError",
       "language": "Python",
-      "line_end": 69,
-      "line_start": 68,
+      "line_end": 76,
+      "line_start": 75,
       "locator": "backend/max_backend/strategy_reset.py::StrategyResetError"
     },
     {
@@ -1520,8 +1791,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_bootstrap_database",
       "language": "Python",
-      "line_end": 501,
-      "line_start": 481,
+      "line_end": 540,
+      "line_start": 520,
       "locator": "backend/max_backend/strategy_reset.py::_bootstrap_database"
     },
     {
@@ -1529,8 +1800,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_connect",
       "language": "Python",
-      "line_end": 105,
-      "line_start": 97,
+      "line_end": 112,
+      "line_start": 104,
       "locator": "backend/max_backend/strategy_reset.py::_connect"
     },
     {
@@ -1538,8 +1809,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_count",
       "language": "Python",
-      "line_end": 119,
-      "line_start": 117,
+      "line_end": 126,
+      "line_start": 124,
       "locator": "backend/max_backend/strategy_reset.py::_count"
     },
     {
@@ -1547,8 +1818,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_delete_rows",
       "language": "Python",
-      "line_end": 351,
-      "line_start": 331,
+      "line_end": 377,
+      "line_start": 357,
       "locator": "backend/max_backend/strategy_reset.py::_delete_rows"
     },
     {
@@ -1556,8 +1827,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_hash_file",
       "language": "Python",
-      "line_end": 77,
-      "line_start": 72,
+      "line_end": 84,
+      "line_start": 79,
       "locator": "backend/max_backend/strategy_reset.py::_hash_file"
     },
     {
@@ -1565,8 +1836,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_make_database_backup",
       "language": "Python",
-      "line_end": 328,
-      "line_start": 305,
+      "line_end": 354,
+      "line_start": 331,
       "locator": "backend/max_backend/strategy_reset.py::_make_database_backup"
     },
     {
@@ -1574,8 +1845,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_owned_paths",
       "language": "Python",
-      "line_end": 178,
-      "line_start": 149,
+      "line_end": 185,
+      "line_start": 156,
       "locator": "backend/max_backend/strategy_reset.py::_owned_paths"
     },
     {
@@ -1583,8 +1854,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_read_counts",
       "language": "Python",
-      "line_end": 293,
-      "line_start": 181,
+      "line_end": 300,
+      "line_start": 188,
       "locator": "backend/max_backend/strategy_reset.py::_read_counts"
     },
     {
@@ -1592,8 +1863,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_runtime_paths",
       "language": "Python",
-      "line_end": 146,
-      "line_start": 122,
+      "line_end": 153,
+      "line_start": 129,
       "locator": "backend/max_backend/strategy_reset.py::_runtime_paths"
     },
     {
@@ -1601,8 +1872,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_settings_fingerprint",
       "language": "Python",
-      "line_end": 94,
-      "line_start": 80,
+      "line_end": 101,
+      "line_start": 87,
       "locator": "backend/max_backend/strategy_reset.py::_settings_fingerprint"
     },
     {
@@ -1610,8 +1881,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::_tables",
       "language": "Python",
-      "line_end": 114,
-      "line_start": 108,
+      "line_end": 121,
+      "line_start": 115,
       "locator": "backend/max_backend/strategy_reset.py::_tables"
     },
     {
@@ -1619,8 +1890,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database",
       "language": "Python",
-      "line_end": 551,
-      "line_start": 504,
+      "line_end": 590,
+      "line_start": 543,
       "locator": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
     },
     {
@@ -1628,8 +1899,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::database_recovery_status",
       "language": "Python",
-      "line_end": 478,
-      "line_start": 430,
+      "line_end": 517,
+      "line_start": 456,
       "locator": "backend/max_backend/strategy_reset.py::database_recovery_status"
     },
     {
@@ -1637,8 +1908,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
       "language": "Python",
-      "line_end": 427,
-      "line_start": 354,
+      "line_end": 453,
+      "line_start": 380,
       "locator": "backend/max_backend/strategy_reset.py::reset_strategy_workspace"
     },
     {
@@ -1646,8 +1917,8 @@
       "kind": "function",
       "label": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
       "language": "Python",
-      "line_end": 302,
-      "line_start": 296,
+      "line_end": 328,
+      "line_start": 303,
       "locator": "backend/max_backend/strategy_reset.py::strategy_reset_preflight"
     },
     {
@@ -1691,7 +1962,7 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::migrate_current",
       "language": "Python",
-      "line_end": 310,
+      "line_end": 312,
       "line_start": 183,
       "locator": "backend/max_backend/workflow_store.py::migrate_current"
     },
@@ -1710,7 +1981,7 @@
       "locator": "frontend/src/ArtifactsPage.tsx::<module>"
     }
   ],
-  "observed_head": "805acae1256973a5fd3b3caee79eee5c7837ff2b",
+  "observed_head": "a374a5e8a3fe3acc6872ecff42874c1131d1aa52",
   "schema_version": 1,
-  "source_digest": "d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d"
+  "source_digest": "38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa"
 }

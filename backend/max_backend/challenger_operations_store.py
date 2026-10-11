@@ -7,7 +7,12 @@ from pathlib import Path
 from typing import Any
 
 from .config import DATABASE_PATH
-from .db import assert_database_schema_compatible, connect
+from .db import (
+    assert_automatic_recovery_supported,
+    assert_database_schema_compatible,
+    connect,
+    is_schema16_archive_compatible,
+)
 from .optimizer_store import utc_now
 from .scientist_store import migrate_m05
 
@@ -296,7 +301,9 @@ def _create_m06_tables(conn: sqlite3.Connection) -> None:
 
 
 def migrate_m06(path: Path = DATABASE_PATH) -> None:
-    assert_database_schema_compatible(path, allow_missing=False)
+    schema = assert_database_schema_compatible(path, allow_missing=False)
+    if is_schema16_archive_compatible(schema):
+        return
     migrate_m05(path)
     with connect(path) as conn:
         _upgrade_challenger_registry(conn)
@@ -996,7 +1003,7 @@ def list_backtests_page(
 def recover_incomplete_backtests(
     path: Path = DATABASE_PATH,
 ) -> int:
-    assert_database_schema_compatible(path, allow_missing=False)
+    assert_automatic_recovery_supported(path)
     migrate_m06(path)
     now = utc_now()
     with connect(path) as conn:
