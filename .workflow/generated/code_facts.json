@@ -87,7 +87,7 @@
       "file": "backend/max_backend/challenger_operations_store.py",
       "is_test": false,
       "language": "Python",
-      "lines": 1030
+      "lines": 1037
     },
     {
       "directory": "backend/max_backend",
@@ -108,7 +108,7 @@
       "file": "backend/max_backend/challenger_store.py",
       "is_test": false,
       "language": "Python",
-      "lines": 445
+      "lines": 447
     },
     {
       "directory": "backend/max_backend",
@@ -129,7 +129,7 @@
       "file": "backend/max_backend/champion_store.py",
       "is_test": false,
       "language": "Python",
-      "lines": 771
+      "lines": 773
     },
     {
       "directory": "backend/max_backend",
@@ -140,10 +140,17 @@
     },
     {
       "directory": "backend/max_backend",
+      "file": "backend/max_backend/database_cutover.py",
+      "is_test": false,
+      "language": "Python",
+      "lines": 519
+    },
+    {
+      "directory": "backend/max_backend",
       "file": "backend/max_backend/db.py",
       "is_test": false,
       "language": "Python",
-      "lines": 283
+      "lines": 511
     },
     {
       "directory": "backend/max_backend",
@@ -157,7 +164,7 @@
       "file": "backend/max_backend/main.py",
       "is_test": false,
       "language": "Python",
-      "lines": 243
+      "lines": 336
     },
     {
       "directory": "backend/max_backend",
@@ -234,7 +241,7 @@
       "file": "backend/max_backend/optimizer_store.py",
       "is_test": false,
       "language": "Python",
-      "lines": 792
+      "lines": 796
     },
     {
       "directory": "backend/max_backend",
@@ -311,14 +318,14 @@
       "file": "backend/max_backend/scientist_store.py",
       "is_test": false,
       "language": "Python",
-      "lines": 596
+      "lines": 603
     },
     {
       "directory": "backend/max_backend",
       "file": "backend/max_backend/strategy_reset.py",
       "is_test": false,
       "language": "Python",
-      "lines": 551
+      "lines": 590
     },
     {
       "directory": "backend/max_backend",
@@ -332,7 +339,7 @@
       "file": "backend/max_backend/workflow_store.py",
       "is_test": false,
       "language": "Python",
-      "lines": 596
+      "lines": 598
     },
     {
       "directory": "backend/tests",
@@ -563,7 +570,7 @@
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "is_test": true,
       "language": "Python",
-      "lines": 856
+      "lines": 1570
     },
     {
       "directory": "backend/tests",
@@ -728,6 +735,13 @@
     },
     {
       "directory": "scripts",
+      "file": "scripts/accept_p0b_database_compatibility.ps1",
+      "is_test": false,
+      "language": "PowerShell",
+      "lines": 294
+    },
+    {
+      "directory": "scripts",
       "file": "scripts/build_m05_final_evidence.py",
       "is_test": false,
       "language": "Python",
@@ -780,7 +794,7 @@
       "file": "scripts/reset_strategy_epoch.py",
       "is_test": false,
       "language": "Python",
-      "lines": 626
+      "lines": 631
     },
     {
       "directory": "scripts",
@@ -7742,7 +7756,7 @@
     },
     {
       "caller": "backend/max_backend/challenger_operations.py::recover_retired_challenger_deployments",
-      "target_token": "assert_database_schema_compatible"
+      "target_token": "assert_automatic_recovery_supported"
     },
     {
       "caller": "backend/max_backend/challenger_operations.py::recover_retired_challenger_deployments",
@@ -9002,6 +9016,10 @@
     },
     {
       "caller": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/challenger_operations_store.py::migrate_m06",
       "target_token": "migrate_m05"
     },
     {
@@ -9954,7 +9972,7 @@
     },
     {
       "caller": "backend/max_backend/challenger_operations_store.py::recover_incomplete_backtests",
-      "target_token": "assert_database_schema_compatible"
+      "target_token": "assert_automatic_recovery_supported"
     },
     {
       "caller": "backend/max_backend/challenger_operations_store.py::recover_incomplete_backtests",
@@ -11358,6 +11376,10 @@
     },
     {
       "caller": "backend/max_backend/challenger_store.py::migrate_m03",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/challenger_store.py::migrate_m03",
       "target_token": "migrate_m02"
     },
     {
@@ -12602,6 +12624,10 @@
     },
     {
       "caller": "backend/max_backend/champion_store.py::migrate_m04",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/champion_store.py::migrate_m04",
       "target_token": "migrate_m03"
     },
     {
@@ -13217,8 +13243,1248 @@
       "target_token": "RuntimeError"
     },
     {
+      "caller": "backend/max_backend/database_cutover.py::_sha256",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_sha256",
+      "target_token": "path.open"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_sha256",
+      "target_token": "iter"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_sha256",
+      "target_token": "handle.read"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_sha256",
+      "target_token": "digest.update"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_sha256",
+      "target_token": "digest.hexdigest"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_stat_fingerprint",
+      "target_token": "path.stat"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_stat_fingerprint",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_stat_fingerprint",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_stat_fingerprint",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_stat_fingerprint",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_regular_nonlink",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_regular_nonlink",
+      "target_token": "candidate.absolute"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_regular_nonlink",
+      "target_token": "bool"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_regular_nonlink",
+      "target_token": "getattr"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_regular_nonlink",
+      "target_token": "ancestor.is_symlink"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_regular_nonlink",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_regular_nonlink",
+      "target_token": "candidate.resolve"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_regular_nonlink",
+      "target_token": "resolved.is_file"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_regular_nonlink",
+      "target_token": "stat.S_ISREG"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_regular_nonlink",
+      "target_token": "resolved.stat"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_regular_nonlink",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_directory_nonlink",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_directory_nonlink",
+      "target_token": "candidate.absolute"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_directory_nonlink",
+      "target_token": "bool"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_directory_nonlink",
+      "target_token": "getattr"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_directory_nonlink",
+      "target_token": "ancestor.is_symlink"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_directory_nonlink",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_directory_nonlink",
+      "target_token": "candidate.resolve"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_directory_nonlink",
+      "target_token": "resolved.is_dir"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_assert_directory_nonlink",
+      "target_token": "ValueError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_sidecars",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_sidecars",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_json_value",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_json_value",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_json_value",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "open_read_only"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "tuple"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "json.dumps"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "table.replace"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "_json_value"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "range"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "json.dumps"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "row_hashes.append"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "tuple"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "target_token": "conn.close"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_write_json_atomic",
+      "target_token": "path.with_name"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_write_json_atomic",
+      "target_token": "uuid.uuid4"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_write_json_atomic",
+      "target_token": "json.dumps"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_write_json_atomic",
+      "target_token": "temporary.open"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_write_json_atomic",
+      "target_token": "handle.write"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_write_json_atomic",
+      "target_token": "handle.flush"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_write_json_atomic",
+      "target_token": "os.fsync"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_write_json_atomic",
+      "target_token": "handle.fileno"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::_write_json_atomic",
+      "target_token": "os.replace"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_assert_regular_nonlink"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_assert_directory_nonlink"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "root.mkdir"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "uuid.uuid4"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "stage_dir.mkdir"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "datetime.now"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_write_json_atomic"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "report.update"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_write_json_atomic"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "source_authorization_reference.strip"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "report.update"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_write_json_atomic"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_sidecars"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "sidecars.values"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "report.update"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_write_json_atomic"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "report.update"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_write_json_atomic"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "verify_schema16_database_integrity"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "report.update"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_write_json_atomic"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_stat_fingerprint"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "shutil.copy2"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "open_read_only"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "sqlite3.connect"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "source_conn.backup"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "candidate_conn.commit"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "candidate_conn.close"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "source_conn.close"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_stat_fingerprint"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_sidecars"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_logical_fingerprint"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_logical_fingerprint"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "verify_schema16_database_integrity"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_sidecars"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "os.replace"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "os.replace"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "report.update"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "report.update"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "target_token": "_write_json_atomic"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "_assert_directory_nonlink"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "_assert_regular_nonlink"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "json.loads"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "report_path.read_text"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "_assert_regular_nonlink"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "_sidecars"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "_sidecars"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "report.get"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "report.get"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "rollback_report.is_file"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "report.get"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "activation_report.is_file"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "json.loads"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "activation_report.read_text"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activation_status",
+      "target_token": "recorded.get"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "_assert_directory_nonlink"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "json.loads"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "report_path.read_text"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "report.get"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "authorization_reference.strip"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "_assert_regular_nonlink"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "report.get"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "report.get"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "report.get"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "_assert_regular_nonlink"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "_assert_regular_nonlink"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "verify_schema16_database_integrity"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "_sidecars"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "existing_report_path.is_file"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "json.loads"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "existing_report_path.read_text"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "existing_report.get"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "existing_report.get"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "datetime.now"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "_write_json_atomic"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "active.with_name"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "uuid.uuid4"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "shutil.copy2"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "_sidecars"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "os.replace"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "temporary.unlink"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "datetime.now"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "target_token": "_write_json_atomic"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "authorization_reference.strip"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "_assert_directory_nonlink"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "_assert_regular_nonlink"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "json.loads"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "report_path.read_text"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "report.get"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "_assert_regular_nonlink"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "_assert_regular_nonlink"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "report.get"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "report.get"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "_sidecars"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "verify_schema16_database_integrity"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "datetime.now"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "_write_json_atomic"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "active.with_name"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "uuid.uuid4"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "shutil.copy2"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "_sidecars"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "os.replace"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "temporary.unlink"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "_sha256"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "datetime.now"
+    },
+    {
+      "caller": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "target_token": "_write_json_atomic"
+    },
+    {
       "caller": "backend/max_backend/db.py::DatabaseSchemaGuardError.__init__",
       "target_token": "super"
+    },
+    {
+      "caller": "backend/max_backend/db.py::_schema_object_fingerprint",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/db.py::_schema_object_fingerprint",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "target_token": "tuple"
+    },
+    {
+      "caller": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "target_token": "_schema_object_fingerprint"
+    },
+    {
+      "caller": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "target_token": "_schema_object_fingerprint"
+    },
+    {
+      "caller": "backend/max_backend/db.py::open_read_only",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/db.py::open_read_only",
+      "target_token": "database.resolve"
+    },
+    {
+      "caller": "backend/max_backend/db.py::open_read_only",
+      "target_token": "sqlite3.connect"
+    },
+    {
+      "caller": "backend/max_backend/db.py::open_read_only",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/db.py::is_schema16_archive_compatible",
+      "target_token": "schema.get"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_automatic_recovery_supported",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_automatic_recovery_supported",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_automatic_recovery_supported",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_reset_supported",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_reset_supported",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_reset_supported",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "target_token": "schema.get"
+    },
+    {
+      "caller": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "target_token": "open_read_only"
+    },
+    {
+      "caller": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "target_token": "tuple"
+    },
+    {
+      "caller": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "target_token": "conn.close"
+    },
+    {
+      "caller": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "target_token": "DatabaseSchemaGuardError"
     },
     {
       "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
@@ -13354,6 +14620,26 @@
     },
     {
       "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "open_read_only"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "_schema16_archive_profile_error"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "conn.close"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
       "target_token": "DatabaseSchemaGuardError"
     },
     {
@@ -13375,6 +14661,10 @@
     {
       "caller": "backend/max_backend/db.py::initialize_database",
       "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/db.py::initialize_database",
+      "target_token": "is_schema16_archive_compatible"
     },
     {
       "caller": "backend/max_backend/db.py::initialize_database",
@@ -13419,6 +14709,50 @@
     {
       "caller": "backend/max_backend/db.py::ensure_baseline_registered",
       "target_token": "verify_baseline_snapshot"
+    },
+    {
+      "caller": "backend/max_backend/db.py::ensure_baseline_registered",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/db.py::ensure_baseline_registered",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/max_backend/db.py::ensure_baseline_registered",
+      "target_token": "zip"
+    },
+    {
+      "caller": "backend/max_backend/db.py::ensure_baseline_registered",
+      "target_token": "open_read_only"
+    },
+    {
+      "caller": "backend/max_backend/db.py::ensure_baseline_registered",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/db.py::ensure_baseline_registered",
+      "target_token": "conn.close"
+    },
+    {
+      "caller": "backend/max_backend/db.py::ensure_baseline_registered",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::ensure_baseline_registered",
+      "target_token": "any"
+    },
+    {
+      "caller": "backend/max_backend/db.py::ensure_baseline_registered",
+      "target_token": "expected.items"
+    },
+    {
+      "caller": "backend/max_backend/db.py::ensure_baseline_registered",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::ensure_baseline_registered",
+      "target_token": "dict"
     },
     {
       "caller": "backend/max_backend/db.py::ensure_baseline_registered",
@@ -13478,6 +14812,14 @@
     },
     {
       "caller": "backend/max_backend/db.py::database_status",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/db.py::database_status",
+      "target_token": "open_read_only"
+    },
+    {
+      "caller": "backend/max_backend/db.py::database_status",
       "target_token": "connect"
     },
     {
@@ -13491,6 +14833,10 @@
     {
       "caller": "backend/max_backend/db.py::database_status",
       "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/db.py::database_status",
+      "target_token": "is_schema16_archive_compatible"
     },
     {
       "caller": "backend/max_backend/db.py::database_status",
@@ -13642,6 +14988,22 @@
     },
     {
       "caller": "backend/max_backend/main.py::_run_startup_migrations",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_run_startup_migrations",
+      "target_token": "verify_schema16_database_integrity"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_run_startup_migrations",
+      "target_token": "ensure_baseline_registered"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_run_startup_migrations",
+      "target_token": "_validate_schema16_operational_state"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_run_startup_migrations",
       "target_token": "initialize_database"
     },
     {
@@ -13683,6 +15045,62 @@
     {
       "caller": "backend/max_backend/main.py::_run_startup_migrations",
       "target_token": "reconcile_optimizer_startup"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "target_token": "open_read_only"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "target_token": "sum"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "target_token": "bool"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "target_token": "conn.close"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "target_token": "verify_current_strategy_champion"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "target_token": "champion.get"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "target_token": "pending.items"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "target_token": "DatabaseSchemaGuardError"
     },
     {
       "caller": "backend/max_backend/main.py::recovery_required_gate",
@@ -20178,7 +21596,7 @@
     },
     {
       "caller": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
-      "target_token": "assert_database_schema_compatible"
+      "target_token": "assert_automatic_recovery_supported"
     },
     {
       "caller": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
@@ -23754,6 +25172,10 @@
     },
     {
       "caller": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_store.py::migrate_m01",
       "target_token": "connect"
     },
     {
@@ -23791,6 +25213,10 @@
     {
       "caller": "backend/max_backend/optimizer_store.py::migrate_m02",
       "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "target_token": "is_schema16_archive_compatible"
     },
     {
       "caller": "backend/max_backend/optimizer_store.py::migrate_m02",
@@ -28842,7 +30268,7 @@
     },
     {
       "caller": "backend/max_backend/promotion_service.py::recover_incomplete_promotions",
-      "target_token": "assert_database_schema_compatible"
+      "target_token": "assert_automatic_recovery_supported"
     },
     {
       "caller": "backend/max_backend/promotion_service.py::recover_incomplete_promotions",
@@ -31950,6 +33376,10 @@
     },
     {
       "caller": "backend/max_backend/scientist_store.py::migrate_m05",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/scientist_store.py::migrate_m05",
       "target_token": "migrate_m04"
     },
     {
@@ -32562,7 +33992,7 @@
     },
     {
       "caller": "backend/max_backend/scientist_store.py::recover_unconfirmed_requests",
-      "target_token": "assert_database_schema_compatible"
+      "target_token": "assert_automatic_recovery_supported"
     },
     {
       "caller": "backend/max_backend/scientist_store.py::recover_unconfirmed_requests",
@@ -32858,7 +34288,7 @@
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::_connect",
-      "target_token": "assert_database_schema_compatible"
+      "target_token": "assert_reset_supported"
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::_connect",
@@ -33042,7 +34472,7 @@
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::_read_counts",
-      "target_token": "assert_database_schema_compatible"
+      "target_token": "assert_reset_supported"
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::_read_counts",
@@ -33202,6 +34632,18 @@
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
+      "target_token": "verify_schema16_database_integrity"
+    },
+    {
+      "caller": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
       "target_token": "_read_counts"
     },
     {
@@ -33290,7 +34732,7 @@
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
-      "target_token": "assert_database_schema_compatible"
+      "target_token": "assert_reset_supported"
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
@@ -33450,11 +34892,19 @@
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::database_recovery_status",
-      "target_token": "closing"
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/strategy_reset.py::database_recovery_status",
+      "target_token": "open_read_only"
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::database_recovery_status",
       "target_token": "_connect"
+    },
+    {
+      "caller": "backend/max_backend/strategy_reset.py::database_recovery_status",
+      "target_token": "closing"
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::database_recovery_status",
@@ -33463,6 +34913,18 @@
     {
       "caller": "backend/max_backend/strategy_reset.py::database_recovery_status",
       "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/strategy_reset.py::database_recovery_status",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/strategy_reset.py::database_recovery_status",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "backend/max_backend/strategy_reset.py::database_recovery_status",
+      "target_token": "is_schema16_archive_compatible"
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::_bootstrap_database",
@@ -33522,7 +34984,7 @@
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database",
-      "target_token": "assert_database_schema_compatible"
+      "target_token": "assert_reset_supported"
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database",
@@ -33795,6 +35257,10 @@
     {
       "caller": "backend/max_backend/workflow_store.py::migrate_current",
       "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/workflow_store.py::migrate_current",
+      "target_token": "is_schema16_archive_compatible"
     },
     {
       "caller": "backend/max_backend/workflow_store.py::migrate_current",
@@ -49205,6 +50671,26 @@
       "target_token": "json.loads"
     },
     {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_install_schema16_archive",
+      "target_token": "conn.executescript"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_install_schema16_archive",
+      "target_token": "textwrap.indent"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_install_schema16_archive",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_install_schema16_archive",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_install_schema16_archive",
+      "target_token": "conn.execute"
+    },
+    {
       "caller": "backend/tests/test_schema_compatibility_guard.py::_create_schema_fixture",
       "target_token": "path.parent.mkdir"
     },
@@ -49418,7 +50904,71 @@
     },
     {
       "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "conn.executemany"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "_install_schema16_archive"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
       "target_token": "str"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_clean_schema16_fixture",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_clean_schema16_fixture",
+      "target_token": "baseline_root.mkdir"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_clean_schema16_fixture",
+      "target_token": "shutil.copy2"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_clean_schema16_fixture",
+      "target_token": "shutil.copy2"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_clean_schema16_fixture",
+      "target_token": "_run_startup"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_clean_schema16_fixture",
+      "target_token": "sqlite3.connect"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_clean_schema16_fixture",
+      "target_token": "_install_schema16_archive"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_clean_schema16_fixture",
+      "target_token": "conn.execute"
     },
     {
       "caller": "backend/tests/test_schema_compatibility_guard.py::_load_epoch_reset_script",
@@ -49461,43 +51011,699 @@
       "target_token": "assert_database_schema_compatible"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_16_without_mutation",
-      "target_token": "_create_schema_fixture"
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_exact_historical_schema16_profile_is_compatible_and_preserves_populated_authority",
+      "target_token": "_create_rich_schema_fixture"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_16_without_mutation",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_exact_historical_schema16_profile_is_compatible_and_preserves_populated_authority",
       "target_token": "_db_snapshot"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_16_without_mutation",
-      "target_token": "pytest.raises"
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_exact_historical_schema16_profile_is_compatible_and_preserves_populated_authority",
+      "target_token": "assert_database_schema_compatible"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_16_without_mutation",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_exact_historical_schema16_profile_is_compatible_and_preserves_populated_authority",
+      "target_token": "verify_schema16_database_integrity"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_exact_historical_schema16_profile_is_compatible_and_preserves_populated_authority.unexpected_rw_open",
+      "target_token": "pytest.fail"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_exact_historical_schema16_profile_is_compatible_and_preserves_populated_authority",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_exact_historical_schema16_profile_is_compatible_and_preserves_populated_authority",
+      "target_token": "database_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_exact_historical_schema16_profile_is_compatible_and_preserves_populated_authority",
+      "target_token": "database_recovery_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_exact_historical_schema16_profile_is_compatible_and_preserves_populated_authority",
+      "target_token": "strategy_reset_preflight"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_exact_historical_schema16_profile_is_compatible_and_preserves_populated_authority",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_historical_migration_entrypoints_are_read_only_noops",
+      "target_token": "_create_rich_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_historical_migration_entrypoints_are_read_only_noops",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_historical_migration_entrypoints_are_read_only_noops",
       "target_token": "migration"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_16_without_mutation",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_historical_migration_entrypoints_are_read_only_noops",
       "target_token": "_db_snapshot"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_16",
-      "target_token": "_create_schema_fixture"
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_historical_migration_entrypoints_are_read_only_noops",
+      "target_token": "assert_database_schema_compatible"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_16",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_direct_recovery_and_reset_are_blocked_without_mutation",
+      "target_token": "_create_rich_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_direct_recovery_and_reset_are_blocked_without_mutation",
       "target_token": "_db_snapshot"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_16",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_direct_recovery_and_reset_are_blocked_without_mutation",
       "target_token": "pytest.raises"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_16",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_direct_recovery_and_reset_are_blocked_without_mutation",
       "target_token": "operation"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_16",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_direct_recovery_and_reset_are_blocked_without_mutation",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_epoch_reset_is_disabled_before_any_mutation",
+      "target_token": "_create_rich_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_epoch_reset_is_disabled_before_any_mutation",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_epoch_reset_is_disabled_before_any_mutation",
+      "target_token": "_load_epoch_reset_script"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_epoch_reset_is_disabled_before_any_mutation",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_epoch_reset_is_disabled_before_any_mutation",
+      "target_token": "reset_script.reset_strategy_epoch"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_epoch_reset_is_disabled_before_any_mutation",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_startup_passes_only_after_readonly_integrity_and_operational_validation",
+      "target_token": "_create_clean_schema16_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_startup_passes_only_after_readonly_integrity_and_operational_validation",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_startup_passes_only_after_readonly_integrity_and_operational_validation",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_startup_passes_only_after_readonly_integrity_and_operational_validation",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_startup_passes_only_after_readonly_integrity_and_operational_validation",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_startup_passes_only_after_readonly_integrity_and_operational_validation",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_startup_passes_only_after_readonly_integrity_and_operational_validation",
+      "target_token": "range"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_startup_passes_only_after_readonly_integrity_and_operational_validation",
+      "target_token": "_run_startup"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_startup_passes_only_after_readonly_integrity_and_operational_validation",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_startup_passes_only_after_readonly_integrity_and_operational_validation",
+      "target_token": "TestClient"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_startup_passes_only_after_readonly_integrity_and_operational_validation",
+      "target_token": "client.get"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_startup_passes_only_after_readonly_integrity_and_operational_validation",
+      "target_token": "client.get"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_startup_passes_only_after_readonly_integrity_and_operational_validation",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_incompatible_schema16_layout_fails_closed_without_operational_access",
+      "target_token": "_create_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_incompatible_schema16_layout_fails_closed_without_operational_access",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_incompatible_schema16_layout_fails_closed_without_operational_access.unexpected_rw_open",
+      "target_token": "pytest.fail"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_incompatible_schema16_layout_fails_closed_without_operational_access",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_incompatible_schema16_layout_fails_closed_without_operational_access",
+      "target_token": "database_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_incompatible_schema16_layout_fails_closed_without_operational_access",
+      "target_token": "database_recovery_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_incompatible_schema16_layout_fails_closed_without_operational_access",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_incompatible_schema16_layout_fails_closed_without_operational_access",
+      "target_token": "strategy_reset_preflight"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_incompatible_schema16_layout_fails_closed_without_operational_access",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_uncertain_operational_and_champion_state_blocks_without_recovery",
+      "target_token": "_create_rich_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_uncertain_operational_and_champion_state_blocks_without_recovery",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_uncertain_operational_and_champion_state_blocks_without_recovery",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_uncertain_operational_and_champion_state_blocks_without_recovery",
+      "target_token": "_run_startup"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_uncertain_operational_and_champion_state_blocks_without_recovery",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_active_optimizer_blocks_startup_and_preserves_checkpoint_rows",
+      "target_token": "_create_clean_schema16_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_active_optimizer_blocks_startup_and_preserves_checkpoint_rows",
+      "target_token": "sqlite3.connect"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_active_optimizer_blocks_startup_and_preserves_checkpoint_rows",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_active_optimizer_blocks_startup_and_preserves_checkpoint_rows",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_active_optimizer_blocks_startup_and_preserves_checkpoint_rows",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_active_optimizer_blocks_startup_and_preserves_checkpoint_rows",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_active_optimizer_blocks_startup_and_preserves_checkpoint_rows",
+      "target_token": "_run_startup"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_active_optimizer_blocks_startup_and_preserves_checkpoint_rows",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_interrupted_validation_retry_is_non_mutating_and_idempotent",
+      "target_token": "_create_clean_schema16_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_interrupted_validation_retry_is_non_mutating_and_idempotent",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_interrupted_validation_retry_is_non_mutating_and_idempotent",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_interrupted_validation_retry_is_non_mutating_and_idempotent",
+      "target_token": "SimulatedCrash"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_interrupted_validation_retry_is_non_mutating_and_idempotent",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_interrupted_validation_retry_is_non_mutating_and_idempotent",
+      "target_token": "_run_startup"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_interrupted_validation_retry_is_non_mutating_and_idempotent",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_interrupted_validation_retry_is_non_mutating_and_idempotent",
+      "target_token": "monkeypatch.undo"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_interrupted_validation_retry_is_non_mutating_and_idempotent",
+      "target_token": "_run_startup"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_interrupted_validation_retry_is_non_mutating_and_idempotent",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_cutover_source",
+      "target_token": "_create_clean_schema16_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_cutover_source",
+      "target_token": "gc.collect"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_stage_schema16_candidate",
+      "target_token": "arguments.update"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_stage_schema16_candidate",
+      "target_token": "database_cutover.stage_schema16_candidate"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_staging_requires_quiesced_source_and_explicit_reference_without_source_mutation",
+      "target_token": "_create_cutover_source"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_staging_requires_quiesced_source_and_explicit_reference_without_source_mutation",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_staging_requires_quiesced_source_and_explicit_reference_without_source_mutation",
+      "target_token": "_file_hashes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_staging_requires_quiesced_source_and_explicit_reference_without_source_mutation",
+      "target_token": "_stage_schema16_candidate"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_staging_requires_quiesced_source_and_explicit_reference_without_source_mutation",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_staging_requires_quiesced_source_and_explicit_reference_without_source_mutation",
+      "target_token": "_file_hashes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_cutover_stages_verified_candidate_and_exact_rollback_without_source_mutation",
+      "target_token": "_create_cutover_source"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_cutover_stages_verified_candidate_and_exact_rollback_without_source_mutation",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_cutover_stages_verified_candidate_and_exact_rollback_without_source_mutation",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_cutover_stages_verified_candidate_and_exact_rollback_without_source_mutation",
+      "target_token": "database.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_cutover_stages_verified_candidate_and_exact_rollback_without_source_mutation",
+      "target_token": "_stage_schema16_candidate"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_cutover_stages_verified_candidate_and_exact_rollback_without_source_mutation",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_cutover_stages_verified_candidate_and_exact_rollback_without_source_mutation",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_cutover_stages_verified_candidate_and_exact_rollback_without_source_mutation",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_cutover_stages_verified_candidate_and_exact_rollback_without_source_mutation",
+      "target_token": "candidate.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_cutover_stages_verified_candidate_and_exact_rollback_without_source_mutation",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_cutover_stages_verified_candidate_and_exact_rollback_without_source_mutation",
+      "target_token": "rollback.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_cutover_stages_verified_candidate_and_exact_rollback_without_source_mutation",
+      "target_token": "database_cutover.activation_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_cutover_stages_verified_candidate_and_exact_rollback_without_source_mutation",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema16_cutover_stages_verified_candidate_and_exact_rollback_without_source_mutation",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_blocks_sidecars_and_reports_without_opening_or_mutating_source",
+      "target_token": "_create_cutover_source"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_blocks_sidecars_and_reports_without_opening_or_mutating_source",
+      "target_token": "sqlite3.connect"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_blocks_sidecars_and_reports_without_opening_or_mutating_source",
+      "target_token": "writer.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_blocks_sidecars_and_reports_without_opening_or_mutating_source",
+      "target_token": "writer.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_blocks_sidecars_and_reports_without_opening_or_mutating_source",
+      "target_token": "writer.commit"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_blocks_sidecars_and_reports_without_opening_or_mutating_source",
+      "target_token": "_file_hashes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_blocks_sidecars_and_reports_without_opening_or_mutating_source",
+      "target_token": "_stage_schema16_candidate"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_blocks_sidecars_and_reports_without_opening_or_mutating_source",
+      "target_token": "_file_hashes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_blocks_sidecars_and_reports_without_opening_or_mutating_source",
+      "target_token": "writer.close"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_cutover_staging_never_replaces_source_and_is_classified_for_retry",
+      "target_token": "_create_cutover_source"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_cutover_staging_never_replaces_source_and_is_classified_for_retry",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_cutover_staging_never_replaces_source_and_is_classified_for_retry",
+      "target_token": "database.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_cutover_staging_never_replaces_source_and_is_classified_for_retry",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_cutover_staging_never_replaces_source_and_is_classified_for_retry.fail_candidate_fingerprint",
+      "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_cutover_staging_never_replaces_source_and_is_classified_for_retry.fail_candidate_fingerprint",
+      "target_token": "real_fingerprint"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_cutover_staging_never_replaces_source_and_is_classified_for_retry",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_cutover_staging_never_replaces_source_and_is_classified_for_retry",
+      "target_token": "_stage_schema16_candidate"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_cutover_staging_never_replaces_source_and_is_classified_for_retry",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_cutover_staging_never_replaces_source_and_is_classified_for_retry",
+      "target_token": "database.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_cutover_staging_never_replaces_source_and_is_classified_for_retry",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_cutover_staging_never_replaces_source_and_is_classified_for_retry",
+      "target_token": "database_cutover.activation_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_cutover_staging_never_replaces_source_and_is_classified_for_retry",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "_create_cutover_source"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "database.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "_stage_schema16_candidate"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "database_cutover.activate_schema16_candidate"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "database_cutover.activate_schema16_candidate"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "database.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "database_cutover.activate_schema16_candidate"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "database.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "database_cutover.activation_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "database_cutover.activate_schema16_candidate"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "target_token": "database.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace",
+      "target_token": "_create_cutover_source"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace",
+      "target_token": "_stage_schema16_candidate"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace.crash_before_activation_report",
+      "target_token": "OSError"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace.crash_before_activation_report",
+      "target_token": "real_write"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace",
+      "target_token": "database_cutover.activate_schema16_candidate"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace",
+      "target_token": "database.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace",
+      "target_token": "database_cutover.activation_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace",
+      "target_token": "database_cutover.activate_schema16_candidate"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace",
+      "target_token": "database.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace",
+      "target_token": "database_cutover.activation_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_authorized_rollback_restores_exact_source_and_repeated_recovery_is_idempotent",
+      "target_token": "_create_cutover_source"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_authorized_rollback_restores_exact_source_and_repeated_recovery_is_idempotent",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_authorized_rollback_restores_exact_source_and_repeated_recovery_is_idempotent",
+      "target_token": "database.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_authorized_rollback_restores_exact_source_and_repeated_recovery_is_idempotent",
+      "target_token": "_stage_schema16_candidate"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_authorized_rollback_restores_exact_source_and_repeated_recovery_is_idempotent",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_authorized_rollback_restores_exact_source_and_repeated_recovery_is_idempotent",
+      "target_token": "database_cutover.activate_schema16_candidate"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_authorized_rollback_restores_exact_source_and_repeated_recovery_is_idempotent",
+      "target_token": "database_cutover.restore_schema16_rollback_image"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_authorized_rollback_restores_exact_source_and_repeated_recovery_is_idempotent",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_authorized_rollback_restores_exact_source_and_repeated_recovery_is_idempotent",
+      "target_token": "database.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_authorized_rollback_restores_exact_source_and_repeated_recovery_is_idempotent",
+      "target_token": "database_cutover.activation_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_authorized_rollback_restores_exact_source_and_repeated_recovery_is_idempotent",
+      "target_token": "database_cutover.restore_schema16_rollback_image"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_authorized_rollback_restores_exact_source_and_repeated_recovery_is_idempotent",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_authorized_rollback_restores_exact_source_and_repeated_recovery_is_idempotent",
+      "target_token": "database.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_17_without_mutation",
+      "target_token": "_create_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_17_without_mutation",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_17_without_mutation",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_17_without_mutation",
+      "target_token": "migration"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_17_without_mutation",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_17",
+      "target_token": "_create_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_17",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_17",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_17",
+      "target_token": "operation"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_17",
       "target_token": "_db_snapshot"
     },
     {
@@ -49589,59 +51795,59 @@
       "target_token": "_db_snapshot"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state",
       "target_token": "_create_schema_fixture"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state",
       "target_token": "_db_snapshot"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state",
       "target_token": "monkeypatch.setattr"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state",
       "target_token": "monkeypatch.setattr"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state",
       "target_token": "monkeypatch.setattr"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state",
       "target_token": "monkeypatch.setattr"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state.migration_must_not_start",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state.migration_must_not_start",
       "target_token": "pytest.fail"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state",
       "target_token": "monkeypatch.setattr"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state",
       "target_token": "monkeypatch.setattr"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state",
       "target_token": "pytest.fail"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state",
       "target_token": "range"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state",
       "target_token": "TestClient"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state",
       "target_token": "client.get"
     },
     {
-      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state",
       "target_token": "_db_snapshot"
     },
     {
@@ -53159,6 +55365,14 @@
     {
       "caller": "scripts/reset_strategy_epoch.py::reset_strategy_epoch",
       "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "scripts/reset_strategy_epoch.py::reset_strategy_epoch",
+      "target_token": "is_schema16_archive_compatible"
+    },
+    {
+      "caller": "scripts/reset_strategy_epoch.py::reset_strategy_epoch",
+      "target_token": "ResetError"
     },
     {
       "caller": "scripts/reset_strategy_epoch.py::reset_strategy_epoch",
@@ -63883,160 +66097,160 @@
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 46,
-      "line_start": 37,
+      "line_end": 51,
+      "line_start": 42,
       "locator": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready",
       "symbol": "_challenger_schema_ready"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 152,
-      "line_start": 49,
+      "line_end": 157,
+      "line_start": 54,
       "locator": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry",
       "symbol": "_upgrade_challenger_registry"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 162,
-      "line_start": 155,
+      "line_end": 167,
+      "line_start": 160,
       "locator": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready",
       "symbol": "_backtest_schema_ready"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 220,
-      "line_start": 165,
+      "line_end": 225,
+      "line_start": 170,
       "locator": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema",
       "symbol": "_upgrade_backtest_schema"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 295,
-      "line_start": 223,
+      "line_end": 300,
+      "line_start": 228,
       "locator": "backend/max_backend/challenger_operations_store.py::_create_m06_tables",
       "symbol": "_create_m06_tables"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 317,
-      "line_start": 298,
+      "line_end": 324,
+      "line_start": 303,
       "locator": "backend/max_backend/challenger_operations_store.py::migrate_m06",
       "symbol": "migrate_m06"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 392,
-      "line_start": 320,
+      "line_end": 399,
+      "line_start": 327,
       "locator": "backend/max_backend/challenger_operations_store.py::challenger_operations_database_status",
       "symbol": "challenger_operations_database_status"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 409,
-      "line_start": 395,
+      "line_end": 416,
+      "line_start": 402,
       "locator": "backend/max_backend/challenger_operations_store.py::_compact_row",
       "symbol": "_compact_row"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 489,
-      "line_start": 412,
+      "line_end": 496,
+      "line_start": 419,
       "locator": "backend/max_backend/challenger_operations_store.py::list_registry_page",
       "symbol": "list_registry_page"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 499,
-      "line_start": 492,
+      "line_end": 506,
+      "line_start": 499,
       "locator": "backend/max_backend/challenger_operations_store.py::_decode_retirement",
       "symbol": "_decode_retirement"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 513,
-      "line_start": 502,
+      "line_end": 520,
+      "line_start": 509,
       "locator": "backend/max_backend/challenger_operations_store.py::get_retirement",
       "symbol": "get_retirement"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 535,
-      "line_start": 516,
+      "line_end": 542,
+      "line_start": 523,
       "locator": "backend/max_backend/challenger_operations_store.py::list_retirements",
       "symbol": "list_retirements"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 710,
-      "line_start": 538,
+      "line_end": 717,
+      "line_start": 545,
       "locator": "backend/max_backend/challenger_operations_store.py::retire_registry_row",
       "symbol": "retire_registry_row"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 781,
-      "line_start": 713,
+      "line_end": 788,
+      "line_start": 720,
       "locator": "backend/max_backend/challenger_operations_store.py::create_backtest_record",
       "symbol": "create_backtest_record"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 858,
-      "line_start": 784,
+      "line_end": 865,
+      "line_start": 791,
       "locator": "backend/max_backend/challenger_operations_store.py::update_backtest",
       "symbol": "update_backtest"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 868,
-      "line_start": 861,
+      "line_end": 875,
+      "line_start": 868,
       "locator": "backend/max_backend/challenger_operations_store.py::_decode_backtest",
       "symbol": "_decode_backtest"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 882,
-      "line_start": 871,
+      "line_end": 889,
+      "line_start": 878,
       "locator": "backend/max_backend/challenger_operations_store.py::get_backtest",
       "symbol": "get_backtest"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 907,
-      "line_start": 885,
+      "line_end": 914,
+      "line_start": 892,
       "locator": "backend/max_backend/challenger_operations_store.py::list_backtests",
       "symbol": "list_backtests"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 993,
-      "line_start": 911,
+      "line_end": 1000,
+      "line_start": 918,
       "locator": "backend/max_backend/challenger_operations_store.py::list_backtests_page",
       "symbol": "list_backtests_page"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 1030,
-      "line_start": 996,
+      "line_end": 1037,
+      "line_start": 1003,
       "locator": "backend/max_backend/challenger_operations_store.py::recover_incomplete_backtests",
       "symbol": "recover_incomplete_backtests"
     },
@@ -64147,7 +66361,7 @@
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 76,
+      "line_end": 78,
       "line_start": 18,
       "locator": "backend/max_backend/challenger_store.py::migrate_m03",
       "symbol": "migrate_m03"
@@ -64155,80 +66369,80 @@
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 123,
-      "line_start": 79,
+      "line_end": 125,
+      "line_start": 81,
       "locator": "backend/max_backend/challenger_store.py::challenger_database_status",
       "symbol": "challenger_database_status"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 145,
-      "line_start": 136,
+      "line_end": 147,
+      "line_start": 138,
       "locator": "backend/max_backend/challenger_store.py::_decode",
       "symbol": "_decode"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 159,
-      "line_start": 148,
+      "line_end": 161,
+      "line_start": 150,
       "locator": "backend/max_backend/challenger_store.py::get_challenger",
       "symbol": "get_challenger"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 178,
-      "line_start": 162,
+      "line_end": 180,
+      "line_start": 164,
       "locator": "backend/max_backend/challenger_store.py::get_challenger_by_source",
       "symbol": "get_challenger_by_source"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 231,
-      "line_start": 181,
+      "line_end": 233,
+      "line_start": 183,
       "locator": "backend/max_backend/challenger_store.py::consumed_source_identities",
       "symbol": "consumed_source_identities"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 245,
-      "line_start": 234,
+      "line_end": 247,
+      "line_start": 236,
       "locator": "backend/max_backend/challenger_store.py::challenger_id_exists",
       "symbol": "challenger_id_exists"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 262,
-      "line_start": 248,
+      "line_end": 264,
+      "line_start": 250,
       "locator": "backend/max_backend/challenger_store.py::list_challengers",
       "symbol": "list_challengers"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 348,
-      "line_start": 265,
+      "line_end": 350,
+      "line_start": 267,
       "locator": "backend/max_backend/challenger_store.py::reserve_challenger",
       "symbol": "reserve_challenger"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 412,
-      "line_start": 351,
+      "line_end": 414,
+      "line_start": 353,
       "locator": "backend/max_backend/challenger_store.py::finalize_challenger",
       "symbol": "finalize_challenger"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 445,
-      "line_start": 415,
+      "line_end": 447,
+      "line_start": 417,
       "locator": "backend/max_backend/challenger_store.py::mark_registration_error",
       "symbol": "mark_registration_error"
     },
@@ -64427,7 +66641,7 @@
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 262,
+      "line_end": 264,
       "line_start": 200,
       "locator": "backend/max_backend/champion_store.py::migrate_m04",
       "symbol": "migrate_m04"
@@ -64435,176 +66649,328 @@
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 320,
-      "line_start": 265,
+      "line_end": 322,
+      "line_start": 267,
       "locator": "backend/max_backend/champion_store.py::champion_database_status",
       "symbol": "champion_database_status"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 335,
-      "line_start": 323,
+      "line_end": 337,
+      "line_start": 325,
       "locator": "backend/max_backend/champion_store.py::_decode_promotion",
       "symbol": "_decode_promotion"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 346,
-      "line_start": 338,
+      "line_end": 348,
+      "line_start": 340,
       "locator": "backend/max_backend/champion_store.py::_decode_champion",
       "symbol": "_decode_champion"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 355,
-      "line_start": 349,
+      "line_end": 357,
+      "line_start": 351,
       "locator": "backend/max_backend/champion_store.py::current_champion",
       "symbol": "current_champion"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 371,
-      "line_start": 358,
+      "line_end": 373,
+      "line_start": 360,
       "locator": "backend/max_backend/champion_store.py::current_champion_summary",
       "symbol": "current_champion_summary"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 386,
-      "line_start": 374,
+      "line_end": 388,
+      "line_start": 376,
       "locator": "backend/max_backend/champion_store.py::get_champion",
       "symbol": "get_champion"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 395,
-      "line_start": 389,
+      "line_end": 397,
+      "line_start": 391,
       "locator": "backend/max_backend/champion_store.py::list_champions",
       "symbol": "list_champions"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 408,
-      "line_start": 398,
+      "line_end": 410,
+      "line_start": 400,
       "locator": "backend/max_backend/champion_store.py::active_promotion",
       "symbol": "active_promotion"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 418,
-      "line_start": 411,
+      "line_end": 420,
+      "line_start": 413,
       "locator": "backend/max_backend/champion_store.py::get_promotion",
       "symbol": "get_promotion"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 427,
-      "line_start": 421,
+      "line_end": 429,
+      "line_start": 423,
       "locator": "backend/max_backend/champion_store.py::list_promotions",
       "symbol": "list_promotions"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 510,
-      "line_start": 430,
+      "line_end": 512,
+      "line_start": 432,
       "locator": "backend/max_backend/champion_store.py::create_prepared_promotion",
       "symbol": "create_prepared_promotion"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 592,
-      "line_start": 513,
+      "line_end": 594,
+      "line_start": 515,
       "locator": "backend/max_backend/champion_store.py::update_promotion",
       "symbol": "update_promotion"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 771,
-      "line_start": 595,
+      "line_end": 773,
+      "line_start": 597,
       "locator": "backend/max_backend/champion_store.py::commit_promotion_authority",
       "symbol": "commit_promotion_authority"
     },
     {
+      "file": "backend/max_backend/database_cutover.py",
+      "kind": "function",
+      "line_end": 35,
+      "line_start": 30,
+      "locator": "backend/max_backend/database_cutover.py::_sha256",
+      "symbol": "_sha256"
+    },
+    {
+      "file": "backend/max_backend/database_cutover.py",
+      "kind": "function",
+      "line_end": 40,
+      "line_start": 38,
+      "locator": "backend/max_backend/database_cutover.py::_stat_fingerprint",
+      "symbol": "_stat_fingerprint"
+    },
+    {
+      "file": "backend/max_backend/database_cutover.py",
+      "kind": "function",
+      "line_end": 53,
+      "line_start": 43,
+      "locator": "backend/max_backend/database_cutover.py::_assert_regular_nonlink",
+      "symbol": "_assert_regular_nonlink"
+    },
+    {
+      "file": "backend/max_backend/database_cutover.py",
+      "kind": "function",
+      "line_end": 66,
+      "line_start": 56,
+      "locator": "backend/max_backend/database_cutover.py::_assert_directory_nonlink",
+      "symbol": "_assert_directory_nonlink"
+    },
+    {
+      "file": "backend/max_backend/database_cutover.py",
+      "kind": "function",
+      "line_end": 73,
+      "line_start": 69,
+      "locator": "backend/max_backend/database_cutover.py::_sidecars",
+      "symbol": "_sidecars"
+    },
+    {
+      "file": "backend/max_backend/database_cutover.py",
+      "kind": "function",
+      "line_end": 79,
+      "line_start": 76,
+      "locator": "backend/max_backend/database_cutover.py::_json_value",
+      "symbol": "_json_value"
+    },
+    {
+      "file": "backend/max_backend/database_cutover.py",
+      "kind": "function",
+      "line_end": 134,
+      "line_start": 82,
+      "locator": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "symbol": "_logical_fingerprint"
+    },
+    {
+      "file": "backend/max_backend/database_cutover.py",
+      "kind": "function",
+      "line_end": 144,
+      "line_start": 137,
+      "locator": "backend/max_backend/database_cutover.py::_write_json_atomic",
+      "symbol": "_write_json_atomic"
+    },
+    {
+      "file": "backend/max_backend/database_cutover.py",
+      "kind": "function",
+      "line_end": 267,
+      "line_start": 147,
+      "locator": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "symbol": "stage_schema16_candidate"
+    },
+    {
+      "file": "backend/max_backend/database_cutover.py",
+      "kind": "function",
+      "line_end": 297,
+      "line_start": 270,
+      "locator": "backend/max_backend/database_cutover.py::activation_status",
+      "symbol": "activation_status"
+    },
+    {
+      "file": "backend/max_backend/database_cutover.py",
+      "kind": "function",
+      "line_end": 424,
+      "line_start": 300,
+      "locator": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "symbol": "activate_schema16_candidate"
+    },
+    {
+      "file": "backend/max_backend/database_cutover.py",
+      "kind": "function",
+      "line_end": 519,
+      "line_start": 427,
+      "locator": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "symbol": "restore_schema16_rollback_image"
+    },
+    {
       "file": "backend/max_backend/db.py",
       "kind": "class",
-      "line_end": 40,
-      "line_start": 15,
+      "line_end": 63,
+      "line_start": 34,
       "locator": "backend/max_backend/db.py::DatabaseSchemaGuardError",
       "symbol": "DatabaseSchemaGuardError"
     },
     {
       "file": "backend/max_backend/db.py",
       "kind": "method",
-      "line_end": 28,
-      "line_start": 18,
+      "line_end": 49,
+      "line_start": 37,
       "locator": "backend/max_backend/db.py::DatabaseSchemaGuardError.__init__",
       "symbol": "DatabaseSchemaGuardError.__init__"
     },
     {
       "file": "backend/max_backend/db.py",
       "kind": "method",
-      "line_end": 40,
-      "line_start": 30,
+      "line_end": 63,
+      "line_start": 51,
       "locator": "backend/max_backend/db.py::DatabaseSchemaGuardError.diagnostic",
       "symbol": "DatabaseSchemaGuardError.diagnostic"
     },
     {
       "file": "backend/max_backend/db.py",
       "kind": "function",
-      "line_end": 138,
-      "line_start": 43,
+      "line_end": 71,
+      "line_start": 66,
+      "locator": "backend/max_backend/db.py::_schema_object_fingerprint",
+      "symbol": "_schema_object_fingerprint"
+    },
+    {
+      "file": "backend/max_backend/db.py",
+      "kind": "function",
+      "line_end": 118,
+      "line_start": 74,
+      "locator": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "symbol": "_schema16_archive_profile_error"
+    },
+    {
+      "file": "backend/max_backend/db.py",
+      "kind": "function",
+      "line_end": 128,
+      "line_start": 121,
+      "locator": "backend/max_backend/db.py::open_read_only",
+      "symbol": "open_read_only"
+    },
+    {
+      "file": "backend/max_backend/db.py",
+      "kind": "function",
+      "line_end": 132,
+      "line_start": 131,
+      "locator": "backend/max_backend/db.py::is_schema16_archive_compatible",
+      "symbol": "is_schema16_archive_compatible"
+    },
+    {
+      "file": "backend/max_backend/db.py",
+      "kind": "function",
+      "line_end": 144,
+      "line_start": 135,
+      "locator": "backend/max_backend/db.py::assert_automatic_recovery_supported",
+      "symbol": "assert_automatic_recovery_supported"
+    },
+    {
+      "file": "backend/max_backend/db.py",
+      "kind": "function",
+      "line_end": 156,
+      "line_start": 147,
+      "locator": "backend/max_backend/db.py::assert_reset_supported",
+      "symbol": "assert_reset_supported"
+    },
+    {
+      "file": "backend/max_backend/db.py",
+      "kind": "function",
+      "line_end": 199,
+      "line_start": 159,
+      "locator": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "symbol": "verify_schema16_database_integrity"
+    },
+    {
+      "file": "backend/max_backend/db.py",
+      "kind": "function",
+      "line_end": 322,
+      "line_start": 202,
       "locator": "backend/max_backend/db.py::assert_database_schema_compatible",
       "symbol": "assert_database_schema_compatible"
     },
     {
       "file": "backend/max_backend/db.py",
       "kind": "function",
-      "line_end": 147,
-      "line_start": 141,
+      "line_end": 331,
+      "line_start": 325,
       "locator": "backend/max_backend/db.py::connect",
       "symbol": "connect"
     },
     {
       "file": "backend/max_backend/db.py",
       "kind": "function",
-      "line_end": 192,
-      "line_start": 150,
+      "line_end": 378,
+      "line_start": 334,
       "locator": "backend/max_backend/db.py::initialize_database",
       "symbol": "initialize_database"
     },
     {
       "file": "backend/max_backend/db.py",
       "kind": "function",
-      "line_end": 226,
-      "line_start": 195,
+      "line_end": 450,
+      "line_start": 381,
       "locator": "backend/max_backend/db.py::ensure_baseline_registered",
       "symbol": "ensure_baseline_registered"
     },
     {
       "file": "backend/max_backend/db.py",
       "kind": "function",
-      "line_end": 234,
-      "line_start": 229,
+      "line_end": 458,
+      "line_start": 453,
       "locator": "backend/max_backend/db.py::read_baseline",
       "symbol": "read_baseline"
     },
     {
       "file": "backend/max_backend/db.py",
       "kind": "function",
-      "line_end": 283,
-      "line_start": 237,
+      "line_end": 511,
+      "line_start": 461,
       "locator": "backend/max_backend/db.py::database_status",
       "symbol": "database_status"
     },
@@ -64635,88 +67001,96 @@
     {
       "file": "backend/max_backend/main.py",
       "kind": "class",
-      "line_end": 52,
-      "line_start": 51,
+      "line_end": 57,
+      "line_start": 56,
       "locator": "backend/max_backend/main.py::CorruptStateResetConfirmation",
       "symbol": "CorruptStateResetConfirmation"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "async_function",
-      "line_end": 77,
-      "line_start": 56,
+      "line_end": 82,
+      "line_start": 61,
       "locator": "backend/max_backend/main.py::lifespan",
       "symbol": "lifespan"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 93,
-      "line_start": 80,
+      "line_end": 103,
+      "line_start": 85,
       "locator": "backend/max_backend/main.py::_run_startup_migrations",
       "symbol": "_run_startup_migrations"
     },
     {
       "file": "backend/max_backend/main.py",
+      "kind": "function",
+      "line_end": 186,
+      "line_start": 106,
+      "locator": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "symbol": "_validate_schema16_operational_state"
+    },
+    {
+      "file": "backend/max_backend/main.py",
       "kind": "async_function",
-      "line_end": 122,
-      "line_start": 105,
+      "line_end": 215,
+      "line_start": 198,
       "locator": "backend/max_backend/main.py::recovery_required_gate",
       "symbol": "recovery_required_gate"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 140,
-      "line_start": 126,
+      "line_end": 233,
+      "line_start": 219,
       "locator": "backend/max_backend/main.py::recovery_status",
       "symbol": "recovery_status"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 161,
-      "line_start": 144,
+      "line_end": 254,
+      "line_start": 237,
       "locator": "backend/max_backend/main.py::reset_corrupt_state",
       "symbol": "reset_corrupt_state"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 191,
-      "line_start": 164,
+      "line_end": 284,
+      "line_start": 257,
       "locator": "backend/max_backend/main.py::_foundation_state",
       "symbol": "_foundation_state"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 222,
-      "line_start": 195,
+      "line_end": 315,
+      "line_start": 288,
       "locator": "backend/max_backend/main.py::health",
       "symbol": "health"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 227,
-      "line_start": 226,
+      "line_end": 320,
+      "line_start": 319,
       "locator": "backend/max_backend/main.py::ea_baseline",
       "symbol": "ea_baseline"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 232,
-      "line_start": 231,
+      "line_end": 325,
+      "line_start": 324,
       "locator": "backend/max_backend/main.py::mt5_preflight",
       "symbol": "mt5_preflight"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 243,
-      "line_start": 236,
+      "line_end": 336,
+      "line_start": 329,
       "locator": "backend/max_backend/main.py::overview",
       "symbol": "overview"
     },
@@ -66211,7 +68585,7 @@
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 112,
+      "line_end": 114,
       "line_start": 46,
       "locator": "backend/max_backend/optimizer_store.py::migrate_m01",
       "symbol": "migrate_m01"
@@ -66219,168 +68593,168 @@
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 136,
-      "line_start": 115,
+      "line_end": 140,
+      "line_start": 117,
       "locator": "backend/max_backend/optimizer_store.py::migrate_m02",
       "symbol": "migrate_m02"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 177,
-      "line_start": 139,
+      "line_end": 181,
+      "line_start": 143,
       "locator": "backend/max_backend/optimizer_store.py::optimizer_database_status",
       "symbol": "optimizer_database_status"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 190,
-      "line_start": 180,
+      "line_end": 194,
+      "line_start": 184,
       "locator": "backend/max_backend/optimizer_store.py::_decode_job",
       "symbol": "_decode_job"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 196,
-      "line_start": 193,
+      "line_end": 200,
+      "line_start": 197,
       "locator": "backend/max_backend/optimizer_store.py::_decode_round",
       "symbol": "_decode_round"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 262,
-      "line_start": 199,
+      "line_end": 266,
+      "line_start": 203,
       "locator": "backend/max_backend/optimizer_store.py::create_job",
       "symbol": "create_job"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 272,
-      "line_start": 265,
+      "line_end": 276,
+      "line_start": 269,
       "locator": "backend/max_backend/optimizer_store.py::get_job",
       "symbol": "get_job"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 281,
-      "line_start": 275,
+      "line_end": 285,
+      "line_start": 279,
       "locator": "backend/max_backend/optimizer_store.py::latest_job",
       "symbol": "latest_job"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 290,
-      "line_start": 284,
+      "line_end": 294,
+      "line_start": 288,
       "locator": "backend/max_backend/optimizer_store.py::active_job",
       "symbol": "active_job"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 368,
-      "line_start": 293,
+      "line_end": 372,
+      "line_start": 297,
       "locator": "backend/max_backend/optimizer_store.py::update_job",
       "symbol": "update_job"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 399,
-      "line_start": 371,
+      "line_end": 403,
+      "line_start": 375,
       "locator": "backend/max_backend/optimizer_store.py::claim_initial_worker_launch",
       "symbol": "claim_initial_worker_launch"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 434,
-      "line_start": 402,
+      "line_end": 438,
+      "line_start": 406,
       "locator": "backend/max_backend/optimizer_store.py::claim_resume_worker_launch",
       "symbol": "claim_resume_worker_launch"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 471,
-      "line_start": 437,
+      "line_end": 475,
+      "line_start": 441,
       "locator": "backend/max_backend/optimizer_store.py::confirm_worker_launch",
       "symbol": "confirm_worker_launch"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 540,
-      "line_start": 474,
+      "line_end": 544,
+      "line_start": 478,
       "locator": "backend/max_backend/optimizer_store.py::upsert_round",
       "symbol": "upsert_round"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 673,
-      "line_start": 543,
+      "line_end": 677,
+      "line_start": 547,
       "locator": "backend/max_backend/optimizer_store.py::_persist_candidate_projection",
       "symbol": "_persist_candidate_projection"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 712,
-      "line_start": 692,
+      "line_end": 716,
+      "line_start": 696,
       "locator": "backend/max_backend/optimizer_store.py::optimizer_candidate_identity",
       "symbol": "optimizer_candidate_identity"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 732,
-      "line_start": 715,
+      "line_end": 736,
+      "line_start": 719,
       "locator": "backend/max_backend/optimizer_store.py::optimizer_candidate_identities",
       "symbol": "optimizer_candidate_identities"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 749,
-      "line_start": 735,
+      "line_end": 753,
+      "line_start": 739,
       "locator": "backend/max_backend/optimizer_store.py::persist_candidate_projection",
       "symbol": "persist_candidate_projection"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 764,
-      "line_start": 752,
+      "line_end": 768,
+      "line_start": 756,
       "locator": "backend/max_backend/optimizer_store.py::get_round",
       "symbol": "get_round"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 774,
-      "line_start": 767,
+      "line_end": 778,
+      "line_start": 771,
       "locator": "backend/max_backend/optimizer_store.py::get_rounds",
       "symbol": "get_rounds"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 782,
-      "line_start": 777,
+      "line_end": 786,
+      "line_start": 781,
       "locator": "backend/max_backend/optimizer_store.py::attach_rounds",
       "symbol": "attach_rounds"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 792,
-      "line_start": 785,
+      "line_end": 796,
+      "line_start": 789,
       "locator": "backend/max_backend/optimizer_store.py::load_resource_calibration",
       "symbol": "load_resource_calibration"
     },
@@ -67611,312 +69985,312 @@
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 21,
-      "line_start": 20,
+      "line_end": 26,
+      "line_start": 25,
       "locator": "backend/max_backend/scientist_store.py::_json",
       "symbol": "_json"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 25,
-      "line_start": 24,
+      "line_end": 30,
+      "line_start": 29,
       "locator": "backend/max_backend/scientist_store.py::_decode_json",
       "symbol": "_decode_json"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 93,
-      "line_start": 28,
+      "line_end": 100,
+      "line_start": 33,
       "locator": "backend/max_backend/scientist_store.py::migrate_m05",
       "symbol": "migrate_m05"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 117,
-      "line_start": 96,
+      "line_end": 124,
+      "line_start": 103,
       "locator": "backend/max_backend/scientist_store.py::scientist_database_status",
       "symbol": "scientist_database_status"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 121,
-      "line_start": 120,
+      "line_end": 128,
+      "line_start": 127,
       "locator": "backend/max_backend/scientist_store.py::_decode_thread",
       "symbol": "_decode_thread"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 130,
-      "line_start": 124,
+      "line_end": 137,
+      "line_start": 131,
       "locator": "backend/max_backend/scientist_store.py::_decode_message",
       "symbol": "_decode_message"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 138,
-      "line_start": 133,
+      "line_end": 145,
+      "line_start": 140,
       "locator": "backend/max_backend/scientist_store.py::_decode_request",
       "symbol": "_decode_request"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 153,
-      "line_start": 141,
+      "line_end": 160,
+      "line_start": 148,
       "locator": "backend/max_backend/scientist_store.py::create_thread",
       "symbol": "create_thread"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 163,
-      "line_start": 156,
+      "line_end": 170,
+      "line_start": 163,
       "locator": "backend/max_backend/scientist_store.py::get_thread",
       "symbol": "get_thread"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 174,
-      "line_start": 166,
+      "line_end": 181,
+      "line_start": 173,
       "locator": "backend/max_backend/scientist_store.py::list_threads",
       "symbol": "list_threads"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 194,
-      "line_start": 177,
+      "line_end": 201,
+      "line_start": 184,
       "locator": "backend/max_backend/scientist_store.py::list_messages",
       "symbol": "list_messages"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 201,
-      "line_start": 197,
+      "line_end": 208,
+      "line_start": 204,
       "locator": "backend/max_backend/scientist_store.py::_title_from_message",
       "symbol": "_title_from_message"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 211,
-      "line_start": 204,
+      "line_end": 218,
+      "line_start": 211,
       "locator": "backend/max_backend/scientist_store.py::get_request",
       "symbol": "get_request"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 278,
-      "line_start": 214,
+      "line_end": 285,
+      "line_start": 221,
       "locator": "backend/max_backend/scientist_store.py::prepare_request",
       "symbol": "prepare_request"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 313,
-      "line_start": 281,
+      "line_end": 320,
+      "line_start": 288,
       "locator": "backend/max_backend/scientist_store.py::mark_request_in_flight",
       "symbol": "mark_request_in_flight"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 384,
-      "line_start": 316,
+      "line_end": 391,
+      "line_start": 323,
       "locator": "backend/max_backend/scientist_store.py::complete_request",
       "symbol": "complete_request"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 424,
-      "line_start": 387,
+      "line_end": 431,
+      "line_start": 394,
       "locator": "backend/max_backend/scientist_store.py::fail_request",
       "symbol": "fail_request"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 443,
-      "line_start": 427,
+      "line_end": 450,
+      "line_start": 434,
       "locator": "backend/max_backend/scientist_store.py::recover_unconfirmed_requests",
       "symbol": "recover_unconfirmed_requests"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 461,
-      "line_start": 446,
+      "line_end": 468,
+      "line_start": 453,
       "locator": "backend/max_backend/scientist_store.py::get_completed_assistant_message",
       "symbol": "get_completed_assistant_message"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 500,
-      "line_start": 465,
+      "line_end": 507,
+      "line_start": 472,
       "locator": "backend/max_backend/scientist_store.py::mark_request_unconfirmed",
       "symbol": "mark_request_unconfirmed"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 519,
-      "line_start": 503,
+      "line_end": 526,
+      "line_start": 510,
       "locator": "backend/max_backend/scientist_store.py::get_active_thread",
       "symbol": "get_active_thread"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 560,
-      "line_start": 522,
+      "line_end": 567,
+      "line_start": 529,
       "locator": "backend/max_backend/scientist_store.py::clear_chat",
       "symbol": "clear_chat"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 596,
-      "line_start": 563,
+      "line_end": 603,
+      "line_start": 570,
       "locator": "backend/max_backend/scientist_store.py::purge_chat",
       "symbol": "purge_chat"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "class",
-      "line_end": 69,
-      "line_start": 68,
+      "line_end": 76,
+      "line_start": 75,
       "locator": "backend/max_backend/strategy_reset.py::StrategyResetError",
       "symbol": "StrategyResetError"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 77,
-      "line_start": 72,
+      "line_end": 84,
+      "line_start": 79,
       "locator": "backend/max_backend/strategy_reset.py::_hash_file",
       "symbol": "_hash_file"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 94,
-      "line_start": 80,
+      "line_end": 101,
+      "line_start": 87,
       "locator": "backend/max_backend/strategy_reset.py::_settings_fingerprint",
       "symbol": "_settings_fingerprint"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 105,
-      "line_start": 97,
+      "line_end": 112,
+      "line_start": 104,
       "locator": "backend/max_backend/strategy_reset.py::_connect",
       "symbol": "_connect"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 114,
-      "line_start": 108,
+      "line_end": 121,
+      "line_start": 115,
       "locator": "backend/max_backend/strategy_reset.py::_tables",
       "symbol": "_tables"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 119,
-      "line_start": 117,
+      "line_end": 126,
+      "line_start": 124,
       "locator": "backend/max_backend/strategy_reset.py::_count",
       "symbol": "_count"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 146,
-      "line_start": 122,
+      "line_end": 153,
+      "line_start": 129,
       "locator": "backend/max_backend/strategy_reset.py::_runtime_paths",
       "symbol": "_runtime_paths"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 178,
-      "line_start": 149,
+      "line_end": 185,
+      "line_start": 156,
       "locator": "backend/max_backend/strategy_reset.py::_owned_paths",
       "symbol": "_owned_paths"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 293,
-      "line_start": 181,
+      "line_end": 300,
+      "line_start": 188,
       "locator": "backend/max_backend/strategy_reset.py::_read_counts",
       "symbol": "_read_counts"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 302,
-      "line_start": 296,
+      "line_end": 328,
+      "line_start": 303,
       "locator": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
       "symbol": "strategy_reset_preflight"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 328,
-      "line_start": 305,
+      "line_end": 354,
+      "line_start": 331,
       "locator": "backend/max_backend/strategy_reset.py::_make_database_backup",
       "symbol": "_make_database_backup"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 351,
-      "line_start": 331,
+      "line_end": 377,
+      "line_start": 357,
       "locator": "backend/max_backend/strategy_reset.py::_delete_rows",
       "symbol": "_delete_rows"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 427,
-      "line_start": 354,
+      "line_end": 453,
+      "line_start": 380,
       "locator": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
       "symbol": "reset_strategy_workspace"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 478,
-      "line_start": 430,
+      "line_end": 517,
+      "line_start": 456,
       "locator": "backend/max_backend/strategy_reset.py::database_recovery_status",
       "symbol": "database_recovery_status"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 501,
-      "line_start": 481,
+      "line_end": 540,
+      "line_start": 520,
       "locator": "backend/max_backend/strategy_reset.py::_bootstrap_database",
       "symbol": "_bootstrap_database"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 551,
-      "line_start": 504,
+      "line_end": 590,
+      "line_start": 543,
       "locator": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database",
       "symbol": "backup_and_reset_corrupt_database"
     },
@@ -67971,7 +70345,7 @@
     {
       "file": "backend/max_backend/workflow_store.py",
       "kind": "function",
-      "line_end": 310,
+      "line_end": 312,
       "line_start": 183,
       "locator": "backend/max_backend/workflow_store.py::migrate_current",
       "symbol": "migrate_current"
@@ -67979,56 +70353,56 @@
     {
       "file": "backend/max_backend/workflow_store.py",
       "kind": "function",
-      "line_end": 336,
-      "line_start": 313,
+      "line_end": 338,
+      "line_start": 315,
       "locator": "backend/max_backend/workflow_store.py::get_batch",
       "symbol": "get_batch"
     },
     {
       "file": "backend/max_backend/workflow_store.py",
       "kind": "function",
-      "line_end": 388,
-      "line_start": 339,
+      "line_end": 390,
+      "line_start": 341,
       "locator": "backend/max_backend/workflow_store.py::prepare_batch",
       "symbol": "prepare_batch"
     },
     {
       "file": "backend/max_backend/workflow_store.py",
       "kind": "function",
-      "line_end": 428,
-      "line_start": 391,
+      "line_end": 430,
+      "line_start": 393,
       "locator": "backend/max_backend/workflow_store.py::update_batch",
       "symbol": "update_batch"
     },
     {
       "file": "backend/max_backend/workflow_store.py",
       "kind": "function",
-      "line_end": 554,
-      "line_start": 431,
+      "line_end": 556,
+      "line_start": 433,
       "locator": "backend/max_backend/workflow_store.py::insert_challenger_batch_rows",
       "symbol": "insert_challenger_batch_rows"
     },
     {
       "file": "backend/max_backend/workflow_store.py",
       "kind": "function",
-      "line_end": 572,
-      "line_start": 557,
+      "line_end": 574,
+      "line_start": 559,
       "locator": "backend/max_backend/workflow_store.py::set_backtest_runtime_status",
       "symbol": "set_backtest_runtime_status"
     },
     {
       "file": "backend/max_backend/workflow_store.py",
       "kind": "function",
-      "line_end": 584,
-      "line_start": 575,
+      "line_end": 586,
+      "line_start": 577,
       "locator": "backend/max_backend/workflow_store.py::delete_backtest_row",
       "symbol": "delete_backtest_row"
     },
     {
       "file": "backend/max_backend/workflow_store.py",
       "kind": "function",
-      "line_end": 596,
-      "line_start": 587,
+      "line_end": 598,
+      "line_start": 589,
       "locator": "backend/max_backend/workflow_store.py::delete_challenger_row",
       "symbol": "delete_challenger_row"
     },
@@ -72731,304 +75105,504 @@
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 103,
-      "line_start": 46,
+      "line_end": 168,
+      "line_start": 135,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::_install_schema16_archive",
+      "symbol": "_install_schema16_archive"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 228,
+      "line_start": 171,
       "locator": "backend/tests/test_schema_compatibility_guard.py::_create_schema_fixture",
       "symbol": "_create_schema_fixture"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 112,
-      "line_start": 106,
+      "line_end": 237,
+      "line_start": 231,
       "locator": "backend/tests/test_schema_compatibility_guard.py::_file_hashes",
       "symbol": "_file_hashes"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 153,
-      "line_start": 115,
+      "line_end": 278,
+      "line_start": 240,
       "locator": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
       "symbol": "_db_snapshot"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 161,
-      "line_start": 156,
+      "line_end": 286,
+      "line_start": 281,
       "locator": "backend/tests/test_schema_compatibility_guard.py::_set_schema_version",
       "symbol": "_set_schema_version"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 165,
-      "line_start": 164,
+      "line_end": 290,
+      "line_start": 289,
       "locator": "backend/tests/test_schema_compatibility_guard.py::_run_startup",
       "symbol": "_run_startup"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 279,
-      "line_start": 168,
+      "line_end": 488,
+      "line_start": 293,
       "locator": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
       "symbol": "_create_rich_schema_fixture"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 288,
-      "line_start": 282,
+      "line_end": 508,
+      "line_start": 491,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::_create_clean_schema16_fixture",
+      "symbol": "_create_clean_schema16_fixture"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 517,
+      "line_start": 511,
       "locator": "backend/tests/test_schema_compatibility_guard.py::_load_epoch_reset_script",
       "symbol": "_load_epoch_reset_script"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 300,
-      "line_start": 291,
+      "line_end": 529,
+      "line_start": 520,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_fresh_install_and_supported_schema_startup_pass",
       "symbol": "test_fresh_install_and_supported_schema_startup_pass"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 319,
-      "line_start": 308,
-      "locator": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_16_without_mutation",
-      "symbol": "test_every_direct_migration_entrypoint_blocks_schema_16_without_mutation"
+      "line_end": 574,
+      "line_start": 532,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_exact_historical_schema16_profile_is_compatible_and_preserves_populated_authority",
+      "symbol": "test_exact_historical_schema16_profile_is_compatible_and_preserves_populated_authority"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "method",
+      "line_end": 555,
+      "line_start": 554,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_exact_historical_schema16_profile_is_compatible_and_preserves_populated_authority.unexpected_rw_open",
+      "symbol": "test_exact_historical_schema16_profile_is_compatible_and_preserves_populated_authority.unexpected_rw_open"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 367,
-      "line_start": 354,
-      "locator": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_16",
-      "symbol": "test_direct_startup_recovery_and_reset_entrypoints_block_schema_16"
+      "line_end": 593,
+      "line_start": 582,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_schema16_historical_migration_entrypoints_are_read_only_noops",
+      "symbol": "test_schema16_historical_migration_entrypoints_are_read_only_noops"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 398,
-      "line_start": 371,
+      "line_end": 643,
+      "line_start": 627,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_schema16_direct_recovery_and_reset_are_blocked_without_mutation",
+      "symbol": "test_schema16_direct_recovery_and_reset_are_blocked_without_mutation"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 662,
+      "line_start": 646,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_schema16_epoch_reset_is_disabled_before_any_mutation",
+      "symbol": "test_schema16_epoch_reset_is_disabled_before_any_mutation"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 683,
+      "line_start": 665,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_schema16_startup_passes_only_after_readonly_integrity_and_operational_validation",
+      "symbol": "test_schema16_startup_passes_only_after_readonly_integrity_and_operational_validation"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 705,
+      "line_start": 686,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_incompatible_schema16_layout_fails_closed_without_operational_access",
+      "symbol": "test_incompatible_schema16_layout_fails_closed_without_operational_access"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "method",
+      "line_end": 694,
+      "line_start": 693,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_incompatible_schema16_layout_fails_closed_without_operational_access.unexpected_rw_open",
+      "symbol": "test_incompatible_schema16_layout_fails_closed_without_operational_access.unexpected_rw_open"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 723,
+      "line_start": 708,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_schema16_uncertain_operational_and_champion_state_blocks_without_recovery",
+      "symbol": "test_schema16_uncertain_operational_and_champion_state_blocks_without_recovery"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 749,
+      "line_start": 726,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_schema16_active_optimizer_blocks_startup_and_preserves_checkpoint_rows",
+      "symbol": "test_schema16_active_optimizer_blocks_startup_and_preserves_checkpoint_rows"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 774,
+      "line_start": 752,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_schema16_interrupted_validation_retry_is_non_mutating_and_idempotent",
+      "symbol": "test_schema16_interrupted_validation_retry_is_non_mutating_and_idempotent"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "class",
+      "line_end": 761,
+      "line_start": 760,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_schema16_interrupted_validation_retry_is_non_mutating_and_idempotent.SimulatedCrash",
+      "symbol": "test_schema16_interrupted_validation_retry_is_non_mutating_and_idempotent.SimulatedCrash"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 784,
+      "line_start": 777,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::_create_cutover_source",
+      "symbol": "_create_cutover_source"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 799,
+      "line_start": 787,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::_stage_schema16_candidate",
+      "symbol": "_stage_schema16_candidate"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 826,
+      "line_start": 810,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_cutover_staging_requires_quiesced_source_and_explicit_reference_without_source_mutation",
+      "symbol": "test_cutover_staging_requires_quiesced_source_and_explicit_reference_without_source_mutation"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 854,
+      "line_start": 829,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_schema16_cutover_stages_verified_candidate_and_exact_rollback_without_source_mutation",
+      "symbol": "test_schema16_cutover_stages_verified_candidate_and_exact_rollback_without_source_mutation"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 876,
+      "line_start": 857,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_cutover_blocks_sidecars_and_reports_without_opening_or_mutating_source",
+      "symbol": "test_cutover_blocks_sidecars_and_reports_without_opening_or_mutating_source"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 901,
+      "line_start": 879,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_cutover_staging_never_replaces_source_and_is_classified_for_retry",
+      "symbol": "test_interrupted_cutover_staging_never_replaces_source_and_is_classified_for_retry"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "method",
+      "line_end": 890,
+      "line_start": 887,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_cutover_staging_never_replaces_source_and_is_classified_for_retry.fail_candidate_fingerprint",
+      "symbol": "test_interrupted_cutover_staging_never_replaces_source_and_is_classified_for_retry.fail_candidate_fingerprint"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 940,
+      "line_start": 904,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_cutover_activation_requires_explicit_authority_and_is_idempotent",
+      "symbol": "test_cutover_activation_requires_explicit_authority_and_is_idempotent"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 978,
+      "line_start": 943,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace",
+      "symbol": "test_interrupted_activation_report_recovers_without_second_database_replace"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "method",
+      "line_end": 962,
+      "line_start": 959,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_interrupted_activation_report_recovers_without_second_database_replace.crash_before_activation_report",
+      "symbol": "test_interrupted_activation_report_recovers_without_second_database_replace.crash_before_activation_report"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 1013,
+      "line_start": 981,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_authorized_rollback_restores_exact_source_and_repeated_recovery_is_idempotent",
+      "symbol": "test_authorized_rollback_restores_exact_source_and_repeated_recovery_is_idempotent"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 1032,
+      "line_start": 1021,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_17_without_mutation",
+      "symbol": "test_every_direct_migration_entrypoint_blocks_schema_17_without_mutation"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 1080,
+      "line_start": 1067,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_17",
+      "symbol": "test_direct_startup_recovery_and_reset_entrypoints_block_schema_17"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 1111,
+      "line_start": 1084,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
       "symbol": "test_application_startup_exposes_schema_block_and_never_offers_reset"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 417,
-      "line_start": 406,
+      "line_end": 1130,
+      "line_start": 1119,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_existing_database_with_invalid_schema_metadata_fails_closed",
       "symbol": "test_existing_database_with_invalid_schema_metadata_fails_closed"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 444,
-      "line_start": 420,
-      "locator": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
-      "symbol": "test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state"
+      "line_end": 1157,
+      "line_start": 1133,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "symbol": "test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "method",
-      "line_end": 432,
-      "line_start": 431,
-      "locator": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state.migration_must_not_start",
-      "symbol": "test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state.migration_must_not_start"
+      "line_end": 1145,
+      "line_start": 1144,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state.migration_must_not_start",
+      "symbol": "test_schema_17_crash_and_retry_never_starts_migration_or_leaves_partial_state.migration_must_not_start"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 473,
-      "line_start": 447,
+      "line_end": 1186,
+      "line_start": 1160,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration",
       "symbol": "test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "class",
-      "line_end": 456,
-      "line_start": 455,
+      "line_end": 1169,
+      "line_start": 1168,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration.SimulatedStartupCrash",
       "symbol": "test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration.SimulatedStartupCrash"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "method",
-      "line_end": 460,
-      "line_start": 458,
+      "line_end": 1173,
+      "line_start": 1171,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration.crash_after_preflight",
       "symbol": "test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration.crash_after_preflight"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 502,
-      "line_start": 476,
+      "line_end": 1215,
+      "line_start": 1189,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_invalid_schema_metadata_startup_is_diagnostic_only",
       "symbol": "test_invalid_schema_metadata_startup_is_diagnostic_only"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 526,
-      "line_start": 505,
+      "line_end": 1239,
+      "line_start": 1218,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_read_only_guard_observes_committed_wal_schema_without_mutation",
       "symbol": "test_read_only_guard_observes_committed_wal_schema_without_mutation"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 542,
-      "line_start": 529,
+      "line_end": 1255,
+      "line_start": 1242,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_hot_rollback_journal_is_not_replayed_during_schema_preflight",
       "symbol": "test_hot_rollback_journal_is_not_replayed_during_schema_preflight"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 555,
-      "line_start": 545,
+      "line_end": 1268,
+      "line_start": 1258,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_initialize_database_rejects_existing_newer_schema_without_side_effects",
       "symbol": "test_initialize_database_rejects_existing_newer_schema_without_side_effects"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 569,
-      "line_start": 558,
+      "line_end": 1282,
+      "line_start": 1271,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_baseline_registration_rejects_existing_newer_schema_before_baseline_reads",
       "symbol": "test_baseline_registration_rejects_existing_newer_schema_before_baseline_reads"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 581,
-      "line_start": 572,
+      "line_end": 1294,
+      "line_start": 1285,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_missing_database_is_allowed_only_for_initialization",
       "symbol": "test_missing_database_is_allowed_only_for_initialization"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 591,
-      "line_start": 584,
+      "line_end": 1304,
+      "line_start": 1297,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_launcher_reports_schema_guard_instead_of_generic_backend_timeout",
       "symbol": "test_launcher_reports_schema_guard_instead_of_generic_backend_timeout"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 615,
-      "line_start": 595,
+      "line_end": 1328,
+      "line_start": 1308,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_database_status_rejects_newer_schema_before_rw_open_without_mutation",
       "symbol": "test_database_status_rejects_newer_schema_before_rw_open_without_mutation"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "method",
-      "line_end": 604,
-      "line_start": 603,
+      "line_end": 1317,
+      "line_start": 1316,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_database_status_rejects_newer_schema_before_rw_open_without_mutation.unexpected_rw_open",
       "symbol": "test_database_status_rejects_newer_schema_before_rw_open_without_mutation.unexpected_rw_open"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 642,
-      "line_start": 619,
+      "line_end": 1355,
+      "line_start": 1332,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_database_recovery_status_separates_schema_from_physical_integrity",
       "symbol": "test_database_recovery_status_separates_schema_from_physical_integrity"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "method",
-      "line_end": 628,
-      "line_start": 627,
+      "line_end": 1341,
+      "line_start": 1340,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_database_recovery_status_separates_schema_from_physical_integrity.unexpected_rw_open",
       "symbol": "test_database_recovery_status_separates_schema_from_physical_integrity.unexpected_rw_open"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 665,
-      "line_start": 646,
+      "line_end": 1378,
+      "line_start": 1359,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_guards_before_readwrite_access",
       "symbol": "test_strategy_reset_preflight_guards_before_readwrite_access"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "method",
-      "line_end": 655,
-      "line_start": 654,
+      "line_end": 1368,
+      "line_start": 1367,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_guards_before_readwrite_access.unexpected_rw_open",
       "symbol": "test_strategy_reset_preflight_guards_before_readwrite_access.unexpected_rw_open"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 691,
-      "line_start": 668,
+      "line_end": 1404,
+      "line_start": 1381,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open",
       "symbol": "test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "method",
-      "line_end": 683,
-      "line_start": 678,
+      "line_end": 1396,
+      "line_start": 1391,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open.track_connection",
       "symbol": "test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open.track_connection"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 720,
-      "line_start": 694,
+      "line_end": 1433,
+      "line_start": 1407,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_all_three_direct_entrypoints_preserve_supported_schema_15_semantics",
       "symbol": "test_all_three_direct_entrypoints_preserve_supported_schema_15_semantics"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 751,
-      "line_start": 724,
+      "line_end": 1464,
+      "line_start": 1437,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_direct_status_and_preflight_calls_fail_closed_on_invalid_schema_metadata",
       "symbol": "test_direct_status_and_preflight_calls_fail_closed_on_invalid_schema_metadata"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 785,
-      "line_start": 754,
+      "line_end": 1499,
+      "line_start": 1467,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_refuse_wal_sidecars_without_mutation",
       "symbol": "test_direct_entrypoints_refuse_wal_sidecars_without_mutation"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 811,
-      "line_start": 788,
+      "line_end": 1525,
+      "line_start": 1502,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_do_not_replay_pending_rollback_journal",
       "symbol": "test_direct_entrypoints_do_not_replay_pending_rollback_journal"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 832,
-      "line_start": 815,
+      "line_end": 1546,
+      "line_start": 1529,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_repeated_direct_schema_blocks_are_idempotent_and_non_mutating",
       "symbol": "test_repeated_direct_schema_blocks_are_idempotent_and_non_mutating"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 856,
-      "line_start": 835,
+      "line_end": 1570,
+      "line_start": 1549,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_api_returns_conflict_for_newer_schema",
       "symbol": "test_strategy_reset_preflight_api_returns_conflict_for_newer_schema"
     },
@@ -73443,192 +76017,192 @@
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "class",
-      "line_end": 32,
-      "line_start": 31,
+      "line_end": 35,
+      "line_start": 34,
       "locator": "scripts/reset_strategy_epoch.py::ResetError",
       "symbol": "ResetError"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 40,
-      "line_start": 35,
+      "line_end": 43,
+      "line_start": 38,
       "locator": "scripts/reset_strategy_epoch.py::sha256_file",
       "symbol": "sha256_file"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 50,
-      "line_start": 43,
+      "line_end": 53,
+      "line_start": 46,
       "locator": "scripts/reset_strategy_epoch.py::_json",
       "symbol": "_json"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 58,
-      "line_start": 53,
+      "line_end": 61,
+      "line_start": 56,
       "locator": "scripts/reset_strategy_epoch.py::_connect",
       "symbol": "_connect"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 65,
-      "line_start": 61,
+      "line_end": 68,
+      "line_start": 64,
       "locator": "scripts/reset_strategy_epoch.py::_table_exists",
       "symbol": "_table_exists"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 69,
-      "line_start": 68,
+      "line_end": 72,
+      "line_start": 71,
       "locator": "scripts/reset_strategy_epoch.py::_count",
       "symbol": "_count"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 83,
-      "line_start": 72,
+      "line_end": 86,
+      "line_start": 75,
       "locator": "scripts/reset_strategy_epoch.py::_settings_paths",
       "symbol": "_settings_paths"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 93,
-      "line_start": 86,
+      "line_end": 96,
+      "line_start": 89,
       "locator": "scripts/reset_strategy_epoch.py::settings_fingerprint",
       "symbol": "settings_fingerprint"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 165,
-      "line_start": 96,
+      "line_end": 168,
+      "line_start": 99,
       "locator": "scripts/reset_strategy_epoch.py::inspect_state",
       "symbol": "inspect_state"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 178,
-      "line_start": 168,
+      "line_end": 181,
+      "line_start": 171,
       "locator": "scripts/reset_strategy_epoch.py::assert_quiescent",
       "symbol": "assert_quiescent"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 207,
-      "line_start": 181,
+      "line_end": 210,
+      "line_start": 184,
       "locator": "scripts/reset_strategy_epoch.py::_consistent_backup",
       "symbol": "_consistent_backup"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 222,
-      "line_start": 210,
+      "line_end": 225,
+      "line_start": 213,
       "locator": "scripts/reset_strategy_epoch.py::_exact_database_rollback_image",
       "symbol": "_exact_database_rollback_image"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 227,
-      "line_start": 225,
+      "line_end": 230,
+      "line_start": 228,
       "locator": "scripts/reset_strategy_epoch.py::_safe_archive_name",
       "symbol": "_safe_archive_name"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 250,
-      "line_start": 230,
+      "line_end": 253,
+      "line_start": 233,
       "locator": "scripts/reset_strategy_epoch.py::_runtime_authority_files",
       "symbol": "_runtime_authority_files"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 279,
-      "line_start": 253,
+      "line_end": 282,
+      "line_start": 256,
       "locator": "scripts/reset_strategy_epoch.py::archive_runtime_authority",
       "symbol": "archive_runtime_authority"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 293,
-      "line_start": 282,
+      "line_end": 296,
+      "line_start": 285,
       "locator": "scripts/reset_strategy_epoch.py::_restore_database_backup",
       "symbol": "_restore_database_backup"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 322,
-      "line_start": 296,
+      "line_end": 325,
+      "line_start": 299,
       "locator": "scripts/reset_strategy_epoch.py::_restore_runtime_files",
       "symbol": "_restore_runtime_files"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 326,
-      "line_start": 325,
+      "line_end": 329,
+      "line_start": 328,
       "locator": "scripts/reset_strategy_epoch.py::_unlink_runtime_file",
       "symbol": "_unlink_runtime_file"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 350,
-      "line_start": 329,
+      "line_end": 353,
+      "line_start": 332,
       "locator": "scripts/reset_strategy_epoch.py::neutralize_runtime_authority",
       "symbol": "neutralize_runtime_authority"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 364,
-      "line_start": 353,
+      "line_end": 367,
+      "line_start": 356,
       "locator": "scripts/reset_strategy_epoch.py::_baseline_values",
       "symbol": "_baseline_values"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 418,
-      "line_start": 367,
+      "line_end": 421,
+      "line_start": 370,
       "locator": "scripts/reset_strategy_epoch.py::mutate_database",
       "symbol": "mutate_database"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 453,
-      "line_start": 421,
+      "line_end": 456,
+      "line_start": 424,
       "locator": "scripts/reset_strategy_epoch.py::verify_reset",
       "symbol": "verify_reset"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 593,
-      "line_start": 456,
+      "line_end": 598,
+      "line_start": 459,
       "locator": "scripts/reset_strategy_epoch.py::reset_strategy_epoch",
       "symbol": "reset_strategy_epoch"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 618,
-      "line_start": 596,
+      "line_end": 623,
+      "line_start": 601,
       "locator": "scripts/reset_strategy_epoch.py::main",
       "symbol": "main"
     },
@@ -74562,16 +77136,16 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d",
+  "source_digest": "892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db",
   "source_summary": {
-    "files": 122,
+    "files": 124,
     "languages": {
-      "PowerShell": 2,
-      "Python": 98,
+      "PowerShell": 3,
+      "Python": 99,
       "TypeScript": 3,
       "TypeScript/React": 19
     },
-    "lines": 58262,
+    "lines": 60178,
     "test_files": 43
   },
   "tests": [

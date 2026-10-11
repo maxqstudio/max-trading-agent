@@ -1,0 +1,43 @@
+{
+  "acceptance_report": "artifacts/sequence/FLOW-P0B-SCHEMA16-COMPATIBILITY-CUTOVER.acceptance.json",
+  "actual": {
+    "diagram": "docs/sequence/generated/FLOW-P0B-SCHEMA16-COMPATIBILITY-CUTOVER.actual.mmd",
+    "entries": [
+      "backend/max_backend/db.py::assert_database_schema_compatible",
+      "backend/max_backend/db.py::is_schema16_archive_compatible",
+      "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "backend/max_backend/main.py::_run_startup_migrations",
+      "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "backend/max_backend/database_cutover.py::activation_status",
+      "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "backend/max_backend/database_cutover.py::restore_schema16_rollback_image"
+    ],
+    "graph": "docs/sequence/generated/FLOW-P0B-SCHEMA16-COMPATIBILITY-CUTOVER.actual.json",
+    "source_digest": "892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db"
+  },
+  "critical": true,
+  "implementation_base_sha": "8ba001bba31d7c74e2d1d1aa03d6c79fb0f9576a",
+  "mode": "DURING",
+  "phase": "P0B_DATABASE_COMPATIBILITY_AND_NONDESTRUCTIVE_CUTOVER",
+  "plan": {
+    "contract": "",
+    "diagram": "",
+    "frozen": false,
+    "frozen_commit": "",
+    "required": false,
+    "sha256": ""
+  },
+  "runtime_trace": {
+    "graph": "",
+    "required": false
+  },
+  "schema_version": 1,
+  "scope": "CURRENT",
+  "session_id": "FLOW-P0B-SCHEMA16-COMPATIBILITY-CUTOVER",
+  "status": "CURRENT",
+  "test_traceability_required": true,
+  "tests": [
+    "backend/tests/test_schema_compatibility_guard.py"
+  ]
+}

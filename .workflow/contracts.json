@@ -423,14 +423,15 @@
       "source_of_truth": "ea/baseline/manifest.json + ea/baseline/Max_MTF.mq5"
     },
     {
-      "name": "Retired Research runtime state",
-      "source_of_truth": "schema migration 15 and legacy research tables/metadata when encountered",
-      "mutability": "purged from current operational authority during migration",
+      "name": "Retired Research runtime state and preserved legacy evidence",
+      "source_of_truth": "schema-15 Research purge contract for supported older databases; exact schema-16 archive-compatibility profile for preserved legacy Research objects/metadata when encountered",
+      "mutability": "not active runtime authority; schema-16 compatibility preserves encountered historical objects and rows without executing them",
       "legal_writes": [
         "backend/max_backend/workflow_store.py::_purge_research_authority"
       ],
       "invariants": [
-        "legacy Research tables and metadata do not remain current runtime authority",
+        "legacy Research tables, metadata and Research-tagged artifact rows are not active runtime authority",
+        "schema-16 compatibility must not replay the historical Research purge or delete retained legacy evidence",
         "Strategy registry, Champion, optimizer, baseline and Scientist settings are preserved",
         "fresh R00-R11 phases require future Owner readiness and separate authorization"
       ],

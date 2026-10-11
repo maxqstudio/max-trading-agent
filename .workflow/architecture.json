@@ -80,10 +80,11 @@
       "name": "FastAPI runtime",
       "owns": [
         "backend/max_backend/main.py::lifespan",
+        "backend/max_backend/db.py::assert_database_schema_compatible",
         "backend/max_backend/main.py::overview",
         "backend/max_backend/main.py::app"
       ],
-      "purpose": "Start migrations/recovery, route semantic APIs and expose overview/readiness."
+      "purpose": "Run read-only schema compatibility preflight before initialization or recovery; preserve exact schema-16 archive-compatible databases without migration mutation; route APIs and expose readiness or reconciliation diagnostics."
     },
     {
       "depends_on": [

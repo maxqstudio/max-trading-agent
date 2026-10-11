@@ -4,17 +4,19 @@
 
 ## Evidence boundary
 
-P0 starts from main 858dcb205fa2fb734fd5a68b8a4970a29c553897 with tree 8325433e9f23822967251037fff149fc6057113a, identical to accepted main tree 203f6ab3dc618e3edd247841aa25e1fa0951a19a (Windows CI 37964999480 PASS). MTA supports schema 15. Schema 16 for the Owner database is reported but has not been inspected. Synthetic temporary SQLite fixtures only: focused schema/reset regression 70 passed; full backend 522 passed with zero skips/failures; frontend 61 passed across 9 files; lint/build/dependency checks passed. Scientist knowledge was rebuilt canonically and Scientist tests passed. No Owner database, MT5, Optimizer, research training, Champion mutation, P0B migration, or cutover was executed. Exact committed-tree source-only/secret scan, clean-commit governance, and Windows CI remain pending external phase-acceptance evidence per D-012; phase remains IN_PROGRESS until Control Room acceptance.
+P0B starts from verified origin/main 8ba001bba31d7c74e2d1d1aa03d6c79fb0f9576a with tree 597dbd569a9c9c99feae5fea2e2b2a2ff8fa3e46; P0A is accepted and merged. Historical schema archaeology and focused synthetic compatibility/cutover tests pass locally (74 passed, 0 failed). Actual Owner database contents and compatibility remain NOT_PROVEN. P0B remains IN_PROGRESS until exact-candidate local and hosted evidence receives Control Room acceptance; exact final SHA/run identity is external under D-012. No actual Owner database, MT5, Optimizer, training, Research execution, Champion mutation or live cutover is authorized.
 
 Final tested source: external final acceptance evidence.
-Current source digest: d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d
+Current source digest: 892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|
 | P0-SCHEMA-GUARD-01 | The canonical read-only schema preflight runs before initialization, baseline registration, migration, startup reconciliation/recovery, database_status, database_recovery_status, and direct Strategy reset preflight/count access; newer versions report INCOMPATIBLE_NEWER_SCHEMA and cannot enter recovery/reset. | backend/max_backend/db.py::assert_database_schema_compatible; database_status; backend/max_backend/strategy_reset.py::database_recovery_status, _read_counts, _connect; backend/max_backend/main.py::_run_startup_migrations; backend/tests/test_schema_compatibility_guard.py | PASS_LOCAL |
 | P0-SCHEMA-NONMUTATION-01 | Synthetic schema-16/future/unknown-schema and pending-journal cases fail closed with unchanged physical hashes, SQLite objects, rows, and foreign-key results; no Owner DB is accessed. | backend/tests/test_schema_compatibility_guard.py; backend/max_backend/db.py::assert_database_schema_compatible | PASS_LOCAL |
 | P0-STARTUP-DIAGNOSTIC-01 | A schema guard block provides a clear diagnostic, blocks normal operations/reset, and the launcher does not hide it behind a generic readiness timeout or offer destructive reset. | backend/max_backend/main.py::recovery_required_gate; scripts/run_max.ps1; backend/tests/test_schema_compatibility_guard.py | PASS_LOCAL |
-| P0B-COMPATIBILITY-PLAN-01 | A forward-compatible schema-16 preservation/cutover/rollback/copy-only cold-start plan is documented; P0 executes none of those operations against an Owner database. | .workflow/roadmap.json::P0_DATABASE_SAFETY | PASS_LOCAL |
+| P0B-COMPATIBILITY-PLAN-01 | The P0B architecture decision and historical schema-15/16 migration evidence are documented before source implementation; actual Owner database access and live cutover remain prohibited. | .workflow/roadmap.json::P0_DATABASE_SAFETY | PASS_LOCAL_DESIGN_ONLY |
+| P0B-STRUCTURAL-COMPATIBILITY-01 | Only the exact schema-15 core plus verified historical schema-16 ONNX archive extension is compatible; metadata remains 16, unsupported layouts/future versions fail closed, and read/migration/startup paths do not mutate schema-16 authority. | backend/max_backend/db.py schema compatibility profile; backend/tests/test_schema_compatibility_guard.py | PASS_LOCAL |
+| P0B-NONDESTRUCTIVE-CUTOVER-01 | Copy-only staging preserves and verifies a rollback image, validates a candidate before publication, emits a machine-readable report, and never activates or overwrites the source without separate explicit Owner authorization. | P0B isolated database cutover staging tool and temporary SQLite acceptance fixtures | PASS_LOCAL |
 | STRAT-RESET-01 | Strategy workspace reset requires current safety preflight, exact Owner confirmation, a verified SQLite backup before mutation, and revalidation inside the mutation transaction. | backend/max_backend/strategy_reset.py::strategy_reset_preflight; backend/max_backend/strategy_reset.py::reset_strategy_workspace; backend/tests/test_strategy_workspace_reset.py | PASS_LOCAL |
 | STRAT-RESET-02 | The reset removes only owned generated Strategy state and preserves the accepted EA baseline, schema, generic settings, and Scientist provider settings. | backend/max_backend/strategy_reset.py; backend/tests/test_strategy_workspace_reset.py | PASS_LOCAL |
 | STRAT-RECOVERY-01 | A supported-schema database with failed integrity enters RECOVERY_REQUIRED and blocks ordinary operations; unknown/unopenable/newer schema metadata is diagnosed and blocked without automatic reset or downgrade. | backend/max_backend/main.py::recovery_required_gate; backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database; frontend/src/App.test.tsx | PASS_LOCAL |
@@ -39,6 +41,8 @@ Current source digest: d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1
 
 ## Test commands
 
+- .venv/Scripts/python.exe -m pytest backend/tests/test_schema_compatibility_guard.py -q -o addopts= --basetemp artifacts/p0b/<run-id>/pytest-focused
+- powershell -ExecutionPolicy Bypass -File scripts/accept_p0b_database_compatibility.ps1
 - .venv/Scripts/python.exe -m pytest backend/tests/test_m01_optimizer_core.py::test_identical_duplicate_parameter_vector_metrics_are_deduplicated backend/tests/test_m01_optimizer_core.py::test_duplicate_parameter_vector_fails_closed backend/tests/test_m08_strategy_results.py::test_exact_duplicate_candidates_are_removed_before_database_persistence -q -o addopts=
 - .venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_worker_identity.py backend/tests/test_optimizer_reliability.py backend/tests/test_m01_jobs.py -q -o addopts= --basetemp .pytest-codex-worker-targeted-final
 - PowerShell loop (3 iterations): .venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_worker_identity.py::test_windows_venv_worker_identity_is_repeatedly_bound_to_real_pipe_peer -q -o addopts= --basetemp .pytest-codex-worker-identity-$i
@@ -78,7 +82,7 @@ ROADMAP_SYNC: PASS
 
 Sequence mode for this phase/session: DURING
 Sequence session contract: FLOW-STRATEGY-RESET-RECOVERY
-SEQUENCE_SYNC: PASS_LOCAL: all 8 DURING/CURRENT sessions and generated actual graphs validated at source digest d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d.
+SEQUENCE_SYNC: PASS_LOCAL_GENERATED: all 9 DURING/CURRENT sessions and actual graphs regenerated at source digest 892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db; formal validation remains in cumulative acceptance.
 
 ## Project Truth Compiler evidence
 

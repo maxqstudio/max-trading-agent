@@ -8,7 +8,12 @@ from typing import Any
 
 from .champion_store import migrate_m04
 from .config import DATABASE_PATH
-from .db import assert_database_schema_compatible, connect
+from .db import (
+    assert_automatic_recovery_supported,
+    assert_database_schema_compatible,
+    connect,
+    is_schema16_archive_compatible,
+)
 from .optimizer_store import utc_now
 
 SCHEMA_VERSION = 6
@@ -26,7 +31,9 @@ def _decode_json(value: str | None, default: Any) -> Any:
 
 
 def migrate_m05(path: Path = DATABASE_PATH) -> None:
-    assert_database_schema_compatible(path, allow_missing=False)
+    schema = assert_database_schema_compatible(path, allow_missing=False)
+    if is_schema16_archive_compatible(schema):
+        return
     migrate_m04(path)
     with connect(path) as conn:
         conn.executescript(
@@ -425,7 +432,7 @@ def fail_request(
 
 
 def recover_unconfirmed_requests(*, path: Path = DATABASE_PATH) -> int:
-    assert_database_schema_compatible(path, allow_missing=False)
+    assert_automatic_recovery_supported(path)
     migrate_m05(path)
     now = utc_now()
     with connect(path) as conn:

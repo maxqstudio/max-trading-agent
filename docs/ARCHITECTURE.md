@@ -2,7 +2,7 @@
 
 # ARCHITECTURE
 
-Current source digest: d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d
+Current source digest: 892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db
 
 ## Components
 
@@ -12,7 +12,7 @@ Current source digest: d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1
 | strategy-domain | Strategy lifecycle domain | Own optimizer qualification, Challenger registration/lifecycle and Champion promotion/tenure semantics. | backend/max_backend/optimizer_candidates.py::qualified_candidates_page, backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration, backend/max_backend/challenger_selection.py::create_selected_challengers, backend/max_backend/challenger_store.py::consumed_source_identities, backend/max_backend/challenger_registry.py::challenger_detail, backend/max_backend/challenger_operations.py::retire_challenger, backend/max_backend/champion_store.py::commit_promotion_authority, backend/max_backend/promotion_service.py::promote_strategy_challenger | SQLite, immutable Challenger/optimizer evidence, MT5/MetaEditor |
 | optimizer-orchestration | Optimizer job orchestration and read model | Persist editable drafts separately from immutable job requests, reconcile exact worker/MT5 launch identity, run terminal64.exe through the native /config path while leaving tester-agent behavior to MT5 and Owner configuration, atomically publish verified round evidence, collapse only identical repeated metrics vectors, and reject exact duplicate candidate identities before SQLite persistence. | backend/max_backend/optimizer_draft.py, backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup, backend/max_backend/optimizer_worker.py, backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv, backend/max_backend/optimizer_runtime.py::commit_round_evidence, backend/max_backend/optimizer_store.py::optimizer_candidate_identity, backend/max_backend/optimizer_store.py::persist_candidate_projection, backend/max_backend/optimizer_candidates.py::candidate_projection_payload, backend/max_backend/optimizer_candidates.py::qualified_candidates_page | SQLite operational state, immutable round evidence, MT5/MetaEditor execution boundary |
 | scientist | Scientist advisory subsystem | Expose hash-verified static knowledge and bounded committed runtime context to an advisory LLM/chat workflow. | backend/max_backend/scientist_knowledge.py::load_knowledge, backend/max_backend/scientist_api.py::get_status, frontend/src/ScientistPage.tsx::ScientistPage | scientist/knowledge/source_manifest.json, Scientist store/provider settings |
-| backend-runtime | FastAPI runtime | Start migrations/recovery, route semantic APIs and expose overview/readiness. | backend/max_backend/main.py::lifespan, backend/max_backend/main.py::overview, backend/max_backend/main.py::app | domain services, SQLite, MT5 detection |
+| backend-runtime | FastAPI runtime | Run read-only schema compatibility preflight before initialization or recovery; preserve exact schema-16 archive-compatible databases without migration mutation; route APIs and expose readiness or reconciliation diagnostics. | backend/max_backend/main.py::lifespan, backend/max_backend/db.py::assert_database_schema_compatible, backend/max_backend/main.py::overview, backend/max_backend/main.py::app | domain services, SQLite, MT5 detection |
 | launcher | Windows launcher/readiness | Verify or start canonical backend/frontend instances, reject invalid occupied ports and emit MAX_READY only after authority/readiness checks. | RUN_MAX.cmd, scripts/run_max.ps1 | backend /api/overview, frontend proxy/root, Scientist status, ports 8000/5173 |
 | mt5 | MT5/MetaEditor execution boundary | Provide Strategy Tester simulation/optimization and MQL5 compile/execution truth. | ea/baseline/Max_MTF.mq5 | MetaTrader 5 terminal, MetaEditor |
 | operational-state | SQLite operational state | Persist mutable Strategy/Scientist operational state through owning stores and transactions. | state/max.db | backend store modules |
@@ -43,9 +43,9 @@ Current source digest: d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1
 
 ## Observed implementation inventory
 
-Source files: 122
-Source lines: 58262
-Languages: PowerShell=2, Python=98, TypeScript=3, TypeScript/React=19
+Source files: 124
+Source lines: 60178
+Languages: PowerShell=3, Python=99, TypeScript=3, TypeScript/React=19
 
 Structural facts come from the code extractor. Component meaning comes from
 .workflow/architecture.json.

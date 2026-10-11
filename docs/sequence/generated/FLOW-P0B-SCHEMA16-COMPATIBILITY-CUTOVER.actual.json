@@ -1,0 +1,958 @@
+{
+  "coverage": {
+    "js_ts_http_module_scan": true,
+    "limitations": [
+      "dynamic dispatch",
+      "dependency injection",
+      "reflection",
+      "callbacks/events",
+      "framework magic not visible statically",
+      "JS/TS function-level call ownership is not fully resolved"
+    ],
+    "python_ast": true,
+    "python_parse_failures": [],
+    "python_route_decorators": true,
+    "runtime_trace": false
+  },
+  "edges": [
+    {
+      "action": "_json_value",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_json_value"
+    },
+    {
+      "action": "open_read_only",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::open_read_only"
+    },
+    {
+      "action": "conn.close",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
+    },
+    {
+      "action": "_assert_directory_nonlink",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_assert_directory_nonlink"
+    },
+    {
+      "action": "_assert_regular_nonlink",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_assert_regular_nonlink"
+    },
+    {
+      "action": "_sha256",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_sha256"
+    },
+    {
+      "action": "_sidecars",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_sidecars"
+    },
+    {
+      "action": "_write_json_atomic",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_write_json_atomic"
+    },
+    {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "action": "verify_schema16_database_integrity",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::verify_schema16_database_integrity"
+    },
+    {
+      "action": "_assert_directory_nonlink",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::activation_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_assert_directory_nonlink"
+    },
+    {
+      "action": "_assert_regular_nonlink",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::activation_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_assert_regular_nonlink"
+    },
+    {
+      "action": "_sha256",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::activation_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_sha256"
+    },
+    {
+      "action": "_sidecars",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::activation_status",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_sidecars"
+    },
+    {
+      "action": "_assert_directory_nonlink",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_assert_directory_nonlink"
+    },
+    {
+      "action": "_assert_regular_nonlink",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_assert_regular_nonlink"
+    },
+    {
+      "action": "_sha256",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_sha256"
+    },
+    {
+      "action": "_sidecars",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_sidecars"
+    },
+    {
+      "action": "_write_json_atomic",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_write_json_atomic"
+    },
+    {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "action": "verify_schema16_database_integrity",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::verify_schema16_database_integrity"
+    },
+    {
+      "action": "_assert_directory_nonlink",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_assert_directory_nonlink"
+    },
+    {
+      "action": "_assert_regular_nonlink",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_assert_regular_nonlink"
+    },
+    {
+      "action": "_logical_fingerprint",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_logical_fingerprint"
+    },
+    {
+      "action": "_sha256",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_sha256"
+    },
+    {
+      "action": "_sidecars",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_sidecars"
+    },
+    {
+      "action": "_stat_fingerprint",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_stat_fingerprint"
+    },
+    {
+      "action": "_write_json_atomic",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/database_cutover.py::_write_json_atomic"
+    },
+    {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
+      "action": "sqlite3.connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "action": "open_read_only",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::open_read_only"
+    },
+    {
+      "action": "verify_schema16_database_integrity",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::verify_schema16_database_integrity"
+    },
+    {
+      "action": "candidate_conn.close",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
+    },
+    {
+      "action": "source_conn.close",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
+    },
+    {
+      "action": "_schema_object_fingerprint",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::_schema_object_fingerprint"
+    },
+    {
+      "action": "DatabaseSchemaGuardError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_automatic_recovery_supported",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::DatabaseSchemaGuardError"
+    },
+    {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_automatic_recovery_supported",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_automatic_recovery_supported",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "action": "DatabaseSchemaGuardError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::DatabaseSchemaGuardError"
+    },
+    {
+      "action": "_schema16_archive_profile_error",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::_schema16_archive_profile_error"
+    },
+    {
+      "action": "sqlite3.connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "open_read_only",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::open_read_only"
+    },
+    {
+      "action": "conn.close",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
+    },
+    {
+      "action": "DatabaseSchemaGuardError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::ensure_baseline_registered",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::DatabaseSchemaGuardError"
+    },
+    {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::ensure_baseline_registered",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::ensure_baseline_registered",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "initialize_database",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::ensure_baseline_registered",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::initialize_database"
+    },
+    {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::ensure_baseline_registered",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "action": "open_read_only",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::ensure_baseline_registered",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::open_read_only"
+    },
+    {
+      "action": "verify_baseline_snapshot",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::ensure_baseline_registered",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/ea.py::verify_baseline_snapshot"
+    },
+    {
+      "action": "conn.close",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::ensure_baseline_registered",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
+    },
+    {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::initialize_database",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
+      "action": "connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::initialize_database",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::initialize_database",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "action": "verify_baseline_snapshot",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::initialize_database",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/ea.py::verify_baseline_snapshot"
+    },
+    {
+      "action": "sqlite3.connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::open_read_only",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "DatabaseSchemaGuardError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::DatabaseSchemaGuardError"
+    },
+    {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "action": "open_read_only",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::open_read_only"
+    },
+    {
+      "action": "conn.close",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
+    },
+    {
+      "action": "load_manifest",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/ea.py::verify_baseline_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/ea.py::load_manifest"
+    },
+    {
+      "action": "sha256_file",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/ea.py::verify_baseline_snapshot",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/ea.py::sha256_file"
+    },
+    {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/main.py::_run_startup_migrations",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
+      "action": "ensure_baseline_registered",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/main.py::_run_startup_migrations",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::ensure_baseline_registered"
+    },
+    {
+      "action": "initialize_database",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/main.py::_run_startup_migrations",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::initialize_database"
+    },
+    {
+      "action": "is_schema16_archive_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/main.py::_run_startup_migrations",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "action": "verify_schema16_database_integrity",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/main.py::_run_startup_migrations",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::verify_schema16_database_integrity"
+    },
+    {
+      "action": "_validate_schema16_operational_state",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/main.py::_run_startup_migrations",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/main.py::_validate_schema16_operational_state"
+    },
+    {
+      "action": "reconcile_optimizer_startup",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/main.py::_run_startup_migrations",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup"
+    },
+    {
+      "action": "DatabaseSchemaGuardError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::DatabaseSchemaGuardError"
+    },
+    {
+      "action": "open_read_only",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::open_read_only"
+    },
+    {
+      "action": "conn.close",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
+    },
+    {
+      "action": "get_process_identity",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_jobs.py::_process_identity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_worker_identity.py::get_process_identity"
+    },
+    {
+      "action": "assert_automatic_recovery_supported",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_automatic_recovery_supported"
+    },
+    {
+      "action": "_mark_reconciliation_required",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_jobs.py::_mark_reconciliation_required"
+    },
+    {
+      "action": "_process_identity",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_jobs.py::_process_identity"
+    },
+    {
+      "action": "_worker_identity_matches",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_jobs.py::_worker_identity_matches"
+    },
+    {
+      "action": "_FileTime",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_worker_identity.py::_windows_process_identity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_worker_identity.py::_FileTime"
+    },
+    {
+      "action": "_windows_api",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_worker_identity.py::get_process_identity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_worker_identity.py::_windows_api"
+    },
+    {
+      "action": "_windows_process_identity",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_worker_identity.py::get_process_identity",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_worker_identity.py::_windows_process_identity"
+    }
+  ],
+  "entries": [
+    "backend/max_backend/db.py::assert_database_schema_compatible",
+    "backend/max_backend/db.py::is_schema16_archive_compatible",
+    "backend/max_backend/db.py::verify_schema16_database_integrity",
+    "backend/max_backend/main.py::_run_startup_migrations",
+    "backend/max_backend/main.py::_validate_schema16_operational_state",
+    "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+    "backend/max_backend/database_cutover.py::activation_status",
+    "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+    "backend/max_backend/database_cutover.py::restore_schema16_rollback_image"
+  ],
+  "generated": true,
+  "generated_by": "generate_sequence_actual.py",
+  "nodes": [
+    {
+      "id": "backend/max_backend/database_cutover.py::_assert_directory_nonlink",
+      "kind": "function",
+      "label": "backend/max_backend/database_cutover.py::_assert_directory_nonlink",
+      "language": "Python",
+      "line_end": 66,
+      "line_start": 56,
+      "locator": "backend/max_backend/database_cutover.py::_assert_directory_nonlink"
+    },
+    {
+      "id": "backend/max_backend/database_cutover.py::_assert_regular_nonlink",
+      "kind": "function",
+      "label": "backend/max_backend/database_cutover.py::_assert_regular_nonlink",
+      "language": "Python",
+      "line_end": 53,
+      "line_start": 43,
+      "locator": "backend/max_backend/database_cutover.py::_assert_regular_nonlink"
+    },
+    {
+      "id": "backend/max_backend/database_cutover.py::_json_value",
+      "kind": "function",
+      "label": "backend/max_backend/database_cutover.py::_json_value",
+      "language": "Python",
+      "line_end": 79,
+      "line_start": 76,
+      "locator": "backend/max_backend/database_cutover.py::_json_value"
+    },
+    {
+      "id": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "kind": "function",
+      "label": "backend/max_backend/database_cutover.py::_logical_fingerprint",
+      "language": "Python",
+      "line_end": 134,
+      "line_start": 82,
+      "locator": "backend/max_backend/database_cutover.py::_logical_fingerprint"
+    },
+    {
+      "id": "backend/max_backend/database_cutover.py::_sha256",
+      "kind": "function",
+      "label": "backend/max_backend/database_cutover.py::_sha256",
+      "language": "Python",
+      "line_end": 35,
+      "line_start": 30,
+      "locator": "backend/max_backend/database_cutover.py::_sha256"
+    },
+    {
+      "id": "backend/max_backend/database_cutover.py::_sidecars",
+      "kind": "function",
+      "label": "backend/max_backend/database_cutover.py::_sidecars",
+      "language": "Python",
+      "line_end": 73,
+      "line_start": 69,
+      "locator": "backend/max_backend/database_cutover.py::_sidecars"
+    },
+    {
+      "id": "backend/max_backend/database_cutover.py::_stat_fingerprint",
+      "kind": "function",
+      "label": "backend/max_backend/database_cutover.py::_stat_fingerprint",
+      "language": "Python",
+      "line_end": 40,
+      "line_start": 38,
+      "locator": "backend/max_backend/database_cutover.py::_stat_fingerprint"
+    },
+    {
+      "id": "backend/max_backend/database_cutover.py::_write_json_atomic",
+      "kind": "function",
+      "label": "backend/max_backend/database_cutover.py::_write_json_atomic",
+      "language": "Python",
+      "line_end": 144,
+      "line_start": 137,
+      "locator": "backend/max_backend/database_cutover.py::_write_json_atomic"
+    },
+    {
+      "id": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "kind": "function",
+      "label": "backend/max_backend/database_cutover.py::activate_schema16_candidate",
+      "language": "Python",
+      "line_end": 424,
+      "line_start": 300,
+      "locator": "backend/max_backend/database_cutover.py::activate_schema16_candidate"
+    },
+    {
+      "id": "backend/max_backend/database_cutover.py::activation_status",
+      "kind": "function",
+      "label": "backend/max_backend/database_cutover.py::activation_status",
+      "language": "Python",
+      "line_end": 297,
+      "line_start": 270,
+      "locator": "backend/max_backend/database_cutover.py::activation_status"
+    },
+    {
+      "id": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "kind": "function",
+      "label": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image",
+      "language": "Python",
+      "line_end": 519,
+      "line_start": 427,
+      "locator": "backend/max_backend/database_cutover.py::restore_schema16_rollback_image"
+    },
+    {
+      "id": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "kind": "function",
+      "label": "backend/max_backend/database_cutover.py::stage_schema16_candidate",
+      "language": "Python",
+      "line_end": 267,
+      "line_start": 147,
+      "locator": "backend/max_backend/database_cutover.py::stage_schema16_candidate"
+    },
+    {
+      "id": "backend/max_backend/db.py::DatabaseSchemaGuardError",
+      "kind": "class",
+      "label": "backend/max_backend/db.py::DatabaseSchemaGuardError",
+      "language": "Python",
+      "line_end": 63,
+      "line_start": 34,
+      "locator": "backend/max_backend/db.py::DatabaseSchemaGuardError"
+    },
+    {
+      "id": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::_schema16_archive_profile_error",
+      "language": "Python",
+      "line_end": 118,
+      "line_start": 74,
+      "locator": "backend/max_backend/db.py::_schema16_archive_profile_error"
+    },
+    {
+      "id": "backend/max_backend/db.py::_schema_object_fingerprint",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::_schema_object_fingerprint",
+      "language": "Python",
+      "line_end": 71,
+      "line_start": 66,
+      "locator": "backend/max_backend/db.py::_schema_object_fingerprint"
+    },
+    {
+      "id": "backend/max_backend/db.py::assert_automatic_recovery_supported",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::assert_automatic_recovery_supported",
+      "language": "Python",
+      "line_end": 144,
+      "line_start": 135,
+      "locator": "backend/max_backend/db.py::assert_automatic_recovery_supported"
+    },
+    {
+      "id": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "language": "Python",
+      "line_end": 322,
+      "line_start": 202,
+      "locator": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
+      "id": "backend/max_backend/db.py::connect",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::connect",
+      "language": "Python",
+      "line_end": 331,
+      "line_start": 325,
+      "locator": "backend/max_backend/db.py::connect"
+    },
+    {
+      "id": "backend/max_backend/db.py::ensure_baseline_registered",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::ensure_baseline_registered",
+      "language": "Python",
+      "line_end": 450,
+      "line_start": 381,
+      "locator": "backend/max_backend/db.py::ensure_baseline_registered"
+    },
+    {
+      "id": "backend/max_backend/db.py::initialize_database",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::initialize_database",
+      "language": "Python",
+      "line_end": 378,
+      "line_start": 334,
+      "locator": "backend/max_backend/db.py::initialize_database"
+    },
+    {
+      "id": "backend/max_backend/db.py::is_schema16_archive_compatible",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::is_schema16_archive_compatible",
+      "language": "Python",
+      "line_end": 132,
+      "line_start": 131,
+      "locator": "backend/max_backend/db.py::is_schema16_archive_compatible"
+    },
+    {
+      "id": "backend/max_backend/db.py::open_read_only",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::open_read_only",
+      "language": "Python",
+      "line_end": 128,
+      "line_start": 121,
+      "locator": "backend/max_backend/db.py::open_read_only"
+    },
+    {
+      "id": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::verify_schema16_database_integrity",
+      "language": "Python",
+      "line_end": 199,
+      "line_start": 159,
+      "locator": "backend/max_backend/db.py::verify_schema16_database_integrity"
+    },
+    {
+      "id": "backend/max_backend/ea.py::load_manifest",
+      "kind": "function",
+      "label": "backend/max_backend/ea.py::load_manifest",
+      "language": "Python",
+      "line_end": 24,
+      "line_start": 20,
+      "locator": "backend/max_backend/ea.py::load_manifest"
+    },
+    {
+      "id": "backend/max_backend/ea.py::sha256_file",
+      "kind": "function",
+      "label": "backend/max_backend/ea.py::sha256_file",
+      "language": "Python",
+      "line_end": 17,
+      "line_start": 12,
+      "locator": "backend/max_backend/ea.py::sha256_file"
+    },
+    {
+      "id": "backend/max_backend/ea.py::verify_baseline_snapshot",
+      "kind": "function",
+      "label": "backend/max_backend/ea.py::verify_baseline_snapshot",
+      "language": "Python",
+      "line_end": 46,
+      "line_start": 27,
+      "locator": "backend/max_backend/ea.py::verify_baseline_snapshot"
+    },
+    {
+      "id": "backend/max_backend/main.py::_run_startup_migrations",
+      "kind": "function",
+      "label": "backend/max_backend/main.py::_run_startup_migrations",
+      "language": "Python",
+      "line_end": 103,
+      "line_start": 85,
+      "locator": "backend/max_backend/main.py::_run_startup_migrations"
+    },
+    {
+      "id": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "kind": "function",
+      "label": "backend/max_backend/main.py::_validate_schema16_operational_state",
+      "language": "Python",
+      "line_end": 186,
+      "line_start": 106,
+      "locator": "backend/max_backend/main.py::_validate_schema16_operational_state"
+    },
+    {
+      "id": "backend/max_backend/optimizer_jobs.py::_mark_reconciliation_required",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_jobs.py::_mark_reconciliation_required",
+      "language": "Python",
+      "line_end": 190,
+      "line_start": 175,
+      "locator": "backend/max_backend/optimizer_jobs.py::_mark_reconciliation_required"
+    },
+    {
+      "id": "backend/max_backend/optimizer_jobs.py::_process_identity",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_jobs.py::_process_identity",
+      "language": "Python",
+      "line_end": 73,
+      "line_start": 72,
+      "locator": "backend/max_backend/optimizer_jobs.py::_process_identity"
+    },
+    {
+      "id": "backend/max_backend/optimizer_jobs.py::_worker_identity_matches",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_jobs.py::_worker_identity_matches",
+      "language": "Python",
+      "line_end": 125,
+      "line_start": 76,
+      "locator": "backend/max_backend/optimizer_jobs.py::_worker_identity_matches"
+    },
+    {
+      "id": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
+      "language": "Python",
+      "line_end": 792,
+      "line_start": 692,
+      "locator": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup"
+    },
+    {
+      "id": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close",
+      "kind": "method",
+      "label": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close",
+      "language": "Python",
+      "line_end": 428,
+      "line_start": 421,
+      "locator": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
+    },
+    {
+      "id": "backend/max_backend/optimizer_worker_identity.py::_FileTime",
+      "kind": "class",
+      "label": "backend/max_backend/optimizer_worker_identity.py::_FileTime",
+      "language": "Python",
+      "line_end": 98,
+      "line_start": 97,
+      "locator": "backend/max_backend/optimizer_worker_identity.py::_FileTime"
+    },
+    {
+      "id": "backend/max_backend/optimizer_worker_identity.py::_windows_api",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_worker_identity.py::_windows_api",
+      "language": "Python",
+      "line_end": 94,
+      "line_start": 62,
+      "locator": "backend/max_backend/optimizer_worker_identity.py::_windows_api"
+    },
+    {
+      "id": "backend/max_backend/optimizer_worker_identity.py::_windows_process_identity",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_worker_identity.py::_windows_process_identity",
+      "language": "Python",
+      "line_end": 129,
+      "line_start": 101,
+      "locator": "backend/max_backend/optimizer_worker_identity.py::_windows_process_identity"
+    },
+    {
+      "id": "backend/max_backend/optimizer_worker_identity.py::get_process_identity",
+      "kind": "function",
+      "label": "backend/max_backend/optimizer_worker_identity.py::get_process_identity",
+      "language": "Python",
+      "line_end": 169,
+      "line_start": 132,
+      "locator": "backend/max_backend/optimizer_worker_identity.py::get_process_identity"
+    }
+  ],
+  "observed_head": "3d563f24a6e0d2af022de19add25a28001d4811d",
+  "schema_version": 1,
+  "source_digest": "892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db"
+}

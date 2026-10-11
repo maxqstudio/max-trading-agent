@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import sqlite3
 from pathlib import Path
 from typing import Any
@@ -10,6 +11,24 @@ from .schema import CURRENT_SCHEMA_VERSION
 
 SCHEMA_VERSION = 1
 MIN_SUPPORTED_SCHEMA = 1
+SCHEMA16_ARCHIVE_COMPATIBILITY = "SCHEMA16_ARCHIVE_EXTENSION_V1"
+_SCHEMA15_CORE_OBJECT_COUNT = 42
+_SCHEMA15_CORE_OBJECT_SHA256 = "d1ac3e384457c5c8f659dea2280fdabe58bb03f2d0631d1227a28b8b59f2475a"
+_SCHEMA16_ARCHIVE_OBJECT_COUNT = 11
+_SCHEMA16_ARCHIVE_OBJECT_SHA256 = "635467e318829432881f89ff5c546ff3dd5fb4d0ff827f2fa5df554236d3530f"
+_SCHEMA16_ARCHIVE_OBJECT_NAMES = {
+    ("index", "ix_onnx_data_snapshots_created"),
+    ("index", "ix_onnx_data_windows_snapshot"),
+    ("table", "onnx_data_readiness_evidence"),
+    ("table", "onnx_data_snapshots"),
+    ("table", "onnx_data_window_configs"),
+    ("trigger", "onnx_data_readiness_no_delete"),
+    ("trigger", "onnx_data_readiness_no_update"),
+    ("trigger", "onnx_data_snapshots_no_delete"),
+    ("trigger", "onnx_data_snapshots_no_update"),
+    ("trigger", "onnx_data_windows_no_delete"),
+    ("trigger", "onnx_data_windows_no_update"),
+}
 
 
 class DatabaseSchemaGuardError(RuntimeError):
@@ -21,10 +40,12 @@ class DatabaseSchemaGuardError(RuntimeError):
         message: str,
         *,
         database_schema_version: int | None = None,
+        compatibility_profile: str | None = None,
     ) -> None:
         super().__init__(message)
         self.status = status
         self.database_schema_version = database_schema_version
+        self.compatibility_profile = compatibility_profile
         self.message = message
 
     def diagnostic(self) -> dict[str, Any]:
@@ -37,7 +58,145 @@ class DatabaseSchemaGuardError(RuntimeError):
         }
         if self.database_schema_version is not None:
             result["database_schema_version"] = self.database_schema_version
+        if self.compatibility_profile is not None:
+            result["compatibility_profile"] = self.compatibility_profile
         return result
+
+
+def _schema_object_fingerprint(rows: list[tuple[Any, ...]]) -> str:
+    encoded = "\n".join(
+        "\x1f".join(str(value or "") for value in row)
+        for row in rows
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def _schema16_archive_profile_error(
+    conn: sqlite3.Connection,
+) -> str | None:
+    rows = [
+        tuple(row)
+        for row in conn.execute(
+            """
+            SELECT type,name,tbl_name,COALESCE(sql,'')
+            FROM sqlite_master
+            WHERE name NOT LIKE 'sqlite_%'
+            ORDER BY type,name
+            """
+        ).fetchall()
+    ]
+    archive_rows = [
+        row for row in rows
+        if str(row[1]).lower().startswith("onnx_data_")
+        or str(row[2]).lower().startswith("onnx_data_")
+    ]
+    core_rows = [
+        row for row in rows
+        if not (
+            str(row[1]).lower().startswith(("onnx_data_", "research_"))
+            or str(row[2]).lower().startswith(("onnx_data_", "research_"))
+        )
+    ]
+    unexpected_research_bindings = [
+        row for row in rows
+        if str(row[1]).lower().startswith("research_")
+        and not str(row[2]).lower().startswith("research_")
+        and str(row[0]).lower() in {"index", "trigger"}
+    ]
+    if len(core_rows) != _SCHEMA15_CORE_OBJECT_COUNT:
+        return "SCHEMA16_CORE_OBJECT_INVENTORY_MISMATCH"
+    if _schema_object_fingerprint(core_rows) != _SCHEMA15_CORE_OBJECT_SHA256:
+        return "SCHEMA16_CORE_SCHEMA_MISMATCH"
+    if len(archive_rows) != _SCHEMA16_ARCHIVE_OBJECT_COUNT:
+        return "SCHEMA16_ARCHIVE_OBJECT_INVENTORY_MISMATCH"
+    if {(str(row[0]), str(row[1])) for row in archive_rows} != _SCHEMA16_ARCHIVE_OBJECT_NAMES:
+        return "SCHEMA16_ARCHIVE_OBJECT_NAMES_MISMATCH"
+    if _schema_object_fingerprint(archive_rows) != _SCHEMA16_ARCHIVE_OBJECT_SHA256:
+        return "SCHEMA16_ARCHIVE_SCHEMA_MISMATCH"
+    if unexpected_research_bindings:
+        return "SCHEMA16_RESEARCH_OBJECT_BOUND_TO_CORE_SCHEMA"
+    return None
+
+
+def open_read_only(path: Path) -> sqlite3.Connection:
+    """Open an existing database without creating files or granting write access."""
+    database = Path(path)
+    uri = database.resolve().as_uri() + "?mode=ro"
+    conn = sqlite3.connect(uri, uri=True, timeout=2.0)
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA query_only=ON")
+    return conn
+
+
+def is_schema16_archive_compatible(schema: dict[str, Any]) -> bool:
+    return schema.get("compatibility_profile") == SCHEMA16_ARCHIVE_COMPATIBILITY
+
+
+def assert_automatic_recovery_supported(path: Path) -> dict[str, Any]:
+    schema = assert_database_schema_compatible(path, allow_missing=False)
+    if is_schema16_archive_compatible(schema):
+        raise DatabaseSchemaGuardError(
+            "SCHEMA16_AUTOMATIC_RECOVERY_DISABLED",
+            "Schema-16 compatibility preserves persisted authority; automatic recovery is disabled until an explicit, evidence-backed reconciliation is authorized.",
+            database_schema_version=16,
+            compatibility_profile=SCHEMA16_ARCHIVE_COMPATIBILITY,
+        )
+    return schema
+
+
+def assert_reset_supported(path: Path) -> dict[str, Any]:
+    schema = assert_database_schema_compatible(path, allow_missing=False)
+    if is_schema16_archive_compatible(schema):
+        raise DatabaseSchemaGuardError(
+            "SCHEMA16_RESET_DISABLED",
+            "Reset is disabled for the preserved schema-16 archive profile; no operational or historical evidence was changed.",
+            database_schema_version=16,
+            compatibility_profile=SCHEMA16_ARCHIVE_COMPATIBILITY,
+        )
+    return schema
+
+
+def verify_schema16_database_integrity(path: Path) -> dict[str, Any]:
+    """Prove SQLite and FK integrity for an already structurally verified schema-16 DB."""
+    schema = assert_database_schema_compatible(path, allow_missing=False)
+    if not is_schema16_archive_compatible(schema):
+        raise DatabaseSchemaGuardError(
+            "SCHEMA16_COMPATIBILITY_PROFILE_REQUIRED",
+            "The integrity verifier only accepts the exact historical schema-16 compatibility profile.",
+            database_schema_version=schema.get("schema_version"),
+        )
+    conn: sqlite3.Connection | None = None
+    try:
+        conn = open_read_only(path)
+        integrity_rows = conn.execute("PRAGMA integrity_check").fetchall()
+        integrity = [str(row[0]) for row in integrity_rows]
+        foreign_key_errors = [
+            tuple(row) for row in conn.execute("PRAGMA foreign_key_check").fetchall()
+        ]
+    except sqlite3.Error as exc:
+        raise DatabaseSchemaGuardError(
+            "SCHEMA16_DATABASE_INTEGRITY_UNVERIFIABLE",
+            "SQLite integrity could not be verified read-only; startup is blocked without changing the database.",
+            database_schema_version=16,
+            compatibility_profile=SCHEMA16_ARCHIVE_COMPATIBILITY,
+        ) from exc
+    finally:
+        if conn is not None:
+            conn.close()
+    if integrity != ["ok"] or foreign_key_errors:
+        raise DatabaseSchemaGuardError(
+            "SCHEMA16_DATABASE_INTEGRITY_FAILED",
+            "The structurally recognized schema-16 database failed SQLite integrity or foreign-key validation; no recovery or reset was attempted.",
+            database_schema_version=16,
+            compatibility_profile=SCHEMA16_ARCHIVE_COMPATIBILITY,
+        )
+    return {
+        "status": "PASS",
+        "schema_version": 16,
+        "compatibility_profile": SCHEMA16_ARCHIVE_COMPATIBILITY,
+        "physical_integrity": "ok",
+        "foreign_key_violations": 0,
+    }
 
 
 def assert_database_schema_compatible(
@@ -129,6 +288,31 @@ def assert_database_schema_compatible(
             "Existing database schema_version is outside the supported migration history; startup and recovery are blocked without changing it.",
             database_schema_version=version,
         )
+    if version == 16:
+        conn = None
+        try:
+            conn = open_read_only(database)
+            profile_error = _schema16_archive_profile_error(conn)
+        except sqlite3.Error as exc:
+            raise DatabaseSchemaGuardError(
+                "DATABASE_SCHEMA_READ_FAILED",
+                "The historical schema-16 structure could not be verified read-only; the database was not modified.",
+                database_schema_version=version,
+            ) from exc
+        finally:
+            if conn is not None:
+                conn.close()
+        if profile_error is not None:
+            raise DatabaseSchemaGuardError(
+                "INCOMPATIBLE_SCHEMA_LAYOUT",
+                f"Schema 16 does not match the verified historical archive compatibility profile ({profile_error}); the database was not modified.",
+                database_schema_version=version,
+            )
+        return {
+            "status": "SUPPORTED_EXTENSION",
+            "schema_version": version,
+            "compatibility_profile": SCHEMA16_ARCHIVE_COMPATIBILITY,
+        }
     if version > CURRENT_SCHEMA_VERSION:
         raise DatabaseSchemaGuardError(
             "INCOMPATIBLE_NEWER_SCHEMA",
@@ -148,7 +332,9 @@ def connect(path: Path = DATABASE_PATH) -> sqlite3.Connection:
 
 
 def initialize_database(path: Path = DATABASE_PATH) -> None:
-    assert_database_schema_compatible(path, allow_missing=True)
+    schema = assert_database_schema_compatible(path, allow_missing=True)
+    if is_schema16_archive_compatible(schema):
+        return
     with connect(path) as conn:
         schema_meta_preexisting = conn.execute(
             "SELECT 1 FROM sqlite_master "
@@ -193,9 +379,8 @@ def initialize_database(path: Path = DATABASE_PATH) -> None:
 
 
 def ensure_baseline_registered(path: Path = DATABASE_PATH) -> dict[str, Any]:
-    assert_database_schema_compatible(path, allow_missing=True)
+    schema = assert_database_schema_compatible(path, allow_missing=True)
     manifest = verify_baseline_snapshot()
-    initialize_database(path)
     values = (
         manifest["ea_version"],
         manifest["source_project"],
@@ -207,6 +392,45 @@ def ensure_baseline_registered(path: Path = DATABASE_PATH) -> dict[str, Any]:
         "BASELINE_NOT_CHAMPION",
         manifest["imported_at_utc"],
     )
+    if is_schema16_archive_compatible(schema):
+        expected = dict(
+            zip(
+                (
+                    "ea_version",
+                    "source_project",
+                    "source_candidate_build_id",
+                    "source_tree_signature",
+                    "source_path",
+                    "snapshot_path",
+                    "sha256",
+                    "status",
+                    "imported_at_utc",
+                ),
+                values,
+                strict=True,
+            )
+        )
+        conn = open_read_only(path)
+        try:
+            row = conn.execute("SELECT * FROM ea_baseline WHERE id=1").fetchone()
+        finally:
+            conn.close()
+        if row is None:
+            raise DatabaseSchemaGuardError(
+                "SCHEMA16_BASELINE_MISSING",
+                "A schema-16 compatibility database must already contain its registered baseline; startup will not insert or repair it.",
+                database_schema_version=16,
+                compatibility_profile=SCHEMA16_ARCHIVE_COMPATIBILITY,
+            )
+        if any(row[key] != value for key, value in expected.items()):
+            raise DatabaseSchemaGuardError(
+                "SCHEMA16_BASELINE_MISMATCH",
+                "The persisted baseline differs from source authority; schema-16 startup is blocked without changing the database.",
+                database_schema_version=16,
+                compatibility_profile=SCHEMA16_ARCHIVE_COMPATIBILITY,
+            )
+        return dict(row)
+    initialize_database(path)
     with connect(path) as conn:
         current = conn.execute("SELECT * FROM ea_baseline WHERE id=1").fetchone()
         if current is not None and current["sha256"] != manifest["snapshot_sha256"]:
@@ -241,12 +465,13 @@ def database_status(path: Path = DATABASE_PATH) -> dict[str, Any]:
         # Status reads are still an application entrypoint: never open the
         # database through the normal connection unless this build supports its
         # persisted schema. In particular, a newer database must not look READY.
-        assert_database_schema_compatible(path, allow_missing=False)
+        schema_authority = assert_database_schema_compatible(path, allow_missing=False)
     except DatabaseSchemaGuardError as exc:
         return exc.diagnostic()
 
     try:
-        with connect(path) as conn:
+        connection = open_read_only(path) if is_schema16_archive_compatible(schema_authority) else connect(path)
+        with connection as conn:
             schema = conn.execute(
                 "SELECT value FROM schema_meta WHERE key='schema_version'"
             ).fetchone()
@@ -270,11 +495,14 @@ def database_status(path: Path = DATABASE_PATH) -> dict[str, Any]:
                 "reason": "EA_BASELINE_STATUS_INVALID",
                 "baseline_status": baseline["status"],
             }
-        return {
+        result = {
             "status": "READY",
             "schema_version": actual_schema,
             "baseline_status": baseline["status"],
         }
+        if is_schema16_archive_compatible(schema_authority):
+            result["compatibility_profile"] = SCHEMA16_ARCHIVE_COMPATIBILITY
+        return result
     except Exception as exc:
         return {
             "status": "FAIL",

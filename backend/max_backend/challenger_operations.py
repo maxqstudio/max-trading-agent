@@ -31,7 +31,7 @@ from .challenger_operations_store import (
     update_backtest,
 )
 from .challenger_store import get_challenger
-from .db import assert_database_schema_compatible
+from .db import assert_automatic_recovery_supported, assert_database_schema_compatible
 from .config import (
     BACKTEST_ARTIFACT_ROOT,
     CHALLENGER_ARTIFACT_ROOT,
@@ -287,7 +287,7 @@ def recover_retired_challenger_deployments(
     *, path: Path = DATABASE_PATH
 ) -> list[dict[str, str]]:
     """Finish exact, journaled Challenger EA removals after process restart."""
-    assert_database_schema_compatible(path, allow_missing=False)
+    assert_automatic_recovery_supported(path)
     recovered: list[dict[str, str]] = []
     first = list_registry_page(view="retired", page=1, page_size=100, path=path)
     for page_no in range(1, int(first["pages"]) + 1):

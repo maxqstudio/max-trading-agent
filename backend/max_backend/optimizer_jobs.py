@@ -40,7 +40,7 @@ from .optimizer_store import (
     latest_job,
     update_job,
 )
-from .db import assert_database_schema_compatible
+from .db import assert_automatic_recovery_supported
 from .optimizer_worker_identity import (
     WORKER_IDENTITY_PROTOCOL,
     WorkerIdentityServer,
@@ -691,7 +691,7 @@ def _ensure_request_snapshot(job: dict[str, Any]) -> None:
 
 def reconcile_optimizer_startup(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
     """Resolve only the one DB-authorized active job; never scan artifact trees."""
-    assert_database_schema_compatible(path, allow_missing=False)
+    assert_automatic_recovery_supported(path)
     job = active_job(path=path)
     if job is None:
         return {"status": "READY", "job_id": None, "action": "NO_ACTIVE_JOB"}

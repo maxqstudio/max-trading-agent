@@ -1,6 +1,37 @@
 {
-  "current_phase": "P0_DATABASE_SAFETY",
+  "current_phase": "P0B_DATABASE_COMPATIBILITY_AND_NONDESTRUCTIVE_CUTOVER",
   "current_phase_results": {
+    "crash_restart_idempotency": "PASS_LOCAL_SYNTHETIC: schema16 startup retry, interrupted startup validation, interrupted staging/activation, repeated activation and rollback recovery are covered in the focused suite; no Owner DB was accessed.",
+    "hosted_ci": "NOT_PROVEN: exact PR Windows CI identity is external evidence under D-012; P0B remains IN_PROGRESS until Control Room acceptance.",
+    "isolated_cutover_staging": "PASS_LOCAL_SYNTHETIC: staged candidate and byte-identical rollback image are hash-checked; candidate structure, row fingerprints, integrity and foreign keys match; source remains unchanged.",
+    "owner_database_compatibility": "NOT_PROVEN",
+    "owner_runtime": "NOT_PROVEN",
+    "schema15_migration_regression": "PASS_LOCAL_SYNTHETIC: focused schema compatibility suite passed 74 tests with 0 failures; existing schema15 and fresh-install paths remain covered.",
+    "schema15_structural_fingerprint": "PASS_LOCAL_SYNTHETIC: exact schema15 application-core fingerprint is checked against the historical schema authority.",
+    "schema16_compatibility_profile": "PASS_LOCAL_SYNTHETIC: exact historical schema16 profile accepted; altered layouts, future versions and sidecars fail closed.",
+    "schema16_populated_fixture_preservation": "PASS_LOCAL_SYNTHETIC: Strategy, Optimizer, Challenger, Champion, Scientist, artifact, Research and ONNX archive rows/relationships preserved across verified startup and retries.",
+    "schema_archaeology": "PASS_LOCAL_SOURCE_AUDIT: historical commits 203f6ab, c75f978, 1a9c9a6, 98ac847 and 39f7a7e were inspected; exact additive ONNX DDL and historical Research purge side effect are documented."
+  },
+  "current_phase_status": "IN_PROGRESS",
+  "evidence_boundary": "P0B starts from verified origin/main 8ba001bba31d7c74e2d1d1aa03d6c79fb0f9576a with tree 597dbd569a9c9c99feae5fea2e2b2a2ff8fa3e46; P0A is accepted and merged. Historical schema archaeology and focused synthetic compatibility/cutover tests pass locally (74 passed, 0 failed). Actual Owner database contents and compatibility remain NOT_PROVEN. P0B remains IN_PROGRESS until exact-candidate local and hosted evidence receives Control Room acceptance; exact final SHA/run identity is external under D-012. No actual Owner database, MT5, Optimizer, training, Research execution, Champion mutation or live cutover is authorized.",
+  "human_comprehension_questions": {
+    "How does failure/recovery behave?": "PASS",
+    "How does important data flow through the system?": "PASS",
+    "What are the important lifecycle states and transitions?": "PASS",
+    "What are the main user/domain workflows?": "PASS",
+    "What are the major components and how do they relate?": "PASS",
+    "What is mutable and what is immutable?": "PASS",
+    "What is proven and what is not proven?": "PASS",
+    "What is the current project state?": "PASS",
+    "What is the project and what problem does it solve?": "PASS",
+    "What may happen next and what is blocked?": "PASS",
+    "Who uses it and what are the primary outcomes?": "PASS",
+    "Who/what is authoritative for important decisions?": "PASS"
+  },
+  "human_comprehension_status": "PASS",
+  "p0a_accepted_evidence": {
+    "accepted_main_sha": "8ba001bba31d7c74e2d1d1aa03d6c79fb0f9576a",
+    "accepted_main_tree": "597dbd569a9c9c99feae5fea2e2b2a2ff8fa3e46",
     "backend_full": "PASS_LOCAL: 522 passed, 0 skipped, 0 failed.",
     "backend_targeted": "PASS_LOCAL: 70 passed across schema compatibility, Strategy reset, and M00 foundation regressions.",
     "build": "PASS_LOCAL with existing Vite chunk-size warning; exit code 0.",
@@ -17,7 +48,7 @@
     "pip_check": "PASS_LOCAL",
     "scientist_knowledge": "PASS_LOCAL: canonical knowledge and source manifest rebuilt with scripts/build_scientist_knowledge.py; full Scientist regression passed.",
     "secret_scan": "Required before phase acceptance: exact committed-tree source-only and secret scans; exact candidate identity and result are external evidence per D-012.",
-    "sequence": "PASS_LOCAL: all 8 DURING/CURRENT sessions and generated actual graphs use source digest d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d; 0 Python parse failures.",
+    "sequence": "PASS_LOCAL_GENERATED: all 9 DURING/CURRENT sessions and actual graphs regenerated at source digest 892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db; 0 Python parse failures. Formal sequence validation remains part of cumulative acceptance.",
     "skill_workflow_provenance": "PASS_LOCAL: exact CI-pinned Skill_Workflow SHA 964481ed1609f87904ba9e08890bffc0a10c3fd4; 21 vendored tool Git blobs match upstream.",
     "skill_workflow_selftests": "PASS_LOCAL: strict workflow, Project Truth compiler, sequence call-resolution, and cross-document regressions.",
     "source_only_scan": "Required before phase acceptance: exact committed-tree source-only and secret scans; exact candidate identity and result are external evidence per D-012.",
@@ -25,23 +56,6 @@
     "starting_main_tree": "8325433e9f23822967251037fff149fc6057113a",
     "supported_schema_version": 15
   },
-  "current_phase_status": "IN_PROGRESS",
-  "evidence_boundary": "P0 starts from main 858dcb205fa2fb734fd5a68b8a4970a29c553897 with tree 8325433e9f23822967251037fff149fc6057113a, identical to accepted main tree 203f6ab3dc618e3edd247841aa25e1fa0951a19a (Windows CI 37964999480 PASS). MTA supports schema 15. Schema 16 for the Owner database is reported but has not been inspected. Synthetic temporary SQLite fixtures only: focused schema/reset regression 70 passed; full backend 522 passed with zero skips/failures; frontend 61 passed across 9 files; lint/build/dependency checks passed. Scientist knowledge was rebuilt canonically and Scientist tests passed. No Owner database, MT5, Optimizer, research training, Champion mutation, P0B migration, or cutover was executed. Exact committed-tree source-only/secret scan, clean-commit governance, and Windows CI remain pending external phase-acceptance evidence per D-012; phase remains IN_PROGRESS until Control Room acceptance.",
-  "human_comprehension_questions": {
-    "How does failure/recovery behave?": "PASS",
-    "How does important data flow through the system?": "PASS",
-    "What are the important lifecycle states and transitions?": "PASS",
-    "What are the main user/domain workflows?": "PASS",
-    "What are the major components and how do they relate?": "PASS",
-    "What is mutable and what is immutable?": "PASS",
-    "What is proven and what is not proven?": "PASS",
-    "What is the current project state?": "PASS",
-    "What is the project and what problem does it solve?": "PASS",
-    "What may happen next and what is blocked?": "PASS",
-    "Who uses it and what are the primary outcomes?": "PASS",
-    "Who/what is authoritative for important decisions?": "PASS"
-  },
-  "human_comprehension_status": "PASS",
   "requirements": [
     {
       "evidence": "backend/max_backend/db.py::assert_database_schema_compatible; database_status; backend/max_backend/strategy_reset.py::database_recovery_status, _read_counts, _connect; backend/max_backend/main.py::_run_startup_migrations; backend/tests/test_schema_compatibility_guard.py",
@@ -64,7 +78,19 @@
     {
       "evidence": ".workflow/roadmap.json::P0_DATABASE_SAFETY",
       "id": "P0B-COMPATIBILITY-PLAN-01",
-      "requirement": "A forward-compatible schema-16 preservation/cutover/rollback/copy-only cold-start plan is documented; P0 executes none of those operations against an Owner database.",
+      "requirement": "The P0B architecture decision and historical schema-15/16 migration evidence are documented before source implementation; actual Owner database access and live cutover remain prohibited.",
+      "status": "PASS_LOCAL_DESIGN_ONLY"
+    },
+    {
+      "evidence": "backend/max_backend/db.py schema compatibility profile; backend/tests/test_schema_compatibility_guard.py",
+      "id": "P0B-STRUCTURAL-COMPATIBILITY-01",
+      "requirement": "Only the exact schema-15 core plus verified historical schema-16 ONNX archive extension is compatible; metadata remains 16, unsupported layouts/future versions fail closed, and read/migration/startup paths do not mutate schema-16 authority.",
+      "status": "PASS_LOCAL"
+    },
+    {
+      "evidence": "P0B isolated database cutover staging tool and temporary SQLite acceptance fixtures",
+      "id": "P0B-NONDESTRUCTIVE-CUTOVER-01",
+      "requirement": "Copy-only staging preserves and verifies a rollback image, validates a candidate before publication, emits a machine-readable report, and never activates or overwrites the source without separate explicit Owner authorization.",
       "status": "PASS_LOCAL"
     },
     {
@@ -333,8 +359,10 @@
   "schema_version": 1,
   "sequence_mode": "DURING",
   "sequence_session": "FLOW-STRATEGY-RESET-RECOVERY",
-  "sequence_sync_status": "PASS_LOCAL: all 8 DURING/CURRENT sessions and generated actual graphs validated at source digest d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d.",
+  "sequence_sync_status": "PASS_LOCAL_GENERATED: all 9 DURING/CURRENT sessions and actual graphs regenerated at source digest 892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db; formal validation remains in cumulative acceptance.",
   "test_commands": [
+    ".venv/Scripts/python.exe -m pytest backend/tests/test_schema_compatibility_guard.py -q -o addopts= --basetemp artifacts/p0b/<run-id>/pytest-focused",
+    "powershell -ExecutionPolicy Bypass -File scripts/accept_p0b_database_compatibility.ps1",
     ".venv/Scripts/python.exe -m pytest backend/tests/test_m01_optimizer_core.py::test_identical_duplicate_parameter_vector_metrics_are_deduplicated backend/tests/test_m01_optimizer_core.py::test_duplicate_parameter_vector_fails_closed backend/tests/test_m08_strategy_results.py::test_exact_duplicate_candidates_are_removed_before_database_persistence -q -o addopts=",
     ".venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_worker_identity.py backend/tests/test_optimizer_reliability.py backend/tests/test_m01_jobs.py -q -o addopts= --basetemp .pytest-codex-worker-targeted-final",
     "PowerShell loop (3 iterations): .venv/Scripts/python.exe -m pytest backend/tests/test_optimizer_worker_identity.py::test_windows_venv_worker_identity_is_repeatedly_bound_to_real_pipe_peer -q -o addopts= --basetemp .pytest-codex-worker-identity-$i",

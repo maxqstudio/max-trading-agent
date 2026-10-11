@@ -28,7 +28,7 @@ Users / External Systems
     -> State / Evidence Authorities
     -> External Runtime / Outputs
 
-Observed source inventory: 122 files, 4 language categories.
+Observed source inventory: 124 files, 4 language categories.
 
 ## Major components
 
@@ -38,7 +38,7 @@ Observed source inventory: 122 files, 4 language categories.
 | Strategy lifecycle domain | Own optimizer qualification, Challenger registration/lifecycle and Champion promotion/tenure semantics. | backend/max_backend/optimizer_candidates.py::qualified_candidates_page, backend/max_backend/optimizer_candidates.py::revalidate_candidate_for_registration, backend/max_backend/challenger_selection.py::create_selected_challengers, backend/max_backend/challenger_store.py::consumed_source_identities, backend/max_backend/challenger_registry.py::challenger_detail, backend/max_backend/challenger_operations.py::retire_challenger, backend/max_backend/champion_store.py::commit_promotion_authority, backend/max_backend/promotion_service.py::promote_strategy_challenger | SQLite, immutable Challenger/optimizer evidence, MT5/MetaEditor |
 | Optimizer job orchestration and read model | Persist editable drafts separately from immutable job requests, reconcile exact worker/MT5 launch identity, run terminal64.exe through the native /config path while leaving tester-agent behavior to MT5 and Owner configuration, atomically publish verified round evidence, collapse only identical repeated metrics vectors, and reject exact duplicate candidate identities before SQLite persistence. | backend/max_backend/optimizer_draft.py, backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup, backend/max_backend/optimizer_worker.py, backend/max_backend/optimizer_core.py::parse_optimizer_metrics_csv, backend/max_backend/optimizer_runtime.py::commit_round_evidence, backend/max_backend/optimizer_store.py::optimizer_candidate_identity, backend/max_backend/optimizer_store.py::persist_candidate_projection, backend/max_backend/optimizer_candidates.py::candidate_projection_payload, backend/max_backend/optimizer_candidates.py::qualified_candidates_page | SQLite operational state, immutable round evidence, MT5/MetaEditor execution boundary |
 | Scientist advisory subsystem | Expose hash-verified static knowledge and bounded committed runtime context to an advisory LLM/chat workflow. | backend/max_backend/scientist_knowledge.py::load_knowledge, backend/max_backend/scientist_api.py::get_status, frontend/src/ScientistPage.tsx::ScientistPage | scientist/knowledge/source_manifest.json, Scientist store/provider settings |
-| FastAPI runtime | Start migrations/recovery, route semantic APIs and expose overview/readiness. | backend/max_backend/main.py::lifespan, backend/max_backend/main.py::overview, backend/max_backend/main.py::app | domain services, SQLite, MT5 detection |
+| FastAPI runtime | Run read-only schema compatibility preflight before initialization or recovery; preserve exact schema-16 archive-compatible databases without migration mutation; route APIs and expose readiness or reconciliation diagnostics. | backend/max_backend/main.py::lifespan, backend/max_backend/db.py::assert_database_schema_compatible, backend/max_backend/main.py::overview, backend/max_backend/main.py::app | domain services, SQLite, MT5 detection |
 | Windows launcher/readiness | Verify or start canonical backend/frontend instances, reject invalid occupied ports and emit MAX_READY only after authority/readiness checks. | RUN_MAX.cmd, scripts/run_max.ps1 | backend /api/overview, frontend proxy/root, Scientist status, ports 8000/5173 |
 | MT5/MetaEditor execution boundary | Provide Strategy Tester simulation/optimization and MQL5 compile/execution truth. | ea/baseline/Max_MTF.mq5 | MetaTrader 5 terminal, MetaEditor |
 | SQLite operational state | Persist mutable Strategy/Scientist operational state through owning stores and transactions. | state/max.db | backend store modules |
@@ -167,7 +167,7 @@ Authority: Read-only database schema preflight before any initialization, migrat
 
 ## Lifecycle and state
 
-Current phase: P0_DATABASE_SAFETY
+Current phase: P0B_DATABASE_COMPATIBILITY_AND_NONDESTRUCTIVE_CUTOVER
 
 Current status: IN_PROGRESS
 
@@ -262,24 +262,24 @@ compiler does not infer them from implementation names.
 ## Current project state
 
 Next authorized actions:
-- Commit and push the repair to existing PR #27 on codex/p0-database-safety, verify exact-head Windows CI, then stop for Control Room audit. Do not merge.
-- Do not execute P0B compatibility work or access the Owner database/PC; seek separate authorization after Control Room audit.
+- Complete the exact-candidate acceptance runner and Windows CI on codex/p0b-schema16-compat, then stop for Control Room audit. Do not merge.
+- Do not access/copy the actual Owner database, activate a cutover, start MT5/Optimizer, train models, run Research, or mutate Champion.
 
 Blocked actions:
-- Do not open, copy, modify, reset, downgrade, or execute against the Owner database; schema 16 is Owner-reported and remains unverified.
+- Do not open, copy, modify, reset, downgrade, stage, or execute against the actual Owner database; its schema-16 contents remain unverified.
 - Do not run MT5, Optimizer, scientific training, Research execution, ONNX, Challenger/Champion mutation, or Owner runtime acceptance.
-- Do not perform P0B migration, cutover, rollback, or cold-start on the Owner environment; P0B is planning only.
+- Do not perform P0B migration, cutover activation, rollback, or cold-start on the Owner environment; this phase permits synthetic fixtures and source implementation only.
 - Do not weaken the schema guard, migration/recovery protections, regression tests, or pinned Skill Workflow validators.
 
 Known blockers:
-- The Owner database is reported to be schema 16, but no copy was accessed or independently verified; this P0 source must reject it safely.
-- Corrected P0 source passed local regression and governance checks; exact-head Windows GitHub Actions remains pending before Control Room audit.
+- The Owner database is reported to be schema 16, but its contents and compatibility have not been independently verified.
+- P0B remains IN_PROGRESS until the exact candidate's local and hosted evidence is independently reviewed by Control Room; actual Owner database compatibility remains NOT_PROVEN.
 
 ## Proven vs not proven
 
 ### Proven
 
-- Current P0 source baseline is maxqstudio/max-trading-agent main 858dcb205fa2fb734fd5a68b8a4970a29c553897, tree 8325433e9f23822967251037fff149fc6057113a; this tree matches previously accepted main 203f6ab3dc618e3edd247841aa25e1fa0951a19a and its Windows CI run 37964999480 completed successfully.
+- P0A was accepted and merged; actual origin/main at P0B entry is 8ba001bba31d7c74e2d1d1aa03d6c79fb0f9576a, tree 597dbd569a9c9c99feae5fea2e2b2a2ff8fa3e46. The prior local P0 baseline 858dcb205fa2fb734fd5a68b8a4970a29c553897 is an ancestor and must not replace this newer accepted main.
 - Current Skill_Workflow/main was fetched and verified at 964481ed1609f87904ba9e08890bffc0a10c3fd4; its exact governance-tool delta was inspected and the applicable tools are vendored byte-identically, with no local validator patch.
 - Prior Optimizer hardening evidence below is historical accepted evidence. The current P0 sequence extends the existing Strategy reset/recovery flow with read-only schema preflight and fail-closed newer/unknown-schema states.
 - Optimizer draft, launch/recovery identity, atomic evidence, read-model, frontend request lifecycle, and visible action feedback are under the authorized source-hardening scope.
@@ -291,12 +291,15 @@ Known blockers:
 - Worker identity remains an accepted Optimizer capability; this P0 task does not modify worker behavior and performs no Owner runtime or MT5 process operation.
 - Read-only DB inspection found job 20261003_012101_e65a942d status FAILED, active=0, round phase REPORT_READY, no candidate rows; offline replay parsed 7,115 report rows and 3,239 unique eligible candidates without writing to SQLite or launching MT5.
 - Local source candidate deduplicates only semantically exact candidate identities before transactional SQLite projection persistence and collapses repeated sidecar vectors only when every semantic metric agrees; this remains historical accepted Optimizer behavior.
-- P0 local validation: focused schema/reset regression passed 70 tests; full backend passed 522 tests with zero skips/failures; frontend passed 61 tests across 9 files, lint/build/npm dependency tree passed, pip check passed, all 8 DURING/CURRENT sequence sessions passed at source digest d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d, and canonical Scientist knowledge was rebuilt and verified by the full suite. All database fixtures were synthetic temporary SQLite files.
+- P0A local source/test evidence is historical and remains recorded in the prior acceptance data; P0A merge is the P0B parent authority. P0B will use synthetic temporary SQLite fixtures only.
+- Git history establishes that ONNX-00 and ONNX-01 did not change schema; ONNX-02 changed schema 15 to 16 by adding three ONNX data tables, two indexes and six immutability triggers. The historical schema-16 migration also invoked Research purge logic; P0B must not repeat that path.
+- P0B keeps CURRENT_SCHEMA_VERSION=15 and recognizes only the exact historical schema-15 core plus schema-16 ONNX archive extension; schema_version remains 16 and the historical Research purge is not replayed.
+- Focused schema-compatibility and cutover suite passed 74 tests with 0 failures, including populated synthetic preservation, fail-closed unknown layouts/future versions/sidecars, idempotent startup and cutover recovery. The source database is unchanged across staged-copy tests.
 
 ### Not proven
 
 - The Owner database schema-16 contents and compatibility with current MTA are NOT_PROVEN; the Owner database was not accessed.
-- P0B forward-compatible migration, data preservation, rollback, and isolated cold-start acceptance are NOT_EXECUTED; this phase records only a plan.
+- P0B implementation and synthetic evidence are not a Control Room acceptance; the phase stays IN_PROGRESS until exact-candidate local and hosted evidence is reviewed.
 - Owner runtime acceptance, real MT5/Optimizer runs, scientific training, ONNX, and Champion mutation remain NOT_PROVEN / NOT_STARTED.
 
 ## Important limitations
