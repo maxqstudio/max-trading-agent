@@ -52,7 +52,7 @@ def _error(exc: Exception) -> HTTPException:
     if isinstance(exc, FileNotFoundError):
         return HTTPException(status_code=404, detail=str(exc) or "Artifact not found")
     message = str(exc)
-    conflict = any(
+    conflict = getattr(exc, "status", None) == "INCOMPATIBLE_NEWER_SCHEMA" or any(
         token in message
         for token in ("BLOCKED", "IN_USE", "ACTIVE", "PROTECTED", "REPARSE", "ESCAPE")
     )

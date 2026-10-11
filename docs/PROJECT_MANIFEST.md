@@ -12,8 +12,8 @@ Governance profile: strict
 Repository: maxqstudio/max-trading-agent
 Active branch: codex/p0-database-safety
 Current authoritative SHA: external final acceptance evidence
-Last accepted SHA: 858dcb205fa2fb734fd5a7b8a4970a29c553897
-Current source digest: 6bd8617b372ea47cd49e8dc18a0b3b3505f38604eb6bc68f1d25c6453af42c36
+Last accepted SHA: 858dcb205fa2fb734fd5a68b8a4970a29c553897
+Current source digest: d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.

@@ -238,6 +238,14 @@ def database_status(path: Path = DATABASE_PATH) -> dict[str, Any]:
     if not path.is_file():
         return {"status": "FAIL", "reason": "DATABASE_FILE_MISSING"}
     try:
+        # Status reads are still an application entrypoint: never open the
+        # database through the normal connection unless this build supports its
+        # persisted schema. In particular, a newer database must not look READY.
+        assert_database_schema_compatible(path, allow_missing=False)
+    except DatabaseSchemaGuardError as exc:
+        return exc.diagnostic()
+
+    try:
         with connect(path) as conn:
             schema = conn.execute(
                 "SELECT value FROM schema_meta WHERE key='schema_version'"

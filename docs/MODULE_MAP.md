@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 6bd8617b372ea47cd49e8dc18a0b3b3505f38604eb6bc68f1d25c6453af42c36
+Source digest: d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -26,7 +26,7 @@ Generated/refreshed: current compiler run
 | backend/max_backend/champion_bundle.py | Python | 350 | backend/max_backend | NO |
 | backend/max_backend/champion_store.py | Python | 771 | backend/max_backend | NO |
 | backend/max_backend/config.py | Python | 30 | backend/max_backend | NO |
-| backend/max_backend/db.py | Python | 275 | backend/max_backend | NO |
+| backend/max_backend/db.py | Python | 283 | backend/max_backend | NO |
 | backend/max_backend/ea.py | Python | 46 | backend/max_backend | NO |
 | backend/max_backend/main.py | Python | 243 | backend/max_backend | NO |
 | backend/max_backend/mt5.py | Python | 104 | backend/max_backend | NO |
@@ -51,11 +51,11 @@ Generated/refreshed: current compiler run
 | backend/max_backend/scientist_knowledge.py | Python | 168 | backend/max_backend | NO |
 | backend/max_backend/scientist_provider.py | Python | 993 | backend/max_backend | NO |
 | backend/max_backend/scientist_store.py | Python | 596 | backend/max_backend | NO |
-| backend/max_backend/strategy_reset.py | Python | 507 | backend/max_backend | NO |
+| backend/max_backend/strategy_reset.py | Python | 551 | backend/max_backend | NO |
 | backend/max_backend/workflow_contract.py | Python | 45 | backend/max_backend | NO |
 | backend/max_backend/workflow_store.py | Python | 596 | backend/max_backend | NO |
 | backend/tests/conftest.py | Python | 17 | backend/tests | YES |
-| backend/tests/test_m00_foundation.py | Python | 326 | backend/tests | YES |
+| backend/tests/test_m00_foundation.py | Python | 325 | backend/tests | YES |
 | backend/tests/test_m01_fail_closed.py | Python | 446 | backend/tests | YES |
 | backend/tests/test_m01_jobs.py | Python | 126 | backend/tests | YES |
 | backend/tests/test_m01_lifecycle.py | Python | 193 | backend/tests | YES |
@@ -86,7 +86,7 @@ Generated/refreshed: current compiler run
 | backend/tests/test_optimizer_runtime_durability.py | Python | 83 | backend/tests | YES |
 | backend/tests/test_optimizer_worker_identity.py | Python | 361 | backend/tests | YES |
 | backend/tests/test_retired_subsystem_migration.py | Python | 98 | backend/tests | YES |
-| backend/tests/test_schema_compatibility_guard.py | Python | 472 | backend/tests | YES |
+| backend/tests/test_schema_compatibility_guard.py | Python | 856 | backend/tests | YES |
 | backend/tests/test_strategy_workspace_reset.py | Python | 314 | backend/tests | YES |
 | frontend/src/ActionControls.test.tsx | TypeScript/React | 47 | frontend/src | YES |
 | frontend/src/ActionControls.tsx | TypeScript/React | 86 | frontend/src | NO |

@@ -1,6 +1,6 @@
 %% GENERATED FILE - DO NOT EDIT
-%% SOURCE_DIGEST: 6bd8617b372ea47cd49e8dc18a0b3b3505f38604eb6bc68f1d25c6453af42c36
-%% OBSERVED_HEAD: 858dcb205fa2fb734fd5a68b8a4970a29c553897
+%% SOURCE_DIGEST: d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d
+%% OBSERVED_HEAD: 805acae1256973a5fd3b3caee79eee5c7837ff2b
 %% GENERATED_BY: generate_sequence_actual.py
 sequenceDiagram
     participant HTTP__action_0 as HTTP /action
@@ -311,6 +311,7 @@ sequenceDiagram
     backend_max_backend_scientist_store_py__migrate_m05_101->>backend_max_backend_db_py__connect_88: connect [STATIC]
     backend_max_backend_scientist_store_py__purge_chat_102->>backend_max_backend_db_py__connect_88: connect [STATIC]
     backend_max_backend_scientist_store_py__purge_chat_102->>backend_max_backend_scientist_store_py__migrate_m05_101: migrate_m05 [STATIC]
+    backend_max_backend_strategy_reset_py___connect_104->>backend_max_backend_db_py__assert_database_schema_compatible_87: assert_database_schema_compatible [STATIC]
     backend_max_backend_strategy_reset_py___connect_104->>backend_max_backend_db_py__connect_88: sqlite3.connect [STATIC]
     backend_max_backend_strategy_reset_py___make_database_backup_108->>backend_max_backend_db_py__connect_88: sqlite3.connect [STATIC]
     backend_max_backend_strategy_reset_py___make_database_backup_108->>backend_max_backend_optimizer_worker_identity_py__WorkerIdentityServer_close_96: target.close [STATIC]
@@ -319,6 +320,7 @@ sequenceDiagram
     backend_max_backend_strategy_reset_py___owned_paths_109->>backend_max_backend_mt5_py__detect_mt5_93: detect_mt5 [STATIC]
     backend_max_backend_strategy_reset_py___owned_paths_109->>backend_max_backend_path_safety_py__file_size_tree_99: file_size_tree [STATIC]
     backend_max_backend_strategy_reset_py___owned_paths_109->>backend_max_backend_strategy_reset_py___runtime_paths_111: _runtime_paths [STATIC]
+    backend_max_backend_strategy_reset_py___read_counts_110->>backend_max_backend_db_py__assert_database_schema_compatible_87: assert_database_schema_compatible [STATIC]
     backend_max_backend_strategy_reset_py___read_counts_110->>backend_max_backend_path_safety_py__assert_owned_path_98: assert_owned_path [STATIC]
     backend_max_backend_strategy_reset_py___read_counts_110->>backend_max_backend_strategy_reset_py__StrategyResetError_103: StrategyResetError [STATIC]
     backend_max_backend_strategy_reset_py___read_counts_110->>backend_max_backend_strategy_reset_py___connect_104: _connect [STATIC]

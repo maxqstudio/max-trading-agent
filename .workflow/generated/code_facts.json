@@ -143,7 +143,7 @@
       "file": "backend/max_backend/db.py",
       "is_test": false,
       "language": "Python",
-      "lines": 275
+      "lines": 283
     },
     {
       "directory": "backend/max_backend",
@@ -318,7 +318,7 @@
       "file": "backend/max_backend/strategy_reset.py",
       "is_test": false,
       "language": "Python",
-      "lines": 507
+      "lines": 551
     },
     {
       "directory": "backend/max_backend",
@@ -346,7 +346,7 @@
       "file": "backend/tests/test_m00_foundation.py",
       "is_test": true,
       "language": "Python",
-      "lines": 326
+      "lines": 325
     },
     {
       "directory": "backend/tests",
@@ -563,7 +563,7 @@
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "is_test": true,
       "language": "Python",
-      "lines": 472
+      "lines": 856
     },
     {
       "directory": "backend/tests",
@@ -891,6 +891,10 @@
     {
       "caller": "backend/max_backend/artifact_api.py::_error",
       "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/artifact_api.py::_error",
+      "target_token": "getattr"
     },
     {
       "caller": "backend/max_backend/artifact_api.py::_error",
@@ -13463,6 +13467,14 @@
     {
       "caller": "backend/max_backend/db.py::database_status",
       "target_token": "path.is_file"
+    },
+    {
+      "caller": "backend/max_backend/db.py::database_status",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/db.py::database_status",
+      "target_token": "exc.diagnostic"
     },
     {
       "caller": "backend/max_backend/db.py::database_status",
@@ -32846,6 +32858,10 @@
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::_connect",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/strategy_reset.py::_connect",
       "target_token": "sqlite3.connect"
     },
     {
@@ -33023,6 +33039,10 @@
     {
       "caller": "backend/max_backend/strategy_reset.py::_read_counts",
       "target_token": "StrategyResetError"
+    },
+    {
+      "caller": "backend/max_backend/strategy_reset.py::_read_counts",
+      "target_token": "assert_database_schema_compatible"
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::_read_counts",
@@ -33419,6 +33439,14 @@
     {
       "caller": "backend/max_backend/strategy_reset.py::database_recovery_status",
       "target_token": "path.is_file"
+    },
+    {
+      "caller": "backend/max_backend/strategy_reset.py::database_recovery_status",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/strategy_reset.py::database_recovery_status",
+      "target_token": "exc.diagnostic"
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::database_recovery_status",
@@ -49325,6 +49353,74 @@
       "target_token": "main._run_startup_migrations"
     },
     {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "baseline_root.mkdir"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "shutil.copy2"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "shutil.copy2"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "_run_startup"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "sqlite3.connect"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "conn.executescript"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "target_token": "str"
+    },
+    {
       "caller": "backend/tests/test_schema_compatibility_guard.py::_load_epoch_reset_script",
       "target_token": "Path"
     },
@@ -49803,6 +49899,370 @@
     {
       "caller": "backend/tests/test_schema_compatibility_guard.py::test_launcher_reports_schema_guard_instead_of_generic_backend_timeout",
       "target_token": "launcher.read_text"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_database_status_rejects_newer_schema_before_rw_open_without_mutation",
+      "target_token": "_create_rich_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_database_status_rejects_newer_schema_before_rw_open_without_mutation",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_database_status_rejects_newer_schema_before_rw_open_without_mutation.unexpected_rw_open",
+      "target_token": "pytest.fail"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_database_status_rejects_newer_schema_before_rw_open_without_mutation",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_database_status_rejects_newer_schema_before_rw_open_without_mutation",
+      "target_token": "database_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_database_status_rejects_newer_schema_before_rw_open_without_mutation",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_database_recovery_status_separates_schema_from_physical_integrity",
+      "target_token": "_create_rich_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_database_recovery_status_separates_schema_from_physical_integrity",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_database_recovery_status_separates_schema_from_physical_integrity.unexpected_rw_open",
+      "target_token": "pytest.fail"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_database_recovery_status_separates_schema_from_physical_integrity",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_database_recovery_status_separates_schema_from_physical_integrity",
+      "target_token": "database_recovery_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_database_recovery_status_separates_schema_from_physical_integrity",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_guards_before_readwrite_access",
+      "target_token": "_create_rich_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_guards_before_readwrite_access",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_guards_before_readwrite_access.unexpected_rw_open",
+      "target_token": "pytest.fail"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_guards_before_readwrite_access",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_guards_before_readwrite_access",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_guards_before_readwrite_access",
+      "target_token": "strategy_reset_preflight"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_guards_before_readwrite_access",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open",
+      "target_token": "_create_rich_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open.track_connection",
+      "target_token": "bool"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open.track_connection",
+      "target_token": "kwargs.get"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open.track_connection",
+      "target_token": "calls.append"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open.track_connection",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open.track_connection",
+      "target_token": "pytest.fail"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open.track_connection",
+      "target_token": "real_connect"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open",
+      "target_token": "strategy_reset._connect"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open",
+      "target_token": "all"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_all_three_direct_entrypoints_preserve_supported_schema_15_semantics",
+      "target_token": "_create_rich_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_all_three_direct_entrypoints_preserve_supported_schema_15_semantics",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_all_three_direct_entrypoints_preserve_supported_schema_15_semantics",
+      "target_token": "database_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_all_three_direct_entrypoints_preserve_supported_schema_15_semantics",
+      "target_token": "database_recovery_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_all_three_direct_entrypoints_preserve_supported_schema_15_semantics",
+      "target_token": "strategy_reset_preflight"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_all_three_direct_entrypoints_preserve_supported_schema_15_semantics",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_all_three_direct_entrypoints_preserve_supported_schema_15_semantics",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_status_and_preflight_calls_fail_closed_on_invalid_schema_metadata",
+      "target_token": "_create_rich_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_status_and_preflight_calls_fail_closed_on_invalid_schema_metadata",
+      "target_token": "sqlite3.connect"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_status_and_preflight_calls_fail_closed_on_invalid_schema_metadata",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_status_and_preflight_calls_fail_closed_on_invalid_schema_metadata",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_status_and_preflight_calls_fail_closed_on_invalid_schema_metadata",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_status_and_preflight_calls_fail_closed_on_invalid_schema_metadata",
+      "target_token": "database_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_status_and_preflight_calls_fail_closed_on_invalid_schema_metadata",
+      "target_token": "database_recovery_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_status_and_preflight_calls_fail_closed_on_invalid_schema_metadata",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_status_and_preflight_calls_fail_closed_on_invalid_schema_metadata",
+      "target_token": "strategy_reset_preflight"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_status_and_preflight_calls_fail_closed_on_invalid_schema_metadata",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_refuse_wal_sidecars_without_mutation",
+      "target_token": "_create_rich_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_refuse_wal_sidecars_without_mutation",
+      "target_token": "sqlite3.connect"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_refuse_wal_sidecars_without_mutation",
+      "target_token": "writer.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_refuse_wal_sidecars_without_mutation",
+      "target_token": "writer.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_refuse_wal_sidecars_without_mutation",
+      "target_token": "writer.commit"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_refuse_wal_sidecars_without_mutation",
+      "target_token": "_file_hashes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_refuse_wal_sidecars_without_mutation",
+      "target_token": "database_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_refuse_wal_sidecars_without_mutation",
+      "target_token": "database_recovery_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_refuse_wal_sidecars_without_mutation",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_refuse_wal_sidecars_without_mutation",
+      "target_token": "strategy_reset_preflight"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_refuse_wal_sidecars_without_mutation",
+      "target_token": "_file_hashes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_refuse_wal_sidecars_without_mutation",
+      "target_token": "writer.close"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_do_not_replay_pending_rollback_journal",
+      "target_token": "_create_rich_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_do_not_replay_pending_rollback_journal",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_do_not_replay_pending_rollback_journal",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_do_not_replay_pending_rollback_journal",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_do_not_replay_pending_rollback_journal",
+      "target_token": "journal.write_bytes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_do_not_replay_pending_rollback_journal",
+      "target_token": "_file_hashes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_do_not_replay_pending_rollback_journal",
+      "target_token": "database_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_do_not_replay_pending_rollback_journal",
+      "target_token": "database_recovery_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_do_not_replay_pending_rollback_journal",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_do_not_replay_pending_rollback_journal",
+      "target_token": "strategy_reset_preflight"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_do_not_replay_pending_rollback_journal",
+      "target_token": "_file_hashes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_repeated_direct_schema_blocks_are_idempotent_and_non_mutating",
+      "target_token": "_create_rich_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_repeated_direct_schema_blocks_are_idempotent_and_non_mutating",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_repeated_direct_schema_blocks_are_idempotent_and_non_mutating",
+      "target_token": "range"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_repeated_direct_schema_blocks_are_idempotent_and_non_mutating",
+      "target_token": "database_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_repeated_direct_schema_blocks_are_idempotent_and_non_mutating",
+      "target_token": "database_recovery_status"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_repeated_direct_schema_blocks_are_idempotent_and_non_mutating",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_repeated_direct_schema_blocks_are_idempotent_and_non_mutating",
+      "target_token": "strategy_reset_preflight"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_repeated_direct_schema_blocks_are_idempotent_and_non_mutating",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_api_returns_conflict_for_newer_schema",
+      "target_token": "_create_rich_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_api_returns_conflict_for_newer_schema",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_api_returns_conflict_for_newer_schema",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_api_returns_conflict_for_newer_schema",
+      "target_token": "strategy_reset_preflight"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_api_returns_conflict_for_newer_schema",
+      "target_token": "FastAPI"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_api_returns_conflict_for_newer_schema",
+      "target_token": "api.include_router"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_api_returns_conflict_for_newer_schema",
+      "target_token": "TestClient"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_api_returns_conflict_for_newer_schema",
+      "target_token": "client.get"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_api_returns_conflict_for_newer_schema",
+      "target_token": "response.json"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_api_returns_conflict_for_newer_schema",
+      "target_token": "response.json"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_api_returns_conflict_for_newer_schema",
+      "target_token": "_db_snapshot"
     },
     {
       "caller": "backend/tests/test_strategy_workspace_reset.py::_current_database",
@@ -64143,7 +64603,7 @@
     {
       "file": "backend/max_backend/db.py",
       "kind": "function",
-      "line_end": 275,
+      "line_end": 283,
       "line_start": 237,
       "locator": "backend/max_backend/db.py::database_status",
       "symbol": "database_status"
@@ -67359,7 +67819,7 @@
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 102,
+      "line_end": 105,
       "line_start": 97,
       "locator": "backend/max_backend/strategy_reset.py::_connect",
       "symbol": "_connect"
@@ -67367,96 +67827,96 @@
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 111,
-      "line_start": 105,
+      "line_end": 114,
+      "line_start": 108,
       "locator": "backend/max_backend/strategy_reset.py::_tables",
       "symbol": "_tables"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 116,
-      "line_start": 114,
+      "line_end": 119,
+      "line_start": 117,
       "locator": "backend/max_backend/strategy_reset.py::_count",
       "symbol": "_count"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 143,
-      "line_start": 119,
+      "line_end": 146,
+      "line_start": 122,
       "locator": "backend/max_backend/strategy_reset.py::_runtime_paths",
       "symbol": "_runtime_paths"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 175,
-      "line_start": 146,
+      "line_end": 178,
+      "line_start": 149,
       "locator": "backend/max_backend/strategy_reset.py::_owned_paths",
       "symbol": "_owned_paths"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 287,
-      "line_start": 178,
+      "line_end": 293,
+      "line_start": 181,
       "locator": "backend/max_backend/strategy_reset.py::_read_counts",
       "symbol": "_read_counts"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 296,
-      "line_start": 290,
+      "line_end": 302,
+      "line_start": 296,
       "locator": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
       "symbol": "strategy_reset_preflight"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 322,
-      "line_start": 299,
+      "line_end": 328,
+      "line_start": 305,
       "locator": "backend/max_backend/strategy_reset.py::_make_database_backup",
       "symbol": "_make_database_backup"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 345,
-      "line_start": 325,
+      "line_end": 351,
+      "line_start": 331,
       "locator": "backend/max_backend/strategy_reset.py::_delete_rows",
       "symbol": "_delete_rows"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 421,
-      "line_start": 348,
+      "line_end": 427,
+      "line_start": 354,
       "locator": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
       "symbol": "reset_strategy_workspace"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 434,
-      "line_start": 424,
+      "line_end": 478,
+      "line_start": 430,
       "locator": "backend/max_backend/strategy_reset.py::database_recovery_status",
       "symbol": "database_recovery_status"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 457,
-      "line_start": 437,
+      "line_end": 501,
+      "line_start": 481,
       "locator": "backend/max_backend/strategy_reset.py::_bootstrap_database",
       "symbol": "_bootstrap_database"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 507,
-      "line_start": 460,
+      "line_end": 551,
+      "line_start": 504,
       "locator": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database",
       "symbol": "backup_and_reset_corrupt_database"
     },
@@ -67647,7 +68107,7 @@
     {
       "file": "backend/tests/test_m00_foundation.py",
       "kind": "function",
-      "line_end": 148,
+      "line_end": 147,
       "line_start": 129,
       "locator": "backend/tests/test_m00_foundation.py::test_foundation_status_rejects_schema_below_minimum_or_missing",
       "symbol": "test_foundation_status_rejects_schema_below_minimum_or_missing"
@@ -67655,80 +68115,80 @@
     {
       "file": "backend/tests/test_m00_foundation.py",
       "kind": "function",
-      "line_end": 159,
-      "line_start": 151,
+      "line_end": 158,
+      "line_start": 150,
       "locator": "backend/tests/test_m00_foundation.py::test_foundation_status_rejects_missing_baseline_authority",
       "symbol": "test_foundation_status_rejects_missing_baseline_authority"
     },
     {
       "file": "backend/tests/test_m00_foundation.py",
       "kind": "function",
-      "line_end": 181,
-      "line_start": 162,
+      "line_end": 180,
+      "line_start": 161,
       "locator": "backend/tests/test_m00_foundation.py::test_auto_detected_valid_terminal_is_ready",
       "symbol": "test_auto_detected_valid_terminal_is_ready"
     },
     {
       "file": "backend/tests/test_m00_foundation.py",
       "kind": "function",
-      "line_end": 199,
-      "line_start": 184,
+      "line_end": 198,
+      "line_start": 183,
       "locator": "backend/tests/test_m00_foundation.py::test_explicit_valid_terminal_is_authoritative",
       "symbol": "test_explicit_valid_terminal_is_authoritative"
     },
     {
       "file": "backend/tests/test_m00_foundation.py",
       "kind": "function",
-      "line_end": 213,
-      "line_start": 202,
+      "line_end": 212,
+      "line_start": 201,
       "locator": "backend/tests/test_m00_foundation.py::test_explicit_missing_terminal_fails_closed",
       "symbol": "test_explicit_missing_terminal_fails_closed"
     },
     {
       "file": "backend/tests/test_m00_foundation.py",
       "kind": "function",
-      "line_end": 227,
-      "line_start": 216,
+      "line_end": 226,
+      "line_start": 215,
       "locator": "backend/tests/test_m00_foundation.py::test_explicit_wrong_executable_fails_closed",
       "symbol": "test_explicit_wrong_executable_fails_closed"
     },
     {
       "file": "backend/tests/test_m00_foundation.py",
       "kind": "function",
-      "line_end": 240,
-      "line_start": 230,
+      "line_end": 239,
+      "line_start": 229,
       "locator": "backend/tests/test_m00_foundation.py::test_metaeditor_missing_fails_closed",
       "symbol": "test_metaeditor_missing_fails_closed"
     },
     {
       "file": "backend/tests/test_m00_foundation.py",
       "kind": "function",
-      "line_end": 256,
-      "line_start": 243,
+      "line_end": 255,
+      "line_start": 242,
       "locator": "backend/tests/test_m00_foundation.py::test_data_root_missing_fails_closed",
       "symbol": "test_data_root_missing_fails_closed"
     },
     {
       "file": "backend/tests/test_m00_foundation.py",
       "kind": "function",
-      "line_end": 273,
-      "line_start": 259,
+      "line_end": 272,
+      "line_start": 258,
       "locator": "backend/tests/test_m00_foundation.py::test_data_root_ambiguous_fails_closed",
       "symbol": "test_data_root_ambiguous_fails_closed"
     },
     {
       "file": "backend/tests/test_m00_foundation.py",
       "kind": "function",
-      "line_end": 326,
-      "line_start": 276,
+      "line_end": 325,
+      "line_start": 275,
       "locator": "backend/tests/test_m00_foundation.py::test_health_and_overview_contract",
       "symbol": "test_health_and_overview_contract"
     },
     {
       "file": "backend/tests/test_m00_foundation.py",
       "kind": "async_method",
-      "line_end": 324,
-      "line_start": 305,
+      "line_end": 323,
+      "line_start": 304,
       "locator": "backend/tests/test_m00_foundation.py::test_health_and_overview_contract.exercise_api",
       "symbol": "test_health_and_overview_contract.exercise_api"
     },
@@ -72271,186 +72731,306 @@
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 98,
-      "line_start": 41,
+      "line_end": 103,
+      "line_start": 46,
       "locator": "backend/tests/test_schema_compatibility_guard.py::_create_schema_fixture",
       "symbol": "_create_schema_fixture"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 107,
-      "line_start": 101,
+      "line_end": 112,
+      "line_start": 106,
       "locator": "backend/tests/test_schema_compatibility_guard.py::_file_hashes",
       "symbol": "_file_hashes"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 148,
-      "line_start": 110,
+      "line_end": 153,
+      "line_start": 115,
       "locator": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
       "symbol": "_db_snapshot"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 156,
-      "line_start": 151,
+      "line_end": 161,
+      "line_start": 156,
       "locator": "backend/tests/test_schema_compatibility_guard.py::_set_schema_version",
       "symbol": "_set_schema_version"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 160,
-      "line_start": 159,
+      "line_end": 165,
+      "line_start": 164,
       "locator": "backend/tests/test_schema_compatibility_guard.py::_run_startup",
       "symbol": "_run_startup"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 169,
-      "line_start": 163,
+      "line_end": 279,
+      "line_start": 168,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::_create_rich_schema_fixture",
+      "symbol": "_create_rich_schema_fixture"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 288,
+      "line_start": 282,
       "locator": "backend/tests/test_schema_compatibility_guard.py::_load_epoch_reset_script",
       "symbol": "_load_epoch_reset_script"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 181,
-      "line_start": 172,
+      "line_end": 300,
+      "line_start": 291,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_fresh_install_and_supported_schema_startup_pass",
       "symbol": "test_fresh_install_and_supported_schema_startup_pass"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 200,
-      "line_start": 189,
+      "line_end": 319,
+      "line_start": 308,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_16_without_mutation",
       "symbol": "test_every_direct_migration_entrypoint_blocks_schema_16_without_mutation"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 248,
-      "line_start": 235,
+      "line_end": 367,
+      "line_start": 354,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_16",
       "symbol": "test_direct_startup_recovery_and_reset_entrypoints_block_schema_16"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 279,
-      "line_start": 252,
+      "line_end": 398,
+      "line_start": 371,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
       "symbol": "test_application_startup_exposes_schema_block_and_never_offers_reset"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 298,
-      "line_start": 287,
+      "line_end": 417,
+      "line_start": 406,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_existing_database_with_invalid_schema_metadata_fails_closed",
       "symbol": "test_existing_database_with_invalid_schema_metadata_fails_closed"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 325,
-      "line_start": 301,
+      "line_end": 444,
+      "line_start": 420,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
       "symbol": "test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "method",
-      "line_end": 313,
-      "line_start": 312,
+      "line_end": 432,
+      "line_start": 431,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state.migration_must_not_start",
       "symbol": "test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state.migration_must_not_start"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 354,
-      "line_start": 328,
+      "line_end": 473,
+      "line_start": 447,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration",
       "symbol": "test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "class",
-      "line_end": 337,
-      "line_start": 336,
+      "line_end": 456,
+      "line_start": 455,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration.SimulatedStartupCrash",
       "symbol": "test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration.SimulatedStartupCrash"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "method",
-      "line_end": 341,
-      "line_start": 339,
+      "line_end": 460,
+      "line_start": 458,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration.crash_after_preflight",
       "symbol": "test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration.crash_after_preflight"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 383,
-      "line_start": 357,
+      "line_end": 502,
+      "line_start": 476,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_invalid_schema_metadata_startup_is_diagnostic_only",
       "symbol": "test_invalid_schema_metadata_startup_is_diagnostic_only"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 407,
-      "line_start": 386,
+      "line_end": 526,
+      "line_start": 505,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_read_only_guard_observes_committed_wal_schema_without_mutation",
       "symbol": "test_read_only_guard_observes_committed_wal_schema_without_mutation"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 423,
-      "line_start": 410,
+      "line_end": 542,
+      "line_start": 529,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_hot_rollback_journal_is_not_replayed_during_schema_preflight",
       "symbol": "test_hot_rollback_journal_is_not_replayed_during_schema_preflight"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 436,
-      "line_start": 426,
+      "line_end": 555,
+      "line_start": 545,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_initialize_database_rejects_existing_newer_schema_without_side_effects",
       "symbol": "test_initialize_database_rejects_existing_newer_schema_without_side_effects"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 450,
-      "line_start": 439,
+      "line_end": 569,
+      "line_start": 558,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_baseline_registration_rejects_existing_newer_schema_before_baseline_reads",
       "symbol": "test_baseline_registration_rejects_existing_newer_schema_before_baseline_reads"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 462,
-      "line_start": 453,
+      "line_end": 581,
+      "line_start": 572,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_missing_database_is_allowed_only_for_initialization",
       "symbol": "test_missing_database_is_allowed_only_for_initialization"
     },
     {
       "file": "backend/tests/test_schema_compatibility_guard.py",
       "kind": "function",
-      "line_end": 472,
-      "line_start": 465,
+      "line_end": 591,
+      "line_start": 584,
       "locator": "backend/tests/test_schema_compatibility_guard.py::test_launcher_reports_schema_guard_instead_of_generic_backend_timeout",
       "symbol": "test_launcher_reports_schema_guard_instead_of_generic_backend_timeout"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 615,
+      "line_start": 595,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_database_status_rejects_newer_schema_before_rw_open_without_mutation",
+      "symbol": "test_database_status_rejects_newer_schema_before_rw_open_without_mutation"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "method",
+      "line_end": 604,
+      "line_start": 603,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_database_status_rejects_newer_schema_before_rw_open_without_mutation.unexpected_rw_open",
+      "symbol": "test_database_status_rejects_newer_schema_before_rw_open_without_mutation.unexpected_rw_open"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 642,
+      "line_start": 619,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_database_recovery_status_separates_schema_from_physical_integrity",
+      "symbol": "test_database_recovery_status_separates_schema_from_physical_integrity"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "method",
+      "line_end": 628,
+      "line_start": 627,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_database_recovery_status_separates_schema_from_physical_integrity.unexpected_rw_open",
+      "symbol": "test_database_recovery_status_separates_schema_from_physical_integrity.unexpected_rw_open"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 665,
+      "line_start": 646,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_guards_before_readwrite_access",
+      "symbol": "test_strategy_reset_preflight_guards_before_readwrite_access"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "method",
+      "line_end": 655,
+      "line_start": 654,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_guards_before_readwrite_access.unexpected_rw_open",
+      "symbol": "test_strategy_reset_preflight_guards_before_readwrite_access.unexpected_rw_open"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 691,
+      "line_start": 668,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open",
+      "symbol": "test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "method",
+      "line_end": 683,
+      "line_start": 678,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open.track_connection",
+      "symbol": "test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open.track_connection"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 720,
+      "line_start": 694,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_all_three_direct_entrypoints_preserve_supported_schema_15_semantics",
+      "symbol": "test_all_three_direct_entrypoints_preserve_supported_schema_15_semantics"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 751,
+      "line_start": 724,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_direct_status_and_preflight_calls_fail_closed_on_invalid_schema_metadata",
+      "symbol": "test_direct_status_and_preflight_calls_fail_closed_on_invalid_schema_metadata"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 785,
+      "line_start": 754,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_refuse_wal_sidecars_without_mutation",
+      "symbol": "test_direct_entrypoints_refuse_wal_sidecars_without_mutation"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 811,
+      "line_start": 788,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_direct_entrypoints_do_not_replay_pending_rollback_journal",
+      "symbol": "test_direct_entrypoints_do_not_replay_pending_rollback_journal"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 832,
+      "line_start": 815,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_repeated_direct_schema_blocks_are_idempotent_and_non_mutating",
+      "symbol": "test_repeated_direct_schema_blocks_are_idempotent_and_non_mutating"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 856,
+      "line_start": 835,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_strategy_reset_preflight_api_returns_conflict_for_newer_schema",
+      "symbol": "test_strategy_reset_preflight_api_returns_conflict_for_newer_schema"
     },
     {
       "file": "backend/tests/test_strategy_workspace_reset.py",
@@ -73982,7 +74562,7 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "6bd8617b372ea47cd49e8dc18a0b3b3505f38604eb6bc68f1d25c6453af42c36",
+  "source_digest": "d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d",
   "source_summary": {
     "files": 122,
     "languages": {
@@ -73991,7 +74571,7 @@
       "TypeScript": 3,
       "TypeScript/React": 19
     },
-    "lines": 57827,
+    "lines": 58262,
     "test_files": 43
   },
   "tests": [

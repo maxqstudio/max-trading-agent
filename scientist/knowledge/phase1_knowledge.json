@@ -316,7 +316,7 @@
     },
     {
       "path": "backend/max_backend/artifact_api.py",
-      "sha256": "7586744ebdcd6f4f23b495d253ff8b2d35b71c62bb803093bf37c0af3c41f68e"
+      "sha256": "0d96d6d3156ce71bc4e2d19f02290c57420f01f96c15b99c1f858dfa59763220"
     },
     {
       "path": "backend/max_backend/champion_store.py",

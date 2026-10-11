@@ -11,7 +11,8 @@
   "flow_id": "FLOW-STRATEGY-RESET-RECOVERY",
   "invariants": [
     "No Owner operational database is read or changed during source tests; tests use synthetic temporary databases.",
-    "Read the exact schema version through a read-only preflight before initialize_database, baseline registration, migrations, reconciliation, or recovery.",
+    "Read the exact schema version through a read-only preflight before initialize_database, baseline registration, migrations, reconciliation, recovery status, or Strategy reset preflight/count access.",
+    "database_status, database_recovery_status, _read_counts, and _connect use the canonical schema guard before any read-write SQLite connection; application-schema compatibility and physical SQLite integrity are reported as separate facts.",
     "A schema newer than the application is reported as INCOMPATIBLE_NEWER_SCHEMA and cannot reach automatic recovery or reset.",
     "Unreadable or malformed schema metadata and pending journal/sidecar state fail closed with no database or evidence mutation.",
     "Only owned Strategy-generated state is reset; EA baseline and provider settings are preserved.",
@@ -30,6 +31,7 @@
   "sequence_session": "docs/sequence/sessions/FLOW-STRATEGY-RESET-RECOVERY.json",
   "source_owners": [
     "backend/max_backend/db.py::assert_database_schema_compatible",
+    "backend/max_backend/db.py::database_status",
     "backend/max_backend/db.py::initialize_database",
     "backend/max_backend/db.py::ensure_baseline_registered",
     "backend/max_backend/main.py::_run_startup_migrations",
@@ -37,6 +39,8 @@
     "backend/max_backend/main.py::recovery_status",
     "backend/max_backend/main.py::reset_corrupt_state",
     "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
+    "backend/max_backend/strategy_reset.py::_read_counts",
+    "backend/max_backend/strategy_reset.py::_connect",
     "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
     "backend/max_backend/strategy_reset.py::database_recovery_status",
     "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database",

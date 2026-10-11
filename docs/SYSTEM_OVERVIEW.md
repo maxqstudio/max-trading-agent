@@ -262,7 +262,7 @@ compiler does not infer them from implementation names.
 ## Current project state
 
 Next authorized actions:
-- Finish P0 local governance/security validation, commit and push codex/p0-database-safety, open a new PR, verify exact-head Windows CI, then stop for Control Room audit. Do not merge.
+- Commit and push the repair to existing PR #27 on codex/p0-database-safety, verify exact-head Windows CI, then stop for Control Room audit. Do not merge.
 - Do not execute P0B compatibility work or access the Owner database/PC; seek separate authorization after Control Room audit.
 
 Blocked actions:
@@ -273,7 +273,7 @@ Blocked actions:
 
 Known blockers:
 - The Owner database is reported to be schema 16, but no copy was accessed or independently verified; this P0 source must reject it safely.
-- P0 source changes still require final local governance/security gates and exact-head Windows GitHub Actions before Control Room audit.
+- Corrected P0 source passed local regression and governance checks; exact-head Windows GitHub Actions remains pending before Control Room audit.
 
 ## Proven vs not proven
 
@@ -291,7 +291,7 @@ Known blockers:
 - Worker identity remains an accepted Optimizer capability; this P0 task does not modify worker behavior and performs no Owner runtime or MT5 process operation.
 - Read-only DB inspection found job 20261003_012101_e65a942d status FAILED, active=0, round phase REPORT_READY, no candidate rows; offline replay parsed 7,115 report rows and 3,239 unique eligible candidates without writing to SQLite or launching MT5.
 - Local source candidate deduplicates only semantically exact candidate identities before transactional SQLite projection persistence and collapses repeated sidecar vectors only when every semantic metric agrees; this remains historical accepted Optimizer behavior.
-- P0 local validation: focused schema/launcher/reset regression passed 50 tests; full backend passed 504 tests with zero skips/failures; frontend passed 61 tests across 9 files, lint/build/npm dependency tree passed, pip check passed, and canonical Scientist knowledge was rebuilt and verified by the full suite. All database fixtures were synthetic temporary SQLite files.
+- P0 local validation: focused schema/reset regression passed 70 tests; full backend passed 522 tests with zero skips/failures; frontend passed 61 tests across 9 files, lint/build/npm dependency tree passed, pip check passed, all 8 DURING/CURRENT sequence sessions passed at source digest d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d, and canonical Scientist knowledge was rebuilt and verified by the full suite. All database fixtures were synthetic temporary SQLite files.
 
 ### Not proven
 

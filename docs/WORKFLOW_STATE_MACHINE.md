@@ -405,7 +405,8 @@ Authority: Read-only database schema preflight before any initialization, migrat
 ### Invariants
 
 - No Owner operational database is read or changed during source tests; tests use synthetic temporary databases.
-- Read the exact schema version through a read-only preflight before initialize_database, baseline registration, migrations, reconciliation, or recovery.
+- Read the exact schema version through a read-only preflight before initialize_database, baseline registration, migrations, reconciliation, recovery status, or Strategy reset preflight/count access.
+- database_status, database_recovery_status, _read_counts, and _connect use the canonical schema guard before any read-write SQLite connection; application-schema compatibility and physical SQLite integrity are reported as separate facts.
 - A schema newer than the application is reported as INCOMPATIBLE_NEWER_SCHEMA and cannot reach automatic recovery or reset.
 - Unreadable or malformed schema metadata and pending journal/sidecar state fail closed with no database or evidence mutation.
 - Only owned Strategy-generated state is reset; EA baseline and provider settings are preserved.

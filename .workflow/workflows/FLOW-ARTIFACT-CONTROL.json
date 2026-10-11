@@ -32,6 +32,7 @@
     "backend/max_backend/artifact_api.py::cleanup",
     "backend/max_backend/artifact_api.py::trace",
     "backend/max_backend/artifact_api.py::strategy_workspace_reset_preflight",
+    "backend/max_backend/artifact_api.py::_error",
     "backend/max_backend/artifact_api.py::strategy_workspace_reset",
     "backend/max_backend/artifact_control.py::artifact_page",
     "backend/max_backend/artifact_control.py::artifact_trace",
@@ -55,6 +56,7 @@
   ],
   "tests": [
     "backend/tests/test_m08_strategy_results.py",
+    "backend/tests/test_schema_compatibility_guard.py",
     "backend/tests/test_strategy_workspace_reset.py",
     "frontend/src/ArtifactsPage.test.tsx"
   ],

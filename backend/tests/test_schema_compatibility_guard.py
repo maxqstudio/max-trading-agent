@@ -3,14 +3,16 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import shutil
 import sqlite3
 from pathlib import Path
 from typing import Callable
 
 import pytest
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from max_backend import main
+from max_backend import artifact_api, db as db_module, main, strategy_reset
 from max_backend.challenger_operations import recover_retired_challenger_deployments
 from max_backend.challenger_operations_store import (
     migrate_m06,
@@ -21,6 +23,7 @@ from max_backend.champion_store import migrate_m04
 from max_backend.db import (
     DatabaseSchemaGuardError,
     assert_database_schema_compatible,
+    database_status,
     ensure_baseline_registered,
     initialize_database,
 )
@@ -34,6 +37,8 @@ from max_backend.strategy_reset import (
     STRATEGY_RESET_CONFIRMATION,
     backup_and_reset_corrupt_database,
     reset_strategy_workspace,
+    database_recovery_status,
+    strategy_reset_preflight,
 )
 from max_backend.workflow_store import migrate_current
 
@@ -158,6 +163,120 @@ def _set_schema_version(path: Path, value: str) -> None:
 
 def _run_startup(path: Path) -> None:
     main._run_startup_migrations(path)
+
+
+def _create_rich_schema_fixture(
+    path: Path, root: Path, version: int = CURRENT_SCHEMA_VERSION
+) -> None:
+    project_root = Path(__file__).resolve().parents[2]
+    baseline_root = root / "ea" / "baseline"
+    baseline_root.mkdir(parents=True)
+    shutil.copy2(
+        project_root / "ea" / "baseline" / "Max_MTF.mq5",
+        baseline_root / "Max_MTF.mq5",
+    )
+    shutil.copy2(
+        project_root / "ea" / "baseline" / "manifest.json",
+        baseline_root / "manifest.json",
+    )
+    _run_startup(path)
+
+    with sqlite3.connect(path) as conn:
+        baseline_sha = str(
+            conn.execute("SELECT sha256 FROM ea_baseline WHERE id=1").fetchone()[0]
+        )
+        conn.executescript(
+            """
+            CREATE TABLE onnx_data_snapshots(
+                snapshot_id TEXT PRIMARY KEY, sha256 TEXT NOT NULL, payload BLOB NOT NULL
+            );
+            INSERT INTO onnx_data_snapshots VALUES(
+                'ONNX-SNAPSHOT-PROTECTED','snapshot-sha','sealed snapshot bytes'
+            );
+            CREATE TABLE research_projects(
+                research_id TEXT PRIMARY KEY, status TEXT NOT NULL
+            );
+            CREATE TABLE research_r02_outcomes(
+                outcome_id TEXT PRIMARY KEY,
+                research_id TEXT NOT NULL REFERENCES research_projects(research_id),
+                payload TEXT NOT NULL
+            );
+            CREATE INDEX research_outcome_research_idx
+                ON research_r02_outcomes(research_id);
+            CREATE TRIGGER research_outcome_immutable
+                BEFORE DELETE ON research_r02_outcomes
+                BEGIN SELECT RAISE(ABORT,'RESEARCH_IMMUTABLE'); END;
+            INSERT INTO research_projects VALUES('RESEARCH-PROTECTED','SEALED');
+            INSERT INTO research_r02_outcomes VALUES(
+                'OUTCOME-PROTECTED','RESEARCH-PROTECTED','immutable evidence'
+            );
+            """
+        )
+        conn.execute(
+            """INSERT INTO optimizer_jobs(
+                job_id,status,active,created_utc,updated_utc,max_rounds,
+                request_json,evidence_dir
+            ) VALUES('JOB-PROTECTED','COMPLETED',0,'now','now',1,'{}','artifacts/optimizer/JOB-PROTECTED')"""
+        )
+        conn.execute(
+            """INSERT INTO optimizer_rounds(
+                job_id,round_no,phase,updated_utc,state_json
+            ) VALUES('JOB-PROTECTED',1,'COMPLETED','now','{}')"""
+        )
+        conn.execute(
+            """INSERT INTO strategy_challengers(
+                challenger_id,status,role_origin,source_job_id,source_round,source_pass,
+                created_utc,updated_utc,ea_version,baseline_ea_sha256,bundle_path,
+                params_json,kpi_json,hard_gates_json,source_request_json,winner_json,
+                provenance_json,winning_xml_sha256,winning_sidecar_sha256
+            ) VALUES(
+                'CHALLENGER-PROTECTED','PROMOTED','OPTIMIZER_WINNER','JOB-PROTECTED',1,1,
+                'now','now','2.11',?,'artifacts/challengers/CHALLENGER-PROTECTED',
+                '{}','{}','{}','{}','{}','{}','xml-sha','sidecar-sha'
+            )""",
+            (baseline_sha,),
+        )
+        conn.execute(
+            """INSERT INTO strategy_promotions(
+                promotion_id,challenger_id,new_champion_id,state,created_utc,
+                expected_challenger_manifest_sha256,before_state_json,recovery_path
+            ) VALUES(
+                'PROMOTION-PROTECTED','CHALLENGER-PROTECTED','STRATEGY-PROTECTED',
+                'COMMITTED','now','manifest-sha','{}',
+                'state/promotion_recovery/PROMOTION-PROTECTED'
+            )"""
+        )
+        conn.execute(
+            """INSERT INTO strategy_champions(
+                champion_tenure_id,strategy_id,status,source_challenger_id,
+                source_job_id,source_round,source_pass,params_json,kpi_json,
+                hard_gates_json,champion_ea_sha256,champion_set_sha256,
+                deployed_ea_sha256,deployed_ex5_sha256,tester_set_sha256,
+                promoted_utc,promotion_id,authority_source,artifact_path,
+                evidence_path,deployment_json
+            ) VALUES(
+                'TENURE-PROTECTED','STRATEGY-PROTECTED','CURRENT',
+                'CHALLENGER-PROTECTED','JOB-PROTECTED',1,1,'{}','{}','{}',
+                'ea-sha','set-sha','deployed-ea-sha','ex5-sha','tester-set-sha',
+                'now','PROMOTION-PROTECTED','OWNER_MANUAL_STRATEGY_PROMOTION',
+                'artifacts/strategy_history/TENURE-PROTECTED',
+                'evidence/PROMOTION-PROTECTED','{}'
+            )"""
+        )
+        conn.execute(
+            """INSERT INTO artifact_registry(
+                artifact_id,artifact_type,producer,owner_type,owner_id,
+                created_utc,updated_utc,canonical_path,status,retention_class
+            ) VALUES(
+                'ARTIFACT-RESEARCH-PROTECTED','RESEARCH_EVIDENCE','RESEARCH_R02',
+                'RESEARCH_R02','RESEARCH-PROTECTED','now','now',
+                'evidence/research/RESEARCH-PROTECTED','RETAINED','ACTIVE_AUTHORITY'
+            )"""
+        )
+        conn.execute(
+            "UPDATE schema_meta SET value=? WHERE key='schema_version'",
+            (str(version),),
+        )
 
 
 def _load_epoch_reset_script():
@@ -470,3 +589,268 @@ def test_launcher_reports_schema_guard_instead_of_generic_backend_timeout() -> N
     assert '"INCOMPATIBLE_NEWER_SCHEMA"' in source
     assert "No reset or downgrade was attempted." in source
     assert "Backend startup blocked:" in source
+
+
+@pytest.mark.parametrize("version", [16, 17, 23])
+def test_database_status_rejects_newer_schema_before_rw_open_without_mutation(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, version: int
+) -> None:
+    root = tmp_path / "max"
+    database = root / "state" / "max.db"
+    _create_rich_schema_fixture(database, root, version)
+    before = _db_snapshot(database)
+
+    def unexpected_rw_open(_path: Path):
+        pytest.fail("database_status opened a read-write connection before schema rejection")
+
+    monkeypatch.setattr(db_module, "connect", unexpected_rw_open)
+    result = database_status(database)
+
+    assert result["status"] == "INCOMPATIBLE_NEWER_SCHEMA"
+    assert result["database_schema_version"] == version
+    assert result["supported_schema_version"] == CURRENT_SCHEMA_VERSION
+    assert result["reset_available"] is False
+    assert _db_snapshot(database) == before
+    assert not (root / "recovery_quarantine").exists()
+    assert not (root / "reset_backups").exists()
+
+
+@pytest.mark.parametrize("version", [16, 17, 23])
+def test_database_recovery_status_separates_schema_from_physical_integrity(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, version: int
+) -> None:
+    root = tmp_path / "max"
+    database = root / "state" / "max.db"
+    _create_rich_schema_fixture(database, root, version)
+    before = _db_snapshot(database)
+
+    def unexpected_rw_open(_path: Path):
+        pytest.fail("database_recovery_status opened a read-write connection before schema rejection")
+
+    monkeypatch.setattr(strategy_reset, "_connect", unexpected_rw_open)
+    result = database_recovery_status(path=database)
+
+    assert result["status"] == "INCOMPATIBLE_NEWER_SCHEMA"
+    assert result["reason"] == "INCOMPATIBLE_NEWER_SCHEMA"
+    assert result["database_schema_version"] == version
+    assert result["supported_schema_version"] == CURRENT_SCHEMA_VERSION
+    assert result["application_schema_compatibility"] == "INCOMPATIBLE"
+    assert result["physical_integrity"] == "NOT_CHECKED"
+    assert result["reset_available"] is False
+    assert _db_snapshot(database) == before
+    assert not (root / "recovery_quarantine").exists()
+    assert not (root / "reset_backups").exists()
+
+
+@pytest.mark.parametrize("version", [16, 17, 23])
+def test_strategy_reset_preflight_guards_before_readwrite_access(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, version: int
+) -> None:
+    root = tmp_path / "max"
+    database = root / "state" / "max.db"
+    _create_rich_schema_fixture(database, root, version)
+    before = _db_snapshot(database)
+
+    def unexpected_rw_open(_path: Path):
+        pytest.fail("reset preflight reached _connect before rejecting schema")
+
+    monkeypatch.setattr(strategy_reset, "_connect", unexpected_rw_open)
+    with pytest.raises(DatabaseSchemaGuardError) as error:
+        strategy_reset_preflight(path=database, root=root)
+
+    assert error.value.status == "INCOMPATIBLE_NEWER_SCHEMA"
+    assert error.value.database_schema_version == version
+    assert _db_snapshot(database) == before
+    assert not (root / "recovery_quarantine").exists()
+    assert not (root / "reset_backups").exists()
+
+
+def test_strategy_reset_low_level_connect_is_guarded_before_sqlite_rw_open(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root = tmp_path / "max"
+    database = root / "state" / "max.db"
+    _create_rich_schema_fixture(database, root, 16)
+    before = _db_snapshot(database)
+    real_connect = sqlite3.connect
+    calls: list[tuple[str, bool]] = []
+
+    def track_connection(database_arg, *args, **kwargs):
+        uri = bool(kwargs.get("uri"))
+        calls.append((str(database_arg), uri))
+        if not uri:
+            pytest.fail("schema 16 reached SQLite through a read-write connection")
+        return real_connect(database_arg, *args, **kwargs)
+
+    monkeypatch.setattr(strategy_reset.sqlite3, "connect", track_connection)
+    with pytest.raises(DatabaseSchemaGuardError) as error:
+        strategy_reset._connect(database)
+
+    assert error.value.status == "INCOMPATIBLE_NEWER_SCHEMA"
+    assert calls and all(uri for _, uri in calls)
+    assert _db_snapshot(database) == before
+
+
+def test_all_three_direct_entrypoints_preserve_supported_schema_15_semantics(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path / "max"
+    database = root / "state" / "max.db"
+    _create_rich_schema_fixture(database, root, CURRENT_SCHEMA_VERSION)
+    before = _db_snapshot(database)
+
+    status = database_status(database)
+    recovery = database_recovery_status(path=database)
+    preflight = strategy_reset_preflight(path=database, root=root)
+
+    assert status == {
+        "status": "READY",
+        "schema_version": CURRENT_SCHEMA_VERSION,
+        "baseline_status": "BASELINE_NOT_CHAMPION",
+    }
+    assert recovery["status"] == "READY"
+    assert recovery["reason"] == "DATABASE_INTEGRITY_OK"
+    assert recovery["application_schema_compatibility"] == "SUPPORTED"
+    assert recovery["application_schema_version"] == CURRENT_SCHEMA_VERSION
+    assert recovery["supported_schema_version"] == CURRENT_SCHEMA_VERSION
+    assert recovery["physical_integrity"] == "ok"
+    assert preflight["status"] == "READY"
+    assert preflight["schema_version"] == str(CURRENT_SCHEMA_VERSION)
+    assert preflight["confirmation_required"] == STRATEGY_RESET_CONFIRMATION
+    assert _db_snapshot(database) == before
+
+
+@pytest.mark.parametrize("metadata_state", ["missing", "malformed"])
+def test_direct_status_and_preflight_calls_fail_closed_on_invalid_schema_metadata(
+    tmp_path: Path, metadata_state: str
+) -> None:
+    root = tmp_path / "max"
+    database = root / "state" / "max.db"
+    _create_rich_schema_fixture(database, root, CURRENT_SCHEMA_VERSION)
+    with sqlite3.connect(database) as conn:
+        if metadata_state == "missing":
+            conn.execute("DELETE FROM schema_meta WHERE key='schema_version'")
+        else:
+            conn.execute(
+                "UPDATE schema_meta SET value='15x' WHERE key='schema_version'"
+            )
+    before = _db_snapshot(database)
+
+    status = database_status(database)
+    recovery = database_recovery_status(path=database)
+    with pytest.raises(DatabaseSchemaGuardError) as error:
+        strategy_reset_preflight(path=database, root=root)
+
+    assert status["status"] == "DATABASE_SCHEMA_METADATA_INVALID"
+    assert recovery["status"] == "DATABASE_SCHEMA_METADATA_INVALID"
+    assert recovery["reset_available"] is False
+    assert recovery["physical_integrity"] == "NOT_CHECKED"
+    assert error.value.status == "DATABASE_SCHEMA_METADATA_INVALID"
+    assert _db_snapshot(database) == before
+    assert not (root / "recovery_quarantine").exists()
+    assert not (root / "reset_backups").exists()
+
+
+def test_direct_entrypoints_refuse_wal_sidecars_without_mutation(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path / "max"
+    database = root / "state" / "max.db"
+    _create_rich_schema_fixture(database, root, 16)
+    writer = sqlite3.connect(database)
+    try:
+        assert writer.execute("PRAGMA journal_mode=WAL").fetchone()[0].lower() == "wal"
+        writer.execute(
+            "UPDATE onnx_data_snapshots SET payload='committed in WAL' "
+            "WHERE snapshot_id='ONNX-SNAPSHOT-PROTECTED'"
+        )
+        writer.commit()
+        before_files = _file_hashes(database)
+        assert f"{database.name}-wal" in before_files
+        assert f"{database.name}-shm" in before_files
+
+        status = database_status(database)
+        recovery = database_recovery_status(path=database)
+        with pytest.raises(DatabaseSchemaGuardError) as error:
+            strategy_reset_preflight(path=database, root=root)
+
+        assert status["status"] == "DATABASE_SCHEMA_WAL_PENDING"
+        assert recovery["status"] == "DATABASE_SCHEMA_WAL_PENDING"
+        assert recovery["physical_integrity"] == "NOT_CHECKED"
+        assert error.value.status == "DATABASE_SCHEMA_WAL_PENDING"
+        assert _file_hashes(database) == before_files
+        assert not (root / "recovery_quarantine").exists()
+        assert not (root / "reset_backups").exists()
+    finally:
+        writer.close()
+
+
+def test_direct_entrypoints_do_not_replay_pending_rollback_journal(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path / "max"
+    database = root / "state" / "max.db"
+    _create_rich_schema_fixture(database, root, 16)
+    before = _db_snapshot(database)
+    journal = Path(str(database) + "-journal")
+    journal.write_bytes(b"synthetic pending rollback journal")
+    before_files = _file_hashes(database)
+
+    status = database_status(database)
+    recovery = database_recovery_status(path=database)
+    with pytest.raises(DatabaseSchemaGuardError) as error:
+        strategy_reset_preflight(path=database, root=root)
+
+    assert status["status"] == "DATABASE_SCHEMA_RECOVERY_PENDING"
+    assert recovery["status"] == "DATABASE_SCHEMA_RECOVERY_PENDING"
+    assert recovery["physical_integrity"] == "NOT_CHECKED"
+    assert error.value.status == "DATABASE_SCHEMA_RECOVERY_PENDING"
+    assert _file_hashes(database) == before_files
+    assert before["files"][database.name] == before_files[database.name]
+    assert not (root / "recovery_quarantine").exists()
+    assert not (root / "reset_backups").exists()
+
+
+@pytest.mark.parametrize("version", [16, 17])
+def test_repeated_direct_schema_blocks_are_idempotent_and_non_mutating(
+    tmp_path: Path, version: int
+) -> None:
+    root = tmp_path / "max"
+    database = root / "state" / "max.db"
+    _create_rich_schema_fixture(database, root, version)
+    before = _db_snapshot(database)
+
+    for _ in range(3):
+        assert database_status(database)["status"] == "INCOMPATIBLE_NEWER_SCHEMA"
+        assert database_recovery_status(path=database)["status"] == "INCOMPATIBLE_NEWER_SCHEMA"
+        with pytest.raises(DatabaseSchemaGuardError) as error:
+            strategy_reset_preflight(path=database, root=root)
+        assert error.value.status == "INCOMPATIBLE_NEWER_SCHEMA"
+        assert _db_snapshot(database) == before
+
+    assert not (root / "recovery_quarantine").exists()
+    assert not (root / "reset_backups").exists()
+
+
+def test_strategy_reset_preflight_api_returns_conflict_for_newer_schema(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root = tmp_path / "max"
+    database = root / "state" / "max.db"
+    _create_rich_schema_fixture(database, root, 16)
+    before = _db_snapshot(database)
+
+    monkeypatch.setattr(
+        artifact_api,
+        "strategy_reset_preflight",
+        lambda: strategy_reset_preflight(path=database, root=root),
+    )
+    api = FastAPI()
+    api.include_router(artifact_api.router)
+    with TestClient(api) as client:
+        response = client.get("/api/artifacts/strategy-reset/preflight")
+
+    assert response.status_code == 409
+    assert "Database schema 16" in response.json()["detail"]
+    assert f"supports ({CURRENT_SCHEMA_VERSION})" in response.json()["detail"]
+    assert _db_snapshot(database) == before

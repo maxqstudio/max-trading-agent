@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from .config import DATABASE_PATH, ROOT
-from .db import assert_database_schema_compatible
+from .db import DatabaseSchemaGuardError, assert_database_schema_compatible
 from .mt5 import detect_mt5
 from .path_safety import assert_owned_path, file_size_tree, remove_owned_path
 from .schema import CURRENT_SCHEMA_VERSION
@@ -95,6 +95,9 @@ def _settings_fingerprint() -> dict[str, dict[str, Any]]:
 
 
 def _connect(path: Path) -> sqlite3.Connection:
+    # Keep this low-level connection guarded as well as its callers so direct
+    # recovery/preflight paths cannot open a newer database read-write.
+    assert_database_schema_compatible(path, allow_missing=False)
     conn = sqlite3.connect(path, timeout=5)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys=ON")
@@ -178,6 +181,9 @@ def _owned_paths(root: Path) -> tuple[list[tuple[Path, Path]], dict[str, Any]]:
 def _read_counts(path: Path, *, root: Path) -> dict[str, Any]:
     if not path.is_file():
         raise StrategyResetError("STRATEGY_RESET_DATABASE_MISSING")
+    # Guard before opening the reset preflight's read-write connection. _connect
+    # repeats the same canonical guard to protect any other direct caller.
+    assert_database_schema_compatible(path, allow_missing=False)
     try:
         with closing(_connect(path)) as conn:
             tables = _tables(conn)
@@ -425,13 +431,51 @@ def database_recovery_status(*, path: Path = DATABASE_PATH) -> dict[str, Any]:
     if not path.is_file():
         return {"status": "RECOVERY_REQUIRED", "reason": "DATABASE_FILE_MISSING"}
     try:
+        schema = assert_database_schema_compatible(path, allow_missing=False)
+    except DatabaseSchemaGuardError as exc:
+        # Physical SQLite integrity is deliberately not inferred from schema
+        # compatibility. Do not turn an unsupported schema into corrupt-state
+        # recovery, which would expose a reset path for a newer database.
+        if exc.status == "DATABASE_SCHEMA_READ_FAILED":
+            return {
+                "status": "RECOVERY_REQUIRED",
+                "reason": "DATABASE_UNOPENABLE",
+                "application_schema_compatibility": "UNVERIFIED",
+                "physical_integrity": "UNVERIFIABLE",
+            }
+        result = exc.diagnostic()
+        result["application_schema_compatibility"] = (
+            "INCOMPATIBLE"
+            if exc.status == "INCOMPATIBLE_NEWER_SCHEMA"
+            else "UNVERIFIED"
+        )
+        result["physical_integrity"] = "NOT_CHECKED"
+        return result
+
+    try:
         with closing(_connect(path)) as conn:
             result = str(conn.execute("PRAGMA integrity_check").fetchone()[0])
-            if result == "ok":
-                return {"status": "READY", "reason": "DATABASE_INTEGRITY_OK"}
-            return {"status": "RECOVERY_REQUIRED", "reason": "DATABASE_INTEGRITY_FAILED"}
+            return {
+                "status": "READY" if result == "ok" else "RECOVERY_REQUIRED",
+                "reason": (
+                    "DATABASE_INTEGRITY_OK"
+                    if result == "ok"
+                    else "DATABASE_INTEGRITY_FAILED"
+                ),
+                "application_schema_compatibility": "SUPPORTED",
+                "application_schema_version": schema["schema_version"],
+                "supported_schema_version": CURRENT_SCHEMA_VERSION,
+                "physical_integrity": result,
+            }
     except sqlite3.Error:
-        return {"status": "RECOVERY_REQUIRED", "reason": "DATABASE_UNOPENABLE"}
+        return {
+            "status": "RECOVERY_REQUIRED",
+            "reason": "DATABASE_UNOPENABLE",
+            "application_schema_compatibility": "SUPPORTED",
+            "application_schema_version": schema["schema_version"],
+            "supported_schema_version": CURRENT_SCHEMA_VERSION,
+            "physical_integrity": "UNVERIFIABLE",
+        }
 
 
 def _bootstrap_database(path: Path) -> None:
