@@ -1145,8 +1145,8 @@
       "kind": "function",
       "label": "backend/max_backend/main.py::_foundation_state",
       "language": "Python",
-      "line_end": 161,
-      "line_start": 134,
+      "line_end": 159,
+      "line_start": 132,
       "locator": "backend/max_backend/main.py::_foundation_state"
     },
     {
@@ -1154,8 +1154,8 @@
       "kind": "function",
       "label": "backend/max_backend/main.py::overview",
       "language": "Python",
-      "line_end": 202,
-      "line_start": 195,
+      "line_end": 200,
+      "line_start": 193,
       "locator": "backend/max_backend/main.py::overview"
     },
     {
@@ -1163,8 +1163,8 @@
       "kind": "async_function",
       "label": "backend/max_backend/main.py::recovery_required_gate",
       "language": "Python",
-      "line_end": 99,
-      "line_start": 86,
+      "line_end": 97,
+      "line_start": 84,
       "locator": "backend/max_backend/main.py::recovery_required_gate"
     },
     {
@@ -1172,8 +1172,8 @@
       "kind": "function",
       "label": "backend/max_backend/main.py::recovery_status",
       "language": "Python",
-      "line_end": 115,
-      "line_start": 103,
+      "line_end": 113,
+      "line_start": 101,
       "locator": "backend/max_backend/main.py::recovery_status"
     },
     {
@@ -1181,8 +1181,8 @@
       "kind": "function",
       "label": "backend/max_backend/main.py::reset_corrupt_state",
       "language": "Python",
-      "line_end": 131,
-      "line_start": 119,
+      "line_end": 129,
+      "line_start": 117,
       "locator": "backend/max_backend/main.py::reset_corrupt_state"
     },
     {
@@ -1524,7 +1524,7 @@
       "locator": "frontend/src/ArtifactsPage.tsx::<module>"
     }
   ],
-  "observed_head": "eee1959d61b272d838d397be27e51c6781c750c4",
+  "observed_head": "557a78d3ef308cac4ba3d1fb8af7f38250af4e41",
   "schema_version": 1,
-  "source_digest": "cdc05804132ecdd472c832b309dfa5d0cbe916ff371c2372cedd0c3be414002b"
+  "source_digest": "2671164d4e2bb587165d521cd430fcf2e90cb28ab2eb41211eaa99d9e9a0ad0d"
 }
