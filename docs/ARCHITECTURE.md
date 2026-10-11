@@ -2,7 +2,7 @@
 
 # ARCHITECTURE
 
-Current source digest: 38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa
+Current source digest: 9090a066dcd04b7cf383862940dca1fcb4e869d7a7fa0fae44bb7830b8832c0d
 
 ## Components
 
@@ -44,7 +44,7 @@ Current source digest: 38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e5
 ## Observed implementation inventory
 
 Source files: 124
-Source lines: 60153
+Source lines: 60164
 Languages: PowerShell=3, Python=99, TypeScript=3, TypeScript/React=19
 
 Structural facts come from the code extractor. Component meaning comes from

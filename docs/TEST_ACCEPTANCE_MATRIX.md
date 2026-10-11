@@ -7,7 +7,7 @@
 P0B starts from verified origin/main 8ba001bba31d7c74e2d1d1aa03d6c79fb0f9576a with tree 597dbd569a9c9c99feae5fea2e2b2a2ff8fa3e46; P0A is accepted and merged. Historical schema archaeology and focused synthetic compatibility/cutover tests pass locally (74 passed, 0 failed). Actual Owner database contents and compatibility remain NOT_PROVEN. P0B remains IN_PROGRESS until exact-candidate local and hosted evidence receives Control Room acceptance; exact final SHA/run identity is external under D-012. No actual Owner database, MT5, Optimizer, training, Research execution, Champion mutation or live cutover is authorized.
 
 Final tested source: external final acceptance evidence.
-Current source digest: 38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa
+Current source digest: 9090a066dcd04b7cf383862940dca1fcb4e869d7a7fa0fae44bb7830b8832c0d
 
 | Requirement | Contract | Evidence | Status |
 |---|---|---|---|

@@ -202,6 +202,27 @@ try {
     }
     if (-not (Invoke-InternalGate 'SKILL_WORKFLOW_PROVENANCE' $provenance)) { throw 'SKILL_WORKFLOW_PROVENANCE failed' }
 
+    $skillTests = @(
+        @('STRICT_SELFTEST', (Join-Path $skillDir 'scripts\selftest_strict_project_workflow.py')),
+        @('PROJECT_TRUTH_COMPILER_SELFTEST', (Join-Path $skillDir 'scripts\selftest_project_truth_compiler.py')),
+        @('SEQUENCE_CALL_RESOLUTION', (Join-Path $skillDir 'scripts\selftest_sequence_call_resolution.py')),
+        @('CROSS_DOCUMENT_REGRESSIONS', (Join-Path $skillDir 'scripts\selftest_cross_document_regressions.py'))
+    )
+    foreach ($gate in $skillTests) {
+        if (-not (Invoke-PythonGate $gate[0] @($gate[1]))) { throw "$($gate[0]) failed" }
+    }
+
+    # The cross-document validator recursively scans Markdown. Keep the exact
+    # pinned source commit and its test scripts, but sparsify its checkout so
+    # upstream docs are not misclassified as project documentation.
+    if (-not (Invoke-Gate 'SKILL_WORKFLOW_SPARSE_INIT' $git @('-C', $skillDir, 'sparse-checkout', 'init', '--no-cone') $repoRoot)) { throw 'SKILL_WORKFLOW_SPARSE_INIT failed' }
+    if (-not (Invoke-Gate 'SKILL_WORKFLOW_SPARSE_SCRIPTS' $git @('-C', $skillDir, 'sparse-checkout', 'set', '--no-cone', '/scripts/', '/scripts/**') $repoRoot)) { throw 'SKILL_WORKFLOW_SPARSE_SCRIPTS failed' }
+    if (-not (Invoke-InternalGate 'SKILL_WORKFLOW_MARKDOWN_ISOLATION' {
+        $markdown = @(Get-ChildItem -LiteralPath $skillDir -Filter '*.md' -File -Recurse)
+        if ($markdown.Count -gt 0) { throw "Skill checkout still exposes Markdown to repository validators: $($markdown.FullName -join ', ')" }
+        'upstream_markdown_files_visible=0'
+    })) { throw 'SKILL_WORKFLOW_MARKDOWN_ISOLATION failed' }
+
     $pytestFocused = Join-Path $runRoot 'pytest-focused'
     New-Item -ItemType Directory -Path $pytestFocused | Out-Null
     if (-not (Invoke-PythonGate 'FOCUSED_DATABASE_COMPATIBILITY' @('-m', 'pytest', 'backend\tests\test_schema_compatibility_guard.py', '-q', '-o', 'addopts=', '--basetemp', $pytestFocused))) { throw 'FOCUSED_DATABASE_COMPATIBILITY failed' }
@@ -229,16 +250,6 @@ try {
     )
     foreach ($gate in $governance) {
         if (-not (Invoke-PythonGate $gate[0] $gate[1])) { throw "$($gate[0]) failed" }
-    }
-
-    $skillTests = @(
-        @('STRICT_SELFTEST', (Join-Path $skillDir 'scripts\selftest_strict_project_workflow.py')),
-        @('PROJECT_TRUTH_COMPILER_SELFTEST', (Join-Path $skillDir 'scripts\selftest_project_truth_compiler.py')),
-        @('SEQUENCE_CALL_RESOLUTION', (Join-Path $skillDir 'scripts\selftest_sequence_call_resolution.py')),
-        @('CROSS_DOCUMENT_REGRESSIONS', (Join-Path $skillDir 'scripts\selftest_cross_document_regressions.py'))
-    )
-    foreach ($gate in $skillTests) {
-        if (-not (Invoke-PythonGate $gate[0] @($gate[1]))) { throw "$($gate[0]) failed" }
     }
 
     $scanReport = Join-Path $runRoot 'source-only-secret-scan.json'
