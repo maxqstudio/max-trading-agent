@@ -62,7 +62,6 @@ export default function OnnxDataIntake() {
   const [preflight, setPreflight] = useState<OnnxDataPreflight | null>(null)
   const [sourcePath, setSourcePath] = useState('')
   const [timezoneProvenance, setTimezoneProvenance] = useState('')
-  const [reviewedSource, setReviewedSource] = useState<{ source_path?: string; timezone_provenance?: string } | null>(null)
   const [confirmSnapshot, setConfirmSnapshot] = useState(false)
   const [confirmCorrection, setConfirmCorrection] = useState(false)
   const [windows, setWindows] = useState<WindowDraft>(EMPTY_WINDOWS)
@@ -73,13 +72,8 @@ export default function OnnxDataIntake() {
   const [retry, setRetry] = useState(0)
 
   const snapshot = workspace?.latest_snapshot ?? null
-  const firstBlocker = preflight?.first_blocker ?? workspace?.first_blocker ?? null
-  const hasAdvancedSourceInput = Boolean(sourcePath.trim() || timezoneProvenance.trim())
-  const visibleStatus = busy ? 'Sedang memproses' : preflight
-    ? (preflight.data_quality.status === 'PASS' || (preflight.snapshot_permitted
-      && preflight.data_quality.issues.every((issue) => issue.code === 'TIMEZONE_PROVENANCE_REQUIRED' || issue.severity === 'RECONCILIATION_PENDING')))
-      ? 'Data ditemukan' : 'Data perlu perhatian'
-    : snapshot ? 'Snapshot tersimpan' : 'Belum diperiksa'
+  const firstBlocker = workspace?.first_blocker ?? preflight?.first_blocker ?? null
+  const timezoneReady = timezoneProvenance.trim().length > 0
   const canCorrectDuplicates = Boolean(
     snapshot
     && snapshot.dq.identical_duplicate_rows > 0
@@ -115,9 +109,9 @@ export default function OnnxDataIntake() {
     try {
       const result = await operation()
       if (result && typeof result === 'object' && 'status' in result) {
-        setOperationResult(name === 'Pemeriksaan data' ? '' : `${name} selesai.`)
+        setOperationResult(`Backend result: ${String(result.status)}.`)
       } else {
-        setOperationResult(`${name} selesai.`)
+        setOperationResult(`${name} completed with backend evidence.`)
       }
       await refreshWorkspace()
       return result
@@ -133,29 +127,27 @@ export default function OnnxDataIntake() {
 
   const runPreflight = async () => {
     setPreflight(null)
-    setReviewedSource(null)
     setConfirmSnapshot(false)
     const payload = {
       ...(sourcePath.trim() ? { source_path: sourcePath.trim() } : {}),
-      ...(timezoneProvenance.trim() ? { timezone_provenance: timezoneProvenance.trim() } : {}),
+      timezone_provenance: timezoneProvenance.trim(),
     }
-    const result = await perform('Pemeriksaan data', async () => {
+    const result = await perform('Source preflight', async () => {
       const evidence = await preflightOnnxData(payload)
       setPreflight(evidence)
-      setReviewedSource(payload)
       return evidence
     })
-    if (!result) { setPreflight(null); setReviewedSource(null) }
+    if (!result) setPreflight(null)
   }
 
   const createSnapshot = async () => {
-    if (!preflight || !reviewedSource || !preflight.snapshot_permitted) return
+    if (!preflight) return
     const evidence = preflight
     setPreflight(null)
-    setReviewedSource(null)
     setConfirmSnapshot(false)
-    await perform('Penyimpanan snapshot', () => createOnnxSnapshot({
-      ...reviewedSource,
+    await perform('Immutable snapshot', () => createOnnxSnapshot({
+      ...(sourcePath.trim() ? { source_path: sourcePath.trim() } : {}),
+      timezone_provenance: timezoneProvenance.trim(),
       expected_source_sha256: evidence.source_identity.sha256,
       confirmed: true,
     }))
@@ -191,74 +183,75 @@ export default function OnnxDataIntake() {
   return (
     <div className="onnx-data-intake" aria-label="ONNX Data Intake">
       <header className="page-head onnx-page-head">
-        <h1>Data Intake</h1>
+        <div>
+          <p className="eyebrow">MAX · ONNX data authority</p>
+          <h1>Data Intake</h1>
+          <p className="onnx-intro">Inspect an approved MAX CP32 source, preserve exact bytes, review DQ, then validate the three research windows. These actions do not run scientific evaluation.</p>
+        </div>
       </header>
 
-      {loading && <p role="status" className="loading">Memuat sumber data…</p>}
+      {loading && <p role="status" className="loading">Loading backend data-intake state…</p>}
       {!loading && error && (
         <div className="onnx-load-error" role="alert">
-          <p><strong>Pemeriksaan belum berhasil.</strong> {error}</p>
-          <button type="button" onClick={() => { setLoading(true); setError(''); setRetry((value) => value + 1) }}>Coba lagi</button>
+          <p>Data-intake state is unavailable; no cached or partial status is being shown.</p>
+          <p>{error}</p>
+          <button type="button" onClick={() => { setLoading(true); setError(''); setRetry((value) => value + 1) }}>Retry data-intake status</button>
         </div>
       )}
 
       {!loading && workspace && (
         <>
-          <section className="onnx-card onnx-data-primary" aria-labelledby="onnx-source-preflight-title">
-            <div className="onnx-data-source-row">
-              <div>
-                <h2 id="onnx-source-preflight-title">Sumber data</h2>
-                <p className="onnx-data-filename">{sourcePath.trim() ? 'Lokasi alternatif dipilih' : 'Max_MTF_Training.csv'}</p>
-                <p className="onnx-data-muted">{sourcePath.trim()
-                  ? 'Lokasi alternatif akan divalidasi agar tetap berada di MT5 Common Files.'
-                  : 'MT5 Common Files · ditemukan otomatis saat diperiksa'}</p>
-              </div>
-              <ActionButton type="button" onClick={runPreflight} disabled={busy || loading}>
-                <ActionProgress active={busy} idle="Periksa Data" pending="Memeriksa…" />
-              </ActionButton>
+          <section className="onnx-card onnx-data-status" aria-label="Backend data-intake status">
+            <div className="onnx-data-status-line">
+              <div><span className="onnx-state-label">Backend state</span><strong>{workspace.status}</strong></div>
+              <div><span className="onnx-state-label">Real data readiness</span><strong>{workspace.real_data_readiness}</strong></div>
+              <div><span className="onnx-state-label">Scientific execution</span><strong>{workspace.scientific_execution}</strong></div>
             </div>
-            <p className="onnx-data-state" role="status">{visibleStatus}</p>
-            {preflight?.first_blocker === 'TIMEZONE_PROVENANCE_REQUIRED' && (
-              <p className="onnx-data-muted">Data bisa diperiksa. Zona waktu broker belum terverifikasi; kesiapan riset tetap tertahan.</p>
-            )}
-            {operationResult && <p className="onnx-data-muted">{operationResult}</p>}
-            <details className="onnx-data-advanced" open={hasAdvancedSourceInput}>
-              <summary>Pengaturan lanjutan</summary>
-              <div className="form-grid onnx-data-form">
-                <label htmlFor="onnx-source-path">Lokasi file alternatif
-                  <input id="onnx-source-path" value={sourcePath} onChange={(event) => setSourcePath(event.target.value)} placeholder="Kosongkan untuk lokasi default MT5" autoComplete="off" />
-                </label>
-                <label htmlFor="onnx-timezone-provenance">Provenance waktu broker (opsional untuk periksa data)
-                  <input id="onnx-timezone-provenance" value={timezoneProvenance} onChange={(event) => setTimezoneProvenance(event.target.value)} placeholder="Isi hanya jika sumber waktunya diketahui" maxLength={160} />
-                </label>
-              </div>
-              <p className="onnx-data-muted">Lokasi alternatif wajib berada dalam MT5 Common Files. Waktu dari CSV tidak otomatis dianggap UTC.</p>
-            </details>
+            {firstBlocker && <p className="onnx-reason"><strong>First blocker:</strong> {firstBlocker}</p>}
+            {operationResult && <p role="status" className="onnx-action-result">{operationResult}</p>}
+          </section>
+
+          <section className="onnx-card" aria-labelledby="onnx-source-preflight-title">
+            <h2 id="onnx-source-preflight-title">Source preflight</h2>
+            <p className="onnx-reason">Default discovery checks only the canonical Max_MTF_Training.csv inside MetaTrader Common Files. An override must also remain under that approved directory. The live CSV is never edited.</p>
+            <div className="form-grid onnx-data-form">
+              <label htmlFor="onnx-source-path">Owner-selected source path override <span>(optional)</span>
+                <input id="onnx-source-path" value={sourcePath} onChange={(event) => setSourcePath(event.target.value)} placeholder="Leave blank for canonical MAX filename" autoComplete="off" />
+              </label>
+              <label htmlFor="onnx-timezone-provenance">Timestamp timezone/source provenance <span>(required; no UTC assumption)</span>
+                <input id="onnx-timezone-provenance" value={timezoneProvenance} onChange={(event) => setTimezoneProvenance(event.target.value)} placeholder="e.g. broker server time; UTC offset unknown" maxLength={160} />
+              </label>
+            </div>
+            <div className="onnx-data-actions">
+              <ActionButton type="button" onClick={runPreflight} disabled={busy || loading || !timezoneReady} blockedReason="Enter the source's broker/server timezone provenance before preflight.">
+                <ActionProgress active={busy} idle="Read-only source preflight" pending="Checking lock, identity, schema and DQ…" />
+              </ActionButton>
+              <p>Preflight does not create a snapshot. It reads under the EA writer lock and returns a source hash for the next confirmation.</p>
+            </div>
             {preflight && (
               <div className="onnx-data-result" aria-label="Source preflight result">
-                <p><strong>{preflight.data_quality.row_count.toLocaleString('id-ID')} baris</strong> · {preflight.data_quality.symbol ?? 'Simbol tidak diketahui'} · {preflight.data_quality.timeframe ?? 'Timeframe tidak diketahui'}</p>
-                <details className="onnx-data-advanced">
-                  <summary>Hasil pemeriksaan lengkap</summary>
-                  <p>Status: {preflight.status} · SHA-256: <span className="mono">{preflight.source_identity.sha256}</span></p>
-                  {firstBlocker && <p>Blocker: {firstBlocker}</p>}
-                  {preflight.data_quality.issues.length > 0 && (
-                    <ul className="onnx-data-issues-list" aria-label="Preflight data-quality findings">
-                      {preflight.data_quality.issues.map((issue, index) => (
-                        <li key={`${issue.code}-${index}`}>
-                          <strong>{issue.code}</strong> — {issue.message} <span>({issue.severity})</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </details>
+                <h3>Backend preflight: {preflight.status}</h3>
+                <p>Source: <strong>{preflight.source_identity.filename}</strong></p>
+                <p className="mono">SHA-256: {preflight.source_identity.sha256}</p>
+                <p>Rows: {preflight.data_quality.row_count}; DQ: {preflight.data_quality.status}; timeframe: {preflight.data_quality.timeframe ?? 'unresolved'}.</p>
+                {preflight.first_blocker && <p><strong>First blocker:</strong> {preflight.first_blocker}</p>}
+                {preflight.data_quality.issues.length > 0 && (
+                  <ul className="onnx-data-issues-list" aria-label="Preflight data-quality findings">
+                    {preflight.data_quality.issues.map((issue, index) => (
+                      <li key={`${issue.code}-${index}`}>
+                        <strong>{issue.code}</strong> — {issue.message} <span>({issue.severity})</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
                 {preflight.snapshot_permitted && (
                   <div className="onnx-confirmation">
                     <label>
                       <input type="checkbox" checked={confirmSnapshot} onChange={(event) => setConfirmSnapshot(event.target.checked)} />
-                      Saya menyetujui pembuatan snapshot dari file yang diperiksa. Status pemeriksaan tidak diubah.
+                      I reviewed this source hash and authorize creating a private, immutable raw snapshot. DQ blockers remain blockers.
                     </label>
-                    <ActionButton type="button" onClick={createSnapshot} disabled={!confirmSnapshot || busy} blockedReason="Konfirmasi pembuatan snapshot terlebih dahulu.">
-                      <ActionProgress active={busy} idle="Simpan snapshot" pending="Menyimpan dan memverifikasi…" />
+                    <ActionButton type="button" onClick={createSnapshot} disabled={!confirmSnapshot || busy} blockedReason="Review the exact source hash and confirm the snapshot operation.">
+                      <ActionProgress active={busy} idle="Create immutable snapshot" pending="Copying and verifying exact source bytes…" />
                     </ActionButton>
                   </div>
                 )}
@@ -269,11 +262,8 @@ export default function OnnxDataIntake() {
           {snapshot && (
             <>
               <section className="onnx-card" aria-labelledby="onnx-snapshot-title">
-                <h2 id="onnx-snapshot-title">Snapshot tersimpan</h2>
-                <p className="onnx-data-muted">{snapshot.row_count.toLocaleString('id-ID')} baris · {snapshot.symbol ?? 'Simbol tidak diketahui'} · {snapshot.timeframe ?? 'Timeframe tidak diketahui'}</p>
-                <details className="onnx-data-advanced">
-                  <summary>Identitas snapshot</summary>
-                  <dl className="onnx-facts">
+                <h2 id="onnx-snapshot-title">Immutable snapshot</h2>
+                <dl className="onnx-facts">
                   <div className="onnx-field"><dt>Snapshot ID</dt><dd className="mono">{snapshot.snapshot_id}</dd></div>
                   <div className="onnx-field"><dt>Dataset ID</dt><dd className="mono">{snapshot.dataset_id}</dd></div>
                   <div className="onnx-field"><dt>SHA-256</dt><dd className="mono">{snapshot.sha256}</dd></div>
@@ -281,13 +271,10 @@ export default function OnnxDataIntake() {
                   <div className="onnx-field"><dt>Window coverage</dt><dd>{snapshot.timestamp_min ?? 'Unavailable'} → {snapshot.timestamp_max ?? 'Unavailable'}</dd></div>
                   <div className="onnx-field"><dt>Evidence class</dt><dd>{snapshot.evidence_class}</dd></div>
                 </dl>
-                  {snapshot.parent_snapshot_id && <p>Induk snapshot tetap tersimpan: <span className="mono">{snapshot.parent_snapshot_id}</span>.</p>}
-                </details>
-                <details className="onnx-data-advanced">
-                  <summary>Audit kualitas data</summary>
-                  <DataIssues snapshot={snapshot} />
-                </details>
+                {snapshot.parent_snapshot_id && <p>Derived from immutable parent <span className="mono">{snapshot.parent_snapshot_id}</span>; original remains retained.</p>}
               </section>
+
+              <DataIssues snapshot={snapshot} />
 
               {canCorrectDuplicates && (
                 <section className="onnx-card" aria-labelledby="onnx-duplicate-resolution-title">
@@ -303,9 +290,9 @@ export default function OnnxDataIntake() {
                 </section>
               )}
 
-              <details className="onnx-card onnx-data-workflow" aria-labelledby="onnx-window-config-title">
-                <summary id="onnx-window-config-title">Atur periode riset</summary>
-                <p className="onnx-data-muted">Periode divalidasi dari snapshot ini. Tidak ada riset yang dijalankan.</p>
+              <section className="onnx-card" aria-labelledby="onnx-window-config-title">
+                <h2 id="onnx-window-config-title">Three research windows</h2>
+                <p>All six boundaries are exact naive broker/source wall-clock timestamps. Each range must contain source rows and be covered by the immutable snapshot. Forward does not expand automatically after validation.</p>
                 <div className="form-grid onnx-data-form onnx-window-form">
                   {(['DISCOVERY', 'TOURNAMENT', 'FORWARD'] as const).map((name: WindowName) => (
                     <fieldset key={name} className="onnx-window-fieldset">
@@ -323,12 +310,12 @@ export default function OnnxDataIntake() {
                   <ActionButton type="button" onClick={saveWindows} disabled={busy || !windowReady} blockedReason="Set all six boundaries; backend will verify the exact three ordered windows and snapshot coverage.">
                     <ActionProgress active={busy} idle="Validate and save windows" pending="Checking chronology, coverage and row support…" />
                   </ActionButton>
-                  <p className="onnx-data-muted">Hanya menyimpan konfigurasi, tanpa menjalankan eksperimen.</p>
+                  <p>This validates configuration only. It does not start Discovery, CPCV, Tournament, Monte Carlo or Forward evaluation.</p>
                 </div>
                 {workspace.window_config && (
                   <p role="status">Backend has a persisted window configuration for snapshot <span className="mono">{String(workspace.window_config.snapshot_id ?? 'unknown')}</span>. Revalidation creates/reuses an immutable revision.</p>
                 )}
-              </details>
+              </section>
             </>
           )}
         </>
