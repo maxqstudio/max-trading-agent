@@ -4,16 +4,16 @@
 
 ## Project
 Name: MAX Trading Agent
-Purpose: Windows-only GitHub-first Strategy control plane with a separately governed ONNX workspace; ONNX-02 implements data intake and immutable snapshot contracts only, while real DATA_READY, scientific runtime, training, export, and research remain unproven or unauthorized.
+Purpose: Windows-only GitHub-first control plane for deterministic Strategy optimization, Challenger/Champion governance, and MetaTrader 5 execution evidence; fresh Research work is roadmap-gated and not active runtime.
 Primary users: Owner, authorized Builder, Control Room auditor
 Governance profile: strict
 
 ## Repositories
 Repository: maxqstudio/max-trading-agent
-Active branch: codex/onnx-02-data-intake
+Active branch: codex/restore-mt5-native-agent-execution
 Current authoritative SHA: external final acceptance evidence
-Last accepted SHA: 1a9c9a6990e1f2571e4d85d79436402e6d37ec23
-Current source digest: da0e2c7f4b8192f4993d9a9223d5dec9ea722c168c3bc9d567014d0d0592707f
+Last accepted SHA: ac2787c0fe46bfa83267b0ceebb9d8f3f1d44c5c
+Current source digest: 7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.
@@ -68,13 +68,12 @@ Generated from PROJECT_PROFILE.yaml.
 - GitHub Actions on windows-latest is the hosted build/test authority for ordinary development phases.
 - Owner PC plus real MetaTrader 5 is final runtime/E2E authority only after the GitHub development roadmap is complete.
 - The public repository is source-only: runtime databases, evidence, artifacts, datasets, credentials and Owner terminal state are not source authority and must not be tracked.
-- The Owner explicitly authorizes Strategy promotion. The legacy Research subsystem and R00-R11 roadmap are RETIRED; ONNX-00 planning, ONNX-01 workspace shell, and ONNX-02 data-intake source work are separately authorized within frozen phase scope; scientific execution phases require further authorization.
+- The Owner explicitly authorizes Strategy promotion. Fresh Research work remains blocked until the Owner declares a real MT5 backtest/sample dataset READY and Control Room authorizes a source phase.
 - Scientist is advisory only and cannot create scientific, promotion, risk or execution authority.
-- The previously implemented Research subsystem is retired and removed from active MAX source, API, UI, schema authority and runtime dependencies. It must not be revived beside ONNX.
-- ONNX-00 is planning/governance only. ONNX-02 adds no scientific evaluation, model training, ONNX export/runtime, Research Challenger, or ONNX Champion mutation. Real DATA_READY remains unproven while broker reconciliation evidence is unavailable.
-- ONNX-02 snapshots use only the source-verified MAX training CSV contract; immutable runtime snapshots and operational databases are ignored and excluded from public source.
+- The previously implemented Research subsystem is rejected and removed from active MAX source, API, UI, schema authority and runtime dependencies.
+- No Research runtime, Research model fitting, or scientific outcome is proven or authorized by the current Strategy source phase; synthetic Optimizer fixtures are source tests only.
 - Optimizer editable draft is mutable current preference state; every started job owns an immutable request snapshot, durable launch identity, and atomically published round evidence.
 - Optimizer read projections may accelerate ordinary listing only; candidate-to-Challenger mutations still revalidate retained canonical evidence.
 - Builder verification uses synthetic temporary databases/evidence and mocked or isolated process boundaries; it does not run a real Owner MT5 optimization or touch the Owner operational database.
 - Destructive Strategy reset requires explicit confirmation, verified backup and ownership-scoped cleanup; ordinary cleanup remains a distinct action.
-- The latest Skill_Workflow/main guidance inspected for ONNX-00 is 3b3289681cf2cec8d3d132895e0848be64bb54b1. MAX's executable Windows CI and vendored validator provenance remain pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4; this planning phase applies current normative guidance but does not silently migrate the validator toolchain.
+- Current governance method is Skill Workflow exact SHA 64836990609cd1ab22f9517be5aaffc14ad19ea9 with roadmap authority, generated documentation and DURING sequence evidence.

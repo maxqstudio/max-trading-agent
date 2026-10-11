@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: da0e2c7f4b8192f4993d9a9223d5dec9ea722c168c3bc9d567014d0d0592707f
+Source digest: 7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -28,16 +28,9 @@ Generated/refreshed: current compiler run
 | backend/max_backend/config.py | Python | 30 | backend/max_backend | NO |
 | backend/max_backend/db.py | Python | 146 | backend/max_backend | NO |
 | backend/max_backend/ea.py | Python | 46 | backend/max_backend | NO |
-| backend/max_backend/main.py | Python | 204 | backend/max_backend | NO |
+| backend/max_backend/main.py | Python | 200 | backend/max_backend | NO |
 | backend/max_backend/mt5.py | Python | 104 | backend/max_backend | NO |
 | backend/max_backend/mtf_geometry.py | Python | 203 | backend/max_backend | NO |
-| backend/max_backend/onnx_api.py | Python | 315 | backend/max_backend | NO |
-| backend/max_backend/onnx_data_api.py | Python | 150 | backend/max_backend | NO |
-| backend/max_backend/onnx_data_contract.py | Python | 364 | backend/max_backend | NO |
-| backend/max_backend/onnx_data_service.py | Python | 481 | backend/max_backend | NO |
-| backend/max_backend/onnx_data_source.py | Python | 426 | backend/max_backend | NO |
-| backend/max_backend/onnx_data_store.py | Python | 368 | backend/max_backend | NO |
-| backend/max_backend/onnx_parameter_estimation.py | Python | 746 | backend/max_backend | NO |
 | backend/max_backend/optimizer_api.py | Python | 169 | backend/max_backend | NO |
 | backend/max_backend/optimizer_candidates.py | Python | 767 | backend/max_backend | NO |
 | backend/max_backend/optimizer_core.py | Python | 1922 | backend/max_backend | NO |
@@ -55,14 +48,14 @@ Generated/refreshed: current compiler run
 | backend/max_backend/scientist_api.py | Python | 270 | backend/max_backend | NO |
 | backend/max_backend/scientist_chat.py | Python | 449 | backend/max_backend | NO |
 | backend/max_backend/scientist_context.py | Python | 625 | backend/max_backend | NO |
-| backend/max_backend/scientist_knowledge.py | Python | 177 | backend/max_backend | NO |
+| backend/max_backend/scientist_knowledge.py | Python | 168 | backend/max_backend | NO |
 | backend/max_backend/scientist_provider.py | Python | 993 | backend/max_backend | NO |
 | backend/max_backend/scientist_store.py | Python | 594 | backend/max_backend | NO |
 | backend/max_backend/strategy_reset.py | Python | 504 | backend/max_backend | NO |
 | backend/max_backend/workflow_contract.py | Python | 45 | backend/max_backend | NO |
-| backend/max_backend/workflow_store.py | Python | 597 | backend/max_backend | NO |
+| backend/max_backend/workflow_store.py | Python | 595 | backend/max_backend | NO |
 | backend/tests/conftest.py | Python | 17 | backend/tests | YES |
-| backend/tests/test_m00_foundation.py | Python | 406 | backend/tests | YES |
+| backend/tests/test_m00_foundation.py | Python | 326 | backend/tests | YES |
 | backend/tests/test_m01_fail_closed.py | Python | 446 | backend/tests | YES |
 | backend/tests/test_m01_jobs.py | Python | 126 | backend/tests | YES |
 | backend/tests/test_m01_lifecycle.py | Python | 193 | backend/tests | YES |
@@ -85,10 +78,7 @@ Generated/refreshed: current compiler run
 | backend/tests/test_m07_launcher_authority.py | Python | 180 | backend/tests | YES |
 | backend/tests/test_m07_true_mtf.py | Python | 245 | backend/tests | YES |
 | backend/tests/test_m08_strategy_results.py | Python | 2465 | backend/tests | YES |
-| backend/tests/test_onnx00_governance_contracts.py | Python | 1326 | backend/tests | YES |
-| backend/tests/test_onnx_data_api.py | Python | 515 | backend/tests | YES |
-| backend/tests/test_onnx_data_intake.py | Python | 426 | backend/tests | YES |
-| backend/tests/test_optimizer_draft.py | Python | 150 | backend/tests | YES |
+| backend/tests/test_optimizer_draft.py | Python | 146 | backend/tests | YES |
 | backend/tests/test_optimizer_frame_finalization.py | Python | 46 | backend/tests | YES |
 | backend/tests/test_optimizer_reliability.py | Python | 846 | backend/tests | YES |
 | backend/tests/test_optimizer_resources.py | Python | 112 | backend/tests | YES |
@@ -99,8 +89,8 @@ Generated/refreshed: current compiler run
 | backend/tests/test_strategy_workspace_reset.py | Python | 316 | backend/tests | YES |
 | frontend/src/ActionControls.test.tsx | TypeScript/React | 47 | frontend/src | YES |
 | frontend/src/ActionControls.tsx | TypeScript/React | 86 | frontend/src | NO |
-| frontend/src/App.test.tsx | TypeScript/React | 320 | frontend/src | YES |
-| frontend/src/App.tsx | TypeScript/React | 461 | frontend/src | NO |
+| frontend/src/App.test.tsx | TypeScript/React | 187 | frontend/src | YES |
+| frontend/src/App.tsx | TypeScript/React | 445 | frontend/src | NO |
 | frontend/src/ArtifactsPage.test.tsx | TypeScript/React | 343 | frontend/src | YES |
 | frontend/src/ArtifactsPage.tsx | TypeScript/React | 778 | frontend/src | NO |
 | frontend/src/ChallengersPage.test.tsx | TypeScript/React | 983 | frontend/src | YES |
@@ -109,9 +99,6 @@ Generated/refreshed: current compiler run
 | frontend/src/ChampionPage.tsx | TypeScript/React | 175 | frontend/src | NO |
 | frontend/src/DataTable.test.tsx | TypeScript/React | 122 | frontend/src | YES |
 | frontend/src/DataTable.tsx | TypeScript/React | 145 | frontend/src | NO |
-| frontend/src/OnnxDataIntake.test.tsx | TypeScript/React | 265 | frontend/src | YES |
-| frontend/src/OnnxDataIntake.tsx | TypeScript/React | 338 | frontend/src | NO |
-| frontend/src/OnnxWorkspace.tsx | TypeScript/React | 334 | frontend/src | NO |
 | frontend/src/OptimizerPage.test.tsx | TypeScript/React | 1325 | frontend/src | YES |
 | frontend/src/OptimizerPage.tsx | TypeScript/React | 1494 | frontend/src | NO |
 | frontend/src/ScientistPage.test.tsx | TypeScript/React | 479 | frontend/src | YES |
@@ -119,18 +106,12 @@ Generated/refreshed: current compiler run
 | frontend/src/SettingsPage.test.tsx | TypeScript/React | 159 | frontend/src | YES |
 | frontend/src/SettingsPage.tsx | TypeScript/React | 613 | frontend/src | NO |
 | frontend/src/main.tsx | TypeScript/React | 10 | frontend/src | NO |
-| frontend/src/onnxApi.test.ts | TypeScript | 346 | frontend/src | YES |
-| frontend/src/onnxApi.ts | TypeScript | 290 | frontend/src | NO |
-| frontend/src/onnxDataApi.test.ts | TypeScript | 272 | frontend/src | YES |
-| frontend/src/onnxDataApi.ts | TypeScript | 767 | frontend/src | NO |
 | frontend/src/tableFormat.ts | TypeScript | 6 | frontend/src | NO |
 | frontend/src/testSetup.ts | TypeScript | 1 | frontend/src | NO |
 | frontend/vite.config.ts | TypeScript | 18 | frontend | NO |
-| scripts/accept_onnx01.ps1 | PowerShell | 292 | scripts | NO |
-| scripts/accept_onnx02.ps1 | PowerShell | 190 | scripts | NO |
 | scripts/build_m05_final_evidence.py | Python | 586 | scripts | NO |
 | scripts/build_m05_partial_evidence.py | Python | 217 | scripts | NO |
-| scripts/build_scientist_knowledge.py | Python | 270 | scripts | NO |
+| scripts/build_scientist_knowledge.py | Python | 240 | scripts | NO |
 | scripts/generate_module_map.py | Python | 120 | scripts | NO |
 | scripts/generate_symbol_index.py | Python | 261 | scripts | NO |
 | scripts/launcher_authority.py | Python | 161 | scripts | NO |
@@ -138,7 +119,6 @@ Generated/refreshed: current compiler run
 | scripts/reset_strategy_epoch.py | Python | 623 | scripts | NO |
 | scripts/run_max.ps1 | PowerShell | 258 | scripts | NO |
 | scripts/scan_m05_candidate_tree.py | Python | 142 | scripts | NO |
-| scripts/test_onnx01_skill_workflow_cache.ps1 | PowerShell | 251 | scripts | YES |
 | scripts/validate_cross_document_consistency.py | Python | 591 | scripts | NO |
 | scripts/validate_handoff.py | Python | 198 | scripts | NO |
 | scripts/validate_project_truth.py | Python | 270 | scripts | NO |

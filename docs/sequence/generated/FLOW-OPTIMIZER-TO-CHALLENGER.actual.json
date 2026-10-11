@@ -1612,13 +1612,6 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
-      "action": "migrate_onnx_data",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/workflow_store.py::migrate_current",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/onnx_data_store.py::migrate_onnx_data"
-    },
-    {
       "action": "_ensure_backtest_runtime_status",
       "evidence": "STATIC",
       "from": "backend/max_backend/workflow_store.py::migrate_current",
@@ -2294,15 +2287,6 @@
       "locator": "backend/max_backend/mtf_geometry.py::resolve_strategy_geometry"
     },
     {
-      "id": "backend/max_backend/onnx_data_store.py::migrate_onnx_data",
-      "kind": "function",
-      "label": "backend/max_backend/onnx_data_store.py::migrate_onnx_data",
-      "language": "Python",
-      "line_end": 105,
-      "line_start": 18,
-      "locator": "backend/max_backend/onnx_data_store.py::migrate_onnx_data"
-    },
-    {
       "id": "backend/max_backend/optimizer_api.py::get_qualified_candidates",
       "kind": "function",
       "label": "backend/max_backend/optimizer_api.py::get_qualified_candidates",
@@ -2919,8 +2903,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::_challenger_role_schema_ready",
       "language": "Python",
-      "line_end": 29,
-      "line_start": 25,
+      "line_end": 28,
+      "line_start": 24,
       "locator": "backend/max_backend/workflow_store.py::_challenger_role_schema_ready"
     },
     {
@@ -2928,8 +2912,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::_ensure_backtest_runtime_status",
       "language": "Python",
-      "line_end": 135,
-      "line_start": 125,
+      "line_end": 134,
+      "line_start": 124,
       "locator": "backend/max_backend/workflow_store.py::_ensure_backtest_runtime_status"
     },
     {
@@ -2937,8 +2921,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::_purge_research_authority",
       "language": "Python",
-      "line_end": 181,
-      "line_start": 138,
+      "line_end": 180,
+      "line_start": 137,
       "locator": "backend/max_backend/workflow_store.py::_purge_research_authority"
     },
     {
@@ -2946,8 +2930,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles",
       "language": "Python",
-      "line_end": 122,
-      "line_start": 32,
+      "line_end": 121,
+      "line_start": 31,
       "locator": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles"
     },
     {
@@ -2955,8 +2939,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::get_batch",
       "language": "Python",
-      "line_end": 337,
-      "line_start": 314,
+      "line_end": 335,
+      "line_start": 312,
       "locator": "backend/max_backend/workflow_store.py::get_batch"
     },
     {
@@ -2964,8 +2948,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::insert_challenger_batch_rows",
       "language": "Python",
-      "line_end": 555,
-      "line_start": 432,
+      "line_end": 553,
+      "line_start": 430,
       "locator": "backend/max_backend/workflow_store.py::insert_challenger_batch_rows"
     },
     {
@@ -2973,8 +2957,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::migrate_current",
       "language": "Python",
-      "line_end": 311,
-      "line_start": 184,
+      "line_end": 309,
+      "line_start": 183,
       "locator": "backend/max_backend/workflow_store.py::migrate_current"
     },
     {
@@ -2982,8 +2966,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::prepare_batch",
       "language": "Python",
-      "line_end": 389,
-      "line_start": 340,
+      "line_end": 387,
+      "line_start": 338,
       "locator": "backend/max_backend/workflow_store.py::prepare_batch"
     },
     {
@@ -2991,8 +2975,8 @@
       "kind": "function",
       "label": "backend/max_backend/workflow_store.py::update_batch",
       "language": "Python",
-      "line_end": 429,
-      "line_start": 392,
+      "line_end": 427,
+      "line_start": 390,
       "locator": "backend/max_backend/workflow_store.py::update_batch"
     },
     {
@@ -3014,7 +2998,7 @@
       "locator": "backend/tests/test_m01_recovery.py::good_pass"
     }
   ],
-  "observed_head": "44f6706022e99479c272a5039595213ecae622b1",
+  "observed_head": "e6046334eee94fd6812a5434a6c4e2828a77e2a4",
   "schema_version": 1,
-  "source_digest": "da0e2c7f4b8192f4993d9a9223d5dec9ea722c168c3bc9d567014d0d0592707f"
+  "source_digest": "7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f"
 }

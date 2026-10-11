@@ -3,8 +3,6 @@
     "GitHub main exact SHA = source authority",
     "GitHub Actions windows-latest = hosted build/test authority",
     "Owner PC + real MT5 = final runtime/E2E authority",
-    "Legacy Research and R00-R11 = RETIRED; ONNX-00 planning and ONNX-01 shell accepted; ONNX-02 data intake source only",
-    "Real broker reconciliation and real market DATA_READY = NOT_PROVEN; synthetic evidence is not market proof",
     "MT5 = simulation/optimization truth when runtime execution is authorized",
     "Deterministic Python = legality/KPI qualification/evidence validation authority",
     "SQLite = mutable operational authority",
@@ -173,37 +171,10 @@
       ],
       "ref": "contract:deferred-capabilities",
       "title": "Explicit deferred capabilities"
-    },
-    {
-      "classification": "EXISTING",
-      "facts": [
-        "The legacy Research runtime and legacy R00-R11 roadmap are RETIRED; they are not implementation authority.",
-        "ONNX-00 is accepted planning/governance authority and ONNX-01 is the accepted workspace/API shell.",
-        "ONNX-02 implements source-grounded MAX CSV intake, DQ, immutable snapshot evidence and exact three-window configuration only; it does not execute research, training, ONNX export/runtime or Champion mutation.",
-        "Real broker reconciliation and real market DATA_READY remain NOT_PROVEN; timestamp continuity and synthetic fixtures are not broker-completeness evidence.",
-        "ONNX-03 through ONNX-09 remain future separately authorized phases; scientific execution and real Owner-PC MT5 Strategy acceptance remain NOT_PROVEN."
-      ],
-      "ref": "contract:legacy-research-retirement-and-onnx-boundary",
-      "title": "Legacy Research retirement and ONNX phase boundary"
-    },
-    {
-      "classification": "EXISTING",
-      "facts": [
-        "MAX source contract is MAX_TRUE_MTF_DYNAMIC_V1 / CP32_TRUE_MTF_V1 with exactly 49 semicolon-delimited columns and 32 CP32 features, source-verified against the current EA baseline and manifest.",
-        "Canonical source discovery is restricted to the MetaTrader Common Files MAX training filename or an explicit path contained within that approved root; source reads respect the existing exclusive writer lock and never edit the live file.",
-        "Snapshots preserve exact source bytes and SHA-256 in immutable storage with backend-owned SQLite lineage; DQ and window results are recomputed on reads.",
-        "Duplicate identity is contract, symbol, period and signal_time as verified from the EA first-write behavior; conflicting duplicates fail closed and identical-row correction creates a separate derived snapshot after explicit confirmation.",
-        "Timestamp discontinuity is an observation, not proof of a broker-missing bar or complete history. Without broker evidence or an explicitly approved disposition, BROKER_RECONCILIATION_PENDING blocks real DATA_READY.",
-        "Exactly DISCOVERY, TOURNAMENT and FORWARD windows are validated against the same immutable snapshot using the source's naive broker/server wall-clock semantics; no UTC is inferred and no evaluation is run.",
-        "Synthetic API/test fixtures are SYNTHETIC_TEST_EVIDENCE and never establish real market readiness. Scientist remains advisory and cannot start intake, repair data, or authorize science."
-      ],
-      "ref": "contract:onnx-data-intake",
-      "title": "ONNX-02 MAX data intake boundary"
     }
   ],
   "explicit_deferred_capabilities": [
-    "Real market DATA_READY, broker reconciliation, scientific evaluation, model fitting/training, ONNX export/runtime and ONNX Champion promotion are NOT_PROVEN or deferred beyond ONNX-02",
-    "Real Owner-PC MT5 Strategy runtime acceptance remains NOT_PROVEN and Owner-controlled",
+    "Research development and scientific execution until the Owner-declared real MT5 backtest sample is READY",
     "Shadow/Live/portfolio execution",
     "news and sentiment workflows",
     "Scientist Python sandbox or coding tools"
@@ -219,16 +190,15 @@
     "M07 accepted causal true-MTF Strategy epoch",
     "M08 accepted qualified pool, multi-Challenger selection, Backtest results and Artifact control plane",
     "V6 Strategy Optimizer source candidate with 17 dimensions including an exact Owner-grid InpRiskPct 0.5%..5.0% step 0.5% that refinement cannot shift off-grid, plus fixed 5.0% daily-loss authority for new jobs",
-    "Strategy Optimizer launches the frozen native tester INI through subprocess.Popen and relies on MetaTrader's configured tester-agent behavior without an external active-agent cap or memory-estimate START admission gate",
-    "ONNX-02 source implementation provides source-contained MAX CP32 preflight, byte-exact immutable snapshot evidence, DQ/duplicate lineage and three-window configuration through a separate versioned API; real DATA_READY is withheld pending broker reconciliation evidence"
+    "Strategy Optimizer launches the frozen native tester INI through subprocess.Popen and relies on MetaTrader's configured tester-agent behavior without an external active-agent cap or memory-estimate START admission gate"
   ],
   "planned_capabilities": [
-    "ONNX-03 through ONNX-09 remain future separately authorized scientific and runtime phases; ONNX-02 does not run research, training, ONNX export/runtime, or promotion",
-    "Broker-history evidence or a separately Owner-approved reconciliation disposition is required before real DATA_READY can be established"
+    "Owner Strategy Champion and real MT5 sample preparation before future Research source work is authorized",
+    "Fresh future R00-R11 research roadmap remains blocked until the Owner declares the real MT5 backtest sample READY"
   ],
   "project": {
     "name": "MAX Trading Agent",
-    "phase": "ONNX-02 source Data Intake/DQ/snapshots/windows; real DATA_READY and scientific runtime NOT_PROVEN"
+    "phase": "GitHub-hosted Strategy stabilization"
   },
   "schema": "MAX_REBUILD_PHASE1_SCIENTIST_KNOWLEDGE_V1",
   "source_manifest": [
@@ -242,15 +212,7 @@
     },
     {
       "path": "docs/ROADMAP.md",
-      "sha256": "f30dc2229447a88e23167fe67d832f3e9fa2a7a75cf6bffe886eeeba29582f3c"
-    },
-    {
-      "path": "docs/onnx/ONNX_02_DATA_INTAKE.md",
-      "sha256": "96507c9cc258e3c4a6602d1952e0100ba4a05b892207de22b65330df426fed24"
-    },
-    {
-      "path": ".workflow/onnx_data_authority.json",
-      "sha256": "e123ea174bb055049434eccfb87dcbb6c15051d0c4af7feb9ef23a231ef52bd2"
+      "sha256": "3ff31f427c7f39c621e34614719420bdf3badae6b6b77df6a0c2a96ccb9632ef"
     },
     {
       "path": "docs/ARCHITECTURE_PHASE1.md",
@@ -270,7 +232,7 @@
     },
     {
       "path": "backend/max_backend/schema.py",
-      "sha256": "d8ec20adeee5149a960b44d99915403e68c8ebffd49ffe2228281e4964018710"
+      "sha256": "688a63b06c9c44f72d168ef372ef2ad8363464e2f1ee23dc06382b6aece24bff"
     },
     {
       "path": "backend/max_backend/workflow_contract.py",
@@ -278,7 +240,7 @@
     },
     {
       "path": "backend/max_backend/workflow_store.py",
-      "sha256": "7ab0e4d3e8fd5452aa342493e26090d986bf15424c3ad6c058f2db92117da8e2"
+      "sha256": "9d3e74cc6fc9bd8eb944b9f3ce47386d18fd83cc0a99d442d412d27bbda0c579"
     },
     {
       "path": "backend/max_backend/mtf_geometry.py",
@@ -370,39 +332,11 @@
     },
     {
       "path": "backend/max_backend/main.py",
-      "sha256": "0d5cf941326f83c66754507f603847bd4c718b50405c9405e156150462aff94d"
-    },
-    {
-      "path": "backend/max_backend/onnx_data_contract.py",
-      "sha256": "02ef5055f19d99defe663ae15eb9d0eb082b74f688d4eec9382f6f29ee1b8add"
-    },
-    {
-      "path": "backend/max_backend/onnx_data_source.py",
-      "sha256": "73d558d1580b14367a5f22f97000475806f2b8e768bb38c1730744c817e8a75e"
-    },
-    {
-      "path": "backend/max_backend/onnx_data_store.py",
-      "sha256": "8bcbf88f31491df9189991da25d15e5310e1a239025b5fb927691cec07d45b9e"
-    },
-    {
-      "path": "backend/max_backend/onnx_data_service.py",
-      "sha256": "f559d1e5a9f7a883cbc323843e095c79163b0dcfd531479c1964b8e59b2bdc76"
-    },
-    {
-      "path": "backend/max_backend/onnx_data_api.py",
-      "sha256": "558425a8d366894293dabd899202f0000ff12c896bf406d33a89a2028abb1354"
-    },
-    {
-      "path": "frontend/src/onnxDataApi.ts",
-      "sha256": "bca322aca6ea63085e438ea2e8146aa91f63de5597773f0690ee3182de6e2c19"
-    },
-    {
-      "path": "frontend/src/OnnxDataIntake.tsx",
-      "sha256": "0f35f9f0bd8b12603fd949b94bde10dcc0dcab25b7ef278608a38143556430d6"
+      "sha256": "849c7dab8af31f8a3efb79ec5847f578981ea29f79cd1eac754598399ef3e4b0"
     },
     {
       "path": "backend/max_backend/scientist_knowledge.py",
-      "sha256": "43cd30807ee5e094c77513bc15552d11eaab71271515bd471898d0a89bd11810"
+      "sha256": "3b938e8ac029d7f0a224e77aa3dc9dc9fe6ea55968910838967d502fed651bd0"
     },
     {
       "path": "backend/max_backend/scientist_context.py",

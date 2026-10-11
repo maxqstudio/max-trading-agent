@@ -3,7 +3,7 @@
 # FLOW INDEX
 
 Authority SHA: external final acceptance evidence
-Source digest: da0e2c7f4b8192f4993d9a9223d5dec9ea722c168c3bc9d567014d0d0592707f
+Source digest: 7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f
 
 ## Flow inventory
 
@@ -56,7 +56,6 @@ Source digest: da0e2c7f4b8192f4993d9a9223d5dec9ea722c168c3bc9d567014d0d0592707f
 | POST | /jobs/{job_id}/stop | backend/max_backend/optimizer_api.py::stop |
 | GET | /knowledge | backend/max_backend/scientist_api.py::get_knowledge |
 | POST | /preflight | backend/max_backend/artifact_api.py::preflight |
-| POST | /preflight | backend/max_backend/onnx_data_api.py::preflight_source |
 | POST | /preview | backend/max_backend/optimizer_api.py::preview_request |
 | GET | /provider-catalog | backend/max_backend/scientist_api.py::get_scientist_provider_catalog |
 | GET | /provider-settings | backend/max_backend/scientist_api.py::get_scientist_provider_settings |
@@ -65,9 +64,6 @@ Source digest: da0e2c7f4b8192f4993d9a9223d5dec9ea722c168c3bc9d567014d0d0592707f
 | POST | /reconcile | backend/max_backend/artifact_api.py::reconcile |
 | GET | /registry | backend/max_backend/challenger_api.py::get_challenger_registry |
 | GET | /scientist/status | backend/max_backend/optimizer_api.py::scientist_status |
-| POST | /snapshots | backend/max_backend/onnx_data_api.py::create_snapshot |
-| GET | /snapshots/{snapshot_id} | backend/max_backend/onnx_data_api.py::get_snapshot |
-| POST | /snapshots/{snapshot_id}/resolve-identical-duplicates | backend/max_backend/onnx_data_api.py::resolve_identical_duplicates |
 | POST | /start | backend/max_backend/optimizer_api.py::start |
 | GET | /status | backend/max_backend/scientist_api.py::get_status |
 | POST | /strategy-reset | backend/max_backend/artifact_api.py::strategy_workspace_reset |
@@ -77,9 +73,6 @@ Source digest: da0e2c7f4b8192f4993d9a9223d5dec9ea722c168c3bc9d567014d0d0592707f
 | GET | /threads/{thread_id}/messages | backend/max_backend/scientist_api.py::get_thread_messages |
 | POST | /threads/{thread_id}/messages | backend/max_backend/scientist_api.py::post_thread_message |
 | PUT | /ui-settings | backend/max_backend/scientist_api.py::put_scientist_ui_settings |
-| POST | /windows/validate | backend/max_backend/onnx_data_api.py::validate_windows |
-| GET | /workspace | backend/max_backend/onnx_api.py::get_onnx_workspace |
-| GET | /workspace | backend/max_backend/onnx_data_api.py::get_data_workspace |
 | GET | /{artifact_id}/trace | backend/max_backend/artifact_api.py::trace |
 | DELETE | /{challenger_id} | backend/max_backend/challenger_api.py::delete_challenger_endpoint |
 | GET | /{challenger_id} | backend/max_backend/challenger_api.py::get_challenger |

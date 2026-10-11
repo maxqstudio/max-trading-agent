@@ -9,15 +9,14 @@ Human comprehension status: PASS
 
 Project: MAX Trading Agent
 
-Purpose: Windows-only GitHub-first Strategy control plane with a separately governed ONNX workspace; ONNX-02 implements data intake and immutable snapshot contracts only, while real DATA_READY, scientific runtime, training, export, and research remain unproven or unauthorized.
+Purpose: Windows-only GitHub-first control plane for deterministic Strategy optimization, Challenger/Champion governance, and MetaTrader 5 execution evidence; fresh Research work is roadmap-gated and not active runtime.
 
 Primary users: Owner, authorized Builder, Control Room auditor
 
 Expected outcomes:
 - Preserve deterministic Strategy lifecycle authority from optimizer evidence through Challenger and Champion tenure.
 - Stabilize the Strategy lifecycle, generated artifact controls, explicit reset/recovery behavior, and fail-closed Owner-facing actions.
-- Keep the rejected legacy Research subsystem retired and establish a single separately governed ONNX model Challenger/Champion roadmap.
-- Complete ONNX-00 planning authority and ONNX-01 workspace shell; implement only ONNX-02 source-grounded Data Intake, DQ, immutable snapshots, and three-window validation. Scientific evaluation, training, export, and real research remain unimplemented and unauthorized.
+- Remove the rejected active Research subsystem and keep fresh R00-R11 work planned and blocked until the Owner declares a real MT5 sample READY.
 - Keep public-source development reproducible from GitHub with Windows CI as hosted build/test authority while deferring real MT5/runtime acceptance to the final Owner-PC phase.
 - Make the Strategy Optimizer draft durable, job execution restart-safe, evidence publication atomic, and ordinary candidate reads bounded before any fresh Owner runtime run.
 
@@ -29,7 +28,7 @@ Users / External Systems
     -> State / Evidence Authorities
     -> External Runtime / Outputs
 
-Observed source inventory: 141 files, 4 language categories.
+Observed source inventory: 121 files, 4 language categories.
 
 ## Major components
 
@@ -164,7 +163,7 @@ Authority: SQLite integrity/recovery status plus exact Owner confirmation and ve
 
 ## Lifecycle and state
 
-Current phase: ONNX-02
+Current phase: STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING
 
 Current status: IN_PROGRESS
 
@@ -182,7 +181,7 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 | immutable_scientific_evidence | Sealed manifests, bundles, reports and retained artifacts | Scientific/execution history is immutable when its owning runtime contract marks it immutable; runtime evidence/artifacts are intentionally not tracked in the public source repository. |
 | strategy_champion | backend/max_backend/champion_store.py::commit_promotion_authority plus explicit Owner promotion | Current Champion tenure changes only through verified promotion authority; prior tenure becomes FORMER history. |
 | strategy_challenger | backend/max_backend/challenger_store.py plus retained immutable Challenger bundle | Active eligibility and historical PROMOTED/RETIRED identity are distinct; retained request epoch defines exact parameter universe. |
-| optimizer | Merged PR #18 at maxqstudio/max-trading-agent main 203f6ab3dc618e3edd247841aa25e1fa0951a19a plus MT5 optimizer reports/sidecars and Python canonical revalidation | Current execution authority is merged PR #18 at main SHA 203f6ab3dc618e3edd247841aa25e1fa0951a19a: launch terminal64.exe through subprocess.Popen with the frozen /config INI and let MT5 manage its configured local tester agents. MAX must not impose an external active-process cap or estimated-memory START gate unless a new explicit Owner decision authorizes it. This supersedes D-039 as current execution policy, not as historical rationale. The reported Windows commit-memory exhaustion remains unresolved/NOT_PROVEN; restoring native scheduling does not prove the runtime memory issue eliminated. Preserve the immutable started-job request, worker/MT5 identity, frozen report and sidecar hashes, Python canonical revalidation, deterministic identical-row collapse, conflicting-evidence rejection, exact candidate deduplication, and projection-read-only boundary. |
+| optimizer | MT5 optimizer reports/sidecars plus Python canonical revalidation | MT5 executes optimization through terminal64.exe with its native /config behavior and Owner-selected tester-agent settings; MAX does not impose an external tester-agent cap or estimated-memory admission gate. The immutable started-job request, worker/MT5 identity, frozen report and sidecar hashes, and Python canonical revalidation govern evidence recovery. Identical repeated sidecar vectors are collapsed deterministically only when all semantic metrics match; conflicting evidence fails closed. Exact duplicate candidate identities are removed before SQLite projection persistence. Candidate projections serve reads only and canonical evidence is revalidated before mutation. |
 | optimizer_draft_and_execution_snapshot | backend/max_backend/optimizer_draft.py and optimizer job/store transactions | One bounded editable draft persists as current Owner preference; each started job freezes its own request snapshot that later draft edits cannot change. |
 | optimizer_round_evidence_and_read_projection | Committed immutable Optimizer round bundle plus optimizer_candidate_projection read model | A verified atomic bundle is canonical retained evidence. Its normalized SQLite projection is a derived read model; it never grants qualification or bypasses canonical revalidation at Challenger mutation. |
 | mt5_execution | MetaTrader 5 Strategy Tester and MetaEditor | MT5/MetaEditor own simulation, optimization and compile execution truth; Python owns legality/orchestration/evidence verification. |
@@ -195,10 +194,6 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 | documentation | .workflow semantic specs + Project Truth Compiler at Skill Workflow 964481ed1609f87904ba9e08890bffc0a10c3fd4 | Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden. |
 | sequence | DURING-mode generated actual sequence graphs plus source/test/runtime semantic review | Existing implementation is reconstructed from current source; retrospective BEFORE plans are forbidden. |
 | governance_tools | .workflow/tools vendored byte-identically from Skill Workflow 964481ed1609f87904ba9e08890bffc0a10c3fd4 | Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed. |
-| onnx_scientific_planning | .workflow/onnx_v1_authority.json plus the explicit Owner ONNX-00 decisions | This is the planning-only source authority for the exact 23-family ONNX V1 universe under current Owner decision D-043 (supplemented by D-044 proposals), distinct architecture/composition identities, CandidateSpec/parameter/capacity contracts, stage gates, data/checkpoint boundaries and roadmap. Explicit unresolved authority gaps fail closed before ONNX-03; no runtime, training, export, MT5 or promotion permission is granted. |
-| onnx_workspace_read_state | backend/max_backend/onnx_api.py::get_onnx_workspace plus frontend/src/onnxApi.ts contract parser | ONNX-01 exposes only a versioned read-only backend-owned capability snapshot. It creates no persisted operational cycle, reads no dataset/database, and grants no stage transition or scientific mutation; status distinctions and the existing application Recovery Required gate remain authoritative. |
-| onnx_data_intake_and_snapshot | backend/max_backend/onnx_data_source.py, onnx_data_store.py, onnx_data_service.py and /api/v2/onnx/data; frontend/src/onnxDataApi.ts | ONNX-02 owns source-contained MAX CSV preflight, EA-lock-coordinated byte-exact immutable snapshots, DQ and duplicate lineage, and exactly three snapshot-backed window configuration. ONNX-01 /api/v1/onnx/workspace remains its accepted null-only contract. Timestamp gaps are observations, not broker facts; without source-backed broker reconciliation or an explicitly approved disposition, real DATA_READY is withheld. Synthetic fixtures remain SYNTHETIC_TEST_EVIDENCE. This phase exposes no research evaluation, training, export, runtime, or Champion mutation. |
-| current_governance_guidance | Latest Skill_Workflow/main normative guidance at 3b3289681cf2cec8d3d132895e0848be64bb54b1 | Latest guidance is consulted for this planning phase. MAX's executable CI validator provenance remains explicitly pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4 until a separately reviewed toolchain migration. |
 
 ## Mutable vs immutable
 
@@ -211,7 +206,7 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 - sqlite_operational_state: Mutable operational lifecycle/settings state is authoritative only where the corresponding store/service owns it.
 - strategy_champion: Current Champion tenure changes only through verified promotion authority; prior tenure becomes FORMER history.
 - strategy_challenger: Active eligibility and historical PROMOTED/RETIRED identity are distinct; retained request epoch defines exact parameter universe.
-- optimizer: Current execution authority is merged PR #18 at main SHA 203f6ab3dc618e3edd247841aa25e1fa0951a19a: launch terminal64.exe through subprocess.Popen with the frozen /config INI and let MT5 manage its configured local tester agents. MAX must not impose an external active-process cap or estimated-memory START gate unless a new explicit Owner decision authorizes it. This supersedes D-039 as current execution policy, not as historical rationale. The reported Windows commit-memory exhaustion remains unresolved/NOT_PROVEN; restoring native scheduling does not prove the runtime memory issue eliminated. Preserve the immutable started-job request, worker/MT5 identity, frozen report and sidecar hashes, Python canonical revalidation, deterministic identical-row collapse, conflicting-evidence rejection, exact candidate deduplication, and projection-read-only boundary.
+- optimizer: MT5 executes optimization through terminal64.exe with its native /config behavior and Owner-selected tester-agent settings; MAX does not impose an external tester-agent cap or estimated-memory admission gate. The immutable started-job request, worker/MT5 identity, frozen report and sidecar hashes, and Python canonical revalidation govern evidence recovery. Identical repeated sidecar vectors are collapsed deterministically only when all semantic metrics match; conflicting evidence fails closed. Exact duplicate candidate identities are removed before SQLite projection persistence. Candidate projections serve reads only and canonical evidence is revalidated before mutation.
 - optimizer_draft_and_execution_snapshot: One bounded editable draft persists as current Owner preference; each started job freezes its own request snapshot that later draft edits cannot change.
 - mt5_execution: MT5/MetaEditor own simulation, optimization and compile execution truth; Python owns legality/orchestration/evidence verification.
 - scientist: Scientist output is advisory only and cannot mutate Strategy/Research scientific authority.
@@ -221,9 +216,6 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 - corrupt_database_recovery: An unopenable or integrity-failed database disables ordinary APIs; only explicit confirmed backup/quarantine and current-schema bootstrap may restore service.
 - documentation: Generated docs under docs/ are deterministic projections of .workflow semantic specs plus code facts; root canonical duplicates are forbidden.
 - sequence: Existing implementation is reconstructed from current source; retrospective BEFORE plans are forbidden.
-- onnx_scientific_planning: This is the planning-only source authority for the exact 23-family ONNX V1 universe under current Owner decision D-043 (supplemented by D-044 proposals), distinct architecture/composition identities, CandidateSpec/parameter/capacity contracts, stage gates, data/checkpoint boundaries and roadmap. Explicit unresolved authority gaps fail closed before ONNX-03; no runtime, training, export, MT5 or promotion permission is granted.
-- onnx_workspace_read_state: ONNX-01 exposes only a versioned read-only backend-owned capability snapshot. It creates no persisted operational cycle, reads no dataset/database, and grants no stage transition or scientific mutation; status distinctions and the existing application Recovery Required gate remain authoritative.
-- onnx_data_intake_and_snapshot: ONNX-02 owns source-contained MAX CSV preflight, EA-lock-coordinated byte-exact immutable snapshots, DQ and duplicate lineage, and exactly three snapshot-backed window configuration. ONNX-01 /api/v1/onnx/workspace remains its accepted null-only contract. Timestamp gaps are observations, not broker facts; without source-backed broker reconciliation or an explicitly approved disposition, real DATA_READY is withheld. Synthetic fixtures remain SYNTHETIC_TEST_EVIDENCE. This phase exposes no research evaluation, training, export, runtime, or Champion mutation.
 
 ### Immutable history / evidence
 
@@ -231,7 +223,6 @@ See WORKFLOW_STATE_MACHINE.md for generated lifecycle contracts.
 - optimizer_round_evidence_and_read_projection: A verified atomic bundle is canonical retained evidence. Its normalized SQLite projection is a derived read model; it never grants qualification or bypasses canonical revalidation at Challenger mutation.
 - historical_evidence: Historical evidence remains historically truthful and is not rewritten to mimic current terminology or configuration.
 - governance_tools: Project-local governance tooling is vendored byte-identically from repaired current Skill Workflow authority; no MAX-local validator patches are allowed.
-- current_governance_guidance: Latest guidance is consulted for this planning phase. MAX's executable CI validator provenance remains explicitly pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4 until a separately reviewed toolchain migration.
 
 ### Configuration vs execution snapshot
 
@@ -266,38 +257,44 @@ compiler does not infer them from implementation names.
 ## Current project state
 
 Next authorized actions:
-- Complete ONNX-02 canonical MAX CSV discovery, writer-safe immutable snapshots, strict DQ/duplicate handling, broker-gap status separation, and exact three-window validation without asserting real DATA_READY absent broker authority.
-- Regenerate Project Truth, Scientist knowledge and DURING/CURRENT sequence artifacts; run the repeatable acceptance runner, full local regressions, source-only scan, pinned Skill Workflow checks, and Windows GitHub Actions.
-- Push a new ONNX-02 branch and PR, verify exact PR head/tree and hosted Windows CI, then STOP with the PR open and unmerged for independent Control Room audit. Do not begin ONNX-03.
+- After local gates pass, update PR #18 with this source repair, wait for exact push and PR-head Windows CI, then stop for Control Room audit. Do not merge.
+- Owner-PC runtime, real MT5 diagnostics, and all R00-R11 Research remain out of scope for this repair; runtime stays NOT_PROVEN and Research remains PAUSED.
 
 Blocked actions:
-- ONNX-02 authorizes source discovery, read-only preflight, explicit immutable snapshots, DQ/duplicate evidence, and validation of the exact three research windows only; no research evaluation, model/scientific execution, training/scoring, ONNX export/runtime, or promotion is authorized.
-- Any Owner-PC access, live MT5 launch, broker-data repair, real Owner dataset snapshot, real Optimizer run, or real scientific result during hosted source development.
-- DATA_READY must fail closed while broker reconciliation remains pending; synthetic fixtures are SYNTHETIC_TEST_EVIDENCE and never establish real DATA_READY.
-- Any promotion or mutation of a Strategy or ONNX Champion from this phase.
-- Any expansion beyond the Owner-frozen V1 model allowlist or silent change to scientific gates, KPI thresholds, date windows, or CandidateSpec.
+- Full/complete or unattended real MT5 Optimizer execution; only explicitly bounded diagnostics of at most 20 minutes are in scope, and a run must not be allowed to complete normally.
+- Mutating Windows pagefile/OS settings or changing the frozen 17D scientific search space to reduce memory use.
+- Fresh R00-R11 Research execution, real model training, Research dataset creation, ONNX, Research Challenger creation, and Champion mutation; Research remains paused and roadmap-gated.
+- Strategy Challenger selection/promotion and live MT5 backtest during this source implementation phase.
+- Unrelated roadmap or product-scope expansion.
 
 Known blockers:
-- Complete numeric KPI definitions for WFA, Tournament, Monte Carlo, and Forward remain an explicit future execution prerequisite; ONNX-00 does not invent them.
-- ONNX parity tolerances, runtime-manifest schema, final-fit row boundary, verified MAX CP32 identity fields, and temporal compute-device policy require separate phase-specific authority before their implementation gates.
-- No broker-history evidence source or Owner-approved reconciliation disposition is available in ONNX-02 source authority; real DATA_READY therefore remains NOT_PROVEN even when no timestamp discontinuity is observed.
+- The latest Owner optimizer job 20261003_012101_e65a942d is inactive and FAILED during PARSING_RESULTS after MT5 returned exit code 0; its frozen report/sidecar contain repeated parameter vectors and no candidate rows were committed. The source repair must remain offline/synthetic until Owner starts a new run.
+- Owner-reported full-range 17D Fast Genetic attempt crashed under Windows commit-memory exhaustion; exact final Owner Optimizer/runtime acceptance remains NOT_PROVEN.
+- The native-launch/parser/dedup source candidate is not yet committed or hosted-CI validated; preserve PR #18 and stop before merge.
 
 ## Proven vs not proven
 
 ### Proven
 
-- ONNX-01 was accepted at parent main 1a9c9a6990e1f2571e4d85d79436402e6d37ec23 (tree 32b6ed070eab06270ec53cac0322890825d85236); post-merge Windows CI run 38022879077 completed successfully in Source-only, Backend/Skill Workflow, and Frontend jobs. Exact evidence is external under D-012.
-- ONNX-00 was closed against accepted merge main c75f978ea4438183e6a759d398eb69b3eeca9ac4 (tree de1eba7dc91cef12843780e9ef2fa70275422a12), Control Room acceptance, and post-merge Windows CI run 38012160408 PASS; this is accepted parent evidence under D-012, not ONNX-01 runtime evidence.
-- Latest maxqstudio/max_research_agent main was fetched at 883ebeb1ca2e70f6255e0889358ba7c822ac52f5; the 19 authorities listed in the Owner prompt were inspected at that commit.
-- Latest Skill_Workflow/main guidance was fetched at 3b3289681cf2cec8d3d132895e0848be64bb54b1 and applied as normative guidance. MAX executable Windows CI and vendored validator provenance remain pinned to 964481ed1609f87904ba9e08890bffc0a10c3fd4; no byte-identity with 3b328968 is claimed.
-- Under current Owner decision D-043, the ONNX V1 universe is exactly nine standalone plus fourteen temporal-to-tree hybrid families, total 23; D-044 proposed parameter envelopes remain non-executable until separately accepted.
-- ONNX-00 planning and ONNX-01 workspace/API shell are accepted; ONNX-02 is authorized for data intake source implementation only. Local synthetic tests do not prove real data readiness, broker reconciliation, model fitting, ONNX export/runtime, MT5, or any scientific result.
+- Accepted starting authority: maxqstudio/max-trading-agent main ac2787c0fe46bfa83267b0ceebb9d8f3f1d44c5c; current branch candidate base verified from origin/main.
+- Current Skill_Workflow/main was fetched and verified at 964481ed1609f87904ba9e08890bffc0a10c3fd4; its exact governance-tool delta was inspected and the applicable tools are vendored byte-identically, with no local validator patch.
+- The Git-aware source inventory excludes Git-ignored Owner Optimizer XML artifacts without modifying them; all 8 DURING/CURRENT sessions use the current source digest c8b5704d63f9f6dd6e8de61dc9772ce4faa74e313bbdc99e80a821f42c1b4048; the Optimizer actual graph now includes native launch, duplicate-vector parsing, and transactional candidate deduplication.
+- Optimizer draft, launch/recovery identity, atomic evidence, read-model, frontend request lifecycle, and visible action feedback are under the authorized source-hardening scope.
+- Source tests and 750-candidate API profile used synthetic SQLite/evidence only; actual qualified-candidate endpoint median was 23.651 ms, p95 68.983 ms, with a 61,462-byte page; no real MT5 or market data was used.
+- A separate Windows process-counter run measured CPU 1.0781 s, peak working set 64,405,504 bytes, read I/O 6,060,864 bytes and write I/O 0 over 108 requests; qualified route was mocked in that resource run.
+- Historical PR15 bounded Stage C/D tests and Optimizer UI control-flow evidence remain accepted as historical evidence; they did not represent the later Owner-reported long-range commit-memory failure and do not prove V2 behavior.
+- V2 targeted optimizer/resource regression passes 171/171; full backend passes 474 tests with zero skips/failures; frontend passes 53 tests, with lint, build, npm tree and pip check passing. Canonical Scientist knowledge was rebuilt after the first full-suite run exposed stale source hashes.
+- The baseline PR #17 head b167d2a6df432ed6c146f1fabe100521cc7feefc had one push attempt fail the actual venv worker identity test with an 8-second PowerShell/CIM TimeoutExpired; its passing reruns did not resolve the defect. The repair source candidate removed that production dependency, passed 32 focused identity/recovery/stop tests, passed 3 repeated venv runs (15/15 actual worker lifecycles), passed full backend (483, zero skips/failures), and passed both push and PR-head Windows CI across all three jobs. Exact final SHA/run identities are external per D-012. PR #17 remains open and unmerged; PR #16 is closed and superseded.
+- Worker identity is now proven on the repair source candidate: deterministic authenticated named-pipe handshake; exact job/token/peer PID/executable/process-creation binding; verified-only termination; 483 full backend tests passed; repeated real Windows venv tests passed 15/15; both push and PR-head CI passed. The current task adds only final governance status after this evidence; no Owner runtime or MT5 process was used.
+- Read-only DB inspection found job 20261003_012101_e65a942d status FAILED, active=0, round phase REPORT_READY, no candidate rows; offline replay parsed 7,115 report rows and 3,239 unique eligible candidates without writing to SQLite or launching MT5.
+- Local source candidate deduplicates only semantically exact candidate identities before transactional SQLite projection persistence and collapses repeated sidecar vectors only when every semantic metric agrees; current local backend/frontend gates passed before governance regeneration.
 
 ### Not proven
 
-- Real market-data DATA_READY, broker reconciliation, ONNX runtime, scientific evaluation, model training, GPU execution, ONNX conversion/parity, Research Challenger, or Champion behavior.
-- Owner-PC Strategy Optimizer and real MT5 runtime acceptance; this planning phase does not claim that unresolved source/runtime behavior is solved.
-- The complete numeric KPI contract and ONNX runtime/parity contracts required before later implementation phases.
+- Owner runtime acceptance remains NOT_PROVEN; this source candidate has not launched MT5 or performed a real Optimizer run.
+- PR #18 candidate updates have not passed hosted CI; no merge or phase closure is claimed. Exact final SHA and CI run identities remain external evidence per D-012.
+- Full production-scale/long-range Owner Strategy Optimizer execution, Challenger selection, Champion promotion, MT5 backtest, and end-to-end runtime acceptance.
+- Fresh R00-R11 Research execution, model training, ONNX, Research Challenger creation, or Champion mutation.
 
 ## Important limitations
 
