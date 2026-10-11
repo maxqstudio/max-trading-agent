@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from .config import DATABASE_PATH
-from .db import connect
+from .db import assert_database_schema_compatible, connect
 from .optimizer_store import migrate_m02, utc_now
 
 SCHEMA_VERSION = 3
@@ -16,6 +16,7 @@ REGISTERING_STATUS = "REGISTERING"
 
 
 def migrate_m03(path: Path = DATABASE_PATH) -> None:
+    assert_database_schema_compatible(path, allow_missing=False)
     migrate_m02(path)
     with connect(path) as conn:
         conn.executescript(

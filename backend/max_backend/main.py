@@ -15,8 +15,14 @@ from .challenger_operations_store import (
 from .challenger_operations import recover_retired_challenger_deployments
 from .champion_api import router as champion_router
 from .champion_store import champion_database_status, current_champion, migrate_m04
-from .config import MILESTONE, PROJECT_NAME, PROJECT_PHASE
-from .db import ensure_baseline_registered, initialize_database, read_baseline
+from .config import DATABASE_PATH, MILESTONE, PROJECT_NAME, PROJECT_PHASE
+from .db import (
+    DatabaseSchemaGuardError,
+    assert_database_schema_compatible,
+    ensure_baseline_registered,
+    initialize_database,
+    read_baseline,
+)
 from .mt5 import detect_mt5
 from .workflow_store import migrate_current
 from .optimizer_api import router as optimizer_router
@@ -39,6 +45,7 @@ from .strategy_reset import (
 logger = logging.getLogger(__name__)
 RECOVERY_REQUIRED = False
 RECOVERY_REASON: str | None = None
+STARTUP_SCHEMA_BLOCKER: dict | None = None
 
 
 class CorruptStateResetConfirmation(BaseModel):
@@ -47,29 +54,43 @@ class CorruptStateResetConfirmation(BaseModel):
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    global RECOVERY_REQUIRED, RECOVERY_REASON
+    global RECOVERY_REQUIRED, RECOVERY_REASON, STARTUP_SCHEMA_BLOCKER
     RECOVERY_REQUIRED = False
     RECOVERY_REASON = None
+    STARTUP_SCHEMA_BLOCKER = None
     try:
-        initialize_database()
-        ensure_baseline_registered()
-        migrate_m04()
-        recover_incomplete_promotions()
-        migrate_m05()
-        recover_unconfirmed_requests()
-        migrate_m06()
-        recover_incomplete_backtests()
-        recover_retired_challenger_deployments()
-        migrate_current()
-        reconcile_optimizer_startup()
+        _run_startup_migrations(DATABASE_PATH)
+    except DatabaseSchemaGuardError as exc:
+        STARTUP_SCHEMA_BLOCKER = exc.diagnostic()
+        logger.error(
+            "MAX startup blocked by database preflight (%s): %s",
+            exc.status,
+            exc.message,
+        )
     except Exception:
-        recovery = database_recovery_status()
+        recovery = database_recovery_status(path=DATABASE_PATH)
         if recovery["status"] != "RECOVERY_REQUIRED":
             raise
         RECOVERY_REQUIRED = True
         RECOVERY_REASON = str(recovery["reason"])
         logger.exception("MAX startup entered explicit Recovery Required mode")
     yield
+
+
+def _run_startup_migrations(path) -> None:
+    """Guard the existing database before any initialization or recovery write."""
+    assert_database_schema_compatible(path, allow_missing=True)
+    initialize_database(path)
+    ensure_baseline_registered(path)
+    migrate_m04(path)
+    recover_incomplete_promotions(path=path)
+    migrate_m05(path)
+    recover_unconfirmed_requests(path=path)
+    migrate_m06(path)
+    recover_incomplete_backtests(path)
+    recover_retired_challenger_deployments(path=path)
+    migrate_current(path)
+    reconcile_optimizer_startup(path=path)
 
 
 app = FastAPI(title=PROJECT_NAME, version="0.1.0", lifespan=lifespan)
@@ -82,6 +103,10 @@ app.include_router(scientist_router)
 
 @app.middleware("http")
 async def recovery_required_gate(request, call_next):
+    if STARTUP_SCHEMA_BLOCKER is not None:
+        if request.url.path in {"/api/health", "/api/recovery/status"}:
+            return await call_next(request)
+        return JSONResponse(status_code=503, content=STARTUP_SCHEMA_BLOCKER)
     if RECOVERY_REQUIRED and request.url.path not in {
         "/api/health",
         "/api/recovery/status",
@@ -99,7 +124,9 @@ async def recovery_required_gate(request, call_next):
 
 @app.get("/api/recovery/status")
 def recovery_status() -> dict:
-    status = database_recovery_status()
+    if STARTUP_SCHEMA_BLOCKER is not None:
+        return dict(STARTUP_SCHEMA_BLOCKER)
+    status = database_recovery_status(path=DATABASE_PATH)
     return {
         "status": "RECOVERY_REQUIRED" if RECOVERY_REQUIRED else status["status"],
         "reason": RECOVERY_REASON if RECOVERY_REQUIRED else status["reason"],
@@ -116,6 +143,11 @@ def recovery_status() -> dict:
 @app.post("/api/recovery/reset")
 def reset_corrupt_state(payload: CorruptStateResetConfirmation) -> dict:
     global RECOVERY_REQUIRED, RECOVERY_REASON
+    if STARTUP_SCHEMA_BLOCKER is not None:
+        raise HTTPException(
+            status_code=503,
+            detail="DATABASE_SCHEMA_GUARD_ACTIVE: reset and recovery are disabled",
+        )
     if not RECOVERY_REQUIRED:
         raise HTTPException(status_code=409, detail="RECOVERY_REQUIRED_MODE_NOT_ACTIVE")
     try:
@@ -161,6 +193,17 @@ def _foundation_state() -> dict:
 
 @app.get("/api/health")
 def health() -> dict:
+    if STARTUP_SCHEMA_BLOCKER is not None:
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": STARTUP_SCHEMA_BLOCKER["status"],
+                "project": PROJECT_NAME,
+                "phase": PROJECT_PHASE,
+                "milestone": MILESTONE,
+                "database": STARTUP_SCHEMA_BLOCKER,
+            },
+        )
     if RECOVERY_REQUIRED:
         return {
             "status": "RECOVERY_REQUIRED",

@@ -6,9 +6,136 @@ from typing import Any
 
 from .config import DATABASE_PATH, STRATEGY_CONTRACT
 from .ea import verify_baseline_snapshot
+from .schema import CURRENT_SCHEMA_VERSION
 
 SCHEMA_VERSION = 1
 MIN_SUPPORTED_SCHEMA = 1
+
+
+class DatabaseSchemaGuardError(RuntimeError):
+    """A database cannot safely be opened by this application build."""
+
+    def __init__(
+        self,
+        status: str,
+        message: str,
+        *,
+        database_schema_version: int | None = None,
+    ) -> None:
+        super().__init__(message)
+        self.status = status
+        self.database_schema_version = database_schema_version
+        self.message = message
+
+    def diagnostic(self) -> dict[str, Any]:
+        result: dict[str, Any] = {
+            "status": self.status,
+            "reason": self.status,
+            "message": self.message,
+            "supported_schema_version": CURRENT_SCHEMA_VERSION,
+            "reset_available": False,
+        }
+        if self.database_schema_version is not None:
+            result["database_schema_version"] = self.database_schema_version
+        return result
+
+
+def assert_database_schema_compatible(
+    path: Path = DATABASE_PATH,
+    *,
+    allow_missing: bool = True,
+) -> dict[str, Any]:
+    """Read schema authority without creating or writing database/journal files."""
+    database = Path(path)
+    if not database.exists():
+        if allow_missing:
+            return {"status": "FRESH_INSTALL", "schema_version": None}
+        raise DatabaseSchemaGuardError(
+            "DATABASE_SCHEMA_METADATA_INVALID",
+            "Database file is missing; initialize it before running a migration.",
+        )
+    if not database.is_file():
+        raise DatabaseSchemaGuardError(
+            "DATABASE_SCHEMA_READ_FAILED",
+            "Database path is not a readable SQLite file; no startup mutation was attempted.",
+        )
+
+    # Opening a WAL database read-only can still update its shared-memory index.
+    # A hot rollback journal may also be replayed by SQLite during open. Refuse
+    # these ambiguous states before connecting, so preflight never changes them.
+    if Path(str(database) + "-wal").exists() or Path(str(database) + "-shm").exists():
+        raise DatabaseSchemaGuardError(
+            "DATABASE_SCHEMA_WAL_PENDING",
+            "SQLite WAL/shared-memory sidecars are present. Startup is blocked without opening or changing the database; use a schema-compatible build to resolve the journal state.",
+        )
+    if Path(str(database) + "-journal").exists():
+        raise DatabaseSchemaGuardError(
+            "DATABASE_SCHEMA_RECOVERY_PENDING",
+            "An SQLite rollback journal is present. Startup and automatic recovery are blocked without opening or changing the database.",
+        )
+
+    conn: sqlite3.Connection | None = None
+    try:
+        # A file: URI with mode=ro prevents SQLite from creating a missing file or
+        # accepting writes during this preflight.
+        uri = database.resolve().as_uri() + "?mode=ro"
+        conn = sqlite3.connect(uri, uri=True, timeout=2.0)
+        conn.execute("PRAGMA query_only=ON")
+        schema_table = conn.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='schema_meta'"
+        ).fetchone()
+        if schema_table is None:
+            raise DatabaseSchemaGuardError(
+                "DATABASE_SCHEMA_METADATA_INVALID",
+                "Existing database has no schema_meta table; startup and recovery are blocked without changing it.",
+            )
+        columns = {
+            str(row[1]) for row in conn.execute("PRAGMA table_info(schema_meta)")
+        }
+        if not {"key", "value"}.issubset(columns):
+            raise DatabaseSchemaGuardError(
+                "DATABASE_SCHEMA_METADATA_INVALID",
+                "Existing database schema_meta table is malformed; startup and recovery are blocked without changing it.",
+            )
+        versions = conn.execute(
+            "SELECT value FROM schema_meta WHERE key='schema_version'"
+        ).fetchall()
+    except DatabaseSchemaGuardError:
+        raise
+    except (OSError, sqlite3.Error, ValueError) as exc:
+        raise DatabaseSchemaGuardError(
+            "DATABASE_SCHEMA_READ_FAILED",
+            "SQLite schema metadata could not be read safely; startup and recovery are blocked without changing the database.",
+        ) from exc
+    finally:
+        if conn is not None:
+            conn.close()
+
+    if len(versions) != 1 or not isinstance(versions[0][0], str):
+        raise DatabaseSchemaGuardError(
+            "DATABASE_SCHEMA_METADATA_INVALID",
+            "Existing database must contain exactly one textual schema_version; startup and recovery are blocked without changing it.",
+        )
+    raw_version = versions[0][0]
+    if not raw_version.isascii() or not raw_version.isdecimal() or raw_version.startswith("0"):
+        raise DatabaseSchemaGuardError(
+            "DATABASE_SCHEMA_METADATA_INVALID",
+            "Existing database schema_version is malformed; startup and recovery are blocked without changing it.",
+        )
+    version = int(raw_version)
+    if version < MIN_SUPPORTED_SCHEMA:
+        raise DatabaseSchemaGuardError(
+            "DATABASE_SCHEMA_METADATA_INVALID",
+            "Existing database schema_version is outside the supported migration history; startup and recovery are blocked without changing it.",
+            database_schema_version=version,
+        )
+    if version > CURRENT_SCHEMA_VERSION:
+        raise DatabaseSchemaGuardError(
+            "INCOMPATIBLE_NEWER_SCHEMA",
+            f"Database schema {version} is newer than this application supports ({CURRENT_SCHEMA_VERSION}). The database was not modified; use a compatible application build.",
+            database_schema_version=version,
+        )
+    return {"status": "SUPPORTED", "schema_version": version}
 
 
 def connect(path: Path = DATABASE_PATH) -> sqlite3.Connection:
@@ -21,6 +148,7 @@ def connect(path: Path = DATABASE_PATH) -> sqlite3.Connection:
 
 
 def initialize_database(path: Path = DATABASE_PATH) -> None:
+    assert_database_schema_compatible(path, allow_missing=True)
     with connect(path) as conn:
         schema_meta_preexisting = conn.execute(
             "SELECT 1 FROM sqlite_master "
@@ -65,6 +193,7 @@ def initialize_database(path: Path = DATABASE_PATH) -> None:
 
 
 def ensure_baseline_registered(path: Path = DATABASE_PATH) -> dict[str, Any]:
+    assert_database_schema_compatible(path, allow_missing=True)
     manifest = verify_baseline_snapshot()
     initialize_database(path)
     values = (

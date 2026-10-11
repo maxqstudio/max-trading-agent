@@ -23,6 +23,13 @@
       "to": "backend/max_backend/scientist_api.py::get_status"
     },
     {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_store.py::migrate_m03",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_store.py::migrate_m03",
@@ -72,11 +79,39 @@
       "to": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema"
     },
     {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/champion_store.py::migrate_m04",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "DatabaseSchemaGuardError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::DatabaseSchemaGuardError"
+    },
+    {
+      "action": "sqlite3.connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "conn.close",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
     },
     {
       "action": "sanitize_route_config",
@@ -128,11 +163,25 @@
       "to": "backend/max_backend/scientist_provider.py::credential_for_route"
     },
     {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_store.py::migrate_m01",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
     },
     {
       "action": "connect",
@@ -520,6 +569,13 @@
       "to": "backend/max_backend/champion_store.py::migrate_m04"
     },
     {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_store.py::migrate_m05",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/scientist_store.py::migrate_m05",
@@ -560,7 +616,7 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_store.py::migrate_m03",
       "language": "Python",
-      "line_end": 75,
+      "line_end": 76,
       "line_start": 18,
       "locator": "backend/max_backend/challenger_store.py::migrate_m03"
     },
@@ -605,17 +661,35 @@
       "kind": "function",
       "label": "backend/max_backend/champion_store.py::migrate_m04",
       "language": "Python",
-      "line_end": 261,
+      "line_end": 262,
       "line_start": 200,
       "locator": "backend/max_backend/champion_store.py::migrate_m04"
+    },
+    {
+      "id": "backend/max_backend/db.py::DatabaseSchemaGuardError",
+      "kind": "class",
+      "label": "backend/max_backend/db.py::DatabaseSchemaGuardError",
+      "language": "Python",
+      "line_end": 40,
+      "line_start": 15,
+      "locator": "backend/max_backend/db.py::DatabaseSchemaGuardError"
+    },
+    {
+      "id": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "language": "Python",
+      "line_end": 138,
+      "line_start": 43,
+      "locator": "backend/max_backend/db.py::assert_database_schema_compatible"
     },
     {
       "id": "backend/max_backend/db.py::connect",
       "kind": "function",
       "label": "backend/max_backend/db.py::connect",
       "language": "Python",
-      "line_end": 20,
-      "line_start": 14,
+      "line_end": 147,
+      "line_start": 141,
       "locator": "backend/max_backend/db.py::connect"
     },
     {
@@ -668,7 +742,7 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::migrate_m01",
       "language": "Python",
-      "line_end": 111,
+      "line_end": 112,
       "line_start": 46,
       "locator": "backend/max_backend/optimizer_store.py::migrate_m01"
     },
@@ -677,9 +751,18 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::migrate_m02",
       "language": "Python",
-      "line_end": 134,
-      "line_start": 114,
+      "line_end": 136,
+      "line_start": 115,
       "locator": "backend/max_backend/optimizer_store.py::migrate_m02"
+    },
+    {
+      "id": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close",
+      "kind": "method",
+      "label": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close",
+      "language": "Python",
+      "line_end": 428,
+      "line_start": 421,
+      "locator": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
     },
     {
       "id": "backend/max_backend/scientist_api.py::get_status",
@@ -965,7 +1048,7 @@
       "kind": "function",
       "label": "backend/max_backend/scientist_store.py::migrate_m05",
       "language": "Python",
-      "line_end": 92,
+      "line_end": 93,
       "line_start": 28,
       "locator": "backend/max_backend/scientist_store.py::migrate_m05"
     },
@@ -974,12 +1057,12 @@
       "kind": "function",
       "label": "backend/max_backend/scientist_store.py::scientist_database_status",
       "language": "Python",
-      "line_end": 116,
-      "line_start": 95,
+      "line_end": 117,
+      "line_start": 96,
       "locator": "backend/max_backend/scientist_store.py::scientist_database_status"
     }
   ],
-  "observed_head": "e6046334eee94fd6812a5434a6c4e2828a77e2a4",
+  "observed_head": "858dcb205fa2fb734fd5a68b8a4970a29c553897",
   "schema_version": 1,
-  "source_digest": "7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f"
+  "source_digest": "6bd8617b372ea47cd49e8dc18a0b3b3505f38604eb6bc68f1d25c6453af42c36"
 }

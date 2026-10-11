@@ -16,6 +16,7 @@ if str(BACKEND) not in sys.path:
     sys.path.insert(0, str(BACKEND))
 
 from max_backend.config import DATABASE_PATH, EA_MANIFEST
+from max_backend.db import assert_database_schema_compatible
 from max_backend.ea import verify_baseline_snapshot
 from max_backend.mtf_geometry import STRATEGY_CONTRACT
 
@@ -364,6 +365,7 @@ def _baseline_values(manifest: dict[str, Any]) -> tuple[Any, ...]:
 
 
 def mutate_database(database: Path, manifest: dict[str, Any]) -> None:
+    assert_database_schema_compatible(database, allow_missing=False)
     conn = _connect(database)
     try:
         conn.execute("BEGIN IMMEDIATE")
@@ -459,6 +461,7 @@ def reset_strategy_epoch(
     dry_run: bool,
     confirmation: str | None = None,
 ) -> dict[str, Any]:
+    assert_database_schema_compatible(database, allow_missing=False)
     manifest_path = root / "ea" / "baseline" / "manifest.json"
     baseline_path = root / "ea" / "baseline" / "Max_MTF.mq5"
     manifest = _json(manifest_path)

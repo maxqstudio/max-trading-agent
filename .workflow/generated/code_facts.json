@@ -80,14 +80,14 @@
       "file": "backend/max_backend/challenger_operations.py",
       "is_test": false,
       "language": "Python",
-      "lines": 1064
+      "lines": 1066
     },
     {
       "directory": "backend/max_backend",
       "file": "backend/max_backend/challenger_operations_store.py",
       "is_test": false,
       "language": "Python",
-      "lines": 1028
+      "lines": 1030
     },
     {
       "directory": "backend/max_backend",
@@ -108,7 +108,7 @@
       "file": "backend/max_backend/challenger_store.py",
       "is_test": false,
       "language": "Python",
-      "lines": 444
+      "lines": 445
     },
     {
       "directory": "backend/max_backend",
@@ -129,7 +129,7 @@
       "file": "backend/max_backend/champion_store.py",
       "is_test": false,
       "language": "Python",
-      "lines": 770
+      "lines": 771
     },
     {
       "directory": "backend/max_backend",
@@ -143,7 +143,7 @@
       "file": "backend/max_backend/db.py",
       "is_test": false,
       "language": "Python",
-      "lines": 146
+      "lines": 275
     },
     {
       "directory": "backend/max_backend",
@@ -157,7 +157,7 @@
       "file": "backend/max_backend/main.py",
       "is_test": false,
       "language": "Python",
-      "lines": 200
+      "lines": 243
     },
     {
       "directory": "backend/max_backend",
@@ -206,7 +206,7 @@
       "file": "backend/max_backend/optimizer_jobs.py",
       "is_test": false,
       "language": "Python",
-      "lines": 1013
+      "lines": 1015
     },
     {
       "directory": "backend/max_backend",
@@ -234,7 +234,7 @@
       "file": "backend/max_backend/optimizer_store.py",
       "is_test": false,
       "language": "Python",
-      "lines": 790
+      "lines": 792
     },
     {
       "directory": "backend/max_backend",
@@ -262,7 +262,7 @@
       "file": "backend/max_backend/promotion_service.py",
       "is_test": false,
       "language": "Python",
-      "lines": 1517
+      "lines": 1519
     },
     {
       "directory": "backend/max_backend",
@@ -311,14 +311,14 @@
       "file": "backend/max_backend/scientist_store.py",
       "is_test": false,
       "language": "Python",
-      "lines": 594
+      "lines": 596
     },
     {
       "directory": "backend/max_backend",
       "file": "backend/max_backend/strategy_reset.py",
       "is_test": false,
       "language": "Python",
-      "lines": 504
+      "lines": 507
     },
     {
       "directory": "backend/max_backend",
@@ -332,7 +332,7 @@
       "file": "backend/max_backend/workflow_store.py",
       "is_test": false,
       "language": "Python",
-      "lines": 595
+      "lines": 596
     },
     {
       "directory": "backend/tests",
@@ -560,10 +560,17 @@
     },
     {
       "directory": "backend/tests",
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "is_test": true,
+      "language": "Python",
+      "lines": 472
+    },
+    {
+      "directory": "backend/tests",
       "file": "backend/tests/test_strategy_workspace_reset.py",
       "is_test": true,
       "language": "Python",
-      "lines": 316
+      "lines": 314
     },
     {
       "directory": "frontend/src",
@@ -773,14 +780,14 @@
       "file": "scripts/reset_strategy_epoch.py",
       "is_test": false,
       "language": "Python",
-      "lines": 623
+      "lines": 626
     },
     {
       "directory": "scripts",
       "file": "scripts/run_max.ps1",
       "is_test": false,
       "language": "PowerShell",
-      "lines": 258
+      "lines": 301
     },
     {
       "directory": "scripts",
@@ -7731,6 +7738,10 @@
     },
     {
       "caller": "backend/max_backend/challenger_operations.py::recover_retired_challenger_deployments",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/challenger_operations.py::recover_retired_challenger_deployments",
       "target_token": "list_registry_page"
     },
     {
@@ -8983,6 +8994,10 @@
     },
     {
       "caller": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/challenger_operations_store.py::migrate_m06",
       "target_token": "migrate_m05"
     },
     {
@@ -9932,6 +9947,10 @@
     {
       "caller": "backend/max_backend/challenger_operations_store.py::list_backtests_page",
       "target_token": "_decode_backtest"
+    },
+    {
+      "caller": "backend/max_backend/challenger_operations_store.py::recover_incomplete_backtests",
+      "target_token": "assert_database_schema_compatible"
     },
     {
       "caller": "backend/max_backend/challenger_operations_store.py::recover_incomplete_backtests",
@@ -11331,6 +11350,10 @@
     },
     {
       "caller": "backend/max_backend/challenger_store.py::migrate_m03",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/challenger_store.py::migrate_m03",
       "target_token": "migrate_m02"
     },
     {
@@ -12571,6 +12594,10 @@
     },
     {
       "caller": "backend/max_backend/champion_store.py::migrate_m04",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/champion_store.py::migrate_m04",
       "target_token": "migrate_m03"
     },
     {
@@ -13186,6 +13213,146 @@
       "target_token": "RuntimeError"
     },
     {
+      "caller": "backend/max_backend/db.py::DatabaseSchemaGuardError.__init__",
+      "target_token": "super"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "database.exists"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "database.is_file"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "database.resolve"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "sqlite3.connect"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "conn.close"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "len"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "raw_version.isascii"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "raw_version.isdecimal"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "raw_version.startswith"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "int"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
+      "caller": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "target_token": "DatabaseSchemaGuardError"
+    },
+    {
       "caller": "backend/max_backend/db.py::connect",
       "target_token": "path.parent.mkdir"
     },
@@ -13200,6 +13367,10 @@
     {
       "caller": "backend/max_backend/db.py::connect",
       "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/db.py::initialize_database",
+      "target_token": "assert_database_schema_compatible"
     },
     {
       "caller": "backend/max_backend/db.py::initialize_database",
@@ -13236,6 +13407,10 @@
     {
       "caller": "backend/max_backend/db.py::initialize_database",
       "target_token": "str"
+    },
+    {
+      "caller": "backend/max_backend/db.py::ensure_baseline_registered",
+      "target_token": "assert_database_schema_compatible"
     },
     {
       "caller": "backend/max_backend/db.py::ensure_baseline_registered",
@@ -13427,47 +13602,15 @@
     },
     {
       "caller": "backend/max_backend/main.py::lifespan",
-      "target_token": "initialize_database"
+      "target_token": "_run_startup_migrations"
     },
     {
       "caller": "backend/max_backend/main.py::lifespan",
-      "target_token": "ensure_baseline_registered"
+      "target_token": "exc.diagnostic"
     },
     {
       "caller": "backend/max_backend/main.py::lifespan",
-      "target_token": "migrate_m04"
-    },
-    {
-      "caller": "backend/max_backend/main.py::lifespan",
-      "target_token": "recover_incomplete_promotions"
-    },
-    {
-      "caller": "backend/max_backend/main.py::lifespan",
-      "target_token": "migrate_m05"
-    },
-    {
-      "caller": "backend/max_backend/main.py::lifespan",
-      "target_token": "recover_unconfirmed_requests"
-    },
-    {
-      "caller": "backend/max_backend/main.py::lifespan",
-      "target_token": "migrate_m06"
-    },
-    {
-      "caller": "backend/max_backend/main.py::lifespan",
-      "target_token": "recover_incomplete_backtests"
-    },
-    {
-      "caller": "backend/max_backend/main.py::lifespan",
-      "target_token": "recover_retired_challenger_deployments"
-    },
-    {
-      "caller": "backend/max_backend/main.py::lifespan",
-      "target_token": "migrate_current"
-    },
-    {
-      "caller": "backend/max_backend/main.py::lifespan",
-      "target_token": "reconcile_optimizer_startup"
+      "target_token": "logger.error"
     },
     {
       "caller": "backend/max_backend/main.py::lifespan",
@@ -13482,6 +13625,62 @@
       "target_token": "logger.exception"
     },
     {
+      "caller": "backend/max_backend/main.py::_run_startup_migrations",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_run_startup_migrations",
+      "target_token": "initialize_database"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_run_startup_migrations",
+      "target_token": "ensure_baseline_registered"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_run_startup_migrations",
+      "target_token": "migrate_m04"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_run_startup_migrations",
+      "target_token": "recover_incomplete_promotions"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_run_startup_migrations",
+      "target_token": "migrate_m05"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_run_startup_migrations",
+      "target_token": "recover_unconfirmed_requests"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_run_startup_migrations",
+      "target_token": "migrate_m06"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_run_startup_migrations",
+      "target_token": "recover_incomplete_backtests"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_run_startup_migrations",
+      "target_token": "recover_retired_challenger_deployments"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_run_startup_migrations",
+      "target_token": "migrate_current"
+    },
+    {
+      "caller": "backend/max_backend/main.py::_run_startup_migrations",
+      "target_token": "reconcile_optimizer_startup"
+    },
+    {
+      "caller": "backend/max_backend/main.py::recovery_required_gate",
+      "target_token": "call_next"
+    },
+    {
+      "caller": "backend/max_backend/main.py::recovery_required_gate",
+      "target_token": "JSONResponse"
+    },
+    {
       "caller": "backend/max_backend/main.py::recovery_required_gate",
       "target_token": "JSONResponse"
     },
@@ -13491,7 +13690,15 @@
     },
     {
       "caller": "backend/max_backend/main.py::recovery_status",
+      "target_token": "dict"
+    },
+    {
+      "caller": "backend/max_backend/main.py::recovery_status",
       "target_token": "database_recovery_status"
+    },
+    {
+      "caller": "backend/max_backend/main.py::reset_corrupt_state",
+      "target_token": "HTTPException"
     },
     {
       "caller": "backend/max_backend/main.py::reset_corrupt_state",
@@ -13528,6 +13735,10 @@
     {
       "caller": "backend/max_backend/main.py::_foundation_state",
       "target_token": "detect_mt5"
+    },
+    {
+      "caller": "backend/max_backend/main.py::health",
+      "target_token": "JSONResponse"
     },
     {
       "caller": "backend/max_backend/main.py::health",
@@ -19955,6 +20166,10 @@
     },
     {
       "caller": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
       "target_token": "active_job"
     },
     {
@@ -23523,6 +23738,10 @@
     },
     {
       "caller": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_store.py::migrate_m01",
       "target_token": "connect"
     },
     {
@@ -23556,6 +23775,10 @@
     {
       "caller": "backend/max_backend/optimizer_store.py::migrate_m01",
       "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "target_token": "assert_database_schema_compatible"
     },
     {
       "caller": "backend/max_backend/optimizer_store.py::migrate_m02",
@@ -28607,6 +28830,10 @@
     },
     {
       "caller": "backend/max_backend/promotion_service.py::recover_incomplete_promotions",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/promotion_service.py::recover_incomplete_promotions",
       "target_token": "migrate_m04"
     },
     {
@@ -31707,6 +31934,10 @@
     },
     {
       "caller": "backend/max_backend/scientist_store.py::migrate_m05",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/scientist_store.py::migrate_m05",
       "target_token": "migrate_m04"
     },
     {
@@ -32316,6 +32547,10 @@
     {
       "caller": "backend/max_backend/scientist_store.py::fail_request",
       "target_token": "_decode_request"
+    },
+    {
+      "caller": "backend/max_backend/scientist_store.py::recover_unconfirmed_requests",
+      "target_token": "assert_database_schema_compatible"
     },
     {
       "caller": "backend/max_backend/scientist_store.py::recover_unconfirmed_requests",
@@ -33035,6 +33270,10 @@
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
       "target_token": "_read_counts"
     },
     {
@@ -33252,6 +33491,10 @@
     {
       "caller": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database",
       "target_token": "StrategyResetError"
+    },
+    {
+      "caller": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database",
+      "target_token": "assert_database_schema_compatible"
     },
     {
       "caller": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database",
@@ -33520,6 +33763,10 @@
     {
       "caller": "backend/max_backend/workflow_store.py::_purge_research_authority",
       "target_token": "RuntimeError"
+    },
+    {
+      "caller": "backend/max_backend/workflow_store.py::migrate_current",
+      "target_token": "assert_database_schema_compatible"
     },
     {
       "caller": "backend/max_backend/workflow_store.py::migrate_current",
@@ -48930,6 +49177,634 @@
       "target_token": "json.loads"
     },
     {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_schema_fixture",
+      "target_token": "path.parent.mkdir"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_schema_fixture",
+      "target_token": "sqlite3.connect"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_schema_fixture",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_schema_fixture",
+      "target_token": "conn.executescript"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_create_schema_fixture",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_file_hashes",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_file_hashes",
+      "target_token": "path.parent.iterdir"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_file_hashes",
+      "target_token": "item.name.startswith"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_file_hashes",
+      "target_token": "item.is_file"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_file_hashes",
+      "target_token": "hashlib.sha256"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_file_hashes",
+      "target_token": "item.read_bytes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "_file_hashes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "path.resolve"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "sqlite3.connect"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "tuple"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "table.replace"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "isinstance"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "value.hex"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "tuple"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "sorted"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "json.dumps"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "tuple"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "target_token": "_file_hashes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_set_schema_version",
+      "target_token": "sqlite3.connect"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_set_schema_version",
+      "target_token": "conn.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_run_startup",
+      "target_token": "main._run_startup_migrations"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_load_epoch_reset_script",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_load_epoch_reset_script",
+      "target_token": "importlib.util.spec_from_file_location"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_load_epoch_reset_script",
+      "target_token": "importlib.util.module_from_spec"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::_load_epoch_reset_script",
+      "target_token": "spec.loader.exec_module"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_fresh_install_and_supported_schema_startup_pass",
+      "target_token": "fresh.exists"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_fresh_install_and_supported_schema_startup_pass",
+      "target_token": "_run_startup"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_fresh_install_and_supported_schema_startup_pass",
+      "target_token": "fresh.is_file"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_fresh_install_and_supported_schema_startup_pass",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_fresh_install_and_supported_schema_startup_pass",
+      "target_token": "_run_startup"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_fresh_install_and_supported_schema_startup_pass",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_16_without_mutation",
+      "target_token": "_create_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_16_without_mutation",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_16_without_mutation",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_16_without_mutation",
+      "target_token": "migration"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_16_without_mutation",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_16",
+      "target_token": "_create_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_16",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_16",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_16",
+      "target_token": "operation"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_16",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "target_token": "_create_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "target_token": "TestClient"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "target_token": "client.get"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "target_token": "diagnostic.json"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "target_token": "diagnostic.json"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "target_token": "diagnostic.json"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "target_token": "diagnostic.json"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "target_token": "client.get"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "target_token": "client.get"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "target_token": "client.post"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "target_token": "reset.json"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_existing_database_with_invalid_schema_metadata_fails_closed",
+      "target_token": "_create_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_existing_database_with_invalid_schema_metadata_fails_closed",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_existing_database_with_invalid_schema_metadata_fails_closed",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_existing_database_with_invalid_schema_metadata_fails_closed",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_existing_database_with_invalid_schema_metadata_fails_closed",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "target_token": "_create_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state.migration_must_not_start",
+      "target_token": "pytest.fail"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "target_token": "pytest.fail"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "target_token": "range"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "target_token": "TestClient"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "target_token": "client.get"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration",
+      "target_token": "_run_startup"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration.crash_after_preflight",
+      "target_token": "real_preflight"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration.crash_after_preflight",
+      "target_token": "SimulatedStartupCrash"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration",
+      "target_token": "_run_startup"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration",
+      "target_token": "_run_startup"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_invalid_schema_metadata_startup_is_diagnostic_only",
+      "target_token": "_create_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_invalid_schema_metadata_startup_is_diagnostic_only",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_invalid_schema_metadata_startup_is_diagnostic_only",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_invalid_schema_metadata_startup_is_diagnostic_only",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_invalid_schema_metadata_startup_is_diagnostic_only",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_invalid_schema_metadata_startup_is_diagnostic_only",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_invalid_schema_metadata_startup_is_diagnostic_only",
+      "target_token": "monkeypatch.setattr"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_invalid_schema_metadata_startup_is_diagnostic_only",
+      "target_token": "pytest.fail"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_invalid_schema_metadata_startup_is_diagnostic_only",
+      "target_token": "TestClient"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_invalid_schema_metadata_startup_is_diagnostic_only",
+      "target_token": "client.get"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_invalid_schema_metadata_startup_is_diagnostic_only",
+      "target_token": "diagnostic.json"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_invalid_schema_metadata_startup_is_diagnostic_only",
+      "target_token": "diagnostic.json"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_invalid_schema_metadata_startup_is_diagnostic_only",
+      "target_token": "client.post"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_invalid_schema_metadata_startup_is_diagnostic_only",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_read_only_guard_observes_committed_wal_schema_without_mutation",
+      "target_token": "sqlite3.connect"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_read_only_guard_observes_committed_wal_schema_without_mutation",
+      "target_token": "writer.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_read_only_guard_observes_committed_wal_schema_without_mutation",
+      "target_token": "writer.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_read_only_guard_observes_committed_wal_schema_without_mutation",
+      "target_token": "writer.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_read_only_guard_observes_committed_wal_schema_without_mutation",
+      "target_token": "writer.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_read_only_guard_observes_committed_wal_schema_without_mutation",
+      "target_token": "writer.execute"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_read_only_guard_observes_committed_wal_schema_without_mutation",
+      "target_token": "writer.commit"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_read_only_guard_observes_committed_wal_schema_without_mutation",
+      "target_token": "_file_hashes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_read_only_guard_observes_committed_wal_schema_without_mutation",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_read_only_guard_observes_committed_wal_schema_without_mutation",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_read_only_guard_observes_committed_wal_schema_without_mutation",
+      "target_token": "_file_hashes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_read_only_guard_observes_committed_wal_schema_without_mutation",
+      "target_token": "writer.close"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_hot_rollback_journal_is_not_replayed_during_schema_preflight",
+      "target_token": "_create_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_hot_rollback_journal_is_not_replayed_during_schema_preflight",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_hot_rollback_journal_is_not_replayed_during_schema_preflight",
+      "target_token": "str"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_hot_rollback_journal_is_not_replayed_during_schema_preflight",
+      "target_token": "journal.write_bytes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_hot_rollback_journal_is_not_replayed_during_schema_preflight",
+      "target_token": "_file_hashes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_hot_rollback_journal_is_not_replayed_during_schema_preflight",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_hot_rollback_journal_is_not_replayed_during_schema_preflight",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_hot_rollback_journal_is_not_replayed_during_schema_preflight",
+      "target_token": "_file_hashes"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_initialize_database_rejects_existing_newer_schema_without_side_effects",
+      "target_token": "_create_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_initialize_database_rejects_existing_newer_schema_without_side_effects",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_initialize_database_rejects_existing_newer_schema_without_side_effects",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_initialize_database_rejects_existing_newer_schema_without_side_effects",
+      "target_token": "initialize_database"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_initialize_database_rejects_existing_newer_schema_without_side_effects",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_baseline_registration_rejects_existing_newer_schema_before_baseline_reads",
+      "target_token": "_create_schema_fixture"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_baseline_registration_rejects_existing_newer_schema_before_baseline_reads",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_baseline_registration_rejects_existing_newer_schema_before_baseline_reads",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_baseline_registration_rejects_existing_newer_schema_before_baseline_reads",
+      "target_token": "ensure_baseline_registered"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_baseline_registration_rejects_existing_newer_schema_before_baseline_reads",
+      "target_token": "_db_snapshot"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_missing_database_is_allowed_only_for_initialization",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_missing_database_is_allowed_only_for_initialization",
+      "target_token": "migrate_current"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_missing_database_is_allowed_only_for_initialization",
+      "target_token": "database.exists"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_missing_database_is_allowed_only_for_initialization",
+      "target_token": "initialize_database"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_missing_database_is_allowed_only_for_initialization",
+      "target_token": "database.is_file"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_missing_database_is_allowed_only_for_initialization",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_launcher_reports_schema_guard_instead_of_generic_backend_timeout",
+      "target_token": "Path"
+    },
+    {
+      "caller": "backend/tests/test_schema_compatibility_guard.py::test_launcher_reports_schema_guard_instead_of_generic_backend_timeout",
+      "target_token": "launcher.read_text"
+    },
+    {
       "caller": "backend/tests/test_strategy_workspace_reset.py::_current_database",
       "target_token": "baseline.mkdir"
     },
@@ -49178,72 +50053,40 @@
       "target_token": "conn.execute"
     },
     {
-      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
+      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_fails_closed_for_database_without_readable_schema_metadata",
       "target_token": "database.parent.mkdir"
     },
     {
-      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
+      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_fails_closed_for_database_without_readable_schema_metadata",
       "target_token": "database.write_bytes"
     },
     {
-      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
+      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_fails_closed_for_database_without_readable_schema_metadata",
       "target_token": "hashlib.sha256"
     },
     {
-      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
+      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_fails_closed_for_database_without_readable_schema_metadata",
       "target_token": "database.read_bytes"
     },
     {
-      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
+      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_fails_closed_for_database_without_readable_schema_metadata",
       "target_token": "monkeypatch.setattr"
     },
     {
-      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
+      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_fails_closed_for_database_without_readable_schema_metadata",
+      "target_token": "pytest.raises"
+    },
+    {
+      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_fails_closed_for_database_without_readable_schema_metadata",
       "target_token": "strategy_reset.backup_and_reset_corrupt_database"
     },
     {
-      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
-      "target_token": "Path"
-    },
-    {
-      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
-      "target_token": "quarantined.is_file"
-    },
-    {
-      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
+      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_fails_closed_for_database_without_readable_schema_metadata",
       "target_token": "hashlib.sha256"
     },
     {
-      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
-      "target_token": "quarantined.read_bytes"
-    },
-    {
-      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
-      "target_token": "strategy_reset.database_recovery_status"
-    },
-    {
-      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
-      "target_token": "sqlite3.connect"
-    },
-    {
-      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
-      "target_token": "conn.execute"
-    },
-    {
-      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
-      "target_token": "conn.execute"
-    },
-    {
-      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
-      "target_token": "str"
-    },
-    {
-      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
-      "target_token": "conn.execute"
-    },
-    {
-      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
-      "target_token": "conn.execute"
+      "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_fails_closed_for_database_without_readable_schema_metadata",
+      "target_token": "database.read_bytes"
     },
     {
       "caller": "backend/tests/test_strategy_workspace_reset.py::test_recovery_refuses_healthy_database_and_wrong_confirmation",
@@ -51711,6 +52554,10 @@
     },
     {
       "caller": "scripts/reset_strategy_epoch.py::mutate_database",
+      "target_token": "assert_database_schema_compatible"
+    },
+    {
+      "caller": "scripts/reset_strategy_epoch.py::mutate_database",
       "target_token": "_connect"
     },
     {
@@ -51848,6 +52695,10 @@
     {
       "caller": "scripts/reset_strategy_epoch.py::verify_reset",
       "target_token": "ResetError"
+    },
+    {
+      "caller": "scripts/reset_strategy_epoch.py::reset_strategy_epoch",
+      "target_token": "assert_database_schema_compatible"
     },
     {
       "caller": "scripts/reset_strategy_epoch.py::reset_strategy_epoch",
@@ -62420,152 +63271,152 @@
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 73,
-      "line_start": 65,
+      "line_end": 74,
+      "line_start": 66,
       "locator": "backend/max_backend/challenger_operations.py::_write_json",
       "symbol": "_write_json"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 89,
-      "line_start": 76,
+      "line_end": 90,
+      "line_start": 77,
       "locator": "backend/max_backend/challenger_operations.py::_bundle_paths",
       "symbol": "_bundle_paths"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 118,
-      "line_start": 92,
+      "line_end": 119,
+      "line_start": 93,
       "locator": "backend/max_backend/challenger_operations.py::challenger_bundle_artifact_path",
       "symbol": "challenger_bundle_artifact_path"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 142,
-      "line_start": 121,
+      "line_end": 143,
+      "line_start": 122,
       "locator": "backend/max_backend/challenger_operations.py::challenger_registry_page",
       "symbol": "challenger_registry_page"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 192,
-      "line_start": 145,
+      "line_end": 193,
+      "line_start": 146,
       "locator": "backend/max_backend/challenger_operations.py::_retirement_runtime_state",
       "symbol": "_retirement_runtime_state"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 282,
-      "line_start": 195,
+      "line_end": 283,
+      "line_start": 196,
       "locator": "backend/max_backend/challenger_operations.py::_remove_retired_runtime_ea",
       "symbol": "_remove_retired_runtime_ea"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 333,
-      "line_start": 285,
+      "line_end": 335,
+      "line_start": 286,
       "locator": "backend/max_backend/challenger_operations.py::recover_retired_challenger_deployments",
       "symbol": "recover_retired_challenger_deployments"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 508,
-      "line_start": 336,
+      "line_end": 510,
+      "line_start": 338,
       "locator": "backend/max_backend/challenger_operations.py::retire_challenger",
       "symbol": "retire_challenger"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 516,
-      "line_start": 511,
+      "line_end": 518,
+      "line_start": 513,
       "locator": "backend/max_backend/challenger_operations.py::_parse_date",
       "symbol": "_parse_date"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 647,
-      "line_start": 519,
+      "line_end": 649,
+      "line_start": 521,
       "locator": "backend/max_backend/challenger_operations.py::freeze_backtest_request",
       "symbol": "freeze_backtest_request"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 655,
-      "line_start": 650,
+      "line_end": 657,
+      "line_start": 652,
       "locator": "backend/max_backend/challenger_operations.py::_format_set_value",
       "symbol": "_format_set_value"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 709,
-      "line_start": 658,
+      "line_end": 711,
+      "line_start": 660,
       "locator": "backend/max_backend/challenger_operations.py::_runtime_set_text",
       "symbol": "_runtime_set_text"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 740,
-      "line_start": 712,
+      "line_end": 742,
+      "line_start": 714,
       "locator": "backend/max_backend/challenger_operations.py::_build_backtest_ini",
       "symbol": "_build_backtest_ini"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 764,
-      "line_start": 743,
+      "line_end": 766,
+      "line_start": 745,
       "locator": "backend/max_backend/challenger_operations.py::_wait_for_report",
       "symbol": "_wait_for_report"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 980,
-      "line_start": 767,
+      "line_end": 982,
+      "line_start": 769,
       "locator": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
       "symbol": "run_challenger_backtest"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 999,
-      "line_start": 983,
+      "line_end": 1001,
+      "line_start": 985,
       "locator": "backend/max_backend/challenger_operations.py::_with_retained_report_metrics",
       "symbol": "_with_retained_report_metrics"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 1027,
-      "line_start": 1002,
+      "line_end": 1029,
+      "line_start": 1004,
       "locator": "backend/max_backend/challenger_operations.py::backtest_registry_page",
       "symbol": "backtest_registry_page"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 1040,
-      "line_start": 1030,
+      "line_end": 1042,
+      "line_start": 1032,
       "locator": "backend/max_backend/challenger_operations.py::backtest_history",
       "symbol": "backtest_history"
     },
     {
       "file": "backend/max_backend/challenger_operations.py",
       "kind": "function",
-      "line_end": 1064,
-      "line_start": 1043,
+      "line_end": 1066,
+      "line_start": 1045,
       "locator": "backend/max_backend/challenger_operations.py::backtest_detail",
       "symbol": "backtest_detail"
     },
@@ -62612,7 +63463,7 @@
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 316,
+      "line_end": 317,
       "line_start": 298,
       "locator": "backend/max_backend/challenger_operations_store.py::migrate_m06",
       "symbol": "migrate_m06"
@@ -62620,112 +63471,112 @@
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 391,
-      "line_start": 319,
+      "line_end": 392,
+      "line_start": 320,
       "locator": "backend/max_backend/challenger_operations_store.py::challenger_operations_database_status",
       "symbol": "challenger_operations_database_status"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 408,
-      "line_start": 394,
+      "line_end": 409,
+      "line_start": 395,
       "locator": "backend/max_backend/challenger_operations_store.py::_compact_row",
       "symbol": "_compact_row"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 488,
-      "line_start": 411,
+      "line_end": 489,
+      "line_start": 412,
       "locator": "backend/max_backend/challenger_operations_store.py::list_registry_page",
       "symbol": "list_registry_page"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 498,
-      "line_start": 491,
+      "line_end": 499,
+      "line_start": 492,
       "locator": "backend/max_backend/challenger_operations_store.py::_decode_retirement",
       "symbol": "_decode_retirement"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 512,
-      "line_start": 501,
+      "line_end": 513,
+      "line_start": 502,
       "locator": "backend/max_backend/challenger_operations_store.py::get_retirement",
       "symbol": "get_retirement"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 534,
-      "line_start": 515,
+      "line_end": 535,
+      "line_start": 516,
       "locator": "backend/max_backend/challenger_operations_store.py::list_retirements",
       "symbol": "list_retirements"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 709,
-      "line_start": 537,
+      "line_end": 710,
+      "line_start": 538,
       "locator": "backend/max_backend/challenger_operations_store.py::retire_registry_row",
       "symbol": "retire_registry_row"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 780,
-      "line_start": 712,
+      "line_end": 781,
+      "line_start": 713,
       "locator": "backend/max_backend/challenger_operations_store.py::create_backtest_record",
       "symbol": "create_backtest_record"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 857,
-      "line_start": 783,
+      "line_end": 858,
+      "line_start": 784,
       "locator": "backend/max_backend/challenger_operations_store.py::update_backtest",
       "symbol": "update_backtest"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 867,
-      "line_start": 860,
+      "line_end": 868,
+      "line_start": 861,
       "locator": "backend/max_backend/challenger_operations_store.py::_decode_backtest",
       "symbol": "_decode_backtest"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 881,
-      "line_start": 870,
+      "line_end": 882,
+      "line_start": 871,
       "locator": "backend/max_backend/challenger_operations_store.py::get_backtest",
       "symbol": "get_backtest"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 906,
-      "line_start": 884,
+      "line_end": 907,
+      "line_start": 885,
       "locator": "backend/max_backend/challenger_operations_store.py::list_backtests",
       "symbol": "list_backtests"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 992,
-      "line_start": 910,
+      "line_end": 993,
+      "line_start": 911,
       "locator": "backend/max_backend/challenger_operations_store.py::list_backtests_page",
       "symbol": "list_backtests_page"
     },
     {
       "file": "backend/max_backend/challenger_operations_store.py",
       "kind": "function",
-      "line_end": 1028,
-      "line_start": 995,
+      "line_end": 1030,
+      "line_start": 996,
       "locator": "backend/max_backend/challenger_operations_store.py::recover_incomplete_backtests",
       "symbol": "recover_incomplete_backtests"
     },
@@ -62836,7 +63687,7 @@
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 75,
+      "line_end": 76,
       "line_start": 18,
       "locator": "backend/max_backend/challenger_store.py::migrate_m03",
       "symbol": "migrate_m03"
@@ -62844,80 +63695,80 @@
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 122,
-      "line_start": 78,
+      "line_end": 123,
+      "line_start": 79,
       "locator": "backend/max_backend/challenger_store.py::challenger_database_status",
       "symbol": "challenger_database_status"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 144,
-      "line_start": 135,
+      "line_end": 145,
+      "line_start": 136,
       "locator": "backend/max_backend/challenger_store.py::_decode",
       "symbol": "_decode"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 158,
-      "line_start": 147,
+      "line_end": 159,
+      "line_start": 148,
       "locator": "backend/max_backend/challenger_store.py::get_challenger",
       "symbol": "get_challenger"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 177,
-      "line_start": 161,
+      "line_end": 178,
+      "line_start": 162,
       "locator": "backend/max_backend/challenger_store.py::get_challenger_by_source",
       "symbol": "get_challenger_by_source"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 230,
-      "line_start": 180,
+      "line_end": 231,
+      "line_start": 181,
       "locator": "backend/max_backend/challenger_store.py::consumed_source_identities",
       "symbol": "consumed_source_identities"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 244,
-      "line_start": 233,
+      "line_end": 245,
+      "line_start": 234,
       "locator": "backend/max_backend/challenger_store.py::challenger_id_exists",
       "symbol": "challenger_id_exists"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 261,
-      "line_start": 247,
+      "line_end": 262,
+      "line_start": 248,
       "locator": "backend/max_backend/challenger_store.py::list_challengers",
       "symbol": "list_challengers"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 347,
-      "line_start": 264,
+      "line_end": 348,
+      "line_start": 265,
       "locator": "backend/max_backend/challenger_store.py::reserve_challenger",
       "symbol": "reserve_challenger"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 411,
-      "line_start": 350,
+      "line_end": 412,
+      "line_start": 351,
       "locator": "backend/max_backend/challenger_store.py::finalize_challenger",
       "symbol": "finalize_challenger"
     },
     {
       "file": "backend/max_backend/challenger_store.py",
       "kind": "function",
-      "line_end": 444,
-      "line_start": 414,
+      "line_end": 445,
+      "line_start": 415,
       "locator": "backend/max_backend/challenger_store.py::mark_registration_error",
       "symbol": "mark_registration_error"
     },
@@ -63116,7 +63967,7 @@
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 261,
+      "line_end": 262,
       "line_start": 200,
       "locator": "backend/max_backend/champion_store.py::migrate_m04",
       "symbol": "migrate_m04"
@@ -63124,144 +63975,176 @@
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 319,
-      "line_start": 264,
+      "line_end": 320,
+      "line_start": 265,
       "locator": "backend/max_backend/champion_store.py::champion_database_status",
       "symbol": "champion_database_status"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 334,
-      "line_start": 322,
+      "line_end": 335,
+      "line_start": 323,
       "locator": "backend/max_backend/champion_store.py::_decode_promotion",
       "symbol": "_decode_promotion"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 345,
-      "line_start": 337,
+      "line_end": 346,
+      "line_start": 338,
       "locator": "backend/max_backend/champion_store.py::_decode_champion",
       "symbol": "_decode_champion"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 354,
-      "line_start": 348,
+      "line_end": 355,
+      "line_start": 349,
       "locator": "backend/max_backend/champion_store.py::current_champion",
       "symbol": "current_champion"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 370,
-      "line_start": 357,
+      "line_end": 371,
+      "line_start": 358,
       "locator": "backend/max_backend/champion_store.py::current_champion_summary",
       "symbol": "current_champion_summary"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 385,
-      "line_start": 373,
+      "line_end": 386,
+      "line_start": 374,
       "locator": "backend/max_backend/champion_store.py::get_champion",
       "symbol": "get_champion"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 394,
-      "line_start": 388,
+      "line_end": 395,
+      "line_start": 389,
       "locator": "backend/max_backend/champion_store.py::list_champions",
       "symbol": "list_champions"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 407,
-      "line_start": 397,
+      "line_end": 408,
+      "line_start": 398,
       "locator": "backend/max_backend/champion_store.py::active_promotion",
       "symbol": "active_promotion"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 417,
-      "line_start": 410,
+      "line_end": 418,
+      "line_start": 411,
       "locator": "backend/max_backend/champion_store.py::get_promotion",
       "symbol": "get_promotion"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 426,
-      "line_start": 420,
+      "line_end": 427,
+      "line_start": 421,
       "locator": "backend/max_backend/champion_store.py::list_promotions",
       "symbol": "list_promotions"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 509,
-      "line_start": 429,
+      "line_end": 510,
+      "line_start": 430,
       "locator": "backend/max_backend/champion_store.py::create_prepared_promotion",
       "symbol": "create_prepared_promotion"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 591,
-      "line_start": 512,
+      "line_end": 592,
+      "line_start": 513,
       "locator": "backend/max_backend/champion_store.py::update_promotion",
       "symbol": "update_promotion"
     },
     {
       "file": "backend/max_backend/champion_store.py",
       "kind": "function",
-      "line_end": 770,
-      "line_start": 594,
+      "line_end": 771,
+      "line_start": 595,
       "locator": "backend/max_backend/champion_store.py::commit_promotion_authority",
       "symbol": "commit_promotion_authority"
     },
     {
       "file": "backend/max_backend/db.py",
+      "kind": "class",
+      "line_end": 40,
+      "line_start": 15,
+      "locator": "backend/max_backend/db.py::DatabaseSchemaGuardError",
+      "symbol": "DatabaseSchemaGuardError"
+    },
+    {
+      "file": "backend/max_backend/db.py",
+      "kind": "method",
+      "line_end": 28,
+      "line_start": 18,
+      "locator": "backend/max_backend/db.py::DatabaseSchemaGuardError.__init__",
+      "symbol": "DatabaseSchemaGuardError.__init__"
+    },
+    {
+      "file": "backend/max_backend/db.py",
+      "kind": "method",
+      "line_end": 40,
+      "line_start": 30,
+      "locator": "backend/max_backend/db.py::DatabaseSchemaGuardError.diagnostic",
+      "symbol": "DatabaseSchemaGuardError.diagnostic"
+    },
+    {
+      "file": "backend/max_backend/db.py",
       "kind": "function",
-      "line_end": 20,
-      "line_start": 14,
+      "line_end": 138,
+      "line_start": 43,
+      "locator": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "symbol": "assert_database_schema_compatible"
+    },
+    {
+      "file": "backend/max_backend/db.py",
+      "kind": "function",
+      "line_end": 147,
+      "line_start": 141,
       "locator": "backend/max_backend/db.py::connect",
       "symbol": "connect"
     },
     {
       "file": "backend/max_backend/db.py",
       "kind": "function",
-      "line_end": 64,
-      "line_start": 23,
+      "line_end": 192,
+      "line_start": 150,
       "locator": "backend/max_backend/db.py::initialize_database",
       "symbol": "initialize_database"
     },
     {
       "file": "backend/max_backend/db.py",
       "kind": "function",
-      "line_end": 97,
-      "line_start": 67,
+      "line_end": 226,
+      "line_start": 195,
       "locator": "backend/max_backend/db.py::ensure_baseline_registered",
       "symbol": "ensure_baseline_registered"
     },
     {
       "file": "backend/max_backend/db.py",
       "kind": "function",
-      "line_end": 105,
-      "line_start": 100,
+      "line_end": 234,
+      "line_start": 229,
       "locator": "backend/max_backend/db.py::read_baseline",
       "symbol": "read_baseline"
     },
     {
       "file": "backend/max_backend/db.py",
       "kind": "function",
-      "line_end": 146,
-      "line_start": 108,
+      "line_end": 275,
+      "line_start": 237,
       "locator": "backend/max_backend/db.py::database_status",
       "symbol": "database_status"
     },
@@ -63292,80 +64175,88 @@
     {
       "file": "backend/max_backend/main.py",
       "kind": "class",
-      "line_end": 45,
-      "line_start": 44,
+      "line_end": 52,
+      "line_start": 51,
       "locator": "backend/max_backend/main.py::CorruptStateResetConfirmation",
       "symbol": "CorruptStateResetConfirmation"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "async_function",
-      "line_end": 72,
-      "line_start": 49,
+      "line_end": 77,
+      "line_start": 56,
       "locator": "backend/max_backend/main.py::lifespan",
       "symbol": "lifespan"
     },
     {
       "file": "backend/max_backend/main.py",
+      "kind": "function",
+      "line_end": 93,
+      "line_start": 80,
+      "locator": "backend/max_backend/main.py::_run_startup_migrations",
+      "symbol": "_run_startup_migrations"
+    },
+    {
+      "file": "backend/max_backend/main.py",
       "kind": "async_function",
-      "line_end": 97,
-      "line_start": 84,
+      "line_end": 122,
+      "line_start": 105,
       "locator": "backend/max_backend/main.py::recovery_required_gate",
       "symbol": "recovery_required_gate"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 113,
-      "line_start": 101,
+      "line_end": 140,
+      "line_start": 126,
       "locator": "backend/max_backend/main.py::recovery_status",
       "symbol": "recovery_status"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 129,
-      "line_start": 117,
+      "line_end": 161,
+      "line_start": 144,
       "locator": "backend/max_backend/main.py::reset_corrupt_state",
       "symbol": "reset_corrupt_state"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 159,
-      "line_start": 132,
+      "line_end": 191,
+      "line_start": 164,
       "locator": "backend/max_backend/main.py::_foundation_state",
       "symbol": "_foundation_state"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 179,
-      "line_start": 163,
+      "line_end": 222,
+      "line_start": 195,
       "locator": "backend/max_backend/main.py::health",
       "symbol": "health"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 184,
-      "line_start": 183,
+      "line_end": 227,
+      "line_start": 226,
       "locator": "backend/max_backend/main.py::ea_baseline",
       "symbol": "ea_baseline"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 189,
-      "line_start": 188,
+      "line_end": 232,
+      "line_start": 231,
       "locator": "backend/max_backend/main.py::mt5_preflight",
       "symbol": "mt5_preflight"
     },
     {
       "file": "backend/max_backend/main.py",
       "kind": "function",
-      "line_end": 200,
-      "line_start": 193,
+      "line_end": 243,
+      "line_start": 236,
       "locator": "backend/max_backend/main.py::overview",
       "symbol": "overview"
     },
@@ -64188,168 +65079,168 @@
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 72,
-      "line_start": 71,
+      "line_end": 73,
+      "line_start": 72,
       "locator": "backend/max_backend/optimizer_jobs.py::_process_identity",
       "symbol": "_process_identity"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 124,
-      "line_start": 75,
+      "line_end": 125,
+      "line_start": 76,
       "locator": "backend/max_backend/optimizer_jobs.py::_worker_identity_matches",
       "symbol": "_worker_identity_matches"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 146,
-      "line_start": 127,
+      "line_end": 147,
+      "line_start": 128,
       "locator": "backend/max_backend/optimizer_jobs.py::_terminate_verified_worker",
       "symbol": "_terminate_verified_worker"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 171,
-      "line_start": 149,
+      "line_end": 172,
+      "line_start": 150,
       "locator": "backend/max_backend/optimizer_jobs.py::_wait_for_worker_identity",
       "symbol": "_wait_for_worker_identity"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 189,
-      "line_start": 174,
+      "line_end": 190,
+      "line_start": 175,
       "locator": "backend/max_backend/optimizer_jobs.py::_mark_reconciliation_required",
       "symbol": "_mark_reconciliation_required"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 217,
-      "line_start": 192,
+      "line_end": 218,
+      "line_start": 193,
       "locator": "backend/max_backend/optimizer_jobs.py::_mark_unverified_worker_launch",
       "symbol": "_mark_unverified_worker_launch"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 238,
-      "line_start": 220,
+      "line_end": 239,
+      "line_start": 221,
       "locator": "backend/max_backend/optimizer_jobs.py::_revoke_unconfirmed_worker_launch",
       "symbol": "_revoke_unconfirmed_worker_launch"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 245,
-      "line_start": 241,
+      "line_end": 246,
+      "line_start": 242,
       "locator": "backend/max_backend/optimizer_jobs.py::_public_job",
       "symbol": "_public_job"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 388,
-      "line_start": 248,
+      "line_end": 389,
+      "line_start": 249,
       "locator": "backend/max_backend/optimizer_jobs.py::_spawn_worker",
       "symbol": "_spawn_worker"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 412,
-      "line_start": 391,
+      "line_end": 413,
+      "line_start": 392,
       "locator": "backend/max_backend/optimizer_jobs.py::start_optimizer",
       "symbol": "start_optimizer"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 427,
-      "line_start": 415,
+      "line_end": 428,
+      "line_start": 416,
       "locator": "backend/max_backend/optimizer_jobs.py::_round_has_mt5_launch_authority",
       "symbol": "_round_has_mt5_launch_authority"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 477,
-      "line_start": 430,
+      "line_end": 478,
+      "line_start": 431,
       "locator": "backend/max_backend/optimizer_jobs.py::_stop_verified_optimizer_mt5",
       "symbol": "_stop_verified_optimizer_mt5"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 561,
-      "line_start": 480,
+      "line_end": 562,
+      "line_start": 481,
       "locator": "backend/max_backend/optimizer_jobs.py::stop_optimizer",
       "symbol": "stop_optimizer"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 621,
-      "line_start": 564,
+      "line_end": 622,
+      "line_start": 565,
       "locator": "backend/max_backend/optimizer_jobs.py::resume_optimizer",
       "symbol": "resume_optimizer"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 675,
-      "line_start": 624,
+      "line_end": 676,
+      "line_start": 625,
       "locator": "backend/max_backend/optimizer_jobs.py::_reconcile_uncertain_round",
       "symbol": "_reconcile_uncertain_round"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 688,
-      "line_start": 678,
+      "line_end": 689,
+      "line_start": 679,
       "locator": "backend/max_backend/optimizer_jobs.py::_ensure_request_snapshot",
       "symbol": "_ensure_request_snapshot"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 790,
-      "line_start": 691,
+      "line_end": 792,
+      "line_start": 692,
       "locator": "backend/max_backend/optimizer_jobs.py::reconcile_optimizer_startup",
       "symbol": "reconcile_optimizer_startup"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 812,
-      "line_start": 793,
+      "line_end": 814,
+      "line_start": 795,
       "locator": "backend/max_backend/optimizer_jobs.py::_round_passes",
       "symbol": "_round_passes"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 897,
-      "line_start": 815,
+      "line_end": 899,
+      "line_start": 817,
       "locator": "backend/max_backend/optimizer_jobs.py::_verified_raw_report_preview",
       "symbol": "_verified_raw_report_preview"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 1001,
-      "line_start": 900,
+      "line_end": 1003,
+      "line_start": 902,
       "locator": "backend/max_backend/optimizer_jobs.py::job_detail",
       "symbol": "job_detail"
     },
     {
       "file": "backend/max_backend/optimizer_jobs.py",
       "kind": "function",
-      "line_end": 1013,
-      "line_start": 1004,
+      "line_end": 1015,
+      "line_start": 1006,
       "locator": "backend/max_backend/optimizer_jobs.py::latest_job_detail",
       "symbol": "latest_job_detail"
     },
@@ -64860,7 +65751,7 @@
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 111,
+      "line_end": 112,
       "line_start": 46,
       "locator": "backend/max_backend/optimizer_store.py::migrate_m01",
       "symbol": "migrate_m01"
@@ -64868,168 +65759,168 @@
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 134,
-      "line_start": 114,
+      "line_end": 136,
+      "line_start": 115,
       "locator": "backend/max_backend/optimizer_store.py::migrate_m02",
       "symbol": "migrate_m02"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 175,
-      "line_start": 137,
+      "line_end": 177,
+      "line_start": 139,
       "locator": "backend/max_backend/optimizer_store.py::optimizer_database_status",
       "symbol": "optimizer_database_status"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 188,
-      "line_start": 178,
+      "line_end": 190,
+      "line_start": 180,
       "locator": "backend/max_backend/optimizer_store.py::_decode_job",
       "symbol": "_decode_job"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 194,
-      "line_start": 191,
+      "line_end": 196,
+      "line_start": 193,
       "locator": "backend/max_backend/optimizer_store.py::_decode_round",
       "symbol": "_decode_round"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 260,
-      "line_start": 197,
+      "line_end": 262,
+      "line_start": 199,
       "locator": "backend/max_backend/optimizer_store.py::create_job",
       "symbol": "create_job"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 270,
-      "line_start": 263,
+      "line_end": 272,
+      "line_start": 265,
       "locator": "backend/max_backend/optimizer_store.py::get_job",
       "symbol": "get_job"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 279,
-      "line_start": 273,
+      "line_end": 281,
+      "line_start": 275,
       "locator": "backend/max_backend/optimizer_store.py::latest_job",
       "symbol": "latest_job"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 288,
-      "line_start": 282,
+      "line_end": 290,
+      "line_start": 284,
       "locator": "backend/max_backend/optimizer_store.py::active_job",
       "symbol": "active_job"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 366,
-      "line_start": 291,
+      "line_end": 368,
+      "line_start": 293,
       "locator": "backend/max_backend/optimizer_store.py::update_job",
       "symbol": "update_job"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 397,
-      "line_start": 369,
+      "line_end": 399,
+      "line_start": 371,
       "locator": "backend/max_backend/optimizer_store.py::claim_initial_worker_launch",
       "symbol": "claim_initial_worker_launch"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 432,
-      "line_start": 400,
+      "line_end": 434,
+      "line_start": 402,
       "locator": "backend/max_backend/optimizer_store.py::claim_resume_worker_launch",
       "symbol": "claim_resume_worker_launch"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 469,
-      "line_start": 435,
+      "line_end": 471,
+      "line_start": 437,
       "locator": "backend/max_backend/optimizer_store.py::confirm_worker_launch",
       "symbol": "confirm_worker_launch"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 538,
-      "line_start": 472,
+      "line_end": 540,
+      "line_start": 474,
       "locator": "backend/max_backend/optimizer_store.py::upsert_round",
       "symbol": "upsert_round"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 671,
-      "line_start": 541,
+      "line_end": 673,
+      "line_start": 543,
       "locator": "backend/max_backend/optimizer_store.py::_persist_candidate_projection",
       "symbol": "_persist_candidate_projection"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 710,
-      "line_start": 690,
+      "line_end": 712,
+      "line_start": 692,
       "locator": "backend/max_backend/optimizer_store.py::optimizer_candidate_identity",
       "symbol": "optimizer_candidate_identity"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 730,
-      "line_start": 713,
+      "line_end": 732,
+      "line_start": 715,
       "locator": "backend/max_backend/optimizer_store.py::optimizer_candidate_identities",
       "symbol": "optimizer_candidate_identities"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 747,
-      "line_start": 733,
+      "line_end": 749,
+      "line_start": 735,
       "locator": "backend/max_backend/optimizer_store.py::persist_candidate_projection",
       "symbol": "persist_candidate_projection"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 762,
-      "line_start": 750,
+      "line_end": 764,
+      "line_start": 752,
       "locator": "backend/max_backend/optimizer_store.py::get_round",
       "symbol": "get_round"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 772,
-      "line_start": 765,
+      "line_end": 774,
+      "line_start": 767,
       "locator": "backend/max_backend/optimizer_store.py::get_rounds",
       "symbol": "get_rounds"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 780,
-      "line_start": 775,
+      "line_end": 782,
+      "line_start": 777,
       "locator": "backend/max_backend/optimizer_store.py::attach_rounds",
       "symbol": "attach_rounds"
     },
     {
       "file": "backend/max_backend/optimizer_store.py",
       "kind": "function",
-      "line_end": 790,
-      "line_start": 783,
+      "line_end": 792,
+      "line_start": 785,
       "locator": "backend/max_backend/optimizer_store.py::load_resource_calibration",
       "symbol": "load_resource_calibration"
     },
@@ -65276,256 +66167,256 @@
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 71,
-      "line_start": 70,
+      "line_end": 72,
+      "line_start": 71,
       "locator": "backend/max_backend/promotion_service.py::_sha",
       "symbol": "_sha"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 164,
-      "line_start": 74,
+      "line_end": 165,
+      "line_start": 75,
       "locator": "backend/max_backend/promotion_service.py::_retained_owner_selected_source",
       "symbol": "_retained_owner_selected_source"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 214,
-      "line_start": 167,
+      "line_end": 215,
+      "line_start": 168,
       "locator": "backend/max_backend/promotion_service.py::_verify_challenger_optimizer_source",
       "symbol": "_verify_challenger_optimizer_source"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 218,
-      "line_start": 217,
+      "line_end": 219,
+      "line_start": 218,
       "locator": "backend/max_backend/promotion_service.py::_relative",
       "symbol": "_relative"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 227,
-      "line_start": 221,
+      "line_end": 228,
+      "line_start": 222,
       "locator": "backend/max_backend/promotion_service.py::_json_write",
       "symbol": "_json_write"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 234,
-      "line_start": 230,
+      "line_end": 235,
+      "line_start": 231,
       "locator": "backend/max_backend/promotion_service.py::_atomic_copy",
       "symbol": "_atomic_copy"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 243,
-      "line_start": 237,
+      "line_end": 244,
+      "line_start": 238,
       "locator": "backend/max_backend/promotion_service.py::_promotion_id",
       "symbol": "_promotion_id"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 247,
-      "line_start": 246,
+      "line_end": 248,
+      "line_start": 247,
       "locator": "backend/max_backend/promotion_service.py::_archive_stamp",
       "symbol": "_archive_stamp"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 263,
-      "line_start": 250,
+      "line_end": 264,
+      "line_start": 251,
       "locator": "backend/max_backend/promotion_service.py::_snapshot_file",
       "symbol": "_snapshot_file"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 276,
-      "line_start": 266,
+      "line_end": 277,
+      "line_start": 267,
       "locator": "backend/max_backend/promotion_service.py::_restore_file",
       "symbol": "_restore_file"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 360,
-      "line_start": 279,
+      "line_end": 361,
+      "line_start": 280,
       "locator": "backend/max_backend/promotion_service.py::_compile_champion",
       "symbol": "_compile_champion"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 393,
-      "line_start": 363,
+      "line_end": 394,
+      "line_start": 364,
       "locator": "backend/max_backend/promotion_service.py::_stage_baseline_archive",
       "symbol": "_stage_baseline_archive"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 437,
-      "line_start": 396,
+      "line_end": 438,
+      "line_start": 397,
       "locator": "backend/max_backend/promotion_service.py::_stage_former_champion_archive",
       "symbol": "_stage_former_champion_archive"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 473,
-      "line_start": 440,
+      "line_end": 474,
+      "line_start": 441,
       "locator": "backend/max_backend/promotion_service.py::_promotion_runtime_spec",
       "symbol": "_promotion_runtime_spec"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 484,
-      "line_start": 476,
+      "line_end": 485,
+      "line_start": 477,
       "locator": "backend/max_backend/promotion_service.py::_promotion_runtime_authority",
       "symbol": "_promotion_runtime_authority"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 513,
-      "line_start": 487,
+      "line_end": 514,
+      "line_start": 488,
       "locator": "backend/max_backend/promotion_service.py::_verify_promotion_runtime_spec",
       "symbol": "_verify_promotion_runtime_spec"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 576,
-      "line_start": 516,
+      "line_end": 577,
+      "line_start": 517,
       "locator": "backend/max_backend/promotion_service.py::_restore_promotion_runtime_state",
       "symbol": "_restore_promotion_runtime_state"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 603,
-      "line_start": 579,
+      "line_end": 604,
+      "line_start": 580,
       "locator": "backend/max_backend/promotion_service.py::_finalize_promotion_runtime_state",
       "symbol": "_finalize_promotion_runtime_state"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 645,
-      "line_start": 606,
+      "line_end": 646,
+      "line_start": 607,
       "locator": "backend/max_backend/promotion_service.py::_capture_before_state",
       "symbol": "_capture_before_state"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 669,
-      "line_start": 648,
+      "line_end": 670,
+      "line_start": 649,
       "locator": "backend/max_backend/promotion_service.py::_restore_before_state",
       "symbol": "_restore_before_state"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 677,
-      "line_start": 672,
+      "line_end": 678,
+      "line_start": 673,
       "locator": "backend/max_backend/promotion_service.py::_commit_history_archive",
       "symbol": "_commit_history_archive"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 685,
-      "line_start": 680,
+      "line_end": 686,
+      "line_start": 681,
       "locator": "backend/max_backend/promotion_service.py::_cleanup_compile_temp",
       "symbol": "_cleanup_compile_temp"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 727,
-      "line_start": 688,
+      "line_end": 728,
+      "line_start": 689,
       "locator": "backend/max_backend/promotion_service.py::_post_deployment_state",
       "symbol": "_post_deployment_state"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 774,
-      "line_start": 730,
+      "line_end": 775,
+      "line_start": 731,
       "locator": "backend/max_backend/promotion_service.py::_stage_evidence",
       "symbol": "_stage_evidence"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 837,
-      "line_start": 777,
+      "line_end": 838,
+      "line_start": 778,
       "locator": "backend/max_backend/promotion_service.py::_finalize_committed_evidence",
       "symbol": "_finalize_committed_evidence"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 857,
-      "line_start": 840,
+      "line_end": 858,
+      "line_start": 841,
       "locator": "backend/max_backend/promotion_service.py::_promotion_public",
       "symbol": "_promotion_public"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 1328,
-      "line_start": 860,
+      "line_end": 1329,
+      "line_start": 861,
       "locator": "backend/max_backend/promotion_service.py::promote_strategy_challenger",
       "symbol": "promote_strategy_challenger"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 1409,
-      "line_start": 1331,
+      "line_end": 1410,
+      "line_start": 1332,
       "locator": "backend/max_backend/promotion_service.py::verify_current_strategy_champion",
       "symbol": "verify_current_strategy_champion"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 1471,
-      "line_start": 1412,
+      "line_end": 1473,
+      "line_start": 1413,
       "locator": "backend/max_backend/promotion_service.py::recover_incomplete_promotions",
       "symbol": "recover_incomplete_promotions"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 1506,
-      "line_start": 1474,
+      "line_end": 1508,
+      "line_start": 1476,
       "locator": "backend/max_backend/promotion_service.py::champion_detail",
       "symbol": "champion_detail"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 1510,
-      "line_start": 1509,
+      "line_end": 1512,
+      "line_start": 1511,
       "locator": "backend/max_backend/promotion_service.py::promotion_history",
       "symbol": "promotion_history"
     },
     {
       "file": "backend/max_backend/promotion_service.py",
       "kind": "function",
-      "line_end": 1517,
-      "line_start": 1513,
+      "line_end": 1519,
+      "line_start": 1515,
       "locator": "backend/max_backend/promotion_service.py::promotion_detail",
       "symbol": "promotion_detail"
     },
@@ -66276,7 +67167,7 @@
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 92,
+      "line_end": 93,
       "line_start": 28,
       "locator": "backend/max_backend/scientist_store.py::migrate_m05",
       "symbol": "migrate_m05"
@@ -66284,288 +67175,288 @@
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 116,
-      "line_start": 95,
+      "line_end": 117,
+      "line_start": 96,
       "locator": "backend/max_backend/scientist_store.py::scientist_database_status",
       "symbol": "scientist_database_status"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 120,
-      "line_start": 119,
+      "line_end": 121,
+      "line_start": 120,
       "locator": "backend/max_backend/scientist_store.py::_decode_thread",
       "symbol": "_decode_thread"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 129,
-      "line_start": 123,
+      "line_end": 130,
+      "line_start": 124,
       "locator": "backend/max_backend/scientist_store.py::_decode_message",
       "symbol": "_decode_message"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 137,
-      "line_start": 132,
+      "line_end": 138,
+      "line_start": 133,
       "locator": "backend/max_backend/scientist_store.py::_decode_request",
       "symbol": "_decode_request"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 152,
-      "line_start": 140,
+      "line_end": 153,
+      "line_start": 141,
       "locator": "backend/max_backend/scientist_store.py::create_thread",
       "symbol": "create_thread"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 162,
-      "line_start": 155,
+      "line_end": 163,
+      "line_start": 156,
       "locator": "backend/max_backend/scientist_store.py::get_thread",
       "symbol": "get_thread"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 173,
-      "line_start": 165,
+      "line_end": 174,
+      "line_start": 166,
       "locator": "backend/max_backend/scientist_store.py::list_threads",
       "symbol": "list_threads"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 193,
-      "line_start": 176,
+      "line_end": 194,
+      "line_start": 177,
       "locator": "backend/max_backend/scientist_store.py::list_messages",
       "symbol": "list_messages"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 200,
-      "line_start": 196,
+      "line_end": 201,
+      "line_start": 197,
       "locator": "backend/max_backend/scientist_store.py::_title_from_message",
       "symbol": "_title_from_message"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 210,
-      "line_start": 203,
+      "line_end": 211,
+      "line_start": 204,
       "locator": "backend/max_backend/scientist_store.py::get_request",
       "symbol": "get_request"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 277,
-      "line_start": 213,
+      "line_end": 278,
+      "line_start": 214,
       "locator": "backend/max_backend/scientist_store.py::prepare_request",
       "symbol": "prepare_request"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 312,
-      "line_start": 280,
+      "line_end": 313,
+      "line_start": 281,
       "locator": "backend/max_backend/scientist_store.py::mark_request_in_flight",
       "symbol": "mark_request_in_flight"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 383,
-      "line_start": 315,
+      "line_end": 384,
+      "line_start": 316,
       "locator": "backend/max_backend/scientist_store.py::complete_request",
       "symbol": "complete_request"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 423,
-      "line_start": 386,
+      "line_end": 424,
+      "line_start": 387,
       "locator": "backend/max_backend/scientist_store.py::fail_request",
       "symbol": "fail_request"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 441,
-      "line_start": 426,
+      "line_end": 443,
+      "line_start": 427,
       "locator": "backend/max_backend/scientist_store.py::recover_unconfirmed_requests",
       "symbol": "recover_unconfirmed_requests"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 459,
-      "line_start": 444,
+      "line_end": 461,
+      "line_start": 446,
       "locator": "backend/max_backend/scientist_store.py::get_completed_assistant_message",
       "symbol": "get_completed_assistant_message"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 498,
-      "line_start": 463,
+      "line_end": 500,
+      "line_start": 465,
       "locator": "backend/max_backend/scientist_store.py::mark_request_unconfirmed",
       "symbol": "mark_request_unconfirmed"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 517,
-      "line_start": 501,
+      "line_end": 519,
+      "line_start": 503,
       "locator": "backend/max_backend/scientist_store.py::get_active_thread",
       "symbol": "get_active_thread"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 558,
-      "line_start": 520,
+      "line_end": 560,
+      "line_start": 522,
       "locator": "backend/max_backend/scientist_store.py::clear_chat",
       "symbol": "clear_chat"
     },
     {
       "file": "backend/max_backend/scientist_store.py",
       "kind": "function",
-      "line_end": 594,
-      "line_start": 561,
+      "line_end": 596,
+      "line_start": 563,
       "locator": "backend/max_backend/scientist_store.py::purge_chat",
       "symbol": "purge_chat"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "class",
-      "line_end": 68,
-      "line_start": 67,
+      "line_end": 69,
+      "line_start": 68,
       "locator": "backend/max_backend/strategy_reset.py::StrategyResetError",
       "symbol": "StrategyResetError"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 76,
-      "line_start": 71,
+      "line_end": 77,
+      "line_start": 72,
       "locator": "backend/max_backend/strategy_reset.py::_hash_file",
       "symbol": "_hash_file"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 93,
-      "line_start": 79,
+      "line_end": 94,
+      "line_start": 80,
       "locator": "backend/max_backend/strategy_reset.py::_settings_fingerprint",
       "symbol": "_settings_fingerprint"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 101,
-      "line_start": 96,
+      "line_end": 102,
+      "line_start": 97,
       "locator": "backend/max_backend/strategy_reset.py::_connect",
       "symbol": "_connect"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 110,
-      "line_start": 104,
+      "line_end": 111,
+      "line_start": 105,
       "locator": "backend/max_backend/strategy_reset.py::_tables",
       "symbol": "_tables"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 115,
-      "line_start": 113,
+      "line_end": 116,
+      "line_start": 114,
       "locator": "backend/max_backend/strategy_reset.py::_count",
       "symbol": "_count"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 142,
-      "line_start": 118,
+      "line_end": 143,
+      "line_start": 119,
       "locator": "backend/max_backend/strategy_reset.py::_runtime_paths",
       "symbol": "_runtime_paths"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 174,
-      "line_start": 145,
+      "line_end": 175,
+      "line_start": 146,
       "locator": "backend/max_backend/strategy_reset.py::_owned_paths",
       "symbol": "_owned_paths"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 286,
-      "line_start": 177,
+      "line_end": 287,
+      "line_start": 178,
       "locator": "backend/max_backend/strategy_reset.py::_read_counts",
       "symbol": "_read_counts"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 295,
-      "line_start": 289,
+      "line_end": 296,
+      "line_start": 290,
       "locator": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
       "symbol": "strategy_reset_preflight"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 321,
-      "line_start": 298,
+      "line_end": 322,
+      "line_start": 299,
       "locator": "backend/max_backend/strategy_reset.py::_make_database_backup",
       "symbol": "_make_database_backup"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 344,
-      "line_start": 324,
+      "line_end": 345,
+      "line_start": 325,
       "locator": "backend/max_backend/strategy_reset.py::_delete_rows",
       "symbol": "_delete_rows"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 419,
-      "line_start": 347,
+      "line_end": 421,
+      "line_start": 348,
       "locator": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
       "symbol": "reset_strategy_workspace"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 432,
-      "line_start": 422,
+      "line_end": 434,
+      "line_start": 424,
       "locator": "backend/max_backend/strategy_reset.py::database_recovery_status",
       "symbol": "database_recovery_status"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 455,
-      "line_start": 435,
+      "line_end": 457,
+      "line_start": 437,
       "locator": "backend/max_backend/strategy_reset.py::_bootstrap_database",
       "symbol": "_bootstrap_database"
     },
     {
       "file": "backend/max_backend/strategy_reset.py",
       "kind": "function",
-      "line_end": 504,
-      "line_start": 458,
+      "line_end": 507,
+      "line_start": 460,
       "locator": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database",
       "symbol": "backup_and_reset_corrupt_database"
     },
@@ -66620,7 +67511,7 @@
     {
       "file": "backend/max_backend/workflow_store.py",
       "kind": "function",
-      "line_end": 309,
+      "line_end": 310,
       "line_start": 183,
       "locator": "backend/max_backend/workflow_store.py::migrate_current",
       "symbol": "migrate_current"
@@ -66628,56 +67519,56 @@
     {
       "file": "backend/max_backend/workflow_store.py",
       "kind": "function",
-      "line_end": 335,
-      "line_start": 312,
+      "line_end": 336,
+      "line_start": 313,
       "locator": "backend/max_backend/workflow_store.py::get_batch",
       "symbol": "get_batch"
     },
     {
       "file": "backend/max_backend/workflow_store.py",
       "kind": "function",
-      "line_end": 387,
-      "line_start": 338,
+      "line_end": 388,
+      "line_start": 339,
       "locator": "backend/max_backend/workflow_store.py::prepare_batch",
       "symbol": "prepare_batch"
     },
     {
       "file": "backend/max_backend/workflow_store.py",
       "kind": "function",
-      "line_end": 427,
-      "line_start": 390,
+      "line_end": 428,
+      "line_start": 391,
       "locator": "backend/max_backend/workflow_store.py::update_batch",
       "symbol": "update_batch"
     },
     {
       "file": "backend/max_backend/workflow_store.py",
       "kind": "function",
-      "line_end": 553,
-      "line_start": 430,
+      "line_end": 554,
+      "line_start": 431,
       "locator": "backend/max_backend/workflow_store.py::insert_challenger_batch_rows",
       "symbol": "insert_challenger_batch_rows"
     },
     {
       "file": "backend/max_backend/workflow_store.py",
       "kind": "function",
-      "line_end": 571,
-      "line_start": 556,
+      "line_end": 572,
+      "line_start": 557,
       "locator": "backend/max_backend/workflow_store.py::set_backtest_runtime_status",
       "symbol": "set_backtest_runtime_status"
     },
     {
       "file": "backend/max_backend/workflow_store.py",
       "kind": "function",
-      "line_end": 583,
-      "line_start": 574,
+      "line_end": 584,
+      "line_start": 575,
       "locator": "backend/max_backend/workflow_store.py::delete_backtest_row",
       "symbol": "delete_backtest_row"
     },
     {
       "file": "backend/max_backend/workflow_store.py",
       "kind": "function",
-      "line_end": 595,
-      "line_start": 586,
+      "line_end": 596,
+      "line_start": 587,
       "locator": "backend/max_backend/workflow_store.py::delete_challenger_row",
       "symbol": "delete_challenger_row"
     },
@@ -71378,66 +72269,250 @@
       "symbol": "test_upgrade_purges_retired_research_authority_and_preserves_strategy_state"
     },
     {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 98,
+      "line_start": 41,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::_create_schema_fixture",
+      "symbol": "_create_schema_fixture"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 107,
+      "line_start": 101,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::_file_hashes",
+      "symbol": "_file_hashes"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 148,
+      "line_start": 110,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::_db_snapshot",
+      "symbol": "_db_snapshot"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 156,
+      "line_start": 151,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::_set_schema_version",
+      "symbol": "_set_schema_version"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 160,
+      "line_start": 159,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::_run_startup",
+      "symbol": "_run_startup"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 169,
+      "line_start": 163,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::_load_epoch_reset_script",
+      "symbol": "_load_epoch_reset_script"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 181,
+      "line_start": 172,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_fresh_install_and_supported_schema_startup_pass",
+      "symbol": "test_fresh_install_and_supported_schema_startup_pass"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 200,
+      "line_start": 189,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_every_direct_migration_entrypoint_blocks_schema_16_without_mutation",
+      "symbol": "test_every_direct_migration_entrypoint_blocks_schema_16_without_mutation"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 248,
+      "line_start": 235,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_direct_startup_recovery_and_reset_entrypoints_block_schema_16",
+      "symbol": "test_direct_startup_recovery_and_reset_entrypoints_block_schema_16"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 279,
+      "line_start": 252,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_application_startup_exposes_schema_block_and_never_offers_reset",
+      "symbol": "test_application_startup_exposes_schema_block_and_never_offers_reset"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 298,
+      "line_start": 287,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_existing_database_with_invalid_schema_metadata_fails_closed",
+      "symbol": "test_existing_database_with_invalid_schema_metadata_fails_closed"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 325,
+      "line_start": 301,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state",
+      "symbol": "test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "method",
+      "line_end": 313,
+      "line_start": 312,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state.migration_must_not_start",
+      "symbol": "test_schema_16_crash_and_retry_never_starts_migration_or_leaves_partial_state.migration_must_not_start"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 354,
+      "line_start": 328,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration",
+      "symbol": "test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "class",
+      "line_end": 337,
+      "line_start": 336,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration.SimulatedStartupCrash",
+      "symbol": "test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration.SimulatedStartupCrash"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "method",
+      "line_end": 341,
+      "line_start": 339,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration.crash_after_preflight",
+      "symbol": "test_supported_schema_crash_after_read_only_preflight_retries_without_partial_migration.crash_after_preflight"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 383,
+      "line_start": 357,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_invalid_schema_metadata_startup_is_diagnostic_only",
+      "symbol": "test_invalid_schema_metadata_startup_is_diagnostic_only"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 407,
+      "line_start": 386,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_read_only_guard_observes_committed_wal_schema_without_mutation",
+      "symbol": "test_read_only_guard_observes_committed_wal_schema_without_mutation"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 423,
+      "line_start": 410,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_hot_rollback_journal_is_not_replayed_during_schema_preflight",
+      "symbol": "test_hot_rollback_journal_is_not_replayed_during_schema_preflight"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 436,
+      "line_start": 426,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_initialize_database_rejects_existing_newer_schema_without_side_effects",
+      "symbol": "test_initialize_database_rejects_existing_newer_schema_without_side_effects"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 450,
+      "line_start": 439,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_baseline_registration_rejects_existing_newer_schema_before_baseline_reads",
+      "symbol": "test_baseline_registration_rejects_existing_newer_schema_before_baseline_reads"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 462,
+      "line_start": 453,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_missing_database_is_allowed_only_for_initialization",
+      "symbol": "test_missing_database_is_allowed_only_for_initialization"
+    },
+    {
+      "file": "backend/tests/test_schema_compatibility_guard.py",
+      "kind": "function",
+      "line_end": 472,
+      "line_start": 465,
+      "locator": "backend/tests/test_schema_compatibility_guard.py::test_launcher_reports_schema_guard_instead_of_generic_backend_timeout",
+      "symbol": "test_launcher_reports_schema_guard_instead_of_generic_backend_timeout"
+    },
+    {
       "file": "backend/tests/test_strategy_workspace_reset.py",
       "kind": "function",
-      "line_end": 31,
-      "line_start": 21,
+      "line_end": 35,
+      "line_start": 25,
       "locator": "backend/tests/test_strategy_workspace_reset.py::_current_database",
       "symbol": "_current_database"
     },
     {
       "file": "backend/tests/test_strategy_workspace_reset.py",
       "kind": "function",
-      "line_end": 184,
-      "line_start": 34,
+      "line_end": 188,
+      "line_start": 38,
       "locator": "backend/tests/test_strategy_workspace_reset.py::_seed_corrupt_strategy_state",
       "symbol": "_seed_corrupt_strategy_state"
     },
     {
       "file": "backend/tests/test_strategy_workspace_reset.py",
       "kind": "function",
-      "line_end": 199,
-      "line_start": 188,
+      "line_end": 203,
+      "line_start": 192,
       "locator": "backend/tests/test_strategy_workspace_reset.py::reset_environment",
       "symbol": "reset_environment"
     },
     {
       "file": "backend/tests/test_strategy_workspace_reset.py",
       "kind": "function",
-      "line_end": 240,
-      "line_start": 202,
+      "line_end": 244,
+      "line_start": 206,
       "locator": "backend/tests/test_strategy_workspace_reset.py::test_preflight_and_reset_handle_malformed_generated_json_and_current_champion",
       "symbol": "test_preflight_and_reset_handle_malformed_generated_json_and_current_champion"
     },
     {
       "file": "backend/tests/test_strategy_workspace_reset.py",
       "kind": "function",
-      "line_end": 263,
-      "line_start": 243,
+      "line_end": 267,
+      "line_start": 247,
       "locator": "backend/tests/test_strategy_workspace_reset.py::test_reset_rejects_wrong_confirmation_and_active_optimizer_without_mutation",
       "symbol": "test_reset_rejects_wrong_confirmation_and_active_optimizer_without_mutation"
     },
     {
       "file": "backend/tests/test_strategy_workspace_reset.py",
       "kind": "function",
-      "line_end": 291,
-      "line_start": 266,
-      "locator": "backend/tests/test_strategy_workspace_reset.py::test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema",
-      "symbol": "test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema"
+      "line_end": 289,
+      "line_start": 270,
+      "locator": "backend/tests/test_strategy_workspace_reset.py::test_recovery_fails_closed_for_database_without_readable_schema_metadata",
+      "symbol": "test_recovery_fails_closed_for_database_without_readable_schema_metadata"
     },
     {
       "file": "backend/tests/test_strategy_workspace_reset.py",
       "kind": "function",
-      "line_end": 307,
-      "line_start": 294,
+      "line_end": 305,
+      "line_start": 292,
       "locator": "backend/tests/test_strategy_workspace_reset.py::test_recovery_refuses_healthy_database_and_wrong_confirmation",
       "symbol": "test_recovery_refuses_healthy_database_and_wrong_confirmation"
     },
     {
       "file": "backend/tests/test_strategy_workspace_reset.py",
       "kind": "function",
-      "line_end": 316,
-      "line_start": 310,
+      "line_end": 314,
+      "line_start": 308,
       "locator": "backend/tests/test_strategy_workspace_reset.py::test_champion_summary_does_not_decode_or_scan_current_artifacts",
       "symbol": "test_champion_summary_does_not_decode_or_scan_current_artifacts"
     },
@@ -71788,192 +72863,192 @@
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "class",
-      "line_end": 31,
-      "line_start": 30,
+      "line_end": 32,
+      "line_start": 31,
       "locator": "scripts/reset_strategy_epoch.py::ResetError",
       "symbol": "ResetError"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 39,
-      "line_start": 34,
+      "line_end": 40,
+      "line_start": 35,
       "locator": "scripts/reset_strategy_epoch.py::sha256_file",
       "symbol": "sha256_file"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 49,
-      "line_start": 42,
+      "line_end": 50,
+      "line_start": 43,
       "locator": "scripts/reset_strategy_epoch.py::_json",
       "symbol": "_json"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 57,
-      "line_start": 52,
+      "line_end": 58,
+      "line_start": 53,
       "locator": "scripts/reset_strategy_epoch.py::_connect",
       "symbol": "_connect"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 64,
-      "line_start": 60,
+      "line_end": 65,
+      "line_start": 61,
       "locator": "scripts/reset_strategy_epoch.py::_table_exists",
       "symbol": "_table_exists"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 68,
-      "line_start": 67,
+      "line_end": 69,
+      "line_start": 68,
       "locator": "scripts/reset_strategy_epoch.py::_count",
       "symbol": "_count"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 82,
-      "line_start": 71,
+      "line_end": 83,
+      "line_start": 72,
       "locator": "scripts/reset_strategy_epoch.py::_settings_paths",
       "symbol": "_settings_paths"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 92,
-      "line_start": 85,
+      "line_end": 93,
+      "line_start": 86,
       "locator": "scripts/reset_strategy_epoch.py::settings_fingerprint",
       "symbol": "settings_fingerprint"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 164,
-      "line_start": 95,
+      "line_end": 165,
+      "line_start": 96,
       "locator": "scripts/reset_strategy_epoch.py::inspect_state",
       "symbol": "inspect_state"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 177,
-      "line_start": 167,
+      "line_end": 178,
+      "line_start": 168,
       "locator": "scripts/reset_strategy_epoch.py::assert_quiescent",
       "symbol": "assert_quiescent"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 206,
-      "line_start": 180,
+      "line_end": 207,
+      "line_start": 181,
       "locator": "scripts/reset_strategy_epoch.py::_consistent_backup",
       "symbol": "_consistent_backup"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 221,
-      "line_start": 209,
+      "line_end": 222,
+      "line_start": 210,
       "locator": "scripts/reset_strategy_epoch.py::_exact_database_rollback_image",
       "symbol": "_exact_database_rollback_image"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 226,
-      "line_start": 224,
+      "line_end": 227,
+      "line_start": 225,
       "locator": "scripts/reset_strategy_epoch.py::_safe_archive_name",
       "symbol": "_safe_archive_name"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 249,
-      "line_start": 229,
+      "line_end": 250,
+      "line_start": 230,
       "locator": "scripts/reset_strategy_epoch.py::_runtime_authority_files",
       "symbol": "_runtime_authority_files"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 278,
-      "line_start": 252,
+      "line_end": 279,
+      "line_start": 253,
       "locator": "scripts/reset_strategy_epoch.py::archive_runtime_authority",
       "symbol": "archive_runtime_authority"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 292,
-      "line_start": 281,
+      "line_end": 293,
+      "line_start": 282,
       "locator": "scripts/reset_strategy_epoch.py::_restore_database_backup",
       "symbol": "_restore_database_backup"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 321,
-      "line_start": 295,
+      "line_end": 322,
+      "line_start": 296,
       "locator": "scripts/reset_strategy_epoch.py::_restore_runtime_files",
       "symbol": "_restore_runtime_files"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 325,
-      "line_start": 324,
+      "line_end": 326,
+      "line_start": 325,
       "locator": "scripts/reset_strategy_epoch.py::_unlink_runtime_file",
       "symbol": "_unlink_runtime_file"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 349,
-      "line_start": 328,
+      "line_end": 350,
+      "line_start": 329,
       "locator": "scripts/reset_strategy_epoch.py::neutralize_runtime_authority",
       "symbol": "neutralize_runtime_authority"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 363,
-      "line_start": 352,
+      "line_end": 364,
+      "line_start": 353,
       "locator": "scripts/reset_strategy_epoch.py::_baseline_values",
       "symbol": "_baseline_values"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 416,
-      "line_start": 366,
+      "line_end": 418,
+      "line_start": 367,
       "locator": "scripts/reset_strategy_epoch.py::mutate_database",
       "symbol": "mutate_database"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 451,
-      "line_start": 419,
+      "line_end": 453,
+      "line_start": 421,
       "locator": "scripts/reset_strategy_epoch.py::verify_reset",
       "symbol": "verify_reset"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 590,
-      "line_start": 454,
+      "line_end": 593,
+      "line_start": 456,
       "locator": "scripts/reset_strategy_epoch.py::reset_strategy_epoch",
       "symbol": "reset_strategy_epoch"
     },
     {
       "file": "scripts/reset_strategy_epoch.py",
       "kind": "function",
-      "line_end": 615,
-      "line_start": 593,
+      "line_end": 618,
+      "line_start": 596,
       "locator": "scripts/reset_strategy_epoch.py::main",
       "symbol": "main"
     },
@@ -72907,17 +73982,17 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f",
+  "source_digest": "6bd8617b372ea47cd49e8dc18a0b3b3505f38604eb6bc68f1d25c6453af42c36",
   "source_summary": {
-    "files": 121,
+    "files": 122,
     "languages": {
       "PowerShell": 2,
-      "Python": 97,
+      "Python": 98,
       "TypeScript": 3,
       "TypeScript/React": 19
     },
-    "lines": 57121,
-    "test_files": 42
+    "lines": 57827,
+    "test_files": 43
   },
   "tests": [
     "backend/tests/conftest.py",
@@ -72952,6 +74027,7 @@
     "backend/tests/test_optimizer_runtime_durability.py",
     "backend/tests/test_optimizer_worker_identity.py",
     "backend/tests/test_retired_subsystem_migration.py",
+    "backend/tests/test_schema_compatibility_guard.py",
     "backend/tests/test_strategy_workspace_reset.py",
     "frontend/src/ActionControls.test.tsx",
     "frontend/src/App.test.tsx",

@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from .config import DATABASE_PATH
-from .db import connect
+from .db import assert_database_schema_compatible, connect
 from .workflow_contract import OPTIMIZER_TERMINAL_QUALIFIED_POOL
 
 ACTIVE_STATES = {
@@ -44,6 +44,7 @@ def utc_now() -> str:
 
 
 def migrate_m01(path: Path = DATABASE_PATH) -> None:
+    assert_database_schema_compatible(path, allow_missing=False)
     with connect(path) as conn:
         conn.executescript(
             """
@@ -117,6 +118,7 @@ def migrate_m02(path: Path = DATABASE_PATH) -> None:
     No schema bump is required. Running this migration proves the accepted M01
     schema is present without rewriting historical optimizer job/round rows.
     """
+    assert_database_schema_compatible(path, allow_missing=False)
     migrate_m01(path)
     with connect(path) as conn:
         schema = conn.execute(

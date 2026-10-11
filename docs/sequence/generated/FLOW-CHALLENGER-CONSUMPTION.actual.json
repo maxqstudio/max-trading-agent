@@ -730,6 +730,13 @@
       "to": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry"
     },
     {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
@@ -807,6 +814,13 @@
       "to": "backend/max_backend/db.py::connect"
     },
     {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/challenger_store.py::migrate_m03",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/challenger_store.py::migrate_m03",
@@ -856,11 +870,39 @@
       "to": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema"
     },
     {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/champion_store.py::migrate_m04",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/champion_store.py::migrate_m04",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "DatabaseSchemaGuardError",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::DatabaseSchemaGuardError"
+    },
+    {
+      "action": "sqlite3.connect",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "conn.close",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
     },
     {
       "action": "load_manifest",
@@ -926,11 +968,25 @@
       "to": "backend/max_backend/mtf_geometry.py::_closest_supported"
     },
     {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m01",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+    },
+    {
       "action": "connect",
       "evidence": "STATIC",
       "from": "backend/max_backend/optimizer_store.py::migrate_m01",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::connect"
+    },
+    {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
     },
     {
       "action": "connect",
@@ -952,6 +1008,13 @@
       "from": "backend/max_backend/scientist_store.py::migrate_m05",
       "resolver": "python_ast",
       "to": "backend/max_backend/champion_store.py::migrate_m04"
+    },
+    {
+      "action": "assert_database_schema_compatible",
+      "evidence": "STATIC",
+      "from": "backend/max_backend/scientist_store.py::migrate_m05",
+      "resolver": "python_ast",
+      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
     },
     {
       "action": "connect",
@@ -1280,8 +1343,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::_build_backtest_ini",
       "language": "Python",
-      "line_end": 740,
-      "line_start": 712,
+      "line_end": 742,
+      "line_start": 714,
       "locator": "backend/max_backend/challenger_operations.py::_build_backtest_ini"
     },
     {
@@ -1289,8 +1352,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::_bundle_paths",
       "language": "Python",
-      "line_end": 89,
-      "line_start": 76,
+      "line_end": 90,
+      "line_start": 77,
       "locator": "backend/max_backend/challenger_operations.py::_bundle_paths"
     },
     {
@@ -1298,8 +1361,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::_format_set_value",
       "language": "Python",
-      "line_end": 655,
-      "line_start": 650,
+      "line_end": 657,
+      "line_start": 652,
       "locator": "backend/max_backend/challenger_operations.py::_format_set_value"
     },
     {
@@ -1307,8 +1370,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::_parse_date",
       "language": "Python",
-      "line_end": 516,
-      "line_start": 511,
+      "line_end": 518,
+      "line_start": 513,
       "locator": "backend/max_backend/challenger_operations.py::_parse_date"
     },
     {
@@ -1316,8 +1379,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::_remove_retired_runtime_ea",
       "language": "Python",
-      "line_end": 282,
-      "line_start": 195,
+      "line_end": 283,
+      "line_start": 196,
       "locator": "backend/max_backend/challenger_operations.py::_remove_retired_runtime_ea"
     },
     {
@@ -1325,8 +1388,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::_retirement_runtime_state",
       "language": "Python",
-      "line_end": 192,
-      "line_start": 145,
+      "line_end": 193,
+      "line_start": 146,
       "locator": "backend/max_backend/challenger_operations.py::_retirement_runtime_state"
     },
     {
@@ -1334,8 +1397,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::_runtime_set_text",
       "language": "Python",
-      "line_end": 709,
-      "line_start": 658,
+      "line_end": 711,
+      "line_start": 660,
       "locator": "backend/max_backend/challenger_operations.py::_runtime_set_text"
     },
     {
@@ -1343,8 +1406,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::_wait_for_report",
       "language": "Python",
-      "line_end": 764,
-      "line_start": 743,
+      "line_end": 766,
+      "line_start": 745,
       "locator": "backend/max_backend/challenger_operations.py::_wait_for_report"
     },
     {
@@ -1352,8 +1415,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::_write_json",
       "language": "Python",
-      "line_end": 73,
-      "line_start": 65,
+      "line_end": 74,
+      "line_start": 66,
       "locator": "backend/max_backend/challenger_operations.py::_write_json"
     },
     {
@@ -1361,8 +1424,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::freeze_backtest_request",
       "language": "Python",
-      "line_end": 647,
-      "line_start": 519,
+      "line_end": 649,
+      "line_start": 521,
       "locator": "backend/max_backend/challenger_operations.py::freeze_backtest_request"
     },
     {
@@ -1370,8 +1433,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::retire_challenger",
       "language": "Python",
-      "line_end": 508,
-      "line_start": 336,
+      "line_end": 510,
+      "line_start": 338,
       "locator": "backend/max_backend/challenger_operations.py::retire_challenger"
     },
     {
@@ -1379,8 +1442,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations.py::run_challenger_backtest",
       "language": "Python",
-      "line_end": 980,
-      "line_start": 767,
+      "line_end": 982,
+      "line_start": 769,
       "locator": "backend/max_backend/challenger_operations.py::run_challenger_backtest"
     },
     {
@@ -1406,8 +1469,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations_store.py::_compact_row",
       "language": "Python",
-      "line_end": 408,
-      "line_start": 394,
+      "line_end": 409,
+      "line_start": 395,
       "locator": "backend/max_backend/challenger_operations_store.py::_compact_row"
     },
     {
@@ -1424,8 +1487,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations_store.py::_decode_backtest",
       "language": "Python",
-      "line_end": 867,
-      "line_start": 860,
+      "line_end": 868,
+      "line_start": 861,
       "locator": "backend/max_backend/challenger_operations_store.py::_decode_backtest"
     },
     {
@@ -1433,8 +1496,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations_store.py::_decode_retirement",
       "language": "Python",
-      "line_end": 498,
-      "line_start": 491,
+      "line_end": 499,
+      "line_start": 492,
       "locator": "backend/max_backend/challenger_operations_store.py::_decode_retirement"
     },
     {
@@ -1460,8 +1523,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations_store.py::create_backtest_record",
       "language": "Python",
-      "line_end": 780,
-      "line_start": 712,
+      "line_end": 781,
+      "line_start": 713,
       "locator": "backend/max_backend/challenger_operations_store.py::create_backtest_record"
     },
     {
@@ -1469,8 +1532,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations_store.py::list_backtests",
       "language": "Python",
-      "line_end": 906,
-      "line_start": 884,
+      "line_end": 907,
+      "line_start": 885,
       "locator": "backend/max_backend/challenger_operations_store.py::list_backtests"
     },
     {
@@ -1478,8 +1541,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations_store.py::list_retirements",
       "language": "Python",
-      "line_end": 534,
-      "line_start": 515,
+      "line_end": 535,
+      "line_start": 516,
       "locator": "backend/max_backend/challenger_operations_store.py::list_retirements"
     },
     {
@@ -1487,7 +1550,7 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations_store.py::migrate_m06",
       "language": "Python",
-      "line_end": 316,
+      "line_end": 317,
       "line_start": 298,
       "locator": "backend/max_backend/challenger_operations_store.py::migrate_m06"
     },
@@ -1496,8 +1559,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations_store.py::retire_registry_row",
       "language": "Python",
-      "line_end": 709,
-      "line_start": 537,
+      "line_end": 710,
+      "line_start": 538,
       "locator": "backend/max_backend/challenger_operations_store.py::retire_registry_row"
     },
     {
@@ -1505,8 +1568,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_operations_store.py::update_backtest",
       "language": "Python",
-      "line_end": 857,
-      "line_start": 783,
+      "line_end": 858,
+      "line_start": 784,
       "locator": "backend/max_backend/challenger_operations_store.py::update_backtest"
     },
     {
@@ -1514,8 +1577,8 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_store.py::consumed_source_identities",
       "language": "Python",
-      "line_end": 230,
-      "line_start": 180,
+      "line_end": 231,
+      "line_start": 181,
       "locator": "backend/max_backend/challenger_store.py::consumed_source_identities"
     },
     {
@@ -1523,7 +1586,7 @@
       "kind": "function",
       "label": "backend/max_backend/challenger_store.py::migrate_m03",
       "language": "Python",
-      "line_end": 75,
+      "line_end": 76,
       "line_start": 18,
       "locator": "backend/max_backend/challenger_store.py::migrate_m03"
     },
@@ -1568,17 +1631,35 @@
       "kind": "function",
       "label": "backend/max_backend/champion_store.py::migrate_m04",
       "language": "Python",
-      "line_end": 261,
+      "line_end": 262,
       "line_start": 200,
       "locator": "backend/max_backend/champion_store.py::migrate_m04"
+    },
+    {
+      "id": "backend/max_backend/db.py::DatabaseSchemaGuardError",
+      "kind": "class",
+      "label": "backend/max_backend/db.py::DatabaseSchemaGuardError",
+      "language": "Python",
+      "line_end": 40,
+      "line_start": 15,
+      "locator": "backend/max_backend/db.py::DatabaseSchemaGuardError"
+    },
+    {
+      "id": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "kind": "function",
+      "label": "backend/max_backend/db.py::assert_database_schema_compatible",
+      "language": "Python",
+      "line_end": 138,
+      "line_start": 43,
+      "locator": "backend/max_backend/db.py::assert_database_schema_compatible"
     },
     {
       "id": "backend/max_backend/db.py::connect",
       "kind": "function",
       "label": "backend/max_backend/db.py::connect",
       "language": "Python",
-      "line_end": 20,
-      "line_start": 14,
+      "line_end": 147,
+      "line_start": 141,
       "locator": "backend/max_backend/db.py::connect"
     },
     {
@@ -1739,7 +1820,7 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::migrate_m01",
       "language": "Python",
-      "line_end": 111,
+      "line_end": 112,
       "line_start": 46,
       "locator": "backend/max_backend/optimizer_store.py::migrate_m01"
     },
@@ -1748,21 +1829,30 @@
       "kind": "function",
       "label": "backend/max_backend/optimizer_store.py::migrate_m02",
       "language": "Python",
-      "line_end": 134,
-      "line_start": 114,
+      "line_end": 136,
+      "line_start": 115,
       "locator": "backend/max_backend/optimizer_store.py::migrate_m02"
+    },
+    {
+      "id": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close",
+      "kind": "method",
+      "label": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close",
+      "language": "Python",
+      "line_end": 428,
+      "line_start": 421,
+      "locator": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
     },
     {
       "id": "backend/max_backend/scientist_store.py::migrate_m05",
       "kind": "function",
       "label": "backend/max_backend/scientist_store.py::migrate_m05",
       "language": "Python",
-      "line_end": 92,
+      "line_end": 93,
       "line_start": 28,
       "locator": "backend/max_backend/scientist_store.py::migrate_m05"
     }
   ],
-  "observed_head": "e6046334eee94fd6812a5434a6c4e2828a77e2a4",
+  "observed_head": "858dcb205fa2fb734fd5a68b8a4970a29c553897",
   "schema_version": 1,
-  "source_digest": "7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f"
+  "source_digest": "6bd8617b372ea47cd49e8dc18a0b3b3505f38604eb6bc68f1d25c6453af42c36"
 }

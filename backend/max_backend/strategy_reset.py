@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from .config import DATABASE_PATH, ROOT
+from .db import assert_database_schema_compatible
 from .mt5 import detect_mt5
 from .path_safety import assert_owned_path, file_size_tree, remove_owned_path
 from .schema import CURRENT_SCHEMA_VERSION
@@ -352,6 +353,7 @@ def reset_strategy_workspace(
 ) -> dict[str, Any]:
     if confirmed != STRATEGY_RESET_CONFIRMATION:
         raise StrategyResetError("EXPLICIT_STRATEGY_WORKSPACE_RESET_CONFIRMATION_REQUIRED")
+    assert_database_schema_compatible(path, allow_missing=False)
     before = _read_counts(path, root=root)
     if before["status"] != "READY":
         raise StrategyResetError("STRATEGY_WORKSPACE_RESET_BLOCKED")
@@ -462,6 +464,7 @@ def backup_and_reset_corrupt_database(
 ) -> dict[str, Any]:
     if confirmed != RECOVERY_RESET_CONFIRMATION:
         raise StrategyResetError("EXPLICIT_CORRUPT_STATE_RECOVERY_CONFIRMATION_REQUIRED")
+    assert_database_schema_compatible(path, allow_missing=False)
     status = database_recovery_status(path=path)
     if status["status"] != "RECOVERY_REQUIRED":
         raise StrategyResetError("DATABASE_RECOVERY_NOT_REQUIRED")

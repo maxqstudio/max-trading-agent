@@ -14,12 +14,12 @@
       "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
     ],
     "graph": "docs/sequence/generated/FLOW-STRATEGY-RESET-RECOVERY.actual.json",
-    "source_digest": "7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f"
+    "source_digest": "6bd8617b372ea47cd49e8dc18a0b3b3505f38604eb6bc68f1d25c6453af42c36"
   },
   "critical": true,
   "implementation_base_sha": "e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d",
   "mode": "DURING",
-  "phase": "PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE",
+  "phase": "P0_DATABASE_SAFETY",
   "plan": {
     "contract": "",
     "diagram": "",
@@ -38,6 +38,7 @@
   "status": "CURRENT",
   "test_traceability_required": true,
   "tests": [
+    "backend/tests/test_schema_compatibility_guard.py",
     "backend/tests/test_strategy_workspace_reset.py",
     "backend/tests/test_retired_subsystem_migration.py",
     "frontend/src/App.test.tsx",
