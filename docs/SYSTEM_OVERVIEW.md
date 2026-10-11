@@ -279,7 +279,7 @@ Known blockers:
 
 ### Proven
 
-- Current P0 source baseline is maxqstudio/max-trading-agent main 858dcb205fa2fb734fd5a7b8a4970a29c553897, tree 8325433e9f23822967251037fff149fc6057113a; this tree matches previously accepted main 203f6ab3dc618e3edd247841aa25e1fa0951a19a and its Windows CI run 37964999480 completed successfully.
+- Current P0 source baseline is maxqstudio/max-trading-agent main 858dcb205fa2fb734fd5a68b8a4970a29c553897, tree 8325433e9f23822967251037fff149fc6057113a; this tree matches previously accepted main 203f6ab3dc618e3edd247841aa25e1fa0951a19a and its Windows CI run 37964999480 completed successfully.
 - Current Skill_Workflow/main was fetched and verified at 964481ed1609f87904ba9e08890bffc0a10c3fd4; its exact governance-tool delta was inspected and the applicable tools are vendored byte-identically, with no local validator patch.
 - Prior Optimizer hardening evidence below is historical accepted evidence. The current P0 sequence extends the existing Strategy reset/recovery flow with read-only schema preflight and fail-closed newer/unknown-schema states.
 - Optimizer draft, launch/recovery identity, atomic evidence, read-model, frontend request lifecycle, and visible action feedback are under the authorized source-hardening scope.
