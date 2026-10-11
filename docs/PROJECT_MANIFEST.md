@@ -13,7 +13,7 @@ Repository: maxqstudio/max-trading-agent
 Active branch: codex/p0b-schema16-compat
 Current authoritative SHA: external final acceptance evidence
 Last accepted SHA: 8ba001bba31d7c74e2d1d1aa03d6c79fb0f9576a
-Current source digest: 9090a066dcd04b7cf383862940dca1fcb4e869d7a7fa0fae44bb7830b8832c0d
+Current source digest: 892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db
 
 ## Authorities
 Source authority: Tracked source/spec/governance state is authoritative by exact commit on main; working branches are proposals until merged after required Windows CI passes.

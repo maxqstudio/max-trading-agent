@@ -738,7 +738,7 @@
       "file": "scripts/accept_p0b_database_compatibility.ps1",
       "is_test": false,
       "language": "PowerShell",
-      "lines": 280
+      "lines": 294
     },
     {
       "directory": "scripts",
@@ -77136,7 +77136,7 @@
     }
   ],
   "schema_version": 1,
-  "source_digest": "9090a066dcd04b7cf383862940dca1fcb4e869d7a7fa0fae44bb7830b8832c0d",
+  "source_digest": "892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db",
   "source_summary": {
     "files": 124,
     "languages": {
@@ -77145,7 +77145,7 @@
       "TypeScript": 3,
       "TypeScript/React": 19
     },
-    "lines": 60164,
+    "lines": 60178,
     "test_files": 43
   },
   "tests": [

@@ -7,7 +7,7 @@
       "backend/max_backend/challenger_operations.py::challenger_registry_page"
     ],
     "graph": "docs/sequence/generated/FLOW-CHALLENGER-DETAIL.actual.json",
-    "source_digest": "38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa"
+    "source_digest": "892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db"
   },
   "critical": true,
   "implementation_base_sha": "eb6192873eb518b9fe4c7f15d03600ca4ac1e73d",

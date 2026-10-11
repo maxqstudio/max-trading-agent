@@ -18,7 +18,7 @@ Branch: codex/p0b-schema16-compat
 Authoritative SHA: external final acceptance evidence
 Last accepted SHA: 8ba001bba31d7c74e2d1d1aa03d6c79fb0f9576a
 Current candidate SHA: external final acceptance evidence
-Current source digest: 9090a066dcd04b7cf383862940dca1fcb4e869d7a7fa0fae44bb7830b8832c0d
+Current source digest: 892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db
 
 ## Runtime
 Environment: see SOURCE_AUTHORITY_MAP.md and RUNBOOK.md
@@ -36,7 +36,7 @@ PROJECT_DOCS_SYNC: PASS
 Sequence policy: REQUIRED
 Current sequence mode: DURING
 Current sequence session: FLOW-STRATEGY-RESET-RECOVERY
-SEQUENCE_SYNC: PASS_LOCAL_GENERATED: all 9 DURING/CURRENT sessions and actual graphs regenerated at source digest 38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa; formal validation remains in cumulative acceptance.
+SEQUENCE_SYNC: PASS_LOCAL_GENERATED: all 9 DURING/CURRENT sessions and actual graphs regenerated at source digest 892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db; formal validation remains in cumulative acceptance.
 
 ## Proven
 - P0A was accepted and merged; actual origin/main at P0B entry is 8ba001bba31d7c74e2d1d1aa03d6c79fb0f9576a, tree 597dbd569a9c9c99feae5fea2e2b2a2ff8fa3e46. The prior local P0 baseline 858dcb205fa2fb734fd5a68b8a4970a29c553897 is an ancestor and must not replace this newer accepted main.

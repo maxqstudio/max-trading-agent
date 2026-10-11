@@ -7,7 +7,7 @@
   "generation_anchor_policy": {
     "meaning": "The observed head is a pre-commit generation anchor. Final hosted source SHA and CI identity remain external acceptance evidence; real MT5 and Owner-PC runtime remain deferred.",
     "observed_head": "a374a5e8a3fe3acc6872ecff42874c1131d1aa52",
-    "source_digest": "38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa"
+    "source_digest": "892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db"
   },
   "flows": [
     {
@@ -31,7 +31,7 @@
       ],
       "generated_nodes": 131,
       "generated_edges": 257,
-      "source_digest": "38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa",
+      "source_digest": "892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_strategy_workspace_reset.py",
@@ -53,7 +53,7 @@
       ],
       "generated_nodes": 95,
       "generated_edges": 154,
-      "source_digest": "38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa",
+      "source_digest": "892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db",
       "tests": [
         "backend/tests/test_m06_challenger_operations.py",
         "backend/tests/test_m08_strategy_results.py"
@@ -73,7 +73,7 @@
       ],
       "generated_nodes": 51,
       "generated_edges": 81,
-      "source_digest": "38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa",
+      "source_digest": "892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db",
       "tests": [
         "backend/tests/test_m03_challenger.py",
         "backend/tests/test_m06_challenger_operations.py"
@@ -92,7 +92,7 @@
       ],
       "generated_nodes": 169,
       "generated_edges": 336,
-      "source_digest": "38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa",
+      "source_digest": "892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db",
       "tests": [
         "backend/tests/test_m04_promotion.py",
         "backend/tests/test_m04_store.py"
@@ -112,7 +112,7 @@
       ],
       "generated_nodes": 152,
       "generated_edges": 260,
-      "source_digest": "38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa",
+      "source_digest": "892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db",
       "tests": [
         "backend/tests/test_m08_strategy_results.py",
         "backend/tests/test_m03_challenger.py"
@@ -132,7 +132,7 @@
       ],
       "generated_nodes": 55,
       "generated_edges": 92,
-      "source_digest": "38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa",
+      "source_digest": "892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db",
       "tests": [
         "backend/tests/test_m05_scientist.py",
         "backend/tests/test_m05_final_evidence_contract.py",
@@ -165,7 +165,7 @@
       ],
       "generated_nodes": 90,
       "generated_edges": 167,
-      "source_digest": "38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa",
+      "source_digest": "892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db",
       "tests": [
         "backend/tests/test_schema_compatibility_guard.py",
         "backend/tests/test_strategy_workspace_reset.py",
@@ -195,7 +195,7 @@
       ],
       "generated_nodes": 189,
       "generated_edges": 390,
-      "source_digest": "38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa",
+      "source_digest": "892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db",
       "tests": [
         "backend/tests/test_schema_compatibility_guard.py"
       ],
@@ -231,7 +231,7 @@
       ],
       "generated_nodes": 275,
       "generated_edges": 531,
-      "source_digest": "38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa",
+      "source_digest": "892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db",
       "tests": [
         "backend/tests/test_optimizer_draft.py",
         "backend/tests/test_optimizer_reliability.py",
@@ -251,7 +251,7 @@
   "parse_failure_boundary": {
     "classification": "NO_FAILURES",
     "python_parse_failures": 0,
-    "source_digest": "38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa",
+    "source_digest": "892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db",
     "detail": "All current source files parsed during canonical sequence regeneration; generated actual graphs bind to the current source digest."
   },
   "retrospective_plan_artifacts": 0,

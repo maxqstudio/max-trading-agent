@@ -20,7 +20,35 @@
       "evidence": "STATIC",
       "from": "HTTP /api/overview",
       "resolver": "python_route_decorator",
+      "to": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/overview",
+      "resolver": "python_route_decorator",
+      "to": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/overview",
+      "resolver": "python_route_decorator",
       "to": "backend/max_backend/main.py::overview"
+    },
+    {
+      "action": "POST route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/recovery/reset",
+      "resolver": "python_route_decorator",
+      "to": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
+    },
+    {
+      "action": "POST route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/recovery/reset",
+      "resolver": "python_route_decorator",
+      "to": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
     },
     {
       "action": "POST route",
@@ -34,196 +62,91 @@
       "evidence": "STATIC",
       "from": "HTTP /api/recovery/status",
       "resolver": "python_route_decorator",
+      "to": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/recovery/status",
+      "resolver": "python_route_decorator",
+      "to": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
+    },
+    {
+      "action": "GET route",
+      "evidence": "STATIC",
+      "from": "HTTP /api/recovery/status",
+      "resolver": "python_route_decorator",
       "to": "backend/max_backend/main.py::recovery_status"
     },
     {
-      "action": "_backtest_schema_ready",
+      "action": "read_baseline",
       "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema",
+      "from": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
       "resolver": "python_ast",
-      "to": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready"
+      "to": "backend/max_backend/db.py::read_baseline"
     },
     {
-      "action": "_challenger_schema_ready",
+      "action": "detect_mt5",
       "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry",
+      "from": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
       "resolver": "python_ast",
-      "to": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready"
+      "to": "backend/max_backend/mt5.py::detect_mt5"
     },
     {
-      "action": "migrate_m06",
+      "action": "_foundation_state",
       "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::challenger_operations_database_status",
+      "from": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
       "resolver": "python_ast",
-      "to": "backend/max_backend/challenger_operations_store.py::migrate_m06"
+      "to": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
     },
     {
-      "action": "connect",
+      "action": "database_recovery_status",
       "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::challenger_operations_database_status",
+      "from": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
       "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::connect"
+      "to": "backend/max_backend/strategy_reset.py::database_recovery_status"
     },
     {
-      "action": "_create_m06_tables",
+      "action": "backup_and_reset_corrupt_database",
       "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "from": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
       "resolver": "python_ast",
-      "to": "backend/max_backend/challenger_operations_store.py::_create_m06_tables"
+      "to": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
     },
     {
-      "action": "_upgrade_backtest_schema",
+      "action": "read_baseline",
       "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "from": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
       "resolver": "python_ast",
-      "to": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema"
+      "to": "backend/max_backend/db.py::read_baseline"
     },
     {
-      "action": "_upgrade_challenger_registry",
+      "action": "detect_mt5",
       "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "from": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
       "resolver": "python_ast",
-      "to": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry"
+      "to": "backend/max_backend/mt5.py::detect_mt5"
     },
     {
-      "action": "assert_database_schema_compatible",
+      "action": "_foundation_state",
       "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "from": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
       "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
+      "to": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
     },
     {
-      "action": "connect",
+      "action": "database_recovery_status",
       "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "from": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
       "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::connect"
+      "to": "backend/max_backend/strategy_reset.py::database_recovery_status"
     },
     {
-      "action": "is_schema16_archive_compatible",
+      "action": "backup_and_reset_corrupt_database",
       "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "from": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
       "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
-    },
-    {
-      "action": "migrate_m05",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_operations_store.py::migrate_m06",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/scientist_store.py::migrate_m05"
-    },
-    {
-      "action": "assert_database_schema_compatible",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_store.py::migrate_m03",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
-    },
-    {
-      "action": "connect",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_store.py::migrate_m03",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::connect"
-    },
-    {
-      "action": "is_schema16_archive_compatible",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_store.py::migrate_m03",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
-    },
-    {
-      "action": "migrate_m02",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/challenger_store.py::migrate_m03",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/optimizer_store.py::migrate_m02"
-    },
-    {
-      "action": "_decode_json",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_store.py::_decode_champion",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/champion_store.py::_decode_json"
-    },
-    {
-      "action": "_challenger_table_supports_promoted",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted"
-    },
-    {
-      "action": "_create_champion_tenure_table",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/champion_store.py::_create_champion_tenure_table"
-    },
-    {
-      "action": "_decode_champion",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_store.py::current_champion",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/champion_store.py::_decode_champion"
-    },
-    {
-      "action": "migrate_m04",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_store.py::current_champion",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/champion_store.py::migrate_m04"
-    },
-    {
-      "action": "connect",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_store.py::current_champion",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::connect"
-    },
-    {
-      "action": "migrate_m03",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_store.py::migrate_m04",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/challenger_store.py::migrate_m03"
-    },
-    {
-      "action": "_upgrade_challenger_status_constraint",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_store.py::migrate_m04",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint"
-    },
-    {
-      "action": "_upgrade_champion_tenure_schema",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_store.py::migrate_m04",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema"
-    },
-    {
-      "action": "assert_database_schema_compatible",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_store.py::migrate_m04",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
-    },
-    {
-      "action": "connect",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_store.py::migrate_m04",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::connect"
-    },
-    {
-      "action": "is_schema16_archive_compatible",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/champion_store.py::migrate_m04",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
+      "to": "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database"
     },
     {
       "action": "_schema_object_fingerprint",
@@ -471,20 +394,6 @@
       "to": "backend/max_backend/ea.py::sha256_file"
     },
     {
-      "action": "challenger_operations_database_status",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/main.py::_foundation_state",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/challenger_operations_store.py::challenger_operations_database_status"
-    },
-    {
-      "action": "current_champion",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/main.py::_foundation_state",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/champion_store.py::current_champion"
-    },
-    {
       "action": "read_baseline",
       "evidence": "STATIC",
       "from": "backend/max_backend/main.py::_foundation_state",
@@ -497,13 +406,6 @@
       "from": "backend/max_backend/main.py::_foundation_state",
       "resolver": "python_ast",
       "to": "backend/max_backend/mt5.py::detect_mt5"
-    },
-    {
-      "action": "latest_job",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/main.py::_foundation_state",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/optimizer_store.py::latest_job"
     },
     {
       "action": "_foundation_state",
@@ -555,132 +457,6 @@
       "to": "backend/max_backend/mt5.py::_unavailable"
     },
     {
-      "action": "connect",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/optimizer_store.py::latest_job",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::connect"
-    },
-    {
-      "action": "_decode_job",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/optimizer_store.py::latest_job",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/optimizer_store.py::_decode_job"
-    },
-    {
-      "action": "migrate_m01",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/optimizer_store.py::latest_job",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/optimizer_store.py::migrate_m01"
-    },
-    {
-      "action": "assert_database_schema_compatible",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/optimizer_store.py::migrate_m01",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
-    },
-    {
-      "action": "connect",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/optimizer_store.py::migrate_m01",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::connect"
-    },
-    {
-      "action": "is_schema16_archive_compatible",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/optimizer_store.py::migrate_m01",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
-    },
-    {
-      "action": "assert_database_schema_compatible",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
-    },
-    {
-      "action": "connect",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::connect"
-    },
-    {
-      "action": "is_schema16_archive_compatible",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
-    },
-    {
-      "action": "migrate_m01",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/optimizer_store.py::migrate_m02",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/optimizer_store.py::migrate_m01"
-    },
-    {
-      "action": "_is_reparse",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/path_safety.py::assert_owned_path",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/path_safety.py::_is_reparse"
-    },
-    {
-      "action": "assert_owned_path",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/path_safety.py::remove_owned_path",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/path_safety.py::assert_owned_path"
-    },
-    {
-      "action": "migrate_m04",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/scientist_store.py::migrate_m05",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/champion_store.py::migrate_m04"
-    },
-    {
-      "action": "assert_database_schema_compatible",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/scientist_store.py::migrate_m05",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
-    },
-    {
-      "action": "connect",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/scientist_store.py::migrate_m05",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::connect"
-    },
-    {
-      "action": "is_schema16_archive_compatible",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/scientist_store.py::migrate_m05",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
-    },
-    {
-      "action": "migrate_m06",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_bootstrap_database",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/challenger_operations_store.py::migrate_m06"
-    },
-    {
-      "action": "migrate_m04",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_bootstrap_database",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/champion_store.py::migrate_m04"
-    },
-    {
       "action": "ensure_baseline_registered",
       "evidence": "STATIC",
       "from": "backend/max_backend/strategy_reset.py::_bootstrap_database",
@@ -695,13 +471,6 @@
       "to": "backend/max_backend/db.py::initialize_database"
     },
     {
-      "action": "migrate_m05",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_bootstrap_database",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/scientist_store.py::migrate_m05"
-    },
-    {
       "action": "StrategyResetError",
       "evidence": "STATIC",
       "from": "backend/max_backend/strategy_reset.py::_bootstrap_database",
@@ -714,13 +483,6 @@
       "from": "backend/max_backend/strategy_reset.py::_bootstrap_database",
       "resolver": "python_ast",
       "to": "backend/max_backend/strategy_reset.py::_connect"
-    },
-    {
-      "action": "migrate_current",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_bootstrap_database",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/workflow_store.py::migrate_current"
     },
     {
       "action": "assert_reset_supported",
@@ -772,13 +534,6 @@
       "to": "backend/max_backend/mt5.py::detect_mt5"
     },
     {
-      "action": "file_size_tree",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_owned_paths",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/path_safety.py::file_size_tree"
-    },
-    {
       "action": "_runtime_paths",
       "evidence": "STATIC",
       "from": "backend/max_backend/strategy_reset.py::_owned_paths",
@@ -791,13 +546,6 @@
       "from": "backend/max_backend/strategy_reset.py::_read_counts",
       "resolver": "python_ast",
       "to": "backend/max_backend/db.py::assert_reset_supported"
-    },
-    {
-      "action": "assert_owned_path",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::_read_counts",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/path_safety.py::assert_owned_path"
     },
     {
       "action": "StrategyResetError",
@@ -940,20 +688,6 @@
       "to": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
     },
     {
-      "action": "assert_owned_path",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/path_safety.py::assert_owned_path"
-    },
-    {
-      "action": "remove_owned_path",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/path_safety.py::remove_owned_path"
-    },
-    {
       "action": "StrategyResetError",
       "evidence": "STATIC",
       "from": "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
@@ -1029,62 +763,6 @@
       "from": "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
       "resolver": "python_ast",
       "to": "backend/max_backend/strategy_reset.py::_read_counts"
-    },
-    {
-      "action": "_challenger_role_schema_ready",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/workflow_store.py::_challenger_role_schema_ready"
-    },
-    {
-      "action": "migrate_m06",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/workflow_store.py::migrate_current",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/challenger_operations_store.py::migrate_m06"
-    },
-    {
-      "action": "assert_database_schema_compatible",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/workflow_store.py::migrate_current",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::assert_database_schema_compatible"
-    },
-    {
-      "action": "connect",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/workflow_store.py::migrate_current",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::connect"
-    },
-    {
-      "action": "is_schema16_archive_compatible",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/workflow_store.py::migrate_current",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/db.py::is_schema16_archive_compatible"
-    },
-    {
-      "action": "_ensure_backtest_runtime_status",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/workflow_store.py::migrate_current",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/workflow_store.py::_ensure_backtest_runtime_status"
-    },
-    {
-      "action": "_purge_research_authority",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/workflow_store.py::migrate_current",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/workflow_store.py::_purge_research_authority"
-    },
-    {
-      "action": "_upgrade_challenger_roles",
-      "evidence": "STATIC",
-      "from": "backend/max_backend/workflow_store.py::migrate_current",
-      "resolver": "python_ast",
-      "to": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles"
     },
     {
       "action": "FETCH request",
@@ -1301,148 +979,76 @@
       "locator": "HTTP /api/scientist/ui-settings"
     },
     {
-      "id": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready",
+      "id": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
       "kind": "function",
-      "label": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready",
+      "label": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
       "language": "Python",
-      "line_end": 167,
-      "line_start": 160,
-      "locator": "backend/max_backend/challenger_operations_store.py::_backtest_schema_ready"
+      "line_end": 284,
+      "line_start": 257,
+      "locator": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
     },
     {
-      "id": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready",
+      "id": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
       "kind": "function",
-      "label": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready",
+      "label": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
       "language": "Python",
-      "line_end": 51,
-      "line_start": 42,
-      "locator": "backend/max_backend/challenger_operations_store.py::_challenger_schema_ready"
+      "line_end": 336,
+      "line_start": 329,
+      "locator": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
     },
     {
-      "id": "backend/max_backend/challenger_operations_store.py::_create_m06_tables",
+      "id": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
       "kind": "function",
-      "label": "backend/max_backend/challenger_operations_store.py::_create_m06_tables",
+      "label": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
       "language": "Python",
-      "line_end": 300,
-      "line_start": 228,
-      "locator": "backend/max_backend/challenger_operations_store.py::_create_m06_tables"
+      "line_end": 233,
+      "line_start": 219,
+      "locator": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
     },
     {
-      "id": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema",
+      "id": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
       "kind": "function",
-      "label": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema",
+      "label": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
       "language": "Python",
-      "line_end": 225,
-      "line_start": 170,
-      "locator": "backend/max_backend/challenger_operations_store.py::_upgrade_backtest_schema"
+      "line_end": 254,
+      "line_start": 237,
+      "locator": "artifacts/p0b/runs/20261011-105419-237-2713a053/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
     },
     {
-      "id": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry",
+      "id": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
       "kind": "function",
-      "label": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry",
+      "label": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state",
       "language": "Python",
-      "line_end": 157,
-      "line_start": 54,
-      "locator": "backend/max_backend/challenger_operations_store.py::_upgrade_challenger_registry"
+      "line_end": 284,
+      "line_start": 257,
+      "locator": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::_foundation_state"
     },
     {
-      "id": "backend/max_backend/challenger_operations_store.py::challenger_operations_database_status",
+      "id": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
       "kind": "function",
-      "label": "backend/max_backend/challenger_operations_store.py::challenger_operations_database_status",
+      "label": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview",
       "language": "Python",
-      "line_end": 399,
-      "line_start": 327,
-      "locator": "backend/max_backend/challenger_operations_store.py::challenger_operations_database_status"
+      "line_end": 336,
+      "line_start": 329,
+      "locator": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::overview"
     },
     {
-      "id": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "id": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
       "kind": "function",
-      "label": "backend/max_backend/challenger_operations_store.py::migrate_m06",
+      "label": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status",
       "language": "Python",
-      "line_end": 324,
-      "line_start": 303,
-      "locator": "backend/max_backend/challenger_operations_store.py::migrate_m06"
+      "line_end": 233,
+      "line_start": 219,
+      "locator": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::recovery_status"
     },
     {
-      "id": "backend/max_backend/challenger_store.py::migrate_m03",
+      "id": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
       "kind": "function",
-      "label": "backend/max_backend/challenger_store.py::migrate_m03",
+      "label": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state",
       "language": "Python",
-      "line_end": 78,
-      "line_start": 18,
-      "locator": "backend/max_backend/challenger_store.py::migrate_m03"
-    },
-    {
-      "id": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted",
-      "kind": "function",
-      "label": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted",
-      "language": "Python",
-      "line_end": 38,
-      "line_start": 34,
-      "locator": "backend/max_backend/champion_store.py::_challenger_table_supports_promoted"
-    },
-    {
-      "id": "backend/max_backend/champion_store.py::_create_champion_tenure_table",
-      "kind": "function",
-      "label": "backend/max_backend/champion_store.py::_create_champion_tenure_table",
-      "language": "Python",
-      "line_end": 153,
-      "line_start": 99,
-      "locator": "backend/max_backend/champion_store.py::_create_champion_tenure_table"
-    },
-    {
-      "id": "backend/max_backend/champion_store.py::_decode_champion",
-      "kind": "function",
-      "label": "backend/max_backend/champion_store.py::_decode_champion",
-      "language": "Python",
-      "line_end": 348,
-      "line_start": 340,
-      "locator": "backend/max_backend/champion_store.py::_decode_champion"
-    },
-    {
-      "id": "backend/max_backend/champion_store.py::_decode_json",
-      "kind": "function",
-      "label": "backend/max_backend/champion_store.py::_decode_json",
-      "language": "Python",
-      "line_end": 23,
-      "line_start": 22,
-      "locator": "backend/max_backend/champion_store.py::_decode_json"
-    },
-    {
-      "id": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint",
-      "kind": "function",
-      "label": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint",
-      "language": "Python",
-      "line_end": 95,
-      "line_start": 41,
-      "locator": "backend/max_backend/champion_store.py::_upgrade_challenger_status_constraint"
-    },
-    {
-      "id": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
-      "kind": "function",
-      "label": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema",
-      "language": "Python",
-      "line_end": 198,
-      "line_start": 156,
-      "locator": "backend/max_backend/champion_store.py::_upgrade_champion_tenure_schema"
-    },
-    {
-      "id": "backend/max_backend/champion_store.py::current_champion",
-      "kind": "function",
-      "label": "backend/max_backend/champion_store.py::current_champion",
-      "language": "Python",
-      "line_end": 357,
-      "line_start": 351,
-      "locator": "backend/max_backend/champion_store.py::current_champion"
-    },
-    {
-      "id": "backend/max_backend/champion_store.py::migrate_m04",
-      "kind": "function",
-      "label": "backend/max_backend/champion_store.py::migrate_m04",
-      "language": "Python",
-      "line_end": 264,
-      "line_start": 200,
-      "locator": "backend/max_backend/champion_store.py::migrate_m04"
+      "line_end": 254,
+      "line_start": 237,
+      "locator": "artifacts/p0b/runs/20261011-112001-461-c5a780c9/pytest-full/test_knowledge_is_current_and_0/root/backend/max_backend/main.py::reset_corrupt_state"
     },
     {
       "id": "backend/max_backend/db.py::DatabaseSchemaGuardError",
@@ -1688,42 +1294,6 @@
       "locator": "backend/max_backend/mt5.py::detect_mt5"
     },
     {
-      "id": "backend/max_backend/optimizer_store.py::_decode_job",
-      "kind": "function",
-      "label": "backend/max_backend/optimizer_store.py::_decode_job",
-      "language": "Python",
-      "line_end": 194,
-      "line_start": 184,
-      "locator": "backend/max_backend/optimizer_store.py::_decode_job"
-    },
-    {
-      "id": "backend/max_backend/optimizer_store.py::latest_job",
-      "kind": "function",
-      "label": "backend/max_backend/optimizer_store.py::latest_job",
-      "language": "Python",
-      "line_end": 285,
-      "line_start": 279,
-      "locator": "backend/max_backend/optimizer_store.py::latest_job"
-    },
-    {
-      "id": "backend/max_backend/optimizer_store.py::migrate_m01",
-      "kind": "function",
-      "label": "backend/max_backend/optimizer_store.py::migrate_m01",
-      "language": "Python",
-      "line_end": 114,
-      "line_start": 46,
-      "locator": "backend/max_backend/optimizer_store.py::migrate_m01"
-    },
-    {
-      "id": "backend/max_backend/optimizer_store.py::migrate_m02",
-      "kind": "function",
-      "label": "backend/max_backend/optimizer_store.py::migrate_m02",
-      "language": "Python",
-      "line_end": 140,
-      "line_start": 117,
-      "locator": "backend/max_backend/optimizer_store.py::migrate_m02"
-    },
-    {
       "id": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close",
       "kind": "method",
       "label": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close",
@@ -1731,51 +1301,6 @@
       "line_end": 428,
       "line_start": 421,
       "locator": "backend/max_backend/optimizer_worker_identity.py::WorkerIdentityServer.close"
-    },
-    {
-      "id": "backend/max_backend/path_safety.py::_is_reparse",
-      "kind": "function",
-      "label": "backend/max_backend/path_safety.py::_is_reparse",
-      "language": "Python",
-      "line_end": 19,
-      "line_start": 11,
-      "locator": "backend/max_backend/path_safety.py::_is_reparse"
-    },
-    {
-      "id": "backend/max_backend/path_safety.py::assert_owned_path",
-      "kind": "function",
-      "label": "backend/max_backend/path_safety.py::assert_owned_path",
-      "language": "Python",
-      "line_end": 62,
-      "line_start": 22,
-      "locator": "backend/max_backend/path_safety.py::assert_owned_path"
-    },
-    {
-      "id": "backend/max_backend/path_safety.py::file_size_tree",
-      "kind": "function",
-      "label": "backend/max_backend/path_safety.py::file_size_tree",
-      "language": "Python",
-      "line_end": 98,
-      "line_start": 88,
-      "locator": "backend/max_backend/path_safety.py::file_size_tree"
-    },
-    {
-      "id": "backend/max_backend/path_safety.py::remove_owned_path",
-      "kind": "function",
-      "label": "backend/max_backend/path_safety.py::remove_owned_path",
-      "language": "Python",
-      "line_end": 85,
-      "line_start": 65,
-      "locator": "backend/max_backend/path_safety.py::remove_owned_path"
-    },
-    {
-      "id": "backend/max_backend/scientist_store.py::migrate_m05",
-      "kind": "function",
-      "label": "backend/max_backend/scientist_store.py::migrate_m05",
-      "language": "Python",
-      "line_end": 100,
-      "line_start": 33,
-      "locator": "backend/max_backend/scientist_store.py::migrate_m05"
     },
     {
       "id": "backend/max_backend/strategy_reset.py::StrategyResetError",
@@ -1922,51 +1447,6 @@
       "locator": "backend/max_backend/strategy_reset.py::strategy_reset_preflight"
     },
     {
-      "id": "backend/max_backend/workflow_store.py::_challenger_role_schema_ready",
-      "kind": "function",
-      "label": "backend/max_backend/workflow_store.py::_challenger_role_schema_ready",
-      "language": "Python",
-      "line_end": 28,
-      "line_start": 24,
-      "locator": "backend/max_backend/workflow_store.py::_challenger_role_schema_ready"
-    },
-    {
-      "id": "backend/max_backend/workflow_store.py::_ensure_backtest_runtime_status",
-      "kind": "function",
-      "label": "backend/max_backend/workflow_store.py::_ensure_backtest_runtime_status",
-      "language": "Python",
-      "line_end": 134,
-      "line_start": 124,
-      "locator": "backend/max_backend/workflow_store.py::_ensure_backtest_runtime_status"
-    },
-    {
-      "id": "backend/max_backend/workflow_store.py::_purge_research_authority",
-      "kind": "function",
-      "label": "backend/max_backend/workflow_store.py::_purge_research_authority",
-      "language": "Python",
-      "line_end": 180,
-      "line_start": 137,
-      "locator": "backend/max_backend/workflow_store.py::_purge_research_authority"
-    },
-    {
-      "id": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles",
-      "kind": "function",
-      "label": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles",
-      "language": "Python",
-      "line_end": 121,
-      "line_start": 31,
-      "locator": "backend/max_backend/workflow_store.py::_upgrade_challenger_roles"
-    },
-    {
-      "id": "backend/max_backend/workflow_store.py::migrate_current",
-      "kind": "function",
-      "label": "backend/max_backend/workflow_store.py::migrate_current",
-      "language": "Python",
-      "line_end": 312,
-      "line_start": 183,
-      "locator": "backend/max_backend/workflow_store.py::migrate_current"
-    },
-    {
       "id": "frontend/src/App.tsx::<module>",
       "kind": "module",
       "label": "frontend/src/App.tsx::<module>",
@@ -1981,7 +1461,7 @@
       "locator": "frontend/src/ArtifactsPage.tsx::<module>"
     }
   ],
-  "observed_head": "a374a5e8a3fe3acc6872ecff42874c1131d1aa52",
+  "observed_head": "3d563f24a6e0d2af022de19add25a28001d4811d",
   "schema_version": 1,
-  "source_digest": "38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa"
+  "source_digest": "892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db"
 }

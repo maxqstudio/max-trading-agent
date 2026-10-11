@@ -48,7 +48,7 @@
     "pip_check": "PASS_LOCAL",
     "scientist_knowledge": "PASS_LOCAL: canonical knowledge and source manifest rebuilt with scripts/build_scientist_knowledge.py; full Scientist regression passed.",
     "secret_scan": "Required before phase acceptance: exact committed-tree source-only and secret scans; exact candidate identity and result are external evidence per D-012.",
-    "sequence": "PASS_LOCAL_GENERATED: all 9 DURING/CURRENT sessions and actual graphs regenerated at source digest 38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa; 0 Python parse failures. Formal sequence validation remains part of cumulative acceptance.",
+    "sequence": "PASS_LOCAL_GENERATED: all 9 DURING/CURRENT sessions and actual graphs regenerated at source digest 892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db; 0 Python parse failures. Formal sequence validation remains part of cumulative acceptance.",
     "skill_workflow_provenance": "PASS_LOCAL: exact CI-pinned Skill_Workflow SHA 964481ed1609f87904ba9e08890bffc0a10c3fd4; 21 vendored tool Git blobs match upstream.",
     "skill_workflow_selftests": "PASS_LOCAL: strict workflow, Project Truth compiler, sequence call-resolution, and cross-document regressions.",
     "source_only_scan": "Required before phase acceptance: exact committed-tree source-only and secret scans; exact candidate identity and result are external evidence per D-012.",
@@ -359,7 +359,7 @@
   "schema_version": 1,
   "sequence_mode": "DURING",
   "sequence_session": "FLOW-STRATEGY-RESET-RECOVERY",
-  "sequence_sync_status": "PASS_LOCAL_GENERATED: all 9 DURING/CURRENT sessions and actual graphs regenerated at source digest 38fafadebf0467500ae42c714acffa9c03a567183b3d69b6ee532f2e506295fa; formal validation remains in cumulative acceptance.",
+  "sequence_sync_status": "PASS_LOCAL_GENERATED: all 9 DURING/CURRENT sessions and actual graphs regenerated at source digest 892ac002c8c7805d67edf99225ed32e6910b7fbc97b51cf58587e9ff994d03db; formal validation remains in cumulative acceptance.",
   "test_commands": [
     ".venv/Scripts/python.exe -m pytest backend/tests/test_schema_compatibility_guard.py -q -o addopts= --basetemp artifacts/p0b/<run-id>/pytest-focused",
     "powershell -ExecutionPolicy Bypass -File scripts/accept_p0b_database_compatibility.ps1",
