@@ -366,11 +366,15 @@ Authority: scientist_knowledge hash manifest + bounded Scientist context/store; 
 
 Purpose: Prevent silent or unsafe loss of Strategy state and provide a fail-closed, explicit path to recover corrupt operational state.
 Critical: TRUE
-Entry condition: Owner requests a current Strategy workspace reset, or application startup detects an unopenable/corrupt operational database.
-Authority: SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate.
+Entry condition: Application startup performs schema preflight before writes, or Owner requests a current Strategy workspace reset/recovery.
+Authority: Read-only database schema preflight before any initialization, migration, or recovery write; supported-schema migrations; SQLite integrity/recovery status; exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate.
 
 ### States
 
+- APPLICATION_STARTUP
+- DATABASE_SCHEMA_PREFLIGHT
+- INCOMPATIBLE_NEWER_SCHEMA
+- DATABASE_SCHEMA_GUARD_BLOCKED
 - DATABASE_READY
 - STRATEGY_RESET_PREFLIGHT
 - STRATEGY_RESET_BLOCKED
@@ -386,17 +390,25 @@ Authority: SQLite integrity/recovery status plus exact Owner confirmation and ve
 
 | From | To | Action | Authority | Side effects |
 |---|---|---|---|---|
-| DATABASE_READY | STRATEGY_RESET_PREFLIGHT | Preflight exact active work, Champion authority, generated state, database integrity, and protected baseline. | SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. |  |
-| STRATEGY_RESET_PREFLIGHT | STRATEGY_RESET_BLOCKED | Show blockers and do not mutate when any reset precondition is false. | SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. |  |
-| STRATEGY_RESET_PREFLIGHT | WAITING_EXACT_RESET_CONFIRMATION | Show deletion/preservation plan and require exact current confirmation. | SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. |  |
-| WAITING_EXACT_RESET_CONFIRMATION | BACKUP_AND_RESET_RUNNING | Create and verify SQLite backup, revalidate inside the write transaction, clear only owned generated Strategy state, then verify result. | SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. | verified database backup, owned Strategy generated state reset |
-| DATABASE_READY | RECOVERY_REQUIRED | On corrupt/unopenable state, block ordinary routes and expose only recovery status/reset until readiness is restored. | SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. |  |
-| RECOVERY_REQUIRED | WAITING_EXACT_RECOVERY_CONFIRMATION | Require exact explicit recovery confirmation; create/verify backup before quarantining the corrupt database. | SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. | verified recovery backup |
-| WAITING_EXACT_RECOVERY_CONFIRMATION | DATABASE_QUARANTINED | Quarantine original, initialize schema and Strategy baseline, then verify state before reporting completion. | SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. | corrupt database quarantine, current schema bootstrap |
+| APPLICATION_STARTUP | DATABASE_SCHEMA_PREFLIGHT | Read schema metadata without writes before initialization, baseline registration, migration, or recovery. | Read-only database schema preflight before any initialization, migration, or recovery write; supported-schema migrations; SQLite integrity/recovery status; exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. |  |
+| DATABASE_SCHEMA_PREFLIGHT | DATABASE_READY | Continue only for a fresh database or a schema version supported by this build. | Read-only database schema preflight before any initialization, migration, or recovery write; supported-schema migrations; SQLite integrity/recovery status; exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. |  |
+| DATABASE_SCHEMA_PREFLIGHT | INCOMPATIBLE_NEWER_SCHEMA | Block startup and all normal/reset operations when the stored version is newer than the supported schema; expose a diagnostic and do not invoke recovery. | Read-only database schema preflight before any initialization, migration, or recovery write; supported-schema migrations; SQLite integrity/recovery status; exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. |  |
+| DATABASE_SCHEMA_PREFLIGHT | DATABASE_SCHEMA_GUARD_BLOCKED | Block startup and reset when metadata is missing/malformed/unreadable or SQLite journal/sidecar state prevents a stable preflight. | Read-only database schema preflight before any initialization, migration, or recovery write; supported-schema migrations; SQLite integrity/recovery status; exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. |  |
+| DATABASE_READY | STRATEGY_RESET_PREFLIGHT | Preflight exact active work, Champion authority, generated state, database integrity, and protected baseline. | Read-only database schema preflight before any initialization, migration, or recovery write; supported-schema migrations; SQLite integrity/recovery status; exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. |  |
+| STRATEGY_RESET_PREFLIGHT | STRATEGY_RESET_BLOCKED | Show blockers and do not mutate when any reset precondition is false. | Read-only database schema preflight before any initialization, migration, or recovery write; supported-schema migrations; SQLite integrity/recovery status; exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. |  |
+| STRATEGY_RESET_PREFLIGHT | WAITING_EXACT_RESET_CONFIRMATION | Show deletion/preservation plan and require exact current confirmation. | Read-only database schema preflight before any initialization, migration, or recovery write; supported-schema migrations; SQLite integrity/recovery status; exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. |  |
+| WAITING_EXACT_RESET_CONFIRMATION | BACKUP_AND_RESET_RUNNING | Create and verify SQLite backup, revalidate inside the write transaction, clear only owned generated Strategy state, then verify result. | Read-only database schema preflight before any initialization, migration, or recovery write; supported-schema migrations; SQLite integrity/recovery status; exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. | verified database backup, owned Strategy generated state reset |
+| DATABASE_READY | RECOVERY_REQUIRED | On corrupt/unopenable state, block ordinary routes and expose only recovery status/reset until readiness is restored. | Read-only database schema preflight before any initialization, migration, or recovery write; supported-schema migrations; SQLite integrity/recovery status; exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. |  |
+| RECOVERY_REQUIRED | WAITING_EXACT_RECOVERY_CONFIRMATION | Require exact explicit recovery confirmation; create/verify backup before quarantining the corrupt database. | Read-only database schema preflight before any initialization, migration, or recovery write; supported-schema migrations; SQLite integrity/recovery status; exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. | verified recovery backup |
+| WAITING_EXACT_RECOVERY_CONFIRMATION | DATABASE_QUARANTINED | Quarantine original, initialize schema and Strategy baseline, then verify state before reporting completion. | Read-only database schema preflight before any initialization, migration, or recovery write; supported-schema migrations; SQLite integrity/recovery status; exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate. | corrupt database quarantine, current schema bootstrap |
 
 ### Invariants
 
 - No Owner operational database is read or changed during source tests; tests use synthetic temporary databases.
+- Read the exact schema version through a read-only preflight before initialize_database, baseline registration, migrations, reconciliation, recovery status, or Strategy reset preflight/count access.
+- database_status, database_recovery_status, _read_counts, and _connect use the canonical schema guard before any read-write SQLite connection; application-schema compatibility and physical SQLite integrity are reported as separate facts.
+- A schema newer than the application is reported as INCOMPATIBLE_NEWER_SCHEMA and cannot reach automatic recovery or reset.
+- Unreadable or malformed schema metadata and pending journal/sidecar state fail closed with no database or evidence mutation.
 - Only owned Strategy-generated state is reset; EA baseline and provider settings are preserved.
 - The original corrupt database is retained in quarantine after a verified backup.
 - Recovery reports READY only after rebuilding and revalidating the current schema.
@@ -405,11 +417,13 @@ Authority: SQLite integrity/recovery status plus exact Owner confirmation and ve
 
 - Active work, current Champion, invalid state, stale preflight, or incorrect confirmation blocks reset before mutation.
 - If database backup cannot be verified, reset/recovery does not proceed.
+- A newer schema, missing/corrupt schema metadata, unreadable database, or pending SQLite journal/sidecar blocks startup and reset without automatic recovery, downgrade, or database mutation.
 - While recovery is required or status is unavailable, ordinary API/UI operations remain blocked and the UI explains why.
 
 ### Restart behavior
 
-- Startup rechecks database recovery state before enabling normal application routes.
+- Every startup and direct migration/recovery entrypoint rechecks schema compatibility before enabling operations or writing.
+- Repeated blocked startup attempts leave the database and its SQLite sidecars unchanged.
 
 ### Rollback behavior
 

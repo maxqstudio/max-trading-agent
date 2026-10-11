@@ -134,18 +134,17 @@ def test_foundation_status_rejects_schema_below_minimum_or_missing(tmp_path: Pat
             "UPDATE schema_meta SET value='0' WHERE key='schema_version'"
         )
     result = database_status(below)
-    assert result["status"] == "FAIL"
-    assert result["reason"] == "SCHEMA_VERSION_MISMATCH"
-    assert result["schema_version"] == 0
+    assert result["status"] == "DATABASE_SCHEMA_METADATA_INVALID"
+    assert result["reason"] == "DATABASE_SCHEMA_METADATA_INVALID"
+    assert result["reset_available"] is False
 
     missing = tmp_path / "schema-missing.db"
     ensure_baseline_registered(missing)
     with connect(missing) as conn:
         conn.execute("DELETE FROM schema_meta WHERE key='schema_version'")
-    assert database_status(missing) == {
-        "status": "FAIL",
-        "reason": "SCHEMA_VERSION_MISSING",
-    }
+    missing_result = database_status(missing)
+    assert missing_result["status"] == "DATABASE_SCHEMA_METADATA_INVALID"
+    assert missing_result["reset_available"] is False
 
 
 def test_foundation_status_rejects_missing_baseline_authority(tmp_path: Path) -> None:

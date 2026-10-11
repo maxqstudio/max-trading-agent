@@ -7,7 +7,7 @@ from typing import Any
 
 from .challenger_store import migrate_m03
 from .config import DATABASE_PATH
-from .db import connect
+from .db import assert_database_schema_compatible, connect
 from .optimizer_store import utc_now
 
 SCHEMA_VERSION = 5
@@ -198,6 +198,7 @@ def _upgrade_champion_tenure_schema(conn: sqlite3.Connection) -> None:
     conn.execute("DROP TABLE strategy_champions_m04")
 
 def migrate_m04(path: Path = DATABASE_PATH) -> None:
+    assert_database_schema_compatible(path, allow_missing=False)
     migrate_m03(path)
     with connect(path) as conn:
         _upgrade_challenger_status_constraint(conn)

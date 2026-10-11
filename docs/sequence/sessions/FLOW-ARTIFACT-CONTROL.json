@@ -12,11 +12,12 @@
       "backend/max_backend/artifact_api.py::cleanup",
       "backend/max_backend/artifact_api.py::trace",
       "backend/max_backend/artifact_api.py::strategy_workspace_reset_preflight",
+      "backend/max_backend/artifact_api.py::_error",
       "backend/max_backend/artifact_api.py::strategy_workspace_reset",
       "backend/max_backend/artifact_control.py::clean_generated_data"
     ],
     "graph": "docs/sequence/generated/FLOW-ARTIFACT-CONTROL.actual.json",
-    "source_digest": "7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f"
+    "source_digest": "d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d"
   },
   "critical": true,
   "implementation_base_sha": "e4af2e9ac5cc7e10a9afb8a98adba22ebbe68e3d",
@@ -41,6 +42,7 @@
   "test_traceability_required": true,
   "tests": [
     "backend/tests/test_m08_strategy_results.py",
+    "backend/tests/test_schema_compatibility_guard.py",
     "backend/tests/test_strategy_workspace_reset.py",
     "frontend/src/ArtifactsPage.test.tsx"
   ]

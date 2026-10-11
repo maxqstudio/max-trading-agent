@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "current_phase": "STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING",
+  "current_phase": "P0_DATABASE_SAFETY",
   "phases": [
     {
       "id": "PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE",
@@ -19,7 +19,7 @@
     {
       "id": "STRATEGY_OPTIMIZER_DURABILITY_PERFORMANCE_HARDENING",
       "title": "Strategy Optimizer durability and performance hardening",
-      "status": "CURRENT",
+      "status": "COMPLETED",
       "objective": "Restore the previously proven native MT5 Optimizer launch behavior while retaining independent durability fixes, and prevent parser duplicate-vector failures or exact duplicate candidates from hiding completed results.",
       "exit_criteria": [
         "Editable Optimizer draft persists independently from each immutable started-job request snapshot; schema migration and reset/recovery use the same current schema authority.",
@@ -34,6 +34,20 @@
         "Frozen requests, authenticated worker identity, crash reconciliation, atomic evidence publication, bounded read projections, and stale-response protection remain intact.",
         "Owner runtime and full Optimizer acceptance remain NOT_PROVEN until the Owner verifies a fresh run; this source phase does not run MT5 or alter real research/scientific authority.",
         "Backend/frontend regression, zero-warning lint, build, dependency checks, source-only/security, governance and exact Windows CI pass; Owner runtime remains NOT_PROVEN."
+      ]
+    },
+    {
+      "id": "P0_DATABASE_SAFETY",
+      "title": "P0 fail-closed database schema safety",
+      "status": "CURRENT",
+      "objective": "Prevent schema-15 MTA startup, migration, reconciliation, or recovery from mutating a database whose schema is newer or cannot be safely identified. P0B is a compatibility plan only; no Owner database access or cutover is authorized.",
+      "exit_criteria": [
+        "Before initialization, baseline registration, migration, reconciliation, recovery, or reset, perform read-only schema preflight. Schema versions newer than 15 report INCOMPATIBLE_NEWER_SCHEMA; missing/corrupt metadata and unresolved SQLite WAL/journal state fail closed with diagnostic status and no automatic reset.",
+        "Direct migration and recovery/reset entrypoints independently enforce the schema guard. Fresh installation and valid schema-15 startup/migration behavior remain covered by regression tests.",
+        "Synthetic temporary-database adversarial tests prove zero mutation for schema 16/future schemas with ONNX/research/artifact evidence, invalid metadata, sidecars, repeated startup and direct entrypoints; physical hashes, logical rows/objects, and foreign-key results are compared.",
+        "Launcher reports schema incompatibility or unsafe metadata/journal state explicitly and does not offer reset or hide the cause behind the generic readiness timeout.",
+        "Backend, frontend, launcher, dependency, source-only/secret, pinned Skill Workflow, Project Truth, sequence and exact-tree Windows CI gates pass. No Owner database, MT5, Optimizer, Champion, research training or real runtime is used.",
+        "P0B forward-compatibility plan only: inventory schema 16 on a disposable consistent copy; implement a forward-only schema strategy that retains ONNX historical tables and preserves Champion, Optimizer and artifact lineage; stage any future cutover in a verified copy with crash-safe atomic publication; retain an untouched rollback image; validate cold start/restart and integrity/FKs on an isolated copy before any Owner approval. None of these migration, cutover, rollback, or Owner-copy tests execute in P0."
       ]
     },
     {

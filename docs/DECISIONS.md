@@ -300,11 +300,11 @@ Rationale: The Owner-authorized Strategy Optimizer hardening repairs durable dra
 
 ## D-038 — Adopt Skill Workflow SW2-00 governance regressions
 
-Status: CURRENT
+Status: SUPERSEDED
 
 MAX adopts Skill_Workflow main 64836990609cd1ab22f9517be5aaffc14ad19ea9 after inspecting the exact delta from 024e2ea458b25ad9dfb401d3fdeaa994a4cbe1b8. Vendor its 21 applicable scripts byte-identically, verify exact upstream provenance in Windows CI, and run its new sequence call-resolution and cross-document regression selftests. Do not adopt Skill Workflow sample project state or unrelated workflows.
 
-Rationale: The Owner requested the updated Skill Workflow. Its current delta prevents false static sequence edges from unresolved expression receivers, projects claim backlinks, scopes path-symbol checks away from templates, and adds direct regression coverage without MAX-local validator patches.
+Rationale: Superseded by D-040 after the already-accepted Windows CI pin and .workflow authority were verified at 964481ed1609f87904ba9e08890bffc0a10c3fd4; retained as the historical SW2-00 adoption record.
 
 ## D-039 — Fail closed on Windows commit-memory pressure
 
@@ -313,3 +313,11 @@ Status: CURRENT
 Resource admission considers both physical RAM and current Windows commit headroom. The frozen Optimizer workload identity includes EA SHA, MT5 build, symbol, timeframe, history-duration bucket, tick model, optimization mode, parameter count and search-space size. Native monitoring reads system commit and exact Job Object-owned terminal/tester processes, including PrivateUsage; compatible bounded high-water observations reuse existing round state read-only. A verified resource stop remains resumable only after fresh admission; failed termination or telemetry persistence enters RECONCILIATION_REQUIRED and is not resumable. AUTO_SAFE and CUSTOM remain subject to the same physical/commit hard floors and Job Object active-process cap. No pagefile mutation, schema bump, search-space shrink, or scientific acceptance change is permitted.
 
 Rationale: The Owner-reported full-range 17D Fast Genetic attempt crashed under Windows commit-memory exhaustion despite historical bounded RAM/concurrency checks. Current commit charge and process private bytes must therefore gate capacity and trigger explicit, verified stop/reconciliation behavior before system exhaustion.
+
+## D-040 — Reconcile Skill Workflow pin to existing Windows CI authority
+
+Status: CURRENT
+
+The current pinned Skill_Workflow authority is 964481ed1609f87904ba9e08890bffc0a10c3fd4, as already specified by .github/workflows/windows-ci.yml, .workflow/authority.json, and .workflow/acceptance.json. The 21 applicable vendored tools must remain byte-identical to that commit. This records existing authority; it does not upgrade or modify validator tooling in P0.
+
+Rationale: The exact upstream delta from D-038's 64836990609cd1ab22f9517be5aaffc14ad19ea9 adds Git-aware tracked/non-ignored source inventory with normalized LF hashing in sequence_contract.py and the Project Truth compiler selftest. Local provenance was verified against 964481ed1609f87904ba9e08890bffc0a10c3fd4; this decision removes conflicting pin metadata without changing validator code.

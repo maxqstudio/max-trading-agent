@@ -57,6 +57,7 @@ from .config import (
     ROOT,
     STRATEGY_HISTORY_ROOT,
 )
+from .db import assert_database_schema_compatible
 from .optimizer_core import EA_STEM, EXPERT_SUBDIR, TESTER_SET, sha256_file
 from .optimizer_runtime import _read_text_flexible, compile_summary
 from .optimizer_store import active_job, utc_now
@@ -1410,6 +1411,7 @@ def verify_current_strategy_champion(
 
 
 def recover_incomplete_promotions(*, path: Path = DATABASE_PATH) -> list[dict[str, Any]]:
+    assert_database_schema_compatible(path, allow_missing=False)
     migrate_m04(path)
     recovered: list[dict[str, Any]] = []
     promotions = list_promotions(path=path)

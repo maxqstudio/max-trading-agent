@@ -12,7 +12,11 @@ from max_backend import strategy_reset
 from max_backend.challenger_operations_store import migrate_m06
 from max_backend.champion_store import current_champion_summary, migrate_m04
 from max_backend.config import ROOT
-from max_backend.db import ensure_baseline_registered, initialize_database
+from max_backend.db import (
+    DatabaseSchemaGuardError,
+    ensure_baseline_registered,
+    initialize_database,
+)
 from max_backend.scientist_store import migrate_m05
 from max_backend.schema import CURRENT_SCHEMA_VERSION
 from max_backend.workflow_store import migrate_current
@@ -263,7 +267,7 @@ def test_reset_rejects_wrong_confirmation_and_active_optimizer_without_mutation(
     assert not (database.parent / "reset_backups").exists()
 
 
-def test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema(
+def test_recovery_fails_closed_for_database_without_readable_schema_metadata(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -274,21 +278,15 @@ def test_recovery_quarantines_unopenable_database_and_bootstraps_current_schema(
     expected_sha = hashlib.sha256(database.read_bytes()).hexdigest()
     monkeypatch.setattr(strategy_reset, "_settings_fingerprint", lambda: {"fixture": {"sha256": "stable"}})
 
-    result = strategy_reset.backup_and_reset_corrupt_database(
-        confirmed=strategy_reset.RECOVERY_RESET_CONFIRMATION,
-        path=database,
-    )
+    with pytest.raises(DatabaseSchemaGuardError) as error:
+        strategy_reset.backup_and_reset_corrupt_database(
+            confirmed=strategy_reset.RECOVERY_RESET_CONFIRMATION,
+            path=database,
+        )
 
-    quarantined = Path(result["quarantine"]) / database.name
-    assert quarantined.is_file()
-    assert hashlib.sha256(quarantined.read_bytes()).hexdigest() == expected_sha
-    assert result["status"] == "RECOVERED_EMPTY_OPERATIONAL_STATE"
-    assert strategy_reset.database_recovery_status(path=database)["status"] == "READY"
-    with sqlite3.connect(database) as conn:
-        assert conn.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
-        assert conn.execute("SELECT value FROM schema_meta WHERE key='schema_version'").fetchone()[0] == str(CURRENT_SCHEMA_VERSION)
-        assert conn.execute("SELECT status FROM ea_baseline WHERE id=1").fetchone()[0] == "BASELINE_NOT_CHAMPION"
-        assert conn.execute("SELECT COUNT(*) FROM optimizer_jobs").fetchone()[0] == 0
+    assert error.value.status == "DATABASE_SCHEMA_READ_FAILED"
+    assert hashlib.sha256(database.read_bytes()).hexdigest() == expected_sha
+    assert not (database.parent / "recovery_quarantine").exists()
 
 
 def test_recovery_refuses_healthy_database_and_wrong_confirmation(

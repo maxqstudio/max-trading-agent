@@ -8,6 +8,7 @@ $AuthorityHelper = Join-Path $ProjectRoot "scripts\launcher_authority.py"
 $Authority = $null
 $BackendProcess = $null
 $FrontendProcess = $null
+$script:BackendSchemaBlocker = $null
 
 function Stop-StartedProcessTree {
     param([System.Diagnostics.Process]$Process)
@@ -57,6 +58,35 @@ function Get-Overview {
     }
 }
 
+function Get-StartupSchemaBlocker {
+    try {
+        $status = Invoke-RestMethod -Uri ($BackendUrl + "/api/recovery/status") -Method Get -TimeoutSec 2
+        if ([string]$status.status -in @(
+            "INCOMPATIBLE_NEWER_SCHEMA",
+            "DATABASE_SCHEMA_METADATA_INVALID",
+            "DATABASE_SCHEMA_READ_FAILED",
+            "DATABASE_SCHEMA_WAL_PENDING",
+            "DATABASE_SCHEMA_RECOVERY_PENDING"
+        )) {
+            return $status
+        }
+    } catch {
+    }
+    return $null
+}
+
+function Get-StartupSchemaBlockerMessage {
+    param($Blocker)
+    if ($null -eq $Blocker) {
+        return "Backend startup is blocked by database schema compatibility. No database reset was attempted."
+    }
+    $message = [string]$Blocker.message
+    if ([string]::IsNullOrWhiteSpace($message)) {
+        $message = [string]$Blocker.status
+    }
+    return ("Backend startup blocked: " + $message + " No reset or downgrade was attempted.")
+}
+
 function Get-AuthorityProblem {
     param(
         [string]$Mode,
@@ -98,6 +128,12 @@ function Wait-Overview {
         $overview = Get-Overview $Url
         if ($null -ne $overview) {
             return $overview
+        }
+        if ($Url -eq ($BackendUrl + "/api/overview")) {
+            $script:BackendSchemaBlocker = Get-StartupSchemaBlocker
+            if ($null -ne $script:BackendSchemaBlocker) {
+                return $null
+            }
         }
         Start-Sleep -Milliseconds 250
     }
@@ -150,6 +186,10 @@ if ($null -ne $backendOverview) {
     }
     Write-Host "[READY] Existing MAX backend verified."
 } else {
+    $script:BackendSchemaBlocker = Get-StartupSchemaBlocker
+    if ($null -ne $script:BackendSchemaBlocker) {
+        Fail-Max (Get-StartupSchemaBlockerMessage $script:BackendSchemaBlocker) 27
+    }
     if (Test-PortListening 8000) {
         Fail-Max "Port 8000 is occupied by an unrelated or broken process." 22
     }
@@ -162,6 +202,9 @@ if ($null -ne $backendOverview) {
     $BackendProcess = Start-Process -FilePath $env:COMSPEC -ArgumentList "/c", ('"' + $backendCmd + '"') -WorkingDirectory $ProjectRoot -WindowStyle Minimized -PassThru
     $backendOverview = Wait-Overview ($BackendUrl + "/api/overview") 30
     if ($null -eq $backendOverview) {
+        if ($null -ne $script:BackendSchemaBlocker) {
+            Fail-Max (Get-StartupSchemaBlockerMessage $script:BackendSchemaBlocker) 27
+        }
         Fail-Max "Backend did not become ready within 30 seconds." 25
     }
 

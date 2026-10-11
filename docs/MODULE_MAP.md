@@ -3,7 +3,7 @@
 # MODULE MAP
 
 Authority SHA: external final acceptance evidence
-Source digest: 7873f57e3945b4a53a5d23d065137899bc56f39d299b027a7532486205a6de7f
+Source digest: d48c7d3d02b3f0d9bede94f59d6fff680f691f996e6779250aafab2b1911b27d
 Generated/refreshed: current compiler run
 
 | Module / File | Language | Lines | Directory | Test file |
@@ -17,45 +17,45 @@ Generated/refreshed: current compiler run
 | backend/max_backend/challenger_api.py | Python | 276 | backend/max_backend | NO |
 | backend/max_backend/challenger_bundle.py | Python | 839 | backend/max_backend | NO |
 | backend/max_backend/challenger_deployment.py | Python | 554 | backend/max_backend | NO |
-| backend/max_backend/challenger_operations.py | Python | 1064 | backend/max_backend | NO |
-| backend/max_backend/challenger_operations_store.py | Python | 1028 | backend/max_backend | NO |
+| backend/max_backend/challenger_operations.py | Python | 1066 | backend/max_backend | NO |
+| backend/max_backend/challenger_operations_store.py | Python | 1030 | backend/max_backend | NO |
 | backend/max_backend/challenger_registry.py | Python | 571 | backend/max_backend | NO |
 | backend/max_backend/challenger_selection.py | Python | 410 | backend/max_backend | NO |
-| backend/max_backend/challenger_store.py | Python | 444 | backend/max_backend | NO |
+| backend/max_backend/challenger_store.py | Python | 445 | backend/max_backend | NO |
 | backend/max_backend/champion_api.py | Python | 80 | backend/max_backend | NO |
 | backend/max_backend/champion_bundle.py | Python | 350 | backend/max_backend | NO |
-| backend/max_backend/champion_store.py | Python | 770 | backend/max_backend | NO |
+| backend/max_backend/champion_store.py | Python | 771 | backend/max_backend | NO |
 | backend/max_backend/config.py | Python | 30 | backend/max_backend | NO |
-| backend/max_backend/db.py | Python | 146 | backend/max_backend | NO |
+| backend/max_backend/db.py | Python | 283 | backend/max_backend | NO |
 | backend/max_backend/ea.py | Python | 46 | backend/max_backend | NO |
-| backend/max_backend/main.py | Python | 200 | backend/max_backend | NO |
+| backend/max_backend/main.py | Python | 243 | backend/max_backend | NO |
 | backend/max_backend/mt5.py | Python | 104 | backend/max_backend | NO |
 | backend/max_backend/mtf_geometry.py | Python | 203 | backend/max_backend | NO |
 | backend/max_backend/optimizer_api.py | Python | 169 | backend/max_backend | NO |
 | backend/max_backend/optimizer_candidates.py | Python | 767 | backend/max_backend | NO |
 | backend/max_backend/optimizer_core.py | Python | 1922 | backend/max_backend | NO |
 | backend/max_backend/optimizer_draft.py | Python | 204 | backend/max_backend | NO |
-| backend/max_backend/optimizer_jobs.py | Python | 1013 | backend/max_backend | NO |
+| backend/max_backend/optimizer_jobs.py | Python | 1015 | backend/max_backend | NO |
 | backend/max_backend/optimizer_runtime.py | Python | 782 | backend/max_backend | NO |
 | backend/max_backend/optimizer_scientist.py | Python | 767 | backend/max_backend | NO |
 | backend/max_backend/optimizer_scientist_transition.py | Python | 670 | backend/max_backend | NO |
-| backend/max_backend/optimizer_store.py | Python | 790 | backend/max_backend | NO |
+| backend/max_backend/optimizer_store.py | Python | 792 | backend/max_backend | NO |
 | backend/max_backend/optimizer_worker.py | Python | 773 | backend/max_backend | NO |
 | backend/max_backend/optimizer_worker_identity.py | Python | 428 | backend/max_backend | NO |
 | backend/max_backend/path_safety.py | Python | 98 | backend/max_backend | NO |
-| backend/max_backend/promotion_service.py | Python | 1517 | backend/max_backend | NO |
+| backend/max_backend/promotion_service.py | Python | 1519 | backend/max_backend | NO |
 | backend/max_backend/schema.py | Python | 1 | backend/max_backend | NO |
 | backend/max_backend/scientist_api.py | Python | 270 | backend/max_backend | NO |
 | backend/max_backend/scientist_chat.py | Python | 449 | backend/max_backend | NO |
 | backend/max_backend/scientist_context.py | Python | 625 | backend/max_backend | NO |
 | backend/max_backend/scientist_knowledge.py | Python | 168 | backend/max_backend | NO |
 | backend/max_backend/scientist_provider.py | Python | 993 | backend/max_backend | NO |
-| backend/max_backend/scientist_store.py | Python | 594 | backend/max_backend | NO |
-| backend/max_backend/strategy_reset.py | Python | 504 | backend/max_backend | NO |
+| backend/max_backend/scientist_store.py | Python | 596 | backend/max_backend | NO |
+| backend/max_backend/strategy_reset.py | Python | 551 | backend/max_backend | NO |
 | backend/max_backend/workflow_contract.py | Python | 45 | backend/max_backend | NO |
-| backend/max_backend/workflow_store.py | Python | 595 | backend/max_backend | NO |
+| backend/max_backend/workflow_store.py | Python | 596 | backend/max_backend | NO |
 | backend/tests/conftest.py | Python | 17 | backend/tests | YES |
-| backend/tests/test_m00_foundation.py | Python | 326 | backend/tests | YES |
+| backend/tests/test_m00_foundation.py | Python | 325 | backend/tests | YES |
 | backend/tests/test_m01_fail_closed.py | Python | 446 | backend/tests | YES |
 | backend/tests/test_m01_jobs.py | Python | 126 | backend/tests | YES |
 | backend/tests/test_m01_lifecycle.py | Python | 193 | backend/tests | YES |
@@ -86,7 +86,8 @@ Generated/refreshed: current compiler run
 | backend/tests/test_optimizer_runtime_durability.py | Python | 83 | backend/tests | YES |
 | backend/tests/test_optimizer_worker_identity.py | Python | 361 | backend/tests | YES |
 | backend/tests/test_retired_subsystem_migration.py | Python | 98 | backend/tests | YES |
-| backend/tests/test_strategy_workspace_reset.py | Python | 316 | backend/tests | YES |
+| backend/tests/test_schema_compatibility_guard.py | Python | 856 | backend/tests | YES |
+| backend/tests/test_strategy_workspace_reset.py | Python | 314 | backend/tests | YES |
 | frontend/src/ActionControls.test.tsx | TypeScript/React | 47 | frontend/src | YES |
 | frontend/src/ActionControls.tsx | TypeScript/React | 86 | frontend/src | NO |
 | frontend/src/App.test.tsx | TypeScript/React | 187 | frontend/src | YES |
@@ -116,8 +117,8 @@ Generated/refreshed: current compiler run
 | scripts/generate_symbol_index.py | Python | 261 | scripts | NO |
 | scripts/launcher_authority.py | Python | 161 | scripts | NO |
 | scripts/project_profile.py | Python | 193 | scripts | NO |
-| scripts/reset_strategy_epoch.py | Python | 623 | scripts | NO |
-| scripts/run_max.ps1 | PowerShell | 258 | scripts | NO |
+| scripts/reset_strategy_epoch.py | Python | 626 | scripts | NO |
+| scripts/run_max.ps1 | PowerShell | 301 | scripts | NO |
 | scripts/scan_m05_candidate_tree.py | Python | 142 | scripts | NO |
 | scripts/validate_cross_document_consistency.py | Python | 591 | scripts | NO |
 | scripts/validate_handoff.py | Python | 198 | scripts | NO |

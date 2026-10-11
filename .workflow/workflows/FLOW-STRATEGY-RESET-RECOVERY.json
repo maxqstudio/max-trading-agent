@@ -1,22 +1,28 @@
 {
-  "authority": "SQLite integrity/recovery status plus exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate.",
+  "authority": "Read-only database schema preflight before any initialization, migration, or recovery write; supported-schema migrations; SQLite integrity/recovery status; exact Owner confirmation and verified backup; all ordinary operations remain behind the recovery gate.",
   "critical": true,
-  "entry_condition": "Owner requests a current Strategy workspace reset, or application startup detects an unopenable/corrupt operational database.",
+  "entry_condition": "Application startup performs schema preflight before writes, or Owner requests a current Strategy workspace reset/recovery.",
   "failure_behavior": [
     "Active work, current Champion, invalid state, stale preflight, or incorrect confirmation blocks reset before mutation.",
     "If database backup cannot be verified, reset/recovery does not proceed.",
+    "A newer schema, missing/corrupt schema metadata, unreadable database, or pending SQLite journal/sidecar blocks startup and reset without automatic recovery, downgrade, or database mutation.",
     "While recovery is required or status is unavailable, ordinary API/UI operations remain blocked and the UI explains why."
   ],
   "flow_id": "FLOW-STRATEGY-RESET-RECOVERY",
   "invariants": [
     "No Owner operational database is read or changed during source tests; tests use synthetic temporary databases.",
+    "Read the exact schema version through a read-only preflight before initialize_database, baseline registration, migrations, reconciliation, recovery status, or Strategy reset preflight/count access.",
+    "database_status, database_recovery_status, _read_counts, and _connect use the canonical schema guard before any read-write SQLite connection; application-schema compatibility and physical SQLite integrity are reported as separate facts.",
+    "A schema newer than the application is reported as INCOMPATIBLE_NEWER_SCHEMA and cannot reach automatic recovery or reset.",
+    "Unreadable or malformed schema metadata and pending journal/sidecar state fail closed with no database or evidence mutation.",
     "Only owned Strategy-generated state is reset; EA baseline and provider settings are preserved.",
     "The original corrupt database is retained in quarantine after a verified backup.",
     "Recovery reports READY only after rebuilding and revalidating the current schema."
   ],
   "purpose": "Prevent silent or unsafe loss of Strategy state and provide a fail-closed, explicit path to recover corrupt operational state.",
   "restart_behavior": [
-    "Startup rechecks database recovery state before enabling normal application routes."
+    "Every startup and direct migration/recovery entrypoint rechecks schema compatibility before enabling operations or writing.",
+    "Repeated blocked startup attempts leave the database and its SQLite sidecars unchanged."
   ],
   "rollback_behavior": [
     "A verified backup and quarantined original remain available; recovery failures do not claim reset success."
@@ -24,17 +30,29 @@
   "schema_version": 1,
   "sequence_session": "docs/sequence/sessions/FLOW-STRATEGY-RESET-RECOVERY.json",
   "source_owners": [
+    "backend/max_backend/db.py::assert_database_schema_compatible",
+    "backend/max_backend/db.py::database_status",
+    "backend/max_backend/db.py::initialize_database",
+    "backend/max_backend/db.py::ensure_baseline_registered",
+    "backend/max_backend/main.py::_run_startup_migrations",
     "backend/max_backend/main.py::recovery_required_gate",
     "backend/max_backend/main.py::recovery_status",
     "backend/max_backend/main.py::reset_corrupt_state",
     "backend/max_backend/strategy_reset.py::strategy_reset_preflight",
+    "backend/max_backend/strategy_reset.py::_read_counts",
+    "backend/max_backend/strategy_reset.py::_connect",
     "backend/max_backend/strategy_reset.py::reset_strategy_workspace",
     "backend/max_backend/strategy_reset.py::database_recovery_status",
     "backend/max_backend/strategy_reset.py::backup_and_reset_corrupt_database",
+    "backend/max_backend/workflow_store.py::migrate_current",
     "frontend/src/App.tsx::RecoveryRequiredPage",
     "frontend/src/ArtifactsPage.tsx::ArtifactsPage"
   ],
   "states": [
+    "APPLICATION_STARTUP",
+    "DATABASE_SCHEMA_PREFLIGHT",
+    "INCOMPATIBLE_NEWER_SCHEMA",
+    "DATABASE_SCHEMA_GUARD_BLOCKED",
     "DATABASE_READY",
     "STRATEGY_RESET_PREFLIGHT",
     "STRATEGY_RESET_BLOCKED",
@@ -47,6 +65,7 @@
     "RECOVERY_FAILED"
   ],
   "tests": [
+    "backend/tests/test_schema_compatibility_guard.py",
     "backend/tests/test_strategy_workspace_reset.py",
     "backend/tests/test_retired_subsystem_migration.py",
     "frontend/src/App.test.tsx",
@@ -54,6 +73,30 @@
   ],
   "title": "Owner-confirmed Strategy reset and fail-closed database recovery",
   "transitions": [
+    {
+      "action": "Read schema metadata without writes before initialization, baseline registration, migration, or recovery.",
+      "from": "APPLICATION_STARTUP",
+      "side_effects": [],
+      "to": "DATABASE_SCHEMA_PREFLIGHT"
+    },
+    {
+      "action": "Continue only for a fresh database or a schema version supported by this build.",
+      "from": "DATABASE_SCHEMA_PREFLIGHT",
+      "side_effects": [],
+      "to": "DATABASE_READY"
+    },
+    {
+      "action": "Block startup and all normal/reset operations when the stored version is newer than the supported schema; expose a diagnostic and do not invoke recovery.",
+      "from": "DATABASE_SCHEMA_PREFLIGHT",
+      "side_effects": [],
+      "to": "INCOMPATIBLE_NEWER_SCHEMA"
+    },
+    {
+      "action": "Block startup and reset when metadata is missing/malformed/unreadable or SQLite journal/sidecar state prevents a stable preflight.",
+      "from": "DATABASE_SCHEMA_PREFLIGHT",
+      "side_effects": [],
+      "to": "DATABASE_SCHEMA_GUARD_BLOCKED"
+    },
     {
       "action": "Preflight exact active work, Champion authority, generated state, database integrity, and protected baseline.",
       "from": "DATABASE_READY",
