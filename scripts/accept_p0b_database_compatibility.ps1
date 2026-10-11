@@ -208,8 +208,22 @@ try {
         @('SEQUENCE_CALL_RESOLUTION', (Join-Path $skillDir 'scripts\selftest_sequence_call_resolution.py')),
         @('CROSS_DOCUMENT_REGRESSIONS', (Join-Path $skillDir 'scripts\selftest_cross_document_regressions.py'))
     )
-    foreach ($gate in $skillTests) {
-        if (-not (Invoke-PythonGate $gate[0] @($gate[1]))) { throw "$($gate[0]) failed" }
+    $priorGitCeiling = $env:GIT_CEILING_DIRECTORIES
+    try {
+        # Pinned compiler self-tests create temp repositories below TEMP. Stop
+        # Git discovery at this checkout so those fixtures are their own roots.
+        $env:GIT_CEILING_DIRECTORIES = $repoRoot
+        foreach ($gate in $skillTests) {
+            if (-not (Invoke-PythonGate $gate[0] @($gate[1]))) { throw "$($gate[0]) failed" }
+        }
+    }
+    finally {
+        if ($null -eq $priorGitCeiling) {
+            Remove-Item Env:\GIT_CEILING_DIRECTORIES -ErrorAction SilentlyContinue
+        }
+        else {
+            $env:GIT_CEILING_DIRECTORIES = $priorGitCeiling
+        }
     }
 
     # The cross-document validator recursively scans Markdown. Keep the exact
