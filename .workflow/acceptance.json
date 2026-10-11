@@ -1,6 +1,37 @@
 {
-  "current_phase": "P0_DATABASE_SAFETY",
+  "current_phase": "P0B_DATABASE_COMPATIBILITY_AND_NONDESTRUCTIVE_CUTOVER",
   "current_phase_results": {
+    "crash_restart_idempotency": "NOT_RUN",
+    "hosted_ci": "NOT_RUN",
+    "isolated_cutover_staging": "NOT_RUN",
+    "owner_database_compatibility": "NOT_PROVEN",
+    "owner_runtime": "NOT_PROVEN",
+    "schema15_migration_regression": "NOT_RUN",
+    "schema15_structural_fingerprint": "NOT_RUN",
+    "schema16_compatibility_profile": "NOT_RUN",
+    "schema16_populated_fixture_preservation": "NOT_RUN",
+    "schema_archaeology": "NOT_RUN"
+  },
+  "current_phase_status": "IN_PROGRESS",
+  "evidence_boundary": "P0B starts from verified origin/main 8ba001bba31d7c74e2d1d1aa03d6c79fb0f9576a with tree 597dbd569a9c9c99feae5fea2e2b2a2ff8fa3e46; P0A is accepted and merged. Historical source audit identifies the schema-15 to schema-16 ONNX archive extension, but the actual Owner database remains uninspected and compatibility is NOT_PROVEN. Source implementation and synthetic acceptance are in progress. No actual Owner database, MT5, Optimizer, training, Research execution, Champion mutation or live cutover is authorized. Exact candidate source-only scan, governance, and Windows CI are pending external evidence under D-012.",
+  "human_comprehension_questions": {
+    "How does failure/recovery behave?": "PASS",
+    "How does important data flow through the system?": "PASS",
+    "What are the important lifecycle states and transitions?": "PASS",
+    "What are the main user/domain workflows?": "PASS",
+    "What are the major components and how do they relate?": "PASS",
+    "What is mutable and what is immutable?": "PASS",
+    "What is proven and what is not proven?": "PASS",
+    "What is the current project state?": "PASS",
+    "What is the project and what problem does it solve?": "PASS",
+    "What may happen next and what is blocked?": "PASS",
+    "Who uses it and what are the primary outcomes?": "PASS",
+    "Who/what is authoritative for important decisions?": "PASS"
+  },
+  "human_comprehension_status": "PASS",
+  "p0a_accepted_evidence": {
+    "accepted_main_sha": "8ba001bba31d7c74e2d1d1aa03d6c79fb0f9576a",
+    "accepted_main_tree": "597dbd569a9c9c99feae5fea2e2b2a2ff8fa3e46",
     "backend_full": "PASS_LOCAL: 522 passed, 0 skipped, 0 failed.",
     "backend_targeted": "PASS_LOCAL: 70 passed across schema compatibility, Strategy reset, and M00 foundation regressions.",
     "build": "PASS_LOCAL with existing Vite chunk-size warning; exit code 0.",
@@ -25,23 +56,6 @@
     "starting_main_tree": "8325433e9f23822967251037fff149fc6057113a",
     "supported_schema_version": 15
   },
-  "current_phase_status": "IN_PROGRESS",
-  "evidence_boundary": "P0 starts from main 858dcb205fa2fb734fd5a68b8a4970a29c553897 with tree 8325433e9f23822967251037fff149fc6057113a, identical to accepted main tree 203f6ab3dc618e3edd247841aa25e1fa0951a19a (Windows CI 37964999480 PASS). MTA supports schema 15. Schema 16 for the Owner database is reported but has not been inspected. Synthetic temporary SQLite fixtures only: focused schema/reset regression 70 passed; full backend 522 passed with zero skips/failures; frontend 61 passed across 9 files; lint/build/dependency checks passed. Scientist knowledge was rebuilt canonically and Scientist tests passed. No Owner database, MT5, Optimizer, research training, Champion mutation, P0B migration, or cutover was executed. Exact committed-tree source-only/secret scan, clean-commit governance, and Windows CI remain pending external phase-acceptance evidence per D-012; phase remains IN_PROGRESS until Control Room acceptance.",
-  "human_comprehension_questions": {
-    "How does failure/recovery behave?": "PASS",
-    "How does important data flow through the system?": "PASS",
-    "What are the important lifecycle states and transitions?": "PASS",
-    "What are the main user/domain workflows?": "PASS",
-    "What are the major components and how do they relate?": "PASS",
-    "What is mutable and what is immutable?": "PASS",
-    "What is proven and what is not proven?": "PASS",
-    "What is the current project state?": "PASS",
-    "What is the project and what problem does it solve?": "PASS",
-    "What may happen next and what is blocked?": "PASS",
-    "Who uses it and what are the primary outcomes?": "PASS",
-    "Who/what is authoritative for important decisions?": "PASS"
-  },
-  "human_comprehension_status": "PASS",
   "requirements": [
     {
       "evidence": "backend/max_backend/db.py::assert_database_schema_compatible; database_status; backend/max_backend/strategy_reset.py::database_recovery_status, _read_counts, _connect; backend/max_backend/main.py::_run_startup_migrations; backend/tests/test_schema_compatibility_guard.py",
@@ -64,8 +78,20 @@
     {
       "evidence": ".workflow/roadmap.json::P0_DATABASE_SAFETY",
       "id": "P0B-COMPATIBILITY-PLAN-01",
-      "requirement": "A forward-compatible schema-16 preservation/cutover/rollback/copy-only cold-start plan is documented; P0 executes none of those operations against an Owner database.",
-      "status": "PASS_LOCAL"
+      "requirement": "The P0B architecture decision and historical schema-15/16 migration evidence are documented before source implementation; actual Owner database access and live cutover remain prohibited.",
+      "status": "PASS_LOCAL_DESIGN_ONLY"
+    },
+    {
+      "evidence": "backend/max_backend/db.py schema compatibility profile; backend/tests/test_schema_compatibility_guard.py",
+      "id": "P0B-STRUCTURAL-COMPATIBILITY-01",
+      "requirement": "Only the exact schema-15 core plus verified historical schema-16 ONNX archive extension is compatible; metadata remains 16, unsupported layouts/future versions fail closed, and read/migration/startup paths do not mutate schema-16 authority.",
+      "status": "NOT_RUN"
+    },
+    {
+      "evidence": "P0B isolated database cutover staging tool and temporary SQLite acceptance fixtures",
+      "id": "P0B-NONDESTRUCTIVE-CUTOVER-01",
+      "requirement": "Copy-only staging preserves and verifies a rollback image, validates a candidate before publication, emits a machine-readable report, and never activates or overwrites the source without separate explicit Owner authorization.",
+      "status": "NOT_RUN"
     },
     {
       "evidence": "backend/max_backend/strategy_reset.py::strategy_reset_preflight; backend/max_backend/strategy_reset.py::reset_strategy_workspace; backend/tests/test_strategy_workspace_reset.py",

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "current_phase": "P0_DATABASE_SAFETY",
+  "current_phase": "P0B_DATABASE_COMPATIBILITY_AND_NONDESTRUCTIVE_CUTOVER",
   "phases": [
     {
       "id": "PRE_RESEARCH_STRATEGY_STABILIZATION_AND_RESEARCH_PURGE",
@@ -39,15 +39,30 @@
     {
       "id": "P0_DATABASE_SAFETY",
       "title": "P0 fail-closed database schema safety",
-      "status": "CURRENT",
-      "objective": "Prevent schema-15 MTA startup, migration, reconciliation, or recovery from mutating a database whose schema is newer or cannot be safely identified. P0B is a compatibility plan only; no Owner database access or cutover is authorized.",
+      "status": "COMPLETED",
+      "objective": "P0A added fail-closed schema-15 startup, migration, recovery, and reset guards. P0A was accepted and merged at 8ba001bba31d7c74e2d1d1aa03d6c79fb0f9576a; the Owner database itself remains uninspected.",
       "exit_criteria": [
         "Before initialization, baseline registration, migration, reconciliation, recovery, or reset, perform read-only schema preflight. Schema versions newer than 15 report INCOMPATIBLE_NEWER_SCHEMA; missing/corrupt metadata and unresolved SQLite WAL/journal state fail closed with diagnostic status and no automatic reset.",
         "Direct migration and recovery/reset entrypoints independently enforce the schema guard. Fresh installation and valid schema-15 startup/migration behavior remain covered by regression tests.",
         "Synthetic temporary-database adversarial tests prove zero mutation for schema 16/future schemas with ONNX/research/artifact evidence, invalid metadata, sidecars, repeated startup and direct entrypoints; physical hashes, logical rows/objects, and foreign-key results are compared.",
         "Launcher reports schema incompatibility or unsafe metadata/journal state explicitly and does not offer reset or hide the cause behind the generic readiness timeout.",
         "Backend, frontend, launcher, dependency, source-only/secret, pinned Skill Workflow, Project Truth, sequence and exact-tree Windows CI gates pass. No Owner database, MT5, Optimizer, Champion, research training or real runtime is used.",
-        "P0B forward-compatibility plan only: inventory schema 16 on a disposable consistent copy; implement a forward-only schema strategy that retains ONNX historical tables and preserves Champion, Optimizer and artifact lineage; stage any future cutover in a verified copy with crash-safe atomic publication; retain an untouched rollback image; validate cold start/restart and integrity/FKs on an isolated copy before any Owner approval. None of these migration, cutover, rollback, or Owner-copy tests execute in P0."
+        "P0A was merged at the accepted main authority above; its exact P0A acceptance remains external evidence under D-012. No Owner database was accessed."
+      ]
+    },
+    {
+      "id": "P0B_DATABASE_COMPATIBILITY_AND_NONDESTRUCTIVE_CUTOVER",
+      "title": "P0B schema-16 compatibility and non-destructive cutover",
+      "status": "CURRENT",
+      "objective": "Implement and prove a structurally verified, non-destructive compatibility path for the historical schema-16 archive extension without restoring cancelled ONNX/Research runtime, downgrading schema metadata, or accessing the Owner database.",
+      "exit_criteria": [
+        "Historical migrations from accepted schema-15 baseline through schema 16 are source-audited; exact ONNX archive DDL, indexes, triggers, relationships, and historical Research purge behavior are documented.",
+        "Schema 16 is accepted only when the schema-15 application core and exact historical ONNX archive extension match a pinned structural contract; unknown/future versions or layouts remain blocked before read-write access.",
+        "Schema-16 compatibility startup and migration entrypoints preserve schema_version=16 and do not create, drop, rewrite, purge, or automatically recover records/files; ambiguous in-flight operational state blocks with explicit reconciliation diagnostics.",
+        "Synthetic populated fixtures prove Strategy, Optimizer, Challenger, Champion, Scientist, artifact, research-prefixed and ONNX archive rows and relationships remain intact across startup, repeated startup, and crash/retry cases.",
+        "A copy-only staging/cutover tool creates and verifies an isolated candidate plus rollback image/report; it never overwrites or activates the source automatically, and activation requires a distinct explicit Owner authorization.",
+        "Fresh install and schema-15 migration behavior remain unchanged; schema 17+ and structurally incompatible schema 16 fail closed. Pending WAL/journal states are handled without deletion or unsafe replay.",
+        "Full backend/frontend, launcher, dependency, governance, Skill Workflow, security/source-only and exact-tree Windows CI gates pass. Owner database/runtime, MT5, Optimizer execution, research, Champion mutation, and live cutover remain NOT_PROVEN / NOT_EXECUTED."
       ]
     },
     {

@@ -321,3 +321,11 @@ Status: CURRENT
 The current pinned Skill_Workflow authority is 964481ed1609f87904ba9e08890bffc0a10c3fd4, as already specified by .github/workflows/windows-ci.yml, .workflow/authority.json, and .workflow/acceptance.json. The 21 applicable vendored tools must remain byte-identical to that commit. This records existing authority; it does not upgrade or modify validator tooling in P0.
 
 Rationale: The exact upstream delta from D-038's 64836990609cd1ab22f9517be5aaffc14ad19ea9 adds Git-aware tracked/non-ignored source inventory with normalized LF hashing in sequence_contract.py and the Project Truth compiler selftest. Local provenance was verified against 964481ed1609f87904ba9e08890bffc0a10c3fd4; this decision removes conflicting pin metadata without changing validator code.
+
+## D-041 — Structurally verify and preserve the historical schema-16 archive extension
+
+Status: CURRENT
+
+P0B keeps CURRENT_SCHEMA_VERSION at 15 and adds one narrowly defined compatibility profile for historical schema 16: accept only the exact schema-15 application-core structure plus the exact ONNX-02 archive extension verified from commit 98ac8477646bafd608650f3a30de8a3c38b2df68. Preserve schema_version=16 and all ONNX/research/artifact/Strategy/Optimizer/Champion evidence. Schema-16 migration entrypoints are no-ops after structural and integrity verification; they must not run the historical Research purge or rewrite schema metadata. Future versions and any structural mismatch remain blocked. Startup does not auto-run file-mutating Champion/retirement recovery on schema 16; unresolved in-flight authority is surfaced as an explicit reconciliation blocker. Cutover staging is isolated and copy-only; activation is a separate Owner-authorized action and is not performed by source CI.
+
+Rationale: Schema archaeology showed that ONNX-02 added only three data tables, two explicit indexes and six immutability triggers, while its historical migrate_current path also ran Research purge logic and wrote the current schema number. Structural recognition permits safe reuse of unchanged MAX operational tables without pretending the current schema is 16, downgrading metadata, deleting archives, or restoring cancelled ONNX runtime. Exact structural checks plus no-op migration behavior are required because schema version alone is insufficient evidence of compatibility.
