@@ -110,13 +110,13 @@
       "status": "PASS_LOCAL"
     },
     {
-      "evidence": "P0 local candidate backend 504 passed, 0 skipped, 0 failed; frontend 61/61 across 9 files; lint, build, npm tree and pip check PASS. Final governance/source-only scan and hosted CI remain NOT_RUN.",
+      "evidence": "P0 regression evidence: backend 504 passed, 0 skipped, 0 failed; frontend 61 passed / 9 files; lint, build, npm tree, pip check, pinned governance validators, and exact committed-tree source-only/secret scan pass. Exact PR-head Windows CI passed all three jobs. Exact SHA/run/tree identities are external evidence per D-012. Exact merged-main CI remains NOT_RUN while the PR is open and unmerged.",
       "id": "REGRESSION-01",
       "requirement": "Full current backend/frontend regressions, dependency checks, build, governance validators, and exact-tree source-only scan pass without unexplained skips or failures.",
-      "status": "NOT_PROVEN"
+      "status": "PASS_LOCAL"
     },
     {
-      "evidence": "External GitHub Actions run bound to exact candidate SHA.",
+      "evidence": "Exact PR-head Windows CI passed all three jobs. Exact merged-main CI is not run because this PR remains open and unmerged; exact SHA/run identities are external evidence per D-012.",
       "id": "HOSTED-01",
       "requirement": "Windows GitHub Actions passes on the exact PR head and exact merged main before phase closure.",
       "status": "NOT_PROVEN"
