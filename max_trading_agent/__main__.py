@@ -1,14 +1,19 @@
-"""CLI for the M00 reference-only knowledge foundation."""
+"""CLI for offline MT5 knowledge and read-only reference agent missions."""
 import argparse
 import json
 from pathlib import Path
+
 from .core import build_index, load_catalog, plan, search
+from .runtime import DEFAULT_JOURNAL, DEFAULT_KNOWLEDGE, EventJournal, ReferenceMission
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(prog="max-trading-agent")
-    parser.add_argument("command", choices=("validate", "index", "search", "plan"))
+    parser.add_argument("command", choices=("validate", "index", "search", "plan", "run", "serve"))
     parser.add_argument("value", nargs="?")
-    parser.add_argument("--db", default=".local/mt5_knowledge.sqlite3")
+    parser.add_argument("--db", default=str(DEFAULT_KNOWLEDGE))
+    parser.add_argument("--journal", default=str(DEFAULT_JOURNAL))
+    parser.add_argument("--port", type=int, default=8765)
     args = parser.parse_args()
     if args.command == "validate":
         output = {"valid": True, "entries": len(load_catalog())}
@@ -18,10 +23,28 @@ def main() -> None:
         if not args.value:
             parser.error("search requires a query")
         output = search(Path(args.db), args.value)
-    else:
+    elif args.command == "plan":
         if not args.value:
             parser.error("plan requires a task name")
         output = plan(args.value)
+    elif args.command == "run":
+        if not args.value:
+            parser.error("run requires a reference task name")
+        journal = EventJournal(Path(args.journal))
+        run_id = journal.start(args.value)
+        ReferenceMission(journal, Path(args.db)).execute(run_id, args.value)
+        output = {"run_id": run_id, "mode": "REFERENCE_ONLY",
+                  "runs": journal.runs(), "events": journal.events(run_id)}
+    else:
+        from .web import create_server
+        with create_server(port=args.port, journal_path=Path(args.journal),
+                           knowledge_path=Path(args.db)) as server:
+            print(f"Agent Trading Room (REFERENCE ONLY) at http://127.0.0.1:{server.server_port}")
+            try:
+                server.serve_forever(poll_interval=0.25)
+            except KeyboardInterrupt:
+                pass
+        return
     print(json.dumps(output, indent=2))
 
 

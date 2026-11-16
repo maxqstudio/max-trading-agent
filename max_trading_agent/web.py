@@ -37,7 +37,14 @@ def create_server(host: str = "127.0.0.1", port: int = 8765,
         def _json(self, code: int, data: object) -> None:
             self._respond(code, json.dumps(data).encode("utf-8"), "application/json; charset=utf-8")
 
+        def _valid_host(self) -> bool:
+            hostname = self.headers.get("Host", "").split(":", 1)[0].lower()
+            return hostname in {"127.0.0.1", "localhost"}
+
         def do_GET(self) -> None:
+            if not self._valid_host():
+                self._json(403, {"error": "invalid_host"})
+                return
             url = urlsplit(self.path)
             assets = {"/": ("index.html", "text/html; charset=utf-8"),
                       "/app.js": ("app.js", "application/javascript; charset=utf-8"),
@@ -63,6 +70,9 @@ def create_server(host: str = "127.0.0.1", port: int = 8765,
             self._json(404, {"error": "not_found"})
 
         def do_POST(self) -> None:
+            if not self._valid_host():
+                self._json(403, {"error": "invalid_host"})
+                return
             if urlsplit(self.path).path != "/api/run":
                 self._json(404, {"error": "not_found"})
                 return
