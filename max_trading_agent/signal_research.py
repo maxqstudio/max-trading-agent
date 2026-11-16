@@ -4,7 +4,8 @@ from __future__ import annotations
 import hashlib
 import json
 import math
-from datetime import datetime, timezone
+import re
+from datetime import datetime, timezone, timedelta
 from typing import Any
 
 from .llm_client import LLMError, ROLE_INSTRUCTIONS
@@ -41,7 +42,7 @@ def market_context(snapshot: dict[str, Any]) -> dict[str, Any]:
         raise LLMError("INCOMPLETE_MARKET_SNAPSHOT")
     name = symbol.get("name")
     timeframe = snapshot.get("timeframe")
-    if not isinstance(name, str) or len(name) > 40 or (
+    if not isinstance(name, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.#-]{0,39}", name) or (
         timeframe not in {"M1", "M5", "M15", "M30", "H1", "H4", "D1"}
     ):
         raise LLMError("INVALID_MARKET_IDENTITY")
@@ -62,13 +63,18 @@ def market_context(snapshot: dict[str, Any]) -> dict[str, Any]:
         raise LLMError("INVALID_QUOTE")
 
     latest = candles[-min(40, len(candles)):]
+    seconds = {"M1": 60, "M5": 300, "M15": 900, "M30": 1800,
+               "H1": 3600, "H4": 14400, "D1": 86400}[timeframe]
     sanitized = []
+    previous_time = None
     for candle in latest:
         if not isinstance(candle, dict):
             raise LLMError("INVALID_CANDLE")
         timestamp = _parse_utc(candle.get("time_utc"))
-        if timestamp > captured:
-            raise LLMError("FUTURE_CANDLE")
+        if (timestamp + timedelta(seconds=seconds) > captured + timedelta(seconds=2)
+                or (previous_time is not None and timestamp <= previous_time)):
+            raise LLMError("UNFINISHED_OR_UNORDERED_CANDLE")
+        previous_time = timestamp
         values = {}
         for key in ("open", "high", "low", "close"):
             value = candle.get(key)

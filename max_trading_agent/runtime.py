@@ -66,7 +66,8 @@ class EventJournal:
     def start(self, task: str, *, mode: str = "REFERENCE_ONLY") -> str:
         # A real-terminal observation may only originate from the opt-in CLI.
         if not ((mode == "REFERENCE_ONLY" and task in ALLOWED_TASKS)
-                or (mode == "READ_ONLY" and task == "observe_mt5")):
+                or (mode == "READ_ONLY" and task == "observe_mt5")
+                or (mode == "SIGNAL" and task == "research_signal")):
             raise ValueError("Unsupported task or mode")
         run_id = uuid.uuid4().hex
         with self._db() as db:
