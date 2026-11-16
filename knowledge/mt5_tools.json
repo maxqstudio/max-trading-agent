@@ -1,0 +1,182 @@
+[
+  {
+    "id": "initialize",
+    "title": "initialize",
+    "summary": "Connect to the MT5 terminal; inspect connection errors on failure.",
+    "effect": "read_only",
+    "source_url": "https://www.mql5.com/en/docs/python_metatrader5/mt5initialize_py",
+    "tags": [
+      "mt5",
+      "python",
+      "read_only"
+    ]
+  },
+  {
+    "id": "terminal_info",
+    "title": "terminal_info",
+    "summary": "Read terminal connection and trading configuration.",
+    "effect": "read_only",
+    "source_url": "https://www.mql5.com/en/docs/python_metatrader5/mt5terminalinfo_py",
+    "tags": [
+      "mt5",
+      "python",
+      "read_only"
+    ]
+  },
+  {
+    "id": "account_info",
+    "title": "account_info",
+    "summary": "Read account mode, balance, equity, margin and trading permissions.",
+    "effect": "read_only",
+    "source_url": "https://www.mql5.com/en/docs/python_metatrader5/mt5accountinfo_py",
+    "tags": [
+      "mt5",
+      "python",
+      "read_only"
+    ]
+  },
+  {
+    "id": "symbol_select",
+    "title": "symbol_select",
+    "summary": "Make symbol available in Market Watch; no trade is placed.",
+    "effect": "local_mutation",
+    "source_url": "https://www.mql5.com/en/docs/python_metatrader5/mt5symbolselect_py",
+    "tags": [
+      "mt5",
+      "python",
+      "local_mutation"
+    ]
+  },
+  {
+    "id": "symbol_info",
+    "title": "symbol_info",
+    "summary": "Read broker symbol contract, volume, price, stops and execution constraints.",
+    "effect": "read_only",
+    "source_url": "https://www.mql5.com/en/docs/python_metatrader5/mt5symbolinfo_py",
+    "tags": [
+      "mt5",
+      "python",
+      "read_only"
+    ]
+  },
+  {
+    "id": "symbol_info_tick",
+    "title": "symbol_info_tick",
+    "summary": "Read timestamped current bid and ask; verify freshness.",
+    "effect": "read_only",
+    "source_url": "https://www.mql5.com/en/docs/python_metatrader5/mt5symbolinfotick_py",
+    "tags": [
+      "mt5",
+      "python",
+      "read_only"
+    ]
+  },
+  {
+    "id": "copy_rates_from_pos",
+    "title": "copy_rates_from_pos",
+    "summary": "Read available OHLCV candles; bar zero is unfinished.",
+    "effect": "read_only",
+    "source_url": "https://www.mql5.com/en/docs/python_metatrader5/mt5copyratesfrompos_py",
+    "tags": [
+      "mt5",
+      "python",
+      "read_only"
+    ]
+  },
+  {
+    "id": "positions_get",
+    "title": "positions_get",
+    "summary": "Read current open positions.",
+    "effect": "read_only",
+    "source_url": "https://www.mql5.com/en/docs/python_metatrader5/mt5positionsget_py",
+    "tags": [
+      "mt5",
+      "python",
+      "read_only"
+    ]
+  },
+  {
+    "id": "orders_get",
+    "title": "orders_get",
+    "summary": "Read current pending orders.",
+    "effect": "read_only",
+    "source_url": "https://www.mql5.com/en/docs/python_metatrader5/mt5ordersget_py",
+    "tags": [
+      "mt5",
+      "python",
+      "read_only"
+    ]
+  },
+  {
+    "id": "history_deals_get",
+    "title": "history_deals_get",
+    "summary": "Read executed historical deals.",
+    "effect": "read_only",
+    "source_url": "https://www.mql5.com/en/docs/python_metatrader5/mt5historydealsget_py",
+    "tags": [
+      "mt5",
+      "python",
+      "read_only"
+    ]
+  },
+  {
+    "id": "order_calc_margin",
+    "title": "order_calc_margin",
+    "summary": "Calculate estimated margin needed for an order.",
+    "effect": "calculation",
+    "source_url": "https://www.mql5.com/en/docs/python_metatrader5/mt5ordercalcmargin_py",
+    "tags": [
+      "mt5",
+      "python",
+      "calculation"
+    ]
+  },
+  {
+    "id": "order_calc_profit",
+    "title": "order_calc_profit",
+    "summary": "Calculate estimated profit/loss for price scenarios.",
+    "effect": "calculation",
+    "source_url": "https://www.mql5.com/en/docs/python_metatrader5/mt5ordercalcprofit_py",
+    "tags": [
+      "mt5",
+      "python",
+      "calculation"
+    ]
+  },
+  {
+    "id": "order_check",
+    "title": "order_check",
+    "summary": "Ask broker to validate order proposal; NOT a fill or execution.",
+    "effect": "broker_preflight",
+    "source_url": "https://www.mql5.com/en/docs/python_metatrader5/mt5ordercheck_py",
+    "tags": [
+      "mt5",
+      "python",
+      "broker_preflight"
+    ]
+  },
+  {
+    "id": "order_send",
+    "title": "order_send",
+    "summary": "Send an actual trade request; forbidden in M00.",
+    "effect": "trade_mutation",
+    "source_url": "https://www.mql5.com/en/docs/python_metatrader5/mt5ordersend_py",
+    "tags": [
+      "mt5",
+      "python",
+      "trade_mutation"
+    ]
+  },
+  {
+    "id": "last_error",
+    "title": "last_error",
+    "summary": "Read last Python MT5 integration error, distinct from trade server retcodes.",
+    "effect": "read_only",
+    "source_url": "https://www.mql5.com/en/docs/python_metatrader5/mt5lasterror_py",
+    "tags": [
+      "mt5",
+      "python",
+      "read_only"
+    ]
+  }
+]
