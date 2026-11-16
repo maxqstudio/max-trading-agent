@@ -1,0 +1,98 @@
+"""Loopback-only Agent Trading Room backed by actual stored reference events."""
+from __future__ import annotations
+
+import json
+import threading
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from urllib.parse import parse_qs, urlsplit
+
+from .runtime import ALLOWED_TASKS, DEFAULT_JOURNAL, DEFAULT_KNOWLEDGE, EventJournal, ReferenceMission
+
+UI_DIR = Path(__file__).resolve().parent.parent / "ui"
+
+
+def create_server(host: str = "127.0.0.1", port: int = 8765,
+                  journal_path: Path = DEFAULT_JOURNAL,
+                  knowledge_path: Path = DEFAULT_KNOWLEDGE) -> ThreadingHTTPServer:
+    if host not in {"127.0.0.1", "localhost"}:
+        raise ValueError("UI must bind to local loopback only in M00")
+    journal = EventJournal(journal_path)
+    mission = ReferenceMission(journal, knowledge_path)
+
+    class Handler(BaseHTTPRequestHandler):
+        def _respond(self, code: int, payload: bytes, content_type: str) -> None:
+            self.send_response(code)
+            self.send_header("Content-Type", content_type)
+            self.send_header("Content-Length", str(len(payload)))
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.send_header("Cache-Control", "no-store")
+            self.send_header("Content-Security-Policy",
+                             "default-src 'none'; script-src 'self'; style-src 'self'; "
+                             "connect-src 'self'; img-src 'self'; base-uri 'none'; "
+                             "form-action 'none'; frame-ancestors 'none'")
+            self.end_headers()
+            self.wfile.write(payload)
+
+        def _json(self, code: int, data: object) -> None:
+            self._respond(code, json.dumps(data).encode("utf-8"), "application/json; charset=utf-8")
+
+        def do_GET(self) -> None:
+            url = urlsplit(self.path)
+            assets = {"/": ("index.html", "text/html; charset=utf-8"),
+                      "/app.js": ("app.js", "application/javascript; charset=utf-8"),
+                      "/style.css": ("style.css", "text/css; charset=utf-8")}
+            if url.path in assets:
+                filename, mime = assets[url.path]
+                self._respond(200, (UI_DIR / filename).read_bytes(), mime)
+                return
+            if url.path == "/api/runs":
+                self._json(200, {"runs": journal.runs()})
+                return
+            if url.path == "/api/events":
+                q = parse_qs(url.query)
+                run_id = q.get("run_id", [""])[0]
+                try:
+                    after = int(q.get("after", ["0"])[0])
+                    rows = journal.events(run_id, after)
+                except (ValueError, OverflowError):
+                    self._json(400, {"error": "invalid_cursor"})
+                    return
+                self._json(200, {"events": rows})
+                return
+            self._json(404, {"error": "not_found"})
+
+        def do_POST(self) -> None:
+            if urlsplit(self.path).path != "/api/run":
+                self._json(404, {"error": "not_found"})
+                return
+            # JSON requests are not cross-origin simple requests; reject an explicit foreign Origin.
+            origin = self.headers.get("Origin")
+            allowed_origins = {f"http://{self.headers.get('Host', '')}"}
+            if origin and origin not in allowed_origins:
+                self._json(403, {"error": "cross_origin_forbidden"})
+                return
+            if self.headers.get("Content-Type", "").split(";")[0].strip() != "application/json":
+                self._json(415, {"error": "json_required"})
+                return
+            try:
+                length = int(self.headers.get("Content-Length", "0"))
+                if length <= 0 or length > 4096:
+                    raise ValueError("Invalid content length")
+                data = json.loads(self.rfile.read(length))
+                task = data["task"]
+                if not isinstance(task, str) or task not in ALLOWED_TASKS:
+                    raise ValueError("Unknown task")
+            except (ValueError, KeyError, TypeError, json.JSONDecodeError):
+                self._json(400, {"error": "invalid_task"})
+                return
+            run_id = journal.start(task)
+            threading.Thread(target=mission.execute, args=(run_id, task),
+                             daemon=True, name=f"reference-mission-{run_id[:8]}").start()
+            self._json(202, {"run_id": run_id, "mode": "REFERENCE_ONLY", "execution": "DISABLED"})
+
+        def log_message(self, format: str, *args: object) -> None:
+            # Do not write raw client inputs or query strings to disk.
+            pass
+
+    return ThreadingHTTPServer((host, port), Handler)

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Max Trading Agent — Trading Room</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon">M</div>
+    <div><strong>MAX TRADING AGENT</strong><small>Autonomous Trading Room</small></div>
+  </div>
+  <div class="top-status"><span class="tag warning">REFERENCE ONLY</span><span>MT5: Disconnected</span><span>LLM: Not configured</span><span class="tag danger">Trading disabled</span></div>
+</header>
+<div class="notice">M00/A00 development build. Events below reflect real knowledge-index and planner operations; all broker analysis is blocked. No orders, live prices, backtests or LLM invocations are simulated as real.</div>
+<main class="workspace">
+  <aside class="panel teams">
+    <div class="panel-title"><h2>TEAM PROGRESS</h2><span id="run-status" class="tag">IDLE</span></div>
+    <label for="mission-task">Run a reference mission</label>
+    <div class="controls">
+      <select id="mission-task">
+        <option value="analyze_symbol">Analyze symbol</option>
+        <option value="prepare_entry">Plan entry prerequisites</option>
+        <option value="inspect_positions">Inspect position requirements</option>
+        <option value="diagnose_connection">Diagnose connection requirements</option>
+      </select>
+      <button id="run-btn" type="button">Run</button>
+    </div>
+    <p class="muted">Research-only: this button cannot place trades.</p>
+    <div class="panel-title compact"><h2>ACTIVE ROLES</h2></div>
+    <div id="roles" aria-live="polite"><p class="muted">Select a mission to populate roles.</p></div>
+    <div class="panel-title compact"><h2>RECENT MISSIONS</h2></div>
+    <div id="runs" class="run-list"><p class="muted">No recorded missions yet.</p></div>
+  </aside>
+  <section class="panel workstream">
+    <div class="panel-title"><h2>MESSAGES & TOOL CALLS</h2><span id="stream-count" class="muted">0 events</span></div>
+    <div class="tabs" aria-label="Event filter">
+      <button type="button" class="tab active" data-filter="ALL">All</button>
+      <button type="button" class="tab" data-filter="TOOL">Tools</button>
+      <button type="button" class="tab" data-filter="DECISION">Decision</button>
+      <button type="button" class="tab" data-filter="BLOCKED">Blocked</button>
+    </div>
+    <div id="stream" class="stream" role="log" aria-live="polite"><p class="muted empty">Choose Run to see actual recorded work.</p></div>
+  </section>
+  <section class="panel inspector">
+    <div class="panel-title"><h2>CURRENT REPORT & EVIDENCE</h2></div>
+    <h3 id="inspector-title">No event selected</h3>
+    <p id="inspector-message" class="muted">Choose an event in the workstream. Its tool output and evidence will appear here.</p>
+    <div class="panel-title compact"><h2>STRUCTURED EVENT EVIDENCE</h2></div>
+    <pre id="inspector-json">No recorded data.</pre>
+    <div class="panel-title compact"><h2>FINAL DECISION</h2></div>
+    <p id="final-decision" class="decision">NONE — awaiting a mission</p>
+    <p class="muted">A report is not a trading permission. A reference-only run always remains non-executable.</p>
+  </section>
+</main>
+<footer>Max Trading Agent · Event-backed UI prototype · Local loopback only · No live trading capability</footer>
+</body>
+</html>
