@@ -51,3 +51,13 @@ python -m max_trading_agent serve
 Open http://127.0.0.1:8765 and run a reference mission. The web server binds to loopback only. It indexes and searches curated MT5 API knowledge, plans required MT5 reads (but **does not call them**), records exact missing evidence and emits NO_TRADE. This is a genuine local tool-index and journal integration, **not** a connected LLM, MT5 broker, live quote stream, backtest, actual role debate, or trading engine. No executable order path exists.
 
 Only **GitHub Actions CI** is used for acceptance; it tests offline Python, HTTP and JS syntax. Real MT5/LLM integrations require separate stages and evidence.
+
+## M01 — Opt-in real MT5 read-only snapshot (candidate)
+
+The connector uses an already configured **local MetaTrader 5 terminal** and never sends an order or changes terminal account credentials. The actual terminal workflow is **not** tested on GitHub runners.
+
+```sh
+python -m max_trading_agent mt5-probe --symbol EURUSD --timeframe M15 --bars 100
+```
+
+The command requires the MetaTrader5 Python package and working terminal on an authorized computer, and reads snapshot data only. Output includes **private balances and open position details; do not post raw output publicly**. Missing data/stale quote means a failed probe, not a trade. See [M01_READONLY.md](docs/M01_READONLY.md) and [Issue #13](https://github.com/maxqstudio/max-trading-agent/issues/13).

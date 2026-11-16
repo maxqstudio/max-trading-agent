@@ -1,6 +1,6 @@
 """Fake-MT5 contract tests. No native package, broker, account or credentials."""
-import copy
 import unittest
+from unittest.mock import patch
 from types import SimpleNamespace as NS
 
 from max_trading_agent.mt5_readonly import MT5ReadError, ReadOnlyMT5
@@ -178,10 +178,17 @@ class ReadOnlyMT5Tests(unittest.TestCase):
         self.assertEqual(self.fake.calls, [])
 
     def test_unknown_timeframe_from_api(self):
-        del self.fake.TIMEFRAME_M15  # class attribute remains, so override explicitly
         self.fake.TIMEFRAME_M15 = None
         self.assert_code("TIMEFRAME_NOT_SUPPORTED_BY_API",
                          lambda: self.reader.capture("EURUSD", bars=2))
+
+    def test_missing_installed_mt5_package_safe_error(self):
+        with patch("max_trading_agent.mt5_readonly.importlib.import_module",
+                   side_effect=ImportError("private machine path")):
+            with self.assertRaises(MT5ReadError) as caught:
+                ReadOnlyMT5.from_local_terminal()
+        self.assertEqual(caught.exception.code, "MT5_PYTHON_PACKAGE_UNAVAILABLE")
+        self.assertNotIn("machine path", str(caught.exception))
 
     def test_missing_positions_is_distinct_from_empty(self):
         self.fake.positions_get = lambda **kwargs: None
