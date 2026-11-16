@@ -24,3 +24,17 @@ A Python standard-library SQLite FTS5 index of curated, attributed MT5 API descr
 - [Official order handling](https://www.mql5.com/en/docs/python_metatrader5/mt5ordersend_py)
 
 **Trading carries substantial loss risk. Nothing in this repository is evidence of profitability.**
+
+## M00 working branch quickstart
+
+Python 3.12+ and the Python standard library suffice for this *reference-only* foundation.
+
+```bash
+python -m max_trading_agent validate
+python -m max_trading_agent index
+python -m max_trading_agent search "bid ask"
+python -m max_trading_agent plan prepare_entry
+python -m unittest discover -s tests -v
+```
+
+All plans have `execution: DISABLED`. The KB does **not** connect to MT5, fetch live data, or submit orders. The broad strategy RAG, LLM tool factory, shadow trading and RL are specified in [Issues #1–#10](https://github.com/maxqstudio/max-trading-agent/issues).
