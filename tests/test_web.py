@@ -42,6 +42,16 @@ class WebTests(unittest.TestCase):
             self.assertIn(marker, data)
             self.assertIn("frame-ancestors 'none'", headers["Content-Security-Policy"])
 
+    def test_research_roles_and_report_inspector_exist_in_ui(self):
+        status, html, _ = self.call("GET", "/")
+        self.assertEqual(status, 200)
+        self.assertIn(b'id="report-body"', html)
+        status, javascript, _ = self.call("GET", "/app.js")
+        self.assertEqual(status, 200)
+        for name in (b"Bull Researcher", b"Bear Researcher", b"Research Manager",
+                     b"RAG", b"ROLE_STARTED"):
+            self.assertIn(name, javascript)
+
     def test_reference_mission_is_accessible_by_event_cursor(self):
         status, data, _ = self.call(
             "POST", "/api/run", json.dumps({"task": "analyze_symbol"}),

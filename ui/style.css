@@ -48,3 +48,7 @@ button:disabled { cursor:not-allowed; opacity:.5 }
 footer { text-align:center; padding:12px; color:var(--muted); font-size:11px; border-top:1px solid var(--border) }
 @media(max-width:1100px) {.workspace { grid-template-columns:220px minmax(360px,1fr) }.inspector { grid-column:1/-1; min-height:230px } .stream { max-height:600px } }
 @media(max-width:700px) {.topbar { align-items:flex-start; flex-direction:column }.workspace { grid-template-columns:1fr }.panel { min-height:200px }.stream { max-height:420px }.inspector { grid-column:1 } }
+
+.team-heading { margin:15px 0 8px; color:var(--accent); font-size:10px; font-weight:700; letter-spacing:.11em }
+.report-body { white-space:pre-wrap; overflow-wrap:anywhere; color:#dfecf6; font-size:12px; line-height:1.65; max-height:34vh; overflow:auto; margin-top:10px }
+.report-body:empty { display:none }

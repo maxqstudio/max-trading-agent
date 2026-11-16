@@ -1,8 +1,13 @@
 "use strict";
 const $ = (id) => document.getElementById(id);
 const state = { runId: null, after: 0, events: [], filter: "ALL", selected: null, busy: false };
-const names = ["Supervisor", "MT5 Specialist", "RAG Curator", "Market Analyst",
-               "Bull / Bear Researchers", "Evidence Lab", "Independent Policy Guard"];
+const teams = [
+  {name: "SUPERVISOR", roles: ["Supervisor"]},
+  {name: "MARKET INTELLIGENCE", roles: ["MT5 Specialist", "Market Analyst"]},
+  {name: "RESEARCH & DEBATE", roles: ["Bull Researcher", "Bear Researcher", "Research Manager", "Bull / Bear Researchers"]},
+  {name: "KNOWLEDGE", roles: ["RAG Curator"]},
+  {name: "EVIDENCE & RISK", roles: ["Evidence Lab", "Independent Policy Guard"]}
+];
 
 function node(tag, className, value) {
   const element = document.createElement(tag);
@@ -19,19 +24,24 @@ async function requestJson(url, options) {
 
 function renderRoles() {
   $("roles").replaceChildren();
-  for (const name of names) {
-    const last = [...state.events].reverse().find((x) => x.role === name);
-    const row = node("div", "role");
-    const label = node("div");
-    label.append(node("strong", "", name), node("span", "", last ? last.event_type : "NOT_INVOKED"));
-    row.append(label, node("span", "state", last ? last.status : "WAITING"));
-    $("roles").append(row);
+  for (const team of teams) {
+    $("roles").append(node("div", "team-heading", team.name));
+    for (const name of team.roles) {
+      const events = state.events.filter((x) => x.role === name);
+      const last = events.length ? events[events.length - 1] : null;
+      const row = node("div", "role");
+      const label = node("div");
+      label.append(node("strong", "", name), node("span", "", last ? last.event_type : "NOT_INVOKED"));
+      const roleState = last ? (last.event_type === "ROLE_STARTED" ? "RUNNING" : last.status) : "NOT INVOKED";
+      row.append(label, node("span", "state", roleState));
+      $("roles").append(row);
+    }
   }
 }
 
 function matchesFilter(event) {
   if (state.filter === "ALL") return true;
-  if (state.filter === "TOOL") return event.event_type.includes("TOOL") || event.event_type.includes("KNOWLEDGE");
+  if (state.filter === "TOOL") return event.event_type.includes("TOOL") || event.event_type.includes("KNOWLEDGE") || event.event_type.includes("RAG");
   if (state.filter === "DECISION") return event.event_type === "DECISION" || event.event_type === "REPORT_READY";
   return event.status === "BLOCKED" || event.status === "FAILED";
 }
@@ -40,6 +50,7 @@ function showEvent(event) {
   state.selected = event.event_id;
   $("inspector-title").textContent = event.role + " · " + event.event_type;
   $("inspector-message").textContent = event.message;
+  $("report-body").textContent = typeof event.details?.report === "string" ? event.details.report : "";
   $("inspector-json").textContent = JSON.stringify({
     event_id: event.event_id,
     occurred_at: event.occurred_at,
@@ -78,12 +89,15 @@ async function loadRuns() {
   if (!data.runs.length) $("runs").append(node("p", "muted", "No missions recorded yet."));
   for (const run of data.runs) {
     const item = node("button", "run-entry" + (state.runId === run.run_id ? " active" : ""));
-    item.append(node("strong", "", run.task), node("small", "", run.status + " · " + run.run_id.slice(0, 8)));
+    item.append(node("strong", "", run.task), node("small", "", run.mode + " · " + run.status + " · " + run.run_id.slice(0, 8)));
     item.addEventListener("click", () => selectRun(run.run_id));
     $("runs").append(item);
   }
   const current = data.runs.find((x) => x.run_id === state.runId);
   $("run-status").textContent = current ? current.status : "IDLE";
+  $("active-mode").textContent = "MODE: " + (current?.mode || "REFERENCE");
+  const invoked = state.events.some((e) => e.event_type === "ROLE_STARTED");
+  $("llm-status").textContent = invoked ? "LLM: role invocations recorded" : "LLM: not invoked in this run";
 }
 
 async function selectRun(runId) {
@@ -93,6 +107,7 @@ async function selectRun(runId) {
   state.selected = null;
   $("inspector-title").textContent = "Select an event";
   $("inspector-message").textContent = "Inspect a recorded tool call or decision.";
+  $("report-body").textContent = "";
   $("inspector-json").textContent = "No event selected.";
   await loadEvents();
   await loadRuns();
