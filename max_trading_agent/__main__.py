@@ -42,12 +42,14 @@ def main() -> None:
     elif args.command == "mt5-probe":
         # Import occurs only after this command; GitHub Actions needs no MT5 package.
         from .mt5_readonly import MT5ReadError, ReadOnlyMT5
+        from .probe import ProbeMission
         if not args.symbol:
             parser.error("mt5-probe requires --symbol (e.g., EURUSD)")
         try:
-            output = ReadOnlyMT5.from_local_terminal().capture(
-                args.symbol, timeframe=args.timeframe, bars=args.bars
-            )
+            run_id, output = ProbeMission(
+                EventJournal(Path(args.journal)), ReadOnlyMT5.from_local_terminal()
+            ).execute(args.symbol, timeframe=args.timeframe, bars=args.bars)
+            output["journal_run_id"] = run_id
         except MT5ReadError as exc:
             print(json.dumps({"ok": False, "read_only": True, "error": exc.as_dict()}),
                   file=sys.stderr)

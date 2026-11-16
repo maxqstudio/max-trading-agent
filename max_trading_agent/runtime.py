@@ -63,14 +63,16 @@ class EventJournal:
         finally:
             connection.close()
 
-    def start(self, task: str) -> str:
-        if task not in ALLOWED_TASKS:
-            raise ValueError("Unsupported task")
+    def start(self, task: str, *, mode: str = "REFERENCE_ONLY") -> str:
+        # A real-terminal observation may only originate from the opt-in CLI.
+        if not ((mode == "REFERENCE_ONLY" and task in ALLOWED_TASKS)
+                or (mode == "READ_ONLY" and task == "observe_mt5")):
+            raise ValueError("Unsupported task or mode")
         run_id = uuid.uuid4().hex
         with self._db() as db:
             db.execute(
                 "INSERT INTO runs (run_id, task, mode, status, created_at) VALUES (?, ?, ?, ?, ?)",
-                (run_id, task, "REFERENCE_ONLY", "RUNNING", _utc_now()),
+                (run_id, task, mode, "RUNNING", _utc_now()),
             )
         return run_id
 

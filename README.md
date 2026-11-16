@@ -61,3 +61,5 @@ python -m max_trading_agent mt5-probe --symbol EURUSD --timeframe M15 --bars 100
 ```
 
 The command requires the MetaTrader5 Python package and working terminal on an authorized computer, and reads snapshot data only. Output includes **private balances and open position details; do not post raw output publicly**. Missing data/stale quote means a failed probe, not a trade. See [M01_READONLY.md](docs/M01_READONLY.md) and [Issue #13](https://github.com/maxqstudio/max-trading-agent/issues/13).
+
+The `mt5-probe` command also records a **redacted READ_ONLY mission** into the local event journal, which the Trading Room can display after the command. Account balances, broker login/server and private position details are excluded from the journal. The full CLI response remains private and should not be uploaded.
