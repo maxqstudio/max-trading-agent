@@ -60,10 +60,16 @@ class SignalResearchTests(unittest.TestCase):
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
         self.journal = EventJournal(Path(tmp.name) / "events.sqlite3")
+        self.kb = Path(tmp.name) / "knowledge.sqlite3"
+
+    def run_research(self, client, snapshot=None):
+        return SignalResearch(self.journal, client, knowledge_db=self.kb).execute(
+            snapshot if snapshot is not None else example_snapshot()
+        )
 
     def test_four_real_role_invocations_and_no_trade(self):
         client = FakeRoleClient()
-        run_id = SignalResearch(self.journal, client).execute(example_snapshot())
+        run_id = self.run_research(client)
         events = self.journal.events(run_id)
         self.assertEqual([role for role, _ in client.calls], list(ROLE_SEQUENCE))
         self.assertEqual(len([e for e in events if e["event_type"] == "ROLE_REPORT"]), 4)
@@ -72,9 +78,21 @@ class SignalResearchTests(unittest.TestCase):
         self.assertEqual(self.journal.runs()[0]["mode"], "SIGNAL")
         self.assertEqual(self.journal.runs()[0]["status"], "COMPLETED")
 
+    def test_mt5_rag_is_real_and_not_backtest_evidence(self):
+        client = FakeRoleClient()
+        run_id = self.run_research(client)
+        events = self.journal.events(run_id)
+        retrieved = next(e for e in events if e["event_type"] == "RAG_RETRIEVAL")
+        self.assertGreater(retrieved["details"]["documents_indexed"], 0)
+        self.assertGreater(len(retrieved["details"]["references"]), 0)
+        self.assertEqual(retrieved["details"]["strategy_backtest_evidence"], 0)
+        prompt = client.calls[0][1]
+        self.assertIn("mt5_tool_references", prompt)
+        self.assertIn("mql5.com", prompt)
+
     def test_account_and_secrets_never_enter_prompt_or_journal(self):
         client = FakeRoleClient()
-        run_id = SignalResearch(self.journal, client).execute(example_snapshot())
+        run_id = self.run_research(client)
         payload = json.dumps(self.journal.events(run_id)) + "".join(p for _, p in client.calls)
         for secret in ("PRIVATE_BROKER_SERVER", "987654321", "123456789",
                        "PRIVATE_API_TOKEN"):
@@ -82,7 +100,7 @@ class SignalResearchTests(unittest.TestCase):
 
     def test_model_instruction_cannot_authorize_order(self):
         client = FakeRoleClient(injected=True)
-        run_id = SignalResearch(self.journal, client).execute(example_snapshot())
+        run_id = self.run_research(client)
         decision = next(e for e in self.journal.events(run_id)
                         if e["event_type"] == "DECISION")
         self.assertEqual(decision["details"]["action"], "NO_TRADE")
@@ -91,7 +109,7 @@ class SignalResearchTests(unittest.TestCase):
     def test_provider_failure_is_logged_without_raw_error(self):
         client = FakeRoleClient(fail_on="Bear Researcher")
         with self.assertRaises(LLMError):
-            SignalResearch(self.journal, client).execute(example_snapshot())
+            self.run_research(client)
         run = self.journal.runs()[0]
         self.assertEqual(run["status"], "FAILED")
         events = self.journal.events(run["run_id"])
@@ -104,7 +122,7 @@ class SignalResearchTests(unittest.TestCase):
                                       timedelta(hours=5)).isoformat()
         client = FakeRoleClient()
         with self.assertRaises(LLMError):
-            SignalResearch(self.journal, client).execute(snapshot)
+            self.run_research(client, snapshot)
         self.assertEqual(client.calls, [])
 
     def test_unfinished_and_unordered_candle_rejected(self):

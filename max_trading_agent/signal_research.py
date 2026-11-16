@@ -6,10 +6,12 @@ import json
 import math
 import re
 from datetime import datetime, timezone, timedelta
+from pathlib import Path
 from typing import Any
 
+from .core import build_index, search
 from .llm_client import LLMError, ROLE_INSTRUCTIONS
-from .runtime import EventJournal
+from .runtime import DEFAULT_KNOWLEDGE, EventJournal
 
 ROLE_SEQUENCE = ("Market Analyst", "Bull Researcher", "Bear Researcher", "Research Manager")
 
@@ -104,9 +106,11 @@ def market_context(snapshot: dict[str, Any]) -> dict[str, Any]:
 class SignalResearch:
     """Multi-role LLM opinions, never order submissions or validated signals."""
 
-    def __init__(self, journal: EventJournal, client: Any):
+    def __init__(self, journal: EventJournal, client: Any,
+                 knowledge_db: Path = DEFAULT_KNOWLEDGE):
         self.journal = journal
         self.client = client
+        self.knowledge_db = Path(knowledge_db)
 
     def execute(self, snapshot: dict[str, Any]) -> str:
         run_id = self.journal.start("research_signal", mode="SIGNAL")
@@ -119,6 +123,22 @@ class SignalResearch:
                  "timeframe": public["timeframe"], "candle_count": len(public["completed_candles"]),
                  "source": "DECLARED_MT5_LOCAL_TERMINAL", "execution": "DISABLED"},
             )
+            # The grounded knowledge here concerns MT5 API operations only.
+            # No strategy cards or performance evidence are silently invented.
+            count = build_index(self.knowledge_db)
+            refs = search(self.knowledge_db, "symbol_info_tick copy_rates_from_pos terminal_info",
+                          limit=6)
+            if not refs:
+                raise LLMError("KNOWLEDGE_UNAVAILABLE")
+            self.journal.append(
+                run_id, "RAG Curator", "RAG_RETRIEVAL", "PASS",
+                "Retrieved versioned MT5 tool references; strategy edge remains UNKNOWN.",
+                {"tools_executed": ["build_index", "search"],
+                 "documents_indexed": count,
+                 "references": refs,
+                 "strategy_backtest_evidence": 0},
+            )
+
             reports = {}
             for role in ROLE_SEQUENCE:
                 self.journal.append(
@@ -130,6 +150,7 @@ class SignalResearch:
                 context = {
                     "instructions": ROLE_INSTRUCTIONS[role],
                     "market": public,
+                    "mt5_tool_references": refs,
                     "previous_reports": reports,
                     "validated_strategy_experiments": [],
                     "execution": "DISABLED",
