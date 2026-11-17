@@ -24,3 +24,30 @@ A Python standard-library SQLite FTS5 index of curated, attributed MT5 API descr
 - [Official order handling](https://www.mql5.com/en/docs/python_metatrader5/mt5ordersend_py)
 
 **Trading carries substantial loss risk. Nothing in this repository is evidence of profitability.**
+
+## M00 working branch quickstart
+
+Python 3.12+ and the Python standard library suffice for this *reference-only* foundation.
+
+```bash
+python -m max_trading_agent validate
+python -m max_trading_agent index
+python -m max_trading_agent search "bid ask"
+python -m max_trading_agent plan prepare_entry
+python -m unittest discover -s tests -v
+```
+
+All plans have `execution: DISABLED`. The KB does **not** connect to MT5, fetch live data, or submit orders. The broad strategy RAG, LLM tool factory, shadow trading and RL are specified in [Issues #1–#10](https://github.com/maxqstudio/max-trading-agent/issues).
+
+## A00 Agent Trading Room — read-only runtime prototype
+
+The browser workspace draws **Team Progress / Messages & Tool Calls / Current Report & Evidence** from persisted event records, inspired by [TradingAgents](https://github.com/TauricResearch/TradingAgents) but not copied from its code.
+
+```bash
+python -m max_trading_agent run analyze_symbol
+python -m max_trading_agent serve
+```
+
+Open http://127.0.0.1:8765 and run a reference mission. The web server binds to loopback only. It indexes and searches curated MT5 API knowledge, plans required MT5 reads (but **does not call them**), records exact missing evidence and emits NO_TRADE. This is a genuine local tool-index and journal integration, **not** a connected LLM, MT5 broker, live quote stream, backtest, actual role debate, or trading engine. No executable order path exists.
+
+Only **GitHub Actions CI** is used for acceptance; it tests offline Python, HTTP and JS syntax. Real MT5/LLM integrations require separate stages and evidence.
