@@ -318,7 +318,8 @@ class MarketWatcher:
                 ),
                 "Observed completed MT5 candles; state and trigger checked.",
                 {"symbol": self.symbol, "timeframe": self.timeframe, **observation,
-                 "source": "READ_ONLY_SNAPSHOT", "broker_execution": False},
+                 "source": "READ_ONLY_SNAPSHOT", "local_hmac_verified": True,
+                 "broker_execution": False},
             )
 
         if status == "NEW_COMPLETED_CANDLE":

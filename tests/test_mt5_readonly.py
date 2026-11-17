@@ -147,6 +147,21 @@ class ReadOnlyMT5Tests(unittest.TestCase):
         self.fake.trade_mode = 9
         self.assertEqual(self.reader.capture("XAUUSD", bars=2)["account"]["trade_mode"], "UNKNOWN")
 
+    def test_account_changes_mid_capture_even_with_same_trade_mode(self):
+        original = self.fake.account_info
+        calls = [0]
+        def swapped_account():
+            calls[0] += 1
+            if calls[0] == 2:
+                self.fake.account_login = 99999999
+            return original()
+        self.fake.account_info = swapped_account
+        adapter = ReadOnlyMT5(self.fake, clock=lambda: NOW,
+                              identity_key=bytes(range(32)))
+        self.assert_code("ACCOUNT_CHANGED_DURING_CAPTURE",
+                         lambda: adapter.capture("EURUSD", bars=2))
+        self.assertEqual(self.fake.calls[-1], ("shutdown",))
+
     def test_initialize_failure_redacts_private_error(self):
         self.fake.init_ok = False
         with self.assertRaises(MT5ReadError) as error:

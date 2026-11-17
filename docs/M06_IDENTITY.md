@@ -12,3 +12,5 @@ Important limits:
 - The program does not verify OS-level broker terminal identity/Windows user profile or remote market attestation; those require real owner terminal acceptance.
 - This does not add any order capabilities; market monitoring remains READ_ONLY and all research NO_TRADE.
 - GitHub Actions runs synthetic data/provider tests on GitHub-hosted Linux and Windows, not the owner's local CI.
+
+The adapter additionally re-reads `account_info()` after the final OHLC/position/order acquisition. If login, server or trade mode changed within the capture, the snapshot is rejected with `ACCOUNT_CHANGED_DURING_CAPTURE`. This narrows but does **not** eliminate all theoretical race conditions in local terminal software; real broker acceptance remains separate.

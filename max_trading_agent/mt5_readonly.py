@@ -197,6 +197,14 @@ class ReadOnlyMT5:
             positions = self._require(self._api.positions_get(symbol=symbol), "POSITIONS_UNAVAILABLE")
             orders = self._require(self._api.orders_get(symbol=symbol), "ORDERS_UNAVAILABLE")
             account_trade_mode = _number(_field(account, "trade_mode"), "trade_mode")
+            # Account switching between the beginning and end of the read
+            # must NEVER stamp observations with the wrong account identity.
+            final_account = self._require(
+                self._api.account_info(), "ACCOUNT_UNAVAILABLE"
+            )
+            if any(_field(account, key) != _field(final_account, key)
+                   for key in ("login", "server", "trade_mode")):
+                raise MT5ReadError("ACCOUNT_CHANGED_DURING_CAPTURE")
             # Explicit allowlists prevent leaking login, server, name and paths.
             result = {
                 "source": "MT5_LOCAL_TERMINAL",
