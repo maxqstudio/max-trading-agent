@@ -158,10 +158,25 @@
       "pr": 74,
       "branch": "feat/g31-postmerge-main-preflight",
       "head_sha": "d0d9630e015855a6b7f9eef5b5e97610128006a8"
+    },
+    {
+      "pr": 76,
+      "branch": "feat/g32-main-integration-completeness",
+      "head_sha": "b3fa9ea473f33e3b52b75645d8b1027d3c1ad064"
+    },
+    {
+      "pr": 78,
+      "branch": "feat/g33-workflow-supply-chain",
+      "head_sha": "cf9155a572ff9293acdfa72883af5e98c179c569"
+    },
+    {
+      "pr": 80,
+      "branch": "feat/g34-docker-runtime-digest",
+      "head_sha": "f5e8bd68391aea823425e32d584716b24af66b4a"
     }
   ],
-  "self_pr": 76,
-  "self_branch": "feat/g32-main-integration-completeness",
+  "self_pr": 82,
+  "self_branch": "feat/g35-full-stack-release-gates",
   "owner_acceptance": "PENDING",
   "decision": "NO_TRADE",
   "execution": "DISABLED"
