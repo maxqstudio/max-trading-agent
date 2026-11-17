@@ -289,6 +289,43 @@ class WatcherTests(unittest.TestCase):
         again.start()
         again.stop()
 
+    def test_fatal_watch_failure_is_failed_not_completed_and_no_secret_leak(self):
+        watcher, _ = self.make([RuntimeError("PRIVATE_BROKER secret credential")])
+        with self.assertRaisesRegex(WatchError, "WATCH_INTERNAL_ERROR"):
+            watcher.run(interval_seconds=5, max_polls=1, sleep=lambda _: None)
+        runs = self.journal.runs()
+        self.assertEqual(runs[0]["status"], "FAILED")
+        self.assertIsNone(watcher.run_id)
+        events = self.journal.events(runs[0]["run_id"])
+        self.assertIn("WATCH_FATAL", [e["event_type"] for e in events])
+        self.assertEqual(events[-1]["event_type"], "WATCH_ABORTED")
+        self.assertNotIn("PRIVATE_BROKER", json.dumps(events))
+
+    def test_new_candle_explicitly_persists_independent_no_trade_veto(self):
+        watcher, _ = self.make([fixture(self.first_bar), fixture(self.next_bar)])
+        run_id = watcher.start()
+        try:
+            watcher.poll_once()
+            watcher.poll_once()
+            decisions = [e for e in self.journal.events(run_id)
+                         if e["role"] == "Independent Policy Guard"]
+            self.assertEqual(len(decisions), 1)
+            self.assertEqual(decisions[0]["details"]["action"], "NO_TRADE")
+            self.assertFalse(decisions[0]["details"]["order_send_called"])
+        finally:
+            watcher.stop()
+
+    def test_lease_loss_halts_watcher_failed(self):
+        watcher, _ = self.make([fixture(self.first_bar)])
+        run_id = watcher.start()
+        watcher.store.release("EURUSD", "M1", watcher.owner)
+        try:
+            with self.assertRaisesRegex(WatchError, "WATCH_LEASE_LOST"):
+                watcher.poll_once()
+        finally:
+            watcher.stop(failed=True)
+        self.assertEqual(self.journal.runs()[0]["status"], "FAILED")
+
     def test_invalid_budgets_rejected_before_mt5_call(self):
         watcher, api = self.make([fixture(self.first_bar)])
         with self.assertRaises(WatchError):

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import sqlite3
 import time
 import uuid
@@ -222,8 +223,10 @@ class MarketWatcher:
     def start(self) -> str:
         if self.run_id is not None:
             raise WatchError("WATCH_ALREADY_STARTED")
-        self.store.acquire(self.symbol, self.timeframe, self.owner,
-                           now=float(self.clock()))
+        now = float(self.clock())
+        if not math.isfinite(now):
+            raise WatchError("INVALID_WATCH_CLOCK")
+        self.store.acquire(self.symbol, self.timeframe, self.owner, now=now)
         try:
             self.run_id = self.journal.start("monitor_market", mode="READ_ONLY")
             self.journal.append(
@@ -241,7 +244,10 @@ class MarketWatcher:
     def poll_once(self) -> dict:
         if self.run_id is None:
             raise WatchError("WATCH_NOT_STARTED")
-        self.store.renew(self.symbol, self.timeframe, self.owner, now=float(self.clock()))
+        now = float(self.clock())
+        if not math.isfinite(now):
+            raise WatchError("INVALID_WATCH_CLOCK")
+        self.store.renew(self.symbol, self.timeframe, self.owner, now=now)
         self.poll_count += 1
         try:
             snapshot = self.adapter.capture(
@@ -271,6 +277,14 @@ class MarketWatcher:
                  "execution": "DISABLED"},
             )
             return {"status": "BLOCKED", "reason": code}
+        except Exception as exc:
+            # Unanticipated bridge/data errors must not expose broker paths.
+            self.journal.append(
+                self.run_id, "Market Watcher", "WATCH_FATAL", "FAILED",
+                "Unrecoverable watcher error. Read-only execution is halted.",
+                {"error_class": type(exc).__name__, "execution": "DISABLED"},
+            )
+            raise WatchError("WATCH_INTERNAL_ERROR") from None
 
         status = observation["status"]
         if status != "UNCHANGED" or self.poll_count % 5 == 0:
@@ -284,6 +298,13 @@ class MarketWatcher:
                  "source": "READ_ONLY_SNAPSHOT", "broker_execution": False},
             )
 
+        if status == "NEW_COMPLETED_CANDLE":
+            self.journal.append(
+                self.run_id, "Independent Policy Guard", "DECISION", "BLOCKED",
+                "NO_TRADE: a read-only candle trigger cannot authorize execution.",
+                {"action": "NO_TRADE", "vetoes": ["WATCH_READ_ONLY"],
+                 "order_send_called": False},
+            )
         if status == "NEW_COMPLETED_CANDLE" and self.client is not None:
             if not self.store.claim(observation["job_id"], public["snapshot_hash"]):
                 return {**observation, "status": "RESEARCH_NOT_CLAIMED"}
@@ -310,17 +331,19 @@ class MarketWatcher:
                 return {**observation, "status": "RESEARCH_FAILED", "reason": code}
         return observation
 
-    def stop(self) -> None:
+    def stop(self, *, failed: bool = False) -> None:
         if self.run_id is None:
             return
         try:
             self.journal.append(
-                self.run_id, "Supervisor", "WATCH_STOPPED", "INFO",
-                "Read-only observer stopped; no live broker mutation occurred.",
+                self.run_id, "Supervisor",
+                "WATCH_ABORTED" if failed else "WATCH_STOPPED",
+                "FAILED" if failed else "INFO",
+                "Read-only observer terminated; no live broker mutation occurred.",
                 {"symbol": self.symbol, "timeframe": self.timeframe,
                  "execution": "DISABLED"},
             )
-            self.journal.finish(self.run_id, "COMPLETED")
+            self.journal.finish(self.run_id, "FAILED" if failed else "COMPLETED")
         finally:
             self.store.release(self.symbol, self.timeframe, self.owner)
             self.run_id = None
@@ -337,7 +360,11 @@ class MarketWatcher:
                 count += 1
                 if max_polls == 0 or count < max_polls:
                     sleep(interval_seconds)
+        except BaseException:
+            # KeyboardInterrupt also releases the single-watcher lease.
+            self.stop(failed=True)
+            raise
+        else:
+            self.stop()
             return {"polls": count, "last_status": outcome["status"],
                     "mode": "READ_ONLY", "execution": "DISABLED"}
-        finally:
-            self.stop()
