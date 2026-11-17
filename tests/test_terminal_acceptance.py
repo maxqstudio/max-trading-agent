@@ -225,6 +225,20 @@ class AcceptanceTests(unittest.TestCase):
         self.assertEqual(self.journal.runs()[0]["status"], "FAILED")
         self.assertEqual(len(api.calls), 1)
 
+    def test_operator_interrupt_is_failed_no_trade(self):
+        api = FakeMT5([sample(self.bar, quote_age=12)])
+        gate = TerminalAcceptance(self.journal, api, TEST_KEY)
+        def stop(_):
+            raise KeyboardInterrupt()
+        result = gate.execute("EURUSD", timeframe="M1", bars=12,
+                              samples=2, sample_interval=1, sleep=stop)
+        self.assertEqual(result["status"], "BLOCKED")
+        self.assertEqual(result["samples_verified"], 1)
+        self.assertEqual(result["block_reason"], "OPERATOR_INTERRUPTED")
+        self.assertEqual(self.journal.runs()[0]["status"], "FAILED")
+        events = self.journal.events(result["run_id"])
+        self.assertEqual(events[-1]["details"]["action"], "NO_TRADE")
+
     def test_invalid_input_rejected_before_adapter_call(self):
         adapter = FakeMT5([sample(self.bar)])
         auditor = TerminalAcceptance(self.journal, adapter, TEST_KEY)

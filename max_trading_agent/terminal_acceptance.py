@@ -214,8 +214,10 @@ class TerminalAcceptance:
                  "order_send_called": False},
             )
             self.journal.finish(run_id, "COMPLETED")
-        except Exception as exc:
-            if isinstance(exc, (AcceptanceError, IdentityError, MT5ReadError, LLMError)):
+        except (Exception, KeyboardInterrupt) as exc:
+            if isinstance(exc, KeyboardInterrupt):
+                reason = "OPERATOR_INTERRUPTED"
+            elif isinstance(exc, (AcceptanceError, IdentityError, MT5ReadError, LLMError)):
                 reason = getattr(exc, "code", str(exc))
             else:
                 reason = "ACCEPTANCE_UNEXPECTED_ERROR"
