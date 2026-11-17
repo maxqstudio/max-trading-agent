@@ -29,7 +29,7 @@ def _dec(raw: Any, *, positive: bool = False) -> Decimal:
         value = Decimal(str(raw))
         if not value.is_finite() or (value <= 0 if positive else value < 0):
             raise ValueError()
-        if len(value.as_tuple().digits) > 22:
+        if len(value.as_tuple().digits) > 22 or abs(value.adjusted()) > 18:
             raise ValueError()
         return value
     except (InvalidOperation, ValueError, OverflowError):
