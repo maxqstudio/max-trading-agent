@@ -100,7 +100,7 @@ jobs:
           PY
       - name: Setup Node for Linux UI regression
         if: runner.os == 'Linux'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: "22"
       - name: Final sequential-merge UI/Trading Room tests
