@@ -2,12 +2,13 @@ name: Tool Factory isolated Docker oracle
 
 on:
   push:
-    branches: ["feat/c06-**", "feat/g20-**", "feat/g21-**"]
+    branches: ["feat/c06-**", "feat/g20-**", "feat/g21-**", "feat/g22-**"]
   pull_request:
     paths:
       - "max_trading_agent/tool_factory.py"
       - "max_trading_agent/tool_review.py"
       - "max_trading_agent/tool_properties.py"
+      - "max_trading_agent/oracle_quarantine.py"
       - "max_trading_agent/__main__.py"
       - "tools/factory_sandbox_runner.py"
       - "knowledge/tool_factory_oracles.json"
@@ -15,6 +16,7 @@ on:
       - "tests/fixtures/tool_factory_rolling_mean.json"
       - "tests/test_tool_review.py"
       - "tests/test_tool_properties.py"
+      - "tests/test_oracle_quarantine.py"
       - "tests/fixtures/tool_factory_range_span.json"
       - ".github/workflows/tool-factory.yml"
   workflow_dispatch:
@@ -37,6 +39,8 @@ jobs:
         run: python -m unittest discover -s tests -p test_tool_review.py -v
       - name: G21 property-contract unit and adversarial tests
         run: python -m unittest discover -s tests -p test_tool_properties.py -v
+      - name: G22 untrusted oracle quarantine negative contracts
+        run: python -m unittest discover -s tests -p test_oracle_quarantine.py -v
       - name: Fetch public sandbox runtime (no secrets mounted)
         run: docker pull python:3.12-alpine
       - name: Known correct candidate must pass isolated oracle
@@ -166,4 +170,72 @@ jobs:
               assert json.loads(pending.stdout)['status']=='PENDING_INDEPENDENT_ORACLE'
               assert len(list(receipts.glob('*.json')))==1
               print('G21: new reviewed contract passed; fixed-oracle lookup cheat failed property challenge; unknown remains PENDING; no trading authority')
+          PY
+
+      - name: G22 offline oracle audit CLI remains quarantined even when reference consistent
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json, pathlib, subprocess, sys, tempfile
+          from max_trading_agent.tool_factory import validate_candidate
+          trusted=[
+              pathlib.Path("knowledge/tool_factory_oracles.json"),
+              pathlib.Path("knowledge/tool_review_contracts.json"),
+          ]
+          before={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in trusted}
+          fixture=json.loads(pathlib.Path(
+              "tests/fixtures/tool_factory_range_span.json").read_text())
+          with tempfile.TemporaryDirectory(prefix="g22_oracles_") as directory:
+              root=pathlib.Path(directory)
+              candidate_file=root/"candidate.json"
+              hypothesis_file=root/"hypothesis.json"
+              receipts=root/"quarantine"
+              def run(candidate,pack):
+                  candidate_file.write_text(json.dumps(candidate))
+                  hypothesis_file.write_text(json.dumps(pack))
+                  return subprocess.run([
+                      sys.executable, "-m", "max_trading_agent",
+                      "tool-oracle-audit", "--file", str(candidate_file),
+                      "--oracle-file", str(hypothesis_file),
+                      "--audit-dir", str(receipts)
+                  ],text=True,capture_output=True,timeout=20)
+              hypothesis={
+                  "tool_id":fixture["tool_id"],
+                  "candidate_sha256":validate_candidate(fixture)["sha256"],
+                  "hypothesis":"Calculate the largest input value minus the smallest.",
+                  "cases":[{"input":[5,3,7],"expected":4},
+                           {"input":[-4,9],"expected":13},
+                           {"input":[11],"expected":0}],
+                  "properties":["PERMUTATION_INVARIANT","TRANSLATION_INVARIANT"],
+              }
+              known=run(fixture,hypothesis)
+              assert known.returncode==3,(known.returncode,known.stderr[-300:])
+              result=json.loads(known.stdout)
+              assert result["status"]=="QUARANTINED_REFERENCE_CONSISTENT"
+              assert not result["trusted_oracle_adopted"]
+              assert not result["candidate_verified"]
+              assert result["decision"]=="NO_TRADE"
+              assert result["execution"]=="DISABLED"
+              assert len(list(receipts.glob("*.json")))==1
+              mismatch=json.loads(json.dumps(hypothesis))
+              mismatch["cases"][0]["expected"]=999
+              wrong=run(fixture,mismatch)
+              assert wrong.returncode==3, (wrong.returncode,wrong.stderr[-300:])
+              assert json.loads(wrong.stdout)["status"]=="QUARANTINED_REFERENCE_MISMATCH"
+              novel=dict(fixture)
+              novel["tool_id"]="brand_new_unreviewed_feature"
+              novel_hypothesis=json.loads(json.dumps(hypothesis))
+              novel_hypothesis["tool_id"]=novel["tool_id"]
+              novel_hypothesis["candidate_sha256"]=validate_candidate(novel)["sha256"]
+              unknown=run(novel,novel_hypothesis)
+              assert unknown.returncode==3, (unknown.returncode,unknown.stderr[-300:])
+              out=json.loads(unknown.stdout)
+              assert out["status"]=="QUARANTINED_UNVERIFIED"
+              assert not out["trusted_reference_checked"]
+              assert not out["eligible_for_demo_or_live"]
+              assert len(list(receipts.glob("*.json")))==3
+          after={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in trusted}
+          assert after==before, "trusted oracle/contract mutated by untrusted audit"
+          print("G22 PASS: reference-consistent still quarantined; mismatch caught; novel quarantined; trusted fixtures untouched; NO_TRADE")
           PY
