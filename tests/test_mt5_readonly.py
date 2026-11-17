@@ -253,9 +253,13 @@ class ReadOnlyMT5Tests(unittest.TestCase):
         self.fake.bad_rates = np.array(invalid, dtype=dtype)
         self.assert_code("NON_FINITE_FIELD",
                          lambda: self.reader.capture("EURUSD", bars=2))
-        self.fake.bad_rates = np.array(normal, dtype=np.dtype([
-            ("time", "<i8"), ("open", "<f8"), ("high", "<f8"), ("low", "<f8")
-        ]))
+        self.fake.bad_rates = np.array(
+            [row[:4] for row in normal],
+            dtype=np.dtype([
+                ("time", "<i8"), ("open", "<f8"),
+                ("high", "<f8"), ("low", "<f8"),
+            ]),
+        )
         self.assert_code("MISSING_OHLC",
                          lambda: self.reader.capture("EURUSD", bars=2))
         self.assertEqual(self.fake.calls[-1], ("shutdown",))
