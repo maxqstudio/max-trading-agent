@@ -1,0 +1,53 @@
+name: Tool Factory isolated Docker oracle
+
+on:
+  push:
+    branches: ["feat/c06-**"]
+  pull_request:
+    paths:
+      - "max_trading_agent/tool_factory.py"
+      - "tools/factory_sandbox_runner.py"
+      - "knowledge/tool_factory_oracles.json"
+      - "tests/fixtures/tool_factory_rolling_mean.json"
+      - ".github/workflows/tool-factory.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  isolated-oracle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Unit security and independent oracle contracts
+        run: python -m unittest discover -s tests -p test_tool_factory.py -v
+      - name: Fetch public sandbox runtime (no secrets mounted)
+        run: docker pull python:3.12-alpine
+      - name: Known correct candidate must pass isolated oracle
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m max_trading_agent tool-sandbox --file tests/fixtures/tool_factory_rolling_mean.json > "$RUNNER_TEMP/candidate_result.json"
+          python -c 'import json,os; d=json.load(open(os.environ["RUNNER_TEMP"]+"/candidate_result.json")); assert d["status"] == "SANDBOX_PASSED_REVIEW_REQUIRED" and d["decision"] == "NO_TRADE" and not d["broker_execution"]'
+      - name: Incorrect candidate must fail and exit nonzero
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, pathlib, subprocess, sys, tempfile
+          item=json.loads(pathlib.Path('tests/fixtures/tool_factory_rolling_mean.json').read_text())
+          item['code']='def analyze(values):\n    return 999\n'
+          with tempfile.TemporaryDirectory() as tmp:
+              path=pathlib.Path(tmp)/'bad.json'
+              path.write_text(json.dumps(item))
+              result=subprocess.run([sys.executable,'-m','max_trading_agent','tool-sandbox','--file',str(path)], capture_output=True, text=True)
+              assert result.returncode == 3, (result.returncode, result.stderr)
+              report=json.loads(result.stdout)
+              assert report['status']=='SANDBOX_FAILED'
+              assert report['decision']=='NO_TRADE' and not report['broker_execution']
+          PY
