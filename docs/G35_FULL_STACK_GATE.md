@@ -23,3 +23,39 @@ G28's owner report dynamically includes later canonical PRs; G32's release gate 
 Owner still controls all 35 Draft PR merges, retargets each successor to `main` *after* predecessor merge, reviews the diff and reruns CI. After the final merge, wait for genuine `main` CI (G31), check G32 current main metadata, then perform the separately opt-in local MT5 acceptance. No generated T1 execution, trading order, DEMO/LIVE or real broker use is authorized.
 
 **Status: `NO_TRADE`, `execution=DISABLED`, `owner_acceptance=PENDING`.** [Issue #81](https://github.com/maxqstudio/max-trading-agent/issues/81) · [G28 original owner procedure](G28_OWNER_HANDOFF.md) · [G31 local MT5](G31_OWNER_MT5_PREFLIGHT.md).
+
+## G35 updated full-stack merge rehearsal (no extra PR)
+
+The earlier G30 replay used a 30-PR snapshot ending at #72. The additional
+`.github/workflows/g35-sequential-main.yml` now covers the **entire current
+35-PR sequence #14–#82**, without opening another milestone or editing
+`main`:
+
+- GitHub-hosted Linux and Windows use read-only `contents:read` checkout of
+  exact triggering feature SHA and the independently observed current
+  `main` SHA `5f27d132bc627fa73fde2e1b56b625cbdb09a465`.
+- The G32 reviewed manifest pins all **34 predecessor head SHA values**.
+  `tools/g35_sequential_rehearsal.py` fetches remote refs, rejects any SHA
+  drift or broken parent ancestry, then makes **35 temporary local Git merge
+  commits** in order on a disposable `main` checkout. It does not push.
+- A separate local worktree starts from the same pinned `main` commit and
+  performs **one aggregate temporary merge** of PR #82. A passing result
+  requires identical final Git tree hashes between the sequential and aggregate
+  methods on **both OS**. Each local merge SHA and staged tree SHA is recorded
+  in an uploaded JSON artifact, along with the exact head SHA.
+- Run the **full Python regression on the actual combined worktree** in both
+  OS, Trading Room JavaScript/UI on Linux, and positive plus deliberately
+  incorrect isolated Docker numerical-tool challenges on Linux with the
+  official digest-pinned sandbox. All tests must complete before either
+  runner's JSON changes to the `PASS` state.
+
+This is still a **merge-commit snapshot rehearsal**, not proof that the owner
+will make identical final Git trees using squash/rebase, that GitHub branch
+protections are satisfied, or that local real MT5/broker acceptance is done.
+The workflow fails closed if `main` moves or any pinned predecessor changes.
+It deliberately does not adapt silently to new PRs or grant trading rights.
+The result can be considered accepted only after the final SHA's real GitHub
+Actions run completes; an earlier successful run is not enough.
+
+As before, owner handles actual PR retarget/merge and final `main` CI.
+`NO_TRADE`, `execution=DISABLED`, `owner_acceptance=PENDING`.
