@@ -166,3 +166,7 @@ The local Trading Room shows source-journal observations and all pending M01–M
 ## G18 — Disjoint multi-dataset robustness (research only)
 
 `rl-robustness` replays one fixed walk-forward configuration over 2–5 non-overlapping, SHA-verified historical datasets for the same instrument/timeframe; it reports all per-dataset outcomes without pooling price-unit profits. Disjoint time windows do **not** certify statistically independent markets or trading alpha. Every result remains `NO_TRADE`; see [G18 limitations](docs/G18_MULTIDATASET_ROBUSTNESS.md) and [Issue #47](https://github.com/maxqstudio/max-trading-agent/issues/47).
+
+## G19 — RAG source and index consistency gate
+
+Curated MT5 RAG indexing uses the strict G17 canonical URL allowlist and verifies FTS rows plus default hashing vectors before retrieval or source diff. Corrupt local metadata is rejected rather than becoming a trusted ranking. This **does not authenticate upstream page content or permit trading**. See [G19 scope](docs/C05_HYBRID_RAG.md) and [Issue #49](https://github.com/maxqstudio/max-trading-agent/issues/49).
