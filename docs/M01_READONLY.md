@@ -29,3 +29,9 @@ This command is for an **authorized Windows computer with MetaTrader 5 installed
 ## Non-goals
 
 No signal, live position management, broker mutation, RAG embedding, model-generated strategy or autonomous LIVE trading in M01.
+
+## Structured NumPy candle compatibility (M01 patch)
+
+Official `copy_rates_from_pos` yields NumPy structured rows with fields `time`, `open`, `high`, `low`, `close`, `tick_volume`, `spread`, and `real_volume`. The adapter now reads `dtype.names` fields via `row[field]`, normalizes NumPy integer/float scalars to JSON-safe Python numbers, and rejects invalid or nonfinite values. GitHub Actions installs **NumPy 2.2.6 only for these fake-provider tests** on both Linux and Windows; runtime still loads MetaTrader5 lazily and no live terminal is accessed by CI.
+
+**Remaining acceptance:** signed real terminal smoke on an authorized owner's Windows session, with private account/server details redacted. A fake structured-array PASS is not evidence of a genuine broker connection. No order execution is enabled.
