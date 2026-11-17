@@ -154,12 +154,12 @@ class SignedReviewLinkTests(unittest.TestCase):
             ("expected_attempt", "2"),
         ):
             with self.subTest(field=field), patch(
-                "max_trading_agent.signed_review_link.verify_signed_evidence"
-            ) as verifier:
+                "max_trading_agent.signed_evidence.subprocess.run"
+            ) as gh:
                 with self.assertRaisesRegex(FactoryError,
                                             "G24_EVIDENCE_INVALID"):
                     self.bind(**{field: value})
-                verifier.assert_called_once()
+                gh.assert_not_called()
                 self.assertFalse(self.link_dir.exists())
 
     def test_invalid_expected_commit_or_branch_prevents_verifier_call(self):
