@@ -122,7 +122,7 @@ jobs:
           PY
       - name: Set up JavaScript runtime on Linux
         if: runner.os == 'Linux'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: "22"
       - name: Merged-tree JavaScript and Trading Room UI regression
