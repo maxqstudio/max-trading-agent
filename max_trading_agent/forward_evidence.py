@@ -174,9 +174,13 @@ class ForwardEvidence:
 
         candidate_jobs = set()
         for ep in episodes:
-            if ep["origin"] != "LLM_RESEARCH" or ep["account_binding_id"] is None:
+            if ep["origin"] != "LLM_RESEARCH":
                 totals["legacy_manual_excluded"] += 1
                 continue
+            if ep["account_binding_id"] is None:
+                # Unverified automated records must not be reclassified as
+                # harmless manual history and silently hidden from the gate.
+                raise EvidenceError("EVIDENCE_INTEGRITY_BLOCKED")
             job_id = ep["watch_job_id"]
             if (job_id not in jobs_by_id or job_id in candidate_jobs
                     or ep["symbol"] != jobs_by_id[job_id]["symbol"]

@@ -123,7 +123,8 @@ class ResearchShadowPipeline:
                 watcher_run_id, "Hypothesis Strategist", "HYPOTHESIS_REJECTED", "BLOCKED",
                 "Hypothesis schema or provider failed; no shadow candidate admitted.",
                 {"reason": "INVALID_HYPOTHESIS",
-                 "research_run_id": research_run_id, "broker_execution": False},
+                 "research_run_id": research_run_id, "watch_job_id": job_id,
+                 "broker_execution": False},
             )
             raise ShadowError("HYPOTHESIS_REJECTED") from None
 
