@@ -12,12 +12,15 @@ class ShadowMission:
 
     def open(self, candidate_id: str, snapshot: dict, *, side: str,
              slippage: float, fee_per_side: float,
-             origin: str = "USER_RESEARCH") -> dict:
+             origin: str = "USER_RESEARCH",
+             research_run_id: str | None = None,
+             watch_job_id: str | None = None) -> dict:
         run_id = self.journal.start("shadow_open", mode="SHADOW")
         try:
             observation = self.ledger.record(
                 candidate_id, snapshot, side=side, slippage=slippage,
                 fee_per_side=fee_per_side, origin=origin,
+                research_run_id=research_run_id, watch_job_id=watch_job_id,
             )
             self.journal.append(
                 run_id, "Shadow Lab", "SHADOW_OPENED", "PASS",
@@ -26,6 +29,8 @@ class ShadowMission:
                  "symbol": observation["symbol"],
                  "entry_quote_utc": observation["entry_quote_utc"],
                  "entry_snapshot_hash": observation["entry_snapshot_hash"],
+                 "research_run_id": observation["research_run_id"],
+                 "watch_job_id": observation["watch_job_id"],
                  "fill_type": "HYPOTHETICAL", "broker_execution": False},
             )
             self.journal.append(
@@ -51,6 +56,8 @@ class ShadowMission:
                  "entry_quote_utc": observation["entry_quote_utc"],
                  "exit_quote_utc": observation["exit_quote_utc"],
                  "net_pnl_price_units": observation["net_pnl_price_units"],
+                 "research_run_id": observation["research_run_id"],
+                 "watch_job_id": observation["watch_job_id"],
                  "fill_type": "HYPOTHETICAL", "broker_execution": False},
             )
             self.journal.append(
