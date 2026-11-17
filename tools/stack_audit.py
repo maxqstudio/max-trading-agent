@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any
 
 _REPO = "maxqstudio/max-trading-agent"
-_REQUIRED = tuple(range(14, 68, 2))  # PRs M01 through G27, 27 stacked PRs
+_REQUIRED = tuple(range(14, 84, 2))  # At least 35 canonical PRs through G35 #82
 _SHA = re.compile(r"[0-9a-f]{40}\Z")
 _BRANCH = re.compile(r"feat/[a-z0-9][a-z0-9/_-]{0,100}\Z")
 
@@ -100,10 +100,14 @@ def audit_stack(prs: Any) -> dict:
     missing = [number for number in _REQUIRED if number not in index]
     if missing:
         raise StackAuditError("G28_REQUIRED_PR_MISSING")
-    numbers = list(_REQUIRED)
-    if 68 in index:
-        numbers.append(68)
-    records = [_validate_pr(index[number], number) for number in numbers]
+    # Do not silently truncate the owner handoff when later canonical PRs
+    # are created. Unlisted gaps are an error, not an approval to skip a PR.
+    canonical = sorted(number for number in index
+                       if number >= 14 and number % 2 == 0)
+    if not canonical or len(canonical) > 80 or canonical != list(
+            range(14, canonical[-1] + 2, 2)):
+        raise StackAuditError("G28_REQUIRED_PR_MISSING")
+    records = [_validate_pr(index[number], number) for number in canonical]
     if records[0]["current_base"] != "main":
         raise StackAuditError("G28_FIRST_BASE_NOT_MAIN")
     if len({record["head_branch"] for record in records}) != len(records):
