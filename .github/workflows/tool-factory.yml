@@ -2,7 +2,7 @@ name: Tool Factory isolated Docker oracle
 
 on:
   push:
-    branches: ["feat/c06-**", "feat/g20-**", "feat/g21-**", "feat/g22-**", "feat/g23-**", "feat/g24-**", "feat/g25-**", "feat/g26-**", "feat/g27-**", "feat/g28-**", "feat/g30-**", "feat/g31-**", "feat/g32-**", "feat/g33-**", "feat/g34-**"]
+    branches: ["feat/c06-**", "feat/g20-**", "feat/g21-**", "feat/g22-**", "feat/g23-**", "feat/g24-**", "feat/g25-**", "feat/g26-**", "feat/g27-**", "feat/g28-**", "feat/g30-**", "feat/g31-**", "feat/g32-**", "feat/g33-**", "feat/g34-**", "feat/g35-**"]
   pull_request:
     paths:
       - "max_trading_agent/tool_factory.py"
@@ -41,6 +41,13 @@ on:
       - "tests/test_workflow_supply_chain.py"
       - "tools/docker_image_audit.py"
       - "tests/test_docker_image_audit.py"
+      - "tools/stack_audit.py"
+      - "tests/test_stack_audit.py"
+      - "tools/main_integration_gate.py"
+      - "tests/test_main_integration_gate.py"
+      - "knowledge/g32_pinned_merge_identities.json"
+      - ".github/workflows/g28-stack-handoff.yml"
+      - ".github/workflows/g32-main-completeness.yml"
       - ".github/workflows/g34-docker-image.yml"
       - ".github/workflows/g33-supply-chain.yml"
       - ".github/workflows/g32-main-completeness.yml"
@@ -156,6 +163,10 @@ jobs:
         run: python -m unittest discover -s tests -p test_workflow_supply_chain.py -v
       - name: G34 exact AMD64 Docker manifest and isolation guard negative tests
         run: python -m unittest discover -s tests -p test_docker_image_audit.py -v
+      - name: G35 full-stack owner handoff and main-only gate negative tests
+        run: |
+          python -m unittest discover -s tests -p test_stack_audit.py -v
+          python -m unittest discover -s tests -p test_main_integration_gate.py -v
       - name: Fetch public sandbox runtime (no secrets mounted)
         run: docker pull --platform linux/amd64 python:3.12-alpine@sha256:a61cbd76a882645de7f91423329fe43a67eed60d7da24f9e5331414bb3618b20
       - name: Known correct candidate must pass isolated oracle
