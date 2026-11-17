@@ -19,6 +19,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install NumPy structured-rate test dependency
+        run: python -m pip install numpy==2.2.6
       - name: Compile Python sources
         run: python -m compileall -q max_trading_agent tests
       - name: Run unit tests (offline)
@@ -60,6 +62,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install NumPy structured-rate test dependency
+        run: python -m pip install numpy==2.2.6
       - name: Windows read-only offline suite
         run: python -m unittest discover -s tests -v
 
