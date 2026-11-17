@@ -35,6 +35,9 @@ on:
       - "tools/owner_mt5_preflight.py"
       - "tests/test_owner_mt5_preflight.py"
       - "knowledge/g32_pinned_merge_identities.json"
+      - "tools/g35_sequential_rehearsal.py"
+      - "tests/test_g35_sequential_rehearsal.py"
+      - ".github/workflows/g35-sequential-main.yml"
       - "tools/main_integration_gate.py"
       - "tests/test_main_integration_gate.py"
       - "tools/workflow_security_audit.py"
@@ -167,6 +170,8 @@ jobs:
         run: |
           python -m unittest discover -s tests -p test_stack_audit.py -v
           python -m unittest discover -s tests -p test_main_integration_gate.py -v
+      - name: G35 full 35-PR merge replay fail-closed tests
+        run: python -m unittest discover -s tests -p test_g35_sequential_rehearsal.py -v
       - name: Fetch public sandbox runtime (no secrets mounted)
         run: docker pull --platform linux/amd64 python:3.12-alpine@sha256:a61cbd76a882645de7f91423329fe43a67eed60d7da24f9e5331414bb3618b20
       - name: Known correct candidate must pass isolated oracle
