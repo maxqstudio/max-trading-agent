@@ -14,7 +14,7 @@ def main() -> None:
                         "signal-research", "market-import", "market-manifest",
                         "market-backtest", "experiment-show",
                         "shadow-open", "shadow-settle", "shadow-show",
-                        "watch", "mt5-acceptance"))
+                        "watch", "mt5-acceptance", "demo-preflight"))
     parser.add_argument("value", nargs="?")
     parser.add_argument("--db", default=str(DEFAULT_KNOWLEDGE))
     parser.add_argument("--journal", default=str(DEFAULT_JOURNAL))
@@ -22,6 +22,8 @@ def main() -> None:
     parser.add_argument("--symbol", help="Exact broker symbol (read-only probe)")
     parser.add_argument("--timeframe", default="M15")
     parser.add_argument("--bars", type=int, default=100)
+    parser.add_argument("--proposal", help="Private local candidate JSON for offline DEMO preflight")
+    parser.add_argument("--policy", help="Private local risk limits JSON for offline DEMO preflight")
     parser.add_argument("--snapshot", help="Private MT5 snapshot JSON for SIGNAL research")
     parser.add_argument("--market-db", default=".local/market_evidence.sqlite3")
     parser.add_argument("--file", help="Private historical OHLC CSV path")
@@ -126,6 +128,26 @@ def main() -> None:
             print(json.dumps({"ok": False, "code": code,
                               "decision": "NO_TRADE", "execution": "DISABLED"}),
                   file=sys.stderr)
+            raise SystemExit(2) from None
+    elif args.command == "demo-preflight":
+        from .demo_preflight import PreflightError, check_demo_preflight
+        from .identity import IdentityError, load_or_create_key
+        if not args.snapshot or not args.proposal or not args.policy:
+            parser.error("demo-preflight requires --snapshot --proposal --policy")
+        try:
+            def private_json(path):
+                file = Path(path)
+                if not file.is_file() or not 0 < file.stat().st_size <= 2_000_000:
+                    raise PreflightError("INVALID_PRIVATE_FILE")
+                return json.loads(file.read_text(encoding="utf-8"))
+            snapshot = private_json(args.snapshot)
+            proposal = private_json(args.proposal)
+            policy = private_json(args.policy)
+            key = load_or_create_key(Path(args.identity_key_file))
+            output = check_demo_preflight(snapshot, proposal, policy, key)
+        except (PreflightError, IdentityError, OSError, ValueError, UnicodeError):
+            print(json.dumps({"ok": False, "code": "PREFLIGHT_BLOCKED",
+                              "decision": "NO_TRADE"}), file=sys.stderr)
             raise SystemExit(2) from None
     elif args.command == "signal-research":
         from .llm_client import LLMError, OpenAICompatibleClient
