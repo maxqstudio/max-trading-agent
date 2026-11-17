@@ -1,9 +1,17 @@
 """Fake-MT5 contract tests. No native package, broker, account or credentials."""
+import json
+import math
 import unittest
 from unittest.mock import patch
 from types import SimpleNamespace as NS
 
-from max_trading_agent.mt5_readonly import MT5ReadError, ReadOnlyMT5
+from max_trading_agent.mt5_readonly import MT5ReadError, ReadOnlyMT5, _number
+
+try:
+    import numpy as np
+except ImportError:
+    np = None  # Optional outside CI; GitHub Actions installs NumPy explicitly.
+
 
 NOW = 1_800_000_000
 PERIOD = 900
@@ -189,6 +197,81 @@ class ReadOnlyMT5Tests(unittest.TestCase):
                 ReadOnlyMT5.from_local_terminal()
         self.assertEqual(caught.exception.code, "MT5_PYTHON_PACKAGE_UNAVAILABLE")
         self.assertNotIn("machine path", str(caught.exception))
+
+    @unittest.skipIf(np is None, "NumPy unavailable outside GitHub Actions")
+    def test_actual_numpy_structured_rates_capture_and_json(self):
+        # Match the official MT5 copy_rates_from_pos structured dtype.
+        dtype = np.dtype([
+            ("time", "<i8"), ("open", "<f8"), ("high", "<f8"),
+            ("low", "<f8"), ("close", "<f8"), ("tick_volume", "<u8"),
+            ("spread", "<i4"), ("real_volume", "<u8"),
+        ])
+        self.fake.bad_rates = np.array([
+            (NOW-3*PERIOD, 1.04, 1.06, 1.03, 1.05, 10, 12, 0),
+            (NOW-2*PERIOD, 1.04, 1.06, 1.03, 1.05, 20, 13, 0),
+            (NOW-1*PERIOD, 1.04, 1.06, 1.03, 1.05, 30, 14, 0),
+        ], dtype=dtype)
+        self.assertIsInstance(self.fake.bad_rates[0], np.void)
+        output = self.reader.capture("EURUSD", bars=3)
+        self.assertEqual(self.fake.start_pos, 1)
+        self.assertEqual(len(output["candles"]), 3)
+        self.assertEqual(output["candles"][1]["tick_volume"], 20)
+        self.assertEqual(output["candles"][2]["spread"], 14)
+        self.assertEqual(type(output["candles"][1]["tick_volume"]), int)
+        self.assertEqual(type(output["candles"][1]["open"]), float)
+        encoded = json.dumps(output, allow_nan=False)
+        self.assertNotIn("PRIVATE", encoded)
+        self.assertEqual(self.fake.calls[-1], ("shutdown",))
+        self.assertFalse({name for name, *rest in self.fake.calls} &
+                         {"order_send", "login", "symbol_select", "order_check"})
+
+    @unittest.skipIf(np is None, "NumPy unavailable outside GitHub Actions")
+    def test_numpy_nonfinite_invalid_scalar_and_missing_ohlc_fail_closed(self):
+        dtype = np.dtype([
+            ("time", "<i8"), ("open", "<f8"), ("high", "<f8"),
+            ("low", "<f8"), ("close", "<f8"),
+        ])
+        normal = [
+            (NOW-2*PERIOD, 1.0, 1.1, 0.9, 1.0),
+            (NOW-PERIOD, 1.0, 1.1, 0.9, 1.0),
+        ]
+        self.fake.bad_rates = np.array(normal, dtype=dtype)
+        self.assertEqual(len(self.reader.capture("EURUSD", bars=2)["candles"]), 2)
+        self.assertEqual(_number(np.int64(42), "tick_volume"), 42)
+        self.assertEqual(_number(np.uint64(10), "tick_volume"), 10)
+        self.assertEqual(_number(np.float64(1.25), "open"), 1.25)
+        self.assert_code("INVALID_NUMERIC_FIELD",
+                         lambda: _number(np.bool_(True), "open"))
+        self.assert_code("INVALID_NUMERIC_FIELD",
+                         lambda: _number(np.complex128(1+2j), "open"))
+        self.assert_code("NON_FINITE_FIELD",
+                         lambda: _number(np.float64(np.nan), "open"))
+        self.assert_code("NON_FINITE_FIELD",
+                         lambda: _number(np.float64(np.inf), "open"))
+        invalid = normal.copy()
+        invalid[1] = (NOW-PERIOD, math.nan, 1.1, 0.9, 1.0)
+        self.fake.bad_rates = np.array(invalid, dtype=dtype)
+        self.assert_code("NON_FINITE_FIELD",
+                         lambda: self.reader.capture("EURUSD", bars=2))
+        self.fake.bad_rates = np.array(
+            [row[:4] for row in normal],
+            dtype=np.dtype([
+                ("time", "<i8"), ("open", "<f8"),
+                ("high", "<f8"), ("low", "<f8"),
+            ]),
+        )
+        self.assert_code("MISSING_OHLC",
+                         lambda: self.reader.capture("EURUSD", bars=2))
+        self.assertEqual(self.fake.calls[-1], ("shutdown",))
+
+    def test_invalid_datetime_timestamp_rejected_safely(self):
+        self.fake.bad_rates = [
+            {"time": 99999999999999999999999999999999999,
+             "open": 1, "high": 2, "low": 0.5, "close": 1.5},
+            {"time": NOW-PERIOD,
+             "open": 1, "high": 2, "low": 0.5, "close": 1.5}
+        ]
+        self.assert_code("INVALID_BAR_TIME", lambda: self.reader.capture("EURUSD", bars=2))
 
     def test_missing_positions_is_distinct_from_empty(self):
         self.fake.positions_get = lambda **kwargs: None
