@@ -142,3 +142,7 @@ Offline `rag-index`, `rag-search`, `rag-diff`, `rag-eval` use FTS5 and determini
 ## Canonical M04 — offline tabular Q experiments
 
 `offline-rl` creates a reproducible after-cost, 70/30 holdout tabular Q research experiment on a locally imported, hash-verified MID dataset. **Research only; NO_TRADE always.** [Method and limits](docs/C04_OFFLINE_RL.md) · [Issue #35](https://github.com/maxqstudio/max-trading-agent/issues/35).
+
+## Canonical M06: quarantine-only autonomous Tool Factory
+
+One explicit `tool-propose` call can generate a novel PURE research-code candidate. `tool-sandbox` evaluates it against independent golden fixtures in a no-network Docker container. Every result remains NO_TRADE and requires review; no LLM-generated code is executed in the main process. See [Factory documentation](docs/C06_TOOL_FACTORY.md) and [Issue #37](https://github.com/maxqstudio/max-trading-agent/issues/37).

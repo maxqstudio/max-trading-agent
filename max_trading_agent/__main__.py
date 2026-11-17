@@ -15,7 +15,8 @@ def main() -> None:
                         "market-backtest", "experiment-show",
                         "shadow-open", "shadow-settle", "shadow-show",
                         "watch", "mt5-acceptance", "demo-preflight",
-                        "rag-index", "rag-search", "rag-diff", "rag-eval", "offline-rl"))
+                        "rag-index", "rag-search", "rag-diff", "rag-eval", "offline-rl",
+                        "tool-propose", "tool-sandbox"))
     parser.add_argument("value", nargs="?")
     parser.add_argument("--db", default=str(DEFAULT_KNOWLEDGE))
     parser.add_argument("--journal", default=str(DEFAULT_JOURNAL))
@@ -36,6 +37,8 @@ def main() -> None:
     parser.add_argument("--spread", type=float, help="Modeled full spread in price units")
     parser.add_argument("--slippage", type=float, help="Modeled slippage per side in price units")
     parser.add_argument("--fee-per-side", type=float, help="Modeled fee in price units per asset unit")
+    parser.add_argument("--tool-dir", default=".local/tool-factory",
+                        help="Private local T0 research proposal directory")
     parser.add_argument("--epochs", type=int, default=16, help="Offline Q epochs 1-100")
     parser.add_argument("--alpha", type=float, default=0.2, help="Offline Q learning rate")
     parser.add_argument("--gamma", type=float, default=0.6, help="Offline Q discount 0-1")
@@ -151,6 +154,35 @@ def main() -> None:
         except (RagError, OSError, UnicodeError, ValueError):
             print(json.dumps({"ok": False, "code": "RAG_VALIDATION_BLOCKED",
                               "execution": "DISABLED"}), file=sys.stderr)
+            raise SystemExit(2) from None
+    elif args.command in ("tool-propose", "tool-sandbox"):
+        from .tool_factory import (
+            FactoryError, independent_cases, propose_from_llm,
+            sandbox_evaluate, save_proposal, validate_candidate,
+        )
+        from .llm_client import LLMError, OpenAICompatibleClient
+        oracle_path = (Path(__file__).resolve().parent.parent /
+                       "knowledge" / "tool_factory_oracles.json")
+        try:
+            if args.command == "tool-propose":
+                if not args.value:
+                    parser.error("tool-propose requires a concrete research goal")
+                client = OpenAICompatibleClient.from_env()
+                proposal, output = propose_from_llm(args.value, client)
+                save_proposal(proposal, Path(args.tool_dir))
+            else:
+                if not args.file:
+                    parser.error("tool-sandbox requires --file")
+                path = Path(args.file)
+                if not path.is_file() or not 0 < path.stat().st_size <= 10_000:
+                    raise FactoryError("INVALID_PROPOSAL_FILE")
+                proposal = json.loads(path.read_text(encoding="utf-8"))
+                validate_candidate(proposal)
+                cases = independent_cases(proposal["tool_id"], oracle_path)
+                output = sandbox_evaluate(proposal, cases)
+        except (FactoryError, LLMError, OSError, ValueError, UnicodeError):
+            print(json.dumps({"ok": False, "code": "TOOL_FACTORY_BLOCKED",
+                              "decision": "NO_TRADE"}), file=sys.stderr)
             raise SystemExit(2) from None
     elif args.command == "demo-preflight":
         from .demo_preflight import PreflightError, check_demo_preflight
@@ -326,6 +358,9 @@ def main() -> None:
                 pass
         return
     print(json.dumps(output, indent=2))
+    if args.command == "tool-sandbox" and (
+            output["status"] != "SANDBOX_PASSED_REVIEW_REQUIRED"):
+        raise SystemExit(3)
     if args.command == "mt5-acceptance":
         if output["status"] == "BLOCKED":
             raise SystemExit(2)
