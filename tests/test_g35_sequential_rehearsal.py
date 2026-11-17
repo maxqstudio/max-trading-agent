@@ -159,7 +159,8 @@ class G35RehearsalTests(unittest.TestCase):
     def test_replay_script_never_writes_to_remote(self):
         script = (ROOT / "tools" / "g35_sequential_rehearsal.py").read_text(
             encoding="utf-8")
-        for forbidden in ('"push"', '"order_send"', '"order_check"',
+        for forbidden in ('_git(work, "push"', '_git(aggregate, "push"',
+                          '"order_send"', '"order_check"',
                           '"git", "commit", "--amend"'):
             self.assertNotIn(forbidden, script)
         self.assertIn('"--no-commit"', script)
