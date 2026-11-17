@@ -125,3 +125,32 @@ A separate step uses `gh attestation verify` against the emitted Sigstore bundle
 The signed statement establishes **artifact provenance**: GitHub's claimed workflow and commit produced a file asserting successful tests. It does NOT establish an independent mathematical proof of the generated code, sandbox invulnerability, absence of a compromised workflow, strategy profitability, or approval to load a runtime tool. In particular, G23's arbitrary copied user-local property receipt is still `STRUCTURAL_ONLY_UNATTESTED`; it is **not silently upgraded** because some unrelated workflow succeeded. A future separate independent verification protocol would need to bind each third-party candidate to the attestation subject before changing that status.
 
 Inspect the GitHub Actions run under **G24 Sigstore signed T0 Docker evidence** or retrieve its published attestation via the GitHub API; for independently obtained matching subject bytes, `gh attestation verify FILE -R maxqstudio/max-trading-agent --signer-workflow maxqstudio/max-trading-agent/.github/workflows/g24-signed-t0.yml` validates the signer. The workflow also requires the exact source SHA/ref. **Owner acceptance remains `PENDING`; every proof and packet retains `NO_TRADE`, `execution=DISABLED`, no T1/DEMO/LIVE permission and no tool admission.** [G24 Issue #59](https://github.com/maxqstudio/max-trading-agent/issues/59).
+
+## G25 — independent downloaded Sigstore evidence linked to G23 review (T0 only)
+
+G25 corrects a concrete G24 evidence gap: G24 signed a JSON claim naming a G21 property-review receipt but uploaded only the claim and Sigstore bundle. An independent consumer now needs to inspect **the exact G21 receipt bytes**, verify its independent goldens and 32 property cases, and match its digest to the signed G24 subject. The G24 signer now exports `g24-property-receipt.json` with the subject and Sigstore bundle. Only the subject itself is signed; its SHA-256 field cryptographically binds the separate receipt after verification.
+
+The dedicated **`independent-download-and-bind` job** in `.github/workflows/g24-signed-t0.yml` runs on a different GitHub-hosted runner after signing finishes. It has **`contents:read`, `actions:read` only**: no `id-token:write`, no `attestations:write`, no model/provider/broker secrets. It downloads the exact current run's artifact using `gh run download "$GITHUB_RUN_ID" -R "$GITHUB_REPOSITORY" -n g24-signed-t0-evidence`. It independently constructs the known fixture's G22 oracle audit and G23 immutable review package, then checks against the downloaded G21 receipt and signed G24 claim.
+
+Independent consumers can run the same offline G23/G21 reconstruction and signature verification for previously downloaded files:
+
+```sh
+python -m max_trading_agent.signed_review_link \
+  --candidate tests/fixtures/tool_factory_range_span.json \
+  --oracle /private/review/oracle.json \
+  --audit /private/review/audit.json \
+  --package /private/review/package.json \
+  --receipt /private/signing-artifact/g24-property-receipt.json \
+  --evidence /private/signing-artifact/g24-t0-proof.json \
+  --bundle /private/signing-artifact/g24-sigstore-bundle.json \
+  --expected-commit FULL_40_CHARACTER_GIT_SHA \
+  --expected-ref refs/heads/feat/g25-independent-signed-link \
+  --expected-run-id GITHUB_SIGNER_RUN_ID \
+  --expected-attempt 1
+```
+
+The caller must obtain the expected signer run, commit, ref and artifact **independently** from GitHub, not copy them blindly from untrusted artifact JSON. The tool internally invokes `gh attestation verify` with the required repository, signer workflow, source commit/ref, bundle and hosted-runner constraints; if GitHub CLI, Sigstore verification, subject bytes or any expected value are unavailable/mismatched, the run **fails closed**. All JSON inputs reject duplicate keys, wrong schemas, tampered reviews and candidate/receipt mismatch. A structurally valid G23 review package must exactly recompute from the supplied candidate/oracle/G21 receipt; the downloaded G21 receipt's candidate SHA, seed, trusted contract/goldens and challenge hashes must exactly match the signed subject and the G23 packet.
+
+If successful, it creates a **separate content-addressed, private, write-once** link record `SIGNED_WORKFLOW_EVIDENCE_LINKED_REVIEW_PENDING`. It never modifies the original G23 `REVIEW_PACKAGE_INCOMPLETE` packet. The link explicitly records `GITHUB_WORKFLOW_SIGNED_CLAIM_ONLY`, signed subject digest, bundle digest, original packet/receipt IDs, remaining independent source/human review and owner-acceptance gates. The CLI emits a JSON record and **exits 3 even on a successful link**, so orchestration does not mistake evidence for authorized tool execution. No model-authored source or raw hypothesis text is included in the record.
+
+The second runner constitutes an **independent verification process**, not an independent mathematical audit: both signer and consumer jobs are defined by the same source repo. A compromised signing workflow could still produce signed false claims about Docker tests. Sigstore proves **who signed which workflow-produced bytes**; it does not certify computation correctness, strategy profitability, sandbox security, permission changes or safe broker integration. The new G25 link **never admits a tool**, `candidate_verified=false`, `NO_TRADE`, `execution=DISABLED`, `eligible_for_demo_or_live=false`, `owner_acceptance=PENDING`. Tests cover forged subject/receipt/package, mismatched SHA/ref/run and missing cryptographic verification. See [G25 Issue #61](https://github.com/maxqstudio/max-trading-agent/issues/61).
