@@ -1,0 +1,34 @@
+[
+  {
+    "query": "symbol_info_tick bid ask",
+    "expected": "symbol_info_tick"
+  },
+  {
+    "query": "copy_rates_from_pos OHLCV candles",
+    "expected": "copy_rates_from_pos"
+  },
+  {
+    "query": "account_info balance equity margin",
+    "expected": "account_info"
+  },
+  {
+    "query": "order_check broker validate proposal",
+    "expected": "order_check"
+  },
+  {
+    "query": "trade server error last_error",
+    "expected": "last_error"
+  },
+  {
+    "query": "order_calc_margin calculate margin",
+    "expected": "order_calc_margin"
+  },
+  {
+    "query": "positions_get open positions",
+    "expected": "positions_get"
+  },
+  {
+    "query": "history_deals_get executed historical deals",
+    "expected": "history_deals_get"
+  }
+]

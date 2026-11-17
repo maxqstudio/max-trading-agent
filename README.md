@@ -134,3 +134,7 @@ Owner-controlled CLI `mt5-acceptance` makes bounded local MT5 read-only reads an
 ## Canonical M03 safety contract: offline DEMO preflight
 
 The independent `demo-preflight` command checks a locally HMAC-signed read-only snapshot against explicit owner-supplied symbol, risk, stop, volume and permission limits. **Passing static checks is never authorization to trade.** All results remain `NO_TRADE`; no order API is connected. Full limitations: [C03 demo preflight](docs/C03_DEMO_PREFLIGHT.md), [Issue #31](https://github.com/maxqstudio/max-trading-agent/issues/31).
+
+## Canonical M05 — local hybrid knowledge search
+
+Offline `rag-index`, `rag-search`, `rag-diff`, `rag-eval` use FTS5 and deterministic lexical vector baseline (not a neural embedding model); output is always source-attributed and **non-executable**. See [RAG limits](docs/C05_HYBRID_RAG.md) and [Issue #33](https://github.com/maxqstudio/max-trading-agent/issues/33).
