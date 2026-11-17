@@ -23,8 +23,8 @@ def env(*, main=False, pull=False):
         "GITHUB_REPOSITORY": REPO,
         "GITHUB_SHA": SHA,
         "GITHUB_REF": ("refs/heads/main" if main else
-                       "refs/pull/76/merge" if pull else
-                       "refs/heads/feat/g32-main-integration-completeness"),
+                       "refs/pull/82/merge" if pull else
+                       "refs/heads/feat/g35-full-stack-release-gates"),
         "GITHUB_EVENT_NAME": "push" if not pull else "pull_request",
         "RUNNER_ENVIRONMENT": "github-hosted",
     }
@@ -47,7 +47,7 @@ def fake_prs(baseline, *, merged=False):
     previous = "main"
     result = []
     for entry in baseline["predecessors"] + [{
-        "pr": 76,
+        "pr": 82,
         "branch": baseline["self_branch"],
         "head_sha": "b" * 40,
     }]:
@@ -70,19 +70,19 @@ class G32IntegrationGateTests(unittest.TestCase):
             environment=env() if environment is ... else environment,
         )
 
-    def test_exact_snapshot_has_31_pinned_predecessors_and_self_76(self):
+    def test_exact_snapshot_has_34_pinned_predecessors_and_self_82(self):
         pinned = verify_baseline(self.data)
-        self.assertEqual(len(pinned), 31)
+        self.assertEqual(len(pinned), 34)
         self.assertEqual([row["pr"] for row in pinned],
-                         list(range(14, 76, 2)))
-        self.assertEqual(self.data["self_pr"], 76)
+                         list(range(14, 82, 2)))
+        self.assertEqual(self.data["self_pr"], 82)
         self.assertEqual(self.data["decision"], "NO_TRADE")
 
     def test_feature_branch_all_draft_must_hold_even_with_all_tests(self):
         out = self.review()
         self.assertEqual(out["status"], "G32_EXPECTED_UNMERGED_STACK_HOLD")
         self.assertEqual(out["scope"], "BRANCH_REHEARSAL_NOT_MAIN")
-        self.assertEqual(out["checked_prs"], 32)
+        self.assertEqual(out["checked_prs"], 35)
         self.assertEqual(out["merged_to_main_count"], 0)
         self.assertFalse(out["main_integration_metadata_verified"])
         self.assertFalse(out["postmerge_python_js_docker_ci_verified"])
@@ -102,7 +102,7 @@ class G32IntegrationGateTests(unittest.TestCase):
         out = self.review(prs=fake_prs(self.data, merged=True),
                           environment=env(main=True))
         self.assertEqual(out["status"], "G32_GITHUB_MAIN_MERGE_METADATA_VERIFIED")
-        self.assertEqual(out["merged_to_main_count"], 32)
+        self.assertEqual(out["merged_to_main_count"], 35)
         self.assertTrue(out["main_integration_metadata_verified"])
         self.assertFalse(out["postmerge_python_js_docker_ci_verified"])
         self.assertFalse(out["real_mt5_terminal_tested"])
@@ -110,7 +110,7 @@ class G32IntegrationGateTests(unittest.TestCase):
         self.assertEqual(out["decision"], "NO_TRADE")
 
     def test_main_push_with_just_one_still_draft_or_unmerged_fails_closed(self):
-        for n in (14, 46, 74, 76):
+        for n in (14, 46, 76, 78, 80, 82):
             fake = fake_prs(self.data, merged=True)
             item = next(x for x in fake if x["number"] == n)
             item.update(state="open", draft=True, merged_at=None)
@@ -120,10 +120,38 @@ class G32IntegrationGateTests(unittest.TestCase):
 
     def test_foreign_base_main_metadata_cannot_pass(self):
         fake = fake_prs(self.data, merged=True)
-        fake[-1]["base"]["ref"] = "feat/g31-postmerge-main-preflight"
+        fake[-1]["base"]["ref"] = "feat/g34-docker-runtime-digest"
         with self.assertRaisesRegex(
                 IntegrationGateError, "G32_INCOMPLETE_MAIN_MERGE_CHAIN"):
             self.review(prs=fake, environment=env(main=True))
+
+    def test_new_future_canonical_pr_cannot_receive_main_complete_status(self):
+        newer = fake_prs(self.data, merged=True)
+        newer.append(pr(84, "feat/g36-unreviewed-next", "c" * 40,
+                        "main", merged=True, draft=False))
+        with self.assertRaisesRegex(
+                IntegrationGateError, "G32_NEW_PR_NOT_IN_BASELINE"):
+            self.review(prs=newer, environment=env(main=True))
+        # Feature rehearsals may inspect a future PR, but never certify main.
+        report = self.review(prs=newer)
+        self.assertFalse(report["main_integration_metadata_verified"])
+        self.assertEqual(report["scope"], "BRANCH_REHEARSAL_NOT_MAIN")
+
+    def test_main_must_not_pass_when_g33_g34_or_g35_missing(self):
+        for number in (78, 80, 82):
+            items = fake_prs(self.data, merged=True)
+            items = [item for item in items if item["number"] != number]
+            with self.subTest(number=number), self.assertRaisesRegex(
+                IntegrationGateError, "G32_REQUIRED_PR_MISSING"):
+                self.review(prs=items, environment=env(main=True))
+
+    def test_sha_changed_in_latest_g34_predecessor_is_vetoed(self):
+        items = fake_prs(self.data, merged=True)
+        item = next(x for x in items if x["number"] == 80)
+        item["head"]["sha"] = "f" * 40
+        with self.assertRaisesRegex(
+                IntegrationGateError, "G32_PR_IDENTITY_CHANGED"):
+            self.review(prs=items, environment=env(main=True))
 
     def test_closed_unmerged_pr_fails_validation(self):
         fake = copy.deepcopy(self.prs)
@@ -207,7 +235,7 @@ class G32IntegrationGateTests(unittest.TestCase):
             self.review(prs=fake, environment=env(main=True))
 
     def test_non_dict_bad_pr_records_fail_closed(self):
-        for bad in (None, {}, "made up", [{"number": 76, "user": "evil"}]):
+        for bad in (None, {}, "made up", [{"number": 82, "user": "evil"}]):
             with self.subTest(bad=str(bad)[:25]), self.assertRaises(
                     IntegrationGateError):
                 self.review(prs=bad)
