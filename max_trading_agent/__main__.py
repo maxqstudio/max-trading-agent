@@ -15,7 +15,7 @@ def main() -> None:
                         "market-backtest", "experiment-show",
                         "shadow-open", "shadow-settle", "shadow-show",
                         "watch", "mt5-acceptance", "demo-preflight",
-                        "rag-index", "rag-search", "rag-diff", "rag-eval", "offline-rl",
+                        "rag-index", "rag-search", "rag-diff", "rag-eval", "rag-source-audit", "offline-rl",
                         "tool-propose", "tool-sandbox", "paper-demo", "rl-walk-forward"))
     parser.add_argument("value", nargs="?")
     parser.add_argument("--db", default=str(DEFAULT_KNOWLEDGE))
@@ -144,6 +144,15 @@ def main() -> None:
             print(json.dumps({"ok": False, "code": code,
                               "decision": "NO_TRADE", "execution": "DISABLED"}),
                   file=sys.stderr)
+            raise SystemExit(2) from None
+    elif args.command == "rag-source-audit":
+        from .source_audit import SourceAuditError, audit_source_links
+        try:
+            output = audit_source_links()
+        except SourceAuditError:
+            print(json.dumps({"ok": False, "code": "SOURCE_AUDIT_BLOCKED",
+                              "source_content_verified": False,
+                              "decision": "NO_TRADE"}), file=sys.stderr)
             raise SystemExit(2) from None
     elif args.command in ("rag-index", "rag-search", "rag-diff", "rag-eval"):
         from .hybrid_knowledge import HybridKnowledge, RagError

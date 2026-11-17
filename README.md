@@ -158,3 +158,7 @@ The local Trading Room shows source-journal observations and all pending M01–M
 ## G16 — Research-only walk-forward validation
 
 `rl-walk-forward` performs expanding chronological tabular-Q retraining with non-overlapping scored holdouts, immutable historical data, fixed momentum/NO_TRADE baselines and doubled-cost stress. **No genuine broker execution, profitability claim or automatic trade authorization.** [Method and limitations](docs/C04_OFFLINE_RL.md) · [Issue #43](https://github.com/maxqstudio/max-trading-agent/issues/43).
+
+## G17 — bounded MetaQuotes documentation link audit
+
+`rag-source-audit` explicitly checks canonical official MT5 documentation URLs over restricted HTTPS. It validates **URL reachability only**, never publication freshness, source correctness, licensing or trade permission. See [RAG audit limitations](docs/C05_HYBRID_RAG.md) and [Issue #45](https://github.com/maxqstudio/max-trading-agent/issues/45).

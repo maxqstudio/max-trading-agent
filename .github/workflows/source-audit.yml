@@ -1,0 +1,46 @@
+name: MT5 documentation link-audit evidence (not source acceptance)
+
+on:
+  push:
+    branches: ["feat/g17-rag-source-audit"]
+  workflow_dispatch:
+  schedule:
+    - cron: "18 3 1 * *"
+
+permissions:
+  contents: read
+
+jobs:
+  source-link-report:
+    name: Collect bounded official URL reachability report (not content verification)
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate fixed-host allowlist with offline tests
+        run: python -m unittest discover -s tests -p test_source_audit.py -v
+      - name: Probe bounded official MetaQuotes URLs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m max_trading_agent rag-source-audit > "$RUNNER_TEMP/mt5-doc-link-report.json"
+          python - <<'PY'
+          import json, os, pathlib
+          report = json.loads((pathlib.Path(os.environ['RUNNER_TEMP']) / 'mt5-doc-link-report.json').read_text())
+          assert report['decision'] == 'NO_TRADE'
+          assert report['broker_execution'] is False
+          assert report['source_content_verified'] is False
+          print('URL reachability audit:', report['status'])
+          print('Counts:', report['reachability_counts'])
+          if report['status'] != 'ALL_HTTP_HTML_REACHABLE':
+              print('::warning::Official link audit is INCONCLUSIVE; see JSON artifact. Workflow success does NOT certify source content or availability.')
+          PY
+      - name: Store safe bounded reachability evidence (7 days)
+        uses: actions/upload-artifact@v4
+        with:
+          name: mt5-documentation-link-audit
+          path: ${{ runner.temp }}/mt5-doc-link-report.json
+          retention-days: 7
