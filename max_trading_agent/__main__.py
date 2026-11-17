@@ -44,6 +44,14 @@ def main() -> None:
     parser.add_argument("--identity-key-file",
                         default=".local/mt5_identity.key",
                         help="Private HMAC key file for opt-in MT5 read-only observation")
+    parser.add_argument("--enable-shadow-research", action="store_true",
+                        help="Opt-in to one additional hypothesis model call and shadow tracking")
+    parser.add_argument("--shadow-slippage", type=float,
+                        help="Explicit adverse shadow slippage per side in price units")
+    parser.add_argument("--shadow-fee-per-side", type=float,
+                        help="Explicit shadow per-side fee per asset unit in price units")
+    parser.add_argument("--shadow-max-cycles", type=int, default=5,
+                        help="Persistent research cycle cap per symbol/timeframe (1-50)")
     parser.add_argument("--enable-llm-research", action="store_true",
                         help="EXPLICIT opt-in: up to 4 billable LLM calls per trigger")
     args = parser.parse_args()
@@ -177,11 +185,20 @@ def main() -> None:
         from .llm_client import LLMError, OpenAICompatibleClient
         from .mt5_readonly import MT5ReadError, ReadOnlyMT5
         from .watcher import MarketWatcher, WatchError
+        from .shadow import ShadowError
         from .identity import IdentityError, load_or_create_key
         if not args.symbol:
             parser.error("watch requires --symbol")
         if not 5 <= args.interval_seconds <= 60 or not 0 <= args.max_polls <= 100000:
             parser.error("watch requires --interval-seconds 5-60 and --max-polls >= 0")
+        if args.enable_shadow_research and (
+            not args.enable_llm_research
+            or args.shadow_slippage is None or args.shadow_fee_per_side is None
+            or not 1 <= args.shadow_max_cycles <= 50
+        ):
+            parser.error("shadow research requires --enable-llm-research "
+                         "--shadow-slippage --shadow-fee-per-side "
+                         "and --shadow-max-cycles 1-50")
         try:
             client = (OpenAICompatibleClient.from_env()
                       if args.enable_llm_research else None)
@@ -193,6 +210,10 @@ def main() -> None:
                 args.symbol, args.timeframe, bars=args.bars,
                 client=client, knowledge_db=Path(args.db),
                 identity_key=load_or_create_key(Path(args.identity_key_file)),
+                enable_shadow_research=args.enable_shadow_research,
+                shadow_slippage=args.shadow_slippage,
+                shadow_fee_per_side=args.shadow_fee_per_side,
+                shadow_max_cycles=args.shadow_max_cycles,
             )
             output = observer.run(
                 interval_seconds=args.interval_seconds, max_polls=args.max_polls
@@ -200,7 +221,7 @@ def main() -> None:
         except KeyboardInterrupt:
             output = {"status": "STOPPED_BY_USER", "mode": "READ_ONLY",
                       "execution": "DISABLED"}
-        except (LLMError, MT5ReadError, WatchError, IdentityError) as exc:
+        except (LLMError, MT5ReadError, WatchError, IdentityError, ShadowError) as exc:
             code = getattr(exc, "code", str(exc))
             print(json.dumps({"ok": False, "code": code,
                               "execution": "DISABLED"}), file=sys.stderr)
