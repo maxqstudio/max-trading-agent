@@ -62,3 +62,8 @@ footer { text-align:center; padding:12px; color:var(--muted); font-size:11px; bo
 .evidence-symbol strong { font-size: 12px; overflow-wrap: anywhere; }
 .evidence-symbol p { font-size: 12px; line-height: 1.5; margin: 7px 0 0 }
 .evidence-warning { color: var(--amber); }
+
+.readiness-gate { padding: 10px 0; border-top: 1px solid var(--border); }
+.readiness-gate-heading { display:flex; align-items:flex-start; flex-wrap:wrap; justify-content:space-between; gap:8px; font-size:11px; }
+.readiness-gate-heading strong { font-size:12px; }
+.readiness-gate p { margin:5px 0 0; }

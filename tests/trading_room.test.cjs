@@ -65,3 +65,37 @@ test("paper roles appear in Trading Room roster", () => {
   assert.ok(names.includes("Paper Orchestrator"));
   assert.ok(names.includes("Paper Auditor"));
 });
+
+test("readiness stays BLOCKED even with successful local observations", async () => {
+  const {context, element} = room();
+  const report = {
+    status: "BLOCKED", decision: "NO_TRADE", broker_execution: false,
+    demo_authorized: false, live_authorized: false, owner_acceptance: "PENDING",
+    observations_status: "LOCAL_RUNS_NOT_INDEPENDENTLY_VERIFIED",
+    observations: {
+      terminal_checks: {attempts: 2}, signal_research: {attempts: 4},
+      paper_drills: {attempts: 1}, shadow_intents: {attempts: 2},
+    },
+    gates: [{id: "M07", name: "Live trade", status: "LIVE_NOT_IMPLEMENTED",
+             why: "No real broker authorization"}],
+    limitations: "Local activity is not a financial release.",
+  };
+  context.fetch = async () => ({ok: true, json: async () => report});
+  await vm.runInContext("loadReadiness()", context);
+  assert.equal(element("readiness-status").textContent, "BLOCKED");
+  assert.match(element("readiness-observed").textContent, /LOCAL_RUNS_NOT_INDEPENDENTLY_VERIFIED/);
+  assert.match(element("readiness-limitations").textContent, /not a financial release/);
+});
+
+test("forged READY or live authorization never renders as ready", async () => {
+  const {context, element} = room();
+  const report = {
+    status: "READY", decision: "BUY", broker_execution: true,
+    demo_authorized: true, live_authorized: true, owner_acceptance: "PASS",
+    observations_status: "FORGED", gates: [], observations: {},
+  };
+  context.fetch = async () => ({ok: true, json: async () => report});
+  await vm.runInContext("loadReadiness()", context);
+  assert.equal(element("readiness-status").textContent, "INTEGRITY BLOCKED");
+  assert.match(element("readiness-limitations").textContent, /NO_TRADE/);
+});
