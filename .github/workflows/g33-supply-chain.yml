@@ -1,0 +1,55 @@
+name: G33 Static GitHub Actions supply-chain security gate
+
+on:
+  push:
+    branches: ["feat/g33-**"]
+  pull_request:
+    paths:
+      - ".github/workflows/**"
+      - "tools/workflow_security_audit.py"
+      - "tests/test_workflow_supply_chain.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pinned-actions-least-privilege:
+    name: Reject mutable action refs, leaked checkout tokens and unauthorized OIDC
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4 pinned
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5 pinned
+        with:
+          python-version: "3.12"
+      - name: Run offline adversarial workflow policy regression
+        run: python -m unittest discover -s tests -p test_workflow_supply_chain.py -v
+      - name: Audit EVERY workflow in current exact checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m tools.workflow_security_audit --root .             > "$RUNNER_TEMP/g33-workflow-security.json"
+          python - <<'PY'
+          import json, os, pathlib
+          report=json.loads((pathlib.Path(os.environ["RUNNER_TEMP"])/"g33-workflow-security.json").read_text())
+          assert report["status"] == "G33_WORKFLOW_SECURITY_STATIC_AUDIT_PASS"
+          assert report["workflow_count"] >= 10
+          assert report["privileged_job_count"] == 1
+          assert report["signer_workflow"] == "g24-signed-t0.yml"
+          assert report["decision"] == "NO_TRADE"
+          assert report["execution"] == "DISABLED"
+          assert not report["third_party_action_code_audited"]
+          assert not report["all_supply_chain_risks_eliminated"]
+          print("G33 PASS: all action refs fixed SHA, no checkout credential persistence, one approved signer job.")
+          PY
+      - name: Upload non-executable SHA-pinned workflow security evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4 pinned
+        with:
+          name: g33-workflow-security-static-report
+          path: ${{ runner.temp }}/g33-workflow-security.json
+          retention-days: 30
+          if-no-files-found: warn
