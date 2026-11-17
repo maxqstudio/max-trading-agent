@@ -10,7 +10,9 @@ from .runtime import DEFAULT_JOURNAL, DEFAULT_KNOWLEDGE, EventJournal, Reference
 
 def main() -> None:
     parser = argparse.ArgumentParser(prog="max-trading-agent")
-    parser.add_argument("command", choices=("validate", "index", "search", "plan", "run", "serve", "mt5-probe", "signal-research"))
+    parser.add_argument("command", choices=("validate", "index", "search", "plan", "run", "serve", "mt5-probe",
+                        "signal-research", "market-import", "market-manifest",
+                        "market-backtest", "experiment-show"))
     parser.add_argument("value", nargs="?")
     parser.add_argument("--db", default=str(DEFAULT_KNOWLEDGE))
     parser.add_argument("--journal", default=str(DEFAULT_JOURNAL))
@@ -19,6 +21,16 @@ def main() -> None:
     parser.add_argument("--timeframe", default="M15")
     parser.add_argument("--bars", type=int, default=100)
     parser.add_argument("--snapshot", help="Private MT5 snapshot JSON for SIGNAL research")
+    parser.add_argument("--market-db", default=".local/market_evidence.sqlite3")
+    parser.add_argument("--file", help="Private historical OHLC CSV path")
+    parser.add_argument("--source", help="Historical data provenance label")
+    parser.add_argument("--rights", default="USER_PROVIDED", help="Usage/license description")
+    parser.add_argument("--quote-basis", default="MID", choices=("MID", "BID", "ASK"))
+    parser.add_argument("--dataset", help="SHA-256 dataset identifier")
+    parser.add_argument("--experiment", help="SHA-256 experiment identifier")
+    parser.add_argument("--spread", type=float, help="Modeled full spread in price units")
+    parser.add_argument("--slippage", type=float, help="Modeled slippage per side in price units")
+    parser.add_argument("--fee-per-side", type=float, help="Modeled fee in price units per asset unit")
     args = parser.parse_args()
     if args.command == "validate":
         output = {"valid": True, "entries": len(load_catalog())}
@@ -74,6 +86,40 @@ def main() -> None:
             raise SystemExit(2) from None
         except LLMError as exc:
             print(json.dumps({"ok": False, "code": exc.code}), file=sys.stderr)
+            raise SystemExit(2) from None
+    elif args.command in ("market-import", "market-manifest",
+                          "market-backtest", "experiment-show"):
+        from .market_store import MarketDataError, MarketStore
+        from .backtest_mission import BacktestMission
+        store = MarketStore(Path(args.market_db))
+        try:
+            if args.command == "market-import":
+                if not args.file or not args.symbol or not args.source:
+                    parser.error("market-import requires --file --symbol --source --timeframe")
+                output = store.import_csv(
+                    Path(args.file), symbol=args.symbol, timeframe=args.timeframe,
+                    source=args.source, rights=args.rights,
+                    quote_basis=args.quote_basis)
+            elif args.command == "market-manifest":
+                if not args.dataset:
+                    parser.error("market-manifest requires --dataset")
+                output = store.manifest(args.dataset)
+            elif args.command == "experiment-show":
+                if not args.experiment:
+                    parser.error("experiment-show requires --experiment")
+                output = store.experiment(args.experiment)
+            else:
+                if not args.dataset or any(x is None for x in (
+                        args.spread, args.slippage, args.fee_per_side)):
+                    parser.error("market-backtest requires --dataset --spread "
+                                 "--slippage --fee-per-side")
+                output = BacktestMission(
+                    EventJournal(Path(args.journal)), store
+                ).execute(args.dataset, spread=args.spread, slippage=args.slippage,
+                          fee_per_side=args.fee_per_side)
+        except MarketDataError as exc:
+            print(json.dumps({"ok": False, "error": str(exc),
+                              "execution": "DISABLED"}), file=sys.stderr)
             raise SystemExit(2) from None
     else:
         from .web import create_server

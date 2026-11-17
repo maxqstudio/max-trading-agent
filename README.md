@@ -77,3 +77,14 @@ python -m max_trading_agent signal-research --snapshot /private/snapshot.json
 This is not a public cloud service; the snapshot and keys remain on the user's authorized computer. Provider calls may cost money. See [M02_SIGNAL_RESEARCH.md](docs/M02_SIGNAL_RESEARCH.md) and [Issue #15](https://github.com/maxqstudio/max-trading-agent/issues/15). GitHub Actions uses a fake provider and no API credentials.
 
 M02 research now also retrieves source-linked **MT5 operational knowledge** through the existing SQLite FTS5 RAG index and records the retrieval as a real `RAG_RETRIEVAL` event. These sources describe MT5 functions, **not** statistically validated strategies; the independent policy guard continues to veto trading.
+
+## M03 — Offline history & evidence lab (candidate)
+
+The engine can ingest operator-provided, provenance-labeled OHLC CSV to a private immutable-by-API SQLite dataset ledger and run a deterministic SMA long/flat **research-only** historical evaluation with a chronological holdout. It records actual computation artifacts and `NO_TRADE` in the existing Trading Room event journal.
+
+```sh
+python -m max_trading_agent market-import --file /private/history.csv --symbol EURUSD --timeframe M15 --source authorized-export --quote-basis MID
+python -m max_trading_agent market-backtest --dataset <DATASET_SHA256> --spread 0.0002 --slippage 0.00005 --fee-per-side 0.00001
+```
+
+These are illustrative research inputs, **not recommended broker execution costs**. Review [M03 market evidence limitations](docs/M03_MARKET_EVIDENCE.md) and [Issue #17](https://github.com/maxqstudio/max-trading-agent/issues/17). No data vendor API, real account, LLM strategy approval, or MT5 order execution is involved. CI validates software behavior against synthetic candles only.

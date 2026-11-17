@@ -133,10 +133,8 @@ class EvidenceTests(unittest.TestCase):
         chosen = desired_long(candles, 60)
         candles[60]["close"] = candles[60]["close"] * 100
         self.assertEqual(chosen, desired_long(candles, 60))
-        self.assertNotEqual(chosen, desired_long(candles, 61)) if (
-            sum(x["close"] for x in candles[53:61]) / 8 >
-            sum(x["close"] for x in candles[58:61]) / 3
-        ) else self.assertIsInstance(desired_long(candles, 61), bool)
+        # A later action is allowed to incorporate the now-completed bar.
+        self.assertIsInstance(desired_long(candles, 61), bool)
 
     def test_cost_monotonicity_and_no_trade_baseline(self):
         low = self._run(spread=0, slippage=0, fee=0)

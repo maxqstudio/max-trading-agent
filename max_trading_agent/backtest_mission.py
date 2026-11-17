@@ -73,8 +73,12 @@ class BacktestMission:
             return {"run_id": run_id, "experiment_id": experiment["experiment_id"],
                     "dataset_id": dataset_id, "decision": "NO_TRADE",
                     "execution": "DISABLED",
-                    "holdout": result["holdout"]}
-        except (MarketDataError, Exception) as exc:
+                    "holdout": {
+                        k: result["holdout"][k]
+                        for k in ("trades", "net_pnl_price_units_per_unit",
+                                  "max_drawdown_price_units_per_unit", "evidence_grade")
+                    }}
+        except Exception as exc:
             # Errors here must not be promoted into trading permissions.
             code = str(exc) if isinstance(exc, MarketDataError) else "EXPERIMENT_FAILED"
             self.journal.append(
