@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "repository": "maxqstudio/max-trading-agent",
+  "default_branch": "main",
+  "status": "PINNED_PREMERGE_SOURCE_IDENTITIES",
+  "predecessors": [
+    {
+      "pr": 14,
+      "branch": "feat/m01-mt5-readonly-adapter",
+      "head_sha": "a5cd9525b6ff2ff3ec2ab151c85151f4427777b9"
+    },
+    {
+      "pr": 16,
+      "branch": "feat/m02-signal-research-team",
+      "head_sha": "59e3ca7148c2e4220ff59e512f3e94c623665fe3"
+    },
+    {
+      "pr": 18,
+      "branch": "feat/m03-market-evidence-lab",
+      "head_sha": "2a1c9f3dcc222bc949bdcfafbeb96be148c3d5d3"
+    },
+    {
+      "pr": 20,
+      "branch": "feat/m04-shadow-ledger",
+      "head_sha": "60e5db18f6d3a70f8195814da7ed14fbc3e417ad"
+    },
+    {
+      "pr": 22,
+      "branch": "feat/m05-autonomous-watcher",
+      "head_sha": "625752a5e47b803bc386f6946c81dcfdc208a30d"
+    },
+    {
+      "pr": 24,
+      "branch": "feat/m06-mt5-account-binding",
+      "head_sha": "479b3605c5675075e16ac28b9a79bc66abe7bb67"
+    },
+    {
+      "pr": 26,
+      "branch": "feat/m07-research-shadow-pipeline",
+      "head_sha": "61b0df13eae8ce4e5d801d1cd909a1292bffba1f"
+    },
+    {
+      "pr": 28,
+      "branch": "feat/m08-shadow-evidence-scorecards",
+      "head_sha": "9fd55d89df5c0a7d91d2d7383ac35f7604c47135"
+    },
+    {
+      "pr": 30,
+      "branch": "feat/m09-readonly-terminal-acceptance",
+      "head_sha": "e5469dd080fc042bbfafe456c773d7edddd9bdf2"
+    },
+    {
+      "pr": 32,
+      "branch": "feat/c03-demo-risk-preflight",
+      "head_sha": "f25e095f81195b8e3aefcaf96f4760e1a978d467"
+    },
+    {
+      "pr": 34,
+      "branch": "feat/c05-hybrid-rag-audit",
+      "head_sha": "04efdd94af17ef62e5cdde5a18fa4cbc7ba495a1"
+    },
+    {
+      "pr": 36,
+      "branch": "feat/c04-offline-rl-lab",
+      "head_sha": "aeaafba5b36bfd9166890a06a7cdf65bd303e397"
+    },
+    {
+      "pr": 38,
+      "branch": "feat/c06-tool-factory-sandbox",
+      "head_sha": "88accdee63d9a965a1e431314dc3e74791cdb7ca"
+    },
+    {
+      "pr": 40,
+      "branch": "feat/c03-paper-reconciliation-drill",
+      "head_sha": "50157e838fc7a6bb57c9b9f7bac8b211c1e7da17"
+    },
+    {
+      "pr": 42,
+      "branch": "feat/g15-trading-room-readiness",
+      "head_sha": "1867a07376787120bd2ceb48689701caaee1ba36"
+    },
+    {
+      "pr": 44,
+      "branch": "feat/g16-rl-walk-forward",
+      "head_sha": "adbbe17758a972570e61ae9fbbf68ef100761095"
+    },
+    {
+      "pr": 46,
+      "branch": "feat/g17-rag-source-audit",
+      "head_sha": "c8a47fb4107b70d7713207fc04e70969e847ce6f"
+    },
+    {
+      "pr": 48,
+      "branch": "feat/g18-multidataset-robustness",
+      "head_sha": "e011b71d414e4826df51597ef084061d3de10795"
+    },
+    {
+      "pr": 50,
+      "branch": "feat/g19-rag-index-integrity",
+      "head_sha": "e9902df8b434fdfec978247e126a64e7f59b94d5"
+    },
+    {
+      "pr": 52,
+      "branch": "feat/g20-independent-tool-review",
+      "head_sha": "c6f60f7593d083b5a45c06e1a357b74457bf7a0f"
+    },
+    {
+      "pr": 54,
+      "branch": "feat/g21-independent-property-review",
+      "head_sha": "b36772b39edae9a1ccd221e70fa814dd98550028"
+    },
+    {
+      "pr": 56,
+      "branch": "feat/g22-oracle-quarantine",
+      "head_sha": "c8475fca04a0701d99d052eceb5deda066e31f43"
+    },
+    {
+      "pr": 58,
+      "branch": "feat/g23-review-evidence-package",
+      "head_sha": "a2672684c9b7465fd0d2a0f3f0bd8bcb7cbed288"
+    },
+    {
+      "pr": 60,
+      "branch": "feat/g24-signed-t0-evidence",
+      "head_sha": "f37698c310bb22b97fe428909c36489336830b91"
+    },
+    {
+      "pr": 62,
+      "branch": "feat/g25-independent-signed-link",
+      "head_sha": "9a7379257f4fddef468fa8f4a023077d2b850c27"
+    },
+    {
+      "pr": 64,
+      "branch": "feat/g26-human-review-gate",
+      "head_sha": "a358c1d94d08444c68ba52651ab371be52890138"
+    },
+    {
+      "pr": 66,
+      "branch": "feat/g27-static-research-registry",
+      "head_sha": "1a1130d600ec97f0e8cbfeee5a251ff8b9536712"
+    },
+    {
+      "pr": 68,
+      "branch": "feat/g28-owner-merge-handoff",
+      "head_sha": "da31ce902ac99ce747da6ea1ba2ad5c97d747c89"
+    },
+    {
+      "pr": 70,
+      "branch": "feat/g29-main-integration-rehearsal",
+      "head_sha": "e475f5573be9c8ecc811bbe99df59640f9efb2aa"
+    },
+    {
+      "pr": 72,
+      "branch": "feat/g30-sequential-main-rehearsal",
+      "head_sha": "722ad4e5dd575ea6f2df2d0a7d940a2114dd28bf"
+    },
+    {
+      "pr": 74,
+      "branch": "feat/g31-postmerge-main-preflight",
+      "head_sha": "d0d9630e015855a6b7f9eef5b5e97610128006a8"
+    }
+  ],
+  "self_pr": 76,
+  "self_branch": "feat/g32-main-integration-completeness",
+  "owner_acceptance": "PENDING",
+  "decision": "NO_TRADE",
+  "execution": "DISABLED"
+}
