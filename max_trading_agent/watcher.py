@@ -21,6 +21,8 @@ from .identity import IdentityError, verify_snapshot
 from .llm_client import LLMError
 from .mt5_readonly import MT5ReadError, ReadOnlyMT5
 from .runtime import DEFAULT_KNOWLEDGE, EventJournal
+from .shadow import ShadowError
+from .shadow_pipeline import ResearchShadowPipeline
 from .signal_research import SignalResearch, market_context
 
 INTERVALS = {"M1": 60, "M5": 300, "M15": 900, "M30": 1800,
@@ -62,7 +64,13 @@ class WatchState:
                 bar_utc TEXT NOT NULL, snapshot_hash TEXT NOT NULL,
                 status TEXT NOT NULL, research_run_id TEXT,
                 created_utc TEXT NOT NULL, completed_utc TEXT,
+                shadow_requested INTEGER NOT NULL DEFAULT 0,
                 UNIQUE(symbol,timeframe,bar_utc))""")
+            # Existing M05/M06 rows are not retrospectively billable cycles.
+            job_columns = {row[1] for row in db.execute("PRAGMA table_info(watch_jobs)")}
+            if "shadow_requested" not in job_columns:
+                db.execute("ALTER TABLE watch_jobs ADD COLUMN shadow_requested "
+                           "INTEGER NOT NULL DEFAULT 0")
             db.execute("""CREATE TABLE IF NOT EXISTS watch_leases (
                 symbol TEXT NOT NULL, timeframe TEXT NOT NULL,
                 owner TEXT NOT NULL, expires_epoch REAL NOT NULL,
@@ -182,13 +190,28 @@ class WatchState:
             return {"status": "NEW_COMPLETED_CANDLE", "bar_utc": bar_utc,
                     "job_id": job_id}
 
-    def claim(self, job_id: str, expected_hash: str) -> bool:
+    def shadow_cycles(self, symbol: str, timeframe: str) -> int:
+        """Persisted billable-cycle counter; never resets on watcher restart."""
+        with self._db() as db:
+            return int(db.execute(
+                "SELECT COUNT(*) FROM watch_jobs WHERE symbol=? AND timeframe=? "
+                "AND shadow_requested=1", (symbol, timeframe),
+            ).fetchone()[0])
+
+    def block_job(self, job_id: str) -> None:
+        with self._db() as db:
+            db.execute("UPDATE watch_jobs SET status='BLOCKED',completed_utc=? "
+                       "WHERE job_id=? AND status='PENDING'",
+                       (datetime.now(timezone.utc).isoformat(), job_id))
+
+    def claim(self, job_id: str, expected_hash: str, *,
+              shadow_requested: bool = False) -> bool:
         """Atomically ensure only one worker can make paid model calls."""
         with self._db() as db:
             cursor = db.execute(
-                "UPDATE watch_jobs SET status='RUNNING' "
+                "UPDATE watch_jobs SET status='RUNNING',shadow_requested=? "
                 "WHERE job_id=? AND snapshot_hash=? AND status='PENDING'",
-                (job_id, expected_hash),
+                (int(shadow_requested), job_id, expected_hash),
             )
             return cursor.rowcount == 1
 
@@ -221,7 +244,11 @@ class MarketWatcher:
                  symbol: str, timeframe: str, *, bars: int = 100,
                  client: Any = None, clock: Any = time.time,
                  knowledge_db: Path = DEFAULT_KNOWLEDGE,
-                 identity_key: bytes | None = None):
+                 identity_key: bytes | None = None,
+                 enable_shadow_research: bool = False,
+                 shadow_slippage: float | None = None,
+                 shadow_fee_per_side: float | None = None,
+                 shadow_max_cycles: int = 5):
         if timeframe not in INTERVALS or not 2 <= bars <= 2000:
             raise WatchError("INVALID_WATCH_CONFIG")
         self.journal = journal
@@ -235,6 +262,20 @@ class MarketWatcher:
         self.identity_key = identity_key
         self.clock = clock
         self.knowledge_db = Path(knowledge_db)
+        if enable_shadow_research and client is None:
+            raise WatchError("SHADOW_REQUIRES_LLM_OPT_IN")
+        if enable_shadow_research and (
+            not isinstance(shadow_max_cycles, int) or isinstance(shadow_max_cycles, bool)
+            or not 1 <= shadow_max_cycles <= 50
+        ):
+            raise WatchError("INVALID_SHADOW_CYCLE_BUDGET")
+        self.pipeline = (
+            ResearchShadowPipeline(
+                journal, client, identity_key, slippage=shadow_slippage,
+                fee_per_side=shadow_fee_per_side,
+            ) if enable_shadow_research else None
+        )
+        self.shadow_max_cycles = shadow_max_cycles
         self.store = WatchState(journal.path)
         self.owner = uuid.uuid4().hex
         self.run_id: str | None = None
@@ -253,8 +294,10 @@ class MarketWatcher:
                 self.run_id, "Supervisor", "WATCH_STARTED", "RUNNING",
                 "Started opt-in local MT5 observation; no order execution is available.",
                 {"symbol": self.symbol, "timeframe": self.timeframe, "bars": self.bars,
-                 "llm_enabled": self.client is not None, "mode": "READ_ONLY",
-                 "execution": "DISABLED"},
+                 "llm_enabled": self.client is not None,
+                 "shadow_enabled": self.pipeline is not None,
+                 "shadow_cycle_budget": self.shadow_max_cycles if self.pipeline else 0,
+                 "mode": "READ_ONLY", "execution": "DISABLED"},
             )
             return self.run_id
         except Exception:
@@ -329,22 +372,68 @@ class MarketWatcher:
                 {"action": "NO_TRADE", "vetoes": ["WATCH_READ_ONLY"],
                  "order_send_called": False},
             )
+        if status == "NEW_COMPLETED_CANDLE" and self.pipeline is not None:
+            # An existing prospective candidate is settled only from a
+            # later, freshly HMAC-verified completed-candle observation.
+            try:
+                settled = self.pipeline.settle_due(snapshot)
+                if settled is not None:
+                    self.journal.append(
+                        self.run_id, "Supervisor", "SHADOW_OUTCOME_LINKED", "INFO",
+                        "Future observation linked to a previous hypothetical research episode.",
+                        {"candidate_id": settled["episode"]["candidate_id"],
+                         "shadow_run_id": settled["run_id"],
+                         "research_run_id": settled["episode"]["research_run_id"],
+                         "fill_type": "HYPOTHETICAL", "broker_execution": False},
+                    )
+            except (ShadowError, LLMError) as exc:
+                self.store.block_job(observation["job_id"])
+                code = str(exc) if isinstance(exc, ShadowError) else exc.code
+                self.journal.append(
+                    self.run_id, "Supervisor", "SHADOW_SETTLEMENT_BLOCKED", "BLOCKED",
+                    "Prior prospective shadow candidate could not be settled safely.",
+                    {"job_id": observation["job_id"], "code": code,
+                     "decision": "NO_TRADE", "broker_execution": False},
+                )
+                return {**observation, "status": "SHADOW_SETTLEMENT_BLOCKED"}
+            if self.store.shadow_cycles(self.symbol, self.timeframe) >= self.shadow_max_cycles:
+                self.store.block_job(observation["job_id"])
+                self.journal.append(
+                    self.run_id, "Supervisor", "SHADOW_BUDGET_EXHAUSTED", "BLOCKED",
+                    "Persistent opt-in shadow LLM cycle budget exhausted. No further model calls.",
+                    {"max_cycles": self.shadow_max_cycles, "decision": "NO_TRADE",
+                     "broker_execution": False},
+                )
+                return {**observation, "status": "SHADOW_BUDGET_EXHAUSTED"}
+
         if status == "NEW_COMPLETED_CANDLE" and self.client is not None:
-            if not self.store.claim(observation["job_id"], public["snapshot_hash"]):
+            if not self.store.claim(observation["job_id"], public["snapshot_hash"],
+                                    shadow_requested=self.pipeline is not None):
                 return {**observation, "status": "RESEARCH_NOT_CLAIMED"}
             try:
                 research_id = SignalResearch(
                     self.journal, self.client, knowledge_db=self.knowledge_db
                 ).execute(snapshot)
+                shadow_result = (
+                    self.pipeline.propose(
+                        snapshot, job_id=observation["job_id"],
+                        research_run_id=research_id,
+                        watcher_run_id=self.run_id,
+                    ) if self.pipeline is not None else None
+                )
                 self.store.finish_job(observation["job_id"], "COMPLETED", research_id)
                 self.journal.append(
                     self.run_id, "Supervisor", "RESEARCH_COMPLETE", "PASS",
                     "Research roles finished; independent trade veto remains active.",
                     {"job_id": observation["job_id"], "research_run_id": research_id,
+                     "shadow_status": shadow_result["status"] if shadow_result else "DISABLED",
+                     "candidate_id": shadow_result.get("candidate_id") if shadow_result else None,
                      "decision": "NO_TRADE", "execution": "DISABLED"},
                 )
             except Exception as exc:
-                code = exc.code if isinstance(exc, LLMError) else "RESEARCH_FAILURE"
+                code = exc.code if isinstance(exc, LLMError) else (
+                    str(exc) if isinstance(exc, ShadowError) else "RESEARCH_FAILURE"
+                )
                 self.store.finish_job(observation["job_id"], "FAILED", None)
                 self.journal.append(
                     self.run_id, "Supervisor", "RESEARCH_BLOCKED", "BLOCKED",

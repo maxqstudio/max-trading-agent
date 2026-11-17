@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable, Iterator
 
+from .identity import IdentityError, verify_snapshot
 from .llm_client import LLMError
 from .market_store import DEFAULT_MARKET_DB
 from .signal_research import market_context
@@ -42,10 +43,14 @@ class ShadowLedger:
     """Private SQLite ledger. The only state transition is PENDING -> SETTLED."""
 
     def __init__(self, path: Path = DEFAULT_MARKET_DB,
-                 *, clock: Callable[[], datetime] | None = None):
+                 *, clock: Callable[[], datetime] | None = None,
+                 identity_key: bytes | None = None):
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.clock = clock or (lambda: datetime.now(timezone.utc))
+        if identity_key is not None and (not isinstance(identity_key, bytes) or len(identity_key) != 32):
+            raise ShadowError("INVALID_IDENTITY_KEY")
+        self.identity_key = identity_key
         with self._db() as db:
             db.execute("""CREATE TABLE IF NOT EXISTS shadow_episodes (
                 candidate_id TEXT PRIMARY KEY,
@@ -67,8 +72,19 @@ class ShadowLedger:
                 exit_ask REAL,
                 exit_price REAL,
                 net_pnl_price_units REAL,
-                recorded_utc TEXT
+                recorded_utc TEXT,
+                account_binding_id TEXT,
+                research_run_id TEXT,
+                watch_job_id TEXT
             )""")
+            # Preserve M04 legacy manual shadow rows; NULL bindings cannot
+            # be promoted into M07 authenticated autonomous episodes.
+            columns = {row[1] for row in db.execute("PRAGMA table_info(shadow_episodes)")}
+            for column in ("account_binding_id", "research_run_id", "watch_job_id"):
+                if column not in columns:
+                    db.execute("ALTER TABLE shadow_episodes ADD COLUMN " + column + " TEXT")
+            db.execute("CREATE INDEX IF NOT EXISTS ix_shadow_active "
+                       "ON shadow_episodes(origin,symbol,status,account_binding_id)")
 
     @contextmanager
     def _db(self) -> Iterator[sqlite3.Connection]:
@@ -99,17 +115,34 @@ class ShadowLedger:
             raise ShadowError("SNAPSHOT_NOT_FRESH")
         if not -2 <= (now - observed).total_seconds() <= 30:
             raise ShadowError("QUOTE_NOT_FRESH")
+        if self.identity_key is not None:
+            try:
+                binding = verify_snapshot(snapshot, self.identity_key)
+            except IdentityError:
+                raise ShadowError("SHADOW_IDENTITY_UNVERIFIED") from None
+            context = {**context, "account_binding_id": binding}
         return context
 
     def record(self, candidate_id: str, snapshot: dict, *, side: str,
                slippage: float, fee_per_side: float,
-               origin: str = "USER_RESEARCH") -> dict:
+               origin: str = "USER_RESEARCH",
+               research_run_id: str | None = None,
+               watch_job_id: str | None = None) -> dict:
         if not isinstance(candidate_id, str) or not _CANDIDATE.fullmatch(candidate_id):
             raise ShadowError("INVALID_CANDIDATE_ID")
         if side not in ("LONG", "SHORT") or origin not in ("USER_RESEARCH", "LLM_RESEARCH"):
             raise ShadowError("INVALID_RESEARCH_PROPOSAL")
         slippage = _nonnegative(slippage, "SLIPPAGE")
         fee_per_side = _nonnegative(fee_per_side, "FEE")
+        if origin == "LLM_RESEARCH":
+            # An autonomous entry must always have authenticated broker
+            # identity and an exact lineage back to real research events.
+            if self.identity_key is None or not isinstance(research_run_id, str) or (
+                not re.fullmatch(r"[0-9a-f]{32}", research_run_id)
+            ) or not isinstance(watch_job_id, str) or (
+                not re.fullmatch(r"[0-9a-f]{64}", watch_job_id)
+            ):
+                raise ShadowError("UNLINKED_AUTONOMOUS_HYPOTHESIS")
         context = self._market(snapshot)
         bid, ask = context["quote"]["bid"], context["quote"]["ask"]
         entry = ask + slippage if side == "LONG" else bid - slippage
@@ -118,17 +151,21 @@ class ShadowLedger:
         data = (candidate_id, origin, context["symbol"], side, "PENDING",
                 context["snapshot_hash"], context["quote"]["time_utc"],
                 bid, ask, entry, slippage, fee_per_side,
-                datetime.now(timezone.utc).isoformat())
+                datetime.now(timezone.utc).isoformat(),
+                context.get("account_binding_id"), research_run_id, watch_job_id)
         with self._db() as db:
             db.execute("""INSERT OR IGNORE INTO shadow_episodes (
                 candidate_id,origin,symbol,side,status,entry_snapshot_hash,
                 entry_quote_utc,entry_bid,entry_ask,entry_price,slippage,
-                fee_per_side,created_utc
-            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)""", data)
+                fee_per_side,created_utc,account_binding_id,research_run_id,watch_job_id
+            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""", data)
         episode = self.get(candidate_id)
         if (episode["origin"] != origin or episode["symbol"] != context["symbol"]
                 or episode["side"] != side or episode["entry_snapshot_hash"] != context["snapshot_hash"]
-                or episode["slippage"] != slippage or episode["fee_per_side"] != fee_per_side):
+                or episode["slippage"] != slippage or episode["fee_per_side"] != fee_per_side
+                or episode["account_binding_id"] != context.get("account_binding_id")
+                or episode["research_run_id"] != research_run_id
+                or episode["watch_job_id"] != watch_job_id):
             raise ShadowError("CANDIDATE_REUSE_CONFLICT")
         return episode
 
@@ -137,6 +174,11 @@ class ShadowLedger:
         if episode["status"] not in ("PENDING", "SETTLED"):
             raise ShadowError("INVALID_EPISODE_STATUS")
         context = self._market(snapshot)
+        if self.identity_key is not None and (
+            episode["account_binding_id"] is None
+            or episode["account_binding_id"] != context.get("account_binding_id")
+        ):
+            raise ShadowError("SHADOW_ACCOUNT_MISMATCH")
         if context["symbol"] != episode["symbol"]:
             raise ShadowError("SYMBOL_MISMATCH")
         if _utc(context["quote"]["time_utc"]) <= _utc(episode["entry_quote_utc"]):
@@ -168,13 +210,28 @@ class ShadowLedger:
                 raise ShadowError("CONCURRENT_SETTLEMENT_CONFLICT")
         return self.get(candidate_id)
 
+    def pending_for(self, symbol: str, account_binding_id: str) -> list[dict]:
+        """Only authenticated autonomous candidates for one account+symbol."""
+        if self.identity_key is None or not isinstance(account_binding_id, str) or (
+            not re.fullmatch(r"[0-9a-f]{64}", account_binding_id)
+        ):
+            raise ShadowError("SHADOW_IDENTITY_REQUIRED")
+        with self._db() as db:
+            rows = db.execute(
+                "SELECT candidate_id FROM shadow_episodes WHERE origin='LLM_RESEARCH' "
+                "AND symbol=? AND account_binding_id=? AND status='PENDING' "
+                "ORDER BY created_utc, candidate_id", (symbol, account_binding_id),
+            ).fetchall()
+        return [self.get(row[0]) for row in rows]
+
     def get(self, candidate_id: str) -> dict:
         fields = ("candidate_id", "origin", "symbol", "side", "status",
                   "entry_snapshot_hash", "entry_quote_utc", "entry_bid",
                   "entry_ask", "entry_price", "slippage", "fee_per_side",
                   "created_utc", "exit_snapshot_hash", "exit_quote_utc",
                   "exit_bid", "exit_ask", "exit_price",
-                  "net_pnl_price_units", "recorded_utc")
+                  "net_pnl_price_units", "recorded_utc",
+                  "account_binding_id", "research_run_id", "watch_job_id")
         with self._db() as db:
             row = db.execute("SELECT " + ",".join(fields)
                              + " FROM shadow_episodes WHERE candidate_id=?",

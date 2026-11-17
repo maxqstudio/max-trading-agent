@@ -2,6 +2,8 @@
 import json
 import os
 import sqlite3
+import subprocess
+import sys
 import tempfile
 import unittest
 from contextlib import closing
@@ -44,6 +46,22 @@ class IdentityTests(unittest.TestCase):
         file.chmod(0o644)
         with self.assertRaisesRegex(IdentityError, "IDENTITY_KEY_PERMISSIONS"):
             load_or_create_key(file)
+
+    def test_corrupt_identity_key_probe_cli_redacts_error(self):
+        invalid = self.root / "corrupt_key"
+        invalid.write_bytes(b"invalid")
+        if os.name == "posix":
+            # Isolate invalid file *content* from the separate ACL check.
+            invalid.chmod(0o600)
+        result = subprocess.run(
+            [sys.executable, "-m", "max_trading_agent", "mt5-probe",
+             "--symbol", "EURUSD", "--identity-key-file", str(invalid),
+             "--journal", str(self.root / "events.sqlite3")],
+            capture_output=True, text=True, timeout=12,
+        )
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("INVALID_IDENTITY_KEY", result.stderr)
+        self.assertNotIn("Traceback", result.stderr)
 
     def test_symlink_key_rejected(self):
         target = self.root / "target"

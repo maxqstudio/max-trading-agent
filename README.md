@@ -118,3 +118,7 @@ See [M05 runtime and limits](docs/M05_AUTONOMOUS_WATCHER.md) and [Issue #21](htt
 Read-only MT5 snapshots are HMAC-signed using a locally generated secret at `.local/mt5_identity.key` (or `--identity-key-file`). The adapter binds the login and broker server without logging them; the watcher stops prospectively admitting research if **either changes, even between two DEMO accounts**. Existing legacy unbound M05 watcher states are intentionally not auto-rebound. Losing or changing the private key also blocks existing account bindings.
 
 HMAC gives local tamper evidence only, **not independent proof of genuine broker quotes**. See [M06 security and limitations](docs/M06_IDENTITY.md) and [Issue #23](https://github.com/maxqstudio/max-trading-agent/issues/23). No trades are permitted.
+
+## M07 — Autonomous research-linked prospective SHADOW (candidate)
+
+On each eligible newly completed read-only MT5 candle (with **explicit opt-in**), the watcher logs four LLM research roles and one strict-JSON hypothetical hypothesis role; a LONG/SHORT/ABSTAIN proposal is linked to a prospective HMAC-account-bound shadow episode and evaluated only against a later verified quote. All results are **HYPOTHETICAL**; real trading remains disabled. Provider calls may cost money, so `--shadow-max-cycles` limits the persisted number of opt-in research cycles. See [M07 usage & limitations](docs/M07_SHADOW_PIPELINE.md), [Issue #25](https://github.com/maxqstudio/max-trading-agent/issues/25).
