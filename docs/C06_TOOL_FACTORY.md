@@ -171,3 +171,19 @@ Required facts for a future G26 review gate: a current non-bot, non-owner, non-a
 G26 **only records governance facts**, not an executable permission. Even when all facts are present, the record says `G26_REVIEW_GATES_RECORDED_NO_ADMISSION`, `t1_registry_enabled=false`, `candidate_verified=false`, `tool_admitted=false`, `execution=DISABLED`, and `decision=NO_TRADE`. The CLI exits 3 even after successfully recording a review snapshot, rather than returning approval-like success. No candidate source is imported or executed. A future trusted T1 registry must be separately reviewed, and all DEMO/LIVE and owner release gates remain closed. Real independent third-party reviewers and the owner's explicit acceptance have **not** been supplied. Branch-protection settings could not be verified through the connected GitHub integration (403), so do not assume GitHub automatically enforces review approvals.
 
 A GitHub-authenticated review record demonstrates who clicked an approval and which commit they reviewed, not that they applied a sufficient code-security methodology, mathematically verified the proposed algorithm, or authorized trading. See [G26 Issue #63](https://github.com/maxqstudio/max-trading-agent/issues/63).
+
+## G27 — safe built-in numerical reference catalog and disabled generated-tool inbox
+
+G27 separates two activities that must not be conflated:
+
+1. **Repository-owned offline numerical reference execution (R0).** The Python reviewer already implements `ARITHMETIC_MEAN` and `NUMERIC_RANGE`. G27 exposes only these two exact allowlisted reference IDs after validating versioned independent golden fixtures. It neither imports nor executes LLM candidate code; changing the JSON contract file does not auto-enroll a new generated algorithm. It accepts 1–128 bounded finite numeric values and produces reproducible numeric results with candidate-code execution explicitly false:
+   ```sh
+   python -m max_trading_agent.research_registry list
+   python -m max_trading_agent.research_registry evaluate --tool-id rolling_mean_v1 --values '[2,4,6]'
+   python -m max_trading_agent.research_registry evaluate --tool-id range_span_v1 --values '[-4,0,7]'
+   ```
+   This is an **R0 built-in reference calculator**, NOT a T1 admission of the LLM-proposed Python tool sharing the name. No dynamic imports, broker data, file/network I/O, order APIs, or active trading strategies are invoked. Output states `NO_TRADE`, `broker_execution=false`, `generated_candidate_executed=false`, `execution=BUILTIN_REFERENCE_ONLY` to distinguish a local calculation from trade or generated-code execution.
+
+2. **Private non-executable T1 candidate staging.** `python -m max_trading_agent.research_registry stage --file candidate.json` validates PURE candidate schema and source syntax but records only its candidate SHA, purpose hash and pending evidence checklist in a private, write-once JSON; it contains **no candidate Python source** and does not change any runtime registry. Staging exits **3** and returns `T1_CANDIDATE_NOT_REGISTERED`, `tool_admitted=false`, `execution=DISABLED`, `decision=NO_TRADE`, even if the ID coincides with an existing built-in reference. Forged approval comments or fabricated G26 evidence cannot influence this path.
+
+No real generated-tool T1 loader exists yet. The trusted repository reference code is compiled-in and independently golden-tested, but **a generated tool requires source audit, authenticated G25/G26 evidence and explicit owner acceptance/merge** before any separate future controlled admission code could be written or enabled. This milestone makes the useful low-risk reference functionality available while keeping the unreviewed agent-authored code quarantined. All DEMO/LIVE and broker capabilities remain blocked. See [G27 Issue #65](https://github.com/maxqstudio/max-trading-agent/issues/65).

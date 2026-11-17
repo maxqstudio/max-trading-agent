@@ -198,3 +198,7 @@ After G24 signs Docker T0 evidence, a **separate read-only GitHub Actions runner
 ## G26 — Authenticated independent GitHub review gate (record-only)
 
 `max_trading_agent.review_governance` reads GitHub-authenticated PR reviews and owner comments, rejects author/self-review and obsolete SHA approvals, and reports every missing independent reviewer, owner, merge, and Sigstore gate. **No approvals are synthesized; even complete review facts do not register or execute generated tool Python.** Always `NO_TRADE`. [G26 policy and limitations](docs/C06_TOOL_FACTORY.md) · [Issue #63](https://github.com/maxqstudio/max-trading-agent/issues/63).
+
+## G27 — Built-in read-only research reference tools; generated T1 tools disabled
+
+`max_trading_agent.research_registry` exposes two **repository-owned deterministic numeric references** (mean and range) without running LLM candidate code. It can also place SHA-only candidate records in a private non-executable T1 review inbox. That staging status is **NOT_REGISTERED**, never execution or trading authority. See [scope and commands](docs/C06_TOOL_FACTORY.md) · [G27 Issue #65](https://github.com/maxqstudio/max-trading-agent/issues/65).
