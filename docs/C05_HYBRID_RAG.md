@@ -14,3 +14,15 @@ Each result provides source URL, SHA-256 content digest, tool effect class and `
 `rag-diff` reports changed, added or removed curated *local metadata*; it does not fetch external pages. Indexes are replaced within one SQLite transaction after embedding validation; malformed replacements cannot silently erase last-good content. Retrieval rejects unexpected model versions, corrupt vectors or source hashes. A small independent fixed query set `knowledge/rag_benchmark.json` estimates recall@k and MRR for an instrument-independent MT5 API retrieval baseline. A good score does not validate broker market analysis, strategy alpha, third-party source freshness, or resistance against every RAG injection.
 
 **Remaining:** licensed source refresh pipeline with actual verification schedule, neural local embedder quality acceptance, retrieval CI reference coverage and owner acceptance. See [Issue #33](https://github.com/maxqstudio/max-trading-agent/issues/33). AUTO_DEMO/LIVE still disabled.
+
+## G17 — official documentation link reachability audit
+
+```sh
+python -m max_trading_agent rag-source-audit
+```
+
+This is a **separate opt-in network action** from the offline RAG index/search. It connects via TLS only to the exact fixed host `www.mql5.com` and canonical Python MT5 API paths; no arbitrary host or user-provided URL may be fetched. All paths are validated before network activity. GET uses a 2 KiB range request, <=2 KiB response read, a five-second timeout per source, no redirect following and a maximum of 64 catalog entries. It neither ingests nor stores website HTML, and no LLM/tool interpreter consumes the response.
+
+Reports include official catalog URL, safe HTTP status/reachability code, full curated metadata SHA-256, timestamp, and counts. `ALL_HTTP_HTML_REACHABLE` **means only those URLs responded with HTTP 200/206 and an HTML Content-Type during that attempt**. It is not a full-page digest, authenticity of technical advice, publication-date check, license clearance, semantic freshness, or a safe-to-execute claim. TLS/network errors, redirects, rate limits and inaccessible pages remain **INCONCLUSIVE** rather than silently passing. `source_content_verified=false`, `source_license_verified=false`, `source_freshness_verified=false` on **all** reports.
+
+A GitHub-hosted optional/scheduled source-audit workflow stores a short-lived JSON report with no secrets; its job success means **report collection**, not link/source acceptance. CI fake-network unit tests verify SSRF/path rejection, no redirect, body budget and fail-closed error classification. Actual source-content review and correct licensing remain future work; **all execution permissions stay disabled**. See [Issue #45](https://github.com/maxqstudio/max-trading-agent/issues/45).
