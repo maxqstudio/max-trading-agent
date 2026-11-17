@@ -14,7 +14,8 @@ def main() -> None:
                         "signal-research", "market-import", "market-manifest",
                         "market-backtest", "experiment-show",
                         "shadow-open", "shadow-settle", "shadow-show",
-                        "watch", "mt5-acceptance", "demo-preflight"))
+                        "watch", "mt5-acceptance", "demo-preflight",
+                        "rag-index", "rag-search", "rag-diff", "rag-eval"))
     parser.add_argument("value", nargs="?")
     parser.add_argument("--db", default=str(DEFAULT_KNOWLEDGE))
     parser.add_argument("--journal", default=str(DEFAULT_JOURNAL))
@@ -128,6 +129,25 @@ def main() -> None:
             print(json.dumps({"ok": False, "code": code,
                               "decision": "NO_TRADE", "execution": "DISABLED"}),
                   file=sys.stderr)
+            raise SystemExit(2) from None
+    elif args.command in ("rag-index", "rag-search", "rag-diff", "rag-eval"):
+        from .hybrid_knowledge import HybridKnowledge, RagError
+        rag = HybridKnowledge(Path(args.db))
+        try:
+            if args.command == "rag-index":
+                output = rag.index()
+            elif args.command == "rag-search":
+                if not args.value:
+                    parser.error("rag-search requires a query")
+                output = rag.search(args.value)
+            elif args.command == "rag-diff":
+                output = rag.source_diff()
+            else:
+                cases = Path(__file__).resolve().parent.parent / "knowledge" / "rag_benchmark.json"
+                output = rag.evaluate(json.loads(cases.read_text(encoding="utf-8")), k=5)
+        except (RagError, OSError, UnicodeError, ValueError):
+            print(json.dumps({"ok": False, "code": "RAG_VALIDATION_BLOCKED",
+                              "execution": "DISABLED"}), file=sys.stderr)
             raise SystemExit(2) from None
     elif args.command == "demo-preflight":
         from .demo_preflight import PreflightError, check_demo_preflight
