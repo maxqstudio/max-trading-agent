@@ -197,6 +197,52 @@ async function loadEvidence() {
   }
 }
 
+async function loadReadiness() {
+  try {
+    const report = await requestJson("/api/readiness");
+    // Readiness is an observation endpoint, NEVER a trading-permission source.
+    if (report.status !== "BLOCKED" || report.decision !== "NO_TRADE" ||
+        report.broker_execution !== false || report.demo_authorized !== false ||
+        report.live_authorized !== false || report.owner_acceptance !== "PENDING" ||
+        !Array.isArray(report.gates)) {
+      throw new Error("Unsafe readiness status");
+    }
+    $("readiness-status").textContent = "BLOCKED";
+    $("readiness-observed").textContent = report.observations_status +
+      " · local mission counts only";
+    const counts = $("readiness-counts");
+    counts.replaceChildren();
+    for (const [key, label] of [
+      ["terminal_checks", "Read-only terminal attempts"],
+      ["signal_research", "SIGNAL research"],
+      ["paper_drills", "Paper simulations"],
+      ["shadow_intents", "Shadow intents"],
+    ]) {
+      const value = report.observations?.[key]?.attempts;
+      if (!Number.isSafeInteger(value) || value < 0) throw new Error("Invalid observation count");
+      addEvidenceMetric(counts, label, value);
+    }
+    const gates = $("readiness-gates");
+    gates.replaceChildren();
+    for (const gate of report.gates) {
+      const line = node("article", "readiness-gate");
+      const heading = node("div", "readiness-gate-heading");
+      heading.append(node("strong", "", gate.id + " · " + gate.name),
+                     node("span", "evidence-warning", gate.status));
+      line.append(heading, node("p", "muted", gate.why));
+      gates.append(line);
+    }
+    $("readiness-limitations").textContent = report.limitations;
+  } catch (error) {
+    // Missing or corrupted journal never becomes an empty-success claim.
+    $("readiness-status").textContent = "INTEGRITY BLOCKED";
+    $("readiness-observed").textContent = "Readiness evidence unavailable or inconsistent.";
+    $("readiness-counts").replaceChildren();
+    $("readiness-gates").replaceChildren();
+    $("readiness-limitations").textContent = "NO_TRADE remains enforced; do not infer readiness.";
+  }
+}
+
 $("run-btn").addEventListener("click", async () => {
   if (state.busy) return;
   state.busy = true;
@@ -229,13 +275,17 @@ async function poll() {
     await loadEvents();
     await loadRuns();
     refreshNumber += 1;
-    if (refreshNumber % 4 === 0) await loadEvidence();
+    if (refreshNumber % 4 === 0) {
+      await loadEvidence();
+      await loadReadiness();
+    }
   } catch (error) {
     $("run-status").textContent = "DISCONNECTED";
   }
 }
 
 loadEvidence();
+loadReadiness();
 loadRuns().then(async () => {
   const data = await requestJson("/api/runs");
   if (data.runs.length) await selectRun(data.runs[0].run_id);
