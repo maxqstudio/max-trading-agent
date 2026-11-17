@@ -214,3 +214,7 @@ Because the cumulative Draft branch and `main` have diverged, the [G29 ephemeral
 ## G30 — SHA-pinned sequential merge replay on GitHub (owner still merges)
 
 The [G30 rehearsal](docs/G30_SEQUENTIAL_REHEARSAL.md) replays **29 pinned stacked Draft PR heads, followed by G30 itself**, as 30 temporary Git merge commits in read-only GitHub-hosted Linux/Windows runners. It checks every expected SHA and ancestor relationship, compares the sequential final tree to a separate aggregate merge tree, and runs Python/Trading Room/isolated Docker regressions on the combined source. It never pushes, retargets or merges a real PR; actual `main` integration and real MT5 terminal acceptance are owner gates. [Issue #71](https://github.com/maxqstudio/max-trading-agent/issues/71).
+
+## G31 — GitHub postmerge-main CI and local Windows MT5 readiness check
+
+The [G31 acceptance workflow](docs/G31_OWNER_MT5_PREFLIGHT.md) performs offline Linux/Windows, JS and real Docker checks on the exact triggering tree. Feature CI is labeled **BRANCH_REHEARSAL_ONLY**; only a later actual push to `main` can produce **MAIN_POSTMERGE_CI**. The owner can run `python -m tools.owner_mt5_preflight --repo .` on Windows after merging: it checks local prerequisites **without importing/connecting MT5, creating an HMAC key or trading**. Actual M09 terminal observation remains a separate explicit owner action. [Issue #73](https://github.com/maxqstudio/max-trading-agent/issues/73).
