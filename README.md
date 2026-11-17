@@ -162,3 +162,7 @@ The local Trading Room shows source-journal observations and all pending M01–M
 ## G17 — bounded MetaQuotes documentation link audit
 
 `rag-source-audit` explicitly checks canonical official MT5 documentation URLs over restricted HTTPS. It validates **URL reachability only**, never publication freshness, source correctness, licensing or trade permission. See [RAG audit limitations](docs/C05_HYBRID_RAG.md) and [Issue #45](https://github.com/maxqstudio/max-trading-agent/issues/45).
+
+## G18 — Disjoint multi-dataset robustness (research only)
+
+`rl-robustness` replays one fixed walk-forward configuration over 2–5 non-overlapping, SHA-verified historical datasets for the same instrument/timeframe; it reports all per-dataset outcomes without pooling price-unit profits. Disjoint time windows do **not** certify statistically independent markets or trading alpha. Every result remains `NO_TRADE`; see [G18 limitations](docs/G18_MULTIDATASET_ROBUSTNESS.md) and [Issue #47](https://github.com/maxqstudio/max-trading-agent/issues/47).
