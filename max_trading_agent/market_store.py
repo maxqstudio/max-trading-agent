@@ -228,8 +228,16 @@ class MarketStore:
                 "SELECT time_utc,open,high,low,close FROM candles "
                 "WHERE dataset_id=? ORDER BY idx", (dataset_id,),
             ).fetchall()
-        return [dict(zip(("time_utc", "open", "high", "low", "close"), row))
-                for row in rows]
+        candles = [dict(zip(("time_utc", "open", "high", "low", "close"), row))
+                   for row in rows]
+        manifest = self.manifest(dataset_id)
+        content_hash = hashlib.sha256(_json({
+            "symbol": manifest["symbol"], "timeframe": manifest["timeframe"],
+            "bars": candles,
+        }).encode("utf-8")).hexdigest()
+        if content_hash != dataset_id or len(candles) != manifest["count"]:
+            raise MarketDataError("DATASET_INTEGRITY_FAILED")
+        return candles
 
     def record_experiment(self, dataset_id: str, strategy_id: str,
                           config: dict, result: dict) -> dict:
