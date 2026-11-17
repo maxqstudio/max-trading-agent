@@ -170,3 +170,7 @@ The local Trading Room shows source-journal observations and all pending M01–M
 ## G19 — RAG source and index consistency gate
 
 Curated MT5 RAG indexing uses the strict G17 canonical URL allowlist and verifies FTS rows plus default hashing vectors before retrieval or source diff. Corrupt local metadata is rejected rather than becoming a trusted ranking. This **does not authenticate upstream page content or permit trading**. See [G19 scope](docs/C05_HYBRID_RAG.md) and [Issue #49](https://github.com/maxqstudio/max-trading-agent/issues/49).
+
+## G20 — Independent T0 tool reviewer (non-executable)
+
+`tool-review --file <private-candidate.json>` runs the known PURE research tool through two independent isolated Docker oracle batches and records a write-once, SHA-bound T0 **evidence-only** receipt if both pass. Novel tools remain pending an external oracle. This does **not** register executable code or permit broker orders. [Details](docs/C06_TOOL_FACTORY.md) · [Issue #51](https://github.com/maxqstudio/max-trading-agent/issues/51).
