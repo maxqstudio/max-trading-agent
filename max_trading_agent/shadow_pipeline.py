@@ -67,7 +67,8 @@ class ResearchShadowPipeline:
         # The ledger separately enforces later quote time and same account.
         return self.mission.settle(episode["candidate_id"], snapshot)
 
-    def propose(self, snapshot: dict, *, job_id: str, research_run_id: str) -> dict:
+    def propose(self, snapshot: dict, *, job_id: str, research_run_id: str,
+                watcher_run_id: str) -> dict:
         """Invoke one extra LLM role, parse strict schema, never an MT5 order."""
         binding = self._identity(snapshot)
         context = market_context(snapshot)
@@ -75,6 +76,8 @@ class ResearchShadowPipeline:
             raise ShadowError("INVALID_WATCH_JOB")
         if not re.fullmatch(r"[0-9a-f]{32}", research_run_id):
             raise ShadowError("INVALID_RESEARCH_RUN")
+        if not re.fullmatch(r"[0-9a-f]{32}", watcher_run_id):
+            raise ShadowError("INVALID_WATCHER_RUN")
         events = self.journal.events(research_run_id, limit=200)
         initial = next((event for event in events
                         if event["event_type"] == "SNAPSHOT_VALIDATED"), None)
@@ -95,9 +98,10 @@ class ResearchShadowPipeline:
             raise ShadowError("PREVIOUS_SHADOW_NOT_SETTLED")
 
         self.journal.append(
-            research_run_id, "Hypothesis Strategist", "HYPOTHESIS_ROLE_STARTED", "RUNNING",
+            watcher_run_id, "Hypothesis Strategist", "HYPOTHESIS_ROLE_STARTED", "RUNNING",
             "Asking a model for a non-executable, one-candle shadow hypothesis.",
-            {"watch_job_id": job_id, "order_authority": False,
+            {"watch_job_id": job_id, "research_run_id": research_run_id,
+             "order_authority": False,
              "evidence_grade": "UNVERIFIED_LLM_OPINION"},
         )
         prompt = json.dumps({
@@ -116,20 +120,22 @@ class ResearchShadowPipeline:
         except Exception:
             # A model/provider failure cannot silently become a shadow entry.
             self.journal.append(
-                research_run_id, "Hypothesis Strategist", "HYPOTHESIS_REJECTED", "BLOCKED",
+                watcher_run_id, "Hypothesis Strategist", "HYPOTHESIS_REJECTED", "BLOCKED",
                 "Hypothesis schema or provider failed; no shadow candidate admitted.",
-                {"reason": "INVALID_HYPOTHESIS", "broker_execution": False},
+                {"reason": "INVALID_HYPOTHESIS",
+                 "research_run_id": research_run_id, "broker_execution": False},
             )
             raise ShadowError("HYPOTHESIS_REJECTED") from None
 
         self.journal.append(
-            research_run_id, "Hypothesis Strategist", (
+            watcher_run_id, "Hypothesis Strategist", (
                 "HYPOTHESIS_ABSTAINED" if proposal["action"] == "ABSTAIN"
                 else "HYPOTHESIS_PROPOSED"
             ), "INFO",
             "Model hypothesis recorded for research only; not a trade approval.",
             {"action": proposal["action"], "thesis": proposal["thesis"],
              "falsifier": proposal["falsifier"], "watch_job_id": job_id,
+             "research_run_id": research_run_id,
              "broker_execution": False, "evidence_grade": "UNVERIFIED_LLM_OPINION"},
         )
         if proposal["action"] == "ABSTAIN":

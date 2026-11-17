@@ -418,6 +418,7 @@ class MarketWatcher:
                     self.pipeline.propose(
                         snapshot, job_id=observation["job_id"],
                         research_run_id=research_id,
+                        watcher_run_id=self.run_id,
                     ) if self.pipeline is not None else None
                 )
                 self.store.finish_job(observation["job_id"], "COMPLETED", research_id)

@@ -7,7 +7,7 @@ import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from max_trading_agent.identity import verify_snapshot
+from max_trading_agent.identity import seal_snapshot, verify_snapshot
 from max_trading_agent.llm_client import LLMError
 from max_trading_agent.runtime import EventJournal
 from max_trading_agent.shadow import ShadowError, ShadowLedger
@@ -42,6 +42,26 @@ class HypothesisClient:
         return f"{role}: historical edge unverified; no executable order recommendation."
 
 
+
+
+
+def observed_fixture(bar_time, *, age_seconds=2, **kwargs):
+    """Explicitly separate quote timestamps: Windows clock ticks can coincide."""
+    snapshot = fixture(bar_time, **kwargs)
+    snapshot.pop("provenance")
+    now = datetime.now(timezone.utc)
+    snapshot["quote"]["time_utc"] = (
+        now - timedelta(seconds=age_seconds)
+    ).isoformat()
+    snapshot["captured_at_utc"] = (
+        now - timedelta(seconds=max(0, age_seconds - 1))
+    ).isoformat()
+    return seal_snapshot(
+        snapshot, TEST_KEY, login=snapshot["account"]["login"],
+        server=snapshot["account"]["server"],
+    )
+
+
 class ShadowPipelineTests(unittest.TestCase):
     def setUp(self):
         temp = tempfile.TemporaryDirectory()
@@ -74,8 +94,8 @@ class ShadowPipelineTests(unittest.TestCase):
     def test_full_autonomous_cycle_uses_future_quote_and_traces_lineage(self):
         snapshots = [
             fixture(self.bar0, bid=1.0500, ask=1.0502),
-            fixture(self.bar1, bid=1.0501, ask=1.0503),
-            fixture(self.bar2, bid=1.0520, ask=1.0522),
+            observed_fixture(self.bar1, age_seconds=12, bid=1.0501, ask=1.0503),
+            observed_fixture(self.bar2, age_seconds=1, bid=1.0520, ask=1.0522),
         ]
         watcher, api, client = self.watch(snapshots)
         watcher.start()
@@ -108,6 +128,12 @@ class ShadowPipelineTests(unittest.TestCase):
             self.assertGreater(finished["exit_quote_utc"], finished["entry_quote_utc"])
             self.assertAlmostEqual(finished["exit_price"], 1.0520-0.00002)
             self.assertEqual(len(client.calls), 5)  # no second paid cycle
+            research_run = next(r for r in self.journal.runs()
+                                if r["mode"] == "SIGNAL")
+            research_events = self.journal.events(research_run["run_id"])
+            self.assertEqual(research_events[-1]["event_type"], "REPORT_READY")
+            self.assertFalse(any(e["role"] == "Hypothesis Strategist"
+                                 for e in research_events))
             events = self.all_events()
             for event in ("RAG_RETRIEVAL", "ROLE_REPORT", "HYPOTHESIS_PROPOSED",
                           "SHADOW_OPENED", "SHADOW_SETTLED", "SHADOW_OUTCOME_LINKED",
@@ -203,7 +229,9 @@ class ShadowPipelineTests(unittest.TestCase):
             watcher.stop()
 
     def test_restart_budget_is_persistent_and_pending_episode_settles(self):
-        a, _, client = self.watch([fixture(self.bar0), fixture(self.bar1)])
+        a, _, client = self.watch([
+            fixture(self.bar0), observed_fixture(self.bar1, age_seconds=12)
+        ])
         a.start()
         a.poll_once()
         a.poll_once()
@@ -211,7 +239,7 @@ class ShadowPipelineTests(unittest.TestCase):
             "EURUSD", verify_snapshot(fixture(self.bar1), TEST_KEY)
         )[0]
         a.stop()
-        b, _, _ = self.watch([fixture(self.bar2)], client)
+        b, _, _ = self.watch([observed_fixture(self.bar2, age_seconds=1)], client)
         b.start()
         try:
             self.assertEqual(b.poll_once()["status"], "SHADOW_BUDGET_EXHAUSTED")
