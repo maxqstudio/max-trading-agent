@@ -16,7 +16,7 @@ def main() -> None:
                         "shadow-open", "shadow-settle", "shadow-show",
                         "watch", "mt5-acceptance", "demo-preflight",
                         "rag-index", "rag-search", "rag-diff", "rag-eval", "rag-source-audit", "offline-rl",
-                        "tool-propose", "tool-sandbox", "paper-demo", "rl-walk-forward"))
+                        "tool-propose", "tool-sandbox", "paper-demo", "rl-walk-forward", "rl-robustness"))
     parser.add_argument("value", nargs="?")
     parser.add_argument("--db", default=str(DEFAULT_KNOWLEDGE))
     parser.add_argument("--journal", default=str(DEFAULT_JOURNAL))
@@ -33,6 +33,7 @@ def main() -> None:
     parser.add_argument("--rights", default="USER_PROVIDED", help="Usage/license description")
     parser.add_argument("--quote-basis", default="MID", choices=("MID", "BID", "ASK"))
     parser.add_argument("--dataset", help="SHA-256 dataset identifier")
+    parser.add_argument("--datasets", help="Comma-separated chronological dataset SHA-256 identifiers")
     parser.add_argument("--experiment", help="SHA-256 experiment identifier")
     parser.add_argument("--spread", type=float, help="Modeled full spread in price units")
     parser.add_argument("--slippage", type=float, help="Modeled slippage per side in price units")
@@ -265,7 +266,7 @@ def main() -> None:
             raise SystemExit(2) from None
     elif args.command in ("market-import", "market-manifest",
                           "market-backtest", "experiment-show", "offline-rl",
-                          "rl-walk-forward"):
+                          "rl-walk-forward", "rl-robustness"):
         from .market_store import MarketDataError, MarketStore
         from .backtest_mission import BacktestMission
         store = MarketStore(Path(args.market_db))
@@ -294,6 +295,18 @@ def main() -> None:
                 output = offline_q_research(
                     store, args.dataset, spread=args.spread,
                     slippage=args.slippage, fee_per_side=args.fee_per_side,
+                    epochs=args.epochs, alpha=args.alpha, gamma=args.gamma
+                )
+            elif args.command == "rl-robustness":
+                from .disjoint_robustness import disjoint_dataset_robustness
+                if not args.datasets or any(x is None for x in (
+                        args.spread, args.slippage, args.fee_per_side)):
+                    parser.error("rl-robustness requires --datasets --spread "
+                                 "--slippage --fee-per-side")
+                output = disjoint_dataset_robustness(
+                    store, args.datasets.split(","), spread=args.spread,
+                    slippage=args.slippage, fee_per_side=args.fee_per_side,
+                    folds=args.folds, test_bars=args.test_bars,
                     epochs=args.epochs, alpha=args.alpha, gamma=args.gamma
                 )
             elif args.command == "rl-walk-forward":
