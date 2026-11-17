@@ -69,7 +69,7 @@ def check_source(source: str) -> None:
         if (func.name.startswith("_") or func.name in _BLOCK_NAMES
                 or func.name in _ALLOWED_CALLS or func.decorator_list
                 or len(func.args.args) != 1 or func.args.args[0].arg != "values"
-                or func.args.defaults or func.args.kwarg_defaults
+                or func.args.defaults or func.args.kw_defaults
                 or func.args.kwarg or func.args.vararg or func.returns):
             raise FactoryError("UNSAFE_FUNCTION_CONTRACT")
     nodes = list(ast.walk(tree))
