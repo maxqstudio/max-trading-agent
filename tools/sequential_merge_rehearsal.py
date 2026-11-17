@@ -183,13 +183,23 @@ def run_rehearsal(repo: Path, manifest: dict, feature_sha: str,
 
         for item in plan:
             before = _ref(repo, "HEAD")
-            merge = _git(repo, "merge", "--no-ff", "--no-commit",
-                         "--no-edit", item["sha"], check=False)
+            merge = _git(
+                repo,
+                "-c", "user.name=G30-Temporary-GitHub-CI",
+                "-c", "user.email=g30-ci@users.noreply.github.com",
+                "-c", "commit.gpgsign=false",
+                "merge", "--no-ff", "--no-commit", "--no-edit",
+                item["sha"], check=False,
+            )
             conflicts = _git(repo, "diff", "--name-only",
                              "--diff-filter=U").stdout.splitlines()
             if merge.returncode != 0 or conflicts:
+                report["blocked_pr"] = item["pr"]
                 report["conflict_paths"] = conflicts[:100]
-                raise RehearsalError("G30_SEQUENTIAL_MERGE_CONFLICT")
+                raise RehearsalError(
+                    "G30_SEQUENTIAL_MERGE_CONFLICT" if conflicts
+                    else "G30_SEQUENTIAL_MERGE_PROCESS_FAILED"
+                )
             git_tree = _git(repo, "write-tree").stdout.strip()
             if not _SHA.fullmatch(git_tree):
                 raise RehearsalError("G30_INVALID_MERGE_TREE")
@@ -212,8 +222,14 @@ def run_rehearsal(repo: Path, manifest: dict, feature_sha: str,
         # main, not the 30 temporary merge commits above.
         _git(repo, "worktree", "add", "--detach",
              str(aggregate_dir), initial_main)
-        merge = _git(aggregate_dir, "merge", "--no-ff", "--no-commit",
-                     "--no-edit", feature_sha, check=False)
+        merge = _git(
+            aggregate_dir,
+            "-c", "user.name=G30-Temporary-GitHub-CI",
+            "-c", "user.email=g30-ci@users.noreply.github.com",
+            "-c", "commit.gpgsign=false",
+            "merge", "--no-ff", "--no-commit", "--no-edit",
+            feature_sha, check=False,
+        )
         if merge.returncode != 0 or _git(
                 aggregate_dir, "diff", "--name-only", "--diff-filter=U"
         ).stdout.strip():
