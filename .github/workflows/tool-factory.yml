@@ -2,7 +2,7 @@ name: Tool Factory isolated Docker oracle
 
 on:
   push:
-    branches: ["feat/c06-**", "feat/g20-**", "feat/g21-**", "feat/g22-**", "feat/g23-**", "feat/g24-**", "feat/g25-**", "feat/g26-**", "feat/g27-**", "feat/g28-**", "feat/g30-**"]
+    branches: ["feat/c06-**", "feat/g20-**", "feat/g21-**", "feat/g22-**", "feat/g23-**", "feat/g24-**", "feat/g25-**", "feat/g26-**", "feat/g27-**", "feat/g28-**", "feat/g30-**", "feat/g31-**"]
   pull_request:
     paths:
       - "max_trading_agent/tool_factory.py"
@@ -32,6 +32,9 @@ on:
       - "tools/sequential_merge_rehearsal.py"
       - "tests/test_sequential_merge_rehearsal.py"
       - "knowledge/g30_pinned_pr_stack.json"
+      - "tools/owner_mt5_preflight.py"
+      - "tests/test_owner_mt5_preflight.py"
+      - ".github/workflows/g31-postmerge-main.yml"
       - ".github/workflows/g30-sequential-main.yml"
       - ".github/workflows/g28-stack-handoff.yml"
       - ".github/workflows/g24-signed-t0.yml"
@@ -133,6 +136,8 @@ jobs:
         run: python -m unittest discover -s tests -p test_stack_audit.py -v
       - name: G30 pinned sequential merge topology and fail-closed runner tests
         run: python -m unittest discover -s tests -p test_sequential_merge_rehearsal.py -v
+      - name: G31 offline owner prerequisites and no-side-effects regression
+        run: python -m unittest discover -s tests -p test_owner_mt5_preflight.py -v
       - name: Fetch public sandbox runtime (no secrets mounted)
         run: docker pull python:3.12-alpine
       - name: Known correct candidate must pass isolated oracle
