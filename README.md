@@ -178,3 +178,7 @@ Curated MT5 RAG indexing uses the strict G17 canonical URL allowlist and verifie
 ## G21 — Extensible independent property review (T0 only)
 
 `tool-property-review` uses a repository-reviewed numerical reference contract and golden oracle to test a PURE proposal against fresh, bounded, seeded property challenges **inside isolated Docker**. Unknown algorithms remain pending independent oracle review; the SHA-bound receipt is **non-executable** and never grants trading authority. See [method and limitations](docs/C06_TOOL_FACTORY.md) · [Issue #53](https://github.com/maxqstudio/max-trading-agent/issues/53).
+
+## G22 — Untrusted oracle hypotheses in quarantine
+
+`tool-oracle-propose` optionally asks an LLM for numerical test hypotheses without sharing candidate source/examples; `tool-oracle-audit` cross-checks structure, example novelty, and existing independently reviewed references entirely offline. **Every result is quarantined and non-executable**; an LLM-authored oracle can never self-approve a newly invented tool. See [Tool Factory boundary](docs/C06_TOOL_FACTORY.md) · [Issue #55](https://github.com/maxqstudio/max-trading-agent/issues/55).

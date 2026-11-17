@@ -16,7 +16,8 @@ def main() -> None:
                         "shadow-open", "shadow-settle", "shadow-show",
                         "watch", "mt5-acceptance", "demo-preflight",
                         "rag-index", "rag-search", "rag-diff", "rag-eval", "rag-source-audit", "offline-rl",
-                        "tool-propose", "tool-sandbox", "tool-review", "tool-property-review", "paper-demo", "rl-walk-forward", "rl-robustness"))
+                        "tool-propose", "tool-sandbox", "tool-review", "tool-property-review",
+                        "tool-oracle-propose", "tool-oracle-audit", "paper-demo", "rl-walk-forward", "rl-robustness"))
     parser.add_argument("value", nargs="?")
     parser.add_argument("--db", default=str(DEFAULT_KNOWLEDGE))
     parser.add_argument("--journal", default=str(DEFAULT_JOURNAL))
@@ -47,6 +48,11 @@ def main() -> None:
                         help="Private local T0 research proposal directory")
     parser.add_argument("--review-dir", default=".local/tool-factory/reviews",
                         help="Private immutable non-executable T0 review receipts")
+    parser.add_argument("--oracle-file", help="Private quarantined oracle hypothesis JSON")
+    parser.add_argument("--oracle-dir", default=".local/tool-factory/oracle-hypotheses",
+                        help="Private quarantined non-executable LLM oracle proposals")
+    parser.add_argument("--audit-dir", default=".local/tool-factory/oracle-audits",
+                        help="Private immutable quarantine audit receipts")
     parser.add_argument("--folds", type=int, default=3,
                         help="Chronological walk-forward folds: 2-6")
     parser.add_argument("--test-bars", type=int, default=32,
@@ -177,7 +183,8 @@ def main() -> None:
                               "execution": "DISABLED"}), file=sys.stderr)
             raise SystemExit(2) from None
     elif args.command in ("tool-propose", "tool-sandbox", "tool-review",
-                          "tool-property-review"):
+                          "tool-property-review", "tool-oracle-propose",
+                          "tool-oracle-audit"):
         from .tool_factory import (
             FactoryError, independent_cases, propose_from_llm,
             sandbox_evaluate, save_proposal, validate_candidate,
@@ -194,14 +201,36 @@ def main() -> None:
                 save_proposal(proposal, Path(args.tool_dir))
             else:
                 if not args.file:
-                    parser.error("tool-sandbox/tool-review/tool-property-review requires --file")
+                    parser.error("tool review/oracle command requires --file")
                 path = Path(args.file)
                 if not path.is_file() or not 0 < path.stat().st_size <= 10_000:
                     raise FactoryError("INVALID_PROPOSAL_FILE")
                 proposal = json.loads(path.read_text(encoding="utf-8"))
                 validate_candidate(proposal)
                 cases = independent_cases(proposal["tool_id"], oracle_path)
-                if args.command == "tool-review":
+                if args.command in ("tool-oracle-propose", "tool-oracle-audit"):
+                    from .oracle_quarantine import (
+                        audit_hypothesis, propose_oracle_hypothesis,
+                        quarantine_hypothesis,
+                    )
+                    if args.command == "tool-oracle-propose":
+                        client = OpenAICompatibleClient.from_env()
+                        pack = propose_oracle_hypothesis(proposal, client)
+                        output = quarantine_hypothesis(
+                            proposal, pack, Path(args.oracle_dir))
+                    else:
+                        if not args.oracle_file:
+                            parser.error("tool-oracle-audit requires --oracle-file")
+                        oracle_file = Path(args.oracle_file)
+                        if (not oracle_file.is_file()
+                                or not 0 < oracle_file.stat().st_size <= 10_000):
+                            raise FactoryError("INVALID_ORACLE_FILE")
+                        from .tool_properties import _no_duplicate_keys
+                        pack = json.loads(oracle_file.read_text(encoding="utf-8"),
+                                          object_pairs_hook=_no_duplicate_keys)
+                        output = audit_hypothesis(
+                            proposal, pack, audit_dir=Path(args.audit_dir))
+                elif args.command == "tool-review":
                     from .tool_review import review_t0
                     output = review_t0(proposal, review_dir=Path(args.review_dir))
                 elif args.command == "tool-property-review":
@@ -442,6 +471,9 @@ def main() -> None:
         raise SystemExit(3)
     if args.command == "tool-property-review" and (
             output["status"] != "T0_PROPERTY_REVIEWED"):
+        raise SystemExit(3)
+    if args.command == "tool-oracle-audit":
+        # Even reference-consistent LLM proposals are quarantine, not PASS.
         raise SystemExit(3)
     if args.command == "mt5-acceptance":
         if output["status"] == "BLOCKED":
