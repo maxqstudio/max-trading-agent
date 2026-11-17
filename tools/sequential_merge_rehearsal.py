@@ -85,12 +85,6 @@ def _ref(cwd: Path, ref: str) -> str:
     return result
 
 
-def _tree(cwd: Path) -> str:
-    return _ref(cwd, "HEAD^{tree}") if not _git(
-        cwd, "diff", "--cached", "--quiet", check=False
-    ).returncode else _git(cwd, "write-tree").stdout.strip()
-
-
 def _temp_commit(cwd: Path, label: str) -> str:
     _git(cwd, "-c", "user.name=G30-Temporary-GitHub-CI",
          "-c", "user.email=g30-ci@users.noreply.github.com",
@@ -260,6 +254,10 @@ def main() -> None:
             Path(args.repo), manifest, os.environ["GITHUB_SHA"],
             Path(args.output), Path(args.aggregate_dir),
         )
+    except RehearsalError as problem:
+        # Only internal fixed error codes are exposed, never command stdout,
+        # credentials, response text or candidate Python.
+        raise SystemExit(f"{_FAIL}: {problem}") from None
     except (KeyError, OSError, ValueError, TypeError, UnicodeError):
         raise SystemExit(_FAIL) from None
     print(json.dumps({
