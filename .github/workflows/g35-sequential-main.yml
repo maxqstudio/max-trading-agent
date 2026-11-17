@@ -42,6 +42,7 @@ jobs:
       - name: Replay 35 individual merges and compare independent aggregate tree
         shell: bash
         env:
+          PYTHONPATH: ${{ github.workspace }}/controller
           G35_EXPECTED_MAIN_SHA: 5f27d132bc627fa73fde2e1b56b625cbdb09a465
         run: |
           set -euo pipefail
