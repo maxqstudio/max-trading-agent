@@ -182,3 +182,7 @@ Curated MT5 RAG indexing uses the strict G17 canonical URL allowlist and verifie
 ## G22 — Untrusted oracle hypotheses in quarantine
 
 `tool-oracle-propose` optionally asks an LLM for numerical test hypotheses without sharing candidate source/examples; `tool-oracle-audit` cross-checks structure, example novelty, and existing independently reviewed references entirely offline. **Every result is quarantined and non-executable**; an LLM-authored oracle can never self-approve a newly invented tool. See [Tool Factory boundary](docs/C06_TOOL_FACTORY.md) · [Issue #55](https://github.com/maxqstudio/max-trading-agent/issues/55).
+
+## G23 — Independently reviewable, non-authorizing evidence packet
+
+`tool-review-package` builds a write-once offline manifest binding the PURE candidate SHA, quarantined oracle hypothesis, independently recomputed G22 audit, and optional G21 property receipt. Unsigned receipts remain **unattested** and every packet remains **incomplete / NO_TRADE**; no new tool registration or execution. [Implementation limits](docs/C06_TOOL_FACTORY.md) · [Issue #57](https://github.com/maxqstudio/max-trading-agent/issues/57).

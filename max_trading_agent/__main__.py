@@ -17,7 +17,8 @@ def main() -> None:
                         "watch", "mt5-acceptance", "demo-preflight",
                         "rag-index", "rag-search", "rag-diff", "rag-eval", "rag-source-audit", "offline-rl",
                         "tool-propose", "tool-sandbox", "tool-review", "tool-property-review",
-                        "tool-oracle-propose", "tool-oracle-audit", "paper-demo", "rl-walk-forward", "rl-robustness"))
+                        "tool-oracle-propose", "tool-oracle-audit", "tool-review-package",
+                        "paper-demo", "rl-walk-forward", "rl-robustness"))
     parser.add_argument("value", nargs="?")
     parser.add_argument("--db", default=str(DEFAULT_KNOWLEDGE))
     parser.add_argument("--journal", default=str(DEFAULT_JOURNAL))
@@ -53,6 +54,10 @@ def main() -> None:
                         help="Private quarantined non-executable LLM oracle proposals")
     parser.add_argument("--audit-dir", default=".local/tool-factory/oracle-audits",
                         help="Private immutable quarantine audit receipts")
+    parser.add_argument("--audit-file", help="G22 immutable offline oracle audit receipt")
+    parser.add_argument("--property-receipt-file", help="Optional G21 independent T0 receipt (unsigned)")
+    parser.add_argument("--package-dir", default=".local/tool-factory/review-packages",
+                        help="Private non-executable immutable review evidence packets")
     parser.add_argument("--folds", type=int, default=3,
                         help="Chronological walk-forward folds: 2-6")
     parser.add_argument("--test-bars", type=int, default=32,
@@ -184,7 +189,7 @@ def main() -> None:
             raise SystemExit(2) from None
     elif args.command in ("tool-propose", "tool-sandbox", "tool-review",
                           "tool-property-review", "tool-oracle-propose",
-                          "tool-oracle-audit"):
+                          "tool-oracle-audit", "tool-review-package"):
         from .tool_factory import (
             FactoryError, independent_cases, propose_from_llm,
             sandbox_evaluate, save_proposal, validate_candidate,
@@ -208,7 +213,28 @@ def main() -> None:
                 proposal = json.loads(path.read_text(encoding="utf-8"))
                 validate_candidate(proposal)
                 cases = independent_cases(proposal["tool_id"], oracle_path)
-                if args.command in ("tool-oracle-propose", "tool-oracle-audit"):
+                if args.command == "tool-review-package":
+                    from .review_package import assemble_review_package
+                    from .tool_properties import _no_duplicate_keys
+
+                    def load_evidence(filename):
+                        if not filename:
+                            raise FactoryError("MISSING_REVIEW_ARTIFACT")
+                        artifact = Path(filename)
+                        if (artifact.is_symlink() or not artifact.is_file()
+                                or not 0 < artifact.stat().st_size <= 10_000):
+                            raise FactoryError("INVALID_REVIEW_ARTIFACT")
+                        return json.loads(artifact.read_text(encoding="utf-8"),
+                                          object_pairs_hook=_no_duplicate_keys)
+
+                    pack = load_evidence(args.oracle_file)
+                    audit = load_evidence(args.audit_file)
+                    prior = (load_evidence(args.property_receipt_file)
+                             if args.property_receipt_file else None)
+                    output = assemble_review_package(
+                        proposal, pack, audit, property_receipt=prior,
+                        package_dir=Path(args.package_dir))
+                elif args.command in ("tool-oracle-propose", "tool-oracle-audit"):
                     from .oracle_quarantine import (
                         audit_hypothesis, propose_oracle_hypothesis,
                         quarantine_hypothesis,
@@ -472,8 +498,8 @@ def main() -> None:
     if args.command == "tool-property-review" and (
             output["status"] != "T0_PROPERTY_REVIEWED"):
         raise SystemExit(3)
-    if args.command == "tool-oracle-audit":
-        # Even reference-consistent LLM proposals are quarantine, not PASS.
+    if args.command in ("tool-oracle-audit", "tool-review-package"):
+        # Offline evidence can never imply independent execution/admission.
         raise SystemExit(3)
     if args.command == "mt5-acceptance":
         if output["status"] == "BLOCKED":

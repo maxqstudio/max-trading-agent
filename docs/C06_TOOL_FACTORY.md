@@ -93,3 +93,23 @@ Only the candidate's **tool ID, declared purpose, interface and SHA-256** go int
 The independent audit writes only a private immutable, hash-bound **quarantine receipt**: proposal+candidate fingerprints, coverage counts, reference-check status, `trusted_oracle_adopted=false`, `candidate_verified=false`, `eligible_for_demo_or_live=false`, `decision=NO_TRADE`, `execution=DISABLED`, `owner_acceptance=PENDING`. The LLM-authored text is **not** copied into an executable registry. An independently authored reference, reviewed goldens, adversarial tests and owner review are still required before use of the G21 sandbox for newly invented mathematics.
 
 G22 does not execute candidate source during oracle auditing. No provider call runs in GitHub Actions; CI uses fake model output and offline CLI fixtures, rechecks that trusted catalog bytes are unchanged and still reruns the existing real Docker G20/G21 acceptance suite. The Docker base image remains tag-pinned rather than digest-pinned. Quarantined artifacts must be treated as untrusted when reviewed manually; they are **not** cryptographic or mathematical publisher attestation, trading readiness or proof of profitability. [G22 issue #55](https://github.com/maxqstudio/max-trading-agent/issues/55).
+
+## G23 — offline evidence packet for an independent reviewer
+
+G23 provides **a review manifest, not tool approval**. For an already saved PURE candidate, quarantined G22 oracle hypothesis and the independently recomputed G22 audit JSON, run:
+
+```sh
+python -m max_trading_agent tool-review-package \
+  --file .local/tool-factory/example.json \
+  --oracle-file .local/tool-factory/oracle-hypotheses/<sha256>.json \
+  --audit-file .local/tool-factory/oracle-audits/<review-id>.json \
+  --package-dir .local/tool-factory/review-packages
+```
+
+An optional `--property-receipt-file .local/tool-factory/reviews/<review-id>.json` supplies a G21 reviewer receipt, **not** an execution attestation. The CLI emits JSON and **exits 3 regardless of packet completeness**, since it cannot grant acceptance. Invalid/unrelated/tampered inputs exit 2.
+
+The assembler validates the candidate's strict PURE contract, checks its SHA-256 against the LLM oracle pack, independently recomputes the entire G22 audit from the supplied candidate and oracle, and requires **field-for-field equality** with the supplied audit. For an optional G21 receipt, the assembler checks the candidate ID/version/SHA, status, NO_TRADE fields, trusted reference and golden hashes, expected property-case count, and regenerated challenge digest from the receipt's seed. It also validates the receipt's self-hash. A passing result is explicitly labeled `STRUCTURAL_ONLY_UNATTESTED`, because an attacker could fabricate a valid unsigned receipt without actually running Docker.
+
+The write-once, content-addressed JSON package records only safe IDs, hashes, source-independent reference status, missing evidence and guardrails. It contains **no candidate code, LLM hypothesis text, test cases, secrets or executable registry entry**. All packages are `REVIEW_PACKAGE_INCOMPLETE`, `evidence_only=true`, `candidate_verified=false`, `trusted_oracle_adopted=false`, `decision=NO_TRADE`, `execution=DISABLED`, `eligible_for_demo_or_live=false`, `owner_acceptance=PENDING`. A new tool without an independently reviewed contract lists missing reference and golden evidence; a known tool without a G21 receipt lists that missing evidence; even a structurally valid G21 receipt still requires a **signed sandbox execution attestation**, independent human review and owner acceptance. G23 never creates or accepts these missing approvals.
+
+A packet is a reproducible **checklist for a reviewer**, not a cryptographic publisher attestation, mathematical proof, live broker test, model-security guarantee, or deployment permit. All validation is offline, does not execute candidate code or contact a model or broker, and cannot modify trusted reference files. GitHub Actions reruns G20/G21's actual Docker suite to prevent regressions but that separate CI run does not magically sign or approve a user-supplied receipt. See [G23 Issue #57](https://github.com/maxqstudio/max-trading-agent/issues/57).
