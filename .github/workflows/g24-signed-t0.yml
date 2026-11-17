@@ -129,17 +129,15 @@ jobs:
           python-version: "3.12"
       - name: G25 offline independent provenance binding regression
         run: python -m unittest discover -s tests -p test_signed_review_link.py -v
-      - name: Download exact signed artifact on separate read-only runner
-        env:
-          GH_TOKEN: \${{ github.token }}
+      - name: Download exact same-run artifact on separate read-only runner
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4 pinned
+        with:
+          name: g24-signed-t0-evidence
+          path: ${{ runner.temp }}/signed
+      - name: Fail closed unless all downloaded evidence files exist
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/signed"
-          gh run download "$GITHUB_RUN_ID" \
-            -R "$GITHUB_REPOSITORY" \
-            -n "g24-signed-t0-evidence" \
-            -D "$RUNNER_TEMP/signed"
           test -s "$RUNNER_TEMP/signed/g24-t0-proof.json"
           test -s "$RUNNER_TEMP/signed/g24-property-receipt.json"
           test -s "$RUNNER_TEMP/signed/g24-sigstore-bundle.json"
@@ -177,7 +175,7 @@ jobs:
           PY
       - name: Real Sigstore verification links signed subject to exact G21 and G23 hashes
         env:
-          GH_TOKEN: \${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
@@ -194,7 +192,7 @@ jobs:
             --link-dir g25-linked-evidence
           )
           status=0
-          python -m max_trading_agent.signed_review_link "\${args[@]}" \
+          python -m max_trading_agent.signed_review_link "${args[@]}" \
             > "$RUNNER_TEMP/g25-link-result.json" || status=$?
           test "$status" -eq 3
           python - <<'PY'
@@ -214,7 +212,7 @@ jobs:
           echo "G25 PASS: separate read-only runner verified downloaded Sigstore subject, G21 receipt, and G23 packet; NO_TRADE"
       - name: Tampered receipt or mismatched source must fail consumer verification
         env:
-          GH_TOKEN: \${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
@@ -238,7 +236,7 @@ jobs:
             --expected-run-id "$GITHUB_RUN_ID" --expected-attempt "$GITHUB_RUN_ATTEMPT"
             --link-dir g25-linked-evidence
           )
-          if python -m max_trading_agent.signed_review_link "\${bad_args[@]}" \
+          if python -m max_trading_agent.signed_review_link "${bad_args[@]}" \
               > /dev/null 2>&1; then
             echo "SECURITY FAIL: modified G21 receipt was accepted"
             exit 1
