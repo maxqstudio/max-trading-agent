@@ -28,7 +28,7 @@ jobs:
       - name: Offline G24 producer and verifier security regression
         run: python -m unittest discover -s tests -p test_signed_evidence.py -v
       - name: Fetch Docker public runtime (no model, repo secrets or broker volumes)
-        run: docker pull python:3.12-alpine
+        run: docker pull --platform linux/amd64 python:3.12-alpine@sha256:a61cbd76a882645de7f91423329fe43a67eed60d7da24f9e5331414bb3618b20
       - name: Run real isolated Docker G21 oracle and produce bound T0 evidence
         shell: bash
         run: |
