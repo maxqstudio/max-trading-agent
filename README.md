@@ -186,3 +186,7 @@ Curated MT5 RAG indexing uses the strict G17 canonical URL allowlist and verifie
 ## G23 — Independently reviewable, non-authorizing evidence packet
 
 `tool-review-package` builds a write-once offline manifest binding the PURE candidate SHA, quarantined oracle hypothesis, independently recomputed G22 audit, and optional G21 property receipt. Unsigned receipts remain **unattested** and every packet remains **incomplete / NO_TRADE**; no new tool registration or execution. [Implementation limits](docs/C06_TOOL_FACTORY.md) · [Issue #57](https://github.com/maxqstudio/max-trading-agent/issues/57).
+
+## G24 — Signed GitHub Actions T0 Docker evidence (not tool admission)
+
+A dedicated GitHub-hosted push workflow for a curated PURE numerical fixture performs actual isolated Docker independent-property tests and uses Sigstore-backed GitHub Artifact Attestations to sign the result. The verifier requires the exact source commit/ref, signer workflow and attested file digest, and a tampered copy must fail. **Provenance does not prove mathematical correctness or authorize a tool, broker or trading decision.** [G24 design and limitations](docs/C06_TOOL_FACTORY.md) · [Issue #59](https://github.com/maxqstudio/max-trading-agent/issues/59).
