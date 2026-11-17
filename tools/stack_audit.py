@@ -162,7 +162,7 @@ def audit_stack(prs: Any) -> dict:
         "owner_merge_steps": [
             "Merge only in ascending dependency order, starting with PR #14.",
             "Before each later merge, retarget that PR base to main once its predecessor has merged.",
-            "Inspect the changed diff and obtain fresh GitHub CI plus required human reviews after retargeting.",
+            "Inspect the changed diff, rerun CI on the retargeted exact SHA, and obtain required human reviews before merging.",
             "Never merge an intermediate PR into the previous feature branch if the intention is main.",
             "Do not interpret synthetic CI as real MT5 terminal, risk or broker acceptance.",
         ],
