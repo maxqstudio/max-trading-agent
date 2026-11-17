@@ -226,3 +226,7 @@ The [G31 acceptance workflow](docs/G31_OWNER_MT5_PREFLIGHT.md) performs offline 
 ## G33 — Supply-chain hardening for GitHub Actions
 
 [G33](docs/G33_WORKFLOW_SECURITY.md) pins every GitHub action used by this repository's workflows to a reviewed full commit SHA, disables persisted checkout tokens, and introduces a fail-closed offline test for unpinned actions or unauthorized OIDC/attestation writes. This reduces CI supply-chain risk but is **not a proof that action code, Docker images or all workflow scripts are safe**. The GitHub-hosted audit remains read-only, the project stays `NO_TRADE`, and owner merge/MT5 acceptance gates are unchanged. [Issue #77](https://github.com/maxqstudio/max-trading-agent/issues/77).
+
+## G34 — Immutable Linux/AMD64 sandbox image
+
+The T0 Docker research sandbox now uses the official Python 3.12 Alpine **linux/amd64 image manifest pinned by full SHA-256 digest**, not a mutable tag. The G34 GitHub-hosted check pulls and runs that exact image, and all five historical Docker CI pulls share the same pin. The offline guard rejects mismatched image digests, floating tags and weakened sandbox flags. This is **not** image-signature verification, a guarantee of zero vulnerabilities, or permission to execute orders. See [G34 security scope](docs/C06_TOOL_FACTORY.md) and [Issue #79](https://github.com/maxqstudio/max-trading-agent/issues/79).
