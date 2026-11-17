@@ -32,10 +32,10 @@ def fake_pr(number: int, base: str, *, merged=False, draft=True) -> dict:
     }
 
 
-def fake_stack(*, include_g28=False) -> list[dict]:
-    numbers = list(range(14, 68, 2))
-    if include_g28:
-        numbers.append(68)
+def fake_stack(*, include_future=False) -> list[dict]:
+    numbers = list(range(14, 84, 2))
+    if include_future:
+        numbers.append(84)
     items = []
     for index, number in enumerate(numbers):
         base = "main" if index == 0 else f"feat/stage-{numbers[index - 1]}"
@@ -47,11 +47,11 @@ class StackedMergeHandoffTests(unittest.TestCase):
     def setUp(self):
         self.prs = fake_stack()
 
-    def test_open_stacked_draft_chain_includes_all_27_prior_prs(self):
+    def test_open_stacked_draft_chain_includes_all_35_prs(self):
         result = audit_stack(self.prs)
-        self.assertEqual(result["audited_count"], 27)
+        self.assertEqual(result["audited_count"], 35)
         self.assertEqual(result["merged_count"], 0)
-        self.assertEqual(result["unmerged_count"], 27)
+        self.assertEqual(result["unmerged_count"], 35)
         self.assertEqual(result["next_merge_pr"], 14)
         self.assertEqual(result["merge_target_required"], "main")
         self.assertEqual(result["next_action"],
@@ -66,12 +66,12 @@ class StackedMergeHandoffTests(unittest.TestCase):
         self.assertEqual(result["decision"], "NO_TRADE")
         self.assertEqual(result["execution"], "DISABLED")
 
-    def test_optional_g28_pr_appended_only_when_created(self):
-        with_g28 = audit_stack(fake_stack(include_g28=True))
-        self.assertEqual(with_g28["audited_count"], 28)
-        self.assertEqual(with_g28["ordered_pull_requests"][-1]["number"], 68)
-        self.assertEqual(with_g28["ordered_pull_requests"][-1]["current_base"],
-                         "feat/stage-66")
+    def test_future_pr_appended_without_silent_truncation(self):
+        future = audit_stack(fake_stack(include_future=True))
+        self.assertEqual(future["audited_count"], 36)
+        self.assertEqual(future["ordered_pull_requests"][-1]["number"], 84)
+        self.assertEqual(future["ordered_pull_requests"][-1]["current_base"],
+                         "feat/stage-82")
 
     def test_next_pr_must_be_retargeted_to_main_after_predecessor_merged(self):
         self.prs[0] = fake_pr(14, "main", merged=True, draft=False)
@@ -116,6 +116,19 @@ class StackedMergeHandoffTests(unittest.TestCase):
         self.prs.pop()
         with self.assertRaisesRegex(StackAuditError, "G28_REQUIRED_PR_MISSING"):
             audit_stack(self.prs)
+
+    def test_missing_latest_g34_or_g35_pr_blocks_handoff(self):
+        for number in (80, 82):
+            remaining = [x for x in fake_stack() if x["number"] != number]
+            with self.subTest(number=number), self.assertRaisesRegex(
+                StackAuditError, "G28_REQUIRED_PR_MISSING"):
+                audit_stack(remaining)
+
+    def test_gap_before_future_canonical_pr_is_denied(self):
+        items = fake_stack(include_future=True)
+        items = [x for x in items if x["number"] != 82]
+        with self.assertRaisesRegex(StackAuditError, "G28_REQUIRED_PR_MISSING"):
+            audit_stack(items)
 
     def test_duplicate_pr_number_blocks_handoff(self):
         self.prs.append(dict(self.prs[-1]))
@@ -176,7 +189,7 @@ class StackedMergeHandoffTests(unittest.TestCase):
             return SimpleNamespace(returncode=0, stdout=json.dumps(fake_stack()))
         with patch("tools.stack_audit.subprocess.run", side_effect=mock):
             data = fetch_authenticated_pr_stack()
-        self.assertEqual(len(data), 27)
+        self.assertEqual(len(data), 35)
         self.assertEqual(len(seen), 1)
         self.assertEqual(seen[0][:2], ["gh", "api"])
         self.assertEqual(seen[0][2],
