@@ -91,7 +91,10 @@ def main() -> None:
             ).execute(args.symbol, timeframe=args.timeframe, bars=args.bars)
             output["journal_run_id"] = run_id
         except (MT5ReadError, IdentityError) as exc:
-            print(json.dumps({"ok": False, "read_only": True, "error": exc.as_dict()}),
+            details = exc.as_dict() if isinstance(exc, MT5ReadError) else {
+                "code": exc.code
+            }
+            print(json.dumps({"ok": False, "read_only": True, "error": details}),
                   file=sys.stderr)
             raise SystemExit(2) from None
     elif args.command == "signal-research":
