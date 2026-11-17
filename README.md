@@ -154,3 +154,7 @@ One explicit `tool-propose` call can generate a novel PURE research-code candida
 ## Trading readiness: honest blocked gates
 
 The local Trading Room shows source-journal observations and all pending M01–M07 release gates. Synthetic CI / paper results never unlock DEMO or LIVE. See [Trading readiness](docs/G15_READINESS.md) and [Issue #41](https://github.com/maxqstudio/max-trading-agent/issues/41).
+
+## G16 — Research-only walk-forward validation
+
+`rl-walk-forward` performs expanding chronological tabular-Q retraining with non-overlapping scored holdouts, immutable historical data, fixed momentum/NO_TRADE baselines and doubled-cost stress. **No genuine broker execution, profitability claim or automatic trade authorization.** [Method and limitations](docs/C04_OFFLINE_RL.md) · [Issue #43](https://github.com/maxqstudio/max-trading-agent/issues/43).
