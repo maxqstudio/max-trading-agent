@@ -83,6 +83,23 @@ jobs:
             exit 1
           fi
           echo "G24 negative test PASS: tampered subject rejected"
+      - name: Preserve signed subject and Sigstore bundle for independent verification
+        env:
+          BUNDLE_PATH: ${{ steps.sigstore.outputs.bundle-path }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp "$BUNDLE_PATH" "$RUNNER_TEMP/g24-sigstore-bundle.json"
+          test -s "$RUNNER_TEMP/g24-sigstore-bundle.json"
+      - name: Upload signed evidence and verification bundle (non-executable)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4 pinned
+        with:
+          name: g24-signed-t0-evidence
+          path: |
+            ${{ runner.temp }}/g24-t0-proof.json
+            ${{ runner.temp }}/g24-sigstore-bundle.json
+          retention-days: 30
+          if-no-files-found: error
       - name: Evidence summary (not tool approval)
         env:
           ATTESTATION_URL: ${{ steps.sigstore.outputs.attestation-url }}
