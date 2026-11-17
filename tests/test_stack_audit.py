@@ -130,6 +130,12 @@ class StackedMergeHandoffTests(unittest.TestCase):
         with self.assertRaisesRegex(StackAuditError, "G28_REQUIRED_PR_MISSING"):
             audit_stack(items)
 
+    def test_unexpected_odd_future_pr_is_not_silently_omitted(self):
+        items = fake_stack()
+        items.append(fake_pr(83, "feat/stage-82"))
+        with self.assertRaisesRegex(StackAuditError, "G28_UNEXPECTED_NEW_PR"):
+            audit_stack(items)
+
     def test_duplicate_pr_number_blocks_handoff(self):
         self.prs.append(dict(self.prs[-1]))
         with self.assertRaisesRegex(StackAuditError, "G28_DUPLICATE_PR"):
