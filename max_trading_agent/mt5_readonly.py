@@ -55,15 +55,36 @@ class MT5ReadError(Exception):
 def _field(obj: Any, key: str, default: Any = None) -> Any:
     if isinstance(obj, dict):
         return obj.get(key, default)
+    # MT5 copy_rates_from_pos returns NumPy structured rows (np.void).
+    # They expose fields through row["time"], not necessarily attributes.
+    names = getattr(getattr(obj, "dtype", None), "names", None)
+    if isinstance(names, tuple):
+        if key not in names:
+            return default
+        try:
+            return obj[key]
+        except (KeyError, IndexError, TypeError, ValueError):
+            raise MT5ReadError("INVALID_RATE_FIELD") from None
     return getattr(obj, key, default)
 
 
 def _number(value: Any, key: str) -> float | int | None:
     if value is None:
         return None
+    # NumPy scalars from structured OHLC arrays are not all Python
+    # int/float, and cannot always be serialized directly to JSON.
+    if type(value).__module__.split(".", 1)[0] == "numpy":
+        try:
+            value = value.item()
+        except (AttributeError, TypeError, ValueError):
+            raise MT5ReadError("INVALID_NUMERIC_FIELD") from None
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise MT5ReadError("INVALID_NUMERIC_FIELD")
-    if not math.isfinite(float(value)):
+    try:
+        finite = math.isfinite(float(value))
+    except (OverflowError, TypeError, ValueError):
+        raise MT5ReadError("NON_FINITE_FIELD") from None
+    if not finite:
         raise MT5ReadError("NON_FINITE_FIELD")
     return value
 
@@ -73,7 +94,10 @@ def _fields(obj: Any, allowed: tuple[str, ...]) -> dict[str, Any]:
 
 
 def _utc(seconds: int | float) -> str:
-    return datetime.fromtimestamp(seconds, timezone.utc).isoformat(timespec="milliseconds")
+    try:
+        return datetime.fromtimestamp(seconds, timezone.utc).isoformat(timespec="milliseconds")
+    except (OverflowError, OSError, ValueError):
+        raise MT5ReadError("INVALID_TIMESTAMP") from None
 
 
 class ReadOnlyMT5:
