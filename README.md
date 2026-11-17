@@ -174,3 +174,7 @@ Curated MT5 RAG indexing uses the strict G17 canonical URL allowlist and verifie
 ## G20 — Independent T0 tool reviewer (non-executable)
 
 `tool-review --file <private-candidate.json>` runs the known PURE research tool through two independent isolated Docker oracle batches and records a write-once, SHA-bound T0 **evidence-only** receipt if both pass. Novel tools remain pending an external oracle. This does **not** register executable code or permit broker orders. [Details](docs/C06_TOOL_FACTORY.md) · [Issue #51](https://github.com/maxqstudio/max-trading-agent/issues/51).
+
+## G21 — Extensible independent property review (T0 only)
+
+`tool-property-review` uses a repository-reviewed numerical reference contract and golden oracle to test a PURE proposal against fresh, bounded, seeded property challenges **inside isolated Docker**. Unknown algorithms remain pending independent oracle review; the SHA-bound receipt is **non-executable** and never grants trading authority. See [method and limitations](docs/C06_TOOL_FACTORY.md) · [Issue #53](https://github.com/maxqstudio/max-trading-agent/issues/53).
