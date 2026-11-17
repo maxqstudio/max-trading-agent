@@ -2,7 +2,7 @@ name: Tool Factory isolated Docker oracle
 
 on:
   push:
-    branches: ["feat/c06-**", "feat/g20-**", "feat/g21-**", "feat/g22-**", "feat/g23-**", "feat/g24-**", "feat/g25-**"]
+    branches: ["feat/c06-**", "feat/g20-**", "feat/g21-**", "feat/g22-**", "feat/g23-**", "feat/g24-**", "feat/g25-**", "feat/g26-**"]
   pull_request:
     paths:
       - "max_trading_agent/tool_factory.py"
@@ -12,6 +12,7 @@ on:
       - "max_trading_agent/review_package.py"
       - "max_trading_agent/signed_evidence.py"
       - "max_trading_agent/signed_review_link.py"
+      - "max_trading_agent/review_governance.py"
       - "max_trading_agent/__main__.py"
       - "tools/factory_sandbox_runner.py"
       - "knowledge/tool_factory_oracles.json"
@@ -23,6 +24,7 @@ on:
       - "tests/test_review_package.py"
       - "tests/test_signed_evidence.py"
       - "tests/test_signed_review_link.py"
+      - "tests/test_review_governance.py"
       - ".github/workflows/g24-signed-t0.yml"
       - "tests/fixtures/tool_factory_range_span.json"
       - ".github/workflows/tool-factory.yml"
@@ -54,6 +56,35 @@ jobs:
         run: python -m unittest discover -s tests -p test_signed_evidence.py -v
       - name: G25 external signer/receipt and G23 binding adversarial tests
         run: python -m unittest discover -s tests -p test_signed_review_link.py -v
+      - name: G26 GitHub independent human review and owner gate adversarial tests
+        run: python -m unittest discover -s tests -p test_review_governance.py -v
+      - name: G26 authenticated GitHub PR review preview (must remain HOLD)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          status=0
+          python -m max_trading_agent.review_governance \
+            --candidate tests/fixtures/tool_factory_range_span.json \
+            --pr 62 \
+            --expected-head 9a7379257f4fddef468fa8f4a023077d2b850c27 \
+            --output-dir "$RUNNER_TEMP/g26-preview" \
+            > "$RUNNER_TEMP/g26-status.json" || status=$?
+          test "$status" -eq 3
+          python - <<'PY'
+          import json, os, pathlib
+          data=json.loads((pathlib.Path(os.environ['RUNNER_TEMP'])/'g26-status.json').read_text())
+          assert data['status']=='G26_REVIEW_GATES_RECORDED_NO_ADMISSION'
+          assert data['candidate_verified'] is False
+          assert data['t1_registry_enabled'] is False
+          assert data['tool_admitted'] is False
+          assert data['decision']=='NO_TRADE' and data['execution']=='DISABLED'
+          assert data['gates']['github_pr_head_match'] is True
+          assert data['gates']['merged_and_closed'] is False
+          assert data['gates']['not_draft'] is False
+          print('G26 PASS: actual GitHub PR #62 remains draft/unmerged; authenticated review gate HOLD, no admission')
+          PY
       - name: Fetch public sandbox runtime (no secrets mounted)
         run: docker pull python:3.12-alpine
       - name: Known correct candidate must pass isolated oracle
