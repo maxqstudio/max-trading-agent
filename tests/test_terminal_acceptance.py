@@ -29,9 +29,11 @@ def sample(bar_time, *, quote_age=1, login=12345678, server="PRIVATE_BROKER",
         "trade_contract_size": 100000, "volume_step": 0.01,
     })
     if gap:
-        for row in snapshot["candles"][7:]:
+        # Shift only older history backwards: creates one real 2-minute
+        # hole but preserves a correctly completed latest candle.
+        for row in snapshot["candles"][:7]:
             row["time_utc"] = (
-                datetime.fromisoformat(row["time_utc"]) + timedelta(minutes=1)
+                datetime.fromisoformat(row["time_utc"]) - timedelta(minutes=1)
             ).isoformat()
     if missing_spec:
         snapshot["symbol"]["volume_step"] = None
