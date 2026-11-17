@@ -194,3 +194,7 @@ A dedicated GitHub-hosted push workflow for a curated PURE numerical fixture per
 ## G25 — Independent verification of downloaded Sigstore evidence
 
 After G24 signs Docker T0 evidence, a **separate read-only GitHub Actions runner** downloads the actual Sigstore bundle, signed subject and G21 receipt. `max_trading_agent.signed_review_link` checks the cryptographic source/workflow identity and exact candidate, independent G21 goldens/property hashes and G23 review-package fingerprint. The original G23 packet stays **incomplete**, and any linked receipt is **evidence only / NO_TRADE**. See [reviewer workflow and limitations](docs/C06_TOOL_FACTORY.md) · [G25 Issue #61](https://github.com/maxqstudio/max-trading-agent/issues/61).
+
+## G26 — Authenticated independent GitHub review gate (record-only)
+
+`max_trading_agent.review_governance` reads GitHub-authenticated PR reviews and owner comments, rejects author/self-review and obsolete SHA approvals, and reports every missing independent reviewer, owner, merge, and Sigstore gate. **No approvals are synthesized; even complete review facts do not register or execute generated tool Python.** Always `NO_TRADE`. [G26 policy and limitations](docs/C06_TOOL_FACTORY.md) · [Issue #63](https://github.com/maxqstudio/max-trading-agent/issues/63).
