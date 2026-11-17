@@ -190,3 +190,7 @@ Curated MT5 RAG indexing uses the strict G17 canonical URL allowlist and verifie
 ## G24 — Signed GitHub Actions T0 Docker evidence (not tool admission)
 
 A dedicated GitHub-hosted push workflow for a curated PURE numerical fixture performs actual isolated Docker independent-property tests and uses Sigstore-backed GitHub Artifact Attestations to sign the result. The verifier requires the exact source commit/ref, signer workflow and attested file digest, and a tampered copy must fail. **Provenance does not prove mathematical correctness or authorize a tool, broker or trading decision.** [G24 design and limitations](docs/C06_TOOL_FACTORY.md) · [Issue #59](https://github.com/maxqstudio/max-trading-agent/issues/59).
+
+## G25 — Independent verification of downloaded Sigstore evidence
+
+After G24 signs Docker T0 evidence, a **separate read-only GitHub Actions runner** downloads the actual Sigstore bundle, signed subject and G21 receipt. `max_trading_agent.signed_review_link` checks the cryptographic source/workflow identity and exact candidate, independent G21 goldens/property hashes and G23 review-package fingerprint. The original G23 packet stays **incomplete**, and any linked receipt is **evidence only / NO_TRADE**. See [reviewer workflow and limitations](docs/C06_TOOL_FACTORY.md) · [G25 Issue #61](https://github.com/maxqstudio/max-trading-agent/issues/61).

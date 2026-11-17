@@ -231,5 +231,35 @@ class SignedEvidenceTests(unittest.TestCase):
             verify_signed_evidence(self.evidence, self.bundle, ci_env())
 
 
+    def test_exported_g21_receipt_bytes_match_signed_subject_hash_and_review_id(self):
+        receipt_file = self.path / "g24-property-receipt.json"
+        with patch("max_trading_agent.tool_properties.sandbox_evaluate",
+                   side_effect=fake_runner):
+            evidence = generate_evidence(
+                self.candidate, ci_env(), receipt_output=receipt_file)
+        receipt = json.loads(receipt_file.read_text(encoding="utf-8"))
+        from max_trading_agent.tool_review import _digest
+        self.assertEqual(evidence["property_receipt_sha256"], _digest(receipt))
+        self.assertEqual(evidence["property_receipt_id"], receipt["review_id"])
+        self.assertEqual(evidence["property_challenge_sha256"],
+                         receipt["property_sha256"])
+        self.assertEqual(evidence["challenge_seed_hex"],
+                         receipt["challenge_seed_hex"])
+        self.assertEqual(evidence["candidate_sha256"],
+                         receipt["candidate_sha256"])
+        self.assertEqual(evidence["decision"], "NO_TRADE")
+
+    def test_existing_receipt_path_never_overwritten_or_signed_as_new(self):
+        receipt_file = self.path / "g24-property-receipt.json"
+        receipt_file.write_text('{"spoofed":true}', encoding="utf-8")
+        with patch("max_trading_agent.tool_properties.sandbox_evaluate",
+                   side_effect=fake_runner):
+            with self.assertRaisesRegex(FactoryError,
+                                        "G24_RECEIPT_ALREADY_EXISTS"):
+                generate_evidence(self.candidate, ci_env(),
+                                  receipt_output=receipt_file)
+        self.assertEqual(receipt_file.read_text(), '{"spoofed":true}')
+
+
 if __name__ == "__main__":
     unittest.main()

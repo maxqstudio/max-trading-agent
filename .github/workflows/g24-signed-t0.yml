@@ -2,7 +2,7 @@ name: G24 Sigstore signed T0 Docker evidence
 
 on:
   push:
-    branches: ["feat/g24-**"]
+    branches: ["feat/g24-**", "feat/g25-**"]
 
 # This dedicated push-only job is the ONLY job permitted to mint an OIDC
 # signature or publish an attestation. Existing CI remains read-only.
@@ -33,7 +33,8 @@ jobs:
           set -euo pipefail
           python -m max_trading_agent.signed_evidence create \
             --candidate tests/fixtures/tool_factory_range_span.json \
-            --evidence "$RUNNER_TEMP/g24-t0-proof.json"
+            --evidence "$RUNNER_TEMP/g24-t0-proof.json" \
+            --receipt-out "$RUNNER_TEMP/g24-property-receipt.json"
           python - <<'PY'
           import json, os, pathlib
           file=pathlib.Path(os.environ['RUNNER_TEMP'])/'g24-t0-proof.json'
@@ -97,6 +98,7 @@ jobs:
           name: g24-signed-t0-evidence
           path: |
             ${{ runner.temp }}/g24-t0-proof.json
+            ${{ runner.temp }}/g24-property-receipt.json
             ${{ runner.temp }}/g24-sigstore-bundle.json
           retention-days: 30
           if-no-files-found: error
@@ -109,3 +111,140 @@ jobs:
           echo "Attestation: $ATTESTATION_URL"
           echo "This proves workflow provenance of T0 Docker evidence only, not model correctness or trading approval"
           echo "NO_TRADE; execution=DISABLED; owner_acceptance=PENDING"
+
+
+  independent-download-and-bind:
+    needs: attest-isolated-tool-review
+    if: github.repository == 'maxqstudio/max-trading-agent'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Second runner cannot mint attestations or obtain OIDC tokens.
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4 pinned
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5 pinned
+        with:
+          python-version: "3.12"
+      - name: G25 offline independent provenance binding regression
+        run: python -m unittest discover -s tests -p test_signed_review_link.py -v
+      - name: Download exact same-run artifact on separate read-only runner
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4 pinned
+        with:
+          name: g24-signed-t0-evidence
+          path: ${{ runner.temp }}/signed
+      - name: Fail closed unless all downloaded evidence files exist
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s "$RUNNER_TEMP/signed/g24-t0-proof.json"
+          test -s "$RUNNER_TEMP/signed/g24-property-receipt.json"
+          test -s "$RUNNER_TEMP/signed/g24-sigstore-bundle.json"
+      - name: Recompute G22 audit and G23 review packet independently
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os, pathlib
+          from max_trading_agent.oracle_quarantine import audit_hypothesis
+          from max_trading_agent.review_package import assemble_review_package
+          from max_trading_agent.tool_factory import validate_candidate
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'signed'
+          candidate=json.loads(pathlib.Path('tests/fixtures/tool_factory_range_span.json').read_text())
+          hypothesis={
+              'tool_id':candidate['tool_id'],
+              'candidate_sha256':validate_candidate(candidate)['sha256'],
+              'hypothesis':'Compute maximum minus minimum of numerical observations.',
+              'cases':[{'input':[1,3],'expected':2},
+                       {'input':[-4,5],'expected':9},
+                       {'input':[4,9,2],'expected':7}],
+              'properties':['PERMUTATION_INVARIANT'],
+          }
+          audit=audit_hypothesis(candidate,hypothesis)
+          receipt=json.loads((root/'g24-property-receipt.json').read_text())
+          packet=assemble_review_package(candidate,hypothesis,audit,
+                                         property_receipt=receipt)
+          for file, content in (
+              ('g25-candidate.json',candidate),('g25-oracle.json',hypothesis),
+              ('g25-audit.json',audit),('g25-package.json',packet)):
+              (root/file).write_text(json.dumps(content,indent=2,sort_keys=True))
+          assert packet['status']=='REVIEW_PACKAGE_INCOMPLETE'
+          assert packet['property_receipt_sha256']
+          assert not packet['candidate_verified']
+          PY
+      - name: Real Sigstore verification links signed subject to exact G21 and G23 hashes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONPATH="$GITHUB_WORKSPACE"
+          cd "$RUNNER_TEMP/signed"
+          args=(
+            --candidate g25-candidate.json --oracle g25-oracle.json
+            --audit g25-audit.json --package g25-package.json
+            --receipt g24-property-receipt.json
+            --evidence g24-t0-proof.json --bundle g24-sigstore-bundle.json
+            --expected-commit "$GITHUB_SHA" --expected-ref "$GITHUB_REF"
+            --expected-run-id "$GITHUB_RUN_ID"
+            --expected-attempt "$GITHUB_RUN_ATTEMPT"
+            --link-dir g25-linked-evidence
+          )
+          status=0
+          python -m max_trading_agent.signed_review_link "${args[@]}" \
+            > "$RUNNER_TEMP/g25-link-result.json" || status=$?
+          test "$status" -eq 3
+          python - <<'PY'
+          import json, os, pathlib
+          report=json.loads((pathlib.Path(os.environ['RUNNER_TEMP'])/'g25-link-result.json').read_text())
+          assert report['status']=='SIGNED_WORKFLOW_EVIDENCE_LINKED_REVIEW_PENDING'
+          assert report['g23_package_status']=='REVIEW_PACKAGE_INCOMPLETE'
+          assert report['source_commit']==os.environ['GITHUB_SHA']
+          assert report['source_run_id']==os.environ['GITHUB_RUN_ID']
+          assert report['cryptographic_attestation_verified'] is True
+          assert report['signed_claim_matches_g23_and_g21'] is True
+          assert report['decision']=='NO_TRADE' and report['execution']=='DISABLED'
+          assert not report['tool_admitted'] and not report['candidate_verified']
+          assert report['owner_acceptance']=='PENDING' and report['missing_evidence']
+          assert report['tool_id']=='range_span_v1'
+          PY
+          echo "G25 PASS: separate read-only runner verified downloaded Sigstore subject, G21 receipt, and G23 packet; NO_TRADE"
+      - name: Tampered receipt or mismatched source must fail consumer verification
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONPATH="$GITHUB_WORKSPACE"
+          cd "$RUNNER_TEMP/signed"
+          cp g24-property-receipt.json tampered-receipt.json
+          python - <<'PY'
+          import json, pathlib
+          file=pathlib.Path('tampered-receipt.json')
+          data=json.loads(file.read_text())
+          data['property_sha256']='0'*64
+          file.write_text(json.dumps(data))
+          PY
+          before=$(find g25-linked-evidence -maxdepth 1 -name '*.json' | wc -l)
+          bad_args=(
+            --candidate g25-candidate.json --oracle g25-oracle.json
+            --audit g25-audit.json --package g25-package.json
+            --receipt tampered-receipt.json
+            --evidence g24-t0-proof.json --bundle g24-sigstore-bundle.json
+            --expected-commit "$GITHUB_SHA" --expected-ref "$GITHUB_REF"
+            --expected-run-id "$GITHUB_RUN_ID" --expected-attempt "$GITHUB_RUN_ATTEMPT"
+            --link-dir g25-linked-evidence
+          )
+          if python -m max_trading_agent.signed_review_link "${bad_args[@]}" \
+              > /dev/null 2>&1; then
+            echo "SECURITY FAIL: modified G21 receipt was accepted"
+            exit 1
+          fi
+          test "$(find g25-linked-evidence -maxdepth 1 -name '*.json' | wc -l)" -eq "$before"
+          echo "G25 negative PASS: altered receipt rejected, no new link"
+      - name: Research-only safety summary
+        run: |
+          echo "G25: independent read-only GitHub runner reverified source and signed claim."
+          echo "G23 original packet remains incomplete; no tool registration or mathematical proof."
+          echo "NO_TRADE; execution=DISABLED; owner_acceptance=PENDING."

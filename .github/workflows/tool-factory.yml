@@ -2,7 +2,7 @@ name: Tool Factory isolated Docker oracle
 
 on:
   push:
-    branches: ["feat/c06-**", "feat/g20-**", "feat/g21-**", "feat/g22-**", "feat/g23-**", "feat/g24-**"]
+    branches: ["feat/c06-**", "feat/g20-**", "feat/g21-**", "feat/g22-**", "feat/g23-**", "feat/g24-**", "feat/g25-**"]
   pull_request:
     paths:
       - "max_trading_agent/tool_factory.py"
@@ -11,6 +11,7 @@ on:
       - "max_trading_agent/oracle_quarantine.py"
       - "max_trading_agent/review_package.py"
       - "max_trading_agent/signed_evidence.py"
+      - "max_trading_agent/signed_review_link.py"
       - "max_trading_agent/__main__.py"
       - "tools/factory_sandbox_runner.py"
       - "knowledge/tool_factory_oracles.json"
@@ -21,6 +22,7 @@ on:
       - "tests/test_oracle_quarantine.py"
       - "tests/test_review_package.py"
       - "tests/test_signed_evidence.py"
+      - "tests/test_signed_review_link.py"
       - ".github/workflows/g24-signed-t0.yml"
       - "tests/fixtures/tool_factory_range_span.json"
       - ".github/workflows/tool-factory.yml"
@@ -50,6 +52,8 @@ jobs:
         run: python -m unittest discover -s tests -p test_review_package.py -v
       - name: G24 signed evidence context and Sigstore verification unit gate
         run: python -m unittest discover -s tests -p test_signed_evidence.py -v
+      - name: G25 external signer/receipt and G23 binding adversarial tests
+        run: python -m unittest discover -s tests -p test_signed_review_link.py -v
       - name: Fetch public sandbox runtime (no secrets mounted)
         run: docker pull python:3.12-alpine
       - name: Known correct candidate must pass isolated oracle

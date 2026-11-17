@@ -49,8 +49,7 @@ def _context(env: dict) -> dict:
     repo, sha, ref = (env["GITHUB_REPOSITORY"], env["GITHUB_SHA"],
                       env["GITHUB_REF"])
     if (repo != _REPO or not _SHA.fullmatch(sha)
-            or not ref.startswith("refs/heads/feat/g24-")
-            or len(ref) > 128 or not re.fullmatch(r"refs/heads/feat/g24-[a-z0-9-]+", ref)
+            or len(ref) > 128 or not re.fullmatch(r"refs/heads/feat/g2[45]-[a-z0-9-]+", ref)
             or env["GITHUB_WORKFLOW_REF"] != f"{_SIGNER}@{ref}"
             or env["GITHUB_EVENT_NAME"] != "push"
             or env["RUNNER_ENVIRONMENT"] != "github-hosted"
@@ -65,7 +64,8 @@ def _context(env: dict) -> dict:
     }
 
 
-def generate_evidence(candidate: dict, env: dict) -> dict:
+def generate_evidence(candidate: dict, env: dict, *,
+                      receipt_output: Path | None = None) -> dict:
     """Run G21's genuine two-stage independent Docker review before evidence."""
     ci = _context(env)
     identity = validate_candidate(candidate)
@@ -85,6 +85,16 @@ def generate_evidence(candidate: dict, env: dict) -> dict:
             or receipt["property_cases"] != 32
             or receipt["reference"] != "NUMERIC_RANGE"):
         raise FactoryError("G24_DOCKER_REVIEW_FAILED")
+    if receipt_output is not None:
+        output = Path(receipt_output)
+        if output.is_symlink() or output.exists():
+            raise FactoryError("G24_RECEIPT_ALREADY_EXISTS")
+        try:
+            with output.open("x", encoding="utf-8") as stream:
+                json.dump(receipt, stream, sort_keys=True, indent=2, allow_nan=False)
+                stream.write("\n")
+        except OSError:
+            raise FactoryError("G24_RECEIPT_WRITE_FAILED") from None
     evidence = {
         "schema_version": 1,
         "kind": "GITHUB_ACTIONS_ISOLATED_DOCKER_T0_EVIDENCE",
@@ -216,6 +226,7 @@ def main() -> None:
     parser.add_argument("--candidate")
     parser.add_argument("--evidence", required=True)
     parser.add_argument("--bundle")
+    parser.add_argument("--receipt-out", help="G21 receipt output for consumer-side verification")
     args = parser.parse_args()
     try:
         if args.command == "create":
@@ -226,7 +237,9 @@ def main() -> None:
                     or not 1 <= candidate_path.stat().st_size <= 10_000):
                 raise FactoryError("G24_INVALID_CANDIDATE_FILE")
             candidate = json.loads(candidate_path.read_text(encoding="utf-8"))
-            document = generate_evidence(candidate, os.environ)
+            document = generate_evidence(
+                candidate, os.environ,
+                receipt_output=Path(args.receipt_out) if args.receipt_out else None)
             output = Path(args.evidence)
             if output.is_symlink() or output.exists():
                 raise FactoryError("G24_EVIDENCE_ALREADY_EXISTS")
@@ -237,7 +250,7 @@ def main() -> None:
                       "candidate_sha256": document["candidate_sha256"],
                       "decision": "NO_TRADE"}
         else:
-            if not args.bundle or args.candidate:
+            if not args.bundle or args.candidate or args.receipt_out:
                 raise FactoryError("G24_INVALID_CLI_ARGUMENTS")
             result = verify_signed_evidence(Path(args.evidence),
                                             Path(args.bundle), os.environ)
