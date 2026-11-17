@@ -60,7 +60,12 @@ def _validate_pr(pr: Any, number: int) -> dict:
         raise StackAuditError("G28_INVALID_PR_METADATA")
     head_repo, base_repo = head.get("repo"), base.get("repo")
     sha, head_ref, base_ref = head.get("sha"), head.get("ref"), base.get("ref")
-    if (type(head_repo) is not dict or head_repo.get("full_name") != _REPO
+    merged = pr.get("merged_at") is not None
+    # GitHub can return head.repo=null after a merged source branch is
+    # deleted. Never accept that missing identity for an unmerged PR.
+    if ((head_repo is None and not merged)
+            or (head_repo is not None and
+                (type(head_repo) is not dict or head_repo.get("full_name") != _REPO))
             or type(base_repo) is not dict or base_repo.get("full_name") != _REPO
             or type(sha) is not str or not _SHA.fullmatch(sha)
             or type(head_ref) is not str or not _BRANCH.fullmatch(head_ref)
@@ -69,7 +74,6 @@ def _validate_pr(pr: Any, number: int) -> dict:
             or type(pr.get("draft")) is not bool
             or pr.get("html_url") != f"https://github.com/{_REPO}/pull/{number}"):
         raise StackAuditError("G28_INVALID_PR_METADATA")
-    merged = pr.get("merged_at") is not None
     if (merged and (pr.get("state") != "closed"
                     or type(pr["merged_at"]) is not str)
             or pr["state"] == "closed" and not merged):

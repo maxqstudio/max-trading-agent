@@ -73,6 +73,32 @@ class StackedMergeHandoffTests(unittest.TestCase):
         self.assertEqual(future["ordered_pull_requests"][-1]["current_base"],
                          "feat/stage-82")
 
+    def test_deleted_head_repo_only_allowed_for_github_merged_pr(self):
+        self.prs[0] = fake_pr(14, "main", merged=True, draft=False)
+        self.prs[0]["head"]["repo"] = None
+        self.prs[1]["base"]["ref"] = "main"
+        result = audit_stack(self.prs)
+        self.assertEqual(result["merged_count"], 1)
+        self.assertEqual(result["next_merge_pr"], 16)
+        self.assertEqual(result["next_action"],
+                         "OWNER_REVIEW_NEXT_PR_AND_MARK_READY_WHEN_APPROPRIATE")
+        self.assertEqual(result["decision"], "NO_TRADE")
+
+    def test_deleted_head_repo_without_merge_record_is_rejected(self):
+        self.prs[0]["head"]["repo"] = None
+        with self.assertRaisesRegex(StackAuditError, "G28_INVALID_PR_METADATA"):
+            audit_stack(self.prs)
+
+    def test_deleted_head_repo_with_fake_or_incomplete_merge_is_rejected(self):
+        self.prs[0] = fake_pr(14, "main", merged=True, draft=False)
+        self.prs[0]["head"]["repo"] = None
+        self.prs[0]["merged_at"] = 123
+        with self.assertRaisesRegex(StackAuditError, "G28_CLOSED_UNMERGED_OR_INVALID"):
+            audit_stack(self.prs)
+        self.prs[0]["merged_at"] = None
+        with self.assertRaisesRegex(StackAuditError, "G28_INVALID_PR_METADATA"):
+            audit_stack(self.prs)
+
     def test_next_pr_must_be_retargeted_to_main_after_predecessor_merged(self):
         self.prs[0] = fake_pr(14, "main", merged=True, draft=False)
         result = audit_stack(self.prs)

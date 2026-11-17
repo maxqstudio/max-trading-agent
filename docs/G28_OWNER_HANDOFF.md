@@ -10,6 +10,8 @@
 
 Use the live check again **before** each merge; existing archived CI PASS only proves the tested SHA, and retargeting/merging can change what must be validated.
 
+When a successfully merged PR's source branch is deleted, GitHub may report `head.repo=null`. G28 tolerates that **only** for a PR with a valid GitHub merged/closed record, while still verifying its original head ref/SHA and the target repository. An unmerged PR with missing source repository remains a hard failure; G28 cannot accept missing branch identity as a merge shortcut.
+
 ## Owner-only merge procedure
 
 1. First review **PR #14** targeting `main`; when satisfied and accepted, mark Ready for review as appropriate, require current CI and merge **into `main`**.
