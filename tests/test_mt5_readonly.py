@@ -6,6 +6,7 @@ from unittest.mock import patch
 from types import SimpleNamespace as NS
 
 from max_trading_agent.mt5_readonly import MT5ReadError, ReadOnlyMT5, _number
+from max_trading_agent.identity import verify_snapshot
 
 try:
     import numpy as np
@@ -29,6 +30,8 @@ class FakeMT5:
         self.init_ok = True
         self.visible = True
         self.trade_mode = 0
+        self.account_login = 12345678
+        self.broker_server = "PRIVATE_BROKER"
         self.offset_seconds = 12
         self.bad_rates = None
 
@@ -49,7 +52,7 @@ class FakeMT5:
 
     def account_info(self):
         self.calls.append(("account_info",))
-        return NS(login=12345678, server="PRIVATE", name="PRIVATE",
+        return NS(login=self.account_login, server=self.broker_server, name="PRIVATE",
                   trade_mode=self.trade_mode, balance=1000.0, equity=999.0,
                   currency="USD", margin=1.0, margin_free=998.0,
                   margin_level=200.0, leverage=100, margin_mode=0,
@@ -127,11 +130,45 @@ class ReadOnlyMT5Tests(unittest.TestCase):
         self.assertEqual(names[-1], "shutdown")
         self.assertFalse(set(names) & {"order_send", "login", "symbol_select", "order_check"})
 
+    def test_readonly_capture_hmac_binding_changes_with_login_or_server(self):
+        key = bytes(range(32))
+        adapter = ReadOnlyMT5(self.fake, clock=lambda: NOW, identity_key=key)
+        first = adapter.capture("EURUSD", bars=2)
+        account_id = verify_snapshot(first, key)
+        self.assertNotIn("login", first["account"])
+        self.assertNotIn("server", first["account"])
+        self.fake.account_login = 87654321
+        self.assertNotEqual(verify_snapshot(adapter.capture("EURUSD", bars=2), key), account_id)
+        self.fake.account_login = 12345678
+        self.fake.broker_server = "ANOTHER_SERVER"
+        self.assertNotEqual(verify_snapshot(adapter.capture("EURUSD", bars=2), key), account_id)
+
+    def test_missing_account_identity_fails_closed(self):
+        self.fake.account_login = None
+        adapter = ReadOnlyMT5(self.fake, clock=lambda: NOW, identity_key=bytes(range(32)))
+        self.assert_code("ACCOUNT_ID_UNAVAILABLE", lambda: adapter.capture("EURUSD", bars=2))
+        self.assertEqual(self.fake.calls[-1], ("shutdown",))
+
     def test_real_account_is_labeled_not_guessed(self):
         self.fake.trade_mode = 2
         self.assertEqual(self.reader.capture("XAUUSD", bars=2)["account"]["trade_mode"], "REAL")
         self.fake.trade_mode = 9
         self.assertEqual(self.reader.capture("XAUUSD", bars=2)["account"]["trade_mode"], "UNKNOWN")
+
+    def test_account_changes_mid_capture_even_with_same_trade_mode(self):
+        original = self.fake.account_info
+        calls = [0]
+        def swapped_account():
+            calls[0] += 1
+            if calls[0] == 2:
+                self.fake.account_login = 99999999
+            return original()
+        self.fake.account_info = swapped_account
+        adapter = ReadOnlyMT5(self.fake, clock=lambda: NOW,
+                              identity_key=bytes(range(32)))
+        self.assert_code("ACCOUNT_CHANGED_DURING_CAPTURE",
+                         lambda: adapter.capture("EURUSD", bars=2))
+        self.assertEqual(self.fake.calls[-1], ("shutdown",))
 
     def test_initialize_failure_redacts_private_error(self):
         self.fake.init_ok = False

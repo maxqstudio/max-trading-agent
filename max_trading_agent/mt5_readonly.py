@@ -16,6 +16,8 @@ from contextlib import contextmanager
 from datetime import datetime, timezone
 from typing import Any, Callable, Iterator
 
+from .identity import IdentityError, seal_snapshot
+
 # The native MT5 Python package uses a terminal-wide session. Serialize probes.
 _SESSION_LOCK = threading.RLock()
 _TIMEFRAMES = {
@@ -102,12 +104,13 @@ class ReadOnlyMT5:
     """Opt-in market snapshot; not a trade engine or a signal generator."""
 
     def __init__(self, api: Any, *, clock: Callable[[], float] | None = None,
-                 max_tick_age_seconds: int = 90):
+                 max_tick_age_seconds: int = 90, identity_key: bytes | None = None):
         if not 1 <= max_tick_age_seconds <= 3600:
             raise ValueError("max_tick_age_seconds must be between 1 and 3600")
         self._api = api
         self._clock = clock or (lambda: datetime.now(timezone.utc).timestamp())
         self._max_tick_age = max_tick_age_seconds
+        self._identity_key = identity_key
 
     @classmethod
     def from_local_terminal(cls, **kwargs: Any) -> "ReadOnlyMT5":
@@ -218,6 +221,14 @@ class ReadOnlyMT5:
             positions = self._require(self._api.positions_get(symbol=symbol), "POSITIONS_UNAVAILABLE")
             orders = self._require(self._api.orders_get(symbol=symbol), "ORDERS_UNAVAILABLE")
             account_trade_mode = _number(_field(account, "trade_mode"), "trade_mode")
+            # Account switching between the beginning and end of the read
+            # must NEVER stamp observations with the wrong account identity.
+            final_account = self._require(
+                self._api.account_info(), "ACCOUNT_UNAVAILABLE"
+            )
+            if any(_field(account, key) != _field(final_account, key)
+                   for key in ("login", "server", "trade_mode")):
+                raise MT5ReadError("ACCOUNT_CHANGED_DURING_CAPTURE")
             # Explicit allowlists prevent leaking login, server, name and paths.
             result = {
                 "source": "MT5_LOCAL_TERMINAL",
@@ -248,4 +259,13 @@ class ReadOnlyMT5:
                 "orders": [_fields(x, _ORDER_NUMBERS) for x in orders],
                 "decision": "NOT_EVALUATED",
             }
+            if self._identity_key is not None:
+                try:
+                    result = seal_snapshot(
+                        result, self._identity_key,
+                        login=_field(account, "login"),
+                        server=_field(account, "server"),
+                    )
+                except IdentityError as exc:
+                    raise MT5ReadError(exc.code) from None
             return result

@@ -112,3 +112,9 @@ python -m max_trading_agent watch --symbol EURUSD --timeframe M15 --enable-llm-r
 ```
 
 See [M05 runtime and limits](docs/M05_AUTONOMOUS_WATCHER.md) and [Issue #21](https://github.com/maxqstudio/max-trading-agent/issues/21). GitHub Actions uses fake providers and tests policy boundaries; owner terminal runtime acceptance remains required.
+
+## M06 — Local MT5 account binding (candidate)
+
+Read-only MT5 snapshots are HMAC-signed using a locally generated secret at `.local/mt5_identity.key` (or `--identity-key-file`). The adapter binds the login and broker server without logging them; the watcher stops prospectively admitting research if **either changes, even between two DEMO accounts**. Existing legacy unbound M05 watcher states are intentionally not auto-rebound. Losing or changing the private key also blocks existing account bindings.
+
+HMAC gives local tamper evidence only, **not independent proof of genuine broker quotes**. See [M06 security and limitations](docs/M06_IDENTITY.md) and [Issue #23](https://github.com/maxqstudio/max-trading-agent/issues/23). No trades are permitted.

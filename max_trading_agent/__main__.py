@@ -41,6 +41,9 @@ def main() -> None:
                         help="Watch interval 5-60 seconds")
     parser.add_argument("--max-polls", type=int, default=0,
                         help="0: continuous until Ctrl+C; >=1: bounded")
+    parser.add_argument("--identity-key-file",
+                        default=".local/mt5_identity.key",
+                        help="Private HMAC key file for opt-in MT5 read-only observation")
     parser.add_argument("--enable-llm-research", action="store_true",
                         help="EXPLICIT opt-in: up to 4 billable LLM calls per trigger")
     args = parser.parse_args()
@@ -68,14 +71,18 @@ def main() -> None:
         # Import occurs only after this command; GitHub Actions needs no MT5 package.
         from .mt5_readonly import MT5ReadError, ReadOnlyMT5
         from .probe import ProbeMission
+        from .identity import IdentityError, load_or_create_key
         if not args.symbol:
             parser.error("mt5-probe requires --symbol (e.g., EURUSD)")
         try:
             run_id, output = ProbeMission(
-                EventJournal(Path(args.journal)), ReadOnlyMT5.from_local_terminal()
+                EventJournal(Path(args.journal)),
+                ReadOnlyMT5.from_local_terminal(
+                    identity_key=load_or_create_key(Path(args.identity_key_file))
+                ),
             ).execute(args.symbol, timeframe=args.timeframe, bars=args.bars)
             output["journal_run_id"] = run_id
-        except MT5ReadError as exc:
+        except (MT5ReadError, IdentityError) as exc:
             print(json.dumps({"ok": False, "read_only": True, "error": exc.as_dict()}),
                   file=sys.stderr)
             raise SystemExit(2) from None
@@ -170,6 +177,7 @@ def main() -> None:
         from .llm_client import LLMError, OpenAICompatibleClient
         from .mt5_readonly import MT5ReadError, ReadOnlyMT5
         from .watcher import MarketWatcher, WatchError
+        from .identity import IdentityError, load_or_create_key
         if not args.symbol:
             parser.error("watch requires --symbol")
         if not 5 <= args.interval_seconds <= 60 or not 0 <= args.max_polls <= 100000:
@@ -179,9 +187,12 @@ def main() -> None:
                       if args.enable_llm_research else None)
             observer = MarketWatcher(
                 EventJournal(Path(args.journal)),
-                ReadOnlyMT5.from_local_terminal(),
+                ReadOnlyMT5.from_local_terminal(
+                    identity_key=load_or_create_key(Path(args.identity_key_file))
+                ),
                 args.symbol, args.timeframe, bars=args.bars,
                 client=client, knowledge_db=Path(args.db),
+                identity_key=load_or_create_key(Path(args.identity_key_file)),
             )
             output = observer.run(
                 interval_seconds=args.interval_seconds, max_polls=args.max_polls
@@ -189,7 +200,7 @@ def main() -> None:
         except KeyboardInterrupt:
             output = {"status": "STOPPED_BY_USER", "mode": "READ_ONLY",
                       "execution": "DISABLED"}
-        except (LLMError, MT5ReadError, WatchError) as exc:
+        except (LLMError, MT5ReadError, WatchError, IdentityError) as exc:
             code = getattr(exc, "code", str(exc))
             print(json.dumps({"ok": False, "code": code,
                               "execution": "DISABLED"}), file=sys.stderr)

@@ -17,6 +17,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterator
 
+from .identity import IdentityError, verify_snapshot
 from .llm_client import LLMError
 from .mt5_readonly import MT5ReadError, ReadOnlyMT5
 from .runtime import DEFAULT_KNOWLEDGE, EventJournal
@@ -48,7 +49,13 @@ class WatchState:
                 symbol TEXT NOT NULL, timeframe TEXT NOT NULL,
                 bar_utc TEXT NOT NULL, bar_hash TEXT NOT NULL,
                 account_mode TEXT NOT NULL, seen_utc TEXT NOT NULL,
+                account_binding_id TEXT,
                 PRIMARY KEY(symbol, timeframe))""")
+            # Existing M05 DBs contain unbound baselines. A NULL binding
+            # explicitly blocks research; never auto-approve a legacy state.
+            columns = {row[1] for row in db.execute("PRAGMA table_info(watch_state)")}
+            if "account_binding_id" not in columns:
+                db.execute("ALTER TABLE watch_state ADD COLUMN account_binding_id TEXT")
             db.execute("""CREATE TABLE IF NOT EXISTS watch_jobs (
                 job_id TEXT PRIMARY KEY,
                 symbol TEXT NOT NULL, timeframe TEXT NOT NULL,
@@ -109,8 +116,12 @@ class WatchState:
                        (symbol, timeframe, owner))
 
     def observe(self, public: dict, account_mode: str, *,
-                observed_at: str) -> dict:
+                observed_at: str, account_binding_id: str) -> dict:
         """Atomic baseline/new-candle detection and one-time job creation."""
+        if not isinstance(account_binding_id, str) or len(account_binding_id) != 64 or (
+            any(c not in "0123456789abcdef" for c in account_binding_id)
+        ):
+            raise WatchError("ACCOUNT_BINDING_MISSING")
         symbol, timeframe = public["symbol"], public["timeframe"]
         bar = public["completed_candles"][-1]
         bar_utc = bar["time_utc"]
@@ -119,17 +130,22 @@ class WatchState:
         step = INTERVALS[timeframe]
         with self._db() as db:
             row = db.execute(
-                "SELECT bar_utc,bar_hash,account_mode FROM watch_state "
+                "SELECT bar_utc,bar_hash,account_mode,account_binding_id FROM watch_state "
                 "WHERE symbol=? AND timeframe=?", (symbol, timeframe)
             ).fetchone()
             if row is None:
                 db.execute("""INSERT INTO watch_state (
-                    symbol,timeframe,bar_utc,bar_hash,account_mode,seen_utc
-                ) VALUES (?,?,?,?,?,?)""",
+                    symbol,timeframe,bar_utc,bar_hash,account_mode,seen_utc,
+                    account_binding_id
+                ) VALUES (?,?,?,?,?,?,?)""",
                            (symbol, timeframe, bar_utc, bar_hash,
-                            account_mode, observed_at))
+                            account_mode, observed_at, account_binding_id))
                 return {"status": "BASELINED", "bar_utc": bar_utc}
-            prev_utc, prev_hash, prev_mode = row
+            prev_utc, prev_hash, prev_mode, prev_identity = row
+            if prev_identity is None:
+                return {"status": "ACCOUNT_BINDING_REQUIRED", "bar_utc": bar_utc}
+            if prev_identity != account_binding_id:
+                return {"status": "ACCOUNT_ID_CHANGED", "bar_utc": bar_utc}
             if prev_mode != account_mode:
                 return {"status": "ACCOUNT_MODE_CHANGED", "bar_utc": bar_utc}
             previous = datetime.fromisoformat(prev_utc)
@@ -204,7 +220,8 @@ class MarketWatcher:
     def __init__(self, journal: EventJournal, adapter: ReadOnlyMT5,
                  symbol: str, timeframe: str, *, bars: int = 100,
                  client: Any = None, clock: Any = time.time,
-                 knowledge_db: Path = DEFAULT_KNOWLEDGE):
+                 knowledge_db: Path = DEFAULT_KNOWLEDGE,
+                 identity_key: bytes | None = None):
         if timeframe not in INTERVALS or not 2 <= bars <= 2000:
             raise WatchError("INVALID_WATCH_CONFIG")
         self.journal = journal
@@ -213,6 +230,9 @@ class MarketWatcher:
         self.timeframe = timeframe
         self.bars = bars
         self.client = client
+        if not isinstance(identity_key, bytes) or len(identity_key) != 32:
+            raise WatchError("IDENTITY_KEY_REQUIRED")
+        self.identity_key = identity_key
         self.clock = clock
         self.knowledge_db = Path(knowledge_db)
         self.store = WatchState(journal.path)
@@ -253,7 +273,9 @@ class MarketWatcher:
             snapshot = self.adapter.capture(
                 self.symbol, timeframe=self.timeframe, bars=self.bars
             )
-            # Fail closed before persisting ANY broker data or selecting an LLM.
+            # Authenticate the local read-only adapter evidence first.
+            # HMAC is not remote broker attestation or a trading permission.
+            account_binding_id = verify_snapshot(snapshot, self.identity_key)
             public = market_context(snapshot)
             if public["symbol"] != self.symbol or public["timeframe"] != self.timeframe:
                 raise WatchError("BROKER_SNAPSHOT_MISMATCH")
@@ -261,13 +283,14 @@ class MarketWatcher:
             if not isinstance(account, dict):
                 raise WatchError("BROKER_ACCOUNT_MISSING")
             account_mode = account.get("trade_mode", "UNKNOWN")
-            if account_mode not in ("DEMO", "REAL", "CONTEST", "UNKNOWN"):
+            if account_mode not in ("DEMO", "REAL", "CONTEST"):
                 raise WatchError("INVALID_ACCOUNT_MODE")
             observation = self.store.observe(
                 public, account_mode,
                 observed_at=datetime.now(timezone.utc).isoformat(),
+                account_binding_id=account_binding_id,
             )
-        except (MT5ReadError, LLMError, WatchError) as exc:
+        except (MT5ReadError, IdentityError, LLMError, WatchError) as exc:
             code = getattr(exc, "code", str(exc) if isinstance(exc, WatchError)
                            else "INVALID_MARKET_DATA")
             self.journal.append(
@@ -295,7 +318,8 @@ class MarketWatcher:
                 ),
                 "Observed completed MT5 candles; state and trigger checked.",
                 {"symbol": self.symbol, "timeframe": self.timeframe, **observation,
-                 "source": "READ_ONLY_SNAPSHOT", "broker_execution": False},
+                 "source": "READ_ONLY_SNAPSHOT", "local_hmac_verified": True,
+                 "broker_execution": False},
             )
 
         if status == "NEW_COMPLETED_CANDLE":
