@@ -137,6 +137,14 @@ class G32IntegrationGateTests(unittest.TestCase):
         self.assertFalse(report["main_integration_metadata_verified"])
         self.assertEqual(report["scope"], "BRANCH_REHEARSAL_NOT_MAIN")
 
+    def test_unexpected_odd_future_pr_also_blocks_main(self):
+        newer = fake_prs(self.data, merged=True)
+        newer.append(pr(83, "feat/unreviewed-extra", "d" * 40,
+                        "main", merged=True, draft=False))
+        with self.assertRaisesRegex(
+                IntegrationGateError, "G32_NEW_PR_NOT_IN_BASELINE"):
+            self.review(prs=newer, environment=env(main=True))
+
     def test_main_must_not_pass_when_g33_g34_or_g35_missing(self):
         for number in (78, 80, 82):
             items = fake_prs(self.data, merged=True)
