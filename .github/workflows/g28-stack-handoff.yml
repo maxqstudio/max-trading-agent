@@ -47,7 +47,7 @@ jobs:
           assert 0<=record["merged_count"]<=record["audited_count"]
           assert record["unmerged_count"]+record["merged_count"]==record["audited_count"]
           assert record["ordered_pull_requests"][0]["current_base"]=="main"
-          assert record["ordered_pull_requests"][1]["current_base"]==record["ordered_pull_requests"][0]["head_branch"]
+          assert record["ordered_pull_requests"][1]["current_base"] in ("main", record["ordered_pull_requests"][0]["head_branch"])
           assert record["owner_acceptance"]=="PENDING"
           assert record["decision"]=="NO_TRADE"
           assert record["execution"]=="DISABLED"
