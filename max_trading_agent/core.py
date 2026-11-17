@@ -5,9 +5,9 @@ M00 deliberately has no MT5 package import and no broker execution path.
 from __future__ import annotations
 
 import json
+from contextlib import closing
 import re
 import sqlite3
-from contextlib import closing
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -101,13 +101,14 @@ def build_index(database: Path, catalog: Path = CATALOG) -> int:
     entries = load_catalog(catalog)
     database = Path(database)
     database.parent.mkdir(parents=True, exist_ok=True)
-    with closing(sqlite3.connect(database)) as connection, connection:
-        connection.execute("CREATE VIRTUAL TABLE IF NOT EXISTS mt5_docs USING fts5(id UNINDEXED, title, summary, tags, source_url UNINDEXED)")
-        connection.execute("DELETE FROM mt5_docs")
-        connection.executemany(
-            "INSERT INTO mt5_docs (id, title, summary, tags, source_url) VALUES (?, ?, ?, ?, ?)",
-            [(x["id"], x["title"], x["summary"], " ".join(x["tags"]), x["source_url"]) for x in entries],
-        )
+    with closing(sqlite3.connect(database)) as connection:
+        with connection:
+            connection.execute("CREATE VIRTUAL TABLE IF NOT EXISTS mt5_docs USING fts5(id UNINDEXED, title, summary, tags, source_url UNINDEXED)")
+            connection.execute("DELETE FROM mt5_docs")
+            connection.executemany(
+                "INSERT INTO mt5_docs (id, title, summary, tags, source_url) VALUES (?, ?, ?, ?, ?)",
+                [(x["id"], x["title"], x["summary"], " ".join(x["tags"]), x["source_url"]) for x in entries],
+            )
     return len(entries)
 
 
@@ -118,7 +119,7 @@ def search(database: Path, query: str, limit: int = 10) -> list[dict]:
     if not terms:
         return []
     safe_query = " OR ".join('"' + t + '"' for t in terms[:15])
-    with closing(sqlite3.connect(database)) as connection, connection:
+    with closing(sqlite3.connect(database)) as connection:
         rows = connection.execute(
             "SELECT id, title, summary, source_url FROM mt5_docs WHERE mt5_docs MATCH ? ORDER BY rank LIMIT ?",
             (safe_query, limit),

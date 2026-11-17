@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install NumPy for real MT5 dtype compatibility tests
+      - name: Install NumPy structured-rate test dependency
         run: python -m pip install numpy==2.2.6
       - name: Compile Python sources
         run: python -m compileall -q max_trading_agent tests
@@ -53,19 +53,19 @@ jobs:
           test -s ui/style.css
           test -s ui/app.js
 
-  mt5-numpy-windows:
-    name: Windows structured-rate compatibility
+  windows-readonly-smoke:
+    name: Windows hosted fake-MT5 regression
     runs-on: windows-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install NumPy for real MT5 dtype compatibility tests
+      - name: Install NumPy structured-rate test dependency
         run: python -m pip install numpy==2.2.6
-      - name: Compile Python sources
-        run: python -m compileall -q max_trading_agent tests
-      - name: Run full fake-MT5 Python regression
+      - name: Windows read-only offline suite
         run: python -m unittest discover -s tests -v
-# GitHub-hosted Windows has NO MT5 terminal and runs NO broker/order requests.
+
+# Windows runner contains no MetaTrader5 installation or broker account.
+# This validates mocks and Python cross-platform behavior only.

@@ -100,3 +100,15 @@ python -m max_trading_agent shadow-show --candidate research_0001
 ```
 
 Real-time snapshot capture is owner-authorized and separate from GitHub Actions. The ledger is not an unattended autonomous agent or a validation of live trading.
+
+## M05 — Autonomous read-only market watcher (candidate)
+
+A locally started watcher can poll an authorized MT5 terminal, set a first-candle baseline, persist/deduplicate new completed candle events and optionally invoke research-only LLM roles. Watcher events appear in the existing Trading Room with real origins. This is **NOT** automatic broker trading and does not run on GitHub-hosted infrastructure.
+
+```sh
+python -m max_trading_agent watch --symbol EURUSD --timeframe M15 --interval-seconds 15
+# Optional, explicitly billable research if provider env vars are configured:
+python -m max_trading_agent watch --symbol EURUSD --timeframe M15 --enable-llm-research
+```
+
+See [M05 runtime and limits](docs/M05_AUTONOMOUS_WATCHER.md) and [Issue #21](https://github.com/maxqstudio/max-trading-agent/issues/21). GitHub Actions uses fake providers and tests policy boundaries; owner terminal runtime acceptance remains required.
