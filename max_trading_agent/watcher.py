@@ -360,8 +360,12 @@ class MarketWatcher:
                 count += 1
                 if max_polls == 0 or count < max_polls:
                     sleep(interval_seconds)
+        except KeyboardInterrupt:
+            # An explicit operator stop is not a fatal watcher failure.
+            self.stop()
+            raise
         except BaseException:
-            # KeyboardInterrupt also releases the single-watcher lease.
+            # Any unexpected fatal exit releases the single-watcher lease.
             self.stop(failed=True)
             raise
         else:

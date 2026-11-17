@@ -315,6 +315,17 @@ class WatcherTests(unittest.TestCase):
         finally:
             watcher.stop()
 
+    def test_operator_interrupt_is_recorded_as_clean_stop(self):
+        watcher, _ = self.make([fixture(self.first_bar)])
+        def interrupt(_):
+            raise KeyboardInterrupt()
+        with self.assertRaises(KeyboardInterrupt):
+            watcher.run(interval_seconds=5, max_polls=2, sleep=interrupt)
+        self.assertEqual(self.journal.runs()[0]["status"], "COMPLETED")
+        events = self.journal.events(self.journal.runs()[0]["run_id"])
+        self.assertEqual(events[-1]["event_type"], "WATCH_STOPPED")
+        self.assertIsNone(watcher.run_id)
+
     def test_lease_loss_halts_watcher_failed(self):
         watcher, _ = self.make([fixture(self.first_bar)])
         run_id = watcher.start()

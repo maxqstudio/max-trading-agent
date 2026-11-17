@@ -50,3 +50,18 @@ jobs:
           test -s ui/index.html
           test -s ui/style.css
           test -s ui/app.js
+
+  windows-readonly-smoke:
+    name: Windows hosted fake-MT5 regression
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Windows read-only offline suite
+        run: python -m unittest discover -s tests -v
+
+# Windows runner contains no MetaTrader5 installation or broker account.
+# This validates mocks and Python cross-platform behavior only.
