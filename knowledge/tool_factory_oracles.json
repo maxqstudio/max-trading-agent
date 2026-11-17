@@ -1,0 +1,43 @@
+{
+  "rolling_mean_v1": [
+    {
+      "input": [
+        1,
+        2,
+        3
+      ],
+      "expected": 2
+    },
+    {
+      "input": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "expected": 5
+    },
+    {
+      "input": [
+        -2,
+        0,
+        2
+      ],
+      "expected": 0
+    },
+    {
+      "input": [
+        0.5,
+        1.5,
+        2.5
+      ],
+      "expected": 1.5
+    },
+    {
+      "input": [
+        12.5
+      ],
+      "expected": 12.5
+    }
+  ]
+}

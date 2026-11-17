@@ -48,7 +48,7 @@ class FactoryError(ValueError):
 
 
 def _number(x: Any) -> float:
-    if type(x) not in (int, float) or not math.isfinite(float(x)) or abs(x) > 1e9:
+    if type(x) not in (int, float) or abs(x) > 1e9 or not math.isfinite(float(x)):
         raise FactoryError("INVALID_ORACLE_NUMBER")
     return float(x)
 
