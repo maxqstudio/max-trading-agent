@@ -133,7 +133,7 @@ jobs:
           test -s ui/app.js
       - name: Pull public G21 isolated numeric sandbox image on Linux
         if: runner.os == 'Linux'
-        run: docker pull python:3.12-alpine
+        run: docker pull --platform linux/amd64 python:3.12-alpine@sha256:a61cbd76a882645de7f91423329fe43a67eed60d7da24f9e5331414bb3618b20
       - name: Linux real Docker independent golden/property approval-negative
         if: runner.os == 'Linux'
         shell: bash
