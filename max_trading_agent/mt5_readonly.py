@@ -16,6 +16,8 @@ from contextlib import contextmanager
 from datetime import datetime, timezone
 from typing import Any, Callable, Iterator
 
+from .identity import IdentityError, seal_snapshot
+
 # The native MT5 Python package uses a terminal-wide session. Serialize probes.
 _SESSION_LOCK = threading.RLock()
 _TIMEFRAMES = {
@@ -78,12 +80,13 @@ class ReadOnlyMT5:
     """Opt-in market snapshot; not a trade engine or a signal generator."""
 
     def __init__(self, api: Any, *, clock: Callable[[], float] | None = None,
-                 max_tick_age_seconds: int = 90):
+                 max_tick_age_seconds: int = 90, identity_key: bytes | None = None):
         if not 1 <= max_tick_age_seconds <= 3600:
             raise ValueError("max_tick_age_seconds must be between 1 and 3600")
         self._api = api
         self._clock = clock or (lambda: datetime.now(timezone.utc).timestamp())
         self._max_tick_age = max_tick_age_seconds
+        self._identity_key = identity_key
 
     @classmethod
     def from_local_terminal(cls, **kwargs: Any) -> "ReadOnlyMT5":
@@ -224,4 +227,13 @@ class ReadOnlyMT5:
                 "orders": [_fields(x, _ORDER_NUMBERS) for x in orders],
                 "decision": "NOT_EVALUATED",
             }
+            if self._identity_key is not None:
+                try:
+                    result = seal_snapshot(
+                        result, self._identity_key,
+                        login=_field(account, "login"),
+                        server=_field(account, "server"),
+                    )
+                except IdentityError as exc:
+                    raise MT5ReadError(exc.code) from None
             return result
