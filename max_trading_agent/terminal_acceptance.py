@@ -130,12 +130,6 @@ class TerminalAcceptance:
                 current_history = {bar["time_utc"]: (
                     bar["open"], bar["high"], bar["low"], bar["close"]
                 ) for bar in candles}
-                if previous_candle_history is not None and any(
-                    prior != current_history[stamp]
-                    for stamp, prior in previous_candle_history.items()
-                    if stamp in current_history
-                ):
-                    raise AcceptanceError("HISTORICAL_CANDLE_REVISED")
                 if any(
                     (_time(right["time_utc"]) - _time(left["time_utc"])).total_seconds()
                     != interval for left, right in zip(candles, candles[1:])
@@ -158,6 +152,12 @@ class TerminalAcceptance:
                     latest != previous_last_bar
                 ):
                     raise AcceptanceError("COMPLETED_BAR_REVISED")
+                if previous_candle_history is not None and any(
+                    prior != current_history[stamp]
+                    for stamp, prior in previous_candle_history.items()
+                    if stamp in current_history
+                ):
+                    raise AcceptanceError("HISTORICAL_CANDLE_REVISED")
                 if previous_bar is not None and completed > previous_bar and (
                     completed - previous_bar
                 ).total_seconds() != interval:
