@@ -6,7 +6,7 @@ const teams = [
   {name: "MARKET INTELLIGENCE", roles: ["MT5 Specialist", "Market Analyst"]},
   {name: "RESEARCH & DEBATE", roles: ["Bull Researcher", "Bear Researcher", "Research Manager", "Bull / Bear Researchers"]},
   {name: "KNOWLEDGE", roles: ["RAG Curator"]},
-  {name: "EVIDENCE & RISK", roles: ["Market Data Auditor", "Evidence Lab", "Independent Policy Guard"]}
+  {name: "EVIDENCE & RISK", roles: ["Market Data Auditor", "Evidence Lab", "Shadow Lab", "Independent Policy Guard"]}
 ];
 
 function node(tag, className, value) {
