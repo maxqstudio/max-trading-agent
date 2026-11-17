@@ -254,7 +254,7 @@ def sandbox_evaluate(candidate: dict, oracles: list[dict] | None,
             os.chmod(place, 0o755)
             container_name = "maxq-t0-" + secrets.token_hex(12)
             cmd = [
-                "docker", "run", "--rm", "--name", container_name, "--platform", "linux/amd64", "--network", "none",
+                "docker", "run", "--rm", "--platform", "linux/amd64", "--network", "none", "--name", container_name,
                 "--read-only", "--cap-drop", "ALL",
                 "--security-opt", "no-new-privileges",
                 "--pids-limit", "32", "--memory", "128m", "--cpus", "1",
