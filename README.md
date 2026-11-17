@@ -138,3 +138,7 @@ The independent `demo-preflight` command checks a locally HMAC-signed read-only 
 ## Canonical M05 — local hybrid knowledge search
 
 Offline `rag-index`, `rag-search`, `rag-diff`, `rag-eval` use FTS5 and deterministic lexical vector baseline (not a neural embedding model); output is always source-attributed and **non-executable**. See [RAG limits](docs/C05_HYBRID_RAG.md) and [Issue #33](https://github.com/maxqstudio/max-trading-agent/issues/33).
+
+## Canonical M04 — offline tabular Q experiments
+
+`offline-rl` creates a reproducible after-cost, 70/30 holdout tabular Q research experiment on a locally imported, hash-verified MID dataset. **Research only; NO_TRADE always.** [Method and limits](docs/C04_OFFLINE_RL.md) · [Issue #35](https://github.com/maxqstudio/max-trading-agent/issues/35).
