@@ -39,5 +39,46 @@
       ],
       "expected": 12.5
     }
+  ],
+  "range_span_v1": [
+    {
+      "input": [
+        1,
+        2,
+        3
+      ],
+      "expected": 2
+    },
+    {
+      "input": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "expected": 6
+    },
+    {
+      "input": [
+        -2,
+        0,
+        2
+      ],
+      "expected": 4
+    },
+    {
+      "input": [
+        0.5,
+        1.5,
+        2.5
+      ],
+      "expected": 2
+    },
+    {
+      "input": [
+        12.5
+      ],
+      "expected": 0
+    }
   ]
 }

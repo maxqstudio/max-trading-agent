@@ -1,0 +1,17 @@
+{
+  "tool_id": "range_span_v1",
+  "version": "0.1.0",
+  "effect": "PURE",
+  "purpose": "Compute the numeric span between maximum and minimum finite observations.",
+  "code": "def analyze(values):\n    return max(values) - min(values)\n",
+  "examples": [
+    {
+      "input": [
+        -1,
+        0,
+        2
+      ],
+      "expected": 3
+    }
+  ]
+}

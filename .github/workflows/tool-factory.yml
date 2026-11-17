@@ -2,16 +2,20 @@ name: Tool Factory isolated Docker oracle
 
 on:
   push:
-    branches: ["feat/c06-**", "feat/g20-**"]
+    branches: ["feat/c06-**", "feat/g20-**", "feat/g21-**"]
   pull_request:
     paths:
       - "max_trading_agent/tool_factory.py"
       - "max_trading_agent/tool_review.py"
+      - "max_trading_agent/tool_properties.py"
       - "max_trading_agent/__main__.py"
       - "tools/factory_sandbox_runner.py"
       - "knowledge/tool_factory_oracles.json"
+      - "knowledge/tool_review_contracts.json"
       - "tests/fixtures/tool_factory_rolling_mean.json"
       - "tests/test_tool_review.py"
+      - "tests/test_tool_properties.py"
+      - "tests/fixtures/tool_factory_range_span.json"
       - ".github/workflows/tool-factory.yml"
   workflow_dispatch:
 
@@ -31,6 +35,8 @@ jobs:
         run: python -m unittest discover -s tests -p test_tool_factory.py -v
       - name: G20 reviewer negative and write-once unit contracts
         run: python -m unittest discover -s tests -p test_tool_review.py -v
+      - name: G21 property-contract unit and adversarial tests
+        run: python -m unittest discover -s tests -p test_tool_properties.py -v
       - name: Fetch public sandbox runtime (no secrets mounted)
         run: docker pull python:3.12-alpine
       - name: Known correct candidate must pass isolated oracle
@@ -107,4 +113,57 @@ jobs:
               assert json.loads(pending.stdout)['status']=='PENDING_INDEPENDENT_ORACLE'
               assert len(list(approved.glob('*.json'))) == 1
               print('G20: correct known T0 reviewed; oracle lookup cheat rejected; novel tool pending; only one immutable receipt')
+          PY
+
+      - name: G21 real Docker new independent range contract and memorized-fixture veto
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, pathlib, subprocess, sys, tempfile
+          fixture=pathlib.Path('tests/fixtures/tool_factory_range_span.json')
+          oracle=json.loads(pathlib.Path('knowledge/tool_factory_oracles.json').read_text())
+          with tempfile.TemporaryDirectory(prefix='g21_property_') as root:
+              work=pathlib.Path(root)
+              receipts=work/'receipts'
+              def invoke(command, file):
+                  return subprocess.run(
+                      [sys.executable, '-m', 'max_trading_agent', command,
+                       '--file', str(file), '--review-dir', str(receipts)],
+                      capture_output=True, text=True, timeout=120)
+              good=invoke('tool-property-review', fixture)
+              assert good.returncode == 0, (good.returncode, good.stderr[-500:])
+              report=json.loads(good.stdout)
+              assert report['status']=='T0_PROPERTY_REVIEWED' and report['reference']=='NUMERIC_RANGE'
+              assert report['golden_cases']==5 and report['property_cases']==32
+              assert report['decision']=='NO_TRADE' and report['execution']=='DISABLED'
+              assert not report['broker_execution'] and not report['eligible_for_demo_or_live']
+              assert report['owner_acceptance']=='PENDING' and report['evidence_only']
+              assert len(list(receipts.glob('*.json')))==1
+              real=json.loads(fixture.read_text())
+              bad=dict(real)
+              statements=['def analyze(values):']
+              for row in oracle['range_span_v1']:
+                  statements.append('    if values == '+repr(row['input'])+':')
+                  statements.append('        return '+repr(row['expected']))
+              statements.append('    return 999')
+              bad['code']='\n'.join(statements)+'\n'
+              path=work/'oracle_cheat.json'
+              path.write_text(json.dumps(bad))
+              old=invoke('tool-sandbox', path)
+              assert old.returncode==0, (old.returncode, old.stderr[-500:])
+              assert json.loads(old.stdout)['status']=='SANDBOX_PASSED_REVIEW_REQUIRED'
+              failed=invoke('tool-property-review', path)
+              assert failed.returncode==3, (failed.returncode, failed.stderr[-500:])
+              f=json.loads(failed.stdout)
+              assert f['status']=='T0_PROPERTY_REJECTED' and f['failed_stage']=='PROPERTIES'
+              unknown=dict(real)
+              unknown['tool_id']='unreviewed_meanlike_candidate'
+              unknown_file=work/'unreviewed.json'
+              unknown_file.write_text(json.dumps(unknown))
+              pending=invoke('tool-property-review', unknown_file)
+              assert pending.returncode==3
+              assert json.loads(pending.stdout)['status']=='PENDING_INDEPENDENT_ORACLE'
+              assert len(list(receipts.glob('*.json')))==1
+              print('G21: new reviewed contract passed; fixed-oracle lookup cheat failed property challenge; unknown remains PENDING; no trading authority')
           PY
