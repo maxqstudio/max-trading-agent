@@ -2,7 +2,7 @@ name: G32 Authenticated main integration completeness (NO_TRADE)
 
 on:
   push:
-    branches: [main, "feat/g32-**"]
+    branches: [main, "feat/g32-**", "feat/g35-**"]
   pull_request:
     paths:
       - "knowledge/g32_pinned_merge_identities.json"
@@ -30,7 +30,7 @@ jobs:
           python-version: "3.12"
       - name: G32 SHA-bound integration and adversarial metadata regression
         run: python -m unittest discover -s tests -p test_main_integration_gate.py -v
-      - name: Verify all 32 actual GitHub PR records and refuse false main acceptance
+      - name: Verify all 35 actual GitHub PR records and refuse false main acceptance
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -48,7 +48,7 @@ jobs:
           data=json.loads(path.read_text(encoding="utf-8"))
           main=(os.environ["GITHUB_EVENT_NAME"]=="push" and
                 os.environ["GITHUB_REF"]=="refs/heads/main")
-          assert data["checked_prs"]==32
+          assert data["checked_prs"]==35
           assert data["github_sha"]==os.environ["GITHUB_SHA"]
           assert data["decision"]=="NO_TRADE"
           assert data["execution"]=="DISABLED"
@@ -59,7 +59,7 @@ jobs:
           if main:
               assert data["scope"]=="MAIN_INTEGRATION_METADATA_ONLY"
               assert data["status"]=="G32_GITHUB_MAIN_MERGE_METADATA_VERIFIED"
-              assert data["merged_to_main_count"]==32
+              assert data["merged_to_main_count"]==35
           else:
               assert data["scope"]=="BRANCH_REHEARSAL_NOT_MAIN"
               assert data["main_integration_metadata_verified"] is False
