@@ -222,3 +222,7 @@ The [G31 acceptance workflow](docs/G31_OWNER_MT5_PREFLIGHT.md) performs offline 
 ## G32 — Genuine-main GitHub PR integration completeness (read-only)
 
 [G32](docs/G32_MAIN_INTEGRATION_GATE.md) verifies authenticated GitHub merge-target records for the **31 pinned predecessor PRs plus G32 #76**. Feature CI must report **HOLD**; only a future actual `main` push after every required PR has merged *into main* can pass the metadata gate. This still does not prove main's full CI or real MT5 acceptance. All reports remain `NO_TRADE`, with no broker or generated-tool admission. [Issue #75](https://github.com/maxqstudio/max-trading-agent/issues/75).
+
+## G33 — Supply-chain hardening for GitHub Actions
+
+[G33](docs/G33_WORKFLOW_SECURITY.md) pins every GitHub action used by this repository's workflows to a reviewed full commit SHA, disables persisted checkout tokens, and introduces a fail-closed offline test for unpinned actions or unauthorized OIDC/attestation writes. This reduces CI supply-chain risk but is **not a proof that action code, Docker images or all workflow scripts are safe**. The GitHub-hosted audit remains read-only, the project stays `NO_TRADE`, and owner merge/MT5 acceptance gates are unchanged. [Issue #77](https://github.com/maxqstudio/max-trading-agent/issues/77).
