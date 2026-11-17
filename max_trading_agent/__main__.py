@@ -12,7 +12,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(prog="max-trading-agent")
     parser.add_argument("command", choices=("validate", "index", "search", "plan", "run", "serve", "mt5-probe",
                         "signal-research", "market-import", "market-manifest",
-                        "market-backtest", "experiment-show"))
+                        "market-backtest", "experiment-show",
+                        "shadow-open", "shadow-settle", "shadow-show"))
     parser.add_argument("value", nargs="?")
     parser.add_argument("--db", default=str(DEFAULT_KNOWLEDGE))
     parser.add_argument("--journal", default=str(DEFAULT_JOURNAL))
@@ -31,6 +32,10 @@ def main() -> None:
     parser.add_argument("--spread", type=float, help="Modeled full spread in price units")
     parser.add_argument("--slippage", type=float, help="Modeled slippage per side in price units")
     parser.add_argument("--fee-per-side", type=float, help="Modeled fee in price units per asset unit")
+    parser.add_argument("--candidate", help="Stable prospective hypothesis ID")
+    parser.add_argument("--side", choices=("LONG", "SHORT"), help="Hypothetical direction")
+    parser.add_argument("--origin", default="USER_RESEARCH",
+                        choices=("USER_RESEARCH", "LLM_RESEARCH"))
     args = parser.parse_args()
     if args.command == "validate":
         output = {"valid": True, "entries": len(load_catalog())}
@@ -119,6 +124,39 @@ def main() -> None:
                           fee_per_side=args.fee_per_side)
         except MarketDataError as exc:
             print(json.dumps({"ok": False, "error": str(exc),
+                              "execution": "DISABLED"}), file=sys.stderr)
+            raise SystemExit(2) from None
+    elif args.command in ("shadow-open", "shadow-settle", "shadow-show"):
+        from .shadow import ShadowError, ShadowLedger
+        from .shadow_mission import ShadowMission
+        if not args.candidate:
+            parser.error("shadow command requires --candidate")
+        try:
+            ledger = ShadowLedger(Path(args.market_db))
+            if args.command == "shadow-show":
+                output = ledger.get(args.candidate)
+            else:
+                if not args.snapshot:
+                    parser.error("shadow-open/shadow-settle require --snapshot")
+                private_path = Path(args.snapshot)
+                if not 0 < private_path.stat().st_size <= 2_000_000:
+                    raise ShadowError("SNAPSHOT_FILE_INVALID_SIZE")
+                snapshot = json.loads(private_path.read_text(encoding="utf-8"))
+                mission = ShadowMission(EventJournal(Path(args.journal)), ledger)
+                if args.command == "shadow-open":
+                    if args.side is None or args.slippage is None or args.fee_per_side is None:
+                        parser.error("shadow-open requires --side --slippage --fee-per-side")
+                    output = mission.open(
+                        args.candidate, snapshot, side=args.side,
+                        slippage=args.slippage, fee_per_side=args.fee_per_side,
+                        origin=args.origin,
+                    )
+                else:
+                    output = mission.settle(args.candidate, snapshot)
+        except (OSError, UnicodeError, ValueError) as exc:
+            # Do not print raw input paths, exception tracebacks or secrets.
+            code = str(exc) if isinstance(exc, ShadowError) else "INVALID_SHADOW_INPUT"
+            print(json.dumps({"ok": False, "error": code,
                               "execution": "DISABLED"}), file=sys.stderr)
             raise SystemExit(2) from None
     else:

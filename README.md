@@ -88,3 +88,15 @@ python -m max_trading_agent market-backtest --dataset <DATASET_SHA256> --spread 
 ```
 
 These are illustrative research inputs, **not recommended broker execution costs**. Review [M03 market evidence limitations](docs/M03_MARKET_EVIDENCE.md) and [Issue #17](https://github.com/maxqstudio/max-trading-agent/issues/17). No data vendor API, real account, LLM strategy approval, or MT5 order execution is involved. CI validates software behavior against synthetic candles only.
+
+## M04 — Forward-only shadow episodes (candidate)
+
+Persist research-only hypothetical LONG/SHORT decisions **before** outcomes exist, then settle using a strictly newer, fresh read-only MT5 snapshot. Each episode has its own SQLite record and Trading Room journal event; no `order_send`, broker fills, or live permissions exist. See [M04 Shadow Ledger](docs/M04_SHADOW_LEDGER.md) and [Issue #19](https://github.com/maxqstudio/max-trading-agent/issues/19).
+
+```sh
+python -m max_trading_agent shadow-open --candidate research_0001 --snapshot /private/entry.json --side LONG --slippage 0.00002 --fee-per-side 0.00001
+python -m max_trading_agent shadow-settle --candidate research_0001 --snapshot /private/later.json
+python -m max_trading_agent shadow-show --candidate research_0001
+```
+
+Real-time snapshot capture is owner-authorized and separate from GitHub Actions. The ledger is not an unattended autonomous agent or a validation of live trading.
