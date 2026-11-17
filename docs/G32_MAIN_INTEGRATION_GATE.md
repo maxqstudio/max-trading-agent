@@ -1,3 +1,5 @@
+> **Current scope (G35):** The earlier 32-PR boundary below is historical. G35 pins predecessor SHAs through #80 and requires **all 35 PRs through #82** genuinely merged to `main`. A future canonical #84+ blocks the main gate until the reviewed baseline is updated. See [G35 full-stack gate](G35_FULL_STACK_GATE.md).
+
 # G32 — Authenticated main integration completeness; NOT trading approval
 
 G30 demonstrated a successful **temporary 30-step sequential merge** and G31 introduced post-merge test jobs. Neither proves that each real GitHub PR was ultimately merged into the intended `main` branch. G32 adds a narrowly scoped **read-only audit of GitHub's actual PR metadata**.
