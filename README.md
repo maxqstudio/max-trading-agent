@@ -206,3 +206,7 @@ After G24 signs Docker T0 evidence, a **separate read-only GitHub Actions runner
 ## G28 — Owner merge handoff for all stacked Draft PRs
 
 `tools/stack_audit.py` and the **G28 Read-only owner PR stack handoff** GitHub Actions workflow verify the canonical stacked PR dependency chain and generate a machine-readable, downloadable merge-order report. With 27 prior Draft PRs open, **merging each successor requires retargeting that PR to `main` after its predecessor merges**, plus new diff inspection and CI. GitHub-only CI does not equal real MT5/broker/owner acceptance. **No PRs are merged or retargeted automatically.** [Owner handoff](docs/G28_OWNER_HANDOFF.md) · [G28 Issue #67](https://github.com/maxqstudio/max-trading-agent/issues/67).
+
+## G29 — GitHub-only rehearsal against divergent `main`
+
+Because the cumulative Draft branch and `main` have diverged, the [G29 ephemeral integration workflow](docs/G29_INTEGRATION_REHEARSAL.md) tests an **uncommitted, disposable three-way merge** into a temporary `main` checkout on GitHub Linux and Windows. It reruns offline Python, UI and real isolated Docker property-review tests on the **combined files** without pushing, merging, retargeting, executing trades or changing PR metadata. A clean rehearsal is not a substitute for owner-controlled sequential PR merges and final `main` CI. [G29 Issue #69](https://github.com/maxqstudio/max-trading-agent/issues/69).

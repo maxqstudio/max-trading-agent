@@ -1,0 +1,192 @@
+name: G29 Ephemeral main integration rehearsal
+
+on:
+  push:
+    branches: ["feat/g29-**"]
+
+# Deliberately no push, branch-edit, PR approval, OIDC or artifact-signing rights.
+permissions:
+  contents: read
+
+jobs:
+  temporary-merge-and-test:
+    name: Dry-run main merge and complete regression (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - name: Checkout current main, not the feature branch
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4 pinned
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Three-way merge cumulative stack into temporary main worktree, no commit
+        shell: bash
+        env:
+          EXPECTED_MAIN_SHA: 5f27d132bc627fa73fde2e1b56b625cbdb09a465
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = "maxqstudio/max-trading-agent"
+          test "$GITHUB_EVENT_NAME" = "push"
+          test "$GITHUB_REF" = "refs/heads/feat/g29-main-integration-rehearsal"
+          main_sha="$(git rev-parse HEAD)"
+          test "$main_sha" = "$EXPECTED_MAIN_SHA" || {
+            echo "main moved: refresh owner rehearsal before accepting results"
+            exit 1
+          }
+          git fetch --no-tags origin "$GITHUB_REF"
+          feature_sha="$(git rev-parse FETCH_HEAD)"
+          test "$feature_sha" = "$GITHUB_SHA"
+          merge_base="$(git merge-base HEAD FETCH_HEAD)"
+          test -n "$merge_base"
+          export REHEARSAL_MAIN_SHA="$main_sha"
+          export REHEARSAL_FEATURE_SHA="$feature_sha"
+          export REHEARSAL_MERGE_BASE="$merge_base"
+          merge_exit=0
+          git -c user.name=GitHub-CI -c user.email=ci@users.noreply.github.com \
+            merge --no-commit --no-ff --no-edit FETCH_HEAD || merge_exit=$?
+          conflicts="$(git diff --name-only --diff-filter=U)"
+          export REHEARSAL_MERGE_EXIT="$merge_exit"
+          export REHEARSAL_CONFLICTS="$conflicts"
+          if [ "$merge_exit" -eq 0 ]; then
+            test -z "$conflicts"
+            export REHEARSAL_MERGE_TREE="$(git write-tree)"
+          else
+            export REHEARSAL_MERGE_TREE=""
+          fi
+          python - <<'PY'
+          import json, os, pathlib
+          report = {
+              "schema_version": 1,
+              "status": ("EPHEMERAL_MAIN_MERGE_CONFLICT"
+                         if os.environ["REHEARSAL_MERGE_EXIT"] != "0"
+                         else "EPHEMERAL_MAIN_MERGE_CLEAN_TESTING"),
+              "repository": os.environ["GITHUB_REPOSITORY"],
+              "main_sha": os.environ["REHEARSAL_MAIN_SHA"],
+              "stack_head_sha": os.environ["REHEARSAL_FEATURE_SHA"],
+              "merge_base_sha": os.environ["REHEARSAL_MERGE_BASE"],
+              "merged_tree_sha": os.environ["REHEARSAL_MERGE_TREE"] or None,
+              "conflict_paths": [x for x in os.environ["REHEARSAL_CONFLICTS"].splitlines() if x],
+              "runner_os": os.environ["RUNNER_OS"],
+              "github_run_id": os.environ["GITHUB_RUN_ID"],
+              "full_test_suite_passed": False,
+              "docker_oracle_passed": False,
+              "remote_repository_modified": False,
+              "decision": "NO_TRADE",
+              "broker_execution": False,
+              "owner_acceptance": "PENDING",
+          }
+          target = pathlib.Path(os.environ["RUNNER_TEMP"]) / "g29-ephemeral-merge.json"
+          target.write_text(json.dumps(report, sort_keys=True, indent=2), encoding="utf-8")
+          print("G29 merge status:", report["status"],
+                "main", report["main_sha"], "stack", report["stack_head_sha"],
+                "tree", report["merged_tree_sha"])
+          PY
+          test "$merge_exit" -eq 0 || exit 1
+          test "$(git rev-parse HEAD)" = "$main_sha"
+          test -z "$(git ls-files -u)"
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5 pinned
+        with:
+          python-version: "3.12"
+      - name: NumPy offline structured-rate dependency
+        run: python -m pip install numpy==2.2.6
+      - name: Compile and run full merged-tree Python regression
+        run: |
+          python -m compileall -q max_trading_agent tests
+          python -m unittest discover -s tests -v
+      - name: Merged-tree deterministic NO_TRADE and knowledge smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m max_trading_agent validate
+          python -m max_trading_agent index --db "$RUNNER_TEMP/mt5_knowledge.sqlite3"
+          python -m max_trading_agent search "bid ask" --db "$RUNNER_TEMP/mt5_knowledge.sqlite3"
+          python -m max_trading_agent plan prepare_entry
+          python -m max_trading_agent run analyze_symbol \
+            --journal "$RUNNER_TEMP/agent_events.sqlite3" \
+            --db "$RUNNER_TEMP/mt5_knowledge.sqlite3"
+          python - <<'PY'
+          from max_trading_agent.research_registry import evaluate_reference, stage_untrusted_candidate
+          import json, pathlib
+          assert evaluate_reference("range_span_v1",[-4,0,7])["result"] == 11.0
+          assert evaluate_reference("rolling_mean_v1",[2,4,6])["result"] == 4.0
+          candidate=json.loads(pathlib.Path("tests/fixtures/tool_factory_range_span.json").read_text())
+          record=stage_untrusted_candidate(candidate)
+          assert record["status"]=="T1_CANDIDATE_NOT_REGISTERED"
+          assert not record["tool_admitted"] and not record["candidate_source_executed"]
+          assert record["decision"]=="NO_TRADE" and record["execution"]=="DISABLED"
+          PY
+      - name: Set up JavaScript runtime on Linux
+        if: runner.os == 'Linux'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Merged-tree JavaScript and Trading Room UI regression
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check ui/app.js
+          node --test tests/trading_room.test.cjs
+          test -s ui/index.html
+          test -s ui/style.css
+          test -s ui/app.js
+      - name: Pull public isolation runtime, Linux only
+        if: runner.os == 'Linux'
+        run: docker pull python:3.12-alpine
+      - name: Actual isolated Docker goldens and property challenge on merged tree
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, pathlib
+          from max_trading_agent.tool_properties import review_t0_properties
+          from max_trading_agent.tool_factory import validate_candidate
+          fixture=pathlib.Path("tests/fixtures/tool_factory_range_span.json")
+          candidate=json.loads(fixture.read_text(encoding="utf-8"))
+          proof=review_t0_properties(candidate)
+          assert proof["candidate_sha256"]==validate_candidate(candidate)["sha256"]
+          assert proof["status"]=="T0_PROPERTY_REVIEWED"
+          assert proof["golden_cases"]==5 and proof["property_cases"]==32
+          assert proof["reference"]=="NUMERIC_RANGE"
+          assert proof["decision"]=="NO_TRADE" and proof["execution"]=="DISABLED"
+          assert not proof["eligible_for_demo_or_live"]
+          bad=dict(candidate)
+          bad["code"]="def analyze(values):\n    return 999\n"
+          rejected=review_t0_properties(bad)
+          assert rejected["status"]=="T0_PROPERTY_REJECTED"
+          assert rejected["decision"]=="NO_TRADE"
+          print("G29 real-Docker PASS: trusted candidate reviewed, wrong candidate rejected, no broker authority")
+          PY
+      - name: Finalize successful combined-tree rehearsal record
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os, pathlib
+          file=pathlib.Path(os.environ["RUNNER_TEMP"])/"g29-ephemeral-merge.json"
+          data=json.loads(file.read_text(encoding="utf-8"))
+          assert data["status"]=="EPHEMERAL_MAIN_MERGE_CLEAN_TESTING"
+          assert data["merged_tree_sha"] and len(data["merged_tree_sha"])==40
+          data["status"]="EPHEMERAL_MAIN_MERGE_TESTS_PASS"
+          data["full_test_suite_passed"]=True
+          data["docker_oracle_passed"]=os.environ["RUNNER_OS"]=="Linux"
+          assert data["decision"]=="NO_TRADE"
+          assert not data["remote_repository_modified"]
+          file.write_text(json.dumps(data,indent=2,sort_keys=True),encoding="utf-8")
+          print("G29 PASS:",data["runner_os"],"main",data["main_sha"],
+                "feature",data["stack_head_sha"],"merge tree",data["merged_tree_sha"])
+          PY
+      - name: Publish main dry-run merge report even if a test fails
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4 pinned
+        with:
+          name: g29-rehearsal-${{ matrix.os }}
+          path: ${{ runner.temp }}/g29-ephemeral-merge.json
+          retention-days: 30
+          if-no-files-found: warn
