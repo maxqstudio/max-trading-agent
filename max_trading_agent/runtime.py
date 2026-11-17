@@ -70,6 +70,7 @@ class EventJournal:
                     "observe_mt5", "monitor_market", "accept_mt5_terminal"})
                 or (mode == "SIGNAL" and task == "research_signal")
                 or (mode == "BACKTEST" and task == "evaluate_historical")
+                or (mode == "PAPER" and task == "paper_demo")
                 or (mode == "SHADOW" and task in {"shadow_open", "shadow_settle"})):
             raise ValueError("Unsupported task or mode")
         run_id = uuid.uuid4().hex
