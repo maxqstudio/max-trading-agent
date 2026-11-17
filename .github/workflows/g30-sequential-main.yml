@@ -36,6 +36,8 @@ jobs:
         with:
           python-version: "3.12"
       - name: Unit security tests for pinned 29-PR manifest and merge rules
+        env:
+          PYTHONPATH: ${{ github.workspace }}/controller
         run: python -m unittest discover -s controller/tests -p test_sequential_merge_rehearsal.py -v
       - name: Rehearse 29 pinned PRs then G30 HEAD as 30 temporary local merges
         shell: bash
