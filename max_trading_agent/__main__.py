@@ -16,7 +16,7 @@ def main() -> None:
                         "shadow-open", "shadow-settle", "shadow-show",
                         "watch", "mt5-acceptance", "demo-preflight",
                         "rag-index", "rag-search", "rag-diff", "rag-eval", "offline-rl",
-                        "tool-propose", "tool-sandbox", "paper-demo"))
+                        "tool-propose", "tool-sandbox", "paper-demo", "rl-walk-forward"))
     parser.add_argument("value", nargs="?")
     parser.add_argument("--db", default=str(DEFAULT_KNOWLEDGE))
     parser.add_argument("--journal", default=str(DEFAULT_JOURNAL))
@@ -44,6 +44,10 @@ def main() -> None:
                                  "TIMEOUT_BEFORE_RECEIPT"))
     parser.add_argument("--tool-dir", default=".local/tool-factory",
                         help="Private local T0 research proposal directory")
+    parser.add_argument("--folds", type=int, default=3,
+                        help="Chronological walk-forward folds: 2-6")
+    parser.add_argument("--test-bars", type=int, default=32,
+                        help="Holdout bars per fold: 24-120")
     parser.add_argument("--epochs", type=int, default=16, help="Offline Q epochs 1-100")
     parser.add_argument("--alpha", type=float, default=0.2, help="Offline Q learning rate")
     parser.add_argument("--gamma", type=float, default=0.6, help="Offline Q discount 0-1")
@@ -251,7 +255,8 @@ def main() -> None:
             print(json.dumps({"ok": False, "code": exc.code}), file=sys.stderr)
             raise SystemExit(2) from None
     elif args.command in ("market-import", "market-manifest",
-                          "market-backtest", "experiment-show", "offline-rl"):
+                          "market-backtest", "experiment-show", "offline-rl",
+                          "rl-walk-forward"):
         from .market_store import MarketDataError, MarketStore
         from .backtest_mission import BacktestMission
         store = MarketStore(Path(args.market_db))
@@ -280,6 +285,18 @@ def main() -> None:
                 output = offline_q_research(
                     store, args.dataset, spread=args.spread,
                     slippage=args.slippage, fee_per_side=args.fee_per_side,
+                    epochs=args.epochs, alpha=args.alpha, gamma=args.gamma
+                )
+            elif args.command == "rl-walk-forward":
+                from .walk_forward import walk_forward_q
+                if not args.dataset or any(x is None for x in (
+                        args.spread, args.slippage, args.fee_per_side)):
+                    parser.error("rl-walk-forward requires --dataset --spread "
+                                 "--slippage --fee-per-side")
+                output = walk_forward_q(
+                    store, args.dataset, spread=args.spread,
+                    slippage=args.slippage, fee_per_side=args.fee_per_side,
+                    folds=args.folds, test_bars=args.test_bars,
                     epochs=args.epochs, alpha=args.alpha, gamma=args.gamma
                 )
             else:
