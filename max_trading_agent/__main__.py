@@ -10,7 +10,7 @@ from .runtime import DEFAULT_JOURNAL, DEFAULT_KNOWLEDGE, EventJournal, Reference
 
 def main() -> None:
     parser = argparse.ArgumentParser(prog="max-trading-agent")
-    parser.add_argument("command", choices=("validate", "index", "search", "plan", "run", "serve", "mt5-probe"))
+    parser.add_argument("command", choices=("validate", "index", "search", "plan", "run", "serve", "mt5-probe", "signal-research"))
     parser.add_argument("value", nargs="?")
     parser.add_argument("--db", default=str(DEFAULT_KNOWLEDGE))
     parser.add_argument("--journal", default=str(DEFAULT_JOURNAL))
@@ -18,6 +18,7 @@ def main() -> None:
     parser.add_argument("--symbol", help="Exact broker symbol (read-only probe)")
     parser.add_argument("--timeframe", default="M15")
     parser.add_argument("--bars", type=int, default=100)
+    parser.add_argument("--snapshot", help="Private MT5 snapshot JSON for SIGNAL research")
     args = parser.parse_args()
     if args.command == "validate":
         output = {"valid": True, "entries": len(load_catalog())}
@@ -53,6 +54,26 @@ def main() -> None:
         except MT5ReadError as exc:
             print(json.dumps({"ok": False, "read_only": True, "error": exc.as_dict()}),
                   file=sys.stderr)
+            raise SystemExit(2) from None
+    elif args.command == "signal-research":
+        from .llm_client import LLMError, OpenAICompatibleClient
+        from .signal_research import SignalResearch
+        if not args.snapshot:
+            parser.error("signal-research requires --snapshot PATH")
+        try:
+            path = Path(args.snapshot)
+            if not 0 < path.stat().st_size <= 2_000_000:
+                raise LLMError("SNAPSHOT_FILE_TOO_LARGE")
+            snapshot = json.loads(path.read_text(encoding="utf-8"))
+            client = OpenAICompatibleClient.from_env()
+            run_id = SignalResearch(EventJournal(Path(args.journal)), client).execute(snapshot)
+            output = {"run_id": run_id, "mode": "SIGNAL", "decision": "NO_TRADE",
+                      "execution": "DISABLED"}
+        except (OSError, UnicodeError, ValueError) as exc:
+            print(json.dumps({"ok": False, "code": "INVALID_SNAPSHOT_FILE"}), file=sys.stderr)
+            raise SystemExit(2) from None
+        except LLMError as exc:
+            print(json.dumps({"ok": False, "code": exc.code}), file=sys.stderr)
             raise SystemExit(2) from None
     else:
         from .web import create_server

@@ -63,3 +63,17 @@ python -m max_trading_agent mt5-probe --symbol EURUSD --timeframe M15 --bars 100
 The command requires the MetaTrader5 Python package and working terminal on an authorized computer, and reads snapshot data only. Output includes **private balances and open position details; do not post raw output publicly**. Missing data/stale quote means a failed probe, not a trade. See [M01_READONLY.md](docs/M01_READONLY.md) and [Issue #13](https://github.com/maxqstudio/max-trading-agent/issues/13).
 
 The `mt5-probe` command also records a **redacted READ_ONLY mission** into the local event journal, which the Trading Room can display after the command. Account balances, broker login/server and private position details are excluded from the journal. The full CLI response remains private and should not be uploaded.
+
+## M02 — Real LLM research roles (SIGNAL-only candidate)
+
+The project now includes a provider adapter for OpenAI-compatible Chat Completions and a role sequence: Market Analyst, Bull Researcher, Bear Researcher, Research Manager. Each model response is stored in the Trading Room journal as **unverified research opinion**. Research ends in `NO_TRADE`, irrespective of model confidence, because no validated strategy evidence or order engine exists yet.
+
+```sh
+# Export three variables in your own private environment:
+# MAX_TRADING_LLM_ENDPOINT, MAX_TRADING_LLM_MODEL and (if required) MAX_TRADING_LLM_API_KEY
+python -m max_trading_agent signal-research --snapshot /private/snapshot.json
+```
+
+This is not a public cloud service; the snapshot and keys remain on the user's authorized computer. Provider calls may cost money. See [M02_SIGNAL_RESEARCH.md](docs/M02_SIGNAL_RESEARCH.md) and [Issue #15](https://github.com/maxqstudio/max-trading-agent/issues/15). GitHub Actions uses a fake provider and no API credentials.
+
+M02 research now also retrieves source-linked **MT5 operational knowledge** through the existing SQLite FTS5 RAG index and records the retrieval as a real `RAG_RETRIEVAL` event. These sources describe MT5 functions, **not** statistically validated strategies; the independent policy guard continues to veto trading.
