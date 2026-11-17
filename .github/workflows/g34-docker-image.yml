@@ -1,0 +1,109 @@
+name: G34 Immutable Docker T0 sandbox runtime (NO_TRADE)
+
+on:
+  push:
+    branches: ["feat/g34-**"]
+  pull_request:
+    paths:
+      - "max_trading_agent/tool_factory.py"
+      - "tools/docker_image_audit.py"
+      - "tests/test_docker_image_audit.py"
+      - ".github/workflows/g34-docker-image.yml"
+      - ".github/workflows/tool-factory.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-amd64-manifest-and-isolated-review:
+    name: Pull exact official amd64 digest, run nonroot T0 positive and adversarial checks
+    if: github.repository == 'maxqstudio/max-trading-agent'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4 pinned
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5 pinned
+        with:
+          python-version: "3.12"
+      - name: Offline pinned manifest and fail-closed security regression
+        run: |
+          python -m unittest discover -s tests -p test_docker_image_audit.py -v
+          python -m tools.docker_image_audit --root . > "$RUNNER_TEMP/g34-static-image.json"
+      - name: Pull exact official linux amd64 manifest, no mutable fallback
+        shell: bash
+        run: |
+          set -euo pipefail
+          image='python:3.12-alpine@sha256:a61cbd76a882645de7f91423329fe43a67eed60d7da24f9e5331414bb3618b20'
+          docker pull --platform linux/amd64 "$image"
+          arch="$(docker image inspect --format '{{.Architecture}}/{{.Os}}' "$image")"
+          test "$arch" = "amd64/linux"
+          python_version="$(docker run --rm --platform linux/amd64 --network none --read-only --user 65534:65534 --cap-drop ALL --security-opt no-new-privileges "$image" python -I -B -S --version)"
+          case "$python_version" in "Python 3.12."*) ;; *) exit 1;; esac
+          echo "G34 real image: $arch, $python_version; pinned by immutable manifest; not a security-vulnerability proof"
+      - name: Real independent G21 goldens and deliberately wrong code in pinned image
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, pathlib
+          from max_trading_agent.tool_properties import review_t0_properties
+          from max_trading_agent.tool_factory import _IMAGE, validate_candidate
+          from tools.docker_image_audit import IMAGE
+          assert _IMAGE == IMAGE
+          candidate=json.loads(pathlib.Path("tests/fixtures/tool_factory_range_span.json").read_text())
+          good=review_t0_properties(candidate)
+          assert good["candidate_sha256"] == validate_candidate(candidate)["sha256"]
+          assert good["status"]=="T0_PROPERTY_REVIEWED"
+          assert good["golden_cases"]==5 and good["property_cases"]==32
+          assert good["decision"]=="NO_TRADE" and good["execution"]=="DISABLED"
+          bad=dict(candidate)
+          bad["code"]="def analyze(values):\n    return 999\n"
+          denial=review_t0_properties(bad)
+          assert denial["status"]=="T0_PROPERTY_REJECTED"
+          assert denial["decision"]=="NO_TRADE"
+          print("G34 real pinned-Docker PASS: positive independent oracle and negative adversarial tool, NO_TRADE")
+          PY
+      - name: Write SHA- and platform-scoped evidence after passing Docker checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os, pathlib
+          from tools.docker_image_audit import IMAGE, DIGEST
+          data = {
+            "schema_version":1,
+            "status":"G34_PINNED_AMD64_MANIFEST_AND_REAL_DOCKER_REVIEW_PASS",
+            "repository":os.environ["GITHUB_REPOSITORY"],
+            "source_commit":os.environ["GITHUB_SHA"],
+            "source_ref":os.environ["GITHUB_REF"],
+            "image":IMAGE,
+            "manifest_digest":DIGEST,
+            "platform":"linux/amd64",
+            "real_docker_pull_and_run_verified":True,
+            "trusted_fixed_goldens":5,
+            "property_challenges":32,
+            "incorrect_candidate_rejected":True,
+            "docker_image_vulnerability_free":False,
+            "image_signature_verified":False,
+            "broker_execution":False,
+            "generated_t1_tool_admitted":False,
+            "owner_acceptance":"PENDING",
+            "decision":"NO_TRADE",
+            "execution":"DISABLED",
+          }
+          assert data["repository"]=="maxqstudio/max-trading-agent"
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])/"g34-pinned-docker-report.json"
+          p.write_text(json.dumps(data,sort_keys=True,indent=2)+"\n")
+          print("G34 FINAL PASS",data["source_commit"],data["image"])
+          PY
+      - name: Upload signed-SHA-neutral, non-executable Docker review evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4 pinned
+        with:
+          name: g34-pinned-docker-security-evidence
+          path: ${{ runner.temp }}/g34-pinned-docker-report.json
+          retention-days: 30
+          if-no-files-found: warn

@@ -116,7 +116,7 @@ jobs:
           test -s ui/app.js
       - name: Fetch public isolated runtime for independent Docker checks
         if: runner.os == 'Linux'
-        run: docker pull python:3.12-alpine
+        run: docker pull --platform linux/amd64 python:3.12-alpine@sha256:a61cbd76a882645de7f91423329fe43a67eed60d7da24f9e5331414bb3618b20
       - name: Final sequential-merge isolated T0 reviewer rejects wrong code
         if: runner.os == 'Linux'
         shell: bash

@@ -40,7 +40,7 @@ _ALLOWED_NODES = (
     ast.Eq, ast.NotEq, ast.Lt, ast.LtE, ast.Gt, ast.GtE,
     ast.In, ast.NotIn, ast.Is, ast.IsNot,
 )
-_IMAGE = "python:3.12-alpine"
+_IMAGE = "python:3.12-alpine@sha256:a61cbd76a882645de7f91423329fe43a67eed60d7da24f9e5331414bb3618b20"
 
 
 class FactoryError(ValueError):
@@ -252,7 +252,7 @@ def sandbox_evaluate(candidate: dict, oracles: list[dict] | None,
             # Docker non-root user needs read access to this ephemeral directory.
             os.chmod(place, 0o755)
             cmd = [
-                "docker", "run", "--rm", "--network", "none",
+                "docker", "run", "--rm", "--platform", "linux/amd64", "--network", "none",
                 "--read-only", "--cap-drop", "ALL",
                 "--security-opt", "no-new-privileges",
                 "--pids-limit", "32", "--memory", "128m", "--cpus", "1",
