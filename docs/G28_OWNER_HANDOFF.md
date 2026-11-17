@@ -1,3 +1,5 @@
+> **Current scope (G35):** The original 27/28-PR snapshot below is historical. There are now 35 canonical stacked PRs **#14 through #82**. The updated auditor includes future canonical even-numbered PRs and fails on gaps. Use the current [G35 full-stack gate](G35_FULL_STACK_GATE.md) and live GitHub report before merging.
+
 # G28 — GitHub-only owner merge handoff and project boundary
 
 **Snapshot scope (17 November 2026).** The canonical agent code is implemented as a **single stack of 27 open Draft PRs #14, #16, … #66**, all still **unmerged** when this handoff was authored. The G28 work is itself a Draft PR #68 on top of #66. These PRs are not 27 independent patches to merge in arbitrary order: each targets the preceding feature branch. **Main does not yet contain their cumulative work.**
