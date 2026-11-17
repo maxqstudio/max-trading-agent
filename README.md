@@ -146,3 +146,7 @@ Offline `rag-index`, `rag-search`, `rag-diff`, `rag-eval` use FTS5 and determini
 ## Canonical M06: quarantine-only autonomous Tool Factory
 
 One explicit `tool-propose` call can generate a novel PURE research-code candidate. `tool-sandbox` evaluates it against independent golden fixtures in a no-network Docker container. Every result remains NO_TRADE and requires review; no LLM-generated code is executed in the main process. See [Factory documentation](docs/C06_TOOL_FACTORY.md) and [Issue #37](https://github.com/maxqstudio/max-trading-agent/issues/37).
+
+## Canonical M03 recovery drill — paper only
+
+`paper-demo` exercises a durable intent journal, fake in-memory broker acknowledgements, no-resend idempotency and readback reconciliation. **No real MetaTrader5 order APIs exist in this path.** Always NO_TRADE. See [paper drill](docs/C03_PAPER_DEMO.md) and [Issue #39](https://github.com/maxqstudio/max-trading-agent/issues/39).

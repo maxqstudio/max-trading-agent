@@ -16,7 +16,7 @@ def main() -> None:
                         "shadow-open", "shadow-settle", "shadow-show",
                         "watch", "mt5-acceptance", "demo-preflight",
                         "rag-index", "rag-search", "rag-diff", "rag-eval", "offline-rl",
-                        "tool-propose", "tool-sandbox"))
+                        "tool-propose", "tool-sandbox", "paper-demo"))
     parser.add_argument("value", nargs="?")
     parser.add_argument("--db", default=str(DEFAULT_KNOWLEDGE))
     parser.add_argument("--journal", default=str(DEFAULT_JOURNAL))
@@ -37,6 +37,11 @@ def main() -> None:
     parser.add_argument("--spread", type=float, help="Modeled full spread in price units")
     parser.add_argument("--slippage", type=float, help="Modeled slippage per side in price units")
     parser.add_argument("--fee-per-side", type=float, help="Modeled fee in price units per asset unit")
+    parser.add_argument("--paper-db", default=".local/paper_demo.sqlite3",
+                        help="Private simulated order-intent ledger")
+    parser.add_argument("--paper-behavior", default="FILL",
+                        choices=("FILL","REJECT","TIMEOUT_AFTER_FILL",
+                                 "TIMEOUT_BEFORE_RECEIPT"))
     parser.add_argument("--tool-dir", default=".local/tool-factory",
                         help="Private local T0 research proposal directory")
     parser.add_argument("--epochs", type=int, default=16, help="Offline Q epochs 1-100")
@@ -182,6 +187,27 @@ def main() -> None:
                 output = sandbox_evaluate(proposal, cases)
         except (FactoryError, LLMError, OSError, ValueError, UnicodeError):
             print(json.dumps({"ok": False, "code": "TOOL_FACTORY_BLOCKED",
+                              "decision": "NO_TRADE"}), file=sys.stderr)
+            raise SystemExit(2) from None
+    elif args.command == "paper-demo":
+        from .paper_demo import InMemoryPaperBroker, PaperError, PaperLedger, PaperMission
+        from .identity import IdentityError, load_or_create_key
+        if not args.snapshot or not args.proposal or not args.policy:
+            parser.error("paper-demo requires --snapshot --proposal --policy")
+        try:
+            def paper_json(source):
+                file = Path(source)
+                if not file.is_file() or not 0 < file.stat().st_size <= 2_000_000:
+                    raise PaperError("INVALID_PAPER_INPUT_FILE")
+                return json.loads(file.read_text(encoding="utf-8"))
+            key = load_or_create_key(Path(args.identity_key_file))
+            output = PaperMission(
+                EventJournal(Path(args.journal)), PaperLedger(Path(args.paper_db)),
+                InMemoryPaperBroker(args.paper_behavior)
+            ).execute(paper_json(args.snapshot), paper_json(args.proposal),
+                      paper_json(args.policy), key)
+        except (PaperError, IdentityError, OSError, UnicodeError, ValueError):
+            print(json.dumps({"ok": False, "code": "PAPER_DEMO_BLOCKED",
                               "decision": "NO_TRADE"}), file=sys.stderr)
             raise SystemExit(2) from None
     elif args.command == "demo-preflight":

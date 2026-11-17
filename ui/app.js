@@ -6,7 +6,7 @@ const teams = [
   {name: "MARKET INTELLIGENCE", roles: ["MT5 Specialist", "Market Watcher", "Market Analyst"]},
   {name: "RESEARCH & DEBATE", roles: ["Bull Researcher", "Bear Researcher", "Research Manager", "Hypothesis Strategist", "Bull / Bear Researchers"]},
   {name: "KNOWLEDGE", roles: ["RAG Curator"]},
-  {name: "EVIDENCE & RISK", roles: ["Market Data Auditor", "Evidence Lab", "Shadow Lab", "Independent Policy Guard"]}
+  {name: "EVIDENCE & RISK", roles: ["Market Data Auditor", "Evidence Lab", "Shadow Lab", "Paper Orchestrator", "Paper Auditor", "Independent Policy Guard"]}
 ];
 
 function node(tag, className, value) {
@@ -79,8 +79,17 @@ function renderEvents() {
 }
 
 function updateDecision() {
-  const d = [...state.events].reverse().find((x) => x.event_type === "DECISION");
-  $("final-decision").textContent = d ? d.details.action + " · " + d.details.vetoes.join(", ") : "NONE — awaiting evidence";
+  const decision = [...state.events].reverse().find((event) => event.event_type === "DECISION");
+  const action = decision?.details?.action;
+  if (action !== "NO_TRADE" && action !== "HOLD") {
+    $("final-decision").textContent = "NONE — awaiting verified NO_TRADE/HOLD decision";
+    return;
+  }
+  const vetoes = Array.isArray(decision.details.vetoes)
+    ? decision.details.vetoes.filter((item) => typeof item === "string")
+    : [];
+  $("final-decision").textContent = action +
+    (vetoes.length ? " · " + vetoes.join(", ") : " · no veto details recorded");
 }
 
 async function loadRuns() {
