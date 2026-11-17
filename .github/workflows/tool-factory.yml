@@ -180,6 +180,26 @@ jobs:
           set -euo pipefail
           python -m max_trading_agent tool-sandbox --file tests/fixtures/tool_factory_rolling_mean.json > "$RUNNER_TEMP/candidate_result.json"
           python -c 'import json,os; d=json.load(open(os.environ["RUNNER_TEMP"]+"/candidate_result.json")); assert d["status"] == "SANDBOX_PASSED_REVIEW_REQUIRED" and d["decision"] == "NO_TRADE" and not d["broker_execution"]'
+      - name: Real Docker timeout must force-remove untrusted T0 candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, pathlib, subprocess
+          from max_trading_agent.tool_factory import independent_cases, sandbox_evaluate
+          candidate=json.loads(pathlib.Path("tests/fixtures/tool_factory_rolling_mean.json").read_text())
+          candidate["code"]="def analyze(values):\n    while True:\n        values = values\n"
+          cases=independent_cases(candidate["tool_id"], pathlib.Path("knowledge/tool_factory_oracles.json"))
+          assert cases is not None
+          result=sandbox_evaluate(candidate,cases,timeout_seconds=3)
+          assert result["status"]=="SANDBOX_TIMEOUT",result["status"]
+          assert result["decision"]=="NO_TRADE" and result["execution"]=="DISABLED"
+          leftovers=subprocess.run(
+              ["docker","ps","-a","--filter","name=maxq-t0-","--format","{{.Names}}"],
+              text=True,capture_output=True,timeout=10,check=True)
+          assert not leftovers.stdout.strip(),"TIMEOUT_CONTAINER_NOT_REMOVED"
+          print("Real Docker timeout cleanup PASS; no remaining T0 container; NO_TRADE")
+          PY
       - name: Incorrect candidate must fail and exit nonzero
         shell: bash
         run: |
