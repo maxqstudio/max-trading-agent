@@ -67,9 +67,11 @@ class OfflineRLTests(unittest.TestCase):
         split = int(220 * 0.7)
         for i in range(split, 218):
             v = float(self.rows[i]["open"])
-            self.rows[i]["open"] = f"{v+0.0003:.8f}"
-            self.rows[i]["high"] = f"{v+0.006:.8f}"
-            self.rows[i]["low"] = f"{v-0.006:.8f}"
+            # A constant shift cancels from open-to-open rewards; vary
+            # the shift by candle to exercise genuine holdout sensitivity.
+            self.rows[i]["open"] = f"{v+0.0001*(i-split):.8f}"
+            self.rows[i]["high"] = f"{v+0.02:.8f}"
+            self.rows[i]["low"] = f"{v-0.02:.8f}"
         b = self.experiment(self.dataset())
         self.assertEqual(a["result"]["model_digest"], b["result"]["model_digest"])
         self.assertEqual(a["result"]["development"], b["result"]["development"])
