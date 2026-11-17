@@ -37,13 +37,13 @@ def verify_baseline(data: Any) -> list[dict]:
             or data["schema_version"] != 1 or data["repository"] != _REPO
             or data["default_branch"] != "main"
             or data["status"] != "PINNED_PREMERGE_SOURCE_IDENTITIES"
-            or data["self_pr"] != 76
-            or data["self_branch"] != "feat/g32-main-integration-completeness"
+            or data["self_pr"] != 82
+            or data["self_branch"] != "feat/g35-full-stack-release-gates"
             or data["owner_acceptance"] != "PENDING"
             or data["decision"] != "NO_TRADE"
             or data["execution"] != "DISABLED"
             or type(data["predecessors"]) is not list
-            or len(data["predecessors"]) != 31):
+            or len(data["predecessors"]) != 34):
         raise IntegrationGateError("G32_INVALID_PINNED_BASELINE")
     names = set()
     rows = []
@@ -115,23 +115,29 @@ def assess_integration(data: Any, prs: Any, *, environment: dict) -> dict:
         if number in index:
             raise IntegrationGateError("G32_DUPLICATE_PR")
         index[number] = item
-    expected = pinned + [{"pr": 76, "branch": data["self_branch"], "head_sha": None}]
+    expected = pinned + [{"pr": 82, "branch": data["self_branch"], "head_sha": None}]
     if any(x["pr"] not in index for x in expected):
         raise IntegrationGateError("G32_REQUIRED_PR_MISSING")
     rows = [_safe_pr(index[x["pr"]], x["pr"], x["branch"], x["head_sha"])
             for x in expected]
     main_run = (environment["GITHUB_EVENT_NAME"] == "push"
                 and environment["GITHUB_REF"] == "refs/heads/main")
+    # A future #84+ cannot silently disappear from this pinned release gate.
+    # A new milestone requires review and re-pinning before main can pass.
+    unexpected_new = sorted(number for number in index
+                            if number >= 84 and number % 2 == 0)
+    if main_run and unexpected_new:
+        raise IntegrationGateError("G32_NEW_PR_NOT_IN_BASELINE")
     if environment["GITHUB_REF"] != "refs/heads/main" and (
         environment["GITHUB_REF"] !=
-        "refs/heads/feat/g32-main-integration-completeness"
+        "refs/heads/feat/g35-full-stack-release-gates"
         and not environment["GITHUB_REF"].startswith("refs/pull/")):
         raise IntegrationGateError("G32_WRONG_BRANCH")
     if (environment["GITHUB_REF"] == "refs/heads/main"
             and environment["GITHUB_EVENT_NAME"] != "push"):
         raise IntegrationGateError("G32_NOT_A_MAIN_PUSH")
 
-    # On main, all 32 actual GitHub PRs must have been merged to main with
+    # On main, all 35 audited PRs must have been merged to main with
     # current base metadata. GitHub merge records are NOT proof of executable
     # correctness, acceptance, or complete data provenance.
     if main_run:
