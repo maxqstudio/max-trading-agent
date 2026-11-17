@@ -63,11 +63,11 @@ class G32IntegrationGateTests(unittest.TestCase):
         self.data = json.loads(BASELINE.read_text(encoding="utf-8"))
         self.prs = fake_prs(self.data)
 
-    def review(self, *, prs=None, baseline=None, environment=None):
+    def review(self, *, prs=..., baseline=..., environment=...):
         return assess_integration(
-            self.data if baseline is None else baseline,
-            self.prs if prs is None else prs,
-            environment=env() if environment is None else environment,
+            self.data if baseline is ... else baseline,
+            self.prs if prs is ... else prs,
+            environment=env() if environment is ... else environment,
         )
 
     def test_exact_snapshot_has_31_pinned_predecessors_and_self_76(self):
