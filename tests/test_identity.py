@@ -50,6 +50,9 @@ class IdentityTests(unittest.TestCase):
     def test_corrupt_identity_key_probe_cli_redacts_error(self):
         invalid = self.root / "corrupt_key"
         invalid.write_bytes(b"invalid")
+        if os.name == "posix":
+            # Isolate invalid file *content* from the separate ACL check.
+            invalid.chmod(0o600)
         result = subprocess.run(
             [sys.executable, "-m", "max_trading_agent", "mt5-probe",
              "--symbol", "EURUSD", "--identity-key-file", str(invalid),
