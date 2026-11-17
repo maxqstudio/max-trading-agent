@@ -2,7 +2,7 @@ name: Tool Factory isolated Docker oracle
 
 on:
   push:
-    branches: ["feat/c06-**", "feat/g20-**", "feat/g21-**", "feat/g22-**", "feat/g23-**", "feat/g24-**", "feat/g25-**", "feat/g26-**", "feat/g27-**"]
+    branches: ["feat/c06-**", "feat/g20-**", "feat/g21-**", "feat/g22-**", "feat/g23-**", "feat/g24-**", "feat/g25-**", "feat/g26-**", "feat/g27-**", "feat/g28-**"]
   pull_request:
     paths:
       - "max_trading_agent/tool_factory.py"
@@ -27,6 +27,9 @@ on:
       - "tests/test_signed_review_link.py"
       - "tests/test_review_governance.py"
       - "tests/test_research_registry.py"
+      - "tools/stack_audit.py"
+      - "tests/test_stack_audit.py"
+      - ".github/workflows/g28-stack-handoff.yml"
       - ".github/workflows/g24-signed-t0.yml"
       - "tests/fixtures/tool_factory_range_span.json"
       - ".github/workflows/tool-factory.yml"
@@ -122,6 +125,8 @@ jobs:
               assert len(list((root/"pending").glob("*.json")))==1
           print("G27 PASS: two static reference computations, novel tool denied, candidate stage NOT_REGISTERED, NO_TRADE")
           PY
+      - name: G28 all stacked PR merge-handoff and mutation-denial tests
+        run: python -m unittest discover -s tests -p test_stack_audit.py -v
       - name: Fetch public sandbox runtime (no secrets mounted)
         run: docker pull python:3.12-alpine
       - name: Known correct candidate must pass isolated oracle
