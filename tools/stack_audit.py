@@ -104,6 +104,8 @@ def audit_stack(prs: Any) -> dict:
     # are created. Unlisted gaps are an error, not an approval to skip a PR.
     canonical = sorted(number for number in index
                        if number >= 14 and number % 2 == 0)
+    if any(number > 82 and number % 2 for number in index):
+        raise StackAuditError("G28_UNEXPECTED_NEW_PR")
     if not canonical or len(canonical) > 80 or canonical != list(
             range(14, canonical[-1] + 2, 2)):
         raise StackAuditError("G28_REQUIRED_PR_MISSING")
