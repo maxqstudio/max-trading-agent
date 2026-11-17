@@ -14,7 +14,7 @@ def main() -> None:
                         "signal-research", "market-import", "market-manifest",
                         "market-backtest", "experiment-show",
                         "shadow-open", "shadow-settle", "shadow-show",
-                        "watch"))
+                        "watch", "mt5-acceptance"))
     parser.add_argument("value", nargs="?")
     parser.add_argument("--db", default=str(DEFAULT_KNOWLEDGE))
     parser.add_argument("--journal", default=str(DEFAULT_JOURNAL))
@@ -41,6 +41,10 @@ def main() -> None:
                         help="Watch interval 5-60 seconds")
     parser.add_argument("--max-polls", type=int, default=0,
                         help="0: continuous until Ctrl+C; >=1: bounded")
+    parser.add_argument("--samples", type=int, default=3,
+                        help="MT5 acceptance: number of bounded samples (2-10)")
+    parser.add_argument("--sample-interval", type=int, default=2,
+                        help="MT5 acceptance: interval between samples (1-30 seconds)")
     parser.add_argument("--identity-key-file",
                         default=".local/mt5_identity.key",
                         help="Private HMAC key file for opt-in MT5 read-only observation")
@@ -95,6 +99,32 @@ def main() -> None:
                 "code": exc.code
             }
             print(json.dumps({"ok": False, "read_only": True, "error": details}),
+                  file=sys.stderr)
+            raise SystemExit(2) from None
+    elif args.command == "mt5-acceptance":
+        from .identity import IdentityError, load_or_create_key
+        from .mt5_readonly import MT5ReadError, ReadOnlyMT5
+        from .terminal_acceptance import AcceptanceError, TerminalAcceptance
+        if not args.symbol:
+            parser.error("mt5-acceptance requires --symbol")
+        if not 2 <= args.samples <= 10 or not 1 <= args.sample_interval <= 30:
+            parser.error("mt5-acceptance requires --samples 2-10 "
+                         "and --sample-interval 1-30")
+        try:
+            key = load_or_create_key(Path(args.identity_key_file))
+            auditor = TerminalAcceptance(
+                EventJournal(Path(args.journal)),
+                ReadOnlyMT5.from_local_terminal(identity_key=key),
+                key,
+            )
+            output = auditor.execute(
+                args.symbol, timeframe=args.timeframe, bars=args.bars,
+                samples=args.samples, sample_interval=args.sample_interval,
+            )
+        except (IdentityError, MT5ReadError, AcceptanceError) as exc:
+            code = getattr(exc, "code", str(exc))
+            print(json.dumps({"ok": False, "code": code,
+                              "decision": "NO_TRADE", "execution": "DISABLED"}),
                   file=sys.stderr)
             raise SystemExit(2) from None
     elif args.command == "signal-research":
@@ -240,6 +270,11 @@ def main() -> None:
                 pass
         return
     print(json.dumps(output, indent=2))
+    if args.command == "mt5-acceptance":
+        if output["status"] == "BLOCKED":
+            raise SystemExit(2)
+        if output["status"] == "INCONCLUSIVE":
+            raise SystemExit(3)
 
 
 if __name__ == "__main__":

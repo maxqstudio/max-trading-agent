@@ -126,3 +126,7 @@ On each eligible newly completed read-only MT5 candle (with **explicit opt-in**)
 ## M08 — Forward shadow evidence scorecards (candidate)
 
 The Trading Room now reports all opt-in research attempts, abstentions, failures and pending hypothetical outcomes alongside per-symbol, account-safe forward shadow metrics. Mixed account histories suppress P/L aggregation and no cross-symbol profit is calculated. **No broker order or strategy-profit approval exists.** See [Evidence limitations](docs/M08_FORWARD_EVIDENCE.md) and [Issue #27](https://github.com/maxqstudio/max-trading-agent/issues/27).
+
+## M09 — Read-only MT5 terminal acceptance kit (candidate)
+
+Owner-controlled CLI `mt5-acceptance` makes bounded local MT5 read-only reads and checks account HMAC stability, quote progression/freshness, broker symbol metadata and completed-candle quality. Reports `OBSERVED_CONSISTENT`, `INCONCLUSIVE`, or `BLOCKED` with **NO_TRADE** throughout. GitHub-hosted synthetic CI does NOT validate real broker authenticity or strategy profit. See [M09 usage](docs/M09_TERMINAL_ACCEPTANCE.md) and [Issue #29](https://github.com/maxqstudio/max-trading-agent/issues/29).
