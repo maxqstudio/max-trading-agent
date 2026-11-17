@@ -1,0 +1,86 @@
+name: G32 Authenticated main integration completeness (NO_TRADE)
+
+on:
+  push:
+    branches: [main, "feat/g32-**"]
+  pull_request:
+    paths:
+      - "knowledge/g32_pinned_merge_identities.json"
+      - "tools/main_integration_gate.py"
+      - "tests/test_main_integration_gate.py"
+      - ".github/workflows/g32-main-completeness.yml"
+  workflow_dispatch:
+
+# GitHub API READ only: no issues/PR mutation, OIDC, broker or deployments.
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  verified-merge-metadata:
+    name: Genuine main-only PR merge metadata gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4 pinned
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5 pinned
+        with:
+          python-version: "3.12"
+      - name: G32 SHA-bound integration and adversarial metadata regression
+        run: python -m unittest discover -s tests -p test_main_integration_gate.py -v
+      - name: Verify all 32 actual GitHub PR records and refuse false main acceptance
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          code=0
+          python -m tools.main_integration_gate \
+            --baseline knowledge/g32_pinned_merge_identities.json \
+            --output "$RUNNER_TEMP/g32-main-integration.json" \
+            > "$RUNNER_TEMP/g32-output.json" || code=$?
+          python - <<'PY'
+          import json, os, pathlib
+          path=pathlib.Path(os.environ["RUNNER_TEMP"])/"g32-main-integration.json"
+          assert path.is_file()
+          data=json.loads(path.read_text(encoding="utf-8"))
+          main=(os.environ["GITHUB_EVENT_NAME"]=="push" and
+                os.environ["GITHUB_REF"]=="refs/heads/main")
+          assert data["checked_prs"]==32
+          assert data["github_sha"]==os.environ["GITHUB_SHA"]
+          assert data["decision"]=="NO_TRADE"
+          assert data["execution"]=="DISABLED"
+          assert data["postmerge_python_js_docker_ci_verified"] is False
+          assert data["real_mt5_terminal_tested"] is False
+          assert data["owner_acceptance"]=="PENDING"
+          assert data["generated_tool_admitted"] is False
+          if main:
+              assert data["scope"]=="MAIN_INTEGRATION_METADATA_ONLY"
+              assert data["status"]=="G32_GITHUB_MAIN_MERGE_METADATA_VERIFIED"
+              assert data["merged_to_main_count"]==32
+          else:
+              assert data["scope"]=="BRANCH_REHEARSAL_NOT_MAIN"
+              assert data["main_integration_metadata_verified"] is False
+              assert data["status"] in (
+                  "G32_EXPECTED_UNMERGED_STACK_HOLD",
+                  "G32_FEATURE_CI_NOT_MAIN_HOLD",
+              )
+          print("G32 gate:",data["status"],
+                "- GH PR metadata only, no live terminal or trade authority")
+          PY
+          if [ "$GITHUB_EVENT_NAME" = "push" ] && [ "$GITHUB_REF" = "refs/heads/main" ]; then
+            test "$code" -eq 0
+          else
+            test "$code" -eq 3
+            echo "G32 branch/PR HOLD expected; this is NOT main release acceptance"
+          fi
+      - name: Upload GitHub-verified PR metadata evidence, even on rejection
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4 pinned
+        with:
+          name: g32-main-integration-readonly
+          path: ${{ runner.temp }}/g32-main-integration.json
+          retention-days: 30
+          if-no-files-found: warn

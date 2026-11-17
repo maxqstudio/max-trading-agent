@@ -218,3 +218,7 @@ The [G30 rehearsal](docs/G30_SEQUENTIAL_REHEARSAL.md) replays **29 pinned stacke
 ## G31 — GitHub postmerge-main CI and local Windows MT5 readiness check
 
 The [G31 acceptance workflow](docs/G31_OWNER_MT5_PREFLIGHT.md) performs offline Linux/Windows, JS and real Docker checks on the exact triggering tree. Feature CI is labeled **BRANCH_REHEARSAL_ONLY**; only a later actual push to `main` can produce **MAIN_POSTMERGE_CI**. The owner can run `python -m tools.owner_mt5_preflight --repo .` on Windows after merging: it checks local prerequisites **without importing/connecting MT5, creating an HMAC key or trading**. Actual M09 terminal observation remains a separate explicit owner action. [Issue #73](https://github.com/maxqstudio/max-trading-agent/issues/73).
+
+## G32 — Genuine-main GitHub PR integration completeness (read-only)
+
+[G32](docs/G32_MAIN_INTEGRATION_GATE.md) verifies authenticated GitHub merge-target records for the **31 pinned predecessor PRs plus G32 #76**. Feature CI must report **HOLD**; only a future actual `main` push after every required PR has merged *into main* can pass the metadata gate. This still does not prove main's full CI or real MT5 acceptance. All reports remain `NO_TRADE`, with no broker or generated-tool admission. [Issue #75](https://github.com/maxqstudio/max-trading-agent/issues/75).
