@@ -130,3 +130,7 @@ The Trading Room now reports all opt-in research attempts, abstentions, failures
 ## M09 — Read-only MT5 terminal acceptance kit (candidate)
 
 Owner-controlled CLI `mt5-acceptance` makes bounded local MT5 read-only reads and checks account HMAC stability, quote progression/freshness, broker symbol metadata and completed-candle quality. Reports `OBSERVED_CONSISTENT`, `INCONCLUSIVE`, or `BLOCKED` with **NO_TRADE** throughout. GitHub-hosted synthetic CI does NOT validate real broker authenticity or strategy profit. See [M09 usage](docs/M09_TERMINAL_ACCEPTANCE.md) and [Issue #29](https://github.com/maxqstudio/max-trading-agent/issues/29).
+
+## Canonical M03 safety contract: offline DEMO preflight
+
+The independent `demo-preflight` command checks a locally HMAC-signed read-only snapshot against explicit owner-supplied symbol, risk, stop, volume and permission limits. **Passing static checks is never authorization to trade.** All results remain `NO_TRADE`; no order API is connected. Full limitations: [C03 demo preflight](docs/C03_DEMO_PREFLIGHT.md), [Issue #31](https://github.com/maxqstudio/max-trading-agent/issues/31).
