@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any, Protocol, Sequence
 
 from .core import CATALOG, load_catalog
+from .source_audit import SourceAuditError, _strict_path
 
 _DIM = 64
 _TERMS = re.compile(r"[A-Za-z0-9_]+")
@@ -86,14 +87,27 @@ class HybridKnowledge:
         if not 1 <= len(records) <= 256:
             raise RagError("INVALID_CATALOG_SIZE")
         docs = []
+        seen_urls = set()
         for item in records:
             url = item["source_url"]
             if (not isinstance(url, str) or not url.startswith(_SOURCE)
                     or not isinstance(item.get("summary"), str)
                     or not 1 <= len(item["summary"]) <= 2048
                     or not isinstance(item.get("title"), str)
-                    or not 1 <= len(item["title"]) <= 160):
+                    or not 1 <= len(item["title"]) <= 160
+                    or not isinstance(item["tags"], list)
+                    or not 1 <= len(item["tags"]) <= 32
+                    or any(not isinstance(tag, str)
+                           or not re.fullmatch(r"[A-Za-z0-9_]{1,40}", tag)
+                           for tag in item["tags"])):
                 raise RagError("UNTRUSTED_SOURCE_METADATA")
+            try:
+                _strict_path(url)  # same canonical URL gate as G17 HTTPS audit
+            except SourceAuditError:
+                raise RagError("UNTRUSTED_SOURCE_METADATA") from None
+            if url in seen_urls:
+                raise RagError("DUPLICATE_SOURCE_URL")
+            seen_urls.add(url)
             doc = {"id": item["id"], "title": item["title"],
                    "summary": item["summary"], "tags": item["tags"],
                    "source_url": url, "effect": item["effect"]}
@@ -143,6 +157,50 @@ class HybridKnowledge:
             raise RagError("INDEX_MISSING")
         return sqlite3.connect(self.path.resolve().as_uri() + "?mode=ro", uri=True)
 
+    def _checked_rows(self, db: sqlite3.Connection) -> list[tuple]:
+        """Verify the visible FTS projection and every document before rankings.
+
+        Integrity is structural and locally reproducible; it is NOT proof of
+        correct/licensed upstream documentation or protection from a malicious
+        actor who can replace the complete database and code.
+        """
+        rows = db.execute(
+            "SELECT id,title,summary,tags,source_url,effect,digest,vector,"
+            "embedder_version FROM hybrid_docs ORDER BY id"
+        ).fetchall()
+        if not 1 <= len(rows) <= 256:
+            raise RagError("INVALID_INDEX")
+        fts = db.execute(
+            "SELECT id,title,summary,tags FROM hybrid_fts ORDER BY id"
+        ).fetchall()
+        if (len({row[0] for row in rows}) != len(rows)
+                or fts != [row[:4] for row in rows]):
+            raise RagError("INDEX_INTEGRITY_FAILED")
+        checked = []
+        for row in rows:
+            key, title, summary, tags, url, effect, digest, embedded, version = row
+            if not isinstance(tags, str):
+                raise RagError("INDEX_INTEGRITY_FAILED")
+            doc = {"id": key, "title": title, "summary": summary,
+                   "tags": tags.split(), "source_url": url, "effect": effect}
+            try:
+                _strict_path(url)
+            except SourceAuditError:
+                raise RagError("INDEX_INTEGRITY_FAILED") from None
+            if _checksum(doc) != digest or version != self.encoder.version:
+                raise RagError("INDEX_INTEGRITY_FAILED")
+            stored = json.loads(embedded)
+            if (not isinstance(stored, list) or len(stored) != _DIM
+                    or any(type(n) not in (int, float)
+                           or not math.isfinite(float(n)) for n in stored)):
+                raise RagError("INDEX_INTEGRITY_FAILED")
+            if type(self.encoder) is HashingEmbedder:
+                content = " ".join([title, summary, tags])
+                if stored != _vector(self.encoder, content):
+                    raise RagError("INDEX_INTEGRITY_FAILED")
+            checked.append((row, stored))
+        return checked
+
     def search(self, query: str, *, limit: int = 5) -> list[dict]:
         if not isinstance(query, str) or not 1 <= len(query) <= 200 or (
             type(limit) is not int or not 1 <= limit <= 30
@@ -154,32 +212,15 @@ class HybridKnowledge:
         vec = _vector(self.encoder, query)
         try:
             with closing(self._connection()) as db:
-                rows = db.execute(
-                    "SELECT id,title,summary,tags,source_url,effect,digest,vector,"
-                    "embedder_version FROM hybrid_docs ORDER BY id"
-                ).fetchall()
-                if not rows or len(rows) > 256:
-                    raise RagError("INVALID_INDEX")
+                checked = self._checked_rows(db)
                 q = " OR ".join('"' + t + '"' for t in terms)
                 lexical = dict(db.execute(
                     "SELECT id, bm25(hybrid_fts) FROM hybrid_fts "
                     "WHERE hybrid_fts MATCH ?", (q,)
                 ))
-                count = db.execute("SELECT COUNT(*) FROM hybrid_fts").fetchone()[0]
-                if count != len(rows):
-                    raise RagError("INDEX_INTEGRITY_FAILED")
             results = []
-            for key, title, summary, tags, url, effect, digest, embedded, version in rows:
-                doc = {"id": key, "title": title, "summary": summary,
-                       "tags": tags.split(), "source_url": url, "effect": effect}
-                if _checksum(doc) != digest or version != self.encoder.version:
-                    raise RagError("INDEX_INTEGRITY_FAILED")
-                stored = json.loads(embedded)
-                if not isinstance(stored, list) or len(stored) != _DIM or any(
-                    type(n) not in (int, float) or not math.isfinite(float(n))
-                    for n in stored
-                ):
-                    raise RagError("INDEX_INTEGRITY_FAILED")
+            for row, stored in checked:
+                key, title, summary, tags, url, effect, digest, _, version = row
                 score = 0.8 * (1 / (1 + abs(lexical[key])) if key in lexical else 0)
                 score += 0.2 * max(0, _cosine(vec, stored))
                 results.append({
@@ -199,9 +240,12 @@ class HybridKnowledge:
         docs = self._docs(Path(catalog))
         try:
             with closing(self._connection()) as db:
-                existing = dict(db.execute("SELECT id,digest FROM hybrid_docs"))
-        except (sqlite3.Error, OSError):
-            raise RagError("INDEX_MISSING") from None
+                checked = self._checked_rows(db)
+                existing = {row[0]: row[6] for row, _ in checked}
+        except RagError:
+            raise
+        except (sqlite3.Error, OSError, ValueError, TypeError):
+            raise RagError("INDEX_INTEGRITY_FAILED") from None
         current = {d["id"]: _checksum(d) for d in docs}
         return {"added": sorted(set(current) - set(existing)),
                 "removed": sorted(set(existing) - set(current)),
