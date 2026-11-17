@@ -1,0 +1,187 @@
+name: G31 Postmerge main CI and local MT5 prerequisites (NO_TRADE)
+
+on:
+  push:
+    branches: [main, "feat/g31-**"]
+  pull_request:
+    paths:
+      - "tools/owner_mt5_preflight.py"
+      - "tests/test_owner_mt5_preflight.py"
+      - ".github/workflows/g31-postmerge-main.yml"
+      - "docs/G31_OWNER_MT5_PREFLIGHT.md"
+  workflow_dispatch:
+
+# GitHub-hosted read-only CI only, no order/LLM/broker secrets or writes.
+permissions:
+  contents: read
+
+jobs:
+  postmerge-readonly-gate:
+    name: Main-or-branch offline gate (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 18
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - name: Checkout exact triggering tree
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4 pinned
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5 pinned
+        with:
+          python-version: "3.12"
+      - name: Record branch-versus-main status before tests (no promotion)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os, pathlib, subprocess
+          sha=subprocess.run(["git","rev-parse","HEAD"],check=True,text=True,
+                             capture_output=True).stdout.strip()
+          assert sha==os.environ["GITHUB_SHA"]
+          assert os.environ["GITHUB_REPOSITORY"]=="maxqstudio/max-trading-agent"
+          actual_main=(os.environ["GITHUB_EVENT_NAME"]=="push"
+                       and os.environ["GITHUB_REF"]=="refs/heads/main")
+          report={
+            "schema_version":1,
+            "status":"G31_CI_STARTED_TESTS_PENDING",
+            "scope":"MAIN_POSTMERGE_CI" if actual_main else "BRANCH_REHEARSAL_ONLY",
+            "source_commit":sha,
+            "source_ref":os.environ["GITHUB_REF"],
+            "os":os.environ["RUNNER_OS"],
+            "python_suite_passed":False,
+            "js_ui_passed":False,
+            "isolated_docker_review_passed":False,
+            "local_owner_preflight_performed":False,
+            "real_mt5_terminal_tested":False,
+            "live_broker_connection_tested":False,
+            "generated_t1_tool_admitted":False,
+            "broker_execution":False,
+            "owner_acceptance":"PENDING",
+            "execution":"DISABLED",
+            "decision":"NO_TRADE",
+          }
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])/"g31-ci-report.json"
+          assert not p.exists()
+          p.write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print("G31 CI scope",report["scope"],"SHA",sha)
+          PY
+      - name: Install offline structured MT5 rate test dependency
+        run: python -m pip install numpy==2.2.6
+      - name: Compile and run complete Python regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m compileall -q max_trading_agent tests tools
+          python -m unittest discover -s tests -v
+      - name: GitHub-hosted preflight must not claim real terminal readiness
+        shell: bash
+        run: |
+          set -euo pipefail
+          status=0
+          python -m tools.owner_mt5_preflight --repo . > "$RUNNER_TEMP/g31-local-preflight.json" || status=$?
+          test "$status" -eq 3
+          python - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])/"g31-local-preflight.json"
+          data=json.loads(p.read_text())
+          assert data["status"]=="LOCAL_PREFLIGHT_NOT_READY"
+          assert data["mt5_terminal_initialized"] is False
+          assert data["terminal_feed_tested"] is False
+          assert data["broker_connected"] is False
+          assert data["identity_key_created"] is False
+          assert data["decision"]=="NO_TRADE" and data["execution"]=="DISABLED"
+          print("G31 offline preflight PASS: hosted CI does not impersonate a real MT5 terminal")
+          PY
+      - name: Deterministic read-only knowledge and R0 candidate rejection
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m max_trading_agent validate
+          python -m max_trading_agent index --db "$RUNNER_TEMP/g31-knowledge.sqlite3"
+          python -m max_trading_agent search "bid ask" --db "$RUNNER_TEMP/g31-knowledge.sqlite3"
+          python -m max_trading_agent plan prepare_entry
+          python - <<'PY'
+          import json, pathlib
+          from max_trading_agent.research_registry import (
+              evaluate_reference, stage_untrusted_candidate)
+          assert evaluate_reference("rolling_mean_v1",[2,4,6])["result"]==4
+          assert evaluate_reference("range_span_v1",[-4,0,7])["result"]==11
+          c=json.loads(pathlib.Path("tests/fixtures/tool_factory_range_span.json").read_text())
+          r=stage_untrusted_candidate(c)
+          assert r["status"]=="T1_CANDIDATE_NOT_REGISTERED"
+          assert not r["tool_admitted"] and not r["candidate_source_executed"]
+          assert r["decision"]=="NO_TRADE" and r["execution"]=="DISABLED"
+          PY
+      - name: Set up Node.js on Linux
+        if: runner.os == 'Linux'
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4 pinned
+        with:
+          node-version: "22"
+      - name: Linux Trading Room JavaScript regression
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check ui/app.js
+          node --test tests/trading_room.test.cjs
+          test -s ui/index.html
+          test -s ui/style.css
+          test -s ui/app.js
+      - name: Pull public G21 isolated numeric sandbox image on Linux
+        if: runner.os == 'Linux'
+        run: docker pull python:3.12-alpine
+      - name: Linux real Docker independent golden/property approval-negative
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, pathlib
+          from max_trading_agent.tool_properties import review_t0_properties
+          from max_trading_agent.tool_factory import validate_candidate
+          c=json.loads(pathlib.Path("tests/fixtures/tool_factory_range_span.json").read_text())
+          evidence=review_t0_properties(c)
+          assert evidence["candidate_sha256"]==validate_candidate(c)["sha256"]
+          assert evidence["status"]=="T0_PROPERTY_REVIEWED"
+          assert evidence["golden_cases"]==5 and evidence["property_cases"]==32
+          assert evidence["decision"]=="NO_TRADE" and evidence["execution"]=="DISABLED"
+          bad={**c,"code":"def analyze(values):\n    return 999\n"}
+          rejection=review_t0_properties(bad)
+          assert rejection["status"]=="T0_PROPERTY_REJECTED"
+          assert rejection["decision"]=="NO_TRADE"
+          print("G31 PASS: real isolated Docker goldens/properties and intentionally bad candidate rejection")
+          PY
+      - name: Finalize SHA-scoped CI evidence, never mark real terminal PASS
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])/"g31-ci-report.json"
+          report=json.loads(p.read_text())
+          assert report["status"]=="G31_CI_STARTED_TESTS_PENDING"
+          report["status"]="G31_OFFLINE_CI_PASS_REAL_TERMINAL_PENDING"
+          report["python_suite_passed"]=True
+          report["js_ui_passed"]=os.environ["RUNNER_OS"]=="Linux"
+          report["isolated_docker_review_passed"]=os.environ["RUNNER_OS"]=="Linux"
+          report["local_owner_preflight_performed"]=True
+          assert not report["real_mt5_terminal_tested"]
+          assert report["owner_acceptance"]=="PENDING"
+          assert not report["broker_execution"]
+          assert report["decision"]=="NO_TRADE" and report["execution"]=="DISABLED"
+          p.write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print("G31 CI PASS",report["scope"],report["os"],
+                "SHA",report["source_commit"],"real MT5 still PENDING")
+          PY
+      - name: Upload SHA-scoped main/branch report (even if regression fails)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4 pinned
+        with:
+          name: g31-offline-ci-${{ matrix.os }}
+          path: ${{ runner.temp }}/g31-ci-report.json
+          retention-days: 30
+          if-no-files-found: warn
