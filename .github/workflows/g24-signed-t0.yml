@@ -2,7 +2,7 @@ name: G24 Sigstore signed T0 Docker evidence
 
 on:
   push:
-    branches: ["feat/g24-**"]
+    branches: ["feat/g24-**", "feat/g25-**"]
 
 # This dedicated push-only job is the ONLY job permitted to mint an OIDC
 # signature or publish an attestation. Existing CI remains read-only.
@@ -33,7 +33,8 @@ jobs:
           set -euo pipefail
           python -m max_trading_agent.signed_evidence create \
             --candidate tests/fixtures/tool_factory_range_span.json \
-            --evidence "$RUNNER_TEMP/g24-t0-proof.json"
+            --evidence "$RUNNER_TEMP/g24-t0-proof.json" \
+            --receipt-out "$RUNNER_TEMP/g24-property-receipt.json"
           python - <<'PY'
           import json, os, pathlib
           file=pathlib.Path(os.environ['RUNNER_TEMP'])/'g24-t0-proof.json'
@@ -97,6 +98,7 @@ jobs:
           name: g24-signed-t0-evidence
           path: |
             ${{ runner.temp }}/g24-t0-proof.json
+            ${{ runner.temp }}/g24-property-receipt.json
             ${{ runner.temp }}/g24-sigstore-bundle.json
           retention-days: 30
           if-no-files-found: error
