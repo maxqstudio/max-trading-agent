@@ -151,9 +151,25 @@ class WalkForwardTests(unittest.TestCase):
             with self.subTest(kw=kw):
                 with self.assertRaises(MarketDataError):
                     self.run_test(dataset_id, **kw)
-        non_mid = self.dataset(basis="BID")
+        # MarketStore correctly rejects the same bars under conflicting
+        # quote-basis provenance. Keep the basis negative test in its own DB.
+        bid_store = MarketStore(self.root / "bid-only.sqlite3")
+        with self.csv.open("w", encoding="utf-8", newline="") as file:
+            writer = csv.DictWriter(file, fieldnames=[
+                "time_utc", "open", "high", "low", "close"
+            ])
+            writer.writeheader()
+            writer.writerows(self.rows)
+        non_mid = bid_store.import_csv(
+            self.csv, symbol="EURUSD", timeframe="M15",
+            quote_basis="BID", source="fully-synthetic-evidence",
+            rights="TEST_ONLY",
+        )["dataset_id"]
         with self.assertRaisesRegex(MarketDataError, "MID_OHLC_REQUIRED"):
-            self.run_test(non_mid)
+            walk_forward_q(
+                bid_store, non_mid, spread=0.0002,
+                slippage=0.00003, fee_per_side=0.00001,
+            )
         gapped = self.dataset(gap=True)
         with self.assertRaisesRegex(MarketDataError, "CONTIGUOUS_CANDLES_REQUIRED"):
             self.run_test(gapped)
