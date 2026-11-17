@@ -15,7 +15,7 @@ def main() -> None:
                         "market-backtest", "experiment-show",
                         "shadow-open", "shadow-settle", "shadow-show",
                         "watch", "mt5-acceptance", "demo-preflight",
-                        "rag-index", "rag-search", "rag-diff", "rag-eval"))
+                        "rag-index", "rag-search", "rag-diff", "rag-eval", "offline-rl"))
     parser.add_argument("value", nargs="?")
     parser.add_argument("--db", default=str(DEFAULT_KNOWLEDGE))
     parser.add_argument("--journal", default=str(DEFAULT_JOURNAL))
@@ -36,6 +36,9 @@ def main() -> None:
     parser.add_argument("--spread", type=float, help="Modeled full spread in price units")
     parser.add_argument("--slippage", type=float, help="Modeled slippage per side in price units")
     parser.add_argument("--fee-per-side", type=float, help="Modeled fee in price units per asset unit")
+    parser.add_argument("--epochs", type=int, default=16, help="Offline Q epochs 1-100")
+    parser.add_argument("--alpha", type=float, default=0.2, help="Offline Q learning rate")
+    parser.add_argument("--gamma", type=float, default=0.6, help="Offline Q discount 0-1")
     parser.add_argument("--candidate", help="Stable prospective hypothesis ID")
     parser.add_argument("--side", choices=("LONG", "SHORT"), help="Hypothetical direction")
     parser.add_argument("--origin", default="USER_RESEARCH",
@@ -190,7 +193,7 @@ def main() -> None:
             print(json.dumps({"ok": False, "code": exc.code}), file=sys.stderr)
             raise SystemExit(2) from None
     elif args.command in ("market-import", "market-manifest",
-                          "market-backtest", "experiment-show"):
+                          "market-backtest", "experiment-show", "offline-rl"):
         from .market_store import MarketDataError, MarketStore
         from .backtest_mission import BacktestMission
         store = MarketStore(Path(args.market_db))
@@ -210,6 +213,17 @@ def main() -> None:
                 if not args.experiment:
                     parser.error("experiment-show requires --experiment")
                 output = store.experiment(args.experiment)
+            elif args.command == "offline-rl":
+                from .offline_rl import offline_q_research
+                if not args.dataset or any(v is None for v in (
+                        args.spread, args.slippage, args.fee_per_side)):
+                    parser.error("offline-rl requires --dataset --spread "
+                                 "--slippage --fee-per-side")
+                output = offline_q_research(
+                    store, args.dataset, spread=args.spread,
+                    slippage=args.slippage, fee_per_side=args.fee_per_side,
+                    epochs=args.epochs, alpha=args.alpha, gamma=args.gamma
+                )
             else:
                 if not args.dataset or any(x is None for x in (
                         args.spread, args.slippage, args.fee_per_side)):
