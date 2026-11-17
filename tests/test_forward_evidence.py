@@ -221,6 +221,26 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(report["symbols"], [])
         self.assertEqual(report["status"], "OBSERVED")
 
+    def test_legacy_watch_schema_cannot_disappear_as_no_data(self):
+        self.journal = EventJournal(self.file)
+        with closing(sqlite3.connect(self.file)) as db, db:
+            db.execute("""CREATE TABLE watch_jobs(
+                job_id TEXT PRIMARY KEY, symbol TEXT, status TEXT
+            )""")
+            db.execute("INSERT INTO watch_jobs VALUES(?,?,?)",
+                       (digest("old"), "EURUSD", "RUNNING"))
+        with self.assertRaisesRegex(EvidenceError, "LEGACY_SCHEMA"):
+            ForwardEvidence(self.file).summary()
+
+    def test_unknown_episode_origin_is_integrity_violation(self):
+        self.initialize()
+        jid = self.add_job(1)
+        self.add_episode(jid, pnl=0.1, idx=1)
+        with closing(sqlite3.connect(self.file)) as db, db:
+            db.execute("UPDATE shadow_episodes SET origin='LIVE'")
+        with self.assertRaises(EvidenceError):
+            self.reporter.summary()
+
     def test_corrupted_net_price_and_future_time_are_blocked(self):
         self.initialize()
         jid = self.add_job(1)

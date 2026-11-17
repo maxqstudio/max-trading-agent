@@ -100,8 +100,8 @@ class ForwardEvidence:
                 if "watch_jobs" in tables:
                     columns = {row[1] for row in db.execute("PRAGMA table_info(watch_jobs)")}
                     if "shadow_requested" not in columns:
-                        # A legacy M05 state has no opt-in evidence permission.
-                        return report
+                        # Unknown historical opt-in state: NEVER report as zero.
+                        raise EvidenceError("EVIDENCE_LEGACY_SCHEMA")
                     jobs = [dict(row) for row in db.execute(
                         "SELECT job_id,symbol,timeframe,bar_utc,status,research_run_id "
                         "FROM watch_jobs WHERE shadow_requested=1"
@@ -113,10 +113,11 @@ class ForwardEvidence:
                               "exit_price","net_pnl_price_units","slippage",
                               "fee_per_side","account_binding_id","research_run_id",
                               "watch_job_id")
-                    if set(fields).issubset(columns):
-                        episodes = [dict(row) for row in db.execute(
-                            "SELECT " + ",".join(fields) + " FROM shadow_episodes"
-                        )]
+                    if not set(fields).issubset(columns):
+                        raise EvidenceError("EVIDENCE_LEGACY_SCHEMA")
+                    episodes = [dict(row) for row in db.execute(
+                        "SELECT " + ",".join(fields) + " FROM shadow_episodes"
+                    )]
                 if "events" in tables:
                     events = [dict(row) for row in db.execute(
                         "SELECT event_type,details FROM events "
@@ -174,6 +175,8 @@ class ForwardEvidence:
 
         candidate_jobs = set()
         for ep in episodes:
+            if ep["origin"] not in ("LLM_RESEARCH", "USER_RESEARCH"):
+                raise EvidenceError("EVIDENCE_INTEGRITY_BLOCKED")
             if ep["origin"] != "LLM_RESEARCH":
                 totals["legacy_manual_excluded"] += 1
                 continue

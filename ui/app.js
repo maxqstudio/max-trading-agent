@@ -148,6 +148,7 @@ async function loadEvidence() {
       ["Pending outcomes", count.pending_episodes],
       ["Settled outcomes", count.settled_episodes],
       ["Unmatched cycles", count.unmatched_cycles],
+      ["Legacy manual excluded", count.legacy_manual_excluded],
     ]) addEvidenceMetric(totals, label, value);
     const symbols = $("evidence-symbols");
     symbols.replaceChildren();
