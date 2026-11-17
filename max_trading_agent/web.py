@@ -7,6 +7,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
+from .forward_evidence import EvidenceError, ForwardEvidence
 from .runtime import ALLOWED_TASKS, DEFAULT_JOURNAL, DEFAULT_KNOWLEDGE, EventJournal, ReferenceMission
 
 UI_DIR = Path(__file__).resolve().parent.parent / "ui"
@@ -19,6 +20,7 @@ def create_server(host: str = "127.0.0.1", port: int = 8765,
         raise ValueError("UI must bind to local loopback only in M00")
     journal = EventJournal(journal_path)
     mission = ReferenceMission(journal, knowledge_path)
+    evidence = ForwardEvidence(journal_path)
 
     class Handler(BaseHTTPRequestHandler):
         def _respond(self, code: int, payload: bytes, content_type: str) -> None:
@@ -55,6 +57,15 @@ def create_server(host: str = "127.0.0.1", port: int = 8765,
                 return
             if url.path == "/api/runs":
                 self._json(200, {"runs": journal.runs()})
+                return
+            if url.path == "/api/evidence":
+                try:
+                    report = evidence.summary()
+                except EvidenceError:
+                    self._json(409, {"error": "evidence_integrity_blocked",
+                                     "decision": "NO_TRADE"})
+                    return
+                self._json(200, report)
                 return
             if url.path == "/api/events":
                 q = parse_qs(url.query)

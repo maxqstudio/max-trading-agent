@@ -52,3 +52,13 @@ footer { text-align:center; padding:12px; color:var(--muted); font-size:11px; bo
 .team-heading { margin:15px 0 8px; color:var(--accent); font-size:10px; font-weight:700; letter-spacing:.11em }
 .report-body { white-space:pre-wrap; overflow-wrap:anywhere; color:#dfecf6; font-size:12px; line-height:1.65; max-height:34vh; overflow:auto; margin-top:10px }
 .report-body:empty { display:none }
+
+.evidence-summary { border-top: 1px solid var(--border); margin-top: 16px; padding-top: 12px }
+.evidence-totals { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px }
+.evidence-metric { background: var(--panel2); border: 1px solid var(--border); border-radius: 7px; padding: 9px; min-width: 0; }
+.evidence-metric span { display: block; font-size: 11px }
+.evidence-metric strong { display: block; font-size: 15px; padding-top: 3px; }
+.evidence-symbol { border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-top: 10px; background: var(--panel2); }
+.evidence-symbol strong { font-size: 12px; overflow-wrap: anywhere; }
+.evidence-symbol p { font-size: 12px; line-height: 1.5; margin: 7px 0 0 }
+.evidence-warning { color: var(--amber); }

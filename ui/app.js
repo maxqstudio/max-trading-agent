@@ -125,6 +125,69 @@ async function loadEvents() {
   }
 }
 
+
+function addEvidenceMetric(parent, label, value) {
+  const item = node("div", "evidence-metric");
+  item.append(node("span", "muted", label), node("strong", "", String(value)));
+  parent.append(item);
+}
+
+async function loadEvidence() {
+  try {
+    const evidence = await requestJson("/api/evidence");
+    $("evidence-status").textContent = evidence.status;
+    const totals = $("evidence-totals");
+    totals.replaceChildren();
+    const count = evidence.totals;
+    for (const [label, value] of [
+      ["Attempted cycles", count.attempted_cycles],
+      ["ABSTAIN", count.abstained],
+      ["Rejected", count.rejected],
+      ["Failed / blocked", count.failed_jobs + count.blocked_jobs],
+      ["Needs review", count.review_required_jobs],
+      ["Pending outcomes", count.pending_episodes],
+      ["Settled outcomes", count.settled_episodes],
+      ["Unmatched cycles", count.unmatched_cycles],
+      ["Legacy manual excluded", count.legacy_manual_excluded],
+    ]) addEvidenceMetric(totals, label, value);
+    const symbols = $("evidence-symbols");
+    symbols.replaceChildren();
+    for (const item of evidence.symbols) {
+      const panel = node("article", "evidence-symbol");
+      panel.append(node("strong", "", item.symbol + " · " + item.evidence_grade));
+      panel.append(node("p", "muted",
+        item.attempts + " attempted · " + item.settled + " settled · " +
+        item.pending + " pending · " + item.abstained + " abstained"));
+      if (item.account_scope === "MIXED") {
+        panel.append(node("p", "evidence-warning",
+          "Multiple broker accounts detected. P/L aggregation blocked."));
+      } else if (item.hypothetical_pnl) {
+        const data = item.hypothetical_pnl;
+        panel.append(node("p", "",
+          "Simulated net: " + data.net_price_units_per_unit +
+          " price units per one unit · " + data.winners + " wins / " +
+          data.losers + " losses / " + data.flat + " flat"));
+        panel.append(node("p", "muted",
+          "Synthetic realized drawdown: " +
+          data.max_realized_drawdown_price_units_per_unit +
+          " price units per unit. No real fill or account-currency return."));
+      }
+      symbols.append(panel);
+    }
+    if (!evidence.symbols.length) {
+      symbols.append(node("p", "muted", "No opt-in forward shadow episodes recorded."));
+    }
+    $("evidence-limitations").textContent = evidence.limitations;
+  } catch (error) {
+    // Integrity errors must never be styled as an empty or profitable sample.
+    $("evidence-status").textContent = "UNVERIFIED";
+    $("evidence-totals").textContent = "Evidence currently unavailable or inconsistent.";
+    $("evidence-symbols").replaceChildren();
+    $("evidence-limitations").textContent =
+      "Do not infer profitability from unavailable or blocked evidence.";
+  }
+}
+
 $("run-btn").addEventListener("click", async () => {
   if (state.busy) return;
   state.busy = true;
@@ -151,15 +214,19 @@ document.querySelectorAll(".tab").forEach((button) => {
   });
 });
 
+let refreshNumber = 0;
 async function poll() {
   try {
     await loadEvents();
     await loadRuns();
+    refreshNumber += 1;
+    if (refreshNumber % 4 === 0) await loadEvidence();
   } catch (error) {
     $("run-status").textContent = "DISCONNECTED";
   }
 }
 
+loadEvidence();
 loadRuns().then(async () => {
   const data = await requestJson("/api/runs");
   if (data.runs.length) await selectRun(data.runs[0].run_id);

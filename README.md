@@ -122,3 +122,7 @@ HMAC gives local tamper evidence only, **not independent proof of genuine broker
 ## M07 — Autonomous research-linked prospective SHADOW (candidate)
 
 On each eligible newly completed read-only MT5 candle (with **explicit opt-in**), the watcher logs four LLM research roles and one strict-JSON hypothetical hypothesis role; a LONG/SHORT/ABSTAIN proposal is linked to a prospective HMAC-account-bound shadow episode and evaluated only against a later verified quote. All results are **HYPOTHETICAL**; real trading remains disabled. Provider calls may cost money, so `--shadow-max-cycles` limits the persisted number of opt-in research cycles. See [M07 usage & limitations](docs/M07_SHADOW_PIPELINE.md), [Issue #25](https://github.com/maxqstudio/max-trading-agent/issues/25).
+
+## M08 — Forward shadow evidence scorecards (candidate)
+
+The Trading Room now reports all opt-in research attempts, abstentions, failures and pending hypothetical outcomes alongside per-symbol, account-safe forward shadow metrics. Mixed account histories suppress P/L aggregation and no cross-symbol profit is calculated. **No broker order or strategy-profit approval exists.** See [Evidence limitations](docs/M08_FORWARD_EVIDENCE.md) and [Issue #27](https://github.com/maxqstudio/max-trading-agent/issues/27).
