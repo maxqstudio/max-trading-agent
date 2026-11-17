@@ -81,6 +81,7 @@ class TerminalAcceptance:
              "interval_seconds": sample_interval, "execution": "DISABLED"},
         )
         binding = previous_quote = previous_bar = previous_capture = None
+        previous_mode = previous_candle_history = None
         warnings: set[str] = set()
         try:
             for index in range(samples):
@@ -104,6 +105,8 @@ class TerminalAcceptance:
                     "DEMO", "REAL", "CONTEST"
                 ):
                     raise AcceptanceError("UNKNOWN_ACCOUNT_MODE")
+                if previous_mode is not None and account["trade_mode"] != previous_mode:
+                    raise AcceptanceError("ACCOUNT_MODE_CHANGED")
                 if not isinstance(terminal, dict) or terminal.get("connected") is not True:
                     raise AcceptanceError("TERMINAL_DISCONNECTED")
                 spec = snapshot.get("symbol")
@@ -124,6 +127,15 @@ class TerminalAcceptance:
                 if (captured - completed).total_seconds() > 3 * interval:
                     warnings.add("RECENT_COMPLETED_BAR_MISSING")
                 candles = public["completed_candles"]
+                current_history = {bar["time_utc"]: (
+                    bar["open"], bar["high"], bar["low"], bar["close"]
+                ) for bar in candles}
+                if previous_candle_history is not None and any(
+                    prior != current_history[stamp]
+                    for stamp, prior in previous_candle_history.items()
+                    if stamp in current_history
+                ):
+                    raise AcceptanceError("HISTORICAL_CANDLE_REVISED")
                 if any(
                     (_time(right["time_utc"]) - _time(left["time_utc"])).total_seconds()
                     != interval for left, right in zip(candles, candles[1:])
@@ -152,6 +164,8 @@ class TerminalAcceptance:
                     warnings.add("MISSED_COMPLETED_BAR")
 
                 previous_capture = captured
+                previous_mode = account["trade_mode"]
+                previous_candle_history = current_history
                 previous_quote = quoted
                 previous_bar = completed
                 previous_last_bar = latest

@@ -15,9 +15,9 @@ from test_watcher import FakeMT5, fixture, TEST_KEY
 
 def sample(bar_time, *, quote_age=1, login=12345678, server="PRIVATE_BROKER",
            bid=1.05, ask=1.0502, gap=False, missing_spec=False,
-           last_close=1.0501):
+           last_close=1.0501, mode="DEMO"):
     snapshot = fixture(bar_time, bid=bid, ask=ask, login=login,
-                       server=server, last_close=last_close)
+                       server=server, last_close=last_close, mode=mode)
     snapshot.pop("provenance")
     now = datetime.now(timezone.utc)
     snapshot["captured_at_utc"] = now.isoformat()
@@ -134,6 +134,25 @@ class AcceptanceTests(unittest.TestCase):
         self.assertEqual(report["block_reason"], "ACCOUNT_ID_CHANGED")
         self.assertNotIn("OTHER_PRIVATE_SERVER",
                          json.dumps(self.journal_events(report["run_id"])))
+
+    def test_same_account_trade_mode_switch_is_blocked(self):
+        report, _ = self.run_check([
+            sample(self.bar, quote_age=12, mode="DEMO"),
+            sample(self.bar, quote_age=1, mode="REAL"),
+        ])
+        self.assertEqual(report["status"], "BLOCKED")
+        self.assertEqual(report["block_reason"], "ACCOUNT_MODE_CHANGED")
+
+    def test_old_historical_candle_revision_is_blocked(self):
+        earlier = sample(self.bar, quote_age=12)
+        revised = sample(self.bar, quote_age=1)
+        revised.pop("provenance")
+        revised["candles"][3]["close"] = 1.0508  # within declared high/low
+        revised = seal_snapshot(revised, TEST_KEY,
+                               login=12345678, server="PRIVATE_BROKER")
+        report, _ = self.run_check([earlier, revised])
+        self.assertEqual(report["status"], "BLOCKED")
+        self.assertEqual(report["block_reason"], "HISTORICAL_CANDLE_REVISED")
 
     def test_quote_time_regression_is_blocked(self):
         report, _ = self.run_check([
