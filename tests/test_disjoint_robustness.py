@@ -6,6 +6,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from contextlib import closing
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -51,7 +52,7 @@ class DisjointRobustnessTests(unittest.TestCase):
         return disjoint_dataset_robustness(self.store, ids, **{**self.options, **kw})
 
     def experiment_count(self):
-        with sqlite3.connect(self.store.path) as db:
+        with closing(sqlite3.connect(self.store.path)) as db, db:
             return db.execute("SELECT COUNT(*) FROM experiments").fetchone()[0]
 
     def test_disjoint_replay_hash_and_no_trade_authority(self):
@@ -128,7 +129,7 @@ class DisjointRobustnessTests(unittest.TestCase):
 
     def test_corrupted_second_dataset_does_not_log_first_as_batch(self):
         first, second = self.dataset(0), self.dataset(400)
-        with sqlite3.connect(self.store.path) as db:
+        with closing(sqlite3.connect(self.store.path)) as db, db:
             db.execute(
                 "UPDATE candles SET close=close+0.00001 "
                 "WHERE dataset_id=? AND idx=99", (second,)
