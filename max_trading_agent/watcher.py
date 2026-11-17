@@ -286,7 +286,7 @@ class MarketWatcher:
 
         if status == "NEW_COMPLETED_CANDLE" and self.client is not None:
             if not self.store.claim(observation["job_id"], public["snapshot_hash"]):
-                return {"status": "RESEARCH_NOT_CLAIMED", **observation}
+                return {**observation, "status": "RESEARCH_NOT_CLAIMED"}
             try:
                 research_id = SignalResearch(
                     self.journal, self.client, knowledge_db=self.knowledge_db
@@ -307,7 +307,7 @@ class MarketWatcher:
                     {"job_id": observation["job_id"], "code": code,
                      "decision": "NO_TRADE", "execution": "DISABLED"},
                 )
-                return {"status": "RESEARCH_FAILED", "reason": code, **observation}
+                return {**observation, "status": "RESEARCH_FAILED", "reason": code}
         return observation
 
     def stop(self) -> None:
