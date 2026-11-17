@@ -1,6 +1,7 @@
 """G24 signed Docker evidence: security regression without local Docker or network."""
 import copy
 import json
+import os
 import subprocess
 import tempfile
 import unittest
@@ -212,6 +213,7 @@ class SignedEvidenceTests(unittest.TestCase):
                 verify_signed_evidence(self.evidence, self.bundle, ci_env())
         gh.assert_not_called()
 
+    @unittest.skipIf(os.name == "nt", "Windows symlinks need elevated privileges")
     def test_bundle_or_evidence_symlink_rejected(self):
         item = self.produce()
         self.save(item)
