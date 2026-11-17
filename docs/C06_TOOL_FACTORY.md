@@ -154,3 +154,20 @@ The caller must obtain the expected signer run, commit, ref and artifact **indep
 If successful, it creates a **separate content-addressed, private, write-once** link record `SIGNED_WORKFLOW_EVIDENCE_LINKED_REVIEW_PENDING`. It never modifies the original G23 `REVIEW_PACKAGE_INCOMPLETE` packet. The link explicitly records `GITHUB_WORKFLOW_SIGNED_CLAIM_ONLY`, signed subject digest, bundle digest, original packet/receipt IDs, remaining independent source/human review and owner-acceptance gates. The CLI emits a JSON record and **exits 3 even on a successful link**, so orchestration does not mistake evidence for authorized tool execution. No model-authored source or raw hypothesis text is included in the record.
 
 The second runner constitutes an **independent verification process**, not an independent mathematical audit: both signer and consumer jobs are defined by the same source repo. A compromised signing workflow could still produce signed false claims about Docker tests. Sigstore proves **who signed which workflow-produced bytes**; it does not certify computation correctness, strategy profitability, sandbox security, permission changes or safe broker integration. The new G25 link **never admits a tool**, `candidate_verified=false`, `NO_TRADE`, `execution=DISABLED`, `eligible_for_demo_or_live=false`, `owner_acceptance=PENDING`. Tests cover forged subject/receipt/package, mismatched SHA/ref/run and missing cryptographic verification. See [G25 Issue #61](https://github.com/maxqstudio/max-trading-agent/issues/61).
+
+## G26 — GitHub-authenticated independent human review; no auto-admission
+
+The G26 `python -m max_trading_agent.review_governance` command reads **live GitHub REST PR, review and comment records** using `gh api`, with bounded repository-specific paths. It does not accept caller-submitted review JSON as authoritative; unit tests use mocks solely to exercise the rules. To inspect the current G25 PR without granting any capability:
+
+```sh
+GH_TOKEN=... python -m max_trading_agent.review_governance \
+  --candidate tests/fixtures/tool_factory_range_span.json \
+  --pr 62 \
+  --expected-head 9a7379257f4fddef468fa8f4a023077d2b850c27
+```
+
+Required facts for a future G26 review gate: a current non-bot, non-owner, non-author collaborator/member must approve **exactly** the expected PR head commit; any later dismissal, changes-requested or updated commit invalidates that review. The repo owner must independently post an **exact** GitHub-authenticated PR comment `/accept-research-t1 <candidate_sha256> <pr_head_sha>` after the active independent approval. Draft/unmerged PRs remain HOLD. The signing provenance gate is still missing unless a trusted in-process G25 Sigstore verifier supplies the linked evidence; arbitrary `verified=true` JSON cannot be passed to the production CLI.
+
+G26 **only records governance facts**, not an executable permission. Even when all facts are present, the record says `G26_REVIEW_GATES_RECORDED_NO_ADMISSION`, `t1_registry_enabled=false`, `candidate_verified=false`, `tool_admitted=false`, `execution=DISABLED`, and `decision=NO_TRADE`. The CLI exits 3 even after successfully recording a review snapshot, rather than returning approval-like success. No candidate source is imported or executed. A future trusted T1 registry must be separately reviewed, and all DEMO/LIVE and owner release gates remain closed. Real independent third-party reviewers and the owner's explicit acceptance have **not** been supplied. Branch-protection settings could not be verified through the connected GitHub integration (403), so do not assume GitHub automatically enforces review approvals.
+
+A GitHub-authenticated review record demonstrates who clicked an approval and which commit they reviewed, not that they applied a sufficient code-security methodology, mathematically verified the proposed algorithm, or authorized trading. See [G26 Issue #63](https://github.com/maxqstudio/max-trading-agent/issues/63).
