@@ -1,0 +1,167 @@
+name: G35 Complete 35-PR ephemeral main integration rehearsal
+
+on:
+  push:
+    branches: ["feat/g35-full-stack-release-gates"]
+
+# Read-only GitHub; local ephemeral merge commits only; NO_TRADE.
+permissions:
+  contents: read
+
+jobs:
+  replay-full-stack:
+    name: Pinned 35-PR main merge + full regression (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - name: Checkout exact controller SHA; no stored Git token
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4 pinned
+        with:
+          ref: ${{ github.sha }}
+          path: controller
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Checkout disposable main snapshot; no stored token
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4 pinned
+        with:
+          ref: main
+          path: work
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5 pinned
+        with:
+          python-version: "3.12"
+      - name: Run hostile 35-PR merge planning and read-only safety tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}/controller
+        run: python -m unittest discover -s controller/tests -p test_g35_sequential_rehearsal.py -v
+      - name: Replay 35 individual merges and compare independent aggregate tree
+        shell: bash
+        env:
+          G35_EXPECTED_MAIN_SHA: 5f27d132bc627fa73fde2e1b56b625cbdb09a465
+        run: |
+          set -euo pipefail
+          python controller/tools/g35_sequential_rehearsal.py \
+            --work work \
+            --aggregate "$RUNNER_TEMP/g35-aggregate" \
+            --manifest controller/knowledge/g32_pinned_merge_identities.json \
+            --report "$RUNNER_TEMP/g35-rehearsal.json"
+          python - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])/"g35-rehearsal.json"
+          data=json.loads(p.read_text(encoding="utf-8"))
+          assert data["status"]=="G35_TREES_MATCH_TESTS_PENDING"
+          assert data["expected_prs"]==35 and len(data["completed_steps"])==35
+          assert [step["pr"] for step in data["completed_steps"]]==list(range(14,84,2))
+          assert data["feature_sha"]==os.environ["GITHUB_SHA"]
+          assert data["sequential_tree_sha"]==data["aggregate_tree_sha"]
+          assert data["trees_identical"] is True
+          assert not data["remote_repository_modified"] and not data["broker_execution"]
+          assert data["decision"]=="NO_TRADE" and data["execution"]=="DISABLED"
+          print("G35 MERGE PASS",data["os"],"35 local PR merges; same aggregate tree",
+                data["sequential_tree_sha"])
+          PY
+      - name: Install pinned NumPy test dependency
+        run: python -m pip install numpy==2.2.6
+      - name: Complete Python test suite on 35-PR merged contents
+        working-directory: work
+        run: |
+          python -m compileall -q max_trading_agent tests tools
+          python -m unittest discover -s tests -v
+      - name: Deterministic research-only smoke on merged contents
+        working-directory: work
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m max_trading_agent validate
+          python -m max_trading_agent index --db "$RUNNER_TEMP/g35-knowledge.sqlite3"
+          python -m max_trading_agent search "bid ask" --db "$RUNNER_TEMP/g35-knowledge.sqlite3"
+          python -m max_trading_agent plan prepare_entry
+          python -m max_trading_agent run analyze_symbol \
+            --journal "$RUNNER_TEMP/g35-agent.sqlite3" \
+            --db "$RUNNER_TEMP/g35-knowledge.sqlite3"
+          python - <<'PY'
+          import json, pathlib
+          from max_trading_agent.research_registry import evaluate_reference, stage_untrusted_candidate
+          assert evaluate_reference("range_span_v1",[-4,0,7])["result"]==11
+          assert evaluate_reference("rolling_mean_v1",[2,4,6])["result"]==4
+          fixture=json.loads(pathlib.Path("tests/fixtures/tool_factory_range_span.json").read_text())
+          evidence=stage_untrusted_candidate(fixture)
+          assert evidence["status"]=="T1_CANDIDATE_NOT_REGISTERED"
+          assert evidence["decision"]=="NO_TRADE" and evidence["execution"]=="DISABLED"
+          assert not evidence["tool_admitted"]
+          PY
+      - name: Set up Node for Linux UI regression
+        if: runner.os == 'Linux'
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4 pinned
+        with:
+          node-version: "22"
+      - name: Trading Room JS syntax, rendering and static asset tests on merged tree
+        if: runner.os == 'Linux'
+        working-directory: work
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check ui/app.js
+          node --test tests/trading_room.test.cjs
+          test -s ui/index.html
+          test -s ui/style.css
+          test -s ui/app.js
+      - name: Pull reviewed immutable T0 Docker image on Linux
+        if: runner.os == 'Linux'
+        run: docker pull --platform linux/amd64 python:3.12-alpine@sha256:a61cbd76a882645de7f91423329fe43a67eed60d7da24f9e5331414bb3618b20
+      - name: Actual isolated Docker golden/property review and bad candidate rejection
+        if: runner.os == 'Linux'
+        working-directory: work
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, pathlib
+          from max_trading_agent.tool_properties import review_t0_properties
+          from max_trading_agent.tool_factory import validate_candidate
+          fixture=json.loads(pathlib.Path("tests/fixtures/tool_factory_range_span.json").read_text())
+          good=review_t0_properties(fixture)
+          assert good["candidate_sha256"]==validate_candidate(fixture)["sha256"]
+          assert good["status"]=="T0_PROPERTY_REVIEWED"
+          assert good["golden_cases"]==5 and good["property_cases"]==32
+          assert good["decision"]=="NO_TRADE" and good["execution"]=="DISABLED"
+          bad={**fixture,"code":"def analyze(values):\n    return 999\n"}
+          rejected=review_t0_properties(bad)
+          assert rejected["status"]=="T0_PROPERTY_REJECTED"
+          assert rejected["decision"]=="NO_TRADE"
+          print("G35 real Docker PASS: trusted fixed oracle and bad code rejection; NO_TRADE")
+          PY
+      - name: Seal passing OS rehearsal report after full checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os, pathlib
+          file=pathlib.Path(os.environ["RUNNER_TEMP"])/"g35-rehearsal.json"
+          data=json.loads(file.read_text(encoding="utf-8"))
+          assert data["status"]=="G35_TREES_MATCH_TESTS_PENDING"
+          assert data["trees_identical"] and len(data["completed_steps"])==35
+          data["status"]="G35_35_PR_SEQUENTIAL_AND_REGRESSION_PASS"
+          data["full_python_suite_passed"]=True
+          data["ui_suite_passed"]=os.environ["RUNNER_OS"]=="Linux"
+          data["docker_review_passed"]=os.environ["RUNNER_OS"]=="Linux"
+          assert data["owner_acceptance"]=="PENDING"
+          assert not data["real_mt5_terminal_tested"]
+          assert not data["remote_repository_modified"]
+          file.write_text(json.dumps(data,sort_keys=True,indent=2)+"\n",encoding="utf-8")
+          print("G35 FINAL PASS",data["os"],"35 PRs, merged git tree",
+                data["sequential_tree_sha"],"NO_TRADE")
+          PY
+      - name: Upload SHA-bound 35-step merge report even on failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4 pinned
+        with:
+          name: g35-35-pr-merge-${{ matrix.os }}
+          path: ${{ runner.temp }}/g35-rehearsal.json
+          retention-days: 30
+          if-no-files-found: warn
