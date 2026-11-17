@@ -7,15 +7,19 @@ import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from max_trading_agent.identity import seal_snapshot
 from max_trading_agent.llm_client import LLMError
 from max_trading_agent.mt5_readonly import MT5ReadError
 from max_trading_agent.runtime import EventJournal
 from max_trading_agent.signal_research import market_context
 from max_trading_agent.watcher import MarketWatcher, WatchError, WatchState
 
+TEST_KEY = bytes(range(32))
+
 
 def fixture(bar_time: datetime, *, mode="DEMO", bid=1.0500,
-            ask=1.0502, last_close=1.0501, fail_quote=False):
+            ask=1.0502, last_close=1.0501, fail_quote=False,
+            login=12345678, server="PRIVATE_BROKER"):
     now = datetime.now(timezone.utc)
     rows = []
     for i in reversed(range(12)):
@@ -23,13 +27,13 @@ def fixture(bar_time: datetime, *, mode="DEMO", bid=1.0500,
         rows.append({"time_utc": ts.isoformat(), "open": 1.05,
                      "high": 1.051, "low": 1.049, "close": 1.05})
     rows[-1]["close"] = last_close
-    return {
+    snapshot = {
         "source": "MT5_LOCAL_TERMINAL", "mode": "READ_ONLY",
         "execution": "DISABLED",
         "captured_at_utc": now.isoformat(),
         "symbol": {"name": "EURUSD", "digits": 5},
         "timeframe": "M1",
-        "account": {"login": 12345678, "server": "PRIVATE_BROKER",
+        "account": {"login": login, "server": server,
                     "balance": 10000, "trade_mode": mode},
         "positions": [{"ticket": 12345678, "volume": 1.0}],
         "terminal": {"connected": True},
@@ -37,6 +41,7 @@ def fixture(bar_time: datetime, *, mode="DEMO", bid=1.0500,
                   "time_utc": (now - timedelta(seconds=600 if fail_quote else 2)).isoformat()},
         "candles": rows,
     }
+    return seal_snapshot(snapshot, TEST_KEY, login=login, server=server)
 
 
 class FakeMT5:
@@ -95,7 +100,7 @@ class WatcherTests(unittest.TestCase):
         api = FakeMT5(snapshots)
         watcher = MarketWatcher(
             self.journal, api, "EURUSD", "M1", bars=12,
-            knowledge_db=self.kb, client=client
+            knowledge_db=self.kb, client=client, identity_key=TEST_KEY
         )
         return watcher, api
 
@@ -173,6 +178,59 @@ class WatcherTests(unittest.TestCase):
             self.assertEqual(watcher.poll_once()["status"], "CANDLE_GAP")
             self.assertEqual(watcher.poll_once()["status"], "BAR_TIME_REGRESSION")
             self.assertEqual(watcher.store.jobs(), [])
+        finally:
+            watcher.stop()
+
+    def test_same_mode_different_login_or_server_blocks(self):
+        watcher, _ = self.make([
+            fixture(self.first_bar), fixture(self.next_bar, login=99999999),
+            fixture(self.next_bar, server="OTHER_SERVER"),
+        ])
+        watcher.start()
+        try:
+            self.assertEqual(watcher.poll_once()["status"], "BASELINED")
+            self.assertEqual(watcher.poll_once()["status"], "ACCOUNT_ID_CHANGED")
+            self.assertEqual(watcher.poll_once()["status"], "ACCOUNT_ID_CHANGED")
+            self.assertEqual(watcher.store.jobs(), [])
+            with watcher.store._db() as db:
+                old = db.execute("SELECT bar_utc,account_binding_id FROM watch_state").fetchone()
+            self.assertEqual(old[0], self.first_bar.isoformat())
+            self.assertEqual(len(old[1]), 64)
+            log = json.dumps(self.journal.events(watcher.run_id))
+            self.assertIn("ACCOUNT_ID_CHANGED", log)
+            for secret in ("OTHER_SERVER", "PRIVATE_BROKER", "99999999", "12345678"):
+                self.assertNotIn(secret, log)
+        finally:
+            watcher.stop()
+
+    def test_tampering_unsigned_or_wrong_key_block_before_baseline(self):
+        valid = fixture(self.first_bar)
+        tampered = json.loads(json.dumps(valid))
+        tampered["quote"]["ask"] += 0.001
+        unsigned = json.loads(json.dumps(valid))
+        unsigned.pop("provenance")
+        watcher, _ = self.make([tampered, unsigned, valid])
+        watcher.start()
+        try:
+            self.assertEqual(watcher.poll_once()["reason"], "SNAPSHOT_MAC_MISMATCH")
+            self.assertEqual(watcher.poll_once()["reason"], "SNAPSHOT_PROVENANCE_MISSING")
+            self.assertEqual(watcher.poll_once()["status"], "BASELINED")
+        finally:
+            watcher.stop()
+        wrong, _ = self.make([valid])
+        wrong.identity_key = bytes([42])*32
+        wrong.start()
+        try:
+            self.assertEqual(wrong.poll_once()["reason"], "SNAPSHOT_MAC_MISMATCH")
+            self.assertEqual(wrong.store.jobs(), [])
+        finally:
+            wrong.stop()
+
+    def test_unknown_account_mode_blocks(self):
+        watcher, _ = self.make([fixture(self.first_bar, mode="UNKNOWN")])
+        watcher.start()
+        try:
+            self.assertEqual(watcher.poll_once()["reason"], "INVALID_ACCOUNT_MODE")
         finally:
             watcher.stop()
 
@@ -336,6 +394,10 @@ class WatcherTests(unittest.TestCase):
         finally:
             watcher.stop(failed=True)
         self.assertEqual(self.journal.runs()[0]["status"], "FAILED")
+
+    def test_missing_local_identity_key_is_not_permitted(self):
+        with self.assertRaisesRegex(WatchError, "IDENTITY_KEY_REQUIRED"):
+            MarketWatcher(self.journal, FakeMT5([]), "EURUSD", "M1", bars=12)
 
     def test_invalid_budgets_rejected_before_mt5_call(self):
         watcher, api = self.make([fixture(self.first_bar)])
