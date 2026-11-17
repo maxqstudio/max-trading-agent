@@ -2,7 +2,7 @@ name: Tool Factory isolated Docker oracle
 
 on:
   push:
-    branches: ["feat/c06-**", "feat/g20-**", "feat/g21-**", "feat/g22-**", "feat/g23-**", "feat/g24-**", "feat/g25-**", "feat/g26-**"]
+    branches: ["feat/c06-**", "feat/g20-**", "feat/g21-**", "feat/g22-**", "feat/g23-**", "feat/g24-**", "feat/g25-**", "feat/g26-**", "feat/g27-**"]
   pull_request:
     paths:
       - "max_trading_agent/tool_factory.py"
@@ -13,6 +13,7 @@ on:
       - "max_trading_agent/signed_evidence.py"
       - "max_trading_agent/signed_review_link.py"
       - "max_trading_agent/review_governance.py"
+      - "max_trading_agent/research_registry.py"
       - "max_trading_agent/__main__.py"
       - "tools/factory_sandbox_runner.py"
       - "knowledge/tool_factory_oracles.json"
@@ -25,6 +26,7 @@ on:
       - "tests/test_signed_evidence.py"
       - "tests/test_signed_review_link.py"
       - "tests/test_review_governance.py"
+      - "tests/test_research_registry.py"
       - ".github/workflows/g24-signed-t0.yml"
       - "tests/fixtures/tool_factory_range_span.json"
       - ".github/workflows/tool-factory.yml"
@@ -84,6 +86,41 @@ jobs:
           assert data['gates']['merged_and_closed'] is False
           assert data['gates']['not_draft'] is False
           print('G26 PASS: actual GitHub PR #62 remains draft/unmerged; authenticated review gate HOLD, no admission')
+          PY
+      - name: G27 static trusted references and non-executable candidate inbox unit tests
+        run: python -m unittest discover -s tests -p test_research_registry.py -v
+      - name: G27 real read-only reference CLI and disabled generated tool staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, pathlib, subprocess, sys, tempfile
+          def invoke(*args):
+              return subprocess.run([sys.executable, "-m",
+                "max_trading_agent.research_registry", *args],
+                text=True, capture_output=True, timeout=20)
+          listing=invoke("list")
+          assert listing.returncode==0
+          names=[x["tool_id"] for x in json.loads(listing.stdout)["entries"]]
+          assert names==["range_span_v1","rolling_mean_v1"]
+          mean=invoke("evaluate","--tool-id","rolling_mean_v1","--values","[2,4,6]")
+          assert mean.returncode==0 and json.loads(mean.stdout)["result"]==4.0
+          spread=invoke("evaluate","--tool-id","range_span_v1","--values","[-4,0,7]")
+          assert spread.returncode==0
+          assert json.loads(spread.stdout)["result"]==11.0
+          denied=invoke("evaluate","--tool-id","llm_unknown_signal","--values","[1,2]")
+          assert denied.returncode!=0
+          with tempfile.TemporaryDirectory() as tmp:
+              root=pathlib.Path(tmp)
+              staged=invoke("stage","--file","tests/fixtures/tool_factory_range_span.json",
+                            "--stage-dir",str(root/"pending"))
+              assert staged.returncode==3
+              state=json.loads(staged.stdout)
+              assert state["status"]=="T1_CANDIDATE_NOT_REGISTERED"
+              assert not state["tool_admitted"] and not state["candidate_source_executed"]
+              assert state["execution"]=="DISABLED" and state["decision"]=="NO_TRADE"
+              assert len(list((root/"pending").glob("*.json")))==1
+          print("G27 PASS: two static reference computations, novel tool denied, candidate stage NOT_REGISTERED, NO_TRADE")
           PY
       - name: Fetch public sandbox runtime (no secrets mounted)
         run: docker pull python:3.12-alpine
