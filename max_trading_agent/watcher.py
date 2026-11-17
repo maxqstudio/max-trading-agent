@@ -64,7 +64,13 @@ class WatchState:
                 bar_utc TEXT NOT NULL, snapshot_hash TEXT NOT NULL,
                 status TEXT NOT NULL, research_run_id TEXT,
                 created_utc TEXT NOT NULL, completed_utc TEXT,
+                shadow_requested INTEGER NOT NULL DEFAULT 0,
                 UNIQUE(symbol,timeframe,bar_utc))""")
+            # Existing M05/M06 rows are not retrospectively billable cycles.
+            job_columns = {row[1] for row in db.execute("PRAGMA table_info(watch_jobs)")}
+            if "shadow_requested" not in job_columns:
+                db.execute("ALTER TABLE watch_jobs ADD COLUMN shadow_requested "
+                           "INTEGER NOT NULL DEFAULT 0")
             db.execute("""CREATE TABLE IF NOT EXISTS watch_leases (
                 symbol TEXT NOT NULL, timeframe TEXT NOT NULL,
                 owner TEXT NOT NULL, expires_epoch REAL NOT NULL,
