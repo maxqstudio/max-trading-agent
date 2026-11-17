@@ -6,6 +6,7 @@ connect to broker servers or use real account credentials.
 import csv
 import math
 import sqlite3
+from contextlib import closing
 import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
@@ -105,7 +106,7 @@ class EvidenceTests(unittest.TestCase):
                 with self.assertRaises(MarketDataError):
                     self._import()
                 self.rows[idx][key] = original
-        with sqlite3.connect(self.store.path) as db:
+        with closing(sqlite3.connect(self.store.path)) as db, db:
             self.assertEqual(db.execute("SELECT count(*) FROM datasets").fetchone()[0], 0)
             self.assertEqual(db.execute("SELECT count(*) FROM candles").fetchone()[0], 0)
 
@@ -170,7 +171,7 @@ class EvidenceTests(unittest.TestCase):
 
     def test_tampered_candle_dataset_is_not_accepted(self):
         ds = self._import()
-        with sqlite3.connect(self.store.path) as db:
+        with closing(sqlite3.connect(self.store.path)) as db, db:
             db.execute("UPDATE candles SET close=close+0.00001 "
                        "WHERE dataset_id=? AND idx=5", (ds["dataset_id"],))
         with self.assertRaisesRegex(MarketDataError, "INTEGRITY"):
