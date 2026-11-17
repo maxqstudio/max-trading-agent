@@ -1,0 +1,68 @@
+name: G28 Read-only owner PR stack handoff
+
+on:
+  push:
+    branches: ["feat/g28-**"]
+  pull_request:
+    paths:
+      - "tools/stack_audit.py"
+      - "tests/test_stack_audit.py"
+      - ".github/workflows/g28-stack-handoff.yml"
+      - "docs/G28_OWNER_HANDOFF.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  read-only-pr-stack-audit:
+    if: github.repository == 'maxqstudio/max-trading-agent'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4 pinned
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5 pinned
+        with:
+          python-version: "3.12"
+      - name: G28 topology and merge safety regression
+        run: python -m unittest discover -s tests -p test_stack_audit.py -v
+      - name: Read real GitHub PR metadata; never merge/retarget/write to GitHub
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/stack_audit.py --output "$RUNNER_TEMP/g28-owner-merge-handoff.json"             > "$RUNNER_TEMP/g28-stdout.json"
+          python - <<'PY'
+          import json, os, pathlib
+          file=pathlib.Path(os.environ["RUNNER_TEMP"])/"g28-owner-merge-handoff.json"
+          record=json.loads(file.read_text(encoding="utf-8"))
+          assert record["status"]=="OWNER_MERGE_HANDOFF_ACTION_REQUIRED"
+          assert record["next_merge_pr"]==14
+          assert record["merge_target_required"]=="main"
+          assert 27<=record["audited_count"]<=28
+          assert record["merged_count"]==0
+          assert record["unmerged_count"]==record["audited_count"]
+          assert record["ordered_pull_requests"][0]["current_base"]=="main"
+          assert record["ordered_pull_requests"][1]["current_base"]==record["ordered_pull_requests"][0]["head_branch"]
+          assert record["owner_acceptance"]=="PENDING"
+          assert record["decision"]=="NO_TRADE"
+          assert record["execution"]=="DISABLED"
+          assert not record["demo_or_live_authorized"]
+          assert not record["branch_protection_verified"]
+          print(f"G28 PASS: real GitHub stack of {record['audited_count']} Draft PRs; first #14, no merges, NO_TRADE")
+          PY
+      - name: Upload read-only owner handoff JSON (no secrets or executable code)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4 pinned
+        with:
+          name: g28-owner-pr-merge-handoff
+          path: ${{ runner.temp }}/g28-owner-merge-handoff.json
+          retention-days: 30
+          if-no-files-found: error
+      - name: Non-executable deployment and security status
+        run: |
+          echo "G28 handoff is informational only; no GitHub PR mutations."
+          echo "Owner must retarget successor PR bases to main in order after predecessor merges."
+          echo "Local MT5 acceptance, independent code review and DEMO/LIVE permissions remain BLOCKED."
+          echo "NO_TRADE; execution=DISABLED; owner_acceptance=PENDING."
