@@ -3,7 +3,7 @@ const $ = (id) => document.getElementById(id);
 const state = { runId: null, after: 0, events: [], filter: "ALL", selected: null, busy: false };
 const teams = [
   {name: "SUPERVISOR", roles: ["Supervisor"]},
-  {name: "MARKET INTELLIGENCE", roles: ["MT5 Specialist", "Market Analyst"]},
+  {name: "MARKET INTELLIGENCE", roles: ["MT5 Specialist", "Market Watcher", "Market Analyst"]},
   {name: "RESEARCH & DEBATE", roles: ["Bull Researcher", "Bear Researcher", "Research Manager", "Bull / Bear Researchers"]},
   {name: "KNOWLEDGE", roles: ["RAG Curator"]},
   {name: "EVIDENCE & RISK", roles: ["Market Data Auditor", "Evidence Lab", "Shadow Lab", "Independent Policy Guard"]}

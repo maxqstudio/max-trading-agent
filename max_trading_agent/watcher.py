@@ -18,7 +18,7 @@ from typing import Any, Iterator
 
 from .llm_client import LLMError
 from .mt5_readonly import MT5ReadError, ReadOnlyMT5
-from .runtime import EventJournal
+from .runtime import DEFAULT_KNOWLEDGE, EventJournal
 from .signal_research import SignalResearch, market_context
 
 INTERVALS = {"M1": 60, "M5": 300, "M15": 900, "M30": 1800,
@@ -202,7 +202,8 @@ class MarketWatcher:
 
     def __init__(self, journal: EventJournal, adapter: ReadOnlyMT5,
                  symbol: str, timeframe: str, *, bars: int = 100,
-                 client: Any = None, clock: Any = time.time):
+                 client: Any = None, clock: Any = time.time,
+                 knowledge_db: Path = DEFAULT_KNOWLEDGE):
         if timeframe not in INTERVALS or not 2 <= bars <= 2000:
             raise WatchError("INVALID_WATCH_CONFIG")
         self.journal = journal
@@ -212,6 +213,7 @@ class MarketWatcher:
         self.bars = bars
         self.client = client
         self.clock = clock
+        self.knowledge_db = Path(knowledge_db)
         self.store = WatchState(journal.path)
         self.owner = uuid.uuid4().hex
         self.run_id: str | None = None
@@ -249,7 +251,10 @@ class MarketWatcher:
             public = market_context(snapshot)
             if public["symbol"] != self.symbol or public["timeframe"] != self.timeframe:
                 raise WatchError("BROKER_SNAPSHOT_MISMATCH")
-            account_mode = snapshot.get("account", {}).get("trade_mode", "UNKNOWN")
+            account = snapshot.get("account")
+            if not isinstance(account, dict):
+                raise WatchError("BROKER_ACCOUNT_MISSING")
+            account_mode = account.get("trade_mode", "UNKNOWN")
             if account_mode not in ("DEMO", "REAL", "CONTEST", "UNKNOWN"):
                 raise WatchError("INVALID_ACCOUNT_MODE")
             observation = self.store.observe(
@@ -283,7 +288,9 @@ class MarketWatcher:
             if not self.store.claim(observation["job_id"], public["snapshot_hash"]):
                 return {"status": "RESEARCH_NOT_CLAIMED", **observation}
             try:
-                research_id = SignalResearch(self.journal, self.client).execute(snapshot)
+                research_id = SignalResearch(
+                    self.journal, self.client, knowledge_db=self.knowledge_db
+                ).execute(snapshot)
                 self.store.finish_job(observation["job_id"], "COMPLETED", research_id)
                 self.journal.append(
                     self.run_id, "Supervisor", "RESEARCH_COMPLETE", "PASS",
