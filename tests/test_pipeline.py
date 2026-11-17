@@ -1,6 +1,8 @@
 """M07 GitHub-hosted integration tests: fake MT5 + fake LLM, no broker calls."""
+import http.client
 import json
 import subprocess
+import threading
 import sys
 import tempfile
 import unittest
@@ -13,6 +15,7 @@ from max_trading_agent.runtime import EventJournal
 from max_trading_agent.shadow import ShadowError, ShadowLedger
 from max_trading_agent.shadow_pipeline import _proposal
 from max_trading_agent.watcher import MarketWatcher, WatchError
+from max_trading_agent.web import create_server
 from test_watcher import FakeMT5, TEST_KEY, fixture
 
 
@@ -304,6 +307,66 @@ class ShadowPipelineTests(unittest.TestCase):
                       slippage=0, fee_per_side=0)
         with self.assertRaisesRegex(ShadowError, "SHADOW_ACCOUNT_MISMATCH"):
             self.ledger().settle("legacy_001", fixture(self.bar2))
+
+    def test_trading_room_api_replays_real_role_and_shadow_events(self):
+        """E2E HTTP event projection; not a screenshot/browser E2E claim."""
+        watcher, _, _ = self.watch([
+            fixture(self.bar0),
+            observed_fixture(self.bar1, age_seconds=12),
+            observed_fixture(self.bar2, age_seconds=1),
+        ])
+        watcher.start()
+        try:
+            watcher.poll_once()
+            watcher.poll_once()
+            watcher.poll_once()
+        finally:
+            watcher.stop()
+
+        server = create_server(
+            port=0, journal_path=self.journal.path, knowledge_path=self.kb
+        )
+        server_thread = threading.Thread(target=server.serve_forever, daemon=True)
+        server_thread.start()
+
+        def read(path):
+            conn = http.client.HTTPConnection("127.0.0.1", server.server_port, timeout=5)
+            try:
+                conn.request("GET", path)
+                response = conn.getresponse()
+                return response.status, response.read()
+            finally:
+                conn.close()
+
+        try:
+            status, data = read("/api/runs")
+            self.assertEqual(status, 200)
+            runs = json.loads(data)["runs"]
+            self.assertGreaterEqual(len(runs), 4)
+            events = []
+            for run in runs:
+                status, raw = read("/api/events?run_id=" + run["run_id"])
+                self.assertEqual(status, 200)
+                rows = json.loads(raw)["events"]
+                self.assertEqual([e["event_id"] for e in rows],
+                                 sorted(e["event_id"] for e in rows))
+                events.extend(rows)
+            labels = [e["event_type"] for e in events]
+            for wanted in ("RAG_RETRIEVAL", "ROLE_REPORT", "HYPOTHESIS_PROPOSED",
+                           "SHADOW_OPENED", "SHADOW_SETTLED", "SHADOW_OUTCOME_LINKED",
+                           "DECISION"):
+                self.assertIn(wanted, labels)
+            status, javascript = read("/app.js")
+            self.assertEqual(status, 200)
+            self.assertIn(b"Hypothesis Strategist", javascript)
+            self.assertIn(b"Shadow Lab", javascript)
+            serialized = json.dumps(events)
+            for forbidden in ("PRIVATE_BROKER", "12345678", "10000"):
+                self.assertNotIn(forbidden, serialized)
+        finally:
+            server.shutdown()
+            server.server_close()
+            server_thread.join(timeout=3)
 
     def test_cli_requires_explicit_paid_model_consent(self):
         r = subprocess.run(
