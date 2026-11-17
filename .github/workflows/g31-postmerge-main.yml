@@ -168,7 +168,8 @@ jobs:
           report["python_suite_passed"]=True
           report["js_ui_passed"]=os.environ["RUNNER_OS"]=="Linux"
           report["isolated_docker_review_passed"]=os.environ["RUNNER_OS"]=="Linux"
-          report["local_owner_preflight_performed"]=True
+          # Hosted negative prerequisite test is NOT an owner-local preflight.
+          assert report["local_owner_preflight_performed"] is False
           assert not report["real_mt5_terminal_tested"]
           assert report["owner_acceptance"]=="PENDING"
           assert not report["broker_execution"]

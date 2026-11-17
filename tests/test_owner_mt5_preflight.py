@@ -198,6 +198,15 @@ class OwnerOfflinePreflightTests(unittest.TestCase):
         self.assertFalse(data["identity_key_created"])
         self.assertFalse(self.key.exists())
 
+    def test_g31_hosted_ci_never_claims_owner_local_preflight(self):
+        workflow = (Path(__file__).resolve().parents[1] / ".github" /
+                    "workflows" / "g31-postmerge-main.yml").read_text(encoding="utf-8")
+        self.assertIn('"local_owner_preflight_performed":False', workflow)
+        self.assertIn('assert report["local_owner_preflight_performed"] is False', workflow)
+        self.assertNotIn('report["local_owner_preflight_performed"]=True', workflow)
+        self.assertIn('"real_mt5_terminal_tested":False', workflow)
+        self.assertIn('"decision":"NO_TRADE"', workflow)
+
     def test_no_working_tree_or_broker_credentials_serialized(self):
         data = self.check()
         text = json.dumps(data)
