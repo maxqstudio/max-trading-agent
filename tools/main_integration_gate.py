@@ -124,8 +124,7 @@ def assess_integration(data: Any, prs: Any, *, environment: dict) -> dict:
                 and environment["GITHUB_REF"] == "refs/heads/main")
     # A future #84+ cannot silently disappear from this pinned release gate.
     # A new milestone requires review and re-pinning before main can pass.
-    unexpected_new = sorted(number for number in index
-                            if number >= 84 and number % 2 == 0)
+    unexpected_new = sorted(number for number in index if number > 82)
     if main_run and unexpected_new:
         raise IntegrationGateError("G32_NEW_PR_NOT_IN_BASELINE")
     if environment["GITHUB_REF"] != "refs/heads/main" and (
