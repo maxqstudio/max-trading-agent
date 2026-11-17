@@ -152,7 +152,7 @@ jobs:
       - name: G33 action pinning, credential and OIDC fail-closed tests
         run: python -m unittest discover -s tests -p test_workflow_supply_chain.py -v
       - name: Fetch public sandbox runtime (no secrets mounted)
-        run: docker pull python:3.12-alpine
+        run: docker pull --platform linux/amd64 python:3.12-alpine@sha256:a61cbd76a882645de7f91423329fe43a67eed60d7da24f9e5331414bb3618b20
       - name: Known correct candidate must pass isolated oracle
         shell: bash
         run: |
