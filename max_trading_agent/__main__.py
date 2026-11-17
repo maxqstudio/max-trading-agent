@@ -16,7 +16,7 @@ def main() -> None:
                         "shadow-open", "shadow-settle", "shadow-show",
                         "watch", "mt5-acceptance", "demo-preflight",
                         "rag-index", "rag-search", "rag-diff", "rag-eval", "rag-source-audit", "offline-rl",
-                        "tool-propose", "tool-sandbox", "paper-demo", "rl-walk-forward", "rl-robustness"))
+                        "tool-propose", "tool-sandbox", "tool-review", "paper-demo", "rl-walk-forward", "rl-robustness"))
     parser.add_argument("value", nargs="?")
     parser.add_argument("--db", default=str(DEFAULT_KNOWLEDGE))
     parser.add_argument("--journal", default=str(DEFAULT_JOURNAL))
@@ -45,6 +45,8 @@ def main() -> None:
                                  "TIMEOUT_BEFORE_RECEIPT"))
     parser.add_argument("--tool-dir", default=".local/tool-factory",
                         help="Private local T0 research proposal directory")
+    parser.add_argument("--review-dir", default=".local/tool-factory/reviews",
+                        help="Private immutable non-executable T0 review receipts")
     parser.add_argument("--folds", type=int, default=3,
                         help="Chronological walk-forward folds: 2-6")
     parser.add_argument("--test-bars", type=int, default=32,
@@ -174,7 +176,7 @@ def main() -> None:
             print(json.dumps({"ok": False, "code": "RAG_VALIDATION_BLOCKED",
                               "execution": "DISABLED"}), file=sys.stderr)
             raise SystemExit(2) from None
-    elif args.command in ("tool-propose", "tool-sandbox"):
+    elif args.command in ("tool-propose", "tool-sandbox", "tool-review"):
         from .tool_factory import (
             FactoryError, independent_cases, propose_from_llm,
             sandbox_evaluate, save_proposal, validate_candidate,
@@ -191,14 +193,18 @@ def main() -> None:
                 save_proposal(proposal, Path(args.tool_dir))
             else:
                 if not args.file:
-                    parser.error("tool-sandbox requires --file")
+                    parser.error("tool-sandbox/tool-review requires --file")
                 path = Path(args.file)
                 if not path.is_file() or not 0 < path.stat().st_size <= 10_000:
                     raise FactoryError("INVALID_PROPOSAL_FILE")
                 proposal = json.loads(path.read_text(encoding="utf-8"))
                 validate_candidate(proposal)
                 cases = independent_cases(proposal["tool_id"], oracle_path)
-                output = sandbox_evaluate(proposal, cases)
+                if args.command == "tool-review":
+                    from .tool_review import review_t0
+                    output = review_t0(proposal, review_dir=Path(args.review_dir))
+                else:
+                    output = sandbox_evaluate(proposal, cases)
         except (FactoryError, LLMError, OSError, ValueError, UnicodeError):
             print(json.dumps({"ok": False, "code": "TOOL_FACTORY_BLOCKED",
                               "decision": "NO_TRADE"}), file=sys.stderr)
@@ -425,6 +431,9 @@ def main() -> None:
     print(json.dumps(output, indent=2))
     if args.command == "tool-sandbox" and (
             output["status"] != "SANDBOX_PASSED_REVIEW_REQUIRED"):
+        raise SystemExit(3)
+    if args.command == "tool-review" and (
+            output["status"] != "T0_SANDBOX_REVIEWED"):
         raise SystemExit(3)
     if args.command == "mt5-acceptance":
         if output["status"] == "BLOCKED":
