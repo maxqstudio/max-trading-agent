@@ -230,3 +230,7 @@ The [G31 acceptance workflow](docs/G31_OWNER_MT5_PREFLIGHT.md) performs offline 
 ## G34 — Immutable Linux/AMD64 sandbox image
 
 The T0 Docker research sandbox now uses the official Python 3.12 Alpine **linux/amd64 image manifest pinned by full SHA-256 digest**, not a mutable tag. The G34 GitHub-hosted check pulls and runs that exact image, and all five historical Docker CI pulls share the same pin. The offline guard rejects mismatched image digests, floating tags and weakened sandbox flags. This is **not** image-signature verification, a guarantee of zero vulnerabilities, or permission to execute orders. See [G34 security scope](docs/C06_TOOL_FACTORY.md) and [Issue #79](https://github.com/maxqstudio/max-trading-agent/issues/79).
+
+## G35 — Complete 35-PR integration gate
+
+[G35](docs/G35_FULL_STACK_GATE.md) repairs stale G28/G32 GitHub gates: the owner audit includes all 35 stacked PRs through #82 and any future canonical PRs, while the main-only gate pins predecessor SHAs and refuses false completeness if G33/G34/G35 or newly added unreviewed PRs are missing. Feature CI remains HOLD, not main acceptance. All PRs remain Draft/unmerged; `NO_TRADE` applies. [Issue #81](https://github.com/maxqstudio/max-trading-agent/issues/81).
