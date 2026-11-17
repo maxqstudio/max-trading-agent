@@ -1,0 +1,10 @@
+{
+  "rolling_mean_v1": {
+    "schema_version": 1,
+    "reference": "ARITHMETIC_MEAN"
+  },
+  "range_span_v1": {
+    "schema_version": 1,
+    "reference": "NUMERIC_RANGE"
+  }
+}
