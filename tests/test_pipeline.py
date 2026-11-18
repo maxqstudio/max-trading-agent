@@ -98,7 +98,8 @@ class ShadowPipelineTests(unittest.TestCase):
         snapshots = [
             fixture(self.bar0, bid=1.0500, ask=1.0502),
             observed_fixture(self.bar1, age_seconds=12, bid=1.0501, ask=1.0503),
-            observed_fixture(self.bar2, age_seconds=1, bid=1.0520, ask=1.0522),
+            lambda: observed_fixture(self.bar2, age_seconds=0,
+                                     bid=1.0520, ask=1.0522),
         ]
         watcher, api, client = self.watch(snapshots)
         watcher.start()
@@ -242,7 +243,9 @@ class ShadowPipelineTests(unittest.TestCase):
             "EURUSD", verify_snapshot(fixture(self.bar1), TEST_KEY)
         )[0]
         a.stop()
-        b, _, _ = self.watch([observed_fixture(self.bar2, age_seconds=1)], client)
+        b, _, _ = self.watch(
+            [lambda: observed_fixture(self.bar2, age_seconds=0)], client
+        )
         b.start()
         try:
             self.assertEqual(b.poll_once()["status"], "SHADOW_BUDGET_EXHAUSTED")

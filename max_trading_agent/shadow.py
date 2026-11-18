@@ -151,7 +151,7 @@ class ShadowLedger:
         data = (candidate_id, origin, context["symbol"], side, "PENDING",
                 context["snapshot_hash"], context["quote"]["time_utc"],
                 bid, ask, entry, slippage, fee_per_side,
-                datetime.now(timezone.utc).isoformat(),
+                self.clock().astimezone(timezone.utc).isoformat(),
                 context.get("account_binding_id"), research_run_id, watch_job_id)
         with self._db() as db:
             db.execute("""INSERT OR IGNORE INTO shadow_episodes (
@@ -181,7 +181,11 @@ class ShadowLedger:
             raise ShadowError("SHADOW_ACCOUNT_MISMATCH")
         if context["symbol"] != episode["symbol"]:
             raise ShadowError("SYMBOL_MISMATCH")
-        if _utc(context["quote"]["time_utc"]) <= _utc(episode["entry_quote_utc"]):
+        exit_quote_time = _utc(context["quote"]["time_utc"])
+        if (exit_quote_time <= _utc(episode["entry_quote_utc"])
+                or exit_quote_time <= _utc(episode["created_utc"])):
+            # A newer-than-entry quote can still have existed before the
+            # candidate was recorded. Never manufacture a forward episode.
             raise ShadowError("NOT_A_FORWARD_OBSERVATION")
         if episode["status"] == "SETTLED":
             if episode["exit_snapshot_hash"] != context["snapshot_hash"]:

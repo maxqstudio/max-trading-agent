@@ -55,6 +55,8 @@ class FakeMT5:
             item = self.snapshots.pop(0)
         else:
             item = self.snapshots[0]
+        if callable(item):
+            item = item()
         if isinstance(item, Exception):
             raise item
         return item

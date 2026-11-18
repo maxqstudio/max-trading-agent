@@ -34,17 +34,24 @@ class ShadowLedgerTests(unittest.TestCase):
         folder = tempfile.TemporaryDirectory()
         self.addCleanup(folder.cleanup)
         self.path = Path(folder.name) / "ledger.sqlite3"
-        self.ledger = ShadowLedger(self.path)
         self.before = datetime.now(timezone.utc) - timedelta(seconds=9)
+        self.candidate_time = self.before + timedelta(seconds=3)
+        self.clock_now = self.candidate_time
+        self.ledger = ShadowLedger(self.path, clock=lambda: self.clock_now)
         self.entry = fake_snapshot(now=self.before)
         self.later = fake_snapshot(now=datetime.now(timezone.utc),
                                    bid=1.052, ask=1.0522)
 
     def record(self, candidate="idea_0001", side="LONG", slip=0.00002, fee=0.00001):
-        return self.ledger.record(
-            candidate, self.entry, side=side,
-            slippage=slip, fee_per_side=fee,
-        )
+        self.clock_now = self.candidate_time
+        try:
+            return self.ledger.record(
+                candidate, self.entry, side=side,
+                slippage=slip, fee_per_side=fee,
+            )
+        finally:
+            # Subsequent settlement is observed at an independently later time.
+            self.clock_now = datetime.now(timezone.utc)
 
     def test_long_forward_outcome_price_units_no_real_trade(self):
         opened = self.record()
@@ -60,6 +67,22 @@ class ShadowLedgerTests(unittest.TestCase):
         self.assertNotIn("123123123", json.dumps(result))
         self.assertNotIn("PRIVATE", json.dumps(result))
         self.assertEqual(ShadowLedger(self.path).get("idea_0001"), result)
+
+
+    def test_later_than_entry_but_already_known_outcome_rejected(self):
+        opened = self.record()
+        retro = fake_snapshot(
+            now=self.before + timedelta(seconds=2),
+            bid=1.055, ask=1.0552, quote_age=1,
+        )
+        # Quote is newer than entry, yet predates candidate creation.
+        self.assertGreater(retro["quote"]["time_utc"], opened["entry_quote_utc"])
+        self.assertLess(retro["quote"]["time_utc"], opened["created_utc"])
+        with self.assertRaisesRegex(ShadowError, "NOT_A_FORWARD_OBSERVATION"):
+            self.ledger.settle("idea_0001", retro)
+        self.assertEqual(self.ledger.get("idea_0001")["status"], "PENDING")
+        self.assertEqual(self.ledger.settle("idea_0001", self.later)["status"],
+                         "SETTLED")
 
     def test_short_uses_bid_entry_ask_exit(self):
         self.record(side="SHORT")
@@ -125,6 +148,7 @@ class ShadowLedgerTests(unittest.TestCase):
         mission = ShadowMission(journal, self.ledger)
         first = mission.open("hypothesis_01", self.entry, side="LONG",
                              slippage=0.00002, fee_per_side=0.00001)
+        self.clock_now = datetime.now(timezone.utc)
         second = mission.settle("hypothesis_01", self.later)
         self.assertEqual(second["episode"]["status"], "SETTLED")
         first_events = journal.events(first["run_id"])
