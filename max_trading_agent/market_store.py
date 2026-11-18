@@ -23,6 +23,7 @@ TIMEFRAME_SECONDS = {
     "H1": 3600, "H4": 14400, "D1": 86400,
 }
 _COLUMNS = ("time_utc", "open", "high", "low", "close")
+_OPTIONAL_COLUMN = "tick_volume"
 _SYMBOL = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.#-]{0,39}\Z")
 
 
@@ -52,6 +53,17 @@ def _finite_positive(value: str, field: str) -> float:
     if not math.isfinite(number) or number <= 0:
         raise MarketDataError("INVALID_" + field.upper())
     return number
+
+
+def _tick_volume(value: str) -> int:
+    # A historical tick count is a nonnegative SQLite signed 64-bit integer.
+    # Do not round floats or silently discard missing/invalid source values.
+    if not isinstance(value, str) or re.fullmatch(r"[0-9]{1,19}", value) is None:
+        raise MarketDataError("INVALID_TICK_VOLUME")
+    amount = int(value)
+    if amount > (2 ** 63 - 1):
+        raise MarketDataError("INVALID_TICK_VOLUME")
+    return amount
 
 
 class MarketStore:
@@ -84,8 +96,16 @@ class MarketStore:
                 high REAL NOT NULL,
                 low REAL NOT NULL,
                 close REAL NOT NULL,
+                tick_volume INTEGER,
                 PRIMARY KEY (dataset_id, idx)
             )""")
+            # Existing local databases were created before optional volume
+            # support. Upgrade in the same transaction without changing
+            # the content hash of already-stored OHLC-only datasets.
+            if "tick_volume" not in {
+                column[1] for column in db.execute("PRAGMA table_info(candles)")
+            }:
+                db.execute("ALTER TABLE candles ADD COLUMN tick_volume INTEGER")
             db.execute("""CREATE TABLE IF NOT EXISTS experiments (
                 experiment_id TEXT PRIMARY KEY,
                 dataset_id TEXT NOT NULL REFERENCES datasets(dataset_id),
@@ -133,8 +153,12 @@ class MarketStore:
         digest = hashlib.sha256(raw).hexdigest()
         try:
             reader = csv.DictReader(io.StringIO(source_text))
-            if reader.fieldnames is None or set(reader.fieldnames) != set(_COLUMNS):
+            if (reader.fieldnames is None
+                    or len(reader.fieldnames) not in (len(_COLUMNS), len(_COLUMNS) + 1)
+                    or set(reader.fieldnames) not in (
+                        set(_COLUMNS), set(_COLUMNS) | {_OPTIONAL_COLUMN})):
                 raise MarketDataError("INVALID_CSV_HEADER")
+            has_volume = _OPTIONAL_COLUMN in reader.fieldnames
             bars = []
             previous = None
             gap_count = 0
@@ -163,7 +187,10 @@ class MarketStore:
                 if not (values["low"] <= min(values["open"], values["close"])
                         <= max(values["open"], values["close"]) <= values["high"]):
                     raise MarketDataError("INVALID_OHLC")
-                bars.append({"time_utc": timestamp.isoformat(), **values})
+                bar = {"time_utc": timestamp.isoformat(), **values}
+                if has_volume:
+                    bar[_OPTIONAL_COLUMN] = _tick_volume(row[_OPTIONAL_COLUMN])
+                bars.append(bar)
         except (csv.Error, OverflowError):
             raise MarketDataError("INVALID_CSV_FORMAT") from None
         if len(bars) < 128:
@@ -198,10 +225,11 @@ class MarketStore:
                 bars[-1]["time_utc"], gap_count, missing, imported,
             ))
             db.executemany("""INSERT INTO candles
-                (dataset_id,idx,time_utc,open,high,low,close)
-                VALUES (?,?,?,?,?,?,?)""", [
+                (dataset_id,idx,time_utc,open,high,low,close,tick_volume)
+                VALUES (?,?,?,?,?,?,?,?)""", [
                 (dataset_id, idx, bar["time_utc"],
-                 bar["open"], bar["high"], bar["low"], bar["close"])
+                 bar["open"], bar["high"], bar["low"], bar["close"],
+                 bar.get(_OPTIONAL_COLUMN))
                 for idx, bar in enumerate(bars)
             ])
         result = self.manifest(dataset_id)
@@ -225,11 +253,15 @@ class MarketStore:
         self.manifest(dataset_id)
         with self._db() as db:
             rows = db.execute(
-                "SELECT time_utc,open,high,low,close FROM candles "
+                "SELECT time_utc,open,high,low,close,tick_volume FROM candles "
                 "WHERE dataset_id=? ORDER BY idx", (dataset_id,),
             ).fetchall()
-        candles = [dict(zip(("time_utc", "open", "high", "low", "close"), row))
-                   for row in rows]
+        candles = []
+        for row in rows:
+            candle = dict(zip(_COLUMNS, row[:len(_COLUMNS)]))
+            if row[-1] is not None:
+                candle[_OPTIONAL_COLUMN] = row[-1]
+            candles.append(candle)
         manifest = self.manifest(dataset_id)
         content_hash = hashlib.sha256(_json({
             "symbol": manifest["symbol"], "timeframe": manifest["timeframe"],

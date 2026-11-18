@@ -74,6 +74,68 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(reopened.candles(first["dataset_id"]),
                          self.store.candles(first["dataset_id"]))
 
+    def test_optional_tick_volume_roundtrip_and_integrity(self):
+        for index, row in enumerate(self.rows):
+            row["tick_volume"] = str(index * 2)
+        with self.file.open("w", encoding="utf-8", newline="") as stream:
+            writer = csv.DictWriter(stream, fieldnames=[
+                "time_utc", "open", "high", "low", "close", "tick_volume",
+            ])
+            writer.writeheader()
+            writer.writerows(self.rows)
+        imported = self._import()
+        stored = MarketStore(self.store.path).candles(imported["dataset_id"])
+        self.assertEqual(stored[0]["tick_volume"], 0)
+        self.assertEqual(stored[-1]["tick_volume"], 358)
+        self.assertTrue(self._import()["existing"])
+        self.assertEqual(MarketStore(self.store.path).candles(imported["dataset_id"]),
+                         stored)
+        with closing(sqlite3.connect(self.store.path)) as db, db:
+            db.execute("UPDATE candles SET tick_volume=tick_volume+1 "
+                       "WHERE dataset_id=? AND idx=5", (imported["dataset_id"],))
+        with self.assertRaisesRegex(MarketDataError, "DATASET_INTEGRITY_FAILED"):
+            self.store.candles(imported["dataset_id"])
+
+    def test_bad_optional_volume_rejected_without_partial_import(self):
+        bad_values = ("", "-1", "1.5", "NaN", "inf", "9223372036854775808")
+        for invalid in bad_values:
+            with self.subTest(volume=invalid):
+                rows = [{**row, "tick_volume": "1"} for row in self.rows]
+                rows[4]["tick_volume"] = invalid
+                with self.file.open("w", encoding="utf-8", newline="") as stream:
+                    writer = csv.DictWriter(stream, fieldnames=[
+                        "time_utc", "open", "high", "low", "close", "tick_volume",
+                    ])
+                    writer.writeheader()
+                    writer.writerows(rows)
+                with self.assertRaisesRegex(MarketDataError, "INVALID_TICK_VOLUME"):
+                    self._import()
+        with closing(sqlite3.connect(self.store.path)) as db:
+            self.assertEqual(db.execute("SELECT count(*) FROM datasets").fetchone()[0], 0)
+
+    def test_legacy_database_upgrade_preserves_old_dataset_hash(self):
+        original = self._import()
+        before = self.store.candles(original["dataset_id"])
+        with closing(sqlite3.connect(self.store.path)) as db, db:
+            # Re-create the old schema in a separate fixture DB, to ensure the
+            # actual migration handles preexisting historical data correctly.
+            legacy = self.root / "legacy.sqlite3"
+            db.backup(sqlite3.connect(legacy))
+        with closing(sqlite3.connect(legacy)) as db, db:
+            db.execute("ALTER TABLE candles RENAME TO candles_with_volume")
+            db.execute("""CREATE TABLE candles (
+                dataset_id TEXT NOT NULL REFERENCES datasets(dataset_id),
+                idx INTEGER NOT NULL, time_utc TEXT NOT NULL,
+                open REAL NOT NULL, high REAL NOT NULL, low REAL NOT NULL,
+                close REAL NOT NULL, PRIMARY KEY(dataset_id,idx))""")
+            db.execute("""INSERT INTO candles (dataset_id,idx,time_utc,open,high,low,close)
+                SELECT dataset_id,idx,time_utc,open,high,low,close
+                FROM candles_with_volume""")
+            db.execute("DROP TABLE candles_with_volume")
+        reopened = MarketStore(legacy)
+        self.assertEqual(reopened.candles(original["dataset_id"]), before)
+        self.assertTrue(reopened.import_csv(self.file, **self.metadata)["existing"])
+
     def test_provenance_conflict_for_identical_candles(self):
         self._import()
         with self.assertRaisesRegex(MarketDataError, "PROVENANCE_CONFLICT"):
