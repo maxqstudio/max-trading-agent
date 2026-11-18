@@ -49,11 +49,12 @@ class AcceptanceTests(unittest.TestCase):
         self.bar = (datetime.now(timezone.utc).replace(second=0, microsecond=0)
                     - timedelta(minutes=1))
 
-    def run_check(self, snapshots, *, samples=2, interval=1, key=TEST_KEY):
+    def run_check(self, snapshots, *, samples=2, interval=1, key=TEST_KEY,
+                  bars=12, clock=None):
         api = FakeMT5(snapshots)
-        gate = TerminalAcceptance(self.journal, api, key)
+        gate = TerminalAcceptance(self.journal, api, key, clock=clock)
         output = gate.execute(
-            "EURUSD", timeframe="M1", bars=12, samples=samples,
+            "EURUSD", timeframe="M1", bars=bars, samples=samples,
             sample_interval=interval, sleep=lambda sec: None,
         )
         return output, api
@@ -72,6 +73,10 @@ class AcceptanceTests(unittest.TestCase):
         self.assertFalse(report["broker_execution"])
         self.assertEqual(report["decision"], "NO_TRADE")
         self.assertEqual(report["warnings"], [])
+        self.assertLessEqual(report["min_quote_age_seconds"],
+                             report["max_quote_age_seconds"])
+        self.assertLessEqual(report["min_spread_price_units"],
+                             report["max_spread_price_units"])
         self.assertEqual(len(api.calls), 2)
         rows = self.journal_events(report["run_id"])
         self.assertEqual([event["event_type"] for event in rows], [
@@ -84,6 +89,77 @@ class AcceptanceTests(unittest.TestCase):
         for secret in ("12345678", "PRIVATE_BROKER", "10000"):
             self.assertNotIn(secret, serialized)
         self.assertEqual(self.journal.runs()[0]["mode"], "READ_ONLY")
+
+    def test_signed_replay_five_minutes_old_is_blocked(self):
+        now = datetime.now(timezone.utc)
+        old_bar = self.bar - timedelta(minutes=8)
+        first = sample(old_bar, quote_age=12)
+        second = sample(old_bar, quote_age=1)
+        for row in (first, second):
+            row.pop("provenance")
+            row["captured_at_utc"] = (now - timedelta(minutes=5)).isoformat()
+            row["quote"]["time_utc"] = (
+                now - timedelta(minutes=5, seconds=12 if row is first else 1)
+            ).isoformat()
+        first = seal_snapshot(first, TEST_KEY, login=12345678,
+                              server="PRIVATE_BROKER")
+        second = seal_snapshot(second, TEST_KEY, login=12345678,
+                               server="PRIVATE_BROKER")
+        result, _ = self.run_check([first, second], clock=lambda: now)
+        self.assertEqual(result["status"], "BLOCKED")
+        self.assertEqual(result["block_reason"], "CAPTURE_NOT_FRESH")
+        self.assertEqual(result["samples_verified"], 0)
+        self.assertEqual(self.journal.events(result["run_id"])[-1]
+                         ["details"]["action"], "NO_TRADE")
+
+    def test_full_requested_history_gap_outside_llm_window_is_inconclusive(self):
+        def expanded(quote_age):
+            row = sample(self.bar, quote_age=quote_age)
+            row.pop("provenance")
+            start = datetime.fromisoformat(row["candles"][0]["time_utc"])
+            old = []
+            for i in range(48, 0, -1):
+                bar = row["candles"][0].copy()
+                # Create one extra minute of distance in the first 20 bars.
+                bar["time_utc"] = (start - timedelta(
+                    minutes=i + (1 if i >= 25 else 0))).isoformat()
+                old.append(bar)
+            row["candles"] = old + row["candles"]
+            return seal_snapshot(row, TEST_KEY, login=12345678,
+                                 server="PRIVATE_BROKER")
+        result, _ = self.run_check([expanded(12), expanded(1)], bars=60)
+        self.assertEqual(result["status"], "INCONCLUSIVE")
+        self.assertIn("HISTORICAL_CANDLE_GAP", result["warnings"])
+        self.assertEqual(result["samples_verified"], 2)
+
+    def test_history_revision_outside_llm_window_is_blocked(self):
+        def expanded(quote_age):
+            row = sample(self.bar, quote_age=quote_age)
+            row.pop("provenance")
+            start = datetime.fromisoformat(row["candles"][0]["time_utc"])
+            old = []
+            for i in range(48, 0, -1):
+                bar = row["candles"][0].copy()
+                bar["time_utc"] = (start - timedelta(minutes=i)).isoformat()
+                old.append(bar)
+            row["candles"] = old + row["candles"]
+            return row
+        first = expanded(12)
+        second = expanded(1)
+        second["candles"][1]["close"] += 0.0001
+        first = seal_snapshot(first, TEST_KEY, login=12345678,
+                              server="PRIVATE_BROKER")
+        second = seal_snapshot(second, TEST_KEY, login=12345678,
+                               server="PRIVATE_BROKER")
+        result, _ = self.run_check([first, second], bars=60)
+        self.assertEqual(result["status"], "BLOCKED")
+        self.assertEqual(result["block_reason"], "HISTORICAL_CANDLE_REVISED")
+
+    def test_short_history_cannot_appear_complete(self):
+        row1, row2 = sample(self.bar, quote_age=12), sample(self.bar, quote_age=1)
+        result, _ = self.run_check([row1, row2], bars=100)
+        self.assertEqual(result["status"], "INCONCLUSIVE")
+        self.assertIn("INCOMPLETE_CANDLE_HISTORY", result["warnings"])
 
     def test_quiet_market_is_inconclusive_not_fake_pass(self):
         original = sample(self.bar, quote_age=3)
