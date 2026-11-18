@@ -255,6 +255,39 @@ class ShadowPipelineTests(unittest.TestCase):
         finally:
             b.stop()
 
+    def test_missing_outcome_bar_cannot_be_settled_on_later_trigger(self):
+        # Baseline B-6, candidate B-5, missing B-4, gap at B-3,
+        # then B-2 is contiguous from B-3 but NOT the candidate horizon.
+        entry_bar = self.bar0 - timedelta(minutes=1)
+        watcher, api, client = self.watch([
+            fixture(self.bar0 - timedelta(minutes=2)),
+            observed_fixture(entry_bar, age_seconds=12),
+            lambda: observed_fixture(self.bar1, age_seconds=0),
+            lambda: observed_fixture(self.bar2, age_seconds=0),
+        ], cycles=3)
+        watcher.start()
+        try:
+            self.assertEqual(watcher.poll_once()["status"], "BASELINED")
+            self.assertEqual(watcher.poll_once()["status"], "NEW_COMPLETED_CANDLE")
+            entry = self.ledger().pending_for(
+                "EURUSD", verify_snapshot(fixture(entry_bar), TEST_KEY)
+            )[0]
+            self.assertEqual(watcher.poll_once()["status"], "CANDLE_GAP")
+            blocked = watcher.poll_once()
+            self.assertEqual(blocked["status"], "SHADOW_SETTLEMENT_BLOCKED")
+            self.assertEqual(self.ledger().get(entry["candidate_id"])["status"], "PENDING")
+            self.assertEqual(len(client.calls), 5)
+            self.assertEqual(len(api.calls), 4)
+            jobs = watcher.store.jobs()
+            self.assertEqual([j["status"] for j in jobs],
+                             ["COMPLETED", "BLOCKED"])
+            self.assertIn("SHADOW_HORIZON_EXCEEDED",
+                          [e["details"].get("code") for e in self.all_events()])
+            self.assertNotIn("SHADOW_SETTLED",
+                             [e["event_type"] for e in self.all_events()])
+        finally:
+            watcher.stop()
+
     def test_late_quote_after_model_run_blocks_candidate(self):
         watcher, _, _ = self.watch([fixture(self.bar0), fixture(self.bar1)])
         watcher.start()

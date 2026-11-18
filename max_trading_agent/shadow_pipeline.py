@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import json
 import re
+import sqlite3
+from contextlib import closing
 from typing import Any
 
 from .identity import IdentityError, verify_snapshot
@@ -64,6 +66,18 @@ class ResearchShadowPipeline:
         if not episodes:
             return None
         episode = episodes[0]
+        # A signed later quote is not enough for the one-candle horizon. A
+        # skipped bar cannot be silently filled on a subsequent trigger.
+        with closing(sqlite3.connect(self.journal.path)) as db:
+            origin = db.execute(
+                "SELECT symbol,timeframe,bar_utc,status FROM watch_jobs "
+                "WHERE job_id=?", (episode["watch_job_id"],)
+            ).fetchone()
+        if (origin is None or origin[0] != context["symbol"]
+                or origin[1] != context["timeframe"] or origin[3] != "COMPLETED"):
+            raise ShadowError("SHADOW_ORIGIN_UNVERIFIED")
+        if context["completed_candles"][-2]["time_utc"] != origin[2]:
+            raise ShadowError("SHADOW_HORIZON_EXCEEDED")
         # The ledger separately enforces later quote time and same account.
         return self.mission.settle(episode["candidate_id"], snapshot)
 
