@@ -17,6 +17,11 @@ from typing import Any
 _REPO = "maxqstudio/max-trading-agent"
 _REQUIRED = tuple(range(14, 84, 2))  # At least 35 canonical PRs through G35 #82
 _SHA = re.compile(r"[0-9a-f]{40}\Z")
+# Owner decision 2026-11-18: the observation-only UI Draft PR #83 is kept
+# OUTSIDE the 35-PR G35 merge scope. Exactly this PR identity is excluded;
+# any other new odd PR (or #83 changed to merged/non-Draft/other branch/base)
+# still fails closed. Exclusion never adds #83 to the merge handoff.
+_OUT_OF_SCOPE = {83: "claude/project-thread-opv6rq"}
 _BRANCH = re.compile(r"feat/[a-z0-9][a-z0-9/_-]{0,100}\Z")
 
 
@@ -108,7 +113,26 @@ def audit_stack(prs: Any) -> dict:
     # are created. Unlisted gaps are an error, not an approval to skip a PR.
     canonical = sorted(number for number in index
                        if number >= 14 and number % 2 == 0)
-    if any(number > 82 and number % 2 for number in index):
+    excluded = []
+    for number, branch in _OUT_OF_SCOPE.items():
+        item = index.get(number)
+        if item is None:
+            continue
+        head, base = item.get("head"), item.get("base")
+        if (type(head) is not dict or type(base) is not dict
+                or head.get("ref") != branch
+                or type(head.get("repo")) is not dict
+                or head["repo"].get("full_name") != _REPO
+                or base.get("ref") != "main"
+                or type(base.get("repo")) is not dict
+                or base["repo"].get("full_name") != _REPO
+                or item.get("state") != "open"
+                or item.get("draft") is not True
+                or item.get("merged_at") is not None):
+            raise StackAuditError("G28_UNEXPECTED_NEW_PR")
+        excluded.append(number)
+    if any(number > 82 and number % 2 and number not in excluded
+           for number in index):
         raise StackAuditError("G28_UNEXPECTED_NEW_PR")
     if not canonical or len(canonical) > 80 or canonical != list(
             range(14, canonical[-1] + 2, 2)):
@@ -162,6 +186,7 @@ def audit_stack(prs: Any) -> dict:
         "repository": _REPO,
         "default_branch": "main",
         "audited_count": len(records),
+        "excluded_out_of_scope_prs": excluded,
         "merged_count": sum(x["merged"] for x in records),
         "unmerged_count": sum(not x["merged"] for x in records),
         "ordered_pull_requests": records,

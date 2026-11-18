@@ -162,6 +162,41 @@ class StackedMergeHandoffTests(unittest.TestCase):
         with self.assertRaisesRegex(StackAuditError, "G28_UNEXPECTED_NEW_PR"):
             audit_stack(items)
 
+    def test_owner_excluded_ui_draft_pr_is_not_added_to_handoff(self):
+        ui = fake_pr(83, "main")
+        ui["head"]["ref"] = "claude/project-thread-opv6rq"
+        report = audit_stack(fake_stack() + [ui])
+        self.assertEqual(report["audited_count"], 35)
+        self.assertEqual(report["excluded_out_of_scope_prs"], [83])
+        self.assertNotIn(83, [r["number"] for r in report["ordered_pull_requests"]])
+
+    def test_excluded_ui_pr_identity_changes_fail_closed(self):
+        def ui(**changes):
+            item = fake_pr(83, "main")
+            item["head"]["ref"] = "claude/project-thread-opv6rq"
+            for key, value in changes.items():
+                if key == "branch":
+                    item["head"]["ref"] = value
+                elif key == "base":
+                    item["base"]["ref"] = value
+                elif key == "head_repo":
+                    item["head"]["repo"] = value
+                else:
+                    item[key] = value
+            return item
+        for bad in (ui(branch="claude/other"), ui(base="feat/stage-82"),
+                    ui(draft=False), ui(state="closed"),
+                    ui(merged_at="2026-11-18T00:00:00Z", state="closed"),
+                    ui(head_repo={"full_name": "attacker/fork"}),
+                    ui(head_repo=None)):
+            with self.subTest(bad=bad):
+                with self.assertRaisesRegex(StackAuditError,
+                                            "G28_UNEXPECTED_NEW_PR"):
+                    audit_stack(fake_stack() + [bad])
+        other = fake_pr(85, "main")
+        with self.assertRaisesRegex(StackAuditError, "G28_UNEXPECTED_NEW_PR"):
+            audit_stack(fake_stack() + [ui(), other])
+
     def test_duplicate_pr_number_blocks_handoff(self):
         self.prs.append(dict(self.prs[-1]))
         with self.assertRaisesRegex(StackAuditError, "G28_DUPLICATE_PR"):
