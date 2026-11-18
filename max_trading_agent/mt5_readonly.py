@@ -100,6 +100,17 @@ def _utc(seconds: int | float) -> str:
         raise MT5ReadError("INVALID_TIMESTAMP") from None
 
 
+def _terminal_version(raw: Any) -> dict[str, int | str]:
+    # The official MT5 version() API returns (major, build, release date).
+    if (type(raw) not in (tuple, list) or len(raw) != 3
+            or type(raw[0]) is not int or raw[0] <= 0
+            or type(raw[1]) is not int or raw[1] <= 0
+            or type(raw[2]) is not str
+            or re.fullmatch(r"[0-9]{1,2} [A-Za-z]{3} [0-9]{4}", raw[2]) is None):
+        raise MT5ReadError("INVALID_TERMINAL_VERSION")
+    return {"major": raw[0], "build": raw[1], "release_date": raw[2]}
+
+
 class ReadOnlyMT5:
     """Opt-in market snapshot; not a trade engine or a signal generator."""
 
@@ -173,6 +184,11 @@ class ReadOnlyMT5:
             terminal = self._require(self._api.terminal_info(), "TERMINAL_UNAVAILABLE")
             if _field(terminal, "connected") is not True:
                 raise MT5ReadError("TERMINAL_DISCONNECTED")
+            try:
+                raw_version = self._api.version()
+            except Exception:
+                raise MT5ReadError("VERSION_UNAVAILABLE") from None
+            version = _terminal_version(self._require(raw_version, "VERSION_UNAVAILABLE"))
             account = self._require(self._api.account_info(), "ACCOUNT_UNAVAILABLE")
             spec = self._require(self._api.symbol_info(symbol), "SYMBOL_NOT_FOUND")
             if _field(spec, "visible") is not True:
@@ -212,8 +228,9 @@ class ReadOnlyMT5:
                                        "tick_volume", "spread", "real_volume"))
                 if any(candle[k] is None for k in ("open", "high", "low", "close")):
                     raise MT5ReadError("MISSING_OHLC")
-                if candle["low"] > min(candle["open"], candle["close"]) or (
-                    candle["high"] < max(candle["open"], candle["close"])
+                if any(candle[k] <= 0 for k in ("open", "high", "low", "close")) or (
+                    candle["low"] > min(candle["open"], candle["close"])
+                    or candle["high"] < max(candle["open"], candle["close"])
                 ):
                     raise MT5ReadError("INVALID_OHLC")
                 candles.append({"time_utc": _utc(timestamp), **candle})
@@ -246,6 +263,7 @@ class ReadOnlyMT5:
                 },
                 "terminal": {
                     "connected": True,
+                    "version": version,
                     "trade_allowed": _field(terminal, "trade_allowed") is True,
                     "tradeapi_disabled": _field(terminal, "tradeapi_disabled") is True,
                     "maxbars": _number(_field(terminal, "maxbars"), "maxbars"),

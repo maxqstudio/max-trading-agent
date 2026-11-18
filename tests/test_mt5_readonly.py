@@ -34,6 +34,11 @@ class FakeMT5:
         self.broker_server = "PRIVATE_BROKER"
         self.offset_seconds = 12
         self.bad_rates = None
+        self.version_value = (500, 4500, "18 Nov 2026")
+
+    def version(self):
+        self.calls.append(("version",))
+        return self.version_value
 
     def initialize(self):
         self.calls.append(("initialize",))
@@ -124,11 +129,56 @@ class ReadOnlyMT5Tests(unittest.TestCase):
         self.assertNotIn("login", result["account"])
         self.assertNotIn("server", result["account"])
         self.assertNotIn("path", result["terminal"])
+        self.assertEqual(result["terminal"]["version"],
+                         {"major": 500, "build": 4500, "release_date": "18 Nov 2026"})
         self.assertNotIn("comment", result["positions"][0])
         names = [x[0] for x in self.fake.calls]
         self.assertEqual(names[0], "initialize")
         self.assertEqual(names[-1], "shutdown")
         self.assertFalse(set(names) & {"order_send", "login", "symbol_select", "order_check"})
+
+    def test_terminal_version_missing_or_malformed_fails_closed(self):
+        malformed = (
+            (None, "VERSION_UNAVAILABLE"),
+            ([], "INVALID_TERMINAL_VERSION"),
+            ((500, 4500), "INVALID_TERMINAL_VERSION"),
+            ((0, 4500, "18 Nov 2026"), "INVALID_TERMINAL_VERSION"),
+            ((500, 0, "18 Nov 2026"), "INVALID_TERMINAL_VERSION"),
+            ((True, 4500, "18 Nov 2026"), "INVALID_TERMINAL_VERSION"),
+            ((500, 4500, "SECRET/BROKER/PATH"), "INVALID_TERMINAL_VERSION"),
+            ((500, 4500, "18 Nov 2026\\nPRIVATE"), "INVALID_TERMINAL_VERSION"),
+        )
+        for raw, code in malformed:
+            self.fake.calls.clear()
+            self.fake.version_value = raw
+            with self.subTest(raw=type(raw).__name__):
+                self.assert_code(code, lambda: self.reader.capture("EURUSD", bars=2))
+                self.assertEqual(self.fake.calls[-1], ("shutdown",))
+                self.assertFalse({"login", "order_send", "symbol_select"}
+                                 & {name for name, *rest in self.fake.calls})
+        self.fake.version = lambda: (_ for _ in ()).throw(
+            RuntimeError("PRIVATE_BROKER_ERROR"))
+        self.assert_code("VERSION_UNAVAILABLE",
+                         lambda: self.reader.capture("EURUSD", bars=2))
+        self.assertEqual(self.fake.calls[-1], ("shutdown",))
+
+    def test_nonpositive_candle_prices_are_rejected(self):
+        base = {"time": NOW-2*PERIOD, "open": 1.0,
+                "high": 1.1, "low": 0.9, "close": 1.0}
+        for invalid in (
+                {"open": 0, "high": 0, "low": 0, "close": 0},
+                {"open": -2, "high": -1, "low": -3, "close": -2},
+                {"open": 0, "high": 1.1, "low": 0, "close": 1.0},
+                {"open": 1.0, "high": 1.1, "low": 0, "close": 1.0},
+                {"open": 1.0, "high": 1.1, "low": 0.9, "close": 0},
+        ):
+            self.fake.bad_rates = [base, {
+                **base, "time": NOW-PERIOD, **invalid,
+            }]
+            with self.subTest(candle=invalid):
+                self.assert_code("INVALID_OHLC",
+                                 lambda: self.reader.capture("EURUSD", bars=2))
+                self.assertEqual(self.fake.calls[-1], ("shutdown",))
 
     def test_readonly_capture_hmac_binding_changes_with_login_or_server(self):
         key = bytes(range(32))
