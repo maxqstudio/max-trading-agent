@@ -16,6 +16,47 @@
   <div class="top-status"><span class="tag warning">REFERENCE ONLY</span><span>MT5: Disconnected</span><span>LLM: Not configured</span><span class="tag danger">Trading disabled</span></div>
 </header>
 <div class="notice">M00/A00 development build. Events below reflect real knowledge-index and planner operations; all broker analysis is blocked. No orders, live prices, backtests or LLM invocations are simulated as real.</div>
+<section class="floor" aria-label="Trading company floor">
+  <div class="floor-head">
+    <div class="floor-title"><strong>Max Trading Co.</strong><span class="muted">satu bot, satu tim · mode riset</span></div>
+    <div class="floor-meta"><span id="clock" class="mono">--:--:-- UTC</span><span class="pill live"><i></i><span id="uptime">Running 0m</span></span></div>
+  </div>
+  <div class="safety-strip" id="safety" role="status">
+    <span class="chip warn">decision = NO_TRADE</span><span class="chip warn">execution = DISABLED</span>
+    <span class="chip warn">broker = OFF</span><span class="chip">owner acceptance = PENDING</span>
+    <span class="chip">UI hanya observasi · tidak ada tombol order</span>
+  </div>
+  <div class="board">
+    <article class="agent a-scanner" data-agent="scanner"><header><b>scanner</b><span class="st" data-st>Idle</span></header><div class="big" data-big>—</div><div class="sub" data-sub>menunggu misi</div><svg class="spark" viewBox="0 0 120 22" preserveAspectRatio="none" data-spark></svg></article>
+    <article class="agent a-analyst" data-agent="analyst"><header><b>analyst</b><span class="st" data-st>Idle</span></header><div class="big" data-big>—</div><div class="sub" data-sub>menunggu misi</div><svg class="spark" viewBox="0 0 120 22" preserveAspectRatio="none" data-spark></svg></article>
+    <article class="agent a-brain" data-agent="brain"><header><b>brain</b><span class="st" data-st>Idle</span></header><div class="big" data-big>—</div><div class="sub" data-sub>menunggu misi</div><svg class="spark" viewBox="0 0 120 22" preserveAspectRatio="none" data-spark></svg></article>
+    <div class="center">
+      <div class="chart-bar"><span>SAMPLE · XAUUSD-like</span><span class="chip warn">ILUSTRASI sintetis · bukan data pasar · MT5 terputus</span></div>
+      <svg id="chart" viewBox="0 0 600 240" preserveAspectRatio="none" role="img" aria-label="Ilustrasi chart sintetis, bukan data pasar"></svg>
+      <span class="cursor c-scanner">scanner</span><span class="cursor c-analyst">analyst</span>
+      <span class="cursor c-brain">brain</span><span class="cursor c-risk">risk</span>
+    </div>
+    <article class="agent a-executor locked" data-agent="executor"><header><b>executor</b><span class="st" data-st>DISABLED</span></header><div class="big" data-big>0</div><div class="sub" data-sub>order terkirim · terkunci</div><svg class="spark" viewBox="0 0 120 22" preserveAspectRatio="none" data-spark></svg></article>
+    <article class="agent a-check" data-agent="check"><header><b>check</b><span class="st" data-st>Idle</span></header><div class="big" data-big>—</div><div class="sub" data-sub>menunggu misi</div><svg class="spark" viewBox="0 0 120 22" preserveAspectRatio="none" data-spark></svg></article>
+    <article class="agent a-risk" data-agent="risk"><header><b>risk</b><span class="st" data-st>Idle</span></header><div class="big" data-big>—</div><div class="sub" data-sub>menunggu misi</div><svg class="spark" viewBox="0 0 120 22" preserveAspectRatio="none" data-spark></svg></article>
+  </div>
+  <div class="statusbar">
+    <div><small>Balance</small><div class="bal">—</div><small>MT5 tidak terhubung · tidak ada saldo nyata</small></div>
+    <div><small>Positions</small><div class="pos">0 open · eksekusi DISABLED</div></div>
+    <div class="tl-wrap"><small id="tl-label">Timeline misi</small><div id="timeline" class="timeline"></div></div>
+  </div>
+  <div class="desk">
+    <section class="feed-col"><div class="panel-title"><h2>AGENT FEED</h2><span id="feed-count" class="muted">0</span></div>
+      <div id="feed" class="feed" role="log" aria-live="polite"></div></section>
+    <section class="ask-col"><div class="panel-title"><h2>PERTANYAAN UNTUK JACKSON</h2><span id="open-q" class="tag warning">0 terbuka</span></div>
+      <div id="questions" class="questions"></div>
+      <form id="note-form" class="note-form"><label for="note-to">Kirim catatan ke agent</label>
+        <div class="controls"><select id="note-to"><option>scanner</option><option>analyst</option><option>brain</option><option>executor</option><option>check</option><option>risk</option></select></div>
+        <div class="controls"><input id="note-body" maxlength="500" placeholder="Tulis catatan riset…" autocomplete="off"><button type="submit">Kirim</button></div>
+        <p class="muted">Catatan hanya disimpan di jurnal. Tidak dieksekusi dan tidak mengubah NO_TRADE.</p></form>
+    </section>
+  </div>
+</section>
 <main class="workspace">
   <aside class="panel teams">
     <div class="panel-title"><h2>TEAM PROGRESS</h2><span id="run-status" class="tag">IDLE</span></div>

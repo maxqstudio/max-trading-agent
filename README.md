@@ -51,3 +51,7 @@ python -m max_trading_agent serve
 Open http://127.0.0.1:8765 and run a reference mission. The web server binds to loopback only. It indexes and searches curated MT5 API knowledge, plans required MT5 reads (but **does not call them**), records exact missing evidence and emits NO_TRADE. This is a genuine local tool-index and journal integration, **not** a connected LLM, MT5 broker, live quote stream, backtest, actual role debate, or trading engine. No executable order path exists.
 
 Only **GitHub Actions CI** is used for acceptance; it tests offline Python, HTTP and JS syntax. Real MT5/LLM integrations require separate stages and evidence.
+
+## Trading company floor (UI)
+
+The Trading Room now opens with a "company floor": scanner / analyst / brain / executor / check / risk cards around a chart, a balance / positions / mission-timeline bar, an agent feed, and questions the agents ask the owner. Card metrics come only from recorded journal events. The chart is a clearly labelled **synthetic illustration**, not market data. Owner replies (`POST /api/desk/reply`) are stored as research notes in the local journal; they are never executed. The UI shows `NO_TRADE` / `DISABLED` and has no order or broker path.

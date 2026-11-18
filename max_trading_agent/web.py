@@ -7,6 +7,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
+from .desk import Desk, SAFETY, AGENTS
 from .runtime import ALLOWED_TASKS, DEFAULT_JOURNAL, DEFAULT_KNOWLEDGE, EventJournal, ReferenceMission
 
 UI_DIR = Path(__file__).resolve().parent.parent / "ui"
@@ -14,11 +15,33 @@ UI_DIR = Path(__file__).resolve().parent.parent / "ui"
 
 def create_server(host: str = "127.0.0.1", port: int = 8765,
                   journal_path: Path = DEFAULT_JOURNAL,
-                  knowledge_path: Path = DEFAULT_KNOWLEDGE) -> ThreadingHTTPServer:
+                  knowledge_path: Path = DEFAULT_KNOWLEDGE,
+                  heartbeat_seconds: float = 300.0) -> ThreadingHTTPServer:
     if host not in {"127.0.0.1", "localhost"}:
         raise ValueError("UI must bind to local loopback only in M00")
     journal = EventJournal(journal_path)
     mission = ReferenceMission(journal, knowledge_path)
+    desk = Desk(journal)
+    desk.startup_checkin()
+    stop = threading.Event()
+
+    def run_mission(run_id: str, task: str) -> None:
+        try:
+            mission.execute(run_id, task)
+        finally:
+            try:
+                desk.checkin_for_run(run_id)
+            except Exception:
+                pass
+
+    def heartbeat() -> None:
+        tick = 0
+        while not stop.wait(heartbeat_seconds):
+            try:
+                desk.heartbeat(tick)
+            except Exception:
+                pass
+            tick += 1
 
     class Handler(BaseHTTPRequestHandler):
         def _respond(self, code: int, payload: bytes, content_type: str) -> None:
@@ -67,13 +90,26 @@ def create_server(host: str = "127.0.0.1", port: int = 8765,
                     return
                 self._json(200, {"events": rows})
                 return
+            if url.path == "/api/desk":
+                q = parse_qs(url.query)
+                try:
+                    after = int(q.get("after", ["0"])[0])
+                    rows = desk.messages(after)
+                except (ValueError, OverflowError):
+                    self._json(400, {"error": "invalid_cursor"})
+                    return
+                self._json(200, {"messages": rows, "open_questions": desk.open_questions(),
+                                 "started_at": desk.started_at, "safety": SAFETY,
+                                 "agents": list(AGENTS)})
+                return
             self._json(404, {"error": "not_found"})
 
         def do_POST(self) -> None:
             if not self._valid_host():
                 self._json(403, {"error": "invalid_host"})
                 return
-            if urlsplit(self.path).path != "/api/run":
+            route = urlsplit(self.path).path
+            if route not in ("/api/run", "/api/desk/reply"):
                 self._json(404, {"error": "not_found"})
                 return
             # JSON requests are not cross-origin simple requests; reject an explicit foreign Origin.
@@ -90,14 +126,24 @@ def create_server(host: str = "127.0.0.1", port: int = 8765,
                 if length <= 0 or length > 4096:
                     raise ValueError("Invalid content length")
                 data = json.loads(self.rfile.read(length))
+                if route == "/api/desk/reply":
+                    qid = data.get("question_id")
+                    if qid is not None and (not isinstance(qid, int) or isinstance(qid, bool)):
+                        raise ValueError("Bad question")
+                    to = data.get("to")
+                    if to is not None and not isinstance(to, str):
+                        raise ValueError("Bad agent")
+                    result = desk.reply(data.get("body"), qid, to)
+                    self._json(201, {**result, "execution": "DISABLED"})
+                    return
                 task = data["task"]
                 if not isinstance(task, str) or task not in ALLOWED_TASKS:
                     raise ValueError("Unknown task")
-            except (ValueError, KeyError, TypeError, json.JSONDecodeError):
-                self._json(400, {"error": "invalid_task"})
+            except (ValueError, KeyError, TypeError, AttributeError, json.JSONDecodeError):
+                self._json(400, {"error": "invalid_request"})
                 return
             run_id = journal.start(task)
-            threading.Thread(target=mission.execute, args=(run_id, task),
+            threading.Thread(target=run_mission, args=(run_id, task),
                              daemon=True, name=f"reference-mission-{run_id[:8]}").start()
             self._json(202, {"run_id": run_id, "mode": "REFERENCE_ONLY", "execution": "DISABLED"})
 
@@ -105,4 +151,14 @@ def create_server(host: str = "127.0.0.1", port: int = 8765,
             # Do not write raw client inputs or query strings to disk.
             pass
 
-    return ThreadingHTTPServer((host, port), Handler)
+    server = ThreadingHTTPServer((host, port), Handler)
+    original_close = server.server_close
+
+    def close() -> None:
+        stop.set()
+        original_close()
+
+    server.server_close = close  # type: ignore[method-assign]
+    if heartbeat_seconds and heartbeat_seconds > 0:
+        threading.Thread(target=heartbeat, daemon=True, name="desk-heartbeat").start()
+    return server
