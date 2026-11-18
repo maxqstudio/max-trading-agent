@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Any
 
 KEY_BYTES = 32
-SCHEME = "LOCAL_MT5_HMAC_V1"
+SCHEME = "LOCAL_MT5_HMAC_V2"
 DEFAULT_KEY_PATH = Path(".local/mt5_identity.key")
 
 
@@ -115,8 +115,11 @@ def seal_snapshot(snapshot: dict, key: bytes, *, login: int,
         snapshot.get("execution") != "DISABLED"
     ):
         raise IdentityError("UNSUPPORTED_SNAPSHOT")
-    digest = hmac.new(key, b"mt5-snapshot-v1:" + _canonical(snapshot),
-                      hashlib.sha256).hexdigest()
+    # Bind the opaque account ID to the snapshot MAC. In V1 the account
+    # ID sat outside the MAC and could be substituted without the secret.
+    digest = hmac.new(key, b"mt5-snapshot-v2:" + _canonical({
+        "account_binding_id": account_id, "snapshot": snapshot,
+    }), hashlib.sha256).hexdigest()
     return {**snapshot, "provenance": {
         "scheme": SCHEME, "account_binding_id": account_id,
         "snapshot_mac": digest,
@@ -146,8 +149,9 @@ def verify_snapshot(snapshot: Any, key: bytes) -> str:
     ):
         raise IdentityError("UNSUPPORTED_SNAPSHOT")
     content = {k: v for k, v in snapshot.items() if k != "provenance"}
-    expected = hmac.new(key, b"mt5-snapshot-v1:" + _canonical(content),
-                        hashlib.sha256).hexdigest()
+    expected = hmac.new(key, b"mt5-snapshot-v2:" + _canonical({
+        "account_binding_id": account_id, "snapshot": content,
+    }), hashlib.sha256).hexdigest()
     if not hmac.compare_digest(mac, expected):
         raise IdentityError("SNAPSHOT_MAC_MISMATCH")
     return account_id

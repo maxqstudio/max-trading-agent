@@ -205,6 +205,25 @@ class WatcherTests(unittest.TestCase):
         finally:
             watcher.stop()
 
+    def test_swapped_provenance_account_id_cannot_bypass_same_mode_guard(self):
+        baseline = fixture(self.first_bar, mode="DEMO")
+        switched = fixture(self.next_bar, mode="DEMO", login=99999999)
+        switched["provenance"]["account_binding_id"] = (
+            baseline["provenance"]["account_binding_id"]
+        )
+        llm = FakeLLM()
+        watcher, _ = self.make([baseline, switched], client=llm)
+        watcher.start()
+        try:
+            self.assertEqual(watcher.poll_once()["status"], "BASELINED")
+            refused = watcher.poll_once()
+            self.assertEqual(refused["status"], "BLOCKED")
+            self.assertEqual(refused["reason"], "SNAPSHOT_MAC_MISMATCH")
+            self.assertEqual(watcher.store.jobs(), [])
+            self.assertEqual(llm.roles, [])
+        finally:
+            watcher.stop()
+
     def test_tampering_unsigned_or_wrong_key_block_before_baseline(self):
         valid = fixture(self.first_bar)
         tampered = json.loads(json.dumps(valid))
