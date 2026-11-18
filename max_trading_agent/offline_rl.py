@@ -94,11 +94,17 @@ def offline_q_research(store: MarketStore, dataset_id: str, *,
     costs = (_cost(spread, "SPREAD"), _cost(slippage, "SLIPPAGE"),
              _cost(fee_per_side, "FEE"))
     _params(epochs, alpha, gamma)
-    if len(dataset_id) != 64 or any(x not in "0123456789abcdef" for x in dataset_id):
+    if (not isinstance(dataset_id, str) or len(dataset_id) != 64
+            or any(x not in "0123456789abcdef" for x in dataset_id)):
         raise MarketDataError("INVALID_DATASET_ID")
     manifest = store.manifest(dataset_id)
     if manifest["quote_basis"] != "MID":
         raise MarketDataError("MID_OHLC_REQUIRED")
+    # Index i+1/i+2 is only "the next open" when no bar is missing; a gap
+    # (weekend, outage) would silently stretch a hypothetical round trip
+    # across hours or days and mislabel it MODELED_NEXT_OPEN_ONLY.
+    if manifest["gap_count"] or manifest["missing_intervals"]:
+        raise MarketDataError("CONTIGUOUS_CANDLES_REQUIRED")
     candles = store.candles(dataset_id)
     n = len(candles)
     if n < 180:
@@ -149,6 +155,17 @@ def offline_q_research(store: MarketStore, dataset_id: str, *,
         diff = candles[i]["close"] - candles[i-2]["close"]
         return "LONG" if diff > cost else "SHORT" if diff < -cost else "FLAT"
 
+    holdout_score = _policy_score(candles, holdout, choose, cost)
+    momentum_score = _policy_score(candles, holdout, momentum, cost)
+    # Fee sensitivity: re-score the SAME frozen policy and the same fixed
+    # baseline decisions at doubled modeled costs; never retrain on holdout.
+    holdout_doubled = _policy_score(candles, holdout, choose, 2 * cost)
+    momentum_doubled = _policy_score(candles, holdout, momentum, 2 * cost)
+    if (holdout_doubled["hypothetical_roundtrips"]
+            != holdout_score["hypothetical_roundtrips"]
+            or holdout_doubled["net_price_units_per_one_unit"]
+            > holdout_score["net_price_units_per_one_unit"] + 1e-10):
+        raise MarketDataError("COST_SENSITIVITY_INTEGRITY_FAILED")
     result = {
         "strategy": STRATEGY, "decision": "NO_TRADE",
         "execution": "DISABLED", "broker_execution": False,
@@ -156,8 +173,10 @@ def offline_q_research(store: MarketStore, dataset_id: str, *,
         "train_count": len(training), "holdout_count": len(holdout),
         "embargo_bars": 2, "model_digest": model_digest,
         "development": _policy_score(candles, training, choose, cost),
-        "holdout": _policy_score(candles, holdout, choose, cost),
-        "momentum_baseline_holdout": _policy_score(candles, holdout, momentum, cost),
+        "holdout": holdout_score,
+        "momentum_baseline_holdout": momentum_score,
+        "holdout_doubled_cost": holdout_doubled,
+        "momentum_baseline_holdout_doubled_cost": momentum_doubled,
         "no_trade_baseline_holdout": 0.0,
         "training_method": "OFFLINE_SIMULATED_TABULAR_Q_ALL_ACTIONS",
         "evidence_grade": "DESCRIPTIVE_ONLY",

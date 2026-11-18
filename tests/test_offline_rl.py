@@ -136,6 +136,41 @@ class OfflineRLTests(unittest.TestCase):
         with self.assertRaisesRegex(MarketDataError, "MID_OHLC_REQUIRED"):
             self.experiment(basis)
 
+    def test_gapped_history_is_rejected_not_scored_as_next_open(self):
+        # A missing bar would make open(i+2) a later-than-next open while the
+        # result still claims MODELED_NEXT_OPEN_ONLY fills.
+        self.rows = generate_rows(220, gap=True)
+        dataset_id = self.dataset()
+        self.assertEqual(self.store.manifest(dataset_id)["gap_count"], 1)
+        with self.assertRaisesRegex(MarketDataError,
+                                    "CONTIGUOUS_CANDLES_REQUIRED"):
+            self.experiment(dataset_id)
+
+    def test_holdout_reports_doubled_cost_sensitivity_of_frozen_policy(self):
+        r = self.experiment(self.dataset())["result"]
+        base, stressed = r["holdout"], r["holdout_doubled_cost"]
+        self.assertEqual(stressed["observations"], base["observations"])
+        self.assertEqual(stressed["hypothetical_roundtrips"],
+                         base["hypothetical_roundtrips"])
+        expected = (base["net_price_units_per_one_unit"]
+                    - base["hypothetical_roundtrips"] * (0.0002 + 2 * 0.00003
+                                                         + 2 * 0.00001))
+        self.assertAlmostEqual(stressed["net_price_units_per_one_unit"],
+                               expected, places=9)
+        m, md = (r["momentum_baseline_holdout"],
+                 r["momentum_baseline_holdout_doubled_cost"])
+        self.assertEqual(m["hypothetical_roundtrips"],
+                         md["hypothetical_roundtrips"])
+        self.assertLessEqual(md["net_price_units_per_one_unit"],
+                             m["net_price_units_per_one_unit"])
+
+    def test_non_string_dataset_id_fails_closed(self):
+        for bad in (None, 7, b"a" * 64, ["0" * 64]):
+            with self.subTest(bad=bad):
+                with self.assertRaisesRegex(MarketDataError,
+                                            "INVALID_DATASET_ID"):
+                    self.experiment(bad)
+
     def test_training_only_csv_mock_never_invokes_mt5(self):
         out = self.experiment(self.dataset())
         self.assertEqual(out["result"]["momentum_baseline_holdout"]["fills"],
