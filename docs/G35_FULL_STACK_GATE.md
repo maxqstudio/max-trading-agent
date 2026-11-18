@@ -57,5 +57,7 @@ It deliberately does not adapt silently to new PRs or grant trading rights.
 The result can be considered accepted only after the final SHA's real GitHub
 Actions run completes; an earlier successful run is not enough.
 
+G34 supply-chain pin verification now explicitly audits **all six direct Docker-pull workflows**, including `.github/workflows/g35-sequential-main.yml`. Changing any of their image digest/platform settings must fail G34 static tests; PR changes to any such workflow trigger G34 independently. Earlier G34 releases audited only five, leaving G35 outside that guard. The G34 verifier remains static for those paths and does not claim that image vulnerability scanning or signature verification has occurred.
+
 As before, owner handles actual PR retarget/merge and final `main` CI.
 `NO_TRADE`, `execution=DISABLED`, `owner_acceptance=PENDING`.

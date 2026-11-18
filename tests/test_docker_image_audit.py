@@ -33,14 +33,27 @@ class DockerImagePinTests(unittest.TestCase):
         self.assertEqual(result["image"], IMAGE)
         self.assertEqual(result["manifest_digest"], DIGEST)
         self.assertEqual(result["platform"], PLATFORM)
-        self.assertEqual(result["source_files_checked"], 6)
-        self.assertEqual(result["workflow_pull_count"], 5)
+        self.assertEqual(result["source_files_checked"], 7)
+        self.assertEqual(result["workflow_pull_count"], 6)
         self.assertFalse(result["runtime_image_executed_by_static_audit"])
         self.assertFalse(result["image_signature_verified"])
         self.assertFalse(result["image_has_no_known_vulnerabilities"])
         self.assertFalse(result["broker_execution"])
         self.assertEqual(result["execution"], "DISABLED")
         self.assertEqual(result["decision"], "NO_TRADE")
+
+    def test_g35_docker_pull_is_a_required_image_pin_source(self):
+        self.assertIn(".github/workflows/g35-sequential-main.yml", PULL_WORKFLOWS)
+        self.assertIn(".github/workflows/g35-sequential-main.yml", REQUIRED)
+
+    def test_g34_pull_request_triggers_on_all_pinned_workflow_changes(self):
+        workflow = (ROOT / ".github/workflows/g34-docker-image.yml").read_text(
+            encoding="utf-8")
+        paths = workflow.split("  pull_request:", 1)[1].split(
+            "  workflow_dispatch:", 1)[0]
+        for path in PULL_WORKFLOWS:
+            with self.subTest(path=path):
+                self.assertIn('"' + path + '"', paths)
 
     def test_digest_is_full_sha256_and_not_a_mutable_tag(self):
         self.assertEqual(len(DIGEST), 64)
@@ -82,7 +95,7 @@ class DockerImagePinTests(unittest.TestCase):
                 DockerImageAuditError, "G34_SANDBOX_ISOLATION_CHANGED"):
                 audit_sources(self.altered(SANDBOX, old, new))
 
-    def test_all_five_workflow_pulls_must_be_digest_pinned(self):
+    def test_all_six_workflow_pulls_must_be_digest_pinned(self):
         for path in PULL_WORKFLOWS:
             with self.subTest(path=path), self.assertRaisesRegex(
                 DockerImageAuditError, "G34_MUTABLE_DOCKER_TAG"):
@@ -179,7 +192,7 @@ class DockerImagePinTests(unittest.TestCase):
     def test_wrong_docker_manifest_does_not_execute_candidate_source(self):
         from max_trading_agent.tool_factory import _IMAGE
         self.assertEqual(_IMAGE, IMAGE)
-        self.assertEqual(len(REQUIRED), 6)
+        self.assertEqual(len(REQUIRED), 7)
 
 
 if __name__ == "__main__":
