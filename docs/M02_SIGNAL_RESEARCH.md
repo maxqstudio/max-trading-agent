@@ -18,3 +18,9 @@
 **Input source warning:** Local snapshot JSON is user-supplied data that declares MT5 origin. The program does not cryptographically prove who generated a supplied file. Do not use \`signal-research\` results as evidence of real broker execution.
 
 **CI:** Python fake-client tests exercise role ordering, prompt minimization, output journaling, failures, security boundaries and veto. GitHub Actions is the requested CI; owner terminal/API acceptance is separately required.
+
+## M02 adversarial market-price validation (G35 stacked tip)
+
+The final stacked tip now rejects zero/negative, boolean, non-finite, or unrepresentably large prices in **both quotes and completed OHLC candles** before invoking any LLM. Explicit bounded errors are `INVALID_QUOTE` and `INVALID_CANDLE`. Fake-provider regression also verifies that an invalid market-price snapshot never reaches a model and the independent decision remains `NO_TRADE`. This validation is separate from the M01 capture adapter because M02's `signal-research` accepts **user-provided local JSON** rather than requiring a newly captured terminal object. It does not confer proof of real MT5 provenance or strategy profitability.
+
+As with the M01 remediation, this is implemented in the final G35 tip **without rewriting pinned predecessor PR heads**. Original PR #16 remains a historical integration stage and should not be treated as individually accepted. GitHub CI only exercises fixtures, not real market/broker data.

@@ -136,6 +136,35 @@ class SignalResearchTests(unittest.TestCase):
         with self.assertRaises(LLMError):
             market_context(snapshot)
 
+    def test_invalid_candle_prices_never_reach_model(self):
+        for candle in (
+            {"open": 0, "high": 0, "low": 0, "close": 0},
+            {"open": -2, "high": -1, "low": -3, "close": -2},
+            {"open": True, "high": 1.06, "low": 1.03, "close": 1.05},
+            {"open": 1.04, "high": 1.06, "low": False, "close": 1.05},
+            {"open": 1.04, "high": 1.06, "low": 1.03, "close": 10 ** 1000},
+        ):
+            snap = example_snapshot()
+            snap["candles"][-1].update(candle)
+            client = FakeRoleClient()
+            with self.subTest(candle=candle), self.assertRaises(LLMError) as caught:
+                self.run_research(client, snap)
+            self.assertEqual(caught.exception.code, "INVALID_CANDLE")
+            self.assertEqual(client.calls, [])
+            self.assertEqual(self.journal.runs()[0]["status"], "FAILED")
+            event = self.journal.events(self.journal.runs()[0]["run_id"])[-1]
+            self.assertEqual(event["details"]["action"], "NO_TRADE")
+
+    def test_invalid_quote_types_and_overflow_fail_closed(self):
+        for value in (True, False, 0, -0.1, 10 ** 1000):
+            snap = example_snapshot()
+            snap["quote"]["bid"] = value
+            client = FakeRoleClient()
+            with self.subTest(value=type(value).__name__), self.assertRaises(LLMError) as caught:
+                self.run_research(client, snap)
+            self.assertEqual(caught.exception.code, "INVALID_QUOTE")
+            self.assertEqual(client.calls, [])
+
     def test_invalid_symbol_or_provenance_rejected(self):
         snapshot = example_snapshot()
         snapshot["symbol"]["name"] = "../../../secrets"
