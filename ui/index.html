@@ -15,11 +15,10 @@
   </div>
   <div class="top-status"><span class="tag warning">REFERENCE ONLY</span><span>MT5: Disconnected</span><span>LLM: Not configured</span><span class="tag danger">Trading disabled</span></div>
 </header>
-<div class="notice">M00/A00 development build. Events below reflect real knowledge-index and planner operations; all broker analysis is blocked. No orders, live prices, backtests or LLM invocations are simulated as real.</div>
 <section class="floor" aria-label="Trading company floor">
   <div class="floor-head">
     <div class="floor-title"><strong>Max Trading Co.</strong><span class="muted">satu bot, satu tim · mode riset</span></div>
-    <div class="floor-meta"><span id="clock" class="mono">--:--:-- UTC</span><span class="pill live"><i></i><span id="uptime">Running 0m</span></span></div>
+    <div class="floor-meta"><button type="button" id="run-floor" title="Misi riset saja, tidak bisa trading">▶ Jalankan misi riset</button><span id="clock" class="mono">--:--:-- UTC</span><span class="pill live"><i></i><span id="uptime">Running 0m</span></span></div>
   </div>
   <div class="safety-strip" id="safety" role="status">
     <span class="chip warn">decision = NO_TRADE</span><span class="chip warn">execution = DISABLED</span>
@@ -31,7 +30,7 @@
     <article class="agent a-analyst" data-agent="analyst"><header><b>analyst</b><span class="st" data-st>Idle</span></header><div class="big" data-big>—</div><div class="sub" data-sub>menunggu misi</div><svg class="spark" viewBox="0 0 120 22" preserveAspectRatio="none" data-spark></svg></article>
     <article class="agent a-brain" data-agent="brain"><header><b>brain</b><span class="st" data-st>Idle</span></header><div class="big" data-big>—</div><div class="sub" data-sub>menunggu misi</div><svg class="spark" viewBox="0 0 120 22" preserveAspectRatio="none" data-spark></svg></article>
     <div class="center">
-      <div class="chart-bar"><span>SAMPLE · XAUUSD-like</span><span class="chip warn">ILUSTRASI sintetis · bukan data pasar · MT5 terputus</span></div>
+      <div class="chart-bar"><span>Chart contoh</span><span class="chip warn">ILUSTRASI · bukan data pasar</span></div>
       <svg id="chart" viewBox="0 0 600 240" preserveAspectRatio="none" role="img" aria-label="Ilustrasi chart sintetis, bukan data pasar"></svg>
       <span class="cursor c-scanner">scanner</span><span class="cursor c-analyst">analyst</span>
       <span class="cursor c-brain">brain</span><span class="cursor c-risk">risk</span>
@@ -57,6 +56,7 @@
     </section>
   </div>
 </section>
+<details class="journal"><summary>Jurnal teknis · event, tool call &amp; evidence</summary>
 <main class="workspace">
   <aside class="panel teams">
     <div class="panel-title"><h2>TEAM PROGRESS</h2><span id="run-status" class="tag">IDLE</span></div>
@@ -97,6 +97,7 @@
     <p class="muted">A report is not a trading permission. A reference-only run always remains non-executable.</p>
   </section>
 </main>
+</details>
 <footer>Max Trading Agent · Event-backed UI prototype · Local loopback only · No live trading capability</footer>
 </body>
 </html>

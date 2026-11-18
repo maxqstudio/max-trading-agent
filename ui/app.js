@@ -339,3 +339,5 @@ setInterval(tickClock, 1000);
 setInterval(renderFloor, 1500);
 pollDesk(true).catch(() => {});
 setInterval(() => pollDesk(false).catch(() => {}), 3000);
+
+$("run-floor").addEventListener("click", () => $("run-btn").click());

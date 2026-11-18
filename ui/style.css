@@ -104,3 +104,28 @@ input{flex:1;min-width:0;font:inherit;border-radius:7px;border:1px solid #486275
 @keyframes wander{0%{transform:translate(0,0)}50%{transform:translate(40px,-26px)}100%{transform:translate(-30px,22px)}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media(max-width:800px){.board{grid-template-columns:1fr;grid-template-areas:"scanner" "analyst" "brain" "center" "executor" "check" "risk"}.agent::after{display:none}.desk,.statusbar{grid-template-columns:1fr}}
+
+/* ---- compact overrides ---- */
+.topbar{padding:8px 16px}.brand-icon{width:30px;height:30px;font-size:17px}
+.floor{margin:8px 10px 0;padding:10px}
+.floor-head{margin-bottom:6px}.safety-strip{margin-bottom:8px;gap:4px}.chip{font-size:10px;padding:1px 6px}
+.board{gap:8px 16px}
+.agent{padding:7px 10px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:0 8px}
+.agent header{grid-column:1/-1}
+.agent .big{font-size:20px;margin:0;grid-column:1;grid-row:2}
+.agent .sub{font-size:11px;min-height:0;grid-column:1;grid-row:3}
+.agent .spark{grid-column:2;grid-row:2/4;width:70px;height:26px;margin:0}
+.agent.active{transform:none}
+#chart{height:150px}
+.chart-bar{padding:3px 8px}
+.statusbar{margin-top:8px;padding:6px 12px;gap:18px}.bal{font-size:18px}.pos{padding-top:2px}
+.desk{margin-top:8px;gap:10px}
+.feed,.questions{max-height:170px}
+.panel-title{padding-bottom:6px;margin-bottom:8px}
+.msg{padding:4px 8px;margin-bottom:4px}
+.q{padding:6px 8px;margin-bottom:5px}.q .opts{margin:4px 0}.q form{display:none}
+.note-form{margin-top:6px}.note-form label,.note-form p.muted{display:none}.note-form .controls{margin-bottom:4px}
+.journal{margin:10px 14px}.journal summary{cursor:pointer;color:var(--muted);font-size:12px;padding:6px 0}
+.journal .workspace{padding:0;min-height:0}
+@media(max-width:800px){.agent .spark{display:none}}
+#run-floor{background:#167b64;border-color:#359d86;color:#fff;font-weight:700;padding:4px 10px;font-size:12px}
