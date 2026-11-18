@@ -141,6 +141,59 @@ class RiskPreflightTests(unittest.TestCase):
         self.assertIn("BROKER_PERMISSIONS_UNKNOWN",
                       self.assess(self.resign(changed))["vetoes"])
 
+    def test_quote_age_must_be_fresh_against_independent_clock(self):
+        changed = snapshot()
+        changed["captured_at_utc"] = (NOW - timedelta(seconds=110)).isoformat()
+        changed["quote"]["time_utc"] = (NOW - timedelta(seconds=190)).isoformat()
+        out = self.assess(self.resign(changed))
+        self.assertEqual(out["checks"], "BLOCKED")
+        self.assertIn("QUOTE_STALE", out["vetoes"])
+        self.assertEqual(out["decision"], "NO_TRADE")
+
+    def test_symbol_side_respects_broker_trade_modes(self):
+        short = copy.deepcopy(PROPOSAL)
+        short.update(side="SHORT", stop_loss=1.051, take_profit=1.047)
+        for mode, proposal, expected in (
+            (1, short, "SYMBOL_SIDE_DENIED"),  # LONGONLY
+            (2, PROPOSAL, "SYMBOL_SIDE_DENIED"),  # SHORTONLY
+            (3, PROPOSAL, "SYMBOL_DISABLED"),  # CLOSEONLY
+            (99, PROPOSAL, "SYMBOL_DISABLED"),  # unknown enum
+        ):
+            with self.subTest(mode=mode):
+                changed = snapshot()
+                changed["symbol"]["trade_mode"] = mode
+                out = self.assess(self.resign(changed), proposal=proposal)
+                self.assertEqual(out["checks"], "BLOCKED")
+                self.assertIn(expected, out["vetoes"])
+                self.assertEqual(out["decision"], "NO_TRADE")
+        for mode, proposal in ((1, PROPOSAL), (2, short), (4, PROPOSAL)):
+            with self.subTest(allowed_mode=mode):
+                changed = snapshot()
+                changed["symbol"]["trade_mode"] = mode
+                self.assertEqual(
+                    self.assess(self.resign(changed), proposal=proposal)["checks"],
+                    "PASS_CHECKS",
+                )
+
+    def test_numeric_strings_are_not_typed_preflight_numbers(self):
+        bad_proposal = copy.deepcopy(PROPOSAL)
+        bad_proposal["volume"] = "0.1"
+        with self.assertRaisesRegex(PreflightError, "INVALID_NUMBER"):
+            self.assess(proposal=bad_proposal)
+        changed = snapshot()
+        changed["symbol"]["trade_tick_value"] = "10.0"
+        with self.assertRaisesRegex(PreflightError, "INVALID_NUMBER"):
+            self.assess(self.resign(changed))
+
+    def test_malformed_inventory_rows_are_never_safely_counted(self):
+        for key, row in (("positions", "not-a-position"),
+                         ("orders", False)):
+            with self.subTest(key=key):
+                changed = snapshot()
+                changed[key] = [row]
+                with self.assertRaisesRegex(PreflightError, "INVALID_INVENTORY"):
+                    self.assess(self.resign(changed))
+
     def test_poisonous_policy_and_broken_numbers_raise_safely(self):
         for bad in (True, float("nan"), float("inf"), -1, "2e309"):
             with self.subTest(bad=str(bad)):
