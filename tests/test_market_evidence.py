@@ -116,11 +116,12 @@ class EvidenceTests(unittest.TestCase):
     def test_legacy_database_upgrade_preserves_old_dataset_hash(self):
         original = self._import()
         before = self.store.candles(original["dataset_id"])
-        with closing(sqlite3.connect(self.store.path)) as db, db:
+        with closing(sqlite3.connect(self.store.path)) as db:
             # Re-create the old schema in a separate fixture DB, to ensure the
             # actual migration handles preexisting historical data correctly.
             legacy = self.root / "legacy.sqlite3"
-            db.backup(sqlite3.connect(legacy))
+            with closing(sqlite3.connect(legacy)) as destination:
+                db.backup(destination)
         with closing(sqlite3.connect(legacy)) as db, db:
             db.execute("ALTER TABLE candles RENAME TO candles_with_volume")
             db.execute("""CREATE TABLE candles (
