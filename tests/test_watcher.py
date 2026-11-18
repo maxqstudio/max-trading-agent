@@ -249,6 +249,45 @@ class WatcherTests(unittest.TestCase):
         finally:
             watcher.stop()
 
+    def test_signed_delayed_snapshot_never_triggers_research(self):
+        delayed = fixture(self.next_bar)
+        delayed.pop("provenance")
+        captured = datetime.now(timezone.utc) - timedelta(seconds=48)
+        delayed["captured_at_utc"] = captured.isoformat()
+        delayed["quote"]["time_utc"] = (captured - timedelta(seconds=1)).isoformat()
+        delayed = seal_snapshot(delayed, TEST_KEY, login=12345678,
+                                server="PRIVATE_BROKER")
+        # The offline M02 research sanitizer permits this 49-second-old quote.
+        self.assertEqual(market_context(delayed)["symbol"], "EURUSD")
+        watcher, api = self.make([
+            fixture(self.first_bar), delayed, fixture(self.next_bar),
+        ], client=FakeLLM())
+        watcher.start()
+        try:
+            self.assertEqual(watcher.poll_once()["status"], "BASELINED")
+            denied = watcher.poll_once()
+            self.assertEqual(denied["status"], "BLOCKED")
+            self.assertEqual(denied["reason"], "WATCH_SNAPSHOT_NOT_FRESH")
+            self.assertEqual(watcher.store.jobs(), [])
+            self.assertEqual(watcher.poll_once()["status"], "NEW_COMPLETED_CANDLE")
+            self.assertEqual(len(watcher.store.jobs()), 1)
+            self.assertEqual(len(api.calls), 3)
+        finally:
+            watcher.stop()
+
+    def test_negative_clock_rejected_without_market_read(self):
+        watcher, api = self.make([fixture(self.first_bar)])
+        watcher.clock = lambda: -1
+        with self.assertRaisesRegex(WatchError, "INVALID_WATCH_CLOCK"):
+            watcher.start()
+        self.assertEqual(api.calls, [])
+        self.assertEqual(self.journal.runs(), [])
+        watcher.clock = iter([datetime.now(timezone.utc).timestamp(), -1]).__next__
+        with self.assertRaisesRegex(WatchError, "INVALID_WATCH_CLOCK"):
+            watcher.run(interval_seconds=5, max_polls=1, sleep=lambda _: None)
+        self.assertEqual(api.calls, [])
+        self.assertEqual(self.journal.runs()[0]["status"], "FAILED")
+
     def test_stale_quote_and_mt5_failure_do_not_create_jobs(self):
         watcher, _ = self.make([
             fixture(self.first_bar),

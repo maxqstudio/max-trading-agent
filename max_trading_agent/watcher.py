@@ -285,7 +285,7 @@ class MarketWatcher:
         if self.run_id is not None:
             raise WatchError("WATCH_ALREADY_STARTED")
         now = float(self.clock())
-        if not math.isfinite(now):
+        if not math.isfinite(now) or now <= 0:
             raise WatchError("INVALID_WATCH_CLOCK")
         self.store.acquire(self.symbol, self.timeframe, self.owner, now=now)
         try:
@@ -308,7 +308,7 @@ class MarketWatcher:
         if self.run_id is None:
             raise WatchError("WATCH_NOT_STARTED")
         now = float(self.clock())
-        if not math.isfinite(now):
+        if not math.isfinite(now) or now <= 0:
             raise WatchError("INVALID_WATCH_CLOCK")
         self.store.renew(self.symbol, self.timeframe, self.owner, now=now)
         self.poll_count += 1
@@ -322,6 +322,13 @@ class MarketWatcher:
             public = market_context(snapshot)
             if public["symbol"] != self.symbol or public["timeframe"] != self.timeframe:
                 raise WatchError("BROKER_SNAPSHOT_MISMATCH")
+            # M02 permits offline research on older snapshots. A live watcher
+            # must independently reject delayed or future quotes/captures.
+            captured_epoch = datetime.fromisoformat(public["snapshot_time_utc"]).timestamp()
+            quote_epoch = datetime.fromisoformat(public["quote"]["time_utc"]).timestamp()
+            if not (-2 <= now - captured_epoch <= 30
+                    and -2 <= now - quote_epoch <= 30):
+                raise WatchError("WATCH_SNAPSHOT_NOT_FRESH")
             account = snapshot.get("account")
             if not isinstance(account, dict):
                 raise WatchError("BROKER_ACCOUNT_MISSING")
