@@ -7,6 +7,7 @@ on:
 # Read-only GitHub; local ephemeral merge commits only; NO_TRADE.
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   replay-full-stack:
@@ -43,6 +44,7 @@ jobs:
         shell: bash
         env:
           PYTHONPATH: ${{ github.workspace }}/controller
+          GH_TOKEN: ${{ github.token }}
           G35_EXPECTED_MAIN_SHA: 5f27d132bc627fa73fde2e1b56b625cbdb09a465
         run: |
           set -euo pipefail
@@ -57,6 +59,7 @@ jobs:
           data=json.loads(p.read_text(encoding="utf-8"))
           assert data["status"]=="G35_TREES_MATCH_TESTS_PENDING"
           assert data["expected_prs"]==35 and len(data["completed_steps"])==35
+          assert data["github_pr_metadata_verified"] is True
           assert [step["pr"] for step in data["completed_steps"]]==list(range(14,84,2))
           assert data["feature_sha"]==os.environ["GITHUB_SHA"]
           assert data["sequential_tree_sha"]==data["aggregate_tree_sha"]
@@ -170,6 +173,7 @@ jobs:
           data=json.loads(file.read_text(encoding="utf-8"))
           assert data["status"]=="G35_TREES_MATCH_TESTS_PENDING"
           assert data["trees_identical"] and len(data["completed_steps"])==35
+          assert data["github_pr_metadata_verified"] is True
           data["status"]="G35_35_PR_SEQUENTIAL_AND_REGRESSION_PASS"
           data["full_python_suite_passed"]=True
           data["ui_suite_passed"]=os.environ["RUNNER_OS"]=="Linux"

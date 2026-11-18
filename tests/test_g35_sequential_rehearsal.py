@@ -11,6 +11,7 @@ from unittest.mock import patch
 
 from tools.g35_sequential_rehearsal import (
     RehearsalError, _MAIN_SHA, validate_inputs, run_rehearsal,
+    verify_live_pr_bindings,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -36,6 +37,64 @@ def context(**changes):
 class G35RehearsalTests(unittest.TestCase):
     def setUp(self):
         self.data = json.loads(MANIFEST.read_text(encoding="utf-8"))
+
+    def live_prs(self):
+        plan = validate_inputs(self.data, SHA, context())
+        records = []
+        for index, entry in enumerate(plan):
+            records.append({
+                "number": entry["pr"],
+                "html_url": "https://github.com/maxqstudio/max-trading-agent/pull/" + str(entry["pr"]),
+                "head": {
+                    "sha": entry["head_sha"], "ref": entry["branch"],
+                    "repo": {"full_name": "maxqstudio/max-trading-agent"},
+                },
+                "base": {
+                    "ref": "main" if index == 0 else plan[index - 1]["branch"],
+                    "repo": {"full_name": "maxqstudio/max-trading-agent"},
+                },
+                "state": "open", "draft": True, "merged_at": None,
+            })
+        return plan, records
+
+    def test_g35_verified_live_github_pr_metadata_all_35_draft(self):
+        plan, records = self.live_prs()
+        self.assertIsNone(verify_live_pr_bindings(plan, records))
+
+    def test_g35_live_github_pr_mutations_fail_closed(self):
+        mutators = (
+            lambda records: records[3]["head"].update(sha="b" * 40),
+            lambda records: records[3]["head"].update(ref="feat/other-branch"),
+            lambda records: records[3]["base"].update(ref="main"),
+            lambda records: records[3]["head"]["repo"].update(full_name="evil/fork"),
+            lambda records: records[3].update(draft=False),
+            lambda records: records[3].update(state="closed"),
+            lambda records: records[3].update(state="closed", merged_at="2026-11-18T00:00:00Z"),
+            lambda records: records.pop(),
+            lambda records: records.append(copy.deepcopy(records[-1])),
+            lambda records: records.append({
+                **copy.deepcopy(records[-1]), "number": 84,
+                "html_url": "https://github.com/maxqstudio/max-trading-agent/pull/84",
+                "head": {"ref": "feat/g36-unreviewed", "sha": "c" * 40,
+                         "repo": {"full_name": "maxqstudio/max-trading-agent"}},
+                "base": {"ref": "feat/g35-full-stack-release-gates",
+                         "repo": {"full_name": "maxqstudio/max-trading-agent"}},
+            }),
+        )
+        for index, mutate in enumerate(mutators):
+            plan, records = self.live_prs()
+            mutate(records)
+            with self.subTest(case=index), self.assertRaisesRegex(
+                    RehearsalError, "G35_GITHUB_PR_CHAIN_UNVERIFIED"):
+                verify_live_pr_bindings(plan, records)
+
+    def test_g35_live_pr_readonly_workflow_token_and_report_gate(self):
+        workflow = (ROOT / ".github" / "workflows" /
+                    "g35-sequential-main.yml").read_text(encoding="utf-8")
+        self.assertIn("  pull-requests: read", workflow)
+        self.assertIn("GH_TOKEN: ${{ github.token }}", workflow)
+        self.assertIn('data["github_pr_metadata_verified"] is True', workflow)
+        self.assertNotIn("pull-requests: write", workflow)
 
     def test_pinned_plan_is_exact_35_prs(self):
         plan = validate_inputs(self.data, SHA, context())

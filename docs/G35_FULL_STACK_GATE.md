@@ -61,3 +61,9 @@ G34 supply-chain pin verification now explicitly audits **all six direct Docker-
 
 As before, owner handles actual PR retarget/merge and final `main` CI.
 `NO_TRADE`, `execution=DISABLED`, `owner_acceptance=PENDING`.
+
+## G35 live GitHub PR-to-branch binding
+
+The merge rehearsal now validates actual authenticated GitHub PR metadata **before** merging temporary Git refs. It checks that each pinned PR #14–#82 exists, remains an open Draft, is in the expected same repository and stacked onto the exact predecessor branch, and has the exact pinned head SHA (PR #82 must match the triggering SHA). Missing, closed, merged, non-Draft, unexpected newer, retargeted or mismatched PRs must refuse the 35-PR rehearsal, even if their Git branch refs still form a valid ancestor chain.
+
+The G35 workflow grants only `pull-requests: read` in addition to `contents: read`; its merge-rehearsal step receives the short-lived GitHub token for a read-only `gh api` lookup. The SHA-scoped G35 artifact carries an explicit `github_pr_metadata_verified` boolean, initially false, and the workflow refuses to seal PASS without true. This is a point-in-time GitHub API check, **not** a transactional lock on PR state or permission to merge. It does not waive separate G28 checks, human review, or final postmerge main validation.

@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from tools.main_integration_gate import verify_baseline
+from tools.stack_audit import StackAuditError, audit_stack, fetch_authenticated_pr_stack
 from tools.sequential_merge_rehearsal import RehearsalError, _git, _ref
 
 _REPO = "maxqstudio/max-trading-agent"
@@ -41,6 +42,26 @@ def validate_inputs(manifest: Any, sha: str, env: dict) -> list[dict]:
     }]
 
 
+def verify_live_pr_bindings(plan: list[dict], github_prs: Any) -> None:
+    """Require actual GitHub Draft PR identities, not only named Git refs."""
+    try:
+        audited = audit_stack(github_prs)
+    except StackAuditError:
+        raise RehearsalError("G35_GITHUB_PR_CHAIN_UNVERIFIED") from None
+    if (audited["audited_count"] != len(plan)
+            or audited["merged_count"] != 0):
+        raise RehearsalError("G35_GITHUB_PR_CHAIN_UNVERIFIED")
+    for index, (pinned, current) in enumerate(
+            zip(plan, audited["ordered_pull_requests"])):
+        parent = "main" if index == 0 else plan[index - 1]["branch"]
+        if (current["number"] != pinned["pr"]
+                or current["head_branch"] != pinned["branch"]
+                or current["head_sha"] != pinned["head_sha"]
+                or current["current_base"] != parent
+                or not current["draft"]):
+            raise RehearsalError("G35_GITHUB_PR_CHAIN_UNVERIFIED")
+
+
 def run_rehearsal(work: Path, aggregate: Path, output: Path,
                   manifest: dict, *, env: dict | None = None) -> dict:
     env = dict(os.environ if env is None else env)
@@ -66,6 +87,7 @@ def run_rehearsal(work: Path, aggregate: Path, output: Path,
         "feature_sha": env["GITHUB_SHA"],
         "os": env.get("RUNNER_OS"),
         "expected_prs": 35,
+        "github_pr_metadata_verified": False,
         "completed_steps": [],
         "conflicts": [],
         "sequential_tree_sha": None,
@@ -93,6 +115,12 @@ def run_rehearsal(work: Path, aggregate: Path, output: Path,
              "refs/heads/main:refs/remotes/origin/main", timeout=180)
         if _ref(work, "refs/remotes/origin/main") != _MAIN_SHA:
             raise RehearsalError("G35_REMOTE_MAIN_MOVED")
+        try:
+            verify_live_pr_bindings(plan, fetch_authenticated_pr_stack())
+        except StackAuditError:
+            raise RehearsalError("G35_GITHUB_PR_API_UNAVAILABLE") from None
+        report["github_pr_metadata_verified"] = True
+        save()
         _git(work, "fetch", "--no-tags", "origin",
              "+refs/heads/feat/*:refs/remotes/origin/feat/*", timeout=240)
         last = None
