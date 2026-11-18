@@ -88,6 +88,25 @@ class IdentityTests(unittest.TestCase):
         with self.assertRaisesRegex(IdentityError, "SNAPSHOT_MAC_MISMATCH"):
             verify_snapshot(snap, WRONG)
 
+    def test_account_binding_substitution_requires_the_local_secret(self):
+        original = fixture(datetime.now(timezone.utc) - timedelta(minutes=2))
+        changed = json.loads(json.dumps(original))
+        true_id = original["provenance"]["account_binding_id"]
+        forged_id = "0" * 64 if true_id != "0" * 64 else "1" * 64
+        changed["provenance"]["account_binding_id"] = forged_id
+        # V1 incorrectly accepted this exact substitution, because provenance
+        # was not covered by the MAC over the market-data payload.
+        with self.assertRaisesRegex(IdentityError, "SNAPSHOT_MAC_MISMATCH"):
+            verify_snapshot(changed, KEY)
+        self.assertEqual(verify_snapshot(original, KEY), true_id)
+
+    def test_historical_v1_signature_is_not_silently_accepted(self):
+        original = fixture(datetime.now(timezone.utc) - timedelta(minutes=2))
+        legacy = json.loads(json.dumps(original))
+        legacy["provenance"]["scheme"] = "LOCAL_MT5_HMAC_V1"
+        with self.assertRaisesRegex(IdentityError, "SNAPSHOT_PROVENANCE_MISSING"):
+            verify_snapshot(legacy, KEY)
+
     def test_missing_provenance_and_bad_identity_rejected(self):
         snap = {"source": "MT5_LOCAL_TERMINAL", "mode": "READ_ONLY",
                 "execution": "DISABLED"}

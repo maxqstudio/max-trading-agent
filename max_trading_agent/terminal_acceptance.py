@@ -44,12 +44,14 @@ def _positive(value: Any) -> bool:
 class TerminalAcceptance:
     """Read-only, broker-account-bound feed diagnostics for future owner review."""
 
-    def __init__(self, journal: EventJournal, adapter: Any, identity_key: bytes):
+    def __init__(self, journal: EventJournal, adapter: Any, identity_key: bytes,
+                 *, clock: Callable[[], datetime] | None = None):
         if not isinstance(identity_key, bytes) or len(identity_key) != 32:
             raise AcceptanceError("IDENTITY_KEY_REQUIRED")
         self.journal = journal
         self.adapter = adapter
         self.key = identity_key
+        self.clock = clock or (lambda: datetime.now(timezone.utc))
 
     def execute(self, symbol: str, *, timeframe: str = "M15", bars: int = 100,
                 samples: int = 3, sample_interval: int = 2,
@@ -71,7 +73,9 @@ class TerminalAcceptance:
             "samples_requested": samples, "samples_verified": 0,
             "new_quote_observed": False,
             "warnings": [], "block_reason": None,
+            "min_quote_age_seconds": None,
             "max_quote_age_seconds": None,
+            "min_spread_price_units": None,
             "max_spread_price_units": None,
         }
         self.journal.append(
@@ -122,18 +126,47 @@ class TerminalAcceptance:
                 completed = _time(latest["time_utc"])
                 interval = _INTERVALS[timeframe]
                 quote_age = (captured - quoted).total_seconds()
-                if not -2 <= quote_age <= 30:
+
+                # A signed but replayed market snapshot is not a fresh feed.
+                # Validate age against an independent operator clock, not
+                # solely the capture/quote timestamps supplied by the adapter.
+                now = self.clock()
+                if not isinstance(now, datetime) or now.tzinfo is None:
+                    raise AcceptanceError("INVALID_ACCEPTANCE_CLOCK")
+                now = now.astimezone(timezone.utc)
+                if not -2 <= (now - captured).total_seconds() <= 30:
+                    raise AcceptanceError("CAPTURE_NOT_FRESH")
+                if (not -2 <= quote_age <= 30
+                        or not -2 <= (now - quoted).total_seconds() <= 30):
                     raise AcceptanceError("QUOTE_NOT_FRESH")
                 if (captured - completed).total_seconds() > 3 * interval:
                     warnings.add("RECENT_COMPLETED_BAR_MISSING")
-                candles = public["completed_candles"]
-                current_history = {bar["time_utc"]: (
-                    bar["open"], bar["high"], bar["low"], bar["close"]
-                ) for bar in candles}
-                if any(
-                    (_time(right["time_utc"]) - _time(left["time_utc"])).total_seconds()
-                    != interval for left, right in zip(candles, candles[1:])
-                ):
+
+                # market_context deliberately shares at most 40 latest bars
+                # with LLM research. M09 must independently validate all
+                # requested, locally MAC-verified historical candles.
+                candles = snapshot["candles"]
+                if len(candles) != bars:
+                    warnings.add("INCOMPLETE_CANDLE_HISTORY")
+                full_history = []
+                for candle in candles:
+                    if not isinstance(candle, dict):
+                        raise AcceptanceError("INVALID_HISTORICAL_CANDLE")
+                    stamp = _time(candle.get("time_utc"))
+                    values = tuple(candle.get(field) for field in
+                                   ("open", "high", "low", "close"))
+                    if (not all(_positive(value) for value in values)
+                            or values[2] > min(values[0], values[3])
+                            or values[1] < max(values[0], values[3])):
+                        raise AcceptanceError("INVALID_HISTORICAL_CANDLE")
+                    full_history.append((stamp, values))
+                if any(right[0] <= left[0] for left, right in
+                       zip(full_history, full_history[1:])):
+                    raise AcceptanceError("INVALID_HISTORICAL_CANDLE")
+                current_history = {stamp.isoformat(): values
+                                   for stamp, values in full_history}
+                if any((right[0] - left[0]).total_seconds() != interval
+                       for left, right in zip(full_history, full_history[1:])):
                     warnings.add("HISTORICAL_CANDLE_GAP")
 
                 if previous_capture is not None and captured < previous_capture:
@@ -171,14 +204,17 @@ class TerminalAcceptance:
                 previous_last_bar = latest
                 previous_price = (public["quote"]["bid"], public["quote"]["ask"])
                 spread = public["quote"]["ask"] - public["quote"]["bid"]
-                report["max_quote_age_seconds"] = round(max(
-                    quote_age, report["max_quote_age_seconds"]
-                    if report["max_quote_age_seconds"] is not None else quote_age
-                ), 3)
-                report["max_spread_price_units"] = round(max(
-                    spread, report["max_spread_price_units"]
-                    if report["max_spread_price_units"] is not None else spread
-                ), 12)
+                for metric, value, places in (
+                    ("quote_age_seconds", quote_age, 3),
+                    ("spread_price_units", spread, 12),
+                ):
+                    low, high = "min_" + metric, "max_" + metric
+                    report[low] = round(min(
+                        value, report[low] if report[low] is not None else value
+                    ), places)
+                    report[high] = round(max(
+                        value, report[high] if report[high] is not None else value
+                    ), places)
                 report["samples_verified"] += 1
                 self.journal.append(
                     run_id, "MT5 Specialist", "ACCEPTANCE_SAMPLE", "PASS",

@@ -33,3 +33,7 @@ Risk caveats:
 
 ## Vendor reference
 [MetaQuotes Python copy_rates_from_pos](https://www.mql5.com/en/docs/python_metatrader5/mt5copyratesfrompos_py): bar index 0 is the unfinished current bar; index 1 is the most recently completed bar. The MT5 adapter reads from index 1 and the watcher detects a changed latest completed bar timestamp.
+
+## G35 stacked-tip watcher input freshness guard
+
+The watcher now independently rejects a signed but delayed or future read-only snapshot before creating a research trigger: both capture and quote timestamps must be within 30 seconds of its current wall clock (at most 2 seconds in the future). The owner's watch clock must be a strictly positive finite Unix timestamp. This is intentionally stricter than M02's offline research JSON acceptance and does not change the MT5 adapter or permit trading. Synthetic GitHub tests show a valid local HMAC alone cannot allow a 49-second-old quote to trigger paid research; an invalid local clock rejects the watch before any MT5 read. This change lives in final stacked PR #82, not original PR #22. It is not evidence of vendor-authenticated market data or the owner's Windows MT5 runtime.

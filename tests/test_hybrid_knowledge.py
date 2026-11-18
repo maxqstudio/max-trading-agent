@@ -21,6 +21,27 @@ class FailingEmbedder(HashingEmbedder):
         return super().encode(text)
 
 
+class CustomHashingEmbedder(HashingEmbedder):
+    """Deterministic local adapter, deliberately not the exact base class."""
+    version = "custom-hashing-v1-64d"
+
+
+class TextVectorEmbedder(CustomHashingEmbedder):
+    version = "invalid-text-vector-v1"
+    def encode(self, text):
+        result = super().encode(text)
+        result[0] = "1.0"
+        return result
+
+
+class BooleanVectorEmbedder(CustomHashingEmbedder):
+    version = "invalid-bool-vector-v1"
+    def encode(self, text):
+        result = super().encode(text)
+        result[0] = True
+        return result
+
+
 class HybridRagTests(unittest.TestCase):
     def setUp(self):
         temp = tempfile.TemporaryDirectory()
@@ -109,6 +130,34 @@ class HybridRagTests(unittest.TestCase):
                        ("0" * 64,))
         with self.assertRaisesRegex(RagError, "INTEGRITY"):
             self.index.search("symbol_info_tick")
+
+    def test_custom_embedder_stored_vector_tampering_fails_closed(self):
+        other = HybridKnowledge(self.db, CustomHashingEmbedder())
+        other.index()
+        self.assertTrue(other.search("symbol_info_tick"))
+        with closing(sqlite3.connect(self.db)) as db, db:
+            # A length-64 finite vector previously bypassed reconstruction
+            # for subclass/custom Embedder versions.
+            db.execute("UPDATE hybrid_docs SET vector=? WHERE id=?",
+                       (json.dumps([1.0] * 64), "symbol_info_tick"))
+        with self.assertRaisesRegex(RagError, "INDEX_INTEGRITY_FAILED"):
+            other.search("symbol_info_tick")
+        with self.assertRaisesRegex(RagError, "INDEX_INTEGRITY_FAILED"):
+            other.source_diff()
+
+    def test_non_numeric_custom_embedder_components_rejected(self):
+        for encoder in (TextVectorEmbedder(), BooleanVectorEmbedder()):
+            with self.subTest(version=encoder.version):
+                with self.assertRaisesRegex(RagError, "INVALID_EMBEDDING"):
+                    HybridKnowledge(self.db, encoder).index()
+        self.assertFalse(self.db.exists())
+
+    def test_punctuation_only_query_rejected_not_empty_success(self):
+        self.index.index()
+        for query in ("!!!", "☃", "   "):
+            with self.subTest(query=query):
+                with self.assertRaisesRegex(RagError, "INVALID_QUERY"):
+                    self.index.search(query)
 
     def test_embedder_version_change_requires_index_rebuild(self):
         self.index.index()

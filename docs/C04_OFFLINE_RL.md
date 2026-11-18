@@ -10,6 +10,8 @@ The command has no access to MT5, order_send, broker credentials or online LLM. 
 
 Outputs are **synthetic price-unit differences per one asset unit**, not account currency, lot-adjusted returns, real fees or realizable broker fills. The class can be profitable on the supplied data and still be overfit or fail on live market. No trading mode promotion is authorized; all results carry `decision=NO_TRADE` and `execution=DISABLED`.
 
+**Audit hardening (G35):** datasets with any recorded gap or missing interval are rejected (`CONTIGUOUS_CANDLES_REQUIRED`), because open(i+2) is only the *next* open on contiguous bars; otherwise a round trip could silently span a weekend or outage while labeled `MODELED_NEXT_OPEN_ONLY`. The holdout result also reports fee sensitivity (`holdout_doubled_cost`, `momentum_baseline_holdout_doubled_cost`): the same frozen policy and fixed baseline decisions re-scored at 2× modeled costs, with an integrity check that the stressed score never exceeds the base score.
+
 Further acceptance: multiple provenance-compliant datasets/regimes, true broker-cost calibration, robust confidence intervals, walk-forward repetitions and owner runtime acceptance. See [Issue #35](https://github.com/maxqstudio/max-trading-agent/issues/35).
 
 ## G16 — Walk-forward robustness drill (offline only)

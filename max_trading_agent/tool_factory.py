@@ -11,6 +11,7 @@ import json
 import math
 import os
 import re
+import secrets
 import subprocess
 import tempfile
 from pathlib import Path
@@ -251,8 +252,9 @@ def sandbox_evaluate(candidate: dict, oracles: list[dict] | None,
             (place / "runner.py").write_bytes(runner.read_bytes())
             # Docker non-root user needs read access to this ephemeral directory.
             os.chmod(place, 0o755)
+            container_name = "maxq-t0-" + secrets.token_hex(12)
             cmd = [
-                "docker", "run", "--rm", "--platform", "linux/amd64", "--network", "none",
+                "docker", "run", "--rm", "--platform", "linux/amd64", "--network", "none", "--name", container_name,
                 "--read-only", "--cap-drop", "ALL",
                 "--security-opt", "no-new-privileges",
                 "--pids-limit", "32", "--memory", "128m", "--cpus", "1",
@@ -262,13 +264,28 @@ def sandbox_evaluate(candidate: dict, oracles: list[dict] | None,
                 "--workdir", "/work", _IMAGE,
                 "python", "-I", "-B", "-S", "/work/runner.py",
             ]
-            result = subprocess.run(cmd, capture_output=True, text=True,
-                                    timeout=timeout_seconds, check=False)
+            try:
+                result = subprocess.run(cmd, capture_output=True, text=True,
+                                        timeout=timeout_seconds, check=False)
+            except subprocess.TimeoutExpired:
+                # Killing the docker CLI may leave its container running.
+                # Clean up by an unpredictable per-run name before removing
+                # the mounted temporary directory.
+                try:
+                    cleanup = subprocess.run(
+                        ["docker", "rm", "--force", container_name],
+                        capture_output=True, text=True, timeout=10, check=False,
+                    )
+                except (OSError, subprocess.TimeoutExpired):
+                    raise FactoryError("SANDBOX_CLEANUP_UNVERIFIED") from None
+                if cleanup.returncode != 0:
+                    raise FactoryError("SANDBOX_CLEANUP_UNVERIFIED")
+                return {**record, "status": "SANDBOX_TIMEOUT"}
         return {**record,
                 "status": ("SANDBOX_PASSED_REVIEW_REQUIRED" if result.returncode == 0
                            else "SANDBOX_FAILED"),
                 "oracle_cases": len(oracles), "broker_execution": False}
-    except subprocess.TimeoutExpired:
-        return {**record, "status": "SANDBOX_TIMEOUT"}
+    except FactoryError:
+        raise
     except (OSError, ValueError):
         raise FactoryError("SANDBOX_UNAVAILABLE") from None

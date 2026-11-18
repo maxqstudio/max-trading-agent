@@ -2,7 +2,7 @@ name: Tool Factory isolated Docker oracle
 
 on:
   push:
-    branches: ["feat/c06-**", "feat/g20-**", "feat/g21-**", "feat/g22-**", "feat/g23-**", "feat/g24-**", "feat/g25-**", "feat/g26-**", "feat/g27-**", "feat/g28-**", "feat/g30-**", "feat/g31-**", "feat/g32-**", "feat/g33-**", "feat/g34-**"]
+    branches: ["feat/c06-**", "feat/g20-**", "feat/g21-**", "feat/g22-**", "feat/g23-**", "feat/g24-**", "feat/g25-**", "feat/g26-**", "feat/g27-**", "feat/g28-**", "feat/g30-**", "feat/g31-**", "feat/g32-**", "feat/g33-**", "feat/g34-**", "feat/g35-**"]
   pull_request:
     paths:
       - "max_trading_agent/tool_factory.py"
@@ -35,12 +35,22 @@ on:
       - "tools/owner_mt5_preflight.py"
       - "tests/test_owner_mt5_preflight.py"
       - "knowledge/g32_pinned_merge_identities.json"
+      - "tools/g35_sequential_rehearsal.py"
+      - "tests/test_g35_sequential_rehearsal.py"
+      - ".github/workflows/g35-sequential-main.yml"
       - "tools/main_integration_gate.py"
       - "tests/test_main_integration_gate.py"
       - "tools/workflow_security_audit.py"
       - "tests/test_workflow_supply_chain.py"
       - "tools/docker_image_audit.py"
       - "tests/test_docker_image_audit.py"
+      - "tools/stack_audit.py"
+      - "tests/test_stack_audit.py"
+      - "tools/main_integration_gate.py"
+      - "tests/test_main_integration_gate.py"
+      - "knowledge/g32_pinned_merge_identities.json"
+      - ".github/workflows/g28-stack-handoff.yml"
+      - ".github/workflows/g32-main-completeness.yml"
       - ".github/workflows/g34-docker-image.yml"
       - ".github/workflows/g33-supply-chain.yml"
       - ".github/workflows/g32-main-completeness.yml"
@@ -156,6 +166,12 @@ jobs:
         run: python -m unittest discover -s tests -p test_workflow_supply_chain.py -v
       - name: G34 exact AMD64 Docker manifest and isolation guard negative tests
         run: python -m unittest discover -s tests -p test_docker_image_audit.py -v
+      - name: G35 full-stack owner handoff and main-only gate negative tests
+        run: |
+          python -m unittest discover -s tests -p test_stack_audit.py -v
+          python -m unittest discover -s tests -p test_main_integration_gate.py -v
+      - name: G35 full 35-PR merge replay fail-closed tests
+        run: python -m unittest discover -s tests -p test_g35_sequential_rehearsal.py -v
       - name: Fetch public sandbox runtime (no secrets mounted)
         run: docker pull --platform linux/amd64 python:3.12-alpine@sha256:a61cbd76a882645de7f91423329fe43a67eed60d7da24f9e5331414bb3618b20
       - name: Known correct candidate must pass isolated oracle
@@ -164,6 +180,26 @@ jobs:
           set -euo pipefail
           python -m max_trading_agent tool-sandbox --file tests/fixtures/tool_factory_rolling_mean.json > "$RUNNER_TEMP/candidate_result.json"
           python -c 'import json,os; d=json.load(open(os.environ["RUNNER_TEMP"]+"/candidate_result.json")); assert d["status"] == "SANDBOX_PASSED_REVIEW_REQUIRED" and d["decision"] == "NO_TRADE" and not d["broker_execution"]'
+      - name: Real Docker timeout must force-remove untrusted T0 candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, pathlib, subprocess
+          from max_trading_agent.tool_factory import independent_cases, sandbox_evaluate
+          candidate=json.loads(pathlib.Path("tests/fixtures/tool_factory_rolling_mean.json").read_text())
+          candidate["code"]="def analyze(values):\n    while True:\n        values = values\n"
+          cases=independent_cases(candidate["tool_id"], pathlib.Path("knowledge/tool_factory_oracles.json"))
+          assert cases is not None
+          result=sandbox_evaluate(candidate,cases,timeout_seconds=3)
+          assert result["status"]=="SANDBOX_TIMEOUT",result["status"]
+          assert result["decision"]=="NO_TRADE" and result["execution"]=="DISABLED"
+          leftovers=subprocess.run(
+              ["docker","ps","-a","--filter","name=maxq-t0-","--format","{{.Names}}"],
+              text=True,capture_output=True,timeout=10,check=True)
+          assert not leftovers.stdout.strip(),"TIMEOUT_CONTAINER_NOT_REMOVED"
+          print("Real Docker timeout cleanup PASS; no remaining T0 container; NO_TRADE")
+          PY
       - name: Incorrect candidate must fail and exit nonzero
         shell: bash
         run: |

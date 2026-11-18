@@ -20,6 +20,7 @@ PULL_WORKFLOWS = (
     ".github/workflows/g29-ephemeral-main-merge.yml",
     ".github/workflows/g30-sequential-main.yml",
     ".github/workflows/g31-postmerge-main.yml",
+    ".github/workflows/g35-sequential-main.yml",
     ".github/workflows/tool-factory.yml",
 )
 REQUIRED = (SANDBOX, *PULL_WORKFLOWS)

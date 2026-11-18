@@ -110,9 +110,29 @@ class FactoryTests(unittest.TestCase):
             self.assertEqual(sandbox_evaluate(CANDIDATE, cases)["status"],
                              "SANDBOX_FAILED")
         with patch("max_trading_agent.tool_factory.subprocess.run",
-                   side_effect=subprocess.TimeoutExpired(["docker"], 2)):
+                   side_effect=[subprocess.TimeoutExpired(["docker"], 2),
+                                SimpleNamespace(returncode=0)]) as runner:
             self.assertEqual(sandbox_evaluate(CANDIDATE, cases)["status"],
                              "SANDBOX_TIMEOUT")
+        run, cleanup = [call.args[0] for call in runner.call_args_list]
+        self.assertEqual(run[:2], ["docker", "run"])
+        self.assertEqual(run[run.index("--name") + 1], cleanup[-1])
+        self.assertTrue(cleanup[-1].startswith("maxq-t0-"))
+        self.assertEqual(cleanup[:3], ["docker", "rm", "--force"])
+
+    def test_timeout_cleanup_failure_never_claims_sandbox_completed(self):
+        cases = independent_cases(CANDIDATE["tool_id"], ORACLES)
+        for followup in (SimpleNamespace(returncode=1),
+                         subprocess.TimeoutExpired(["docker", "rm"], 10),
+                         OSError("unavailable")):
+            with self.subTest(followup=type(followup).__name__):
+                with patch("max_trading_agent.tool_factory.subprocess.run",
+                           side_effect=[subprocess.TimeoutExpired(["docker"], 2),
+                                        followup]) as runner:
+                    with self.assertRaisesRegex(
+                            FactoryError, "SANDBOX_CLEANUP_UNVERIFIED"):
+                        sandbox_evaluate(CANDIDATE, cases)
+                self.assertEqual(runner.call_count, 2)
 
     def test_private_proposal_is_write_once(self):
         with tempfile.TemporaryDirectory() as root:

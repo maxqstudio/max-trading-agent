@@ -16,6 +16,19 @@ from .runtime import DEFAULT_KNOWLEDGE, EventJournal
 ROLE_SEQUENCE = ("Market Analyst", "Bull Researcher", "Bear Researcher", "Research Manager")
 
 
+def _positive_market_price(value: Any, error: str) -> float:
+    # JSON booleans are int subclasses; huge integers can overflow float().
+    if type(value) not in (int, float):
+        raise LLMError(error)
+    try:
+        price = float(value)
+    except (OverflowError, TypeError, ValueError):
+        raise LLMError(error) from None
+    if not math.isfinite(price) or price <= 0:
+        raise LLMError(error)
+    return price
+
+
 def _parse_utc(raw: str) -> datetime:
     try:
         dt = datetime.fromisoformat(raw.replace("Z", "+00:00"))
@@ -57,11 +70,9 @@ def market_context(snapshot: dict[str, Any]) -> dict[str, Any]:
     if not -2 <= (captured - quoted).total_seconds() <= 90:
         raise LLMError("STALE_SNAPSHOT_QUOTE")
 
-    numeric = ("bid", "ask")
-    if any(not isinstance(quote.get(k), (int, float)) or
-           not math.isfinite(float(quote[k])) for k in numeric):
-        raise LLMError("INVALID_QUOTE")
-    if not 0 < quote["bid"] < quote["ask"]:
+    bid = _positive_market_price(quote.get("bid"), "INVALID_QUOTE")
+    ask = _positive_market_price(quote.get("ask"), "INVALID_QUOTE")
+    if bid >= ask:
         raise LLMError("INVALID_QUOTE")
 
     latest = candles[-min(40, len(candles)):]
@@ -79,10 +90,7 @@ def market_context(snapshot: dict[str, Any]) -> dict[str, Any]:
         previous_time = timestamp
         values = {}
         for key in ("open", "high", "low", "close"):
-            value = candle.get(key)
-            if not isinstance(value, (int, float)) or not math.isfinite(float(value)):
-                raise LLMError("INVALID_CANDLE")
-            values[key] = float(value)
+            values[key] = _positive_market_price(candle.get(key), "INVALID_CANDLE")
         if values["low"] > min(values["open"], values["close"]) or (
             values["high"] < max(values["open"], values["close"])
         ):
@@ -93,7 +101,7 @@ def market_context(snapshot: dict[str, Any]) -> dict[str, Any]:
         "snapshot_time_utc": captured.isoformat(),
         "symbol": name,
         "timeframe": timeframe,
-        "quote": {"bid": float(quote["bid"]), "ask": float(quote["ask"]),
+        "quote": {"bid": bid, "ask": ask,
                   "time_utc": quoted.isoformat()},
         "completed_candles": sanitized,
     }

@@ -19,11 +19,11 @@ The command samples 2–10 times, with 1–30 seconds between samples. Each snap
 ## Status and exit codes
 
 - `OBSERVED_CONSISTENT` (exit 0): local HMAC, stable account, recent candle history/mandatory metadata and at least one **new quote timestamp**. **Owner acceptance is still PENDING**; no trading permission.
-- `INCONCLUSIVE` (exit 3): valid signed reads with no newer quote, absent symbol specifications, aged last completed candle, recent history gaps, or skipped completed candles. Can be normal in quiet/closed markets; never count as feed-ready.
-- `BLOCKED` (exit 2): account switch, bad HMAC, invalid/stale quote, backwards timestamp, revised candle at identical time, disconnection or malformed evidence. Stop and investigate locally.
+- `INCONCLUSIVE` (exit 3): valid signed reads with no newer quote, absent symbol specifications, aged last completed candle, gaps/revisions-free but incomplete requested history, historical gaps anywhere in the requested bars (not only the most recent 40), or skipped completed candles. Can be normal in quiet/closed markets; never count as feed-ready.
+- `BLOCKED` (exit 2): account switch, bad HMAC, invalid/stale quote or capture (including a locally signed replay older than 30 seconds), backwards timestamp, revised historical candle even outside the LLM's 40-bar window, disconnection or malformed evidence. Stop and investigate locally.
 - Missing local MT5 bridge/key or invalid CLI args also exits 2 with redacted error.
 
-`NO_TRADE` and `broker_execution=false` apply to ALL results. Journal contains only sample hashes of scrubbed market evidence, quote age, modeled spread (price units), safe reason codes and independent deterministic veto. A local HMAC is **not broker attestation**.
+`NO_TRADE` and `broker_execution=false` apply to ALL results. Journal contains only sample hashes of scrubbed market evidence, quote age, modeled spread (price units), safe reason codes and independent deterministic veto. The CLI summary exposes minimum/maximum quote age and bid–ask spread in price units across verified samples. Stale capture/quote checks are evaluated against the independent operator clock in addition to adapter-provided timestamps. A local HMAC is **not broker attestation**.
 
 ## Unmet real-runtime acceptance
 

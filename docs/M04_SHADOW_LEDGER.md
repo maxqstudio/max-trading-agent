@@ -42,3 +42,7 @@ A local JSON file can claim to originate from MT5. It may be fabricated or modif
 - Idempotent write / single settlement and restart recovery tested with SQLite.
 - Price/fee/slippage monotonicity; no P&L in account currency.
 - Independent NO_TRADE policy event always written. GitHub Actions runs only synthetic tests; no real MT5 calls or local CI.
+
+## Forward-observation chronology hardening (G35 stacked tip)
+
+SHADOW settlement now rejects a quote timestamp unless it is **strictly later than both** the recorded entry quote **and the persisted candidate `created_utc`**. An outcome quote newer than the original quote but already observed before the candidate was recorded cannot manufacture a forward-looking result. The creation timestamp uses the ledger's validated observation clock, allowing reproducible synthetic tests. The CLI end-to-end test generates a fresh outcome **after** recording the candidate; watcher integration fixtures similarly generate a new observed snapshot only when it is consumed. Negative tests prove a retrospective outcome leaves the candidate PENDING. All settlement remains hypothetical and `NO_TRADE`; local clocks and user-provided snapshot JSON are not cryptographic proof of authentic broker observation. Original PR #20 is unchanged; this safety repair lives in final stacked PR #82.

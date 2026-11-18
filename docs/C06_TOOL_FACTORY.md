@@ -21,7 +21,7 @@ Only fixed independent oracle fixtures from knowledge/tool_factory_oracles.json 
 certify a T0 sandbox test. Agent-written examples DO NOT count as correctness evidence.
 Unknown novel tools are PENDING_INDEPENDENT_ORACLE (exit 3).
 Known passing oracle yields SANDBOX_PASSED_REVIEW_REQUIRED (exit 0), not production admission.
-Failed, timed-out and missing-oracle candidates exit 3; malformed/unsafe proposals exit 2.
+Failed, timed-out and missing-oracle candidates exit 3; malformed/unsafe proposals exit 2. A timed-out Docker run is force-removed by its unique container name before temporary files are released; if cleanup cannot be verified, the sandbox fails closed (exit 2) without accepting the tool.
 
 ## Security boundary and limitations
 

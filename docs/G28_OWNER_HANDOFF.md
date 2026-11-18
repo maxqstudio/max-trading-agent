@@ -1,3 +1,5 @@
+> **Current scope (G35):** The original 27/28-PR snapshot below is historical. There are now 35 canonical stacked PRs **#14 through #82**. The updated auditor includes future canonical even-numbered PRs and fails on gaps. Use the current [G35 full-stack gate](G35_FULL_STACK_GATE.md) and live GitHub report before merging.
+
 # G28 — GitHub-only owner merge handoff and project boundary
 
 **Snapshot scope (17 November 2026).** The canonical agent code is implemented as a **single stack of 27 open Draft PRs #14, #16, … #66**, all still **unmerged** when this handoff was authored. The G28 work is itself a Draft PR #68 on top of #66. These PRs are not 27 independent patches to merge in arbitrary order: each targets the preceding feature branch. **Main does not yet contain their cumulative work.**
@@ -7,6 +9,8 @@
 `.github/workflows/g28-stack-handoff.yml` checks current public GitHub PR metadata with a token restricted to `contents:read` and `pull-requests:read`. It runs `python tools/stack_audit.py` and its offline adversarial tests. It emits a downloadable **`g28-owner-pr-merge-handoff`** artifact containing a JSON list with exact PR numbers, HEAD SHAs, current bases, merged/Draft state, dependency chain, next merge candidate, required retarget status, and remaining owner/terminal acceptance blockers. The job never calls a GitHub mutation endpoint and does not obtain a token with write permission.
 
 Use the live check again **before** each merge; existing archived CI PASS only proves the tested SHA, and retargeting/merging can change what must be validated.
+
+When a successfully merged PR's source branch is deleted, GitHub may report `head.repo=null`. G28 tolerates that **only** for a PR with a valid GitHub merged/closed record, while still verifying its original head ref/SHA and the target repository. An unmerged PR with missing source repository remains a hard failure; G28 cannot accept missing branch identity as a merge shortcut.
 
 ## Owner-only merge procedure
 

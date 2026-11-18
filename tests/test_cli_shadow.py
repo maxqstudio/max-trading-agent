@@ -1,6 +1,7 @@
 """Shadow CLI E2E on synthetic snapshots, tested only in GitHub Actions."""
 import json
 import subprocess
+import time
 import sys
 import tempfile
 import unittest
@@ -39,9 +40,7 @@ class ShadowCliTests(unittest.TestCase):
         self.entry.write_text(json.dumps(fixture(
             now - timedelta(seconds=8), bid=1.0500, ask=1.0502
         )), encoding="utf-8")
-        self.outcome.write_text(json.dumps(fixture(
-            now, bid=1.0530, ask=1.0532
-        )), encoding="utf-8")
+        # The outcome must be observed after shadow-open, not prewritten in setUp.
 
     def cli(self, *args):
         return subprocess.run(
@@ -63,6 +62,12 @@ class ShadowCliTests(unittest.TestCase):
         self.assertNotIn("987654321", opened.stdout)
         self.assertNotIn("PRIVATE_SERVER", opened.stdout)
 
+        # A new market observation is generated after the candidate exists.
+        # The vendor timestamp is one second behind the capture time.
+        time.sleep(1.5)
+        self.outcome.write_text(json.dumps(fixture(
+            datetime.now(timezone.utc), bid=1.0530, ask=1.0532
+        )), encoding="utf-8")
         settled = self.cli(
             "shadow-settle", "--candidate", "sample_0001",
             "--snapshot", str(self.outcome),

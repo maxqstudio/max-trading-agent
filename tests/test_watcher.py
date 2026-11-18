@@ -55,6 +55,8 @@ class FakeMT5:
             item = self.snapshots.pop(0)
         else:
             item = self.snapshots[0]
+        if callable(item):
+            item = item()
         if isinstance(item, Exception):
             raise item
         return item
@@ -203,6 +205,25 @@ class WatcherTests(unittest.TestCase):
         finally:
             watcher.stop()
 
+    def test_swapped_provenance_account_id_cannot_bypass_same_mode_guard(self):
+        baseline = fixture(self.first_bar, mode="DEMO")
+        switched = fixture(self.next_bar, mode="DEMO", login=99999999)
+        switched["provenance"]["account_binding_id"] = (
+            baseline["provenance"]["account_binding_id"]
+        )
+        llm = FakeLLM()
+        watcher, _ = self.make([baseline, switched], client=llm)
+        watcher.start()
+        try:
+            self.assertEqual(watcher.poll_once()["status"], "BASELINED")
+            refused = watcher.poll_once()
+            self.assertEqual(refused["status"], "BLOCKED")
+            self.assertEqual(refused["reason"], "SNAPSHOT_MAC_MISMATCH")
+            self.assertEqual(watcher.store.jobs(), [])
+            self.assertEqual(llm.roles, [])
+        finally:
+            watcher.stop()
+
     def test_tampering_unsigned_or_wrong_key_block_before_baseline(self):
         valid = fixture(self.first_bar)
         tampered = json.loads(json.dumps(valid))
@@ -246,6 +267,45 @@ class WatcherTests(unittest.TestCase):
             self.assertEqual(watcher.store.jobs(), [])
         finally:
             watcher.stop()
+
+    def test_signed_delayed_snapshot_never_triggers_research(self):
+        delayed = fixture(self.next_bar)
+        delayed.pop("provenance")
+        captured = datetime.now(timezone.utc) - timedelta(seconds=48)
+        delayed["captured_at_utc"] = captured.isoformat()
+        delayed["quote"]["time_utc"] = (captured - timedelta(seconds=1)).isoformat()
+        delayed = seal_snapshot(delayed, TEST_KEY, login=12345678,
+                                server="PRIVATE_BROKER")
+        # The offline M02 research sanitizer permits this 49-second-old quote.
+        self.assertEqual(market_context(delayed)["symbol"], "EURUSD")
+        watcher, api = self.make([
+            fixture(self.first_bar), delayed, fixture(self.next_bar),
+        ], client=FakeLLM())
+        watcher.start()
+        try:
+            self.assertEqual(watcher.poll_once()["status"], "BASELINED")
+            denied = watcher.poll_once()
+            self.assertEqual(denied["status"], "BLOCKED")
+            self.assertEqual(denied["reason"], "WATCH_SNAPSHOT_NOT_FRESH")
+            self.assertEqual(watcher.store.jobs(), [])
+            self.assertEqual(watcher.poll_once()["status"], "NEW_COMPLETED_CANDLE")
+            self.assertEqual(len(watcher.store.jobs()), 1)
+            self.assertEqual(len(api.calls), 3)
+        finally:
+            watcher.stop()
+
+    def test_negative_clock_rejected_without_market_read(self):
+        watcher, api = self.make([fixture(self.first_bar)])
+        watcher.clock = lambda: -1
+        with self.assertRaisesRegex(WatchError, "INVALID_WATCH_CLOCK"):
+            watcher.start()
+        self.assertEqual(api.calls, [])
+        self.assertEqual(self.journal.runs(), [])
+        watcher.clock = iter([datetime.now(timezone.utc).timestamp(), -1]).__next__
+        with self.assertRaisesRegex(WatchError, "INVALID_WATCH_CLOCK"):
+            watcher.run(interval_seconds=5, max_polls=1, sleep=lambda _: None)
+        self.assertEqual(api.calls, [])
+        self.assertEqual(self.journal.runs()[0]["status"], "FAILED")
 
     def test_stale_quote_and_mt5_failure_do_not_create_jobs(self):
         watcher, _ = self.make([

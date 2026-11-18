@@ -35,3 +35,12 @@ No signal, live position management, broker mutation, RAG embedding, model-gener
 Official `copy_rates_from_pos` yields NumPy structured rows with fields `time`, `open`, `high`, `low`, `close`, `tick_volume`, `spread`, and `real_volume`. The adapter now reads `dtype.names` fields via `row[field]`, normalizes NumPy integer/float scalars to JSON-safe Python numbers, and rejects invalid or nonfinite values. GitHub Actions installs **NumPy 2.2.6 only for these fake-provider tests** on both Linux and Windows; runtime still loads MetaTrader5 lazily and no live terminal is accessed by CI.
 
 **Remaining acceptance:** signed real terminal smoke on an authorized owner's Windows session, with private account/server details redacted. A fake structured-array PASS is not evidence of a genuine broker connection. No order execution is enabled.
+
+## M01 acceptance gap repair (implemented in the G35 stacked tip)
+
+The final G35 aggregate branch adds two narrow fixes to M01 without changing the pinned head of PR #14 or any intermediate stacked PR:
+
+- Reject zero or negative `open`, `high`, `low`, or `close` before a snapshot can pass as valid market data. Fail closed with `INVALID_OHLC` and release the MT5 connection.
+- Read the official [MT5 `version()` API](https://www.mql5.com/en/docs/python_metatrader5/mt5version_py) after confirming terminal connectivity. Capture only validated numeric terminal version, build and structured release date in `terminal.version`; missing or malformed metadata aborts with a bounded error code. No broker login, server or raw exception text is recorded as version metadata.
+
+These checks are exercised by fake-provider regression on GitHub Linux/Windows, not by an actual owner's MT5 terminal. Because the fix lives in the final stacked branch, PR #14 alone remains the historical M01 candidate: its standalone tests still do **not** verify these new constraints, and it must not be described as individually accepted. Integrating the full reviewed stack and owner Windows terminal acceptance remain separately gated. `execution=DISABLED`, `NO_TRADE`.

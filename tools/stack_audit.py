@@ -15,8 +15,13 @@ from pathlib import Path
 from typing import Any
 
 _REPO = "maxqstudio/max-trading-agent"
-_REQUIRED = tuple(range(14, 68, 2))  # PRs M01 through G27, 27 stacked PRs
+_REQUIRED = tuple(range(14, 84, 2))  # At least 35 canonical PRs through G35 #82
 _SHA = re.compile(r"[0-9a-f]{40}\Z")
+# Owner decision 2026-11-18: the observation-only UI Draft PR #83 is kept
+# OUTSIDE the 35-PR G35 merge scope. Exactly this PR identity is excluded;
+# any other new odd PR (or #83 changed to merged/non-Draft/other branch/base)
+# still fails closed. Exclusion never adds #83 to the merge handoff.
+_OUT_OF_SCOPE = {83: "claude/project-thread-opv6rq"}
 _BRANCH = re.compile(r"feat/[a-z0-9][a-z0-9/_-]{0,100}\Z")
 
 
@@ -60,7 +65,12 @@ def _validate_pr(pr: Any, number: int) -> dict:
         raise StackAuditError("G28_INVALID_PR_METADATA")
     head_repo, base_repo = head.get("repo"), base.get("repo")
     sha, head_ref, base_ref = head.get("sha"), head.get("ref"), base.get("ref")
-    if (type(head_repo) is not dict or head_repo.get("full_name") != _REPO
+    merged = pr.get("merged_at") is not None
+    # GitHub can return head.repo=null after a merged source branch is
+    # deleted. Never accept that missing identity for an unmerged PR.
+    if ((head_repo is None and not merged)
+            or (head_repo is not None and
+                (type(head_repo) is not dict or head_repo.get("full_name") != _REPO))
             or type(base_repo) is not dict or base_repo.get("full_name") != _REPO
             or type(sha) is not str or not _SHA.fullmatch(sha)
             or type(head_ref) is not str or not _BRANCH.fullmatch(head_ref)
@@ -69,7 +79,6 @@ def _validate_pr(pr: Any, number: int) -> dict:
             or type(pr.get("draft")) is not bool
             or pr.get("html_url") != f"https://github.com/{_REPO}/pull/{number}"):
         raise StackAuditError("G28_INVALID_PR_METADATA")
-    merged = pr.get("merged_at") is not None
     if (merged and (pr.get("state") != "closed"
                     or type(pr["merged_at"]) is not str)
             or pr["state"] == "closed" and not merged):
@@ -100,10 +109,35 @@ def audit_stack(prs: Any) -> dict:
     missing = [number for number in _REQUIRED if number not in index]
     if missing:
         raise StackAuditError("G28_REQUIRED_PR_MISSING")
-    numbers = list(_REQUIRED)
-    if 68 in index:
-        numbers.append(68)
-    records = [_validate_pr(index[number], number) for number in numbers]
+    # Do not silently truncate the owner handoff when later canonical PRs
+    # are created. Unlisted gaps are an error, not an approval to skip a PR.
+    canonical = sorted(number for number in index
+                       if number >= 14 and number % 2 == 0)
+    excluded = []
+    for number, branch in _OUT_OF_SCOPE.items():
+        item = index.get(number)
+        if item is None:
+            continue
+        head, base = item.get("head"), item.get("base")
+        if (type(head) is not dict or type(base) is not dict
+                or head.get("ref") != branch
+                or type(head.get("repo")) is not dict
+                or head["repo"].get("full_name") != _REPO
+                or base.get("ref") != "main"
+                or type(base.get("repo")) is not dict
+                or base["repo"].get("full_name") != _REPO
+                or item.get("state") != "open"
+                or item.get("draft") is not True
+                or item.get("merged_at") is not None):
+            raise StackAuditError("G28_UNEXPECTED_NEW_PR")
+        excluded.append(number)
+    if any(number > 82 and number % 2 and number not in excluded
+           for number in index):
+        raise StackAuditError("G28_UNEXPECTED_NEW_PR")
+    if not canonical or len(canonical) > 80 or canonical != list(
+            range(14, canonical[-1] + 2, 2)):
+        raise StackAuditError("G28_REQUIRED_PR_MISSING")
+    records = [_validate_pr(index[number], number) for number in canonical]
     if records[0]["current_base"] != "main":
         raise StackAuditError("G28_FIRST_BASE_NOT_MAIN")
     if len({record["head_branch"] for record in records}) != len(records):
@@ -152,6 +186,7 @@ def audit_stack(prs: Any) -> dict:
         "repository": _REPO,
         "default_branch": "main",
         "audited_count": len(records),
+        "excluded_out_of_scope_prs": excluded,
         "merged_count": sum(x["merged"] for x in records),
         "unmerged_count": sum(not x["merged"] for x in records),
         "ordered_pull_requests": records,

@@ -1,7 +1,6 @@
 """Offline-only, deterministic DEMO proposal veto. NEVER an order authorization."""
 from __future__ import annotations
 
-import math
 import re
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
@@ -23,7 +22,9 @@ class PreflightError(ValueError):
 
 
 def _dec(raw: Any, *, positive: bool = False) -> Decimal:
-    if type(raw) not in (int, float, str, Decimal):
+    # Reject strings (even parseable ones): policy and broker numeric
+    # fields must have an actual numeric type, never LLM-like prose.
+    if type(raw) not in (int, float, Decimal):
         raise PreflightError("INVALID_NUMBER")
     try:
         value = Decimal(str(raw))
@@ -107,7 +108,8 @@ def check_demo_preflight(snapshot: dict, proposal: dict, limits: dict,
         raise PreflightError("INVALID_BROKER_SCHEMA")
     positions = _get(snapshot, "positions")
     orders = _get(snapshot, "orders")
-    if not isinstance(positions, list) or not isinstance(orders, list):
+    if (not isinstance(positions, list) or not isinstance(orders, list)
+            or any(not isinstance(row, dict) for row in positions + orders)):
         raise PreflightError("INVALID_INVENTORY")
     if now is not None and (not isinstance(now, datetime) or now.tzinfo is None):
         raise PreflightError("INVALID_OBSERVATION_TIME")
@@ -143,10 +145,17 @@ def check_demo_preflight(snapshot: dict, proposal: dict, limits: dict,
          or account.get("trade_expert") is not True
          or terminal.get("trade_allowed") is not True
          or terminal.get("tradeapi_disabled") is not False, "BROKER_PERMISSIONS_UNKNOWN")
-    veto(symbol.get("visible") is not True or symbol_trade_mode == 0, "SYMBOL_DISABLED")
+    # MT5 SYMBOL_TRADE_MODE: 0 disabled, 1 long-only, 2 short-only,
+    # 3 close-only, 4 full. Unknown codes must never imply permission.
+    veto(symbol.get("visible") is not True
+         or symbol_trade_mode not in (1, 2, 4), "SYMBOL_DISABLED")
+    veto((symbol_trade_mode == 1 and side == "SHORT")
+         or (symbol_trade_mode == 2 and side == "LONG"),
+         "SYMBOL_SIDE_DENIED")
     veto(bid >= ask, "INVALID_SPREAD")
     veto(not -2 <= (clock - captured).total_seconds() <= 120
-         or not -2 <= (captured - quoted).total_seconds() <= 90, "QUOTE_STALE")
+         or not -2 <= (captured - quoted).total_seconds() <= 90
+         or not -2 <= (clock - quoted).total_seconds() <= 90, "QUOTE_STALE")
     veto(volume < min_vol or volume > max_vol
          or (volume - min_vol) % step != 0, "INVALID_VOLUME")
     veto(len(positions) >= max_positions or len(orders) >= max_orders, "EXPOSURE_CAP")

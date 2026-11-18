@@ -9,6 +9,11 @@ on:
       - "tools/docker_image_audit.py"
       - "tests/test_docker_image_audit.py"
       - ".github/workflows/g34-docker-image.yml"
+      - ".github/workflows/g24-signed-t0.yml"
+      - ".github/workflows/g29-ephemeral-main-merge.yml"
+      - ".github/workflows/g30-sequential-main.yml"
+      - ".github/workflows/g31-postmerge-main.yml"
+      - ".github/workflows/g35-sequential-main.yml"
       - ".github/workflows/tool-factory.yml"
   workflow_dispatch:
 

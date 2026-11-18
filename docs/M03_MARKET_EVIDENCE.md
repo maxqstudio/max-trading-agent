@@ -62,3 +62,7 @@ Research-only experiment events appear in the Trading Room under the **Market Da
 ## Gate
 
 M03 can PASS software CI while remaining **RESEARCH_ONLY**. M04 should add shadow episodes and compare hypothetical decisions to observed forward market outcomes, with clear separation from DEMO and LIVE broker fills.
+
+## M03 optional CSV tick-volume repair (G35 stacked tip)
+
+CSV imports may include the exact additional column `tick_volume`, a **nonnegative integer count** (zero is permitted). This optional field is persisted with its historical candle, participates in the immutable dataset content hash, and is included in readback integrity checks; negative, missing, non-integral and out-of-range values are refused. OHLC-only CSV imports retain their historical content hashes. Existing offline SQLite databases are upgraded in place with a nullable volume field; no broker access or market feeds are introduced. Tests cover restart replay, tampering and legacy-schema upgrades. This correction lives in the final stacked G35 tip; original PR #18 is unchanged and must not be described as independently accepted. Research-only / `NO_TRADE` remains mandatory.

@@ -2,7 +2,7 @@ name: G28 Read-only owner PR stack handoff
 
 on:
   push:
-    branches: ["feat/g28-**"]
+    branches: ["feat/g28-**", "feat/g35-**"]
   pull_request:
     paths:
       - "tools/stack_audit.py"
@@ -41,19 +41,19 @@ jobs:
           file=pathlib.Path(os.environ["RUNNER_TEMP"])/"g28-owner-merge-handoff.json"
           record=json.loads(file.read_text(encoding="utf-8"))
           assert record["status"]=="OWNER_MERGE_HANDOFF_ACTION_REQUIRED"
-          assert record["next_merge_pr"]==14
+          assert record["next_merge_pr"] is None or record["next_merge_pr"] % 2 == 0
           assert record["merge_target_required"]=="main"
-          assert 27<=record["audited_count"]<=28
-          assert record["merged_count"]==0
-          assert record["unmerged_count"]==record["audited_count"]
+          assert 35<=record["audited_count"]<=80
+          assert 0<=record["merged_count"]<=record["audited_count"]
+          assert record["unmerged_count"]+record["merged_count"]==record["audited_count"]
           assert record["ordered_pull_requests"][0]["current_base"]=="main"
-          assert record["ordered_pull_requests"][1]["current_base"]==record["ordered_pull_requests"][0]["head_branch"]
+          assert record["ordered_pull_requests"][1]["current_base"] in ("main", record["ordered_pull_requests"][0]["head_branch"])
           assert record["owner_acceptance"]=="PENDING"
           assert record["decision"]=="NO_TRADE"
           assert record["execution"]=="DISABLED"
           assert not record["demo_or_live_authorized"]
           assert not record["branch_protection_verified"]
-          print(f"G28 PASS: real GitHub stack of {record['audited_count']} Draft PRs; first #14, no merges, NO_TRADE")
+          print(f"G35 PASS: real GitHub complete stack of {record['audited_count']} PRs, next merge {record['next_merge_pr']}, NO_TRADE")
           PY
       - name: Upload read-only owner handoff JSON (no secrets or executable code)
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4 pinned

@@ -98,7 +98,8 @@ class ShadowPipelineTests(unittest.TestCase):
         snapshots = [
             fixture(self.bar0, bid=1.0500, ask=1.0502),
             observed_fixture(self.bar1, age_seconds=12, bid=1.0501, ask=1.0503),
-            observed_fixture(self.bar2, age_seconds=1, bid=1.0520, ask=1.0522),
+            lambda: observed_fixture(self.bar2, age_seconds=0,
+                                     bid=1.0520, ask=1.0522),
         ]
         watcher, api, client = self.watch(snapshots)
         watcher.start()
@@ -242,7 +243,9 @@ class ShadowPipelineTests(unittest.TestCase):
             "EURUSD", verify_snapshot(fixture(self.bar1), TEST_KEY)
         )[0]
         a.stop()
-        b, _, _ = self.watch([observed_fixture(self.bar2, age_seconds=1)], client)
+        b, _, _ = self.watch(
+            [lambda: observed_fixture(self.bar2, age_seconds=0)], client
+        )
         b.start()
         try:
             self.assertEqual(b.poll_once()["status"], "SHADOW_BUDGET_EXHAUSTED")
@@ -251,6 +254,39 @@ class ShadowPipelineTests(unittest.TestCase):
             self.assertEqual(b.store.shadow_cycles("EURUSD", "M1"), 1)
         finally:
             b.stop()
+
+    def test_missing_outcome_bar_cannot_be_settled_on_later_trigger(self):
+        # Baseline B-6, candidate B-5, missing B-4, gap at B-3,
+        # then B-2 is contiguous from B-3 but NOT the candidate horizon.
+        entry_bar = self.bar0 - timedelta(minutes=1)
+        watcher, api, client = self.watch([
+            fixture(self.bar0 - timedelta(minutes=2)),
+            observed_fixture(entry_bar, age_seconds=12),
+            lambda: observed_fixture(self.bar1, age_seconds=0),
+            lambda: observed_fixture(self.bar2, age_seconds=0),
+        ], cycles=3)
+        watcher.start()
+        try:
+            self.assertEqual(watcher.poll_once()["status"], "BASELINED")
+            self.assertEqual(watcher.poll_once()["status"], "NEW_COMPLETED_CANDLE")
+            entry = self.ledger().pending_for(
+                "EURUSD", verify_snapshot(fixture(entry_bar), TEST_KEY)
+            )[0]
+            self.assertEqual(watcher.poll_once()["status"], "CANDLE_GAP")
+            blocked = watcher.poll_once()
+            self.assertEqual(blocked["status"], "SHADOW_SETTLEMENT_BLOCKED")
+            self.assertEqual(self.ledger().get(entry["candidate_id"])["status"], "PENDING")
+            self.assertEqual(len(client.calls), 5)
+            self.assertEqual(len(api.calls), 4)
+            jobs = watcher.store.jobs()
+            self.assertEqual([j["status"] for j in jobs],
+                             ["COMPLETED", "BLOCKED"])
+            self.assertIn("SHADOW_HORIZON_EXCEEDED",
+                          [e["details"].get("code") for e in self.all_events()])
+            self.assertNotIn("SHADOW_SETTLED",
+                             [e["event_type"] for e in self.all_events()])
+        finally:
+            watcher.stop()
 
     def test_late_quote_after_model_run_blocks_candidate(self):
         watcher, _, _ = self.watch([fixture(self.bar0), fixture(self.bar1)])
@@ -313,7 +349,7 @@ class ShadowPipelineTests(unittest.TestCase):
         watcher, _, _ = self.watch([
             fixture(self.bar0),
             observed_fixture(self.bar1, age_seconds=12),
-            observed_fixture(self.bar2, age_seconds=1),
+            lambda: observed_fixture(self.bar2, age_seconds=0),
         ])
         watcher.start()
         try:
