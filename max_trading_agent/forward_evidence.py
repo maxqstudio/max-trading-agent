@@ -51,6 +51,14 @@ def _number(value: float) -> float:
     return round(float(value), 12)
 
 
+def _range(values: list[float]) -> dict:
+    return {"min": _number(min(values)), "max": _number(max(values))}
+
+
+def _matches_price(actual: float, expected: float) -> bool:
+    return math.isclose(actual, expected, abs_tol=1e-12, rel_tol=1e-12)
+
+
 class ForwardEvidence:
     """Computes a current SQLite snapshot, never creating a missing database."""
 
@@ -102,17 +110,26 @@ class ForwardEvidence:
                     if "shadow_requested" not in columns:
                         # Unknown historical opt-in state: NEVER report as zero.
                         raise EvidenceError("EVIDENCE_LEGACY_SCHEMA")
-                    jobs = [dict(row) for row in db.execute(
-                        "SELECT job_id,symbol,timeframe,bar_utc,status,research_run_id "
-                        "FROM watch_jobs WHERE shadow_requested=1"
+                    all_jobs = [dict(row) for row in db.execute(
+                        "SELECT job_id,symbol,timeframe,bar_utc,status,research_run_id,"
+                        "shadow_requested FROM watch_jobs"
                     )]
+                    # No SQLite CHECK on this flag: invalid values must
+                    # never disappear silently from attempted-cycle counts.
+                    if any(type(job["shadow_requested"]) is not int or
+                           job["shadow_requested"] not in (0, 1)
+                           for job in all_jobs):
+                        raise EvidenceError("EVIDENCE_INTEGRITY_BLOCKED")
+                    jobs = [job for job in all_jobs if job["shadow_requested"] == 1]
                 if "shadow_episodes" in tables:
                     columns = {row[1] for row in db.execute("PRAGMA table_info(shadow_episodes)")}
                     fields = ("candidate_id","origin","symbol","side","status",
-                              "entry_quote_utc","exit_quote_utc","entry_price",
-                              "exit_price","net_pnl_price_units","slippage",
-                              "fee_per_side","account_binding_id","research_run_id",
-                              "watch_job_id")
+                              "entry_snapshot_hash","entry_quote_utc","entry_bid",
+                              "entry_ask","entry_price","created_utc",
+                              "exit_snapshot_hash","exit_quote_utc","exit_bid",
+                              "exit_ask","exit_price","net_pnl_price_units",
+                              "recorded_utc","slippage","fee_per_side",
+                              "account_binding_id","research_run_id","watch_job_id")
                     if not set(fields).issubset(columns):
                         raise EvidenceError("EVIDENCE_LEGACY_SCHEMA")
                     episodes = [dict(row) for row in db.execute(
@@ -200,26 +217,50 @@ class ForwardEvidence:
             if (job_id, "abstained") in event_seen or (job_id, "rejected") in event_seen:
                 raise EvidenceError("EVIDENCE_INTEGRITY_BLOCKED")
             candidate_jobs.add(job_id)
-            _finite(ep["entry_price"], positive=True)
+            entry_price = _finite(ep["entry_price"], positive=True)
+            entry_bid = _finite(ep["entry_bid"], positive=True)
+            entry_ask = _finite(ep["entry_ask"], positive=True)
             fee = _finite(ep["fee_per_side"])
             slip = _finite(ep["slippage"])
-            if fee < 0 or slip < 0:
+            if (fee < 0 or slip < 0 or entry_ask < entry_bid
+                    or not isinstance(ep["entry_snapshot_hash"], str)
+                    or not _HEX64.fullmatch(ep["entry_snapshot_hash"])):
+                raise EvidenceError("EVIDENCE_INTEGRITY_BLOCKED")
+            expected_entry = (entry_ask + slip if ep["side"] == "LONG"
+                              else entry_bid - slip)
+            if not _matches_price(entry_price, expected_entry):
                 raise EvidenceError("EVIDENCE_INTEGRITY_BLOCKED")
             entry_time = _utc(ep["entry_quote_utc"])
+            created_time = _utc(ep["created_utc"])
+            exit_fields = ("exit_snapshot_hash", "exit_quote_utc", "exit_bid",
+                           "exit_ask", "exit_price", "net_pnl_price_units",
+                           "recorded_utc")
             if ep["status"] == "SETTLED":
-                exit_time = _utc(ep["exit_quote_utc"])
-                if exit_time <= entry_time:
+                if (not isinstance(ep["exit_snapshot_hash"], str)
+                        or not _HEX64.fullmatch(ep["exit_snapshot_hash"])):
                     raise EvidenceError("EVIDENCE_INTEGRITY_BLOCKED")
+                exit_time = _utc(ep["exit_quote_utc"])
+                _utc(ep["recorded_utc"])
+                if exit_time <= entry_time or exit_time <= created_time:
+                    raise EvidenceError("EVIDENCE_INTEGRITY_BLOCKED")
+                exit_bid = _finite(ep["exit_bid"], positive=True)
+                exit_ask = _finite(ep["exit_ask"], positive=True)
                 exit_price = _finite(ep["exit_price"], positive=True)
+                if exit_ask < exit_bid:
+                    raise EvidenceError("EVIDENCE_INTEGRITY_BLOCKED")
+                expected_exit = (exit_bid - slip if ep["side"] == "LONG"
+                                 else exit_ask + slip)
+                if not _matches_price(exit_price, expected_exit):
+                    raise EvidenceError("EVIDENCE_INTEGRITY_BLOCKED")
                 recorded = _finite(ep["net_pnl_price_units"])
-                expected = ((exit_price - ep["entry_price"])
+                expected = ((exit_price - entry_price)
                             if ep["side"] == "LONG"
-                            else (ep["entry_price"] - exit_price)) - 2 * fee
+                            else (entry_price - exit_price)) - 2 * fee
                 if not math.isclose(recorded, expected, abs_tol=1e-9, rel_tol=1e-9):
                     raise EvidenceError("EVIDENCE_INTEGRITY_BLOCKED")
                 totals["settled_episodes"] += 1
             else:
-                if ep["exit_price"] is not None or ep["net_pnl_price_units"] is not None:
+                if any(ep[field] is not None for field in exit_fields):
                     raise EvidenceError("EVIDENCE_INTEGRITY_BLOCKED")
                 totals["pending_episodes"] += 1
             symbols[ep["symbol"]]["episodes"].append(ep)
@@ -251,7 +292,21 @@ class ForwardEvidence:
                                  else "SINGLE" if len(identities) == 1 else "NONE",
                 "evidence_grade": "NO_DATA",
                 "hypothetical_pnl": None,
+                "execution_assumptions": None,
             }
+            if len(identities) == 1:
+                metrics["execution_assumptions"] = {
+                    "modeled_fee_per_side": _range(
+                        [float(ep["fee_per_side"]) for ep in eps]),
+                    "modeled_slippage_per_side": _range(
+                        [float(ep["slippage"]) for ep in eps]),
+                    "recorded_entry_spread": _range(
+                        [float(ep["entry_ask"] - ep["entry_bid"]) for ep in eps]),
+                    "recorded_exit_spread": (
+                        _range([float(ep["exit_ask"] - ep["exit_bid"]) for ep in done])
+                        if done else None),
+                    "units": "PRICE_UNITS_PER_ONE_ASSET_UNIT",
+                }
             if len(identities) > 1:
                 metrics["evidence_grade"] = "ACCOUNT_MIXED"
             elif not done:

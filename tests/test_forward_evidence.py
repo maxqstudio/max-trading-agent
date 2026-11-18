@@ -75,6 +75,12 @@ class EvidenceTests(unittest.TestCase):
         fee = 0.0001
         exit_price = (price + pnl + 2 * fee if side == "LONG"
                       else price - pnl - 2 * fee) if pnl is not None else None
+        entry_bid = price - 0.00012 if side == "LONG" else price + 0.00002
+        entry_ask = price - 0.00002 if side == "LONG" else price + 0.00012
+        exit_bid = (exit_price + 0.00002 if side == "LONG"
+                    else exit_price - 0.00012) if pnl is not None else None
+        exit_ask = (exit_price + 0.00012 if side == "LONG"
+                    else exit_price - 0.00002) if pnl is not None else None
         with closing(sqlite3.connect(self.file)) as db, db:
             db.execute("""INSERT INTO shadow_episodes (
                 candidate_id,origin,symbol,side,status,entry_snapshot_hash,
@@ -84,12 +90,11 @@ class EvidenceTests(unittest.TestCase):
                 account_binding_id,research_run_id,watch_job_id
             ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""", (
                 "hyp_" + str(idx), origin, name, side, status,
-                digest("entry-"+str(idx)), timestamp(idx), 0.9999, 1.0001,
+                digest("entry-"+str(idx)), timestamp(idx), entry_bid, entry_ask,
                 price, 0.00002, fee, timestamp(idx + 1),
                 digest("exit-"+str(idx)) if pnl is not None else None,
                 timestamp(idx+2) if pnl is not None else None,
-                exit_price - 0.0001 if pnl is not None else None,
-                exit_price + 0.0001 if pnl is not None else None,
+                exit_bid, exit_ask,
                 exit_price, pnl,
                 timestamp(idx+3) if pnl is not None else None,
                 binding, "a" * 32 if origin == "LLM_RESEARCH" else None,
@@ -174,6 +179,7 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(item["account_scope"], "MIXED")
         self.assertEqual(item["evidence_grade"], "ACCOUNT_MIXED")
         self.assertIsNone(item["hypothetical_pnl"])
+        self.assertIsNone(item["execution_assumptions"])
         self.assertNotIn(digest("a"), json.dumps(report))
         self.assertNotIn(digest("b"), json.dumps(report))
 
@@ -231,6 +237,62 @@ class EvidenceTests(unittest.TestCase):
                        (digest("old"), "EURUSD", "RUNNING"))
         with self.assertRaisesRegex(EvidenceError, "LEGACY_SCHEMA"):
             ForwardEvidence(self.file).summary()
+
+    def test_invalid_shadow_opt_in_is_not_silently_excluded(self):
+        self.initialize()
+        self.add_job(1, status="FAILED", requested=2)
+        with self.assertRaisesRegex(EvidenceError, "INTEGRITY"):
+            self.reporter.summary()
+        with closing(sqlite3.connect(self.file)) as db, db:
+            db.execute("UPDATE watch_jobs SET shadow_requested=-1")
+        with self.assertRaises(EvidenceError):
+            self.reporter.summary()
+
+    def test_settled_outcome_requires_all_exit_provenance(self):
+        self.initialize()
+        jid = self.add_job(1)
+        self.add_episode(jid, pnl=0.01, idx=1)
+        for column in ("exit_bid", "exit_snapshot_hash", "recorded_utc"):
+            with self.subTest(column=column):
+                with closing(sqlite3.connect(self.file)) as db, db:
+                    db.execute(f"UPDATE shadow_episodes SET {column}=NULL")
+                with self.assertRaisesRegex(EvidenceError, "INTEGRITY"):
+                    self.reporter.summary()
+                with closing(sqlite3.connect(self.file)) as db, db:
+                    db.execute("DELETE FROM shadow_episodes")
+                self.add_episode(jid, pnl=0.01, idx=1)
+
+    def test_pending_outcome_cannot_hide_partial_exit(self):
+        self.initialize()
+        jid = self.add_job(1)
+        self.add_episode(jid, pnl=None, idx=1)
+        with closing(sqlite3.connect(self.file)) as db, db:
+            db.execute("UPDATE shadow_episodes SET exit_quote_utc=?",
+                       (timestamp(3),))
+        with self.assertRaises(EvidenceError):
+            self.reporter.summary()
+
+    def test_recomputed_pnl_cannot_launder_inconsistent_fill(self):
+        self.initialize()
+        jid = self.add_job(1)
+        self.add_episode(jid, pnl=0.01, idx=1)
+        with closing(sqlite3.connect(self.file)) as db, db:
+            db.execute("UPDATE shadow_episodes SET entry_price=0.9,"
+                       "net_pnl_price_units=0.11")
+        with self.assertRaises(EvidenceError):
+            self.reporter.summary()
+
+    def test_cost_assumptions_disclosed_without_account_identity(self):
+        self.initialize()
+        jid = self.add_job(1)
+        self.add_episode(jid, pnl=0.01, idx=1)
+        data = self.reporter.summary()["symbols"][0]
+        costs = data["execution_assumptions"]
+        self.assertEqual(costs["modeled_fee_per_side"]["min"], 0.0001)
+        self.assertEqual(costs["modeled_slippage_per_side"]["max"], 0.00002)
+        self.assertEqual(costs["recorded_entry_spread"]["min"], 0.0001)
+        self.assertEqual(costs["recorded_exit_spread"]["max"], 0.0001)
+        self.assertNotIn(digest("account_one"), json.dumps(data))
 
     def test_unknown_episode_origin_is_integrity_violation(self):
         self.initialize()

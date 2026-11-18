@@ -181,6 +181,17 @@ async function loadEvidence() {
           data.max_realized_drawdown_price_units_per_unit +
           " price units per unit. No real fill or account-currency return."));
       }
+      if (item.execution_assumptions) {
+        const costs = item.execution_assumptions;
+        const span = (range) => !range ? "not observed" :
+          range.min === range.max ? String(range.min) : range.min + " to " + range.max;
+        panel.append(node("p", "muted",
+          "Modeled fee/side: " + span(costs.modeled_fee_per_side) +
+          " · adverse slippage/side: " + span(costs.modeled_slippage_per_side) +
+          " · recorded entry spread: " + span(costs.recorded_entry_spread) +
+          " · recorded exit spread: " + span(costs.recorded_exit_spread) +
+          " (price units per asset unit; hypothetical fills)."));
+      }
       symbols.append(panel);
     }
     if (!evidence.symbols.length) {
