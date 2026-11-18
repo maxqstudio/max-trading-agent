@@ -316,7 +316,7 @@ class ShadowPipelineTests(unittest.TestCase):
         watcher, _, _ = self.watch([
             fixture(self.bar0),
             observed_fixture(self.bar1, age_seconds=12),
-            observed_fixture(self.bar2, age_seconds=1),
+            lambda: observed_fixture(self.bar2, age_seconds=0),
         ])
         watcher.start()
         try:
