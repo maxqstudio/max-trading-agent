@@ -156,6 +156,16 @@ class G35RehearsalTests(unittest.TestCase):
         self.assertEqual(self.data["decision"], "NO_TRADE")
         self.assertEqual(self.data["execution"], "DISABLED")
 
+    def test_g35_replay_checks_real_docker_timeout_cleanup(self):
+        workflow = (ROOT / ".github" / "workflows" /
+                    "g35-sequential-main.yml").read_text(encoding="utf-8")
+        self.assertIn("G35 merged-tree Docker timeout cleanup", workflow)
+        self.assertIn("sandbox_evaluate(candidate,cases,timeout_seconds=3)", workflow)
+        self.assertIn('"status"]=="SANDBOX_TIMEOUT"', workflow)
+        self.assertIn('["docker","ps","-a","--filter","name=maxq-t0-"', workflow)
+        self.assertIn("TIMEOUT_CONTAINER_NOT_REMOVED", workflow)
+        self.assertIn('working-directory: work', workflow)
+
     def test_replay_script_never_writes_to_remote(self):
         script = (ROOT / "tools" / "g35_sequential_rehearsal.py").read_text(
             encoding="utf-8")

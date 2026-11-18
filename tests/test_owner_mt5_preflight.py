@@ -198,6 +198,17 @@ class OwnerOfflinePreflightTests(unittest.TestCase):
         self.assertFalse(data["identity_key_created"])
         self.assertFalse(self.key.exists())
 
+    def test_g31_postmerge_rechecks_real_docker_timeout_cleanup(self):
+        workflow = (Path(__file__).resolve().parents[1] / ".github" /
+                    "workflows" / "g31-postmerge-main.yml").read_text(
+                        encoding="utf-8")
+        self.assertIn("G31 postmerge Docker timeout cleanup", workflow)
+        self.assertIn("sandbox_evaluate(candidate,cases,timeout_seconds=3)", workflow)
+        self.assertIn('"status"]=="SANDBOX_TIMEOUT"', workflow)
+        self.assertIn('["docker","ps","-a","--filter","name=maxq-t0-"', workflow)
+        self.assertIn("TIMEOUT_CONTAINER_NOT_REMOVED", workflow)
+        self.assertIn("if: runner.os == 'Linux'", workflow)
+
     def test_g31_hosted_ci_never_claims_owner_local_preflight(self):
         workflow = (Path(__file__).resolve().parents[1] / ".github" /
                     "workflows" / "g31-postmerge-main.yml").read_text(encoding="utf-8")
