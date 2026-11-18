@@ -165,15 +165,19 @@ jobs:
           PY
       - name: Seal passing OS rehearsal report after full checks
         shell: bash
+        env:
+          PYTHONPATH: ${{ github.workspace }}/controller
         run: |
           set -euo pipefail
           python - <<'PY'
           import json, os, pathlib
+          from tools.g35_sequential_rehearsal import verify_tested_worktree
           file=pathlib.Path(os.environ["RUNNER_TEMP"])/"g35-rehearsal.json"
           data=json.loads(file.read_text(encoding="utf-8"))
           assert data["status"]=="G35_TREES_MATCH_TESTS_PENDING"
           assert data["trees_identical"] and len(data["completed_steps"])==35
           assert data["github_pr_metadata_verified"] is True
+          verify_tested_worktree(pathlib.Path("work"), data)
           data["status"]="G35_35_PR_SEQUENTIAL_AND_REGRESSION_PASS"
           data["full_python_suite_passed"]=True
           data["ui_suite_passed"]=os.environ["RUNNER_OS"]=="Linux"

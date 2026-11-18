@@ -62,6 +62,30 @@ def verify_live_pr_bindings(plan: list[dict], github_prs: Any) -> None:
             raise RehearsalError("G35_GITHUB_PR_CHAIN_UNVERIFIED")
 
 
+def verify_tested_worktree(work: Path, report: Any) -> None:
+    """Never certify a changed checkout as the tested merged Git tree."""
+    if (type(report) is not dict
+            or report.get("status") != "G35_TREES_MATCH_TESTS_PENDING"
+            or report.get("github_pr_metadata_verified") is not True
+            or report.get("trees_identical") is not True
+            or not _SHA.fullmatch(str(report.get("sequential_tree_sha")))
+            or type(report.get("completed_steps")) is not list
+            or len(report["completed_steps"]) != 35
+            or type(report["completed_steps"][-1]) is not dict
+            or not _SHA.fullmatch(str(
+                report["completed_steps"][-1].get("temporary_merge_sha")))):
+        raise RehearsalError("G35_INVALID_TESTED_TREE_REPORT")
+    work = Path(work)
+    if (not work.is_dir() or work.is_symlink()
+            or not (work / ".git").is_dir()):
+        raise RehearsalError("G35_UNSAFE_TESTED_WORKTREE")
+    if (_ref(work, "HEAD^{tree}") != report["sequential_tree_sha"]
+            or _ref(work, "HEAD") !=
+               report["completed_steps"][-1]["temporary_merge_sha"]
+            or _git(work, "status", "--porcelain").stdout.strip()):
+        raise RehearsalError("G35_TESTED_WORKTREE_DRIFT")
+
+
 def run_rehearsal(work: Path, aggregate: Path, output: Path,
                   manifest: dict, *, env: dict | None = None) -> dict:
     env = dict(os.environ if env is None else env)

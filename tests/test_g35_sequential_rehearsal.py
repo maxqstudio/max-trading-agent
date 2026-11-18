@@ -4,6 +4,7 @@ from __future__ import annotations
 import copy
 import json
 import os
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -11,7 +12,7 @@ from unittest.mock import patch
 
 from tools.g35_sequential_rehearsal import (
     RehearsalError, _MAIN_SHA, validate_inputs, run_rehearsal,
-    verify_live_pr_bindings,
+    verify_live_pr_bindings, verify_tested_worktree,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -214,6 +215,57 @@ class G35RehearsalTests(unittest.TestCase):
             self.assertNotIn(word, raw)
         self.assertEqual(self.data["decision"], "NO_TRADE")
         self.assertEqual(self.data["execution"], "DISABLED")
+
+    def test_tested_tree_guard_rejects_tracked_untracked_and_head_drift(self):
+        def git(work, *args):
+            done = subprocess.run(["git", *args], cwd=work, capture_output=True,
+                                  text=True, timeout=15, check=True)
+            return done.stdout.strip()
+
+        with tempfile.TemporaryDirectory() as tmp:
+            work = Path(tmp)
+            git(work, "init", "-q")
+            source = work / "source.py"
+            source.write_text("value = 1\n", encoding="utf-8")
+            git(work, "add", "source.py")
+            git(work, "-c", "user.name=G35-Test",
+                "-c", "user.email=g35-test@users.noreply.github.com",
+                "-c", "commit.gpgsign=false", "commit", "-qm", "test")
+            head = git(work, "rev-parse", "HEAD")
+            tree = git(work, "rev-parse", "HEAD^{tree}")
+            report = {
+                "status": "G35_TREES_MATCH_TESTS_PENDING",
+                "github_pr_metadata_verified": True,
+                "trees_identical": True,
+                "sequential_tree_sha": tree,
+                "completed_steps": [{"temporary_merge_sha": head}] * 35,
+            }
+            self.assertIsNone(verify_tested_worktree(work, report))
+            source.write_text("value = 2\n", encoding="utf-8")
+            with self.assertRaisesRegex(RehearsalError,
+                                        "G35_TESTED_WORKTREE_DRIFT"):
+                verify_tested_worktree(work, report)
+            git(work, "restore", "source.py")
+            extra = work / "unexpected.py"
+            extra.write_text("injected = True\n", encoding="utf-8")
+            with self.assertRaisesRegex(RehearsalError,
+                                        "G35_TESTED_WORKTREE_DRIFT"):
+                verify_tested_worktree(work, report)
+            extra.unlink()
+            tampered = dict(report, sequential_tree_sha="b" * 40)
+            with self.assertRaisesRegex(RehearsalError,
+                                        "G35_TESTED_WORKTREE_DRIFT"):
+                verify_tested_worktree(work, tampered)
+            tampered = dict(report, github_pr_metadata_verified=False)
+            with self.assertRaisesRegex(RehearsalError,
+                                        "G35_INVALID_TESTED_TREE_REPORT"):
+                verify_tested_worktree(work, tampered)
+
+    def test_g35_pass_seal_requires_unchanged_tested_tree(self):
+        workflow = (ROOT / ".github/workflows" /
+                    "g35-sequential-main.yml").read_text(encoding="utf-8")
+        self.assertIn("verify_tested_worktree(pathlib.Path(\"work\"), data)", workflow)
+        self.assertIn("G35_35_PR_SEQUENTIAL_AND_REGRESSION_PASS", workflow)
 
     def test_g35_replay_checks_real_docker_timeout_cleanup(self):
         workflow = (ROOT / ".github" / "workflows" /
