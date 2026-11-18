@@ -53,6 +53,11 @@ def _vector(encoder: Embedder, text: str) -> list[float]:
         raw = encoder.encode(text)
         if not isinstance(raw, (list, tuple)) or len(raw) != _DIM:
             raise ValueError()
+        # Implementations of the local protocol must actually return
+        # numeric components. Strings/booleans must not be coerced into
+        # apparently valid embeddings by float(...).
+        if any(type(x) not in (int, float) for x in raw):
+            raise ValueError()
         values = [float(x) for x in raw]
         if any(not math.isfinite(x) for x in values) or not any(values):
             raise ValueError()
@@ -194,10 +199,17 @@ class HybridKnowledge:
                     or any(type(n) not in (int, float)
                            or not math.isfinite(float(n)) for n in stored)):
                 raise RagError("INDEX_INTEGRITY_FAILED")
-            if type(self.encoder) is HashingEmbedder:
-                content = " ".join([title, summary, tags])
-                if stored != _vector(self.encoder, content):
-                    raise RagError("INDEX_INTEGRITY_FAILED")
+            # The persisted vector must reconstruct from the same
+            # document for *every* local Embedder implementation, not only
+            # the built-in hashing class. A nondeterministic adapter cannot
+            # supply reproducible, auditable evidence and must fail closed.
+            content = " ".join([title, summary, tags])
+            try:
+                expected = _vector(self.encoder, content)
+            except RagError:
+                raise RagError("INDEX_INTEGRITY_FAILED") from None
+            if stored != expected:
+                raise RagError("INDEX_INTEGRITY_FAILED")
             checked.append((row, stored))
         return checked
 
@@ -208,7 +220,7 @@ class HybridKnowledge:
             raise RagError("INVALID_QUERY")
         terms = _TERMS.findall(query)[:16]
         if not terms:
-            return []
+            raise RagError("INVALID_QUERY")
         vec = _vector(self.encoder, query)
         try:
             with closing(self._connection()) as db:
