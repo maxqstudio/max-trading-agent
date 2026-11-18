@@ -139,6 +139,7 @@ jobs:
           PY
       - name: G35 merged-tree Docker timeout cleanup against actual checked-out code
         if: runner.os == 'Linux'
+        working-directory: work
         shell: bash
         run: |
           set -euo pipefail
